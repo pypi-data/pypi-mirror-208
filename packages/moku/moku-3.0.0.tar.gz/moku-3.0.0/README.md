@@ -1,0 +1,77 @@
+# Moku
+A Python library for the command, control and monitoring of the [Liquid Instruments Moku:Go](http://www.liquidinstruments.com).
+API documentation can be found at [ReadTheDocs](http://moku.readthedocs.org).
+
+# Getting Started
+
+### 1. Requirements
+- [Python](https://www.python.org) installed.  We support Python >= **3.5**.
+- pip installed (`pip` for Python 2.7 or `pip3` for Python 3)
+- Zeroconf to browse for Moku's on network
+- Your Moku connected to the same network as your computer.
+- Internet access.
+
+### 1. Install Moku
+Open a command-line terminal and type
+
+    pip install --upgrade moku
+
+The IP address of your Moku:Go device can be found with
+
+    moku list
+
+### 3. Start scripting
+You are now ready to control your Moku:Go using Python! You can find a few example scripts in the **examples/** folder.
+Here is a basic example of how to connect to a Moku:Go, deploy the Oscilloscope and fetch a single hi-res data trace. Open python and run the following code
+
+```python
+from moku.instruments import Oscilloscope
+
+# Connect to your Moku by its ip Oscilloscope('192.168.###.###')
+# or by its serial m = Oscilloscope(serial=123)
+i = Oscilloscope('192.168.###.###', force_connect=False)
+
+try:
+    # Span from -1s to 1s i.e. trigger point centred
+    i.set_timebase(-1, 1)
+
+    # Get and print a single frame worth of data (time series
+    # of voltage per channel)
+    data = i.get_data()
+    print(data['ch1'], data['ch2'], data['time'])
+except Exception as e:
+    print(f'Exception occurred: {e}')
+finally:
+    i.relinquish_ownership()
+```
+
+# Troubleshooting
+
+#### moku: command not found
+Ensure moku has been successfully installed in your Python distrubution by open a python shell and running
+
+    import moku
+
+No error indicates a successful install.
+
+You may need to add python binaries to your PATH.  This varies with operating system and python version but as an example
+
+    export PATH=$PATH:/home/user/.local/bin
+
+#### I can't find my Moku on the network
+Search your local network for running Moku with
+
+    $ moku list
+
+
+If you are still having difficulty, contact support@liquidinstruments.com.
+
+#### ImportError: No Module named moku
+Make sure you are running the version of Python you installed moku to.  Often a system will have multiple Python installations. Try substituting `pip` with `python -m pip` in the installation.
+If you installed moku inside an Environment (i.e. via virtualenv or conda-env), ensure that Environment is activated. You can check that moku is installed in your currently running environment using
+
+    (myenv)$ pip list
+
+## Issue Tracking
+
+Please report issues at https://www.liquidinstruments.com/support/contact/
