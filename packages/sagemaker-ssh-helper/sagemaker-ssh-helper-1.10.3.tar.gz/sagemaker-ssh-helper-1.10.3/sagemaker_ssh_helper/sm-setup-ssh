@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Main entry point to be called from training / processing jobs or inference endpoint by SageMaker.
+# It will be either called from setup.py automatically when installing the 'sagemaker-ssh-helper' package
+# from 'requirements.txt' and 'bootstrap_on_start' parameter was passed to the wrapper, or manually
+# from training / processing / inference script, e. g. with subprocess.check_call()
+
+# This script can be called simultaneously multiple times in a distributed training job
+# To avoid race conditions, we install helper scripts under an exclusive lock
+if [[ "$1" == "install-helper-scripts" ]]; then
+  dir=$(dirname "$0")
+  source "$dir"/sm-helper-functions
+
+  _install_helper_scripts
+  exit 0
+fi
+
+set -e
+set -v
+
+flock /tmp/sm-install-lock bash "$0" install-helper-scripts
+
+# nohup will detach the child process from parent and run it in background
+# flock prevents from starting more than 1 process
+# redirection to /proc/1/fd/1 will write logs to CloudWatch
+if [[ ! -f /tmp/sm-start-ssh-lock ]]; then
+  if [[ "$SSH_LOG_TO_STDOUT" == "true" ]]; then
+    flock -n /tmp/sm-start-ssh-lock sm-start-ssh &
+  else
+    nohup flock -n /tmp/sm-start-ssh-lock sm-start-ssh >/proc/1/fd/1 2>&1 &
+  fi
+fi
+
+sm-wait "${SSH_WAIT_TIME_SECONDS:-60}"
