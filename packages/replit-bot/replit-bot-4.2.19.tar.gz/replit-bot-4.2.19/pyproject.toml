@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "replit-bot"
+version = "4.2.19"
+description = "make discord.py like bots on replit and/or do replapi-it style replit interactions"
+authors = ["bigminboss <you@example.com>"]
+
+[tool.poetry.dependencies]
+# python ver
+python = ">=3.7,<4.0.0"
+# replit db I think I can't remember lol
+replit = "^3.2.4"
+# these are 100% necessary
+requests = "^2.28.1"
+pyee = "^9.0.4"
+
+# kinda if I get it working
+# datauri="^1.0.0"
+
+# docs
+# [tool.poetry.group.docs]
+# optional = true
+
+# [tool.poetry.group.docs.dependencies]
+Flask = "^2.2.0"
+waitress = "^2.1.2"
+# uvloop = "^0.17.0"
+
+[tool.poetry.dev-dependencies]
+debugpy = "^1.6.2"
+python-lsp-server = {extras = ["yapf", "rope", "pyflakes"], version = "^1.5.0"}
+toml = "^0.10.2"
+Markdown = "^3.4.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
