@@ -1,0 +1,141 @@
+# package distribution files
+/steam_sdk.egg-info/*
+/build/*
+/dist/*
+**/__pycache__/
+
+# IDE specific
+/.idea/
+/.pytest_cache/
+/venv/*
+/.pytest_cache
+
+# Documentation
+/docs/source/index.html
+
+# Temporary files
+*~$*
+
+# User-specific settings files
+/tests/settings.*.yaml
+/tests/**/settings.*.yaml
+# Exceptions (files TO INCLUDE even if they are settings):
+!/tests/settings.user.yaml
+!/tests/settings.SYSTEM.yaml
+
+# LEDET diary files
+/tests/**/diaryLEDET*
+/tests/**/diaryProteCCT*
+
+# Dakota input files generated on run-time
+/tests/parsims/input/Dakota/*.py
+/tests/parsims/input/Dakota/*.yaml
+/tests/parsims/input/Dakota/*.pkl
+
+# all files of .xlsx, .csv, .yaml, etc files in subfolders named "output" will be ignored
+/tests/**/output/**/*.xlsx
+/tests/**/output/**/*.xls
+/tests/**/output/**/*.csv
+/tests/**/output/**/*.yaml
+/tests/**/output/**/*.json
+/tests/**/output/**/*.map2d
+/tests/**/output/**/*.cir
+/tests/**/output/**/*.dat
+/tests/**/output/**/*.csd
+/tests/**/output/**/*.mif
+/tests/**/output/**/*.out*
+/tests/**/output/**/*.stl
+/tests/**/output/**/*.lib
+/tests/**/output/**/*.png
+/tests/**/output/**/*.prb
+/tests/**/output/**/*.geo
+/tests/**/output/**/*.geom
+/tests/**/output/**/*.set
+/tests/**/output/**/*.gs
+/tests/**/output/**/*.txt
+/tests/**/output/**/*.in
+/tests/**/output/**/*.out
+/tests/**/output/**/*.out.1
+/tests/**/output/**/*.svg
+/tests/**/output/**/*.pdf
+/tests/**/output/**/*.html
+# Exceptions (files TO INCLUDE even if they are in the output folder):
+!/tests/drivers/output/pspice/TEST_0.cir
+
+# setting files in tests/analyses
+/tests/analyses/settings.*.yaml
+
+# test files - builders
+/tests/builders/MQXF_V2.xlsx
+/tests/builders/MQXF_V2_selfMutualInductanceMatrix.csv
+/tests/builders/MQXF_V2_all_data.yaml
+
+# test files - data
+/tests/data/model_data_TEST.yaml
+/tests/data/api_data_TEST.yaml
+
+# test files - parsers
+/tests/parsers/output/*.xlsx
+/tests/parsers/output/*.csv
+/tests/parsers/output/MQXF_V2_TEST.xlsx
+
+########################################################################################################################
+# The following lines are a copy/paste of the .gitignore file from steam-nb-api, which could be useful during the transition to steam-sdk
+#*.pyc
+#/.idea/
+#**/__pycache__/
+#/venv
+#
+## package distribution files
+#/build/*
+#/dist/*
+#-steam_nb_api.egg-info/*
+#/steam_nb_api.egg-info/*
+#
+## ROXIE library
+#/tests/inputOutput/libraryROXIE/*
+#/tests/libraryROXIE/*
+#/tests/MBX_2D.data
+#/tests/lhcmbx__0002-v0.plt
+#
+## LEDET-generated csv files
+#*_selfMutualInductanceMatrix.csv
+#
+## test files - magnetAPI
+#/tests/notebook/*_TEST.xlsx
+#/tests/*_TEST.xlsx
+#
+## test files - ledet
+#tests/ledet/resources/TestFile_A_compare.xlsx
+#tests/ledet/resources/TestFile_B_compare.xlsx
+#tests/ledet/TestFile1.xlsx
+#tests/ledet/TEST_MAGNET_0.xlsx
+#steam_nb_api/ledet/LEDET/
+## test files - parametersLedet
+#tests/MBX_2D_fieldmap.data
+#tests/MBX_2D_new_iron2.data
+#tests/TEST_MAGNET_0.xlsx
+#tests/test_xlswrite_generated_01.xlsx
+#/tests/TestFile1.xlsx
+## test files - ledet - parameterSweep
+#steam_nb_api/ledet/RunParameterSweep.py
+#tests/ledet/resources/TestFile.xlsx
+#tests/ledet/resources/TestSweeps/LEDET/Dummy/Input/SimulationMatrix.xlsx
+#tests/ledet/resources/TestSweeps/LEDET/Dummy/Input/Dummy_*.xlsx
+#
+## test files - sing cosim
+#tests/1_cosim_model_RCS/
+#tests/2_cosim_model_RCS/
+#tests/3_cosim_model_RCS/
+#tests/sing/1_cosim_model_RCS/
+#tests/sing/2_cosim_model_RCS/
+#tests/sing/3_cosim_model_RCS/
+#
+## test files - magnetAPI
+#/tests/notebook/magnet_input.yaml
+#
+
+
+
+/tests/drivers/output/**/*.plk
+/tests/drivers/output/PyBBQ/MQY_OUT/output/steam_sdk_test/logfile

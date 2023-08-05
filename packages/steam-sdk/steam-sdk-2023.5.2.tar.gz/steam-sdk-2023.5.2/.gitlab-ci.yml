@@ -1,0 +1,70 @@
+stages:
+    - test
+    - deploy
+
+# This installs all packages listed in requirements
+before_script:
+  - echo "Install required packages."
+  - echo "These are the system paths:"
+  - echo $env:PATH
+  - pip install -r requirements.txt
+
+
+# This job runs all the tests.
+unit-test-job:
+  stage: test
+# not necessary to define image 
+#  image: python:3.8
+#  allow_failure: true
+  script:
+    # Run tests
+    - echo "Running unit tests."
+    - coverage run --source steam_sdk/ -m pytest --cov-report=html --junitxml=report.xml -v tests/ 
+    - coverage report  # this allows displaying the coverage percentage in the "Jobs" page on Gitlab
+    - coverage html
+  artifacts:
+     reports:
+        junit: report.xml
+
+     paths:
+#      - coverage_html  # can be read at C:\GitLab-Runner\builds\X55TDgza\0\steam\steam_sdk\coverage_html
+       - htmlcov  # can be read at C:\GitLab-Runner\builds\X55TDgza\0\steam\steam_sdk\htmlcov
+       - C:\GitLab-Runner\builds\X55TDgza\0\steam\steam_sdk\tests\drivers\output\SIGMA
+       - C:\GitLab-Runner\builds\X55TDgza\0\steam\steam_sdk\tests\builders\output\SIGMA
+
+     when: always  # this makes sure artifacts are always generated (useful for debugging)
+     expire_in: 7 days
+
+  coverage: '/TOTAL.*\s+(\d+\%)/'
+
+  # These tags are to use the STEAM shared runner
+  tags:
+      - matlab
+      - windows
+
+
+# This job generates the project documentation
+pages:
+  stage: deploy
+  image: python:3.8
+  script:
+    - mkdocs build --clean --site-dir public
+    - 'cp -r htmlcov public/htmlcov 2>/dev/null || :'
+
+  artifacts:
+    paths:
+    - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+
+## This job should visualize the coverage badge, but it doesn't work.
+#unit-tests:
+#  stage: test
+#  image: python:3.8
+#  script:
+#      - python -m unittest discover
+#      - coverage report -m
+#      - coverage-badge
+#  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+

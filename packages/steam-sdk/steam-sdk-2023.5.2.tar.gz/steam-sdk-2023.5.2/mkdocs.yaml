@@ -1,0 +1,130 @@
+site_name: STEAM SDK
+site_description: Documentation for STEAM SDK
+site_author: STEAM Team
+site_url: https://steam-sdk.docs.cern.ch/
+repo_name: GitLab
+repo_url: https://gitlab.cern.ch/steam/steam_sdk
+edit_uri: -/tree/master/docs
+theme:
+  name: material
+  palette: 
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+plugins:
+  - git-revision-date-localized
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: sphinx
+
+markdown_extensions:
+  - markdown_include.include
+nav:
+    - 'Introduction': index.md
+    - 'Source code':
+      - 'analyses':
+        - 'AnalysisSTEAM': analyses/AnalysisSTEAM.md
+      - 'builders':
+        - 'BuilderFiQuS': builders/BuilderFiQuS.md
+        - 'BuilderLEDET': builders/BuilderLEDET.md
+        - 'BuilderModel': builders/BuilderModel.md
+        - 'BuilderProteCCT': builders/BuilderProteCCT.md
+        - 'BuilderPyBBQ': builders/BuilderPyBBQ.md
+        - 'BuilderSIGMA': builders/BuilderSIGMA.md
+        - 'geometricFunctions': builders/geometricFunctions.md
+        - 'OBSOLETE_BuilderCircuit': builders/OBSOLETE_BuilderCircuit.md
+        - 'SelfMutualInductanceCalculation': builders/SelfMutualInductanceCalculation.md
+        - 'Solenoids': builders/Solenoids.md
+      - 'data':
+        - 'DataAnalysis': data/DataAnalysis.md
+        - 'DataConductor': data/DataConductor.md
+        - 'DataDakota': data/DataDakota.md
+        - 'DataEventMagnet': data/DataEventMagnet.md
+        - 'DataFiQuS': data/DataFiQuS.md
+        - 'DataLEDET': data/DataLEDET.md
+        - 'DataModelCircuit': data/DataModelCircuit.md
+        - 'DataModelConductor': data/DataModelConductor.md
+        - 'DataModelMagnet': data/DataModelMagnet.md
+        - 'DataParsims': data/DataParsims.md
+        - 'DataProteCCT': data/DataProteCCT.md
+        - 'DataPyBBQ': data/DataPyBBQ.md
+        - 'DataRoxieParser': data/DataRoxieParser.md
+        - 'DataSettings': data/DataSettings.md
+        - 'DataSignal': data/DataSignal.md
+        - 'DictionaryLEDET': data/DictionaryLEDET.md
+        - 'DictionaryProteCCT': data/DictionaryProteCCT.md
+        - 'DictionaryPyBBQ': data/DictionaryPyBBQ.md
+        - 'TemplateLEDET': data/TemplateLEDET.md
+        - 'TemplateProteCCT': data/TemplateProteCCT.md
+      - 'drivers':
+        - 'DriverAnalysis': drivers/DriverAnalysis.md
+        - 'DriverDakota': drivers/DriverDakota.md
+        - 'DriverFiQuS': drivers/DriverFiQuS.md
+        - 'DriverLEDET': drivers/DriverLEDET.md
+        - 'DriverProteCCT': drivers/DriverProteCCT.md
+        - 'DriverPSPICE': drivers/DriverPSPICE.md
+        - 'DriverPyBBQ': drivers/DriverPyBBQ.md
+        - 'DriverSIGMA': drivers/DriverSIGMA.md
+        - 'DriverXYCE': drivers/DriverXYCE.md
+      - 'parsers':
+        - 'CSD_Reader': parsers/CSD_Reader.md
+        - 'dict_to_in': parsers/dict_to_in.md
+        - 'ParserCond2d': parsers/ParserCond2d.md
+        - 'ParserCsd': parsers/ParserCsd.md
+        - 'ParserCsv': parsers/ParserCsv.md
+        - 'ParserDakota': parsers/ParserDakota.md
+        - 'ParserExcel': parsers/ParserExcel.md
+        - 'ParserFiQuS': parsers/ParserFiQuS.md
+        - 'ParserLEDET': parsers/ParserLEDET.md
+        - 'ParserMap2d': parsers/ParserMap2d.md
+        - 'ParserMat': parsers/ParserMat.md
+        - 'ParserProteCCT': parsers/ParserProteCCT.md
+        - 'ParserProtePyBBQ': parsers/ParserProtePyBBQ.md
+        - 'ParserPSPICE': parsers/ParserPSPICE.md
+        - 'ParserRoxie': parsers/ParserRoxie.md
+        - 'ParserTdms': parsers/ParserTdms.md
+        - 'ParserXYCE': parsers/ParserXYCE.md
+        - 'ParserYAML': parsers/ParserYAML.md
+      - 'parsims':
+        - 'ParsimDakota': parsims/ParsimDakota.md
+        - 'ParsimEventMagnet': parsims/ParsimEventMagnet.md
+        - 'ParsimSweep': parsims/ParsimSweep.md
+      - 'plotters':
+        - 'PlotterModel': plotters/PlotterModel.md
+        - 'PlotterParametric': plotters/PlotterParametric.md
+        - 'PlotterRoxie': plotters/PlotterRoxie.md
+        - 'PlotterSIGMA': plotters/PlotterSIGMA.md
+      - 'postprocs':
+        - 'PostprocsMetrics': postprocs/PostprocsMetrics.md
+      - 'utils':
+        - 'clean_NaN_from_signal': utils/clean_NaN_from_signal.md
+        - 'isNaN': utils/isNaN.md
+        - 'make_folder_if_not_existing': utils/make_folder_if_not_existing.md
+        - 'misc': utils/misc.md
+        - 'ModifyModelData': utils/ModifyModelData.md
+        - 'ModifyModelDataconductor': utils/ModifyModelDataconductor.md
+        - 'ModifyModelDataMagnet': utils/ModifyModelDataMagnet.md
+        - 'NumpyEncoder': utils/NumpyEncoder.md
+        - 'rgetattr': utils/rgetattr.md
+        - 'rhasattr': utils/rhasattr.md
+        - 'sgetattr': utils/sgetattr.md
+        - 'tic_toc': utils/tic_toc.md
+        - 'unique': utils/unique.md
+      - 'viewers':
+        - 'Viewer': viewers/Viewer.md
+        - 'ViewerMeas': viewers/ViewerMeas.md
+        - 'ViewerSim': viewers/ViewerSim.md
+      - 'wrappers':
+        - 'wrapper_yaml': wrappers/wrapper_yaml.md
