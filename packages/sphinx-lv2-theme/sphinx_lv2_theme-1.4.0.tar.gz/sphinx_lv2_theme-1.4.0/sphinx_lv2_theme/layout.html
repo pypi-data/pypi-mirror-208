@@ -1,0 +1,235 @@
+{# Main page template #}
+
+{%- block doctype -%}
+  <!DOCTYPE html>
+{% endblock -%}
+
+{# Set various variables for use below #}
+{%- set reldelim1 = reldelim1 is not defined and '&#187;' or reldelim1 -%}
+{%- set reldelim2 = reldelim2 is not defined and ',' or reldelim2 -%}
+{%- set render_sidebar = (not embedded) and (not theme_nosidebar|tobool) and (sidebars != []) -%}
+{%- set url_root = pathto('', 1) -%}
+{%- if url_root == '#' -%}{% set url_root = '' -%}{% endif -%}
+{%- if not embedded and docstitle -%}
+  {%- set titlesuffix = " &#8212; "|safe + docstitle|e -%}
+{%- else -%}
+  {%- set titlesuffix = "" -%}
+{%- endif -%}
+
+{# Related navigation bar #}
+{%- macro relbar() -%}
+      <ul>
+    {%- if next %}
+        <li class="right last"><a href="{{ next.link|e }}">&rarr;</a></li>
+    {%- endif -%}
+
+    {%- if prev %}
+        <li class="right"><a href="{{ prev.link|e }}">&larr;</a></li>
+    {%- endif -%}
+
+    {#- Other related links -#}
+    {#- Note that "first" and "last" are flipped here because of the right float -#}
+    {%- set first = False -%}
+    {%- for rellink in rellinks -%}
+      {%- if
+        not (prev and pathto(rellink[0]) == prev.link) and
+        not (next and pathto(rellink[0]) == next.link) %}
+        <li class="right"><a href="{{ pathto(rellink[0])|e }}" title="{{ rellink[1]|striptags|e }}" {{ accesskey(rellink[2]) }}> {{ rellink[3] }}</a></li>
+        {%- set first = True -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- block rootrellink %}
+        <li class="nav-item nav-item-0">
+          <a href="{{ pathto(master_doc)|e }}">
+            {{ shorttitle|e }}
+            {%- if theme_show_nav_version %}
+              {{ release }}
+            {%- endif %}
+          </a>
+        </li>
+    {%- endblock -%}
+
+    {%- for parent in parents -%}
+      <li class="nav-item nav-item-{{ loop.index }}">
+        {{ reldelim1 }}
+        <a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>
+          {{ parent.title }}
+        </a>
+      </li>
+    {%- endfor %}
+
+    {%- block thisrellink %}
+        <li class="nav-item nav-item-this">{{ reldelim1 }} <a href="{{ link|e }}">{{ title }}</a></li>
+    {%- endblock -%}
+    {%- block relbaritems -%}
+    {%- endblock -%}
+    {# #}
+      </ul>
+{%- endmacro -%}
+
+{# Sidebar #}
+{%- macro sidebar() -%}
+  {%- if render_sidebar -%}
+    <div class="sidebar" role="navigation" aria-label="main navigation">
+      {%- block sidebarlogo -%}
+        {%- if theme_logo -%}
+          <div class="sidebarlogo">
+            <a href="{{ pathto(master_doc) }}">
+              <img class="logo" src="{{ pathto('_static/' ~ theme_logo, 1) }}" alt="Logo"/>
+            </a>
+          </div>
+        {%- endif -%}
+        {%- if theme_logo_name|lower == 'true' -%}
+          <div class="logo-name">
+            {{ project }}
+            {%- if theme_show_logo_version %}
+              {{ release }}
+            {%- endif %}
+          </div>
+        {%- endif -%}
+        {%- if theme_description -%}
+          <div class="description">{{ theme_description }}</div>
+        {%- endif -%}
+      {%- endblock -%}
+      {%- for sidebartemplate in sidebars -%}
+        {%- include sidebartemplate -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+{%- endmacro -%}
+
+{# CSS links #}
+{%- macro css() -%}
+  {%- for css in css_files -%}
+    {%- if css|attr("filename") %}
+    {{ css_tag(css) }}
+    {%- else %}
+    <link rel="stylesheet" href="{{ pathto(css, 1)|e }}" type="text/css" />
+    {% endif %}
+  {%- endfor -%}
+{%- endmacro -%}
+
+{# HTML tag #}
+{%- if html_tag %}
+  {{ html_tag }}
+{% else -%}
+  <html{% if language is not none %} lang="{{ language }}"{% endif %}>
+{% endif -%}
+
+{# HTML head #}
+{%- block html_head %}
+  <head>
+    <meta charset="{{ encoding }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {{ metatags -}}
+    {%- block htmltitle %}
+    <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+    {%- endblock %}
+    {%- block css %}
+      {{- css() }}
+    {%- endblock %}
+    {%- if not embedded %}
+      {%- if pageurl %}
+    <link rel="canonical" href="{{ pageurl|e }}" />
+      {%- endif %}
+      {%- if favicon %}
+    <link rel="shortcut icon" href="{{ pathto('_static/' + favicon, 1)|e }}"/>
+      {%- endif %}
+    {%- endif %}
+    {%- block linktags %}
+      {%- if hasdoc('about') %}
+    <link rel="author" title="{{ _('About these documents') }}" href="{{ pathto('about') }}" />
+      {%- endif %}
+      {%- if hasdoc('copyright') %}
+    <link rel="copyright" title="{{ _('Copyright') }}" href="{{ pathto('copyright') }}" />
+      {%- endif %}
+      {%- if next %}
+    <link rel="next" title="{{ next.title|striptags|e }}" href="{{ next.link|e }}" />
+      {%- endif %}
+      {%- if prev %}
+    <link rel="prev" title="{{ prev.title|striptags|e }}" href="{{ prev.link|e }}" />
+      {%- endif %}
+    {%- endblock %}
+    {%- block extrahead %}{% endblock %}
+  </head>
+{% endblock -%}
+
+{# HTML body #}
+{%- block body_tag %}
+  <body>
+{% endblock %}
+
+{%- block header %}{% endblock %}
+
+{%- block content %}
+  {%- if builder != "singlehtml" %}
+    {%- block relbar1 %}
+    <div class="related topnav" role="navigation" aria-label="related navigation">
+      {{ relbar() }}
+    </div>
+    {%- endblock -%}
+  {%- endif %}
+
+  {%- block sidebar1 -%}
+    {{ sidebar() }}
+  {%- endblock %}
+
+    <div class="document">
+    {%- block document %}
+      <div class="documentwrapper">
+        <div class="body" role="main">
+
+        {% block body -%}{%- endblock -%}
+        {# #}
+        </div>
+      </div>
+    {%- endblock %}
+    </div>
+{%- endblock %}
+
+    <div class="clearer"></div>
+
+{%- block footer %}
+    <div class="footer" role="contentinfo">
+
+    {%- if show_copyright -%}
+      {%- if hasdoc('copyright') -%}
+        {%- trans path=pathto('copyright'), copyright=copyright|e %}
+      <a class="copyright" href="{{ path }}">Copyright</a> {{ copyright }}.
+        {%- endtrans -%}
+      {%- else -%}
+        {%- trans copyright=copyright|e %}
+      <span class="copyright">Copyright {{ copyright }}.</span>
+        {%- endtrans -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if theme_show_footer_version %}
+      <span class="meta">
+        Generated for {{shorttitle|e}} {{ release }}
+        {%- if show_sphinx %}
+          using <a href="https://www.sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}
+        {%- endif %}.
+      </span>
+    {%- elif show_sphinx %}
+      <span class="meta">
+        Generated using
+        <a href="https://www.sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.
+      </span>
+    {%- endif -%}
+    {# #}
+    </div>
+{%- endblock %}
+
+    <div class="clearer"></div>
+
+{%- if builder != "singlehtml" %}
+  {%- block relbar2 %}
+    <div class="related bottomnav" role="navigation" aria-label="related navigation">
+      {{ relbar() }}
+    </div>
+  {%- endblock -%}
+{%- endif %}
+
+  </body>
+  </html>

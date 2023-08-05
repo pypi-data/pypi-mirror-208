@@ -1,0 +1,59 @@
+{# Global alphabetical index #}
+
+{%- extends "layout.html" %}
+{%- set title = _('Index') %}
+
+{%- macro indexentries(firstname, links) -%}
+  {%- if links -%}
+        <a href="{{ links[0][1] }}">
+          {%- if links[0][0] -%}
+            <strong>
+          {%- endif -%}
+          {{ firstname|e }}
+          {%- if links[0][0] -%}
+            </strong>
+          {%- endif -%}
+        </a>
+
+    {%- for ismain, link in links[1:] -%}
+        ,
+        <a href="{{ link }}">
+          {%- if ismain -%}<strong>{%- endif -%}
+          [{{ loop.index }}]
+          {%- if ismain -%}</strong>{%- endif -%}
+        </a>
+    {%- endfor -%}
+  {%- else -%}
+    {{ firstname|e }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{%- block body %}
+          <h1 id="index">{{ _('Index') }}</h1>
+
+          <div class="genindex-jumpbox">
+            {%- for letter, entries in genindexentries %}
+            <a href="#{{ letter }}"><strong>{{ letter }}</strong></a>
+            {%- if not loop.last -%}| {%- endif -%}
+            {%- endfor %}
+          </div>
+
+          {%- for letter, entries in genindexentries %}
+          {# #}
+          <h2 id="{{ letter }}">{{ letter }}</h2>
+          <ul>
+            {%- for name, (links, subitems, _) in entries %}
+            <li>{{- indexentries(name, links) -}}
+              {%- if subitems %}
+                <ul>
+                  {%- for subentryname, subentrylinks in subitems %}
+                    <li>{{- indexentries(subentryname, subentrylinks) -}}</li>
+                  {%- endfor %}
+                </ul>
+              {%- endif -%}
+            </li>
+            {%- endfor %}
+          </ul>
+          {%- endfor %}
+
+{%- endblock -%}

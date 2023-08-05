@@ -1,0 +1,27 @@
+{# No search, but Sphinx requires this template to exist #}
+
+{%- block doctype -%}
+  <!DOCTYPE html>
+{% endblock -%}
+
+{# HTML tag #}
+{%- if html_tag %}
+  {{ html_tag }}
+{% else -%}
+  <html{% if language is not none %} lang="{{ language }}"{% endif %}>
+{% endif -%}
+
+{# HTML head #}
+{%- block html_head %}
+  <head>
+    <meta charset="{{ encoding }}"  />
+  </head>
+{% endblock -%}
+
+{# HTML body #}
+{%- block body_tag %}
+  <body>
+{% endblock %}
+
+  </body>
+  </html>

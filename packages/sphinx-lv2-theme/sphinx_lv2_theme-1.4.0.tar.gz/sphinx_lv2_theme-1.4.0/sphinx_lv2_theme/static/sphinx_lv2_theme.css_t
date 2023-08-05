@@ -1,0 +1,842 @@
+/* Generic page style */
+
+/* Smaller sizes: 0.236em 0.271em 0.382em 0.438em 0.618em 0.708em */
+
+/* Larger sizes:  1.146em 1.618em 1.854em 2.618em 3em     4.236em */
+
+html {
+  background: #FFF;
+  color: #222;
+}
+
+body {
+  font-style: normal;
+  line-height: 1.618em;
+  margin: 0 auto auto;
+  padding: 0;
+  max-width: {{ theme_page_width|todim }};
+  font-family: "SF Pro Text", Verdana, "DejaVu Sans", sans-serif;
+  text-rendering: optimizelegibility;
+}
+
+h1 {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 4.236em;
+  font-weight: 600;
+  line-height: 114.6%;
+  margin: 1.146em 0;
+}
+
+h2 {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 3em;
+  font-weight: 600;
+  line-height: 114.6%;
+  margin: 1.146em 0;
+}
+
+h3 {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 2.618em;
+  font-weight: 600;
+  line-height: 114.6%;
+  margin: 1.146em 0;
+}
+
+h4 {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 1.854em;
+  font-weight: 600;
+  line-height: 114.6%;
+  margin: 1.146em 0;
+}
+
+h5 {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 1.618em;
+  font-weight: 600;
+  line-height: 114.6%;
+  margin: 1.146em 0;
+}
+
+h6 {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 1.146em;
+  font-weight: 600;
+  line-height: 114.6%;
+  margin: 1.146em 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  color: #222;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link {
+  color: #222;
+}
+
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+  color: #222;
+}
+
+table {
+  border-collapse: collapse;
+  border-style: hidden;
+  margin: 1.618em 0;
+  border: 0;
+  empty-cells: hide;
+}
+
+th {
+  background-color: #FAFAFA;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: text-top;
+}
+
+td, th {
+  border: 1px solid #EEE;
+  padding: 0 1em;
+}
+
+blockquote {
+  hyphens: auto;
+}
+
+img {
+  border: 0;
+  max-width: 100%;
+}
+
+p {
+  margin: 1.146em 0;
+  padding: 0;
+  hyphens: auto;
+}
+
+ul, ol, dl {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  padding: 0;
+  hyphens: auto;
+}
+
+dt {
+  font-weight: 600;
+  margin: 0.618em 0 0;
+}
+
+dd {
+  margin: 0 0 0 2.618em;
+  hyphens: auto;
+}
+
+dd > ul:only-child, dd > ol:only-child {
+  padding-left: 0;
+}
+
+li {
+  margin-left: 2.618em;
+}
+
+caption {
+  font-weight: 700;
+}
+
+/* Main sections layout */
+
+.clearer {
+  clear: both;
+}
+
+.section {
+  margin-bottom: 2.618em;
+}
+
+.section::after {
+  display: block;
+  content: "";
+  clear: left;
+}
+
+/* Navigation bars */
+
+.topnav {
+  border-bottom-left-radius: 0.271em;
+  border-bottom-right-radius: 0.271em;
+  border-bottom: 1px solid #EEE;
+  border-left: 1px solid #EEE;
+  border-right: 1px solid #EEE;
+  margin: 0;
+}
+
+.bottomnav {
+  border-top-left-radius: 0.271em;
+  border-top-right-radius: 0.271em;
+  border: 1px solid #EEE;
+  margin: 0.438em 0 0;
+}
+
+.related {
+  background: #FAFAFA;
+  box-sizing: border-box;
+  clear: both;
+  font-size: 0.708em;
+  line-height: 2.618em;
+  width: 100%;
+}
+
+.related ul {
+  color: #AAA;
+  list-style: none;
+  margin: 0;
+  padding: 0 0.438em;
+}
+
+.related li {
+  display: inline;
+  white-space: nowrap;
+  margin-left: 0;
+}
+
+.related .right {
+  border-bottom: 1px solid #EEE;
+  border-left: 1px solid #EEE;
+  float: right;
+  margin: 0;
+  padding: 0 0.438em;
+}
+
+.related .last {
+  padding-right: 0;
+}
+
+.related .nav-item-0 {
+  font-weight: 600;
+}
+
+.related .nav-item-this {
+  margin-right: 4em;
+}
+
+/* Sidebar */
+
+.sidebar {
+  background: #FAFAFA;
+  border-radius: 0.271em;
+  border: 1px solid #EEE;
+  box-sizing: border-box;
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  overflow-wrap: break-word;
+  padding: 0 0.618em 0.618em;
+  word-wrap: break-word;
+}
+
+.sidebar .tocheader {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+  font-size: 1.146em;
+  font-weight: 600;
+  margin: 0.708em 0;
+}
+
+li.toctree-l1 {
+  margin-top: 1em;
+}
+
+li.toctree-l1 > a {
+  font-size: 1.146em;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul > li {
+  margin-left: 0.708em;
+}
+
+.logo-name {
+  font-size: 1.854em;
+  font-weight: 600;
+  margin: 0.438em 0;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+}
+
+.sidebarlogo {
+  width: {{ theme_logo_width|todim }};
+  margin: 0.618em auto 0;
+}
+
+/* Body */
+
+div.document {
+  margin: 1em auto 4.236em;
+}
+
+.footer {
+  clear: both;
+  color: #666;
+  font-size: 0.618em;
+  margin: 1.854em 0.438em 0.438em;
+  text-align: center;
+}
+
+.footer .copyright {
+  float: left;
+  clear: left;
+}
+
+.footer .meta {
+  clear: right;
+  float: right;
+}
+
+a.headerlink {
+  visibility: hidden;
+  margin-left: 0.271em;
+}
+
+a.brackets::before,
+span.brackets > a::before {
+  content: "[";
+}
+
+a.brackets::after,
+span.brackets > a::after {
+  content: "]";
+}
+
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink,
+dt:hover > a.headerlink {
+  visibility: visible;
+  color: #859900;
+}
+
+.body td {
+  text-align: left;
+}
+
+.rubric {
+  margin-top: 4em;
+  font-weight: 700;
+}
+
+/* Inline toctree */
+
+.toctree-wrapper.compound {
+  margin: 1.854em 0;
+}
+
+/* Local table of contents */
+
+.contents.local {
+  margin: 1.854em 0 3em;
+}
+
+/* Field lists */
+
+table.field-list td, table.field-list th {
+  border: 0;
+}
+
+dl.field-list {
+  margin-bottom: 0.708em;
+}
+
+dl.field-list > dd > ul > li {
+  margin-left: 0; /* Compensate for double indent */
+}
+
+.field-list p {
+  margin: 0.382em 0;
+}
+
+.field-name {
+  -epub-hyphens: manual;
+  -moz-hyphens: manual;
+  -ms-hyphens: manual;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+
+dt.field-odd {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+}
+
+dt.field-even {
+  font-family: Helvetica, Arial, "DejaVu Sans Condensed", Verdana, sans-serif;
+}
+
+/* Miscellaneous other things */
+
+.footnote:target {
+  background-color: #EEE8D5;
+}
+
+.line-block {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.line-block .line-block {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 1.618em;
+}
+
+.accelerator {
+  text-decoration: underline;
+}
+
+.classifier {
+  font-style: oblique;
+}
+
+.classifier::before {
+  font-style: normal;
+  margin: 0.438em;
+  content: ":";
+}
+
+abbr, acronym {
+  border-bottom: dotted 1px;
+  cursor: help;
+}
+
+/* Code */
+
+pre, tt, code {
+  overflow: auto;
+  font-family: "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace, fixed;
+  -epub-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  -webkit-hyphens: none;
+  hyphens: none;
+  white-space: pre;
+}
+
+pre, tt {
+  background-color: #FAFAFA;
+}
+
+pre {
+  padding: 0.438em 1em;
+  margin: 1em 0;
+}
+
+code {
+  padding: 0 0.125em;
+}
+
+div.highlight {
+  border: 1px solid #EEE;
+  border-radius: 0.271em;
+  margin: 1.618em 0;
+}
+
+.pre {
+  -epub-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+td.linenos pre {
+  border: 0;
+  background-color: transparent;
+  color: #AAA;
+}
+
+.highlight .hll {
+  display: block;
+}
+
+div.highlight pre,
+table.highlighttable pre {
+  margin: 0;
+  border-radius: 0.271em;
+}
+
+table.highlighttable td.linenos,
+span.linenos,
+.doctest > div.highlight .gp {
+  user-select: none;
+}
+
+.descname {
+  background-color: transparent;
+}
+
+.xref, a code {
+  background-color: transparent;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+  background-color: transparent;
+}
+
+/* API documentation */
+
+em.property {
+  font-style: normal;
+}
+
+.function em.property,
+.method em.property {
+  color: #666;
+}
+
+dl.class > dt,
+dl.function > dt,
+dl.enum > dt,
+dl.enum-class > dt,
+dl.struct > dt,
+dl.type > dt {
+  font-size: 1.146em;
+  font-weight: normal;
+  -epub-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+dl.method > dt {
+  font-weight: normal;
+  -epub-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+.class > dt:first-of-type,
+.enum > dt:first-of-type,
+.enum-class > dt:first-of-type,
+.function > dt:first-of-type,
+.method > dt:first-of-type,
+.struct > dt:first-of-type,
+.type > dt:first-of-type,
+.union > dt:first-of-type,
+.var > dt:first-of-type {
+  font-family: "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace, fixed;
+  font-size: 1.146em;
+}
+
+span.sig-name,
+span.desc-name, {
+  font-weight: 600;
+}
+
+.highlight span.k {
+  color: #586E75;
+}
+
+section > dl, .section > dl {
+  margin-top: 3em;
+}
+
+dl.method {
+  margin-top: 1.618em;
+}
+
+.struct > dd > dl.member > dt,
+.enum > dd > dl.member > dt,
+.enum-class > dd > dl.member > dt {
+  padding: 0.382em 0 0;
+}
+
+.c.function > dt > .sig-name:last-of-type::before,
+.cpp.function > dt > .sig-name:last-of-type::before,
+.c.type > dt > .sig-name:last-of-type::before {
+  content: "\A";
+  white-space: pre;
+}
+
+.sig-prename {
+  background: transparent;
+}
+
+.sig-name {
+  font-weight: bold;
+}
+
+.sig-paren {
+  font-weight: normal;
+}
+
+.sig-param {
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+dl.cpp > dd > dl > dt > .pre + br {
+  display: none; /* Remove spurious blank line after template headers */
+}
+
+.enumerator > dt > em:first-of-type {
+  display: none;
+}
+
+.class > dd > dl {
+  padding-top: 1em;
+}
+
+/* Media-specific style */
+
+/* Color links on screens */
+@media screen {
+  a {
+    color: #546E00;
+  }
+}
+
+/* Squash as much as reasonable on super narrow screens like mobile */
+@media (width <= {{ theme_body_min_width|todim }}) {
+  div.logo, .logo-name, .description, .sidebarlogo {
+    display: none;
+  }
+
+  .sidebar {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    float: none;
+    margin: 0 0 1.854em;
+    width: auto;
+  }
+
+  .sidebar li.toctree-l1 {
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 3em;
+  }
+
+  div.document {
+    float: none;
+    max-width: none;
+    min-width: unset;
+    padding: 0 0.438em;
+  }
+
+  .highlight-c, .highlight-cpp, .highlight-py {
+    font-size: 0.708em;
+  }
+}
+
+/* Make the sidebar a topbar on narrow screens */
+@media (width >= {{ theme_body_min_width|todim }}) and (width <= {{ theme_page_width|todim }}) {
+  div.logo, .logo-name, .description, .sidebarlogo {
+    display: none;
+  }
+
+  .sidebar {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    float: none;
+    margin: 0 0 1.854em;
+    width: auto;
+  }
+
+  .sidebar li.toctree-l1 {
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 3em;
+  }
+
+  div.document {
+    float: none;
+    max-width: none;
+    min-width: unset;
+    padding: 0 1.854em;
+  }
+}
+
+/* Sidebar on wide screens */
+@media (width >= {{ theme_page_width|todim }}) {
+  .sidebar {
+    clear: left;
+    float: left;
+    margin: 1em 3em 1em 0;
+    width: {{ theme_sidebar_width|todim }};
+  }
+
+  .sidebar .tocheader {
+    color: #888;
+    font-weight: 600;
+    line-height: 1.146em;
+    margin: 1.146em 0 0.438em;
+  }
+
+  div.document {
+    box-sizing: border-box;
+    clear: right;
+    float: left;
+    margin: 0 auto 4.236em;
+    max-width: {{ theme_body_max_width|todim }};
+    min-width: {{ theme_body_min_width|todim }};
+    padding: 0 0.438em;
+  }
+}
+
+/* Simple layout with no table of contents on paper */
+@media print {
+  @page {
+    margin: 6em 4em;
+  }
+
+  body {
+    color: #000;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    color: #000;
+  }
+
+  h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link {
+    color: #000;
+  }
+
+  h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+    color: #000;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  div.related {
+    display: none;
+  }
+
+  pre, tt, code {
+    background-color: transparent;
+  }
+
+  div.highlight {
+    border-radius: 0;
+    border: 1px solid #DDD;
+  }
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+  html {
+    background: #222;
+    color: #DDD;
+  }
+
+  a {
+    color: #B4C342;
+  }
+
+  h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    color: #DDD;
+  }
+
+  h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link {
+    color: #DDD;
+  }
+
+  h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+    color: #DDD;
+  }
+
+  th {
+    background-color: #282828;
+  }
+
+  td, th {
+    border: 1px solid #383838;
+  }
+
+  .topnav, .bottomnav {
+    border-color: #333;
+  }
+
+  .related {
+    background: #1A1A1A;
+  }
+
+  .related ul {
+    color: #666;
+  }
+
+  .related .right {
+    border-bottom: 1px solid #333;
+    border-left: 1px solid #333;
+  }
+
+  .sidebar {
+    background: #181818;
+    border-radius: 0.271em;
+    border: 1px solid #333;
+  }
+
+  .footer {
+    color: #666;
+  }
+
+  pre, tt {
+    background-color: #181818;
+  }
+
+  code {
+    background-color: #1A1A1A;
+  }
+
+  div.highlight {
+    border: 1px solid #333;
+  }
+
+  td.linenos pre {
+    border: 0;
+    background-color: transparent;
+    color: #444;
+  }
+
+  .function em.property,
+  .method em.property {
+    color: #999;
+  }
+
+  span.k,
+  span.kt {
+    color: #93A1A1;
+  }
+}
+
+/* Hard black for dark mode on mobile (since it's likely to be an OLED screen) */
+@media only screen and (hover: none) and (pointer: coarse) and (prefers-color-scheme: dark) {
+  html {
+    background: #000;
+    color: #CCC;
+  }
+}
