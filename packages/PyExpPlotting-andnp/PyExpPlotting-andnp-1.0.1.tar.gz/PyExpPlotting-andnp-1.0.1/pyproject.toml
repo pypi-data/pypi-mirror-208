@@ -1,0 +1,48 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.0.1"
+tag_format = "$version"
+version_files = [
+    "pyproject.toml",
+]
+
+[tool.pdm]
+source = [
+    { url = "https://pypi.org/simple", verify_ssl = true, name = "pypi" },
+]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "mypy>=0.770",
+    "flake8",
+    "commitizen",
+    "pre-commit",
+    "build",
+    "twine",
+]
+
+[project]
+name = "PyExpPlotting-andnp"
+version = "1.0.1"
+description = ""
+authors = [
+    { name = "Andy Patterson", email = "andnpatterson@gmail.com" },
+]
+dependencies = [
+    "matplotlib>=2.2.3",
+    "numba>=0.50.0",
+    "scipy>=1.5.4",
+    "PyExpUtils-andnp>=3.4.0",
+    "pandas",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+
+[project.license]
+text = "MIT"
+
+[build-system]
+requires = [
+    "pdm-pep517>=1.0.1",
+]
+build-backend = "pdm.pep517.api"
