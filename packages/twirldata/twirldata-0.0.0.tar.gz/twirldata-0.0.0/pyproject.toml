@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "twirldata"
+version = "0.0.0"
+
+authors = [
+  { name="Twirl Data", email="hello@twirldata.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+description = "Client SDK for the Twirl data platform"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.scripts]
+twirl = "twirl.cli:main"
+
+[project.urls]
+"Homepage" = "https://twirldata.com"
+
+[tool.black]
+line-length = 88
