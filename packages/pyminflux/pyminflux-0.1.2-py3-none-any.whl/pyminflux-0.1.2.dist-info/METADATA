@@ -1,0 +1,110 @@
+Metadata-Version: 2.1
+Name: pyminflux
+Version: 0.1.2
+Summary: Reader, processor, and viewer of MINFLUX raw data.
+Home-page: https://github.com/bsse-scf/pyMINFLUX
+License: Apache-2.0
+Keywords: MINFLUX,Visualization,Filtering,Analysis,Python
+Author: Aaron Ponti
+Author-email: aaron.ponti@bsse.ethz.ch
+Requires-Python: >=3.10,<3.12
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Requires-Dist: numpy (>=1.23.4,<2.0.0)
+Requires-Dist: pandas (>=1.5.1,<2.0.0)
+Requires-Dist: pyopengl (>=3.1.6,<4.0.0)
+Requires-Dist: pyqtgraph (>=0.13.2,<0.14.0)
+Requires-Dist: pyside6 (>=6.4.0.1,<6.5)
+Requires-Dist: scikit-learn (>=1.2.0,<2.0.0)
+Requires-Dist: scipy (>=1.9.3,<2.0.0)
+Project-URL: Bug Tracker, https://github.com/bsse-scf/pyMINFLUX/issues
+Project-URL: Documentation, https://github.com/bsse-scf/pyMINFLUX/wiki
+Project-URL: Repository, https://github.com/bsse-scf/pyMINFLUX
+Description-Content-Type: text/markdown
+
+# ![](pyminflux/ui/assets/Logo_v3_small.png)&nbsp;&nbsp;&nbsp;pyMINFLUX
+
+Reader, analyzer, and viewer of MINFLUX raw data.
+
+## Installation
+
+### Apps
+
+Compiled executables (apps) for Linux, macOS and Windows can be downloaded from the [release page](https://github.com/bsse-scf/pyMINFLUX/releases/latest). 
+
+**Please note**: since pyMINFLUX on macOS comes from an *unidentified developer*, you might need to make an exception in the macOS security settings when launching it for the first time. To do this, right-click on the application icon and select `Open`. After this initial setup, you can simply double-click the icon to launch pyMINFLUX normally.
+
+### pip
+
+The latest version of pyMINFLUX can also be installed from [pypi.org](https://pypi.org/project/pyminflux/). pyMINFLUX is compatible with and tested on Python 3.10 and 3.11. It is recommended to install pyMINFLUX in a conda environment as follows:
+
+```sh
+$ conda create -n pyminflux-env python=3.10  # or 3.11
+$ conda activate pyminflux-env
+$ pip install --upgrade pyminflux
+```
+
+pyMINFLUX can then easily be run from the command line:
+
+```sh
+$ pyminflux
+```
+
+## For developers and tinkerers
+
+pyMINFLUX is compatible with and tested on Python 3.10 and 3.11. For development, it is recommended to install pyMINFLUX in editable mode in a [conda](https://docs.conda.io/en/latest/miniconda.html#latest-miniconda-installer-links) environment as follows:
+
+### Windows and Linux
+
+```sh
+$ conda create -n pyminflux-env python=3.10  # or 3.11
+$ conda activate pyminflux-env
+$ git clone https://github.com/bsse-scf/pyMINFLUX /path/to/pyminflux
+$ cd /path/to/pyminflux
+$ python -m pip install -e .
+```
+
+### macOS
+
+openGL support in recent macOS requires `pyopengl` to be installed with `conda` instead of `pip`.
+
+```sh
+$ conda create -n pyminflux-env python=3.10  # or 3.11
+$ conda activate pyminflux-env
+$ git clone https://github.com/bsse-scf/pyMINFLUX /path/to/pyminflux
+$ cd /path/to/pyminflux
+$ conda install pyopengl       # This is specific to macOS
+$ python -m pip install -e .
+```
+
+### Running pyMinFlux from console
+
+```sh
+$ cd /path/to/pyminflux
+$ python pyminflux/main.py
+```
+
+## Official website and documentation
+
+The official pyMINFLUX website is on https://pyminflux.ethz.ch.
+
+## Citing pyMINFLUX
+
+If you use pyMINFLUX in your research, please cite this repository as follows:
+
+> Aaron Ponti, Javier Casares Arias, & Thomas Horn. (2023). pyMINFLUX (0.1.1). Zenodo. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7895501.svg)](https://doi.org/10.5281/zenodo.7895501)
+
+
+
+
