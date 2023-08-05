@@ -1,0 +1,53 @@
+[build-system]
+requires = ["build", "setuptools-scm"]
+
+[project]
+dynamic = ["version"]
+name = "transport-data"
+description = "Tools for the Transport Data Commons"
+authors = [
+  {name = "Transport Data Commons Initiative (TDCI)"}
+]
+maintainers = [
+  {name = "Paul Natsuo Kishimoto", email = "mail@paul.kishimoto.name"}
+]
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+]
+readme = "README.rst"
+
+dependencies = [
+    "click",
+    "openpyxl",
+    "packaging",
+    "pandas",
+    "platformdirs",
+    "pooch",
+    "requests",
+    "sdmx1 >= 2.9",
+]
+
+[project.optional-dependencies]
+tests = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+
+[project.urls]
+homepage = "https://transport-data.org"
+repository = "https://github.com/transport-data/tools"
+
+[project.scripts]
+tdc = "transport_data.cli:main"
+
+[tool.pytest.ini_options]
+addopts = """-m "not network" --cov=transport_data"""
+markers = [
+    "network: tests that perform network requests",
+]
+
+[tool.setuptools_scm]
