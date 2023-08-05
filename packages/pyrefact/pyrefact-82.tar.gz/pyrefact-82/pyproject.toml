@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyrefact"
+version = "82"
+description = "Automated Python refactoring"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {email = "olle.ln@outlook.com"},
+    {name = "Olle Lindgren"}
+]
+classifiers = ["Programming Language :: Python :: 3"]
+dependencies = [
+    "black>=23.1.0",
+    "isort>=5.12.0",
+    "rmspace>=7",
+    "sympy>=1.11.0",
+    'astunparse==1.6.3; python_version<"3.9"'
+]
+
+[project.urls]
+repository="https://github.com/OlleLindgren/pyrefact"
+
+[project.scripts]
+pyrefact = "pyrefact.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["pyrefact*"]
+
+[tool.black]
+skip_magic_trailing_comma = true
