@@ -1,0 +1,87 @@
+[tool.poetry]
+authors = [
+  "Craig Trim <craigtrim@gmail.com>",
+]
+
+maintainers = [
+  "Craig Trim <craigtrim@gmail.com>",
+]
+
+description = "OpenAI Helper for Easy I/O"
+license = "MIT"
+name = "openai-helper"
+readme = "README.md"
+version = "0.2.2"
+
+keywords = ["openai", "api", "utility"]
+repository = "https://github.com/craigtrim/openai-helper"
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry.dependencies]
+baseblock = "*"
+openai = "^0.27.0"
+python = "^3.8.5"
+tiktoken = "*"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "*"
+flakeheaven = "*"
+plac = "*"
+pre-commit = "^2.20.0"
+pytest = "*"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/craigtrim/openai-helper/issues"
+
+[tool.poetry.build]
+generate-setup-file = true
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool.mypy]
+enable_error_code = [
+  "ignore-without-code",
+  "redundant-expr",
+  "truthy-bool",
+]
+
+explicit_package_bases = true
+files = "src"
+mypy_path = "src"
+namespace_packages = true
+show_error_codes = true
+strict = false
+
+[tool.flakeheaven]
+# optionally inherit from remote config (or local if you want)
+base = "https://raw.githubusercontent.com/flakeheaven/flakeheaven/main/pyproject.toml"
+# specify any flake8 options. For example, exclude "example.py":
+exclude = ["__init__.py", "*.md", "setup.py", ".ipynb"]
+# make output nice
+format = "grouped"
+# 80 chars aren't enough in 21 century
+max_line_length = 2500
+# show line of source code in output
+show_source = true
+
+# list of plugins and rules for them
+[tool.flakeheaven.plugins]
+# include everything in pyflakes except F401
+# F401 (Missing Import)
+# F403 (Unable to Detect Undefined Names)
+# F501 (Line to Long)
+# F541 (f-string missing Placeholders)
+pyflakes = ["+*", "-F401", "-F403"]
+# enable only codes from S100 to S199
+flake8-bandit = ["-*", "+S1??"]
+# enable everything that starts from `flake8-`
+"flake8-*" = ["+*"]
+# explicitly disable plugin
+flake8-docstrings = ["-*"]
