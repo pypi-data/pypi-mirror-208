@@ -1,0 +1,109 @@
+
+Screen {
+  overflow: hidden;
+  layers: base overlay;
+}
+
+UserInput {
+  border: panel $primary-background;
+  background: $surface-lighten-1;
+  margin: 2;
+  margin-top: 3;
+  height: 10;
+  padding: 1;
+  dock: bottom;
+  border-title-color: rgb(225, 225, 225);
+  border-subtitle-color: $surface-lighten-3;
+}
+
+AssistantResponses {
+  border: panel $primary-background-lighten-1;
+  margin: 1;
+  border-title-align: center;
+  border-title-color: rgb(225,225,225);
+  background: $surface-lighten-1;
+}
+
+AssistantResponse {
+  padding: 1;
+}
+
+#response-container {
+  background: $surface;
+  border: tall $surface-lighten-3;
+  margin-bottom: 1;
+  border-subtitle-color: $panel-lighten-2;
+  height: auto;
+}
+
+#help-text {
+  margin: 1;
+}
+
+#submit {
+  margin: 1;
+  width: 100%;
+}
+
+
+.convo {
+  margin: 1;
+}
+
+LoadingIndicator {
+  height: 1;
+}
+
+PastConversations {
+  layer: overlay;
+  margin-top: 1;
+  width: 40;
+  height: 60%;
+  border: panel $primary-background-lighten-1;
+  border-title-color: rgb(225, 225, 225);
+  border-title-align: center;
+  background: $panel;
+  transition: offset 400ms in_back;
+}
+
+PastConversations:focus-within {
+  offset-x: 0 !important;
+}
+
+PastConversations.hidden {
+  offset-x: -100%;
+}
+
+StartNewConversationOption {
+  text-style: italic;
+  color: $primary-lighten-3;
+  align: center middle;
+}
+
+StartNewConversationOption.highlighted {
+  color: $secondary;
+}
+
+Options {
+  layer: overlay;
+  margin-top: 1;
+  width: 35;
+  height: 17%;
+  border: panel $primary-background-lighten-1;
+  border-title-color: rgb(225, 225, 225);
+  border-title-align: center;
+  background: $panel;
+  transition: offset 400ms in_back;
+}
+
+Options:focus-within {
+  offset-x: 0 !important;
+}
+
+Options.hidden {
+  offset-x: -100%;
+}
+
+OptionCheckbox:focus-within {
+  background: $secondary-background-lighten-2;
+}
