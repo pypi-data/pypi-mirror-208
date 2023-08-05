@@ -1,0 +1,30 @@
+# {{ package.description }}
+{% if msgs %}
+## Messages published
+{% for msg in msgs %}  
+
+### `{{ msg.name }}`
+{{ msg.comment }}
+```bash
+{{ msg.code }}
+```
+{% endfor %}
+{% endif %}
+
+{% if srvs %}
+## Services
+{% for srv in srvs %}  
+
+### `{{ srv.name }}`
+{{ srv.comment }}
+{% endfor %}
+{% endif %}
+
+{% if actions %}
+## Actions
+{% for action in actions %}  
+
+### `{{ action.name }}`
+{{ action.comment }}
+{% endfor %}
+{% endif %}
