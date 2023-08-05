@@ -1,0 +1,102 @@
+Metadata-Version: 2.1
+Name: fastapi-request-id
+Version: 1.1.0
+Summary: 
+Author: Stanislav Tsoy
+Author-email: dev.stanislav@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: fastapi (>=0.95.1,<0.96.0)
+Description-Content-Type: text/markdown
+
+# FastApi Request ID
+
+Augments each request with unique request_id attribute and provides request id logging helpers.
+____
+
+### Quickstart
+
+```bash
+pip install fastapi-request-id
+```
+
+```python
+import logging.config
+from typing import Optional
+from fastapi_request_id import (
+    RequestContextMiddleware,
+    BaseExceptionHandler,
+    get_request_id,
+    get_headers,
+)
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import JSONResponse
+from httpx import Client
+
+
+class CustomExceptionHandler(BaseExceptionHandler):
+
+    @staticmethod
+    def build_response(request: Request, exc: Exception, request_id: Optional[str]) -> Response:
+        return JSONResponse(status_code=200, content={
+            'error': True,
+            'request_id': request_id,
+        })
+
+
+app = FastAPI()
+app.add_middleware(RequestContextMiddleware)
+app.add_exception_handler(Exception, CustomExceptionHandler())
+
+LOGGING_CONFIG = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'filters': {
+        'RequestIdFilter': {
+            '()': 'fastapi_request_id.logging.RequestIdFilter',
+        },
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            "filters": [
+                "RequestIdFilter"
+            ]
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+    }
+}
+
+logging.config.dictConfig(LOGGING_CONFIG)
+logger = logging.getLogger()
+
+
+@app.get('/raise')
+def get_with_raise():
+    raise Exception('Raised error')
+
+
+@app.get('/')
+def root():
+    return {'request_id': get_request_id()}
+
+
+@app.get('/request')
+def request():
+    headers = get_headers({
+        'Authorization': "Bearer ...",
+    })
+
+    client = Client()
+    response = client.get('http://localhost/request', headers=headers)
+    return response.json()
+```
