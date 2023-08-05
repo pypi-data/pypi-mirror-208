@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "catalyst_care"
+version = "0.0.1"
+description = ""
+authors = ["BloodSpy <hahaclassik@gmail.com>"]
+readme = "README.md"
+packages = [{include = "python_workspace"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-lsp-server = "^1.7.2"
+wemake-python-styleguide = "^0.17.0"
+black = "^23.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "wemake"
+
+[tool.pyright]
+venv=".venv"
+venvPath="."
+typeCheckingMode="basic"
+analyzeUnannotatedFunctions=true
+strictListInference=true
+strictDictionaryInference=true
+strictSetInference=true
+reportFunctionMemberAccess=true
+reportUnknownParameterType=true
