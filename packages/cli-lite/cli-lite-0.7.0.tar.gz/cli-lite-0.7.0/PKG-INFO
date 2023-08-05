@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: cli-lite
+Version: 0.7.0
+Summary: A simple framework to build a cli tool, base on Alconna
+License: MIT
+Keywords: commandline,cli-tool,plugin,cli,litecli
+Author-email: RF-Tar-Railt <rf_tar_railt@qq.com>
+Requires-Python: >=3.8
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Project-URL: Bug Reports, https://github.com/RF-Tar-Railt/cli-lite/issues
+Project-URL: Homepage, https://github.com/RF-Tar-Railt/cli-lite
+Project-URL: Source, https://github.com/RF-Tar-Railt/cli-lite
+Description-Content-Type: text/markdown
+
+# Cli-Lite
+
+A simple framework to build a cli tool. Base on [`Alconna`](https://github/ArcletProject/Alconna)
+
+## install
+
+```powershell
+pip install cli-lite
+```
+
+## example
+
+write as sample:
+
+```python
+# example.py
+from clilte import BasePlugin, CommandLine, PluginMetadata
+from arclet.alconna import Alconna, Arparma, Args, CommandMeta
+
+
+class MyPlugin(BasePlugin):
+
+    def init(self) -> Alconna | str:
+        return Alconna("hello", Args["name", str], meta=CommandMeta("test command"))
+
+    def meta(self) -> PluginMetadata:
+        return PluginMetadata("hello", "0.0.1", "my first plugin", ["dev"], ["john"])
+
+    def dispatch(self, result: Arparma) -> bool | None:
+        return print(f"Hello! {result.name}")
+
+
+if __name__ == '__main__':
+    cli = CommandLine(title="My first CLI", version="example 0.0.1")
+    cli.add(MyPlugin)
+    cli.load_register('builtin.cache')
+    cli.main()
+```
+
+and execute the line:
+
+```shell
+python example.py hello world
+```
+
+you will get the result:
+
+```shell
+Hello! world
+```
+
+
