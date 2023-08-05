@@ -1,0 +1,38 @@
+{# -*- engine:django -*- #}
+{% load django_vite i18n any_js %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <base href="{{ BASE_URL }}">
+
+    {% include "core/partials/meta.html" %}
+    <title>{{ request.site.preferences.general__title }}</title>
+
+    {% if SENTRY_ENABLED %}
+      {% if SENTRY_TRACE_ID %}
+        <meta name="sentry-trace" content="{{ SENTRY_TRACE_ID }}"/>
+      {% endif %}
+    {% endif %}
+
+    {{ FRONTEND_SETTINGS|json_script:"frontend_settings" }}
+
+    {% vite_hmr_client %}
+  </head>
+
+  <body>
+    <main id="app">
+      <!-- HTML and CSS in #app will be replaced by vue -->
+      {% include "core/partials/splash_screen.html" %}
+
+      <app ref="aleksisApp"></app>
+    </main>
+
+    {% block no_frontend %}
+      {% if not need_maintenance_response %}
+        {% vite_asset 'aleksis/core/frontend/index.js' %}
+      {% endif %}
+    {% endblock no_frontend %}
+  </body>
+</html>

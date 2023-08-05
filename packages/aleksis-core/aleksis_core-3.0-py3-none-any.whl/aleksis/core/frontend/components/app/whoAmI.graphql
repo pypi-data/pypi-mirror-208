@@ -1,0 +1,20 @@
+query ($permissions: [String]!) {
+  whoAmI {
+    username
+    isAuthenticated
+    isAnonymous
+    isImpersonate
+    person {
+      photo {
+        url
+      }
+      fullName
+      avatarUrl
+      isDummy
+    }
+    permissions: globalPermissionsByName(permissions: $permissions) {
+      name
+      result
+    }
+  }
+}

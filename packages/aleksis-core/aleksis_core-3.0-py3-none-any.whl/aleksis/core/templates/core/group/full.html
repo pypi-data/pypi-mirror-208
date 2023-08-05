@@ -1,0 +1,108 @@
+{# -*- engine:django -*- #}
+
+{% extends "core/base.html" %}
+{% load rules %}
+
+{% load i18n static material_form %}
+{% load render_table from django_tables2 %}
+
+{% block browser_title %}{{ group.name }}{% endblock %}
+
+{% block content %}
+  <h1>{{ group.name }}
+    <small class="grey-text">{{ group.short_name }}</small>
+  </h1>
+
+  {% has_perm 'core.edit_group_rule' user group as can_change_group %}
+  {% has_perm 'core.change_group_preferences_rule' user group as can_change_group_preferences %}
+  {% has_perm 'core.delete_group_rule' user group as can_delete_group %}
+  {% has_perm 'core.view_group_stats_rule' user group as can_view_group_stats %}
+
+  {% if can_change_group or can_change_group_preferences or can_delete_group %}
+    <p>
+      {% if can_change_group %}
+        <a href="{% url 'edit_group_by_id' group.id %}" class="btn waves-effect waves-light">
+          <i class="material-icons iconify left" data-icon="mdi:pencil-outline"></i>
+          {% trans "Edit" %}
+        </a>
+      {% endif %}
+
+      {% if can_delete_group %}
+        <a href="{% url 'delete_group_by_id' group.id %}" class="btn waves-effect waves-light red">
+          <i class="material-icons iconify left" data-icon="mdi:delete-outline"></i>
+          {% trans "Delete" %}
+        </a>
+      {% endif %}
+
+      {% if can_change_group_preferences %}
+        <a href="{% url "preferences_group" group.id %}" class="btn waves-effect waves-light">
+          <i class="material-icons iconify left" data-icon="mdi:cog-outline"></i>
+          {% trans "Change preferences" %}
+        </a>
+      {% endif %}
+    </p>
+  {% endif %}
+
+  <table>
+    <tr>
+      <th>
+        <i class="material-icons iconify left" data-icon="mdi:shape-outline"></i>
+        {% trans "Group type" %}
+      </th>
+      <td>
+        {{ group.group_type|default:"–" }}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <i class="material-icons iconify left" data-icon="mdi:format-vertical-align-top"></i>
+        {% trans "Parent groups" %}
+      </th>
+      <td>
+        {{ group.parent_groups.all|join:", "|default:"–" }}
+      </td>
+    </tr>
+  </table>
+
+  {% if can_view_group_stats %}
+    <h2>{% blocktrans %}Statistics{% endblocktrans %}</h2>
+    <table>
+      <tr>
+        <th>
+          <i class="material-icons iconify left" data-icon="mdi:account-group-outline"></i>
+          {% trans "Count of members" %}
+        </th>
+        <td>{{ stats.members }}</td>
+      </tr>
+      {% if stats.age_avg %}
+        <tr>
+          <th>
+            <i class="material-icons iconify left" data-icon="mdi:cake-variant-outline"></i>
+            {% trans "Average age" %}
+          </th>
+          <td>{{ stats.age_avg|floatformat }}</td>
+        </tr>
+      {% endif %}
+      {% if stats.age_range_min %}
+        <tr>
+          <th>
+            <i class="material-icons iconify left" data-icon="mdi:calendar-range-outline"></i>
+            {% trans "Age range" %}
+          </th>
+          <td>
+            {% blocktrans with min=stats.age_range_min max=stats.age_range_max %}
+              {{ min }} years to {{ max }} years
+            {% endblocktrans %}
+          </td>
+        </tr>
+      {% endif %}
+    </table>
+  {% endif %}
+
+  <h2>{% blocktrans %}Owners{% endblocktrans %}</h2>
+  {% render_table owners_table %}
+
+  <h2>{% blocktrans %}Members{% endblocktrans %}</h2>
+  {% render_table members_table %}
+
+{% endblock %}

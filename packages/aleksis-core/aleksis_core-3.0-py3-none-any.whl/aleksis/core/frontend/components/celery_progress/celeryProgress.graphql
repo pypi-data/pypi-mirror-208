@@ -1,0 +1,30 @@
+query ($taskId: String!) {
+  celeryProgressByTaskId(taskId: $taskId) {
+    state
+    success
+    progress {
+      current
+      total
+      percent
+    }
+    complete
+    messages {
+      level
+      message
+      tag
+    }
+    meta {
+      title
+      progressTitle
+      errorMessage
+      successMessage
+      redirectOnSuccessUrl
+      backUrl
+      additionalButton {
+        title
+        icon
+        url
+      }
+    }
+  }
+}

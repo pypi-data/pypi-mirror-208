@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="container">
+    <div class="card red">
+      <div class="card-content white-text">
+        <i class="material-icons small left">error_outline</i>
+        <span class="card-title">{% blocktrans %}Permission Denied{% endblocktrans %}</span>
+        <p>{% blocktrans %}The page you requested enforces users to verify using
+          two-factor authentication for security reasons. You need to enable this
+          security feature in order to access this page.{% endblocktrans %}</p>
+
+        <p>
+          <a href="javascript:history.go(-1)" class="pull-right btn waves-effect waves-light">
+            {% trans "Go back" %}
+          </a>
+          <a href="{% url 'setup_two_factor_auth' %}" class="btn green waves-effect waves-light">
+            {% trans "Enable Two-Factor Authentication" %}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
