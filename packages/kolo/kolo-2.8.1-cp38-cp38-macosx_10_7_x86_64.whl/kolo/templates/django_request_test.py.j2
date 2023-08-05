@@ -1,0 +1,52 @@
+import freezegun
+import httpretty
+
+from django.test import TestCase
+from django.utils.http import urlencode
+
+{% for import in imports %}{{ import }}
+{% endfor %}
+
+@freezegun.freeze_time("{{ request_timestamp }}", tick=True)
+class {{ test_class }}(TestCase):
+    @httpretty.activate(allow_net_connect=False)
+    def {{ test_name }}(self):
+        {% for fixture in sql_fixtures %}
+        # {{fixture.query.query}}
+        # {{fixture.query.query_data}}
+        {% if fixture.model %}
+        {{fixture.model}}.objects.create({% for column in fixture.values %}
+            {{column.field}}={{column.value}},{% endfor %}
+        )
+        {% endif %}
+        {% endfor %}
+
+        {% for outbound_request in outbound_request_frames %}
+        httpretty.register_uri(
+            httpretty.{{outbound_request.request.method}},
+            "{{outbound_request.request.url}}",
+            status={{outbound_request.response.status_code}}
+        ) 
+        {% endfor %}
+        response = self.client.{{ request.method.lower() }}(
+            "{{ request.path_info }}",
+            {{ query_params }}
+            {{ prettified_request_body }},
+            {% for header, value in request_headers.items() %}
+            {{ header }}={{ value.__repr__() }},
+            {% endfor %}
+        )
+
+        self.assertEqual(response.status_code, {{ response.status_code }})
+        {%- if "\n" in response.content %}
+        content = """\
+{% filter indent(8, True) %}{{ response.content }}{% endfilter %}
+        """
+        {%- else %}
+        content = {{ response.content.__repr__() }}
+        {%- endif %}
+        self.assertEqual(response.content.decode("{{ response.charset|default("utf-8") }}"), content)
+        {%- for name in template_names %}
+        self.assertTemplateUsed(response, {{ name.__repr__() }})
+        {%- endfor %}
+
