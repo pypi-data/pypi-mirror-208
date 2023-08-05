@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: dagster-duckdb
+Version: 0.19.4
+Summary: Package for DuckDB-specific Dagster framework op and resource components.
+Home-page: https://github.com/dagster-io/dagster/tree/master/python_modules/libraries/dagster-duckb
+Author: Elementl
+Author-email: hello@elementl.com
+License: Apache-2.0
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+License-File: LICENSE
+Requires-Dist: duckdb
+Requires-Dist: dagster (==1.3.4)
+Provides-Extra: pandas
+Requires-Dist: pandas ; extra == 'pandas'
+Provides-Extra: pyspark
+Requires-Dist: pyspark (>=2.0.2) ; (python_version < "3.8") and extra == 'pyspark'
+Requires-Dist: pyspark (>=3.0.0) ; (python_version >= "3.8") and extra == 'pyspark'
+
