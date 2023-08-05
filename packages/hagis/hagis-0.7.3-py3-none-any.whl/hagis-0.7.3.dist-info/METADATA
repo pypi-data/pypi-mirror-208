@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: hagis
+Version: 0.7.3
+Summary: A high availability GIS client
+Author-email: Jiro Shirota <jshirota@gmail.com>
+Project-URL: Homepage, https://github.com/jshirota/Hagis
+Project-URL: Bug Tracker, https://github.com/jshirota/Hagis/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# Hagis
+
+A GIS client
+
+```python
+from hagis import Layer, Point
+
+class City:
+    objectid: int
+    areaname: str
+    pop2000: int
+    shape: Point
+
+layer = Layer("https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0", City)
+
+for city in layer.query():
+    print(city.areaname, city.pop2000, city.shape.x, city.shape.y)
+```
+
+[More examples](https://github.com/jshirota/Hagis/blob/main/demo.ipynb)
