@@ -1,0 +1,42 @@
+{
+    "workflow_name": "primary",
+    "template_id": "{name-your-service}-primary",
+    "template_labels": ["{name-your-service}"],
+    "unique_iteration_id": "",
+    "unique_template_id": "",
+    "specific_jobs_to_run": [],
+    "force_remove_all_prerequisites": false,
+    "use_only_wf_packages": false,
+    "dag_interval": "@daily",
+    "dag_retries": 5,
+    "dag_pause_on_start": false,
+
+    "spark_properties": {
+        "basic": {
+            "spark.sql.execution.arrow.maxRecordsPerBatch": "15",
+            "spark.driver.memory": "16g",
+            "spark.executor.memory": "3g",
+            "spark.executor.memoryOverhead": "3g",
+            "spark.sql.shuffle.partitions": "1500",
+            "spark.scheduler.mode": "FAIR",
+            "spark.sql.parquet.columnarReaderBatchSize": "1024",
+            "spark.hadoop.fs.gs.implicit.dir.repair.enable": "false"
+        },
+        "example_stage": {
+            "spark.driver.memory": "2g",
+            "spark.executor.memory": "2g",
+            "spark.executor.memoryOverhead": "1g"
+        }
+    },
+
+    "workflow_stages": [
+        {
+            "stage_name":  "example_stage",
+            "prerequisites":  []
+        }
+    ],
+
+    "extra_job_params": {
+        "MODE": "MANUAL"
+    }
+}
