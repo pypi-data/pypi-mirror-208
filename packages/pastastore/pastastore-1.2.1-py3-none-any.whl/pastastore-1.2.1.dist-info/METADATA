@@ -1,0 +1,184 @@
+Metadata-Version: 2.1
+Name: pastastore
+Version: 1.2.1
+Summary: Tools for managing Pastas time series models.
+Author: D.A. Brakenhoff
+Maintainer-email: "D.A. Brakenhoff" <d.brakenhoff@artesia-water.nl>, "R. Calje" <r.calje@artesia-water.nl>, "M.A. Vonk" <m.vonk@artesia-water.nl>
+License: The MIT License (MIT)
+        
+        Copyright (c) 2020 D.A. Brakenhoff
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: homepage, https://github.com/pastas/pastastore
+Project-URL: repository, https://github.com/pastas/pastastore
+Project-URL: documentation, https://pastastore.readthedocs.io/en/latest/
+Keywords: hydrology,groundwater,time series,analysis,database
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Other Audience
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Scientific/Engineering :: Hydrology
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pastas (>=0.13)
+Requires-Dist: tqdm (>=4.36)
+Requires-Dist: pyyaml
+Provides-Extra: arctic
+Requires-Dist: arctic ; extra == 'arctic'
+Provides-Extra: arcticdb
+Requires-Dist: arcticdb ; extra == 'arcticdb'
+Provides-Extra: docs
+Requires-Dist: pastastore[optional] ; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme ; extra == 'docs'
+Requires-Dist: Ipython ; extra == 'docs'
+Requires-Dist: ipykernel ; extra == 'docs'
+Requires-Dist: nbsphinx ; extra == 'docs'
+Requires-Dist: nbsphinx-link ; extra == 'docs'
+Provides-Extra: lint
+Requires-Dist: black ; extra == 'lint'
+Requires-Dist: flake8 ; extra == 'lint'
+Requires-Dist: isort ; extra == 'lint'
+Provides-Extra: optional
+Requires-Dist: contextily ; extra == 'optional'
+Requires-Dist: pyproj ; extra == 'optional'
+Requires-Dist: adjustText ; extra == 'optional'
+Provides-Extra: pystore
+Requires-Dist: fsspec (>=0.3.3) ; extra == 'pystore'
+Requires-Dist: python-snappy ; extra == 'pystore'
+Requires-Dist: dask[dataframe] ; extra == 'pystore'
+Provides-Extra: test
+Requires-Dist: pastastore[arcticdb,lint,optional] ; extra == 'test'
+Requires-Dist: hydropandas ; extra == 'test'
+Requires-Dist: coverage ; extra == 'test'
+Requires-Dist: codecov ; extra == 'test'
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: pytest-dependency ; extra == 'test'
+Requires-Dist: pytest-benchmark ; extra == 'test'
+Requires-Dist: codacy-coverage ; extra == 'test'
+
+![pastastore](https://github.com/pastas/pastastore/workflows/pastastore/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/pastastore/badge/?version=latest)](https://pastastore.readthedocs.io/en/latest/?badge=latest)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/81b1e0294f5247cfa4eca657a8eebc61)](https://www.codacy.com/gh/pastas/pastastore?utm_source=github.com&utm_medium=referral&utm_content=pastas/pastastore&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/81b1e0294f5247cfa4eca657a8eebc61)](https://www.codacy.com/gh/pastas/pastastore/dashboard?utm_source=github.com&utm_medium=referral&utm_content=pastas/pastastore&utm_campaign=Badge_Coverage)
+![PyPI](https://img.shields.io/pypi/v/pastastore)
+
+# pastastore
+
+This module stores 
+[Pastas](https://pastas.readthedocs.io/en/latest/) time series and models in a
+database.
+
+Storing time series and models in a database allows the user to manage time
+series and Pastas models on disk, which allows the user to pick up where they
+left off without having to reload everything.
+
+## Installation
+
+Install the module with `pip install pastastore`.
+
+For installing in development mode, clone the repository and install by typing
+`pip install -e .` from the module root directory.
+
+For plotting background maps, the `contextily` and `pyproj` packages are
+required. For a full install, including optional dependencies for plotting and
+labeling data on maps, use: `pip install pastastore[optional]` Windows users
+are asked to install `rasterio` themselves since it often cannot be installed
+using `pip`. `rasterio` is a dependency of `contextily`.
+
+## Usage
+
+The following snippets show typical usage. The first step is to define a
+so-called `Connector` object. This object contains methods to store time series
+or models to the database, or read objects from the database.
+
+The following code creates a PasConnector, which uses Pastas JSON-styled
+"`.pas`-files" to save models in a folder on your computer (in this case a
+folder called `pastas_db` in the current directory).
+
+```python
+import pastastore as pst
+
+# create connector instance
+conn = pst.PasConnector(name="pastas_db", path=".")
+```
+
+The next step is to pass that connector to the `PastaStore` object. This object
+contains all kinds of useful methods to analyze and visualize time series, and
+build and analyze models.
+
+```python
+# create PastaStore instance
+pstore = pst.PastaStore(conn)
+```
+
+Now the user can add time series, models or analyze or visualize existing
+objects in the database. Some examples showing the functionality of the
+PastaStore object are shown below:
+
+```python
+import pandas as pd
+import pastas as ps
+
+# load oseries from CSV and add to database
+oseries = pd.read_csv("oseries.csv")
+pstore.add_oseries(oseries, "my_oseries", metadata={"x": 100_000, "y": 400_000})
+
+# read oseries from database
+oseries = pstore.get_oseries("my_oseries")
+
+# view oseries metadata DataFrame
+pstore.oseries
+
+# plot oseries location on map
+ax = pstore.maps.oseries()
+pstore.maps.add_background_map(ax)  # add a background map
+
+# plot my_oseries time series
+ax2 = pstore.plot.oseries(names=["my_oseries"])
+
+# create a model with pastas
+ml = ps.Model(oseries, name="my_model")
+
+# add model to database
+pstore.add_model(ml)
+
+# load model from database
+ml2 = pstore.get_models("my_model")
+
+# export whole database to a zip file
+pstore.to_zip("my_backup.zip")
+```
+
+For more elaborate examples, refer to the
+[Notebooks](https://pastastore.readthedocs.io/en/latest/examples.html#example-notebooks).
