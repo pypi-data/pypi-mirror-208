@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: streaming-indicators
+Version: 0.0.2
+Summary: A python library for computing technical analysis indicators on streaming data.
+Home-page: https://github.com/mr-easy/streaming_indicators
+Author: Rishabh Gupta
+Author-email: rishabhg1997@gmail.com
+Project-URL: Bug Tracker, https://github.com/mr-easy/streaming_indicators/issues
+Project-URL: Code, https://github.com/mr-easy/streaming_indicators
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.4
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: numpy (>=1.13.3)
+
+# Streaming Indicators 
+
+A python library for computing technical analysis indicators on streaming data.
+
+## Installation
+```
+pip install streaming-indicators
+```
+## Why another TA library?
+There are many other technical analysis python packages, most notably ta-lib, then why another library?  
+All other libraries work on static data, but you can not add values to any indicator. But in real system, data values keeps coming, and indicators should keep updating. This library is for that purpose.
+
+## Usage
+Each indicator is a class, and is statefull. It will have 3 main functions:
+1. Constructor: initialise all parameters such as period.
+2. update: To add new data point in the indicator computation. Returns the new value of the indicator.
+3. compute: Compute indicator value with a new data point, but don't update it's state. This is useful in some cases, for example, compute indictor on ltp, but don't update it.
+
+## Example
+```
+from streaming_indicators import SMA
+
+sma = SMA(10)
+for i in range(20):
+    print(i, sma.update(i))
+```
+MIT License
+
+Copyright (c) [2023] [Rishabh Gupta]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
