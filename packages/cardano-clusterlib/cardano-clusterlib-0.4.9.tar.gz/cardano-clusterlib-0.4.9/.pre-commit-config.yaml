@@ -1,0 +1,51 @@
+repos:
+- repo: https://github.com/asottile/reorder_python_imports
+  rev: v3.9.0
+  hooks:
+  - id: reorder-python-imports
+    entry: env SETUPTOOLS_USE_DISTUTILS=stdlib reorder-python-imports
+    language_version: python3
+- repo: https://github.com/ambv/black
+  rev: 23.3.0
+  hooks:
+  - id: black
+    args: [--safe, --quiet]
+    language_version: python3
+    require_serial: true
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: trailing-whitespace
+    language_version: python3
+    exclude_types: [html]
+  - id: end-of-file-fixer
+    language_version: python3
+    exclude_types: [html]
+  - id: check-yaml
+    language_version: python3
+  - id: debug-statements
+    language_version: python3
+- repo: https://github.com/charliermarsh/ruff-pre-commit
+  rev: v0.0.265
+  hooks:
+    - id: ruff
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.9.0.2
+  hooks:
+  - id: shellcheck
+- repo: https://github.com/igorshubovych/markdownlint-cli
+  rev: v0.34.0
+  hooks:
+  - id: markdownlint
+- repo: local
+  hooks:
+  - id: pylint
+    name: pylint
+    entry: pylint
+    language: system
+    types: [python]
+  - id: mypy
+    name: mypy
+    entry: mypy
+    language: system
+    types: [python]
