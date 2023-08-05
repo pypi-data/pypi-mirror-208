@@ -1,0 +1,2 @@
+def alawi():
+    print("Hey")
