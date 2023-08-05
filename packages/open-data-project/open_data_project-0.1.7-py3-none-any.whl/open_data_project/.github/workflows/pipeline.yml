@@ -1,0 +1,138 @@
+name: Dataset Pull Automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      commitToRepos:
+        description: 'Commit to the portal'
+        required: true
+        default: true
+        type: boolean
+
+  schedule:
+    - cron: '0 12 * * FRI'
+
+jobs:
+  Pull_datasets:
+    runs-on: ubuntu-latest
+    env: 
+      jkanPath: jkan
+      odbodsPath: od_bods
+      
+    steps:
+    # Init repos
+    - name: Check out OD bods toolset repo
+      uses: actions/checkout@v3
+      with: 
+        repository: 'OpenDataPortalFramework-Demo/od_bods'
+        path: 'od_bods'
+        token: ${{ secrets.COMMITS_TOKEN }}
+    - name: Check out JKAN repo
+      uses: actions/checkout@v3
+      with: 
+        repository: 'OpenDataPortalFramework-Demo/jkan'
+        path: 'jkan'
+        token: ${{ secrets.COMMITS_TOKEN }}
+    - name: Check files
+      run: ls -l -a
+
+   # Set up programming toolsets
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+          python-version: '3.9'
+    - name: Install dependencies for python scripts
+      run: python -m pip install beautifulsoup4 black datefinder Markdown pandas pytest PyYAML PyGithub requests
+      
+    # Set up log file
+    - name: Set up log file
+      run: | 
+        touch log.json
+        touch log.md
+        echo '# pipeline error log' >> log.md
+        echo '' >> log.md
+        echo '## Unaccessible Webpages' >> log.md
+        echo '' >> log.md
+        echo '|URL | Error Code | Error Reason|' >> log.md
+        echo '|--- | --- | ---|' >> log.md
+      working-directory: ${{env.odbodsPath}}
+    
+    - name: Check files
+      run: ls -l -a
+        
+    # ArcGIS portals
+    - name: Run Script arcgis.py
+      run: python arcgis.py
+      working-directory: ${{env.odbodsPath}}
+
+    # USMART portals
+    - name: Run Script usmart.py
+      run: python usmart.py
+      working-directory: ${{env.odbodsPath}}  
+
+    - name: Run Script ckan.py
+      run: python ckan.py
+      working-directory: ${{env.odbodsPath}}
+     
+    # ScotGov Statistics Sparkql
+    - name: Run Script sparkql_statistics.py
+      run: python sparkql_statistics.py
+      working-directory: ${{env.odbodsPath}}
+
+    # DCAT feeds
+    - name: Run Script dcat.py
+      run: python dcat.py
+      working-directory: ${{env.odbodsPath}}
+      
+    # aberdeenshire_council_scraper feeds
+    #- name: Run Script aberdeenshire_council_scraper.py
+     # run: python aberdeenshire_council_scraper.py
+     # working-directory: ${{env.odbodsPath}}/web-scrapers
+   
+    # Merge data
+    - name: Run Script merge_data.py
+      run: python merge_data.py
+      working-directory: ${{env.odbodsPath}}
+
+    - name: Run Script health_checks/health_categories.py
+      run: python health_categories.py
+      working-directory: ${{env.odbodsPath}}/health_checks
+
+    # Convert merged CSV to Markdown files 
+    - name: Run Script export2jkan.py
+      run: python export2jkan.py
+      working-directory: ${{env.odbodsPath}}
+
+    # Commit changes
+    - name: Git config
+      working-directory: ${{env.jkanPath}}
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    - name: Git status od_bods
+      run: git status
+      working-directory: ${{env.odbodsPath}}
+    - name: Commit and push od_bods
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+      run: git add -A && git commit -m "Dataset Sync" && git push origin main
+      working-directory: ${{env.odbodsPath}}
+    - name: Git status JKAN
+      run: git status
+      working-directory: ${{env.jkanPath}}
+    - name: Commit and push JKAN
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+      run: git add -A && git commit -m 'Dataset Sync' && git push origin main
+      working-directory: ${{env.jkanPath}}
+        
+    # Debugging: artifact upload if the workflow fails at all or if we're not committing to the site (likely to debug)
+    - uses: actions/upload-artifact@v3
+      if: ${{ failure() || github.event.inputs.commitToRepos == 'false' }}
+      with:
+        name: workspace
+        path: ${{ github.workspace }}
+        
+    # Log output
+    - name: Log output
+      run: cat log.md >> $GITHUB_STEP_SUMMARY
+      working-directory: ${{env.odbodsPath}}
+
