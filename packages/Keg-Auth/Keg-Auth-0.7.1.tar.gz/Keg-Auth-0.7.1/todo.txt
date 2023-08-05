@@ -1,0 +1,65 @@
+Triage
+------
+- Send email when password or email is changed
+
+
+Initial Release
+---------------
+- Need user CRUD.
+- circle.yml version checks aren't working as expected
+- remove CSRF cleanup which is in Keg now
+
+For Agari
+---------
+- invalidate an existing token if the user logs in?
+- document testing and development options, readme
+- support password complexity?
+- Login page: redirect if user is logged in?
+- Add token expiration time to reset email.
+- Should we be using the check-manifest command in tox.ini?
+
+
+Backlog
+-------
+- Create user CLI needs to handle errors
+- Is there some confusion in the extension about whether or not KegAuth is application specific or
+  application neutral?  We store stuff on self, specific to the app's configuration, but then use
+  flask.current_app in some of the methods.
+- use recreate in Keg?  Maybe in dev but not in CI?
+- review authbwc functionality and duplicate good parts
+- rate limiting and audit trail
+- test Login form next redirection, make sure it's secure
+- Flask login has some options when logging a user in for "remember" and "fresh" should we use them?
+- Flask login has some enhanced security for preventing session hijacking, use it?
+- cli command to add user, how does this integrate as an extension?
+- csrf cleanup should go in keg_elements?
+
+
+Icebox
+-------
+- Email or password change done by user should be authorized through the token system.
+- add signals
+- Consider config setting to prevent user enumeration:
+    - https://security.stackexchange.com/questions/158075/is-it-unsafe-to-show-message-that-username-account-does-not-exist-at-login
+    - https://blog.codinghorror.com/the-god-login/
+    - hashing password even for non-users
+- login by email, send easy-login link like Slack
+- social account registration and login
+- bcrypt probably doesn't need to be a hardcoded setup.py requirement
+- have another test in tox to run with default crypto to make sure it's setup and working
+  correctly for our non-test defaults
+- invalid data in the password field will throw an exception.  Catch this?
+- bootstrap tamplate: why do the form fields show up not as indented as paragraph and headings?
+- Render all view messages from templates so language can be easily overridden without subclassing?
+- UserMixin should be generated from a function?
+- 2FA
+- text message to reset password link
+- Where should reset-password.html cancel link go?  Is Login right?
+- forms aren't tested thoroughly/separately, e.g. field validations
+- When token is invalid, we redirect to forgot-password with a flash.  That's a little jaring from
+  a UX perspective.
+- If a token exists and is not expired, don't generate a new one, as a malicious user could keep
+  requesting token resets.  Maybe a mute point of we get rate limiting setup.
+- use CircleCI "workflows" for parallel testing of different python versions
+- find a "common passwords" library and make sure passwords aren't in it as part of complexity
+  requirements

@@ -1,0 +1,12 @@
+{% import 'keg-elements/forms/horizontal-b4.html' as horizontal %}
+{% extends 'keg-elements/form-view.html' %}
+{%- if _ is not defined -%}
+    {% from 'keg-auth/i18n.j2' import gettext as _ %}
+{%- endif -%}
+
+{% block form %}
+{{ horizontal.form(form, action_text=form_action_text) }}
+{% if config['KEGAUTH_EMAIL_OPS_ENABLED'] %}
+<p><a href="{{auth_manager.url_for('forgot-password')}}">{{ _('I forgot my password') }}</a>.</p>
+{% endif %}
+{% endblock %}
