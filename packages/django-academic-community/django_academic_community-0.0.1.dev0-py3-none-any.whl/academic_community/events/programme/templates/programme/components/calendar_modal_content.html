@@ -1,0 +1,10 @@
+{% load events_programme %}
+
+{{ object.abstract|truncatewords_html:200 }}
+
+{% with meetingroom_list=object.session.meeting_rooms.all %}
+  {% if meetingroom_list %}
+    <h4>Meeting room{{ meetingroom_list|pluralize }}</h4>
+    {% meetingroom_cards meetingroom_list row_class='row-cols-1 row-cols-lg-2' %}
+  {% endif %}
+{% endwith %}

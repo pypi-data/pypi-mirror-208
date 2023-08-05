@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+  {% bootstrap_alert "Logged out!" alert_type="success" %}
+  {% url 'login' as login_url %}
+  {% bootstrap_button "Click here to login again." button_type="link" button_class="btn-link" href=login_url %}
+{% endblock %}

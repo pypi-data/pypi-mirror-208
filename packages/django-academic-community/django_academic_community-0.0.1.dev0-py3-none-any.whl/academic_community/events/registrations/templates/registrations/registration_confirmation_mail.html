@@ -1,0 +1,21 @@
+
+{% spaceless %}
+<p>
+    Hello {{ registration.member }}!
+</p>
+<p>
+    This is to confirm that you successfully registered for the
+    <a href="{{ root_url }}{{ registration.event.get_absolute_url }}">{{ registration.event }}</a>.
+</p>
+{% if registration.event.registration_possible %}
+<p>
+    You can update, view or withdraw your registration until
+    {{ registration.event.registration_end|date }} at the following url:
+    <a href="{{ root_url }}{{ registration.get_absolute_url }}">{{ root_url }}{{ registration.get_absolute_url }}</a>.
+</p>
+{% endif %}
+<p>
+    Best,<br>
+    The organizers of the {{ registration.event }}.
+</p>
+{% endspaceless %}

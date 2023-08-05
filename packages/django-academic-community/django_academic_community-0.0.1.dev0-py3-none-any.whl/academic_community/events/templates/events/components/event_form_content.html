@@ -1,0 +1,229 @@
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load sekizai_tags %}
+
+{% with active_tab="generalTab" tablist_id="eventFormTabs" %}
+  {% tab_list generalTab="General Properties" viewOptionsTab="View options" submissionsTab="Abstract Submissions" registrationsTab="Registrations" othersTab="Other Properties" %}
+
+    {% tab_content "generalTab" %}
+
+      {% card card_class="mb-4" %}
+        <p>
+          Specify general information for your event. For small events (e.g.)
+          activity meetings, discussions, we recommend to use the
+          <i>Single session mode</i>. Larger events, such as community
+          assemblies, should disable this option.
+        </p>
+        <p>
+          If you want to enable the <i>Advanced Editing Mode</i>, which gives
+          your more power in designing the landing page, please
+          <a href="{% url 'contact:contact' %}">
+            contact the community managers
+          </a>.
+        </p>
+        <p>
+          For other options, such as
+          <a href="#" onclick="changeFormTab('viewOptionsTab')">
+            view restrictions
+          </a>,
+          <a href="#" onclick="changeFormTab('submissionsTab')">
+            abstract submission
+          </a> or
+          <a href="#" onclick="changeFormTab('registrationsTab')">
+            registration
+          </a>, please use the tabs above.
+        </p>
+      {% endcard %}
+      {% bootstrap_field form.name %}
+      {% bootstrap_field form.time_range %}
+      {% bootstrap_field form.slug %}
+      {% bootstrap_field form.single_session_mode %}
+      {% bootstrap_field form.orga_team %}
+      {% bootstrap_field form.logo %}
+      {% bootstrap_field form.abstract %}
+      {% bootstrap_field form.activities %}
+    {% endtab_content %}
+
+    {% tab_content "viewOptionsTab" %}
+
+      {% card card_class="mb-4" %}
+        <p>
+          Control who can see your events or contents of your event. Here you can
+          select user groups that can see various aspects of your event. Standard
+          groups are:
+        </p>
+
+        <ul>
+          <li>
+            <b>Anonymous users (public)</b>:
+            Users, that are not logged in
+          </li>
+          <li>
+            <b>All registered users</b>:
+            Users that are logged in but are not necessarily a member of the
+            community (note that this option implies <i>Community members</i>).
+          </li>
+          <li>
+            <b>Community members</b>:
+            Members of the community that are logged in
+          </li>
+          <li>
+            <b>Community managers</b>:
+            The managers of the community
+          </li>
+        </ul>
+
+        <p>
+          Other available groups depend on your community. Please ask your
+          community managers in case of questions. <br>
+          Note that the organization team you specified in the
+          <a href="#" onclick="changeFormTab('generalTab')">
+            General properties
+          </a> of the event has always access.
+        </p>
+      {% endcard %}
+
+      {% bootstrap_field form.event_view_groups %}
+      {% bootstrap_field form.view_programme_groups %}
+      {% bootstrap_field form.view_connections_groups %}
+    {% endtab_content %}
+
+    {% tab_content "submissionsTab" %}
+
+      {% card card_class="mb-4" %}
+        <p>
+          To enable abstract submissions for your event, set the
+          <i>Submission range</i> below and enter the groups that are allowed to
+          submit an abstract (see
+          <a href="#" onclick="changeFormTab('viewOptionsTab')">
+            View options
+          </a>
+          for an explanation on the groups). If you do not plan to get any submissions,
+          you should deactivate the <i>Display submissions</i> option.
+        </p>
+      {% endcard %}
+
+      {% bootstrap_field form.submission_groups %}
+      {% bootstrap_field form.submission_upload %}
+      {% bootstrap_field form.display_submission_button %}
+      {% bootstrap_field form.display_submissions %}
+      {% bootstrap_field form.register_presenters %}
+      {% bootstrap_field form.submission_for_activity %}
+      {% bootstrap_field form.submission_for_session %}
+      {% bootstrap_field form.submission_range %}
+      {% bootstrap_field form.submission_editing_end %}
+      {% bootstrap_field form.submission_licenses %}
+      {% bootstrap_field form.submission_upload_licenses %}
+
+    {% endtab_content %}
+
+    {% tab_content "registrationsTab" %}
+
+    {% card card_class="mb-4" %}
+      <p>
+        To allow users to register for your event, set the
+        <i>Registration range</i> below and enter the groups that are allowed to
+        register (see
+        <a href="#" onclick="changeFormTab('viewOptionsTab')">
+          View options
+        </a>
+        for an explanation on the groups). If you do not plan enable the
+        registration make sure to set the
+        <a href="#" onclick="changeFormTab('viewOptionsTab')">
+          View options
+        </a> accordingly.
+      </p>
+      <p>
+        As a member of the organization team, you can also
+        manually add registrations
+        {% if form.instance.slug %}
+          <a href="{% url 'events:registrations:registration-create-admin' form.instance.slug %}" target="_blank">
+            here
+          </a>.
+        {% else %}
+          after you clicked <i>Submit</i>.
+        {% endif %}
+      </p>
+    {% endcard %}
+
+      {% bootstrap_field form.display_registration_button %}
+      {% bootstrap_field form.registration_groups %}
+      {% bootstrap_field form.registration_range %}
+
+      {% collapsible_card "Further registration options" %}
+
+        <p>
+          You can add further questions to the people when they register. The
+          answers on these questions can then later be accessed by the event
+          organizers
+          {% if form.instance.slug %}
+            <a href="{% url 'rest:event-api-root' form.instance.slug %}registrations/" target="_blank">
+              here
+            </a>.
+          {% else %}
+            after you clicked <i>Submit</i>.
+          {% endif %}
+        </p>
+
+        {% bootstrap_field form.registration_detail_form label_class="fs-2" %}
+      {% endcollapsible_card %}
+
+    {% endtab_content %}
+
+    {% tab_content "othersTab" %}
+
+      {% bootstrap_form form exclude="name,time_range,slug,single_session_mode,orga_team,abstract,logo,event_view_groups,view_programme_groups,view_connections_groups,display_registration_button,registration_range,registration_groups,submission_groups,display_submission_button,display_submissions,submission_range,submission_editing_end,submission_for_activity,submission_for_session,submission_licenses,registration_detail_form,register_presenters,activities,submission_upload,submission_upload_licenses" %}
+
+    {% endtab_content %}
+
+  {% endtab_list %}
+{% endwith %}
+
+{% addtoblock "js" %}
+  <script>
+    function changeFormTab(tabName) {
+      var tab = new bootstrap.Tab(document.querySelector('#eventFormTabs li #' + tabName));
+      tab.show();
+      return false;
+    }
+  </script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>
+    function slugify(str) {
+      return str.toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-');
+    }
+
+    var slugModified = {% if form.instance.slug %}true{% else %}false{% endif %};
+
+    function setSlug(e) {
+      // propose a slug for the event
+      var text = e.target.value;
+      if (!slugModified) {
+        var slugified = slugify(text);
+        var slugInput = document.querySelector("#id_slug");
+        slugInput.value = slugified;
+      }
+
+    }
+
+    function onSlugModification(e) {
+      slugModified = true;
+    }
+
+    $(document).ready(
+      function() {
+        // connect form button to generate the slug
+        const nameInput = document.getElementById('id_name');
+        const slugInput = document.getElementById('id_slug');
+
+        nameInput.addEventListener('input', setSlug);
+        slugInput.addEventListener('input', onSlugModification);
+      }
+    )
+
+  </script>
+{% endaddtoblock %}

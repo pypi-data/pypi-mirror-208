@@ -1,0 +1,33 @@
+{% load django_bootstrap5 %}
+
+<!doctype html>
+{% block extrahead %}
+
+
+  {% comment %}
+  We set the restUri Javascript variable here to make it accessible for institution_query.js
+  and anywhere else where it is needed
+  {% endcomment %}
+  <script>restUri = '{{ root_url }}{% url "rest:api-root" %}'</script>
+
+  {% if form %}
+    {{ form.media }}
+  {% endif %}
+{% endblock %}
+<head>
+  <script>restUri = '{{ root_url }}{% url "rest:api-root" %}'</script>
+  {% bootstrap_css %}
+</head>
+
+  <body>
+    <div class="container">
+      <section class="page-content" itemprop="text">
+        <form role="form" method="post">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          {% include "admin/cms/page/submit_row.html" with show_save=True %}
+        </form>
+      </section>
+    </div>
+  </body>
+<!doctype html>

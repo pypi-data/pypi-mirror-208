@@ -1,0 +1,82 @@
+{% extends "base_detail.html" %}
+
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load members %}
+{% load events_programme %}
+{% load cms_tags %}
+{% load guardian_tags %}
+
+{% block headline %}{{ event.name }}{% endblock %}
+
+{% block title %}{{ event.name }}{% endblock %}
+
+{% block head_meta %}
+  {% with meta_title=event.name meta_description=event.abstract meta_logo_alt=event.name %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:request.path %}
+{% endblock %}
+
+{% block topnav %}
+  {{ block.super }}
+  {% if event.advanced_editing_mode %}
+    {% render_placeholder event.top_nav_placeholder %}
+  {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% if event.advanced_editing_mode %}
+      {% render_placeholder event.sidebar_placeholder %}
+    {% else %}
+      {% include "events/components/event_sidebar.html" %}
+    {% endif %}
+  {% endblock %}
+{% endblock %}
+
+{% block action_buttons %}
+  {% get_obj_perms user for event as "event_perms" %}
+  {% if perms.events.change_event or "change_event" in event_perms %}
+    <a class="button btn btn-primary btn-round btn-send" title="Send a notification to participants"
+      href='{% url "events:event-notify" event.slug %}?event={{ event.pk }}'></a>
+  {% endif %}
+  {% edit_button event %}
+{% endblock %}
+
+{% block content %}
+
+  {% if event.advanced_editing_mode %}
+    {% render_placeholder event.event_landing_page_placeholder %}
+  {% else %}
+
+    {% if event.abstract %}
+      {% card header="Abstract" %}
+        {{ event.abstract }}
+      {% endcard %}
+    {% endif %}
+
+    {{ event.description|default_if_none:"" }}
+
+    {% if event.orga_team.all %}
+      {% collapsible_card "Organization Team" "orga-team" "" body_class="p-0" card_class="mt-4 mb-4" %}
+        {% member_rows event.orga_team.all %}
+      {% endcollapsible_card %}
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Revision {{ revision.pk }}{% endblock %}
+
+{% block headline %}
+  {% url 'history:revision-list' as revision_list_url %}
+  <a href="{{ next_url|default:revision_list_url }}"><i class="fas fa-arrow-alt-circle-left"></i></a>
+  Revision {{ revision.pk }}: {{ revision|truncatechars:40 }}{% endblock %}
+
+{% block content %}
+    {% include "reversion/revision_detail_content.html" %}
+{% endblock %}

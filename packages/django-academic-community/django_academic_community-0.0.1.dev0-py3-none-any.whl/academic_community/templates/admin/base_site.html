@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrahead %}
+
+  {% comment %}
+  We set the restUri Javascript variable here to make it accessible for institution_query.js
+  and anywhere else where it is needed
+  {% endcomment %}
+  <script>restUri = '{{ root_url }}{% url "rest:api-root" %}'</script>
+
+  {{ block.super }}
+
+{% endblock %}

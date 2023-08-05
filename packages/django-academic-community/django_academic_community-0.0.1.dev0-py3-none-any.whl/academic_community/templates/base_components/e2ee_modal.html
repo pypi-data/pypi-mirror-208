@@ -1,0 +1,172 @@
+{% load sekizai_tags %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load e2ee %}
+
+
+{% if not user.master_key and perms.e2ee.add_masterkey %}
+  {% modal "Enable end-to-end encryption for your account" "e2e-masterkey-modal" %}
+    <div class="modal-body">
+
+      <p>
+        This website offers end-to-end encrypted communication. Mesages
+        that you send in a channel with end-to-end encryption are encrypted
+        in your browser. Website administrators, community managers and server
+        admin are not able to read these messages.
+      </p>
+
+      <p>
+        Please create a key for end-to-end encryption by entering a strong
+        password down below. The identifier helps you in case you want to
+        use multiple password later.
+      </p>
+
+      {% bootstrap_alert "Do not loose this password. The website administrators will not be able to decrypt your messages once they are encrypted." alert_type="danger" dismissible=False %}
+
+      {% bootstrap_alert "End-to-end encryption is currently in beta!" alert_type="warning" dismissible=False %}
+
+      <form action="{{ e2ee_login_url }}" method="POST">
+        {% bootstrap_form e2ee_login_form %}
+        <input type="submit" name="submit_json_" value="I wrote down my password" class="btn btn-primary wait-for-serviceworker" disabled>
+      </form>
+
+      <p class="my-4">
+        <a href="{% url 'e2ee-status' %}">
+          Click here for more information and your E2E-status.
+        </a>
+      </p>
+    </div>
+  {% endmodal %}
+{% elif not request.session|e2ee_enabled %}
+  {% modal "Enable end-to-end encryption for this session" "e2e-sessionkey-modal" %}
+    <div class="modal-body p-4">
+      <p>Enter your E2EE password to read end-to-end-encrypted messages</p>
+
+      <form action="{{ e2ee_login_url }}" method="POST">
+        {% bootstrap_form e2ee_login_form %}
+        <input type="submit" name="submit_json_" class="btn btn-primary" value="Enable end-to-end encryption">
+      </form>
+
+      <p>or identify through a different session.</p>
+
+      <form action="{% url 'e2ee:sessionkey-list' %}" method="POST" onsubmit="submitFormAsJSON(event).then(displayVerificationNumber)">
+        <input type="submit" value="Login through a different device" class="btn btn-primary">
+      </form>
+
+    </div>
+  {% endmodal %}
+
+  {% modal "Login through other session" "e2ee-verification-number-modal" %}
+    <div class="modal-body p-4">
+      Please login at another device at
+      <a href="{% url 'e2ee-status' %}">{% url 'e2ee-status' %}</a>
+      end enter the following verification number:
+
+      {% card %}
+        <h3 class="e2ee-verification-number"></h3>
+      {% endcard %}
+    </div>
+  {% endmodal %}
+
+{% endif %}
+
+{% addtoblock "js" %}
+  {{ e2ee_login_form.media.js }}
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>
+    window.addEventListener("load", function () {
+      document.querySelectorAll("input[type=submit][name=submit_json_]").forEach(
+        elem => {
+          elem.addEventListener("click", (event) => {
+            elem.classList.add("disabled");
+            newElem = document.createElement("div");
+            newElem.classList.add("spinner-border");
+            newElem.classList.add("spinner-border-sm");
+            newElem.classList.add("me-2");
+            newElem.setAttribute("role", "status");
+            newElem.innerHTML = '<span class="visually-hidden">Loading...</span>'
+
+            elem.parentElement.insertBefore(newElem, elem)
+          });
+        }
+      )
+    })
+  </script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  {% spaceless %}
+    {% if not user.master_key and perms.e2ee.add_masterkey %}
+      <script>
+          window.addEventListener("load", function () {
+          displayMessageInToast(`
+            <p>
+              You did not yet enable end to end encryption for your account.
+            </p>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#e2e-masterkey-modal">
+                Click here
+            </button>
+          `, "false")
+
+          })
+      </script>
+    {% elif perms.e2ee.add_masterkey and not request.session|e2ee_ignored and not request.session|e2ee_enabled %}
+      <script>
+
+        function ignoreE2E() {
+          return fetch("{% url 'e2ee:sessionkey-list' %}", {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+              'X-CSRFTOKEN': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ignore: true})
+          }).then(
+            response => {
+              let toastElem = document.getElementById("e2ee-session-toast");
+              if (toastElem) {
+                let toast = new bootstrap.Toast(toastElem);
+                toast.dispose();
+              }
+            }
+          )
+        }
+
+        window.addEventListener("load", function () {
+          displayMessageInToast(`
+            <p>
+              End-to-end encryption has not yet been enabled for this session.
+            </p>
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#e2e-sessionkey-modal">
+                Click here
+              </button>
+              <button type="button" class="btn btn-light" title="Do not ask again for the E2E-password in this session." onclick="ignoreE2E()">
+                Ignore
+              </button>
+            </div>
+
+          `, "false", "", toastId="e2ee-session-toast")
+
+          })
+
+          async function displayVerificationNumber(response) {
+            let body = await response.json();
+            let oldModalEl = document.getElementById("e2e-sessionkey-modal");
+            let oldModal = bootstrap.Modal.getInstance(oldModalEl);
+            if (typeof(oldModal) !== "undefined") {
+              oldModal.toggle();
+            }
+            let modalEl = document.getElementById("e2ee-verification-number-modal");
+            let numberField = modalEl.querySelector(".e2ee-verification-number");
+            numberField.innerHTML = body.verificationNumber;
+            let modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+          }
+
+      </script>
+    {% endif %}
+  {% endspaceless %}
+{% endaddtoblock %}

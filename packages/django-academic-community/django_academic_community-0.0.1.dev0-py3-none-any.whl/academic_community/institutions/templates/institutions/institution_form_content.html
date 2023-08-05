@@ -1,0 +1,76 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+{{ form.non_form_errors }}
+{% bootstrap_form form %}
+
+<h2>Departments</h2>
+
+{{ form.departments.management_form }}
+{{ form.departments.non_form_errors }}
+<p>
+  <div id="department-accordion">
+    {% for department in form.departments %}
+    {% with deptid=department.instance.id|stringformat:"s"|default:'new' %}
+      {% with collapse_id="collapse-department-"|add:deptid %}
+        <div class="card">
+          <div class="card-header" id="heading-{{ collapse_id }}">
+            <h3 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ collapse_id }}" aria-expanded="true" aria-controls="{{ collapse_id }}">
+                {% if department.instance.id %}
+                  {{ department.instance }}
+                {% else %}
+                <i class="fas fa-plus-circle"></i> Add a new department
+                {% endif %}
+              </button>
+            </h3>
+          </div>
+          <div id="{{ collapse_id }}" class="collapse" aria-labelledby="heading-{{ collapse_id }}" data-bs-parent="#department-accordion">
+            <div class="card-body">
+              {% bootstrap_form department %}
+
+              {{ department.units.management_form }}
+              {{ department.units.non_form_errors }}
+
+              <h4>Units</h4>
+
+              <div id="unit-accordion">
+
+                {% for unit in department.units.forms %}
+                  {% with unitid=unit.instance.id|stringformat:"s"|default:'new' %}
+                    {% with unit_collapse_id="collapse-department-"|add:deptid|add:"-"|add:unitid %}
+                      <div class="card">
+                        <div class="card-header" id="heading-{{ unit_collapse_id }}">
+                          <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ unit_collapse_id }}" aria-expanded="true" aria-controls="{{ unit_collapse_id }}">
+                              {% if unit.instance.id %}
+                                {{ unit.instance }}
+                              {% else %}
+                              <i class="fas fa-plus-circle"></i> Add a new unit
+                              {% endif %}
+                            </button>
+                          </h5>
+                        </div>
+                        <div id="{{ unit_collapse_id }}" class="collapse" aria-labelledby="heading-{{ unit_collapse_id }}" data-bs-parent="#unit-accordion">
+                          <div class="card-body">
+
+                            {{ unit.management_form }}
+                            {{ unit.non_form_errors }}
+
+                            {% bootstrap_form unit %}
+                          </div>
+                        </div>
+                      </div>
+                    {% endwith %}
+                  {% endwith %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endwith %}
+    {% endwith %}
+
+  {% endfor %}
+  </div>
+</p>

@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs" id="{{ tablist_id|default:'tablist' }}" role="tablist">
+  {% for tabid, tab in tabs.items %}
+    <li class="nav-item" role="presentation">
+      <a class="nav-link {% if tabid == active_tab %}active{% endif %} {% if tabid in disabled_tabs %}disabled {% endif %}" id="{{ tabid }}" data-bs-toggle="tab" href="#{{ tabid }}-content" role="tab" aria-controls="{{ tabid }}-content" aria-selected="true">
+        {{ tab }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+<div class="tab-content" id="{{ tablist_id|default:'tablist' }}-content">
+  {{ content }}
+</div>

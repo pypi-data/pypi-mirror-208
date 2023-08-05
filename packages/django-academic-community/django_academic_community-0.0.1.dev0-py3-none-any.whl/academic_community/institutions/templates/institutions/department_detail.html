@@ -1,0 +1,100 @@
+{% extends "base_detail.html" %}
+{% load institutions %}
+{% load members %}
+{% load bootstrap_helpers %}
+{% load community_badges %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load topics %}
+
+{% block action_buttons %}
+  <a class="button btn btn-primary btn-round btn-edit" href='{% url "institutions:edit-department" department.parent_institution.abbreviation department.pk %}'></a>
+
+  {% if user.is_staff %}
+    <a class="button btn btn-primary btn-round btn-history" title="View the history"
+     href='{% url "institutions:department-history" department.parent_institution.abbreviation department.pk %}'>
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block head_meta %}
+  {% with meta_title=department.abbreviation|default_if_none:department.name meta_description="Contributions of the "|add:department.name|add:" in the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}{{ department.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'institutions:institutions' as institutions_url %}
+  {% with institutions_url=institutions_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Institutions"|combine:institutions_url department.parent_institution.abbreviation|combine:department.parent_institution.get_absolute_url ""|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block subtitle %}{{ department.abbreviation|default_if_none:"" }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% organization_card department.parent_institution base_id="sidebar-" %}
+    {% with body_class="p-0" %}
+      {% if department.contact or department.website %}
+        {% card header="Contact" body_class="p-0" %}
+          {% if department.contact %}{% member_card department.contact %}{% endif %}
+          {% card body_class="p-0" %}
+            <ul class="list-group">
+            {% if department.website %}
+                <li class="list-group-item">
+                {% website_button department %}
+                </li>
+            {% endif %}
+            </ul>
+          {% endcard %}
+        {% endcard %}
+      {% endif %}
+      {% card header="Stats" %}
+        {% active_topics_badge department department.active_lead_topics %}
+        {% members_badge department department.active_memberships %}
+      {% endcard %}
+    {% endwith %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% with card_class="mb-4" %}
+
+    {% with units=department.unit_set.all %}
+      {% if units %}
+        {% collapsible_card "Units" "department-units" "" body_class="p-0" show=True %}
+         {% for unit in units %}
+           {% organization_card unit card_class="h-100" base_id="department-unit-" %}
+         {% endfor %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% collapsible_card "Members" "active-department-members" "" body_class="p-0" show=True %}
+      {% for membership in department.active_memberships %}
+        {% member_row membership.member membership_organization=membership.organization show_institution=False show_department=False %}
+      {% endfor %}
+    {% endcollapsible_card %}
+
+    {% collapsible_card "Former members" "finished-department-members" "" body_class="p-0" %}
+      {% for membership in department.finished_memberships %}
+        {% member_row membership.member membership_organization=membership.organization show_institution=False show_department=False %}
+      {% endfor %}
+    {% endcollapsible_card %}
+
+    {% collapsible_card "Active topics" "active-participating-topics" "" body_class="p-0" show=True %}
+      {% topic_rows department.active_participating_topics %}
+    {% endcollapsible_card %}
+
+    {% collapsible_card "Finished topics" "finished-participating-topics" "" body_class="p-0" %}
+      {% topic_rows department.finished_participating_topics %}
+    {% endcollapsible_card %}
+
+  {% endwith %}
+
+{% endblock %}

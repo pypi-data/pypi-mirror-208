@@ -1,0 +1,144 @@
+{% extends "chats/base_detail.html" %}
+
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load community_buttons %}
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+{% load chats %}
+
+{% block headline %}{% if form.instance.pk %}Configure channel properties{% else %}Create a new channel{% endif %}{% endblock %}
+{% block subtitle %}{% if form.instance.pk %}{{ channel }}{% endif %}{% endblock %}
+
+{% block title %}{% if form.instance.pk %}Edit {{ channel }}{% else %}Create a new channel{% endif %}{% endblock %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel_list_url|str_add:"/.." %}
+    {% if form.instance.pk %}
+      {% with channel_relation=channel_relation|default:form.instance %}
+        {% breadcrumbs "Channels"|combine:all_channels_url form.instance.channel_type|verbose_model_name_plural|combine:channel_relation.get_list_url channel.channel_id_name|combine:channel_relation.get_absolute_url "Edit"|combine:request.path %}
+      {% endwith %}
+    {% else %}
+      {% breadcrumbs "Channels"|combine:all_channels_url channel_type|verbose_channel_type_name_plural|combine:channel_list_url "Create new"|combine:request.path %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post" id="comment-form">
+    {% csrf_token %}
+    {% tab_list ChannelTab="General properties" ChannelTypeTab=channel_type|verbose_channel_type_name|add:" Properties" PermissionsTab="Permissions" RelationsTab="Relations to other content" active_tab="ChannelTab" disabled_tabs=channel_type|equals:"private-conversations"|ifthen:"PermissionsTab" %}
+      {% tab_content "ChannelTab" is_active_tab=True %}
+        {% bootstrap_form form exclude="editors,user_view_permission,group_view_permission,user_edit_permission,group_edit_permission,user_start_thread_permission,group_start_thread_permission,user_post_comment_permission,group_post_comment_permission" %}
+      {% endtab_content %}
+
+      {% tab_content "ChannelTypeTab" %}
+        {{ channel_type_formset.management_form }}
+        {{ channel_type_formset.non_form_errors }}
+        {% bootstrap_formset channel_type_formset %}
+      {% endtab_content %}
+
+      {% tab_content "PermissionsTab" %}
+        <div class="alert alert-info" role="alert">
+          Note that if you share this channel, it will be available
+          <a class="alert-link" href='{% url "chats:channel-list" %}'>
+            in the list of community channels
+          </a>
+          for the groups and users you enter down below.<br>
+          If you want to make a channel available for working group members,
+          topic members, etc., you should use the <i>Relations</i> tab
+          above.
+        </div>
+
+        {% if form.editors %}
+          {% bootstrap_field form.editors %}
+        {% endif %}
+        {% if form.user_view_permission %}
+          {% bootstrap_field form.user_view_permission %}
+        {% endif %}
+        {% if form.group_view_permission %}
+          {% bootstrap_field form.group_view_permission %}
+        {% endif %}
+        {% if form.user_edit_permission %}
+          {% bootstrap_field form.user_edit_permission %}
+        {% endif %}
+        {% if form.group_edit_permission %}
+          {% bootstrap_field form.group_edit_permission %}
+        {% endif %}
+        {% if form.user_start_thread_permission %}
+          {% bootstrap_field form.user_start_thread_permission %}
+        {% endif %}
+        {% if form.group_start_thread_permission %}
+          {% bootstrap_field form.group_start_thread_permission %}
+        {% endif %}
+        {% if form.user_post_comment_permission %}
+          {% bootstrap_field form.user_post_comment_permission %}
+        {% endif %}
+        {% if form.group_post_comment_permission %}
+          {% bootstrap_field form.group_post_comment_permission %}
+        {% endif %}
+      {% endtab_content %}
+
+      {% tab_content "RelationsTab" %}
+        <div class="mb-4">
+          <div class="alert alert-info" role="alert">
+            You can create a relation between this channel and other objects
+            on the website. The channel will then show up on their
+            corresponding webpage, and it will be made accessible for the
+            corresponding members.
+          </div>
+        </div>
+        {% channel_tab_list inlines|slice:"1:" active_tab=inlines|slice:"1:"|first|channel_tab_id %}
+          {% for inline in inlines|slice:"1:" %}
+            {% tab_content inline|channel_tab_id is_active_tab=forloop.first %}
+              <div class="m-2">
+                {{ inline.management_form }}
+                {{ inline.non_form_errors }}
+                {% for form in inline.forms %}
+                  {% if form.instance.pk %}
+                    {% with related_object=form.instance|get_attr:form.instance.related_permission_field %}
+                      {% card header=related_object card_class="mb-4" %}
+                        {% details_button related_object %}
+                        {% bootstrap_form form %}
+                      {% endcard %}
+                    {% endwith %}
+                  {% else %}
+                    {% card header="Add a new relation" card_class="mb-4" %}
+                      {% bootstrap_form form %}
+                    {% endcard %}
+                    {% endif %}
+                {% endfor %}
+              </div>
+            {% endtab_content %}
+          {% endfor %}
+        {% endchannel_tab_list %}
+      {% endtab_content %}
+    {% endtab_list %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% with channel_relation=channel_relation|default:form.instance %}
+        {% if form.instance.pk %}
+          {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:form.instance.get_absolute_url %}
+          {% delete_button channel_relation None url_for_next=channel_relation.get_list_url button_class="ms-2 btn-primary" %}
+        {% else %}
+          {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:channel_relation.get_absolute_url %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  </form>
+
+  {% include "chats/components/comment_form_js.html" %}
+
+  {% for inline in inlines %}
+    {% addtoblock "js" %}
+      {{ inline.media.js }}
+    {% endaddtoblock %}
+    {% addtoblock "css" %}
+      {{ inline.media.css }}
+    {% endaddtoblock %}
+  {% endfor %}
+
+{% endblock %}

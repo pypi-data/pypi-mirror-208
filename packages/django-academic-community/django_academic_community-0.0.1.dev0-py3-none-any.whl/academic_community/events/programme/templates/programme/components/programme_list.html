@@ -1,0 +1,16 @@
+{% load events_programme %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+
+{% for event in events %}
+  {% ifchanged event.start.day %}
+    <h3 class="m-4">{{ event.start|date:"DATE_FORMAT" }}</h3>
+  {% endifchanged %}
+  {% if show_modal %}
+    {% collapsible_card event.title event|object_id "" %}
+      {% calendar_modal_content event %}
+    {% endcollapsible_card %}
+  {% else %}
+    {% slot_card event %}
+  {% endif %}
+{% endfor %}

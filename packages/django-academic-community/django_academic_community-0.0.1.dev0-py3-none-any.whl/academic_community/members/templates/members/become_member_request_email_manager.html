@@ -1,0 +1,30 @@
+<p>Hello Community Manager!</p>
+
+<p>
+    <a href="{{ communitymember.get_absolute_url }}">{{ communitymember }}</a>
+    wants to become a member of the
+    <a href="{{ index_url }}">{{ community_name }}</a>.
+</p>
+{% spaceless %}
+<p>
+    The request has been approved by
+    {% if approver.communitymember %}
+        <a href="{{ root_url }}{{ approver.communitymember.get_absolute_url }}">
+          {{ approver }}
+        </a>
+    {% else %}
+        {{ communitymember.approved_by }}
+    {% endif %}
+</p>
+{% endspaceless %}
+<p>
+    As community manager, please
+    <a href="{{ root_url }}{% url 'members:approve-member' communitymember.pk %}">
+        approve the membership
+    </a>
+    or get it touch with him.
+</p>
+<p>
+    Best,<br>
+    Your {{ community_abbreviation }} community website (on behalf of {{ communitymember }})
+</p>

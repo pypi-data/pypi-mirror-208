@@ -1,0 +1,7 @@
+{% load community_utils %}
+{% url 'topics:topics' as topics_url %}
+<a href="{% if url %}{{ url }}{% elif topics_url|same_url:request.path %}{% add_to_filters 'keywords' object.pk %}{% else %}{{ topics_url}}?end_date__isnull=true&keywords={{ object.pk }}{% endif %}"
+   class="badge rounded-pill text-decoration-none bg-info m-2">
+  {% if close_icon %}{% close_icon %}{% endif %}
+  {{ object }}
+</a>

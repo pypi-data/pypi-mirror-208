@@ -1,0 +1,57 @@
+{% load humanize %}
+{% load events_programme %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load guardian_tags %}
+{% load community_badges %}
+{% load activities %}
+
+<div class="card {{ card_class }} event-card mb-0">
+  <div class="card-body p-1" id="{{ event|object_id }}-header">
+    <div class="d-flex justify-content-between">
+      <button data-bs-toggle="collapse"
+       type="button" class="btn btn-sm w-100"
+       data-bs-target="#{{ event|object_id }}-collapse"
+       aria-expanded="{%if show %}true{% else %}false{% endif %}"
+       aria-controls="{{ event|object_id }}-collapse">
+        {% if show_logo|default_if_none:True and event.logo %}
+          <img src="{{ event.logo.url }}" class="card-img-top w-auto mt-1 mw-100" style="object-fit: contain;" height="75px" alt="{{ event }}">
+        {% endif %}
+        <div class="card-title text-start">
+          <span class="slot-date fw-bold">
+            {% with start=event.time_range.lower|naturalday end=event.time_range.upper|naturalday %}
+              {{ start }}{% if start != end %} &ndash; {{ end }}{% endif %}
+            {% endwith %}
+          </span>
+        </div>
+        <h3 class="card-title text-start fw-bold">
+          {{ event }}
+        </h3>
+      </button>
+    </div>
+  </div>
+  <div id="{{ event|object_id }}-collapse" class="collapse {% if show %}show{% endif %}" aria-labelledby="{{ event|object_id }}-header">
+    {% if not hide_description %}
+      <div class="card-body {{ body_class }}">
+        <div class="mt-4 mb-4">
+          {{ event.abstract|truncatewords_html:200 }}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="card-body p-0 {{ body_class }}">
+
+      {% if event.activities.exists %}
+        <div class="mb-2">
+          {% for activity in event.activities.all %}
+            {% activity_badge activity %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% include "events/components/event_links.html" %}
+
+    </div>
+
+  </div>
+</div>

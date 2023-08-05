@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}
+  {% if department.name %}
+    Edit {{ department.name }}
+  {% else %}
+    Create a new department
+  {% endif %}
+{% endblock %}
+
+{% block headline %}
+  {% if department.name %}
+    Edit {{ department }}
+  {% else %}
+    Create a new department
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'institutions:institutions' as institutions_url %}
+  {% with institutions_url=institutions_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Institutions"|combine:institutions_url department.parent_institution.abbreviation|combine:department.parent_institution.get_absolute_url department.name|combine:department.get_absolute_url "Edit"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+
+{% block content %}
+
+<form role="form" method="post">
+  {% csrf_token %}
+  {% include "institutions/department_form_content.html" %}
+
+  <div class="row row-cols-auto m-3">
+    {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+    {% bootstrap_button "Reset" button_type="reset"  %}
+    {% if form.instance.pk %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=department.get_absolute_url %}
+    {% else %}
+      {% url "institutions:institutions" as institution_list %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=institution_list %}
+    {% endif %}
+  </div>
+</form>
+
+{% endblock %}

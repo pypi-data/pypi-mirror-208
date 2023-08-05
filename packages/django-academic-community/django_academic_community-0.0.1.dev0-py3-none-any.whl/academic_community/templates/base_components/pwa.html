@@ -1,0 +1,21 @@
+{% load community_utils %}
+{% url 'webmanifest' as default_manifest_url %}
+<!-- Path to manifest.webmanifest -->
+<link rel="manifest" href="{{ manifest_url|default:default_manifest_url }}?next={% url_for_next %}">
+
+<!-- Add to homescreen for Chrome on Android -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="{{ app_name|default:community_name }}">
+
+
+<!-- Chrome for Android theme color -->
+<meta name="theme-color" content="#0A0302">
+
+<!-- Add to homescreen for Safari on iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="{{ app_name|default:community_name }}">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+{% for splash in pwa_splash_screens %}
+<link href="{{ splash.src }}" media="{{ splash.media }}" rel="apple-touch-startup-image"/>
+{% endfor %}

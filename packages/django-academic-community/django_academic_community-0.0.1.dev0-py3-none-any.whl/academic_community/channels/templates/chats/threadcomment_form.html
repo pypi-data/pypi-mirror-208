@@ -1,0 +1,40 @@
+{% extends "chats/base_detail.html" %}
+
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load community_buttons %}
+{% load chats %}
+
+{% block headline %}{{ threadcomment }}{% endblock %}
+
+{% block title %}{{ threadcomment }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.get_list_url|str_add:"/.." threadcomment=form.instance %}
+    {% if form.instance.pk %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.get_list_url channel|name_for:user|combine:channel.get_absolute_url thread|combine:thread.get_absolute_url threadcomment|combine:threadcomment.get_absolute_url "Edit comment"|combine:request.path %}
+    {% else %}
+      {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.get_list_url channel|name_for:user|combine:channel.get_absolute_url thread|combine:thread.get_absolute_url "Reply"|combine:request.path %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post" id="comment-form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:channel.get_absolute_url %}
+      {% delete_button form.instance None url_for_next=form.instance.get_list_url button_class="ms-2 btn-primary" %}
+    </div>
+  </form>
+
+  {% include "chats/components/comment_form_js.html" %}
+
+{% endblock %}

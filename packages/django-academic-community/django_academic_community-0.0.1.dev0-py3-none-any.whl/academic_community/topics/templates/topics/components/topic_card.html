@@ -1,0 +1,25 @@
+{% load institutions %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_badges %}
+{% load members %}
+
+<div class="card topic-card col-12 border-bottom border-left-0 pr-0 pl-0 rounded-0 border-right-0 border-dark mb-4 mb-lg-0 {{ card_class }}">
+  <div class="row m-0 {{ topic_row_class }} topic-row" id="topic-{{ topic.id_name }}-header">
+    {% card card_class="col-sm-12 col-lg-5 mb-0 topic-row-card" body_class="p-1" %}
+      <button data-bs-toggle="collapse" type="button" class="btn btn-sm text-start" data-bs-target="#topic-{{ topic.id_name }}-collapse" aria-expanded={% if show %}"true"{% else %}"false"{% endif %} aria-controls="topic-{{ topic.id_name }}-collapse">
+        <b>{{ topic.id_name }}</b>: {{ topic.name }}
+      </button>
+    {% endcard %}
+    {% member_card topic.leader card_class="col-sm-12 col-md-9 col-lg-5 mb-0 topic-row-card" show=False %}
+    <div class="card-deck col-sm-12 col-md-3 col-lg-2 mb-0 p-0 flex-column">
+      {% for institution in topic.institutions %}
+        {% organization_card institution base_id=topic.id_name|add:"-" card_class="col-12 mb-0 topic-row-card" abbreviation_only=True %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="topic-{{ topic.id_name }}-collapse" class="collapse {% if show %}show{% endif %} border-left border-right" aria-labelledby="topic-{{ topic.id_name }}-header">
+    {% include "topics/components/topic_card_body.html" %}
+  </div>
+</div>

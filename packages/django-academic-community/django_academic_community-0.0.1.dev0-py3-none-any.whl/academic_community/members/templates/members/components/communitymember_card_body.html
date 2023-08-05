@@ -1,0 +1,14 @@
+{% load community_buttons %}
+{% load community_badges %}
+
+<div class="card-body">
+  <div class="row row-cols-auto">
+    {% website_button communitymember %}
+    {% details_button communitymember %}
+  </div>
+  <div class="row row-cols-auto">
+    {% start_date_badge communitymember %}
+    {% end_date_badge communitymember %}
+    {% active_topics_badge communitymember communitymember.open_topicmemberships %}
+  </div>
+</div>

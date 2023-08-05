@@ -1,0 +1,75 @@
+{% extends "base_list.html" %}
+{% load static %}
+{% load members %}
+{% load community_buttons %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load community_utils %}
+
+{% block head_meta %}
+  {% with meta_title="Members" meta_description="Members of the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block headline %}Community Members{% endblock %}
+
+{% block display %}
+  {% alphabet_buttons "last_name" %}
+  {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "Members"|combine:request.path %}
+{% endblock %}
+
+
+{% block filter_modal %}
+  {% login_alert %}
+  <h2>Filter by</h2>
+  {% with form=filter.form %}
+
+  {% collapsible_card "Member profile" "filter-profile" "" show=True %}
+    {% bootstrap_field form.name %}
+    {% bootstrap_field form.orcid__icontains %}
+    {% bootstrap_field form.website__icontains %}
+    {% bootstrap_field form.membership %}
+
+    {% if user.is_staff %}
+      {% bootstrap_field form.email__email__icontains %}
+      {% bootstrap_field form.phone_number__search %}
+      {% bootstrap_field form.description__search %}
+      {% bootstrap_field form.non_member_details__search %}
+    {% endif %}
+  {% endcollapsible_card %}
+
+  {% if user.is_staff %}
+    {% collapsible_card "General properties" "filter-general" "" %}
+      {% bootstrap_field form.is_member %}
+      {% bootstrap_field form.end_date__isnull %}
+      {% bootstrap_field form.activities %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if user.is_staff %}
+    {% collapsible_card "Start or end date" "filter-start_date" %}
+      {% bootstrap_field form.start_date %}
+      {% bootstrap_field form.start_date__lte %}
+      {% bootstrap_field form.start_date__range %}
+      {% bootstrap_field form.start_date__gte %}
+      {% bootstrap_field form.end_date %}
+      {% bootstrap_field form.end_date__lte %}
+      {% bootstrap_field form.end_date__range %}
+      {% bootstrap_field form.end_date__gte %}
+    {% endcollapsible_card %}
+  {% endif %}
+  {% endwith %}
+{% endblock %}
+
+
+{% block content %}
+  {% with communitymember_row_class="mb-3 mb-md-0 communitymember-list-row" %}
+    {% member_rows communitymember_list children=False %}
+  {% endwith %}
+{% endblock %}

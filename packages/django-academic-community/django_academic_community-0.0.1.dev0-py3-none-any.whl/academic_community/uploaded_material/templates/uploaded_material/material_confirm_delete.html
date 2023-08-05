@@ -1,0 +1,35 @@
+{% extends "base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load uploaded_material %}
+
+{% block title %}Delete {{ material|verbose_model_name }}{% endblock %}
+
+{% block headline %}Delete {{ material|verbose_model_name }} {{ material }}{% endblock %}
+
+
+{% block breadcrumbs %}
+  {% breadcrumbs material|verbose_model_name|combine:material.get_list_url material.name|combine:material.get_absolute_url "Delete"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% render_material_sidebar material_relation_model|default:material %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  <p>
+    Are you sure, you want to delete the following material?
+  </p>
+
+  <p>
+    {% material_card material_relation|default:material hide_buttons=True %}
+  </p>
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_button "Delete" button_type="submit"  %}
+  </form>
+{% endblock %}

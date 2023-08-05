@@ -1,0 +1,38 @@
+{% load chats %}
+{% load community_utils %}
+
+<a href="{{ channel.get_absolute_url }}" data-channel-id="{{ channel.channel_id }}" class="list-group-item list-group-item-action channel-item channel-sidebar-item d-flex justify-content-between{% if active %}active{% endif %} {% if unread %}unread{% endif %} {% if not display %}d-none{% endif %}">
+  <div class="d-flex w-100">
+    <span class="w-100">
+      {% if channel.name %}
+        {{ channel.name }}
+      {% else %}
+        {% with subscribers=channel|other_subscribers:user %}
+          {% if subscribers|length == 1 %}
+            {% with subscriber=subscribers|first %}
+              <span>
+                <span class="availability-symbol availability-tooltip" data-bs-toggle="tooltip" data-availability-id="{{ subscriber.id }}"></span>
+                {{ subscriber }}
+              </span>
+            {% endwith %}
+          {% else %}
+            {% for subscriber in subscribers|slice:":3" %}
+              <span>
+                <span class="availability-symbol availability-tooltip" data-bs-toggle="tooltip" data-availability-id="{{ subscriber.id }}"></span>
+                {{ subscriber }}{% if not forloop.last %},{% endif %}
+              </span>
+            {% empty %}
+              Unnamed channel
+            {% endfor %}
+            {% if subscribers|length > 3 %}
+              <span data-bs-toggle="tooltip" data-bs-title="{{ subscribers|join:', ' }}">
+                +{{ subscribers|length|subtract:3 }}
+              </span>
+            {% endif %}
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+    </span>
+    <span class="flex-shrink-1 text-muted">#{{ channel.channel_id }}</span>
+  </div>
+</a>

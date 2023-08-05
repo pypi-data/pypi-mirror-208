@@ -1,0 +1,31 @@
+{% extends "uploaded_material/material_form.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Add channel material{% endblock %}
+{% block headline %}
+  {% if form.instance.pk %}
+    Edit {{ form.instance }}
+  {% else %}
+    Add Channel Material
+  {% endif %}
+{% endblock %}
+{% block subtitle %}{{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channelmaterialrelation-list" channel.channel_id as channelmaterial_url %}
+  {% url "chats:channel-list" as channels_url %}
+
+  {% if form.instance.pk %}
+    {% breadcrumbs "Channels"|combine:channels_url channel|name_for:user|combine:channel.get_absolute_url "Material"|combine:channelmaterial_url form.instance.name|combine:form.instance.get_absolute_url "Edit"|combine:request.path %}
+  {% else %}
+    {% breadcrumbs "Channels"|combine:channels_url channel|name_for:user|combine:channel.get_absolute_url "Material"|combine:channelmaterial_url "New"|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "chats/components/channel_sidebar.html" %}
+  {% endblock %}
+{% endblock %}

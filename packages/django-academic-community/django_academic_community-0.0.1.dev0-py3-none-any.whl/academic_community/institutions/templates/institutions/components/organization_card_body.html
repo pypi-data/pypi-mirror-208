@@ -1,0 +1,25 @@
+{% load community_buttons %}
+{% load community_badges %}
+
+<div class="card-body">
+  {% if abbreviation_only %}
+    <div class="row">
+      {{ organization.name | truncatechars_html:90  }}
+      {% if organization.abbreviation %}({{ organization.abbreviation }}){% endif %}
+    </div>
+  {% endif %}
+  <div class="row row-cols-auto">
+    {% website_button organization %}
+    {% details_button organization %}
+  </div>
+  <div class="row row-cols-auto">
+    {% if organization.contact %}
+      <a href="{{ organization.contact.get_absolute_url }}" class="badge rounded-pill text-decoration-none bg-light text-black m-2 col-auto">
+          <i class="fas fa-id-card"></i> {{ organization.contact }}
+      </a>
+    {% endif %}
+    {% if show_members %}
+      {% members_badge organization organization.active_memberships %}
+    {% endif %}
+  </div>
+</div>

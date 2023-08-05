@@ -1,0 +1,27 @@
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+
+{% bootstrap_field field wrapper_class="bootstrap-switch" %}
+
+{% addtoblock "js" %}
+  <script>
+
+    function renderSwitches(switches) {
+
+      // turn checkboxes into bootstrap switches
+      if (typeof(switches) === "undefined") {
+        switches = $(".bootstrap-switch");
+      }
+      var children = switches.children();
+      children.addClass("form-check form-switch");
+      var boxes = children.children("input[type='checkbox']");
+      // checkboxes
+      boxes.addClass("form-check-input");
+      boxes.attr("role", "switch");
+      // labels
+      boxes.next().addClass("form-check-label");
+    }
+
+    $(() => renderSwitches())
+  </script>
+{% endaddtoblock %}

@@ -1,0 +1,172 @@
+{% extends "base_components/empty_top_nav.html" %}
+
+{% load static %}
+{% load cms_tags %}
+{% load community_utils %}
+{% load sekizai_tags %}
+{% load notification_helpers %}
+{% load e2ee %}
+
+{% block logo %}
+
+  {% page_url "home" as home %}
+  <a class="navbar-brand float-left me-0" href="{{ home|default:'/' }}">
+    <img src="{% static 'images/logo.png' %}" class="nav-logo" alt="Logo" loading="lazy">
+    <span class="d-none d-md-inline">{{ community_name }}</span>
+  </a>
+{% endblock %}
+
+{% block topnav_topbuttons %}
+  {% if user.is_staff %}
+    <button class="btn btn-search nav-icon-button me-md-3" type="button" id="search-toggle"></button>
+    <div class="d-flex" id="search-wrapper">
+      <form class="row row-cols-auto align-items-center" id="search-form" action="{% url 'search:search' %}" method="get">
+        <input name="q" class="form-control" type="search" placeholder="Search" aria-label="Search" id="search-text">
+        <button class="btn nav-icon-button btn-search" type="submit"></button>
+        <button class="btn nav-icon-button btn-cancel" id="btn-search-cancel"></button>
+      </form>
+    </div>
+  {% elif not user.is_authenticated %}
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="{% url 'login' %}?next={% url_for_next %}">Login</a>
+    </li>
+    {% url 'clm_registration:signup' as signup %}
+    {% if signup %}
+      <li class="nav-item mx-2">
+        <a class="nav-link" href="{{ signup }}?next={% url_for_next %}">Sign up</a>
+      </li>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block topnav_bottombuttons %}
+  {% if user.is_authenticated %}
+    {% if user.is_manager or user.is_superuser %}
+      <li class="nav-item p-md-2 d-none d-md-block">
+        <a class="btn nav-icon-button" role="button" href="{% url 'admin:index' %}" title="Access Django Management Area">
+          <i class="fas fa-users-cog"></i>
+        </a>
+      </li>
+    {% endif %}
+    <li class="nav-item p-md-2">
+      <button id="a2hs-button" class="btn nav-icon-button position-relative d-none" title="Add a shortcut to this website to your home screen">
+        <i class="fas fa-mobile-alt"></i>
+        <span class="position-absolute a2hs-badge translate-middle p-2 bg-primary border border-light rounded-circle">
+          <span class="visually-hidden">Add to home screen</span>
+        </span>
+      </button>
+    </li>
+    <li class="nav-item p-md-2 dropstart">
+      {% profile user profile_class="nav-link" url="#" profile_id="profile-button" button_attrs='data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' %}
+        {% with unread_notifications=user.unread_notifications %}
+          <span class="notification-badge btn-profile-badge position-absolute translate-middle p-2 bg-danger border border-light rounded-circle top-10 start-90 {% if not unread_notifications %}invisible{% endif %}">
+            <span class="visually-hidden">unread notifications</span>
+          </span>
+        {% endwith %}
+      {% endprofile %}
+      <div class="dropdown-menu dropdown-menu-right position-absolute" aria-labelledby="profile-button">
+        <div class="dropdown-item-text">
+            Logged in as <span class="fw-bold">{% get_username user %}</span>
+        </div>
+        <a class="dropdown-item" href="{% url 'chats:edit-chatsettings' %}?next={% url_for_next %}&tab=availabilityTab">
+          Availability: <span class="availability-text" data-availability-id="{{ user.id }}"></span>
+        </a>
+        {% notifications_button button_class="dropdown-item" button_text="Notifications" %}
+        <div class="dropdown-divider"></div>
+        <div><h6 class="dropdown-header">My Settings</h6></div>
+        {% if user.communitymember %}
+          <a class="dropdown-item" href="{% url 'members:profile' %}">My Profile</a>
+          <a class="dropdown-item" href="{% url 'members:edit-profile-emails' %}">My Emails</a>
+          {% if not user.communitymember.is_member %}
+            {% url 'members:self-become-member' as become_member_url %}
+            {% if become_member_url %}
+              <a class="dropdown-item fw-bold" href="{{ become_member_url }}">Become a community member</a>
+            {% endif  %}
+          {% endif %}
+        {% endif %}
+        <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+        <a class="dropdown-item" class="btn-lock" href="{% url 'e2ee-status' %}">End-to-end message encryption</a>
+        <a class="dropdown-item" href="{% url 'chats:edit-chatsettings' %}">My Chat settings</a>
+        <a class="dropdown-item" href="{% url 'notifications:settings-system' %}?next={% url_for_next %}">Notification settings</a>
+
+        <div class="dropdown-divider"></div>
+        <div><h6 class="dropdown-header">My Content</h6></div>
+        <a class="dropdown-item" href="{% url 'usermaterial-list' %}">My Uploads</a>
+        <a class="dropdown-item" href="{% url 'chats:userchannel-list' %}">My Created channels</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item link-primary" role="button" href="{% url 'logout' %}?next={% url_for_next %}">Logout</a>
+      </div>
+    </li>
+  {% endif %}
+  <li class="nav-item p-md-2">
+    <button class="btn nav-icon-button" type="button" id="menu-toggle" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar"></button>
+  </li>
+
+  <!-- Menu Toggle Script -->
+  {% addtoblock "js" %}
+    <script>
+      document.getElementById("menu-toggle").addEventListener(
+        "click", function(e) {
+          e.preventDefault();
+          $("#menu-toggle").toggleClass("toggled");
+        }
+      );
+    </script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    {% if user.is_staff %}
+      <script>
+        document.getElementById("search-toggle").addEventListener(
+          "click", function(e) {
+            e.preventDefault();
+            $("#search-wrapper").toggleClass("toggled");
+            $("#search-toggle").toggleClass("toggled");
+            $("#search-text").focus();
+         }
+        );
+        document.getElementById("btn-search-cancel").addEventListener(
+          "click", function(e) {
+            e.preventDefault();
+            $("#search-wrapper").toggleClass("toggled");
+            $("#search-toggle").toggleClass("toggled");
+          }
+        );
+        document.getElementById("search-text").addEventListener(
+          "keydown", function(e) {
+            if (e.key === "Escape") {
+              $("#search-toggle").click();
+            }
+          }
+        );
+      </script>
+    {% endif %}
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    <script>
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        {% if user.is_authenticated %}
+          // Stash the event so it can be triggered later.
+          var deferredPrompt = e;
+          // Update UI to notify the user they can add to home screen
+          let addBtn = document.getElementById("a2hs-button")
+          addBtn.classList.remove("d-none");
+
+          addBtn.addEventListener('click', () => {
+            // hide our user interface that shows our A2HS button
+            addBtn.style.display = 'none';
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+              deferredPrompt = null;
+            });
+          });
+        {% endif %}
+      });
+    </script>
+  {% endaddtoblock %}
+
+{% endblock %}

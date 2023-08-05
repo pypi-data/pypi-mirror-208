@@ -1,0 +1,60 @@
+/* Remove extra left and right margins, due to padding */
+div.topic_cards_row {
+    margin: 0 -5px;
+}
+
+/* Clear floats after the columns */
+div.topic_cards_row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Float four columns side by side */
+div.topic_cards_column {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+    div.topic_cards_column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+
+div.topic_cards{
+  display: inline-block;
+}
+div.topic_card {
+    display: inline-block;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 1.25em;
+    padding: 16px;
+    text-align: center;
+    background-color: #f8f9fa;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.cursor_pointer{
+    cursor: pointer;
+}
+label.label_text {
+    display: block !important;
+    text-overflow: ellipsis !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+    max-height: 3.6em !important;
+    line-height: 1.8em !important;
+    width: 160px !important;
+
+}
+small.small_text {
+    text-align: left !important;
+    text-overflow: ellipsis !important;
+}

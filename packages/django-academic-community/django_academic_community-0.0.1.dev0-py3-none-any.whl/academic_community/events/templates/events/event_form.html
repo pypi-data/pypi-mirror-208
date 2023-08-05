@@ -1,0 +1,44 @@
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load members %}
+{% load sekizai_tags %}
+
+{% block headline %}Edit {{ event }}{% endblock %}
+{% block title %}{{ event }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Edit"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  {% block form_content %}
+    <form role="form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% include "events/components/event_form_content.html" %}
+
+      <div class="row row-cols-auto m-3">
+        {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" name="_save" %}
+        {% bootstrap_button "Reset" button_type="reset"  %}
+        {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=event.get_absolute_url %}
+      </div>
+    </form>
+  {% endblock %}
+
+
+{% endblock %}

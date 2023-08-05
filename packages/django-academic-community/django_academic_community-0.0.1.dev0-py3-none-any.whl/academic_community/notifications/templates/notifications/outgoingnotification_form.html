@@ -1,0 +1,27 @@
+{% extends "base_list.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load sekizai_tags %}
+
+{% block title %}Send a mail to community members{% endblock %}
+
+{% block headline %}Send a mail to community members{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "notifications:inbox" as inbox_url %}
+  {% breadcrumbs "Notifications"|combine:inbox_url "Create"|combine:request.path %}
+{% endblock %}
+
+{% block filter_modal %}
+  <h2>Filter recipients by</h2>
+  {% with form=filter.form %}
+    {% bootstrap_form form %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% include "notifications/outgoingnotification_form_content.html" %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "notifications/notificationsettings_form.html" %}
+{% load django_bootstrap5 %}
+{% load chats %}
+{% load bootstrap_helpers %}
+
+{% block headline %}Channel Notification Settings{% endblock %}
+
+{% block subtitle %}for {{ form.instance.channel }}{% endblock %}
+
+{% block form_buttons %}
+  <div class="row row-cols-auto m-3">
+    {{ block.super }}
+    {% url "notifications:settings-channel-delete" form.instance.channel.channel_id as delete_url %}
+    {% url "notifications:settings-channels" as chat_settings_url %}
+    {% if form.instance.pk %}
+      {% bootstrap_button content='Reset to global settings' extra_classes="ms-auto" button_type="link" href=delete_url|add:'?next='|add:chat_settings_url %}
+    {% endif %}
+  </div>
+{% endblock form_buttons %}
+
+{% block navbar %}
+
+  {{ block.super }}
+
+  {% card card_class="mx-4" %}
+    <p>
+      These are your specific notifications settings for
+    </p>
+
+    <div class="list-group mt-4 mb-4">
+      {% channel_item form.instance.channel %}
+    </div>
+
+    <p>
+      {% if form.instance.pk %}
+        They are currently overwriting your global channel notification settings
+      {% else %}
+        If you update your settings here, your global notifications will be
+        overwritten for this specific channel.
+      {% endif %}
+    </p>
+    <p>
+      Your global channel notification settings can be modified
+      <a href="{% url 'notifications:settings-channels' %}">here</a>.
+    </p>
+  {% endcard %}
+
+  <h2 class="mx-4 mt-4">Notification settings</h2>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load institutions %}
+
+{% if department %}
+  <div class="card-group {{ department_row_class }} department-row h-100">
+    {% if show_department|default:True %}
+      {% organization_card department card_class=department_card_class|default_if_none:"h-100" base_id=base_id|add:"department" show_members=False %}
+    {% endif %}
+    {% if children %}
+      <div class="card department-unit-card {{ department_card_class|default_if_none:'h-100' }}">
+        {% for unit in children %}
+          {% organization_card unit card_class="h-100" base_id=base_id|add:"unit" show_members=False %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

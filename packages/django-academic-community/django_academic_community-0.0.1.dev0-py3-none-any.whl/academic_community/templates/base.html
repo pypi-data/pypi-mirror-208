@@ -1,0 +1,365 @@
+{% load cms_tags menu_tags sekizai_tags %}
+{% load static %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load django_bootstrap5 %}
+{% load faqs %}
+
+<!doctype html>
+
+<html lang="en" class="no-js">
+  <head>
+    {% block pwa %}
+      {% pwa_head %}
+    {% endblock pwa %}
+    {% comment %} {% webpush_header %} {% endcomment %}
+    {% block head_meta %}
+      <title>{% if community_abbreviation %}{{ community_abbreviation }} | {% endif %}{% block title %}{{ meta_title|default:'' }}{% endblock %}</title>
+      {% include "base_components/base_meta.html" %}
+    {% endblock %}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+    </script>
+
+    <!-- For all browsers -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+    <!--[if IE]>
+      <style>
+        /* old IE unsupported flexbox fixes */
+        .greedy-nav .site-title {
+          padding-right: 3em;
+        }
+        .greedy-nav button {
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 100%;
+        }
+      </style>
+    <![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+    {% block head %}
+
+    {% endblock %}
+
+    {% block extrahead %}
+      {% comment %}
+      We set the restUri Javascript variable here to make it accessible for institution_query.js
+      and anywhere else where it is needed
+      {% endcomment %}
+      <script>restUri = '{{ root_url }}{% url "rest:api-root" %}'</script>
+      {% if form %}
+        {{ form.media.css }}
+      {% endif %}
+    {% endblock %}
+
+    <!-- end custom head snippets -->
+    {% render_block "css" %}
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+  </head>
+
+  <body class="layout--single wide">
+    {% cms_toolbar %}
+    <!--[if lt IE 9]>
+      <div class="notice--danger align-center" style="margin: 0;">
+        You are using an <strong>outdated</strong> browser.
+        Please upgrade your browser to improve your experience.
+      </div>
+    <![endif]-->
+
+    {% block topnav %}
+      {% include "base_components/top_nav.html" %}
+    {% endblock %}
+
+    <!-- Page Content -->
+    <div id="content-container" class="{% if container_class %}{{ container_class }}{% else %}{{ request.current_page.pagestylesextension.container_class|default:'container' }}{% endif %} overflow-md-scroll min-vh-100">
+
+      {% block container %}
+
+        <header>
+          {% block breadcrumbs %}{% endblock %}
+          <div class="d-flex">
+            <h1 id="page-title" class="p-2 flex-grow-1 page-title" itemprop="headline">
+              {% block headline %}{% endblock %}
+            </h1>
+            <div class="p-2">
+              {% block action_buttons %}
+                {% if can_change_current_page %}
+                  {% if not request.toolbar.show_toolbar %}
+                    <a class="btn btn btn-primary btn-round btn-edit" role="button" href="{{request.path }}?edit" title="Enable frontend editing via Django CMS"></a>
+                  {% endif %}
+                {% endif %}
+                {% if site_faq_list %}
+                  <button type="button" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#site-faqs">
+                    <i class="fas fa-question"></i>
+                  </button>
+                  {% modal "Frequently asked questions" "site-faqs" %}
+                    <div class="modal-body">
+                      <div class="accordion mb-4" id="faqs-accordion">
+                        {% faq_list site_faq_list display_options="accordion" accordion_id="faqs-accordion" %}
+                      </div>
+                    </div>
+                  {% endmodal %}
+                {% endif %}
+              {% endblock %}
+            </div>
+          </div>
+          <h4 class="text-muted">{% block subtitle %}{% endblock %}</h4>
+          {% block display %} {% endblock %}
+
+        </header>
+
+        <section class="page-content" itemprop="text">
+
+          {# Display django.contrib.messages as Bootstrap alerts #}
+          <div id="systemMessages">
+            {% include "cookielaw/banner.html" %}
+            {% bootstrap_messages %}
+            {# Check if the users primary mail has been verified #}
+            {% if user.communitymember and user.communitymember.email and not user.communitymember.email.is_verified %}
+              {% with email=user.communitymember.email %}
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                  Your primary email <a href="mailto:{{ email }}" class="alert-link">{{ email }}</a> has not yet been verified.
+                  Please click <a class="alert-link" href="{% url 'members:send-verification-mail' %}?email={{ email }}">here</a> to do so.
+                </div>
+              {% endwith %}
+            {% endif %}
+          </div>
+          {% if user.is_authenticated %}
+            {% include "base_components/e2ee_modal.html" %}
+          {% endif %}
+
+          {% block content %}{% endblock %}
+
+
+          {% block pagination %}
+            {% if is_paginated %}
+              <div class="mt-4 mb-4">
+                {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
+              </div>
+            {% endif %}
+          {% endblock %}
+
+          <div id="notificationToasts" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div class="toast align-items-center" id="notificationToast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+              <div class="d-flex">
+                <div class="toast-body">
+                  Push notifications in your browser are not yet configured.
+                  <div class="mt-2 pt-2 border-top">
+                    <button type="button" id="webpush-subscription-button" class="btn btn-secondary btn-sm" onclick="requestNotificationPermission()" data-bs-dismiss="toast" disabled>
+                      Please configure
+                    </button>
+                  </div>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      {% endblock %}
+    </div>
+    <!-- /#page-content-wrapper -->
+
+    {% block sticky %}{% endblock %}
+
+    <!-- Sidebar -->
+    {% include "base_components/sidebar.html" %}
+    <!-- /#wrapper -->
+
+    <div id="footer" {% block footer_class %}class="page-footer"{% endblock %}>
+      <footer>
+        {% block footer %}
+
+          {% include "base_components/footer.html" %}
+
+        {% endblock %}
+        {% bootstrap_javascript %}
+        <script type="text/javascript" src="{% static 'js/cookiealert.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/refresh_times.js' %}"></script>
+
+        {% if form %}
+          {{ form.media.js }}
+        {% endif %}
+
+        {% render_block "js" %}
+        <script>
+
+          function createTooltips() {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+          }
+
+          window.addEventListener("load", createTooltips);
+
+          $(document).ready(
+            function () {
+              $(".django-select2:required").next().addClass("required")
+            }
+          )
+
+          var browserNotificationDenied = false;
+          var subscriptionButton = document.getElementById('webpush-subscription-button');
+
+          function urlBase64ToUint8Array(base64String) {
+            var padding = '='.repeat((4 - base64String.length % 4) % 4);
+            var base64 = (base64String + padding)
+              .replace(/\-/g, '+')
+              .replace(/_/g, '/');
+
+            var rawData = window.atob(base64);
+            var outputArray = new Uint8Array(rawData.length);
+
+            for (var i = 0; i < rawData.length; ++i) {
+              outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+          }
+
+
+          function requestNotificationPermission() {
+            navigator.serviceWorker.ready
+              .then(async function(registration) {
+                // Get the server's public key
+                const vapidPublicKey = "{{ vapid_public_key }}";
+                // Chrome doesn't accept the base64-encoded (string) vapidPublicKey yet
+                const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+                // Subscribe the user
+                return registration.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: convertedVapidKey
+                });
+              }).then(function(subscription) {
+                console.log('Subscribed', subscription.endpoint);
+                var browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
+                var keys = subscription.toJSON().keys;
+                var data = {
+                  browser: browser,
+                  endpoint: subscription.endpoint,
+                  auth: keys.auth,
+                  p256dh: keys.p256dh
+                };
+                return fetch('{% url "rest:edit-notificationsubscription" %}', {
+                  method: 'PUT',
+                  headers: {
+                    'Content-type': 'application/json',
+                    'X-CSRFTOKEN': '{{ csrf_token }}'
+                  },
+                  body: JSON.stringify(data)
+                });
+              }).then(function () { console.log("Subscribed in backend")})
+          }
+
+          $(document).ready(
+            function () {
+              {% url "serviceworker" as default_serviceworker_url %}
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('{{ serviceworker_url|default:default_serviceworker_url }}', {
+                  scope: '{{ serviceworker_scope|default:index_url|trailing_slash }}'
+                })
+
+                // toogle the wait-for-serviceworker class
+                $(".wait-for-serviceworker")
+                  .toggleClass("wait-for-serviceworker")
+                  .attr("disabled", false);
+
+                {% if user.is_authenticated %}
+                  // When the Service Worker is ready, enable the UI (button),
+                  // and see if we already have a subscription set up.
+                  {% if request.session.subscription_required %}
+                    navigator.serviceWorker.ready
+                    .then(function(registration) {
+                      console.log('service worker registered');
+                      subscriptionButton.removeAttribute('disabled');
+
+                      // Get the server's public key
+                      const vapidPublicKey = "{{ vapid_public_key }}";
+                      // Chrome doesn't accept the base64-encoded (string) vapidPublicKey yet
+                      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+                      return registration.pushManager.permissionState({
+                        userVisibleOnly: true,
+                        applicationServerKey: convertedVapidKey
+                      });
+                    }).then(function(state) {
+                      if (state != "denied") {
+                        navigator.serviceWorker.ready
+                        .then(function(registration) {
+                          return registration.pushManager.getSubscription();
+                        }).then(function(subscription) {
+                          if (subscription) {
+                            // store the endpoint in the cookie
+                            var keys = subscription.toJSON().keys;
+                            var data = {
+                              endpoint: subscription.endpoint,
+                              auth: keys.auth,
+                              p256dh: keys.p256dh
+                            };
+                            return fetch('{% url "rest:edit-notificationsubscription" %}', {
+                              method: 'PATCH',
+                              headers: {
+                                'Content-type': 'application/json',
+                                'X-CSRFTOKEN': '{{ csrf_token }}'
+                              },
+                              body: JSON.stringify(data)
+                            });
+                          } else if (!browserNotificationDenied) {
+                            let toast = new bootstrap.Toast(document.getElementById("notificationToast"));
+                            toast.show()
+                          }
+                        });
+                      }
+                    })
+                  {% endif %}
+                {% endif %}
+              }
+            }
+          )
+
+          function displayMessageInToast(html, autohide="true", classes="", toastId="") {
+            let toastElem = document.createElement("div");
+            toastElem.classList.add("toast");
+            toastElem.classList.add("align-items-center");
+            if (classes) {
+             classes.split(" ").forEach(cls => toastElem.classList.add(cls));
+            }
+            if (toastId) {
+              toastElem.setAttribute("id", toastId)
+            }
+            toastElem.setAttribute("data-bs-animation", "false")
+            toastElem.setAttribute("role", "alert");
+            toastElem.setAttribute("aria-live", "assertive");
+            toastElem.setAttribute("aria-atomic", "true");
+            toastElem.setAttribute("data-bs-autohide", autohide);
+            toastElem.innerHTML = `
+              <div class="d-flex">
+                <div class="toast-body">
+                  ${html}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            `;
+
+            let toasts = document.getElementById('notificationToasts');
+
+            toasts.appendChild(toastElem);
+            let toast = new bootstrap.Toast(toastElem);
+            toast.show();
+            return toast;
+          }
+        </script>
+        <script type="text/javascript" src="{% static 'js/protect_email.js' %}"></script>
+      </footer>
+    </div>
+  </body>
+</html>

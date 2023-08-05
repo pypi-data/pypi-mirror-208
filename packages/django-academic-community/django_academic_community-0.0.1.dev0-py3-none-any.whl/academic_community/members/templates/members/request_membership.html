@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Join {{ community_abbreviation }}{% endblock %}
+
+{% block headline %}Join the {{ community_name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url communitymember|combine:communitymember.get_absolute_url "Join "|add:community_abbreviation|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  {% if communitymember.is_member %}
+    {% bootstrap_alert content="You are already a member of the community." alert_type="warning" dismissible=False %}
+  {% else %}
+
+    <p>
+        Do you want to request becoming a member of the {{ community_name }}?
+    </p>
+
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% bootstrap_button "Request" button_type="submit"  %}
+    </form>
+  {% endif %}
+{% endblock %}

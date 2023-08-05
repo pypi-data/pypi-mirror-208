@@ -1,0 +1,12 @@
+{% load institutions %}
+{% load community_utils %}
+<div class="card-group border-bottom border-dark {{ institution_row_class }} institution-row">
+  {% if show_institution|default:True %}
+    {% include "institutions/components/organization_card.html" with organization=institution card_class=children|ifthen:"col-lg-4" base_id=base_id|add:"institution" show_members=True %}
+  {% endif %}
+  {% if children %}
+    <div class="card institution-department-card">
+      {% department_rows children True render_all_children active_status %}
+    </div>
+  {% endif %}
+</div>

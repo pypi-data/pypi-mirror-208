@@ -1,0 +1,80 @@
+{% extends "chats/base_detail.html" %}
+
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load chats %}
+
+{% block headline %}{{ channel }}{% endblock %}
+
+{% block title %}Subscribe to {{ channel }}{% endblock %}
+{% block subtitle %}
+  {% if form.instance.pk %}
+    Edit subscription
+  {% else %}
+    Subscribe
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url channel|name_for:user|combine:channel.get_absolute_url "Edit subscription"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="list-group mt-4 mb-4">
+    {% channel_item channel %}
+  </div>
+
+  {% if not form.instance.pk %}
+    <p>
+      You are currently not subscribed to this channel. If you want to receive
+      notifications on new comments, please subscribe.
+    </p>
+  {% else %}
+    <p>
+      You are currently subscribed to this channel. If you want to stop
+      receiving any notifications, please disable <i>following</i> or
+      remove this subscription using the
+      <button class="btn btn-link disabled">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      below.
+    </p>
+    <div class="alert alert-info">
+      If you only want to edit <i>how</i> you want to receive notifications for
+      this channel, checkout your
+      <a href="{% url 'notifications:settings-channel' form.instance.channel.channel_id %}">
+        notification settings for this channel
+      </a>.
+    </div>
+  {% endif %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_switch form.following %}
+
+    {% bootstrap_switch form.favorite %}
+
+    <div class="my-4">
+      {% bootstrap_form form exclude="following,favorite" %}
+    </div>
+
+
+    <div class="d-flex m-3">
+      {% bootstrap_button form.instance.pk|ifthenelse:",OK,Subscribe" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset" extra_classes="me-auto me-2" %}
+
+      {% if form.instance.pk %}
+        {% url "chats:channel-list" as channels_url %}
+        {% with next=next_url|default:channels_url %}
+          {% bootstrap_button '<i class="fas fa-trash-alt"></i>'|safe button_type="link" href=form.instance.get_delete_url|add:"?next="|add:next extra_classes="me-2" %}
+        {% endwith %}
+      {% endif %}
+      {% bootstrap_button content="Cancel" button_type="link" href=next_url|default:channel.get_absolute_url %}
+    </div>
+  </form>
+
+{% endblock %}

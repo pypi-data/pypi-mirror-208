@@ -1,0 +1,8 @@
+{% if end_date and user.is_staff %}
+  <a href="{{ object.get_absolute_url }}" class="badge rounded-pill text-decoration-none bg-light text-black m-2">
+    <i class="fas fa-times-circle"></i>
+    <abbr title="{{ object }} ended on {{ start_date }}">
+      {{ end_date }}
+    </abbr>
+  </a>
+{% endif %}

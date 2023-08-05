@@ -1,0 +1,89 @@
+{% extends "base_detail.html" %}
+
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load members %}
+{% load events_programme %}
+{% load uploaded_material %}
+{% load cms_tags %}
+{% load guardian_tags %}
+
+{% block action_buttons %}
+  {% edit_button session %}
+  {% get_obj_perms user for session as "session_perms" %}
+  {% if perms.programme.change_session or "change_session" in session_perms %}
+    <a class="button btn btn-primary btn-round btn-send" title="Send a notification to coauthors"
+      href='{% url "events:programme:session-notify" session.event.slug session.pk %}?session={{ session.pk }}'></a>
+  {% endif %}
+  {% edit_button session.event None button_text="Edit event properties" button_class="btn-primary" %}
+{% endblock %}
+
+{% block headline %}{{ session }}{% endblock %}
+
+{% block head_meta %}
+  {% with meta_title=session.title meta_description=session.abstract|default:session.event.abstract meta_logo_alt=session.event.name event=session.event %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% if not session.event.single_session_mode %}
+    {% url "events:programme:session-list" session.event.slug as programme_url %}
+    {% breadcrumbs "Events"|combine:event_list_url session.event.name|combine:session.event.get_absolute_url "Programme"|combine:programme_url session.title|combine:request.path %}
+  {% else %}
+  {% breadcrumbs "Events"|combine:event_list_url session.event.name|combine:session.event.get_absolute_url %}
+  {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "programme/components/session_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {% if session.abstract %}
+    {% card header="Abstract" %}
+      {{ session.abstract }}
+    {% endcard %}
+  {% endif %}
+
+  {{ session.description|default_if_none:"" }}
+
+  {% with contribution_list=session.contribution_set.all slot_list=session.slot_set.all %}
+
+    {% if contribution_list or slot_list %}
+      {% collapsible_card "Agenda" "session-agenda" "" show=True %}
+        {% with active_tab="calendarTab" %}
+          {% tab_list calendarTab="Calendar" programmeListTab="List" %}
+            {% tab_content "calendarTab" %}
+              {% show_calendar contribution_list slot_list display_available=True vmin=session.start vmax=session.start|add:session.duration slot_duration="00:15" %}
+            {% endtab_content %}
+            {% tab_content "programmeListTab" %}
+              {% show_programme_list contribution_list slot_list %}
+            {% endtab_content %}
+          {% endtab_list %}
+        {% endwith %}
+      {% endcollapsible_card %}
+    {% endif %}
+
+    {% if contribution_list %}
+      {% collapsible_card "Contributions" "session-contributions" "" show=True body_class="p-0" %}
+        {% contribution_rows contribution_list %}
+      {% endcollapsible_card %}
+    {% endif %}
+  {% endwith %}
+
+{% endblock %}

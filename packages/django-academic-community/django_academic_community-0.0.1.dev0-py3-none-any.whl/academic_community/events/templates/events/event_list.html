@@ -1,0 +1,58 @@
+{% extends "base_list.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load events %}
+{% load sekizai_tags %}
+{% load cms_tags %}
+
+{% block head_meta %}
+  {% with meta_title="Community events" meta_description="Events organized by the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}Community Events{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "Events"|combine:request.path %}
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  {{ event_form.media.css }}
+
+  {% addtoblock "js" %}
+    {{ event_form.media.js }}
+  {% endaddtoblock %}
+{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% if perms.events.add_event %}
+    {% create_modal_button object_name="Event" show_modal=event_form.errors form_attrs='enctype="multipart/form-data"'%}
+      <input type="hidden" name="event_form" value="true">
+      {% include "events/components/event_form_content.html" with form=event_form %}
+    {% endcreate_modal_button %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if event_list.current_events %}
+    {% section "Current" %}
+      {% event_cards event_list.current_events %}
+    {% endsection %}
+  {% endif %}
+  {% if event_list.upcoming_events %}
+    {% section "Upcoming" %}
+      {% event_cards event_list.upcoming_events %}
+    {% endsection %}
+  {% endif %}
+  {% if event_list.past_events %}
+    {% section "Past" %}
+      {% event_cards event_list.past_events %}
+    {% endsection %}
+  {% endif %}
+{% endblock %}

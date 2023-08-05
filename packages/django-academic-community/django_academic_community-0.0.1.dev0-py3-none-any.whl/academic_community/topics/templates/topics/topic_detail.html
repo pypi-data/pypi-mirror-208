@@ -1,0 +1,94 @@
+
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load static %}
+{% load institutions %}
+{% load members %}
+{% load community_badges %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load activities %}
+{% load topics %}
+{% load uploaded_material %}
+
+{% block head_meta %}
+  {% with meta_title=topic.id_name|add:": "|add:topic.name meta_description=topic.description %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}{{ topic.name }}{% endblock %}
+{% block subtitle %}{{ topic.id_name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "topics:topics" as topic_list_url %}
+  {% with topic_list_url=topic_list_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Topics"|combine:topic_list_url topic.id_name|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block action_buttons %}
+    {% get_obj_perms user for topic as "topic_perms" %}
+    {% edit_button topic %}
+    {% if perms.reversion.view_revision %}
+        <a class="button btn btn-primary btn-round btn-history" title="View the history"
+           href='{% url "topics:topic-history" topic.id_name %}'></a>
+    {% endif %}
+    {% if perms.topics.approve_topicmembership or "approve_topicmembership" in topic_perms %}
+        <a class="button btn btn-primary btn-round btn-users" title="Edit and approve the topic members"
+           href='{% url "topics:topicmembership-formset" topic.id_name %}'></a>
+    {% endif %}
+    {% if not topic.end_date and user.communitymember and user.communitymember not in topic.members.all %}
+      {% url "topics:topicmembership-request" topic.id_name as join_url %}
+      {% join_button join_url attrs='title="Ask for topic membership"' %}
+    {% endif %}
+    <a class="button btn btn-primary btn-round" title="Clone this topic"
+    href='{% url "topics:clone-topic" topic.id_name %}'>
+        <i class="far fa-clone"></i>
+    </a>
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "topics/components/topic_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block content %}
+  {{ topic.description }}
+
+  <div class="row-cols-1">
+
+    {% with card_class="mb-4" button_class="fw-bold" header_class="p-0 bg-light text-black" %}
+
+      {% block topic-cards %}
+        {% if topic.end_date %}
+          {% collapsible_card "Team" "team-card" "" show=True body_class="p-0" %}
+            {% for membership in topic.approved_memberships %}
+              {% member_row membership.member base_id="team-member-" %}
+            {% endfor %}
+          {% endcollapsible_card %}
+        {% else %}
+          {% collapsible_card "Team" "team-card" "" show=True body_class="p-0" %}
+            {% for membership in topic.topicmembership_set.all_active %}
+              {% member_row membership.member base_id="team-member-" %}
+            {% endfor %}
+          {% endcollapsible_card %}
+          {% with former_members=topic.topicmembership_set.all_finished %}
+            {% if former_members %}
+              {% collapsible_card "Former members" "former-team-card" "" show=False body_class="p-0" %}
+                {% for membership in former_members %}
+                  {% member_row membership.member base_id="team-member-" %}
+                {% endfor %}
+              {% endcollapsible_card %}
+            {% endif %}
+          {% endwith %}
+        {% endif %}
+      {% endblock %}
+
+    {% endwith %}
+  </div>
+{% endblock %}

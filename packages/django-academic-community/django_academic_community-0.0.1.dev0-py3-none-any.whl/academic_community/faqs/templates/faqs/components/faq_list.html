@@ -1,0 +1,28 @@
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% filter_for_user "view_faq" faq_list as faq_list %}
+
+{% if display_options == "accordion" %}
+  {% with accordion_id=accordion_id|default:"accordion" %}
+    <div class="accordion" id="{{ accordion_id }}">
+      {% for faq in faq_list.all %}
+        {% with faq_id=faq.id|stringformat:"s" %}
+          {% with elem_id=accordion_id|add:"-"|add:faq_id %}
+            {% collapsible_card faq.question elem_id accordion_id %}
+              {% include "faqs/faq_detail_content.html" with display_options="list" %}
+            {% endcollapsible_card %}
+          {% endwith %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+  {% endwith %}
+{% else %}
+  <ul class="list-group">
+    {% for faq in faq_list.all %}
+      <a href="{{ faq.get_absolute_url }}" class="list-group-item list-group-item-action">
+        {{ faq }}
+      </a>
+    {% endfor %}
+</ul>
+{% endif %}

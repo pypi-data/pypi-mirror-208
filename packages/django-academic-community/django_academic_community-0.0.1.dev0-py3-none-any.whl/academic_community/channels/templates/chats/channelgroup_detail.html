@@ -1,0 +1,33 @@
+{% extends "chats/base_detail.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load chats %}
+
+{% block title %}
+  {% block headline %}
+    {{ channelgroup }}
+  {% endblock %}
+{% endblock %}
+
+{% block subtitle %}Channel group{% endblock %}
+
+{% block action_buttons %}
+  {% edit_button channelgroup True %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channelgroups" as groups_url %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url "Groups"|combine:groups_url channelgroup.name|combine:request.path %}
+{% endblock %}
+
+
+{% block content %}
+  <div class="mt-4 list-group">
+    {% for channel in channelgroup.channels.all %}
+      {% channel_item channel %}
+    {% endfor %}
+  </div>
+{% endblock content %}

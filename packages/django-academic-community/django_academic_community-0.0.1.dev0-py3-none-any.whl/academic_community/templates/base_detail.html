@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load bootstrap_helpers %}
+
+{% block container %}
+  <div class="row">
+    <div class="col col-12 col-lg-3">
+      <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvas-sidebar">
+        <div class="offcanvas-header">
+          {% comment %} <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Responsive offcanvas</h5> {% endcomment %}
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-sidebar" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-block">
+          {% block sidebar_left %}{% endblock %}
+        </div>
+      </div>
+    </div>
+
+    <div class="right col col-12 col-lg-9" id="details-content">
+      {{ block.super }}
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block display %}
+  <button class="btn left d-lg-none my-2 mx-2 border-1 border-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-sidebar" aria-controls="offcanvas-sidebar">
+    <i class="fas fa-angle-double-right"></i>
+  </button>
+  {{ block.super }}
+{% endblock display %}

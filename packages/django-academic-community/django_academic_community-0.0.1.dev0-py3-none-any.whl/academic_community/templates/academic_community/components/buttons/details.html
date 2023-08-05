@@ -1,0 +1,6 @@
+{% load community_utils %}
+
+<a href="{{ object.get_absolute_url }}?next={% url_for_next %}"
+ class="btn btn-sm btn-link btn-{% if not no_lock %}{{ user.is_staff|ifthenelse:',details,internal' }}{% else %}details{% endif %} text-decoration-none {{ details_button_class }}">
+  {{ button_text|default:'View details' }}
+</a>

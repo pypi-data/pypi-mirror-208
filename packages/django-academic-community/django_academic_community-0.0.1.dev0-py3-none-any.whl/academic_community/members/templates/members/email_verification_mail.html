@@ -1,0 +1,22 @@
+<p>Hello {{ email.member }}!</p>
+
+<p>
+    Please verify your email {{ email }} using the following link:. <br>
+
+    <a href="{{ root_url }}{{ email.get_absolute_url }}">
+        {{ root_url }}{{ email.get_absolute_url }}
+    </a>
+    <br>
+    {% if not email.member.user %}
+    The administrators of the community will then create a new user for you.
+    {% endif %}
+</p>
+<p>
+    Best,<br>
+    Your community managers
+</p>
+
+<p>
+    PS: If you don't know what this is all about, your email may have been
+    entered accidentally. In this case, please just ignore this email.
+</p>

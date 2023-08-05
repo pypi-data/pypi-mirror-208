@@ -1,0 +1,12 @@
+{% load community_buttons %}
+{% spaceless %}
+  <span class="author-name {% if is_presenter %}fw-bold{% endif %}">{{ name }}</span>
+  {% if affiliations %}
+    <sup class="author-affiliations">
+      {% for idx in affiliations %}
+        <span class="author-affiliation" data-affiliation="{{ idx }}">{{ idx }}</span>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </sup>
+  {% endif %}
+  {% orcid_button author %}
+{% endspaceless %}

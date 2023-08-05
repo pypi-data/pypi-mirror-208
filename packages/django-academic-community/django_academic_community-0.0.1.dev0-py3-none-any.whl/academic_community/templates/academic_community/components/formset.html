@@ -1,0 +1,87 @@
+{% load django_bootstrap5 %}
+{% load community_utils %}
+{% load sekizai_tags %}
+
+{% block form_wrapper %}
+  {{ inline.management_form }}
+  {{ inline.non_form_errors }}
+
+  {% block form_container %}
+    <div id="{{ formset.model|model_name }}-container">
+      {% block forms %}
+        {% for form in formset.forms %}
+          <div>
+            {% render_form form %}
+          </div>
+        {% endfor %}
+      {% endblock %}
+    </div>
+  {% endblock %}
+{% endblock %}
+
+{% addtoblock 'css' %}
+  {{ formset.media.css }}
+{% endaddtoblock %}
+
+{% addtoblock 'js' %}
+  {{ formset.media.js }}
+{% endaddtoblock %}
+
+{% block add_button_wrapper %}
+  {% block add_button %}
+    {% if not no_add_button %}
+      <button class="btn btn-primary btn-create" type="button" id="add{{ formset.model|model_name }}" onclick="addNew{{ formset.model|model_name }}()">
+        Add more
+      </button>
+    {% endif %}
+  {% endblock %}
+
+  {% spaceless %}
+    {% addtoblock "js" %}
+      {% block add_button_js %}
+        {% if not no_add_button %}
+          <script>
+
+            function addNew{{ formset.model|model_name }}(){
+
+              let container = document.querySelector("#{{ formset.model|model_name }}-container");
+
+              let totalForms = document.querySelector("#id_{{ formset.prefix }}-TOTAL_FORMS");
+
+              let totalFormNum = container.childElementCount - 1;
+
+              let newForm = document.createElement("div");
+              newForm.innerHTML = `
+                {% filter escapejs %}
+                  <div {{ wrapper_attrs }}>
+                    {% render_form formset.empty_form %}
+                  </div>
+                {% endfilter %}
+              `;
+              // let newForm = rootElem.children[0].cloneNode(true)
+              // djangos Formset.empty_form uses a __prefix__ that should be replaced
+              // with the correct number
+              let formRegex = RegExp(`{{ formset.prefix }}-__prefix__-`,'g');
+              let idFormRegex = RegExp(`_id(\\d){1}`,'g');
+
+              totalFormNum++;
+
+              newForm.innerHTML = newForm.innerHTML.replace(
+                formRegex, `{{ formset.prefix }}-${totalFormNum}-`
+              );
+              newForm.innerHTML = newForm.innerHTML.replace(idFormRegex, `_id${totalFormNum}`);
+              container.appendChild(newForm);
+
+              {% block post_add_js %}
+              $('.django-select2').djangoSelect2();
+              {% endblock %}
+
+              totalForms.setAttribute('value', `${totalFormNum+1}`);
+            }
+
+          </script>
+        {% endif %}
+      {% endblock %}
+    {% endaddtoblock %}
+  {% endspaceless %}
+{% endblock %}

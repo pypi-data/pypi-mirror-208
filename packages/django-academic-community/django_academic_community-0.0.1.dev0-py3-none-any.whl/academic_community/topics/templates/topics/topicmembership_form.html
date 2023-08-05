@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Request topic membership{% endblock %}
+
+{% block headline %}Request topic membership for {{ topic }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "topics:topics" as topic_list_url %}
+  {% with topic_list_url=topic_list_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Topics"|combine:topic_list_url topic.id_name|combine:topic.get_absolute_url "Request membership"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  {% if member in topic.members.all %}
+    {{ member }} already asked for a membership in {{ topic }}
+  {% elif topic.end_date %}
+    The topic {{ topic }} already finished.
+    Go <a href="{{ topic.get_absolute_url }}">back</a>.
+  {% else %}
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+
+      {% bootstrap_button "Request" button_type="submit"  %}
+      {% bootstrap_button content="Cancel" button_type="link" href=topic.get_absolute_url %}
+    </form>
+  {% endif %}
+{% endblock %}

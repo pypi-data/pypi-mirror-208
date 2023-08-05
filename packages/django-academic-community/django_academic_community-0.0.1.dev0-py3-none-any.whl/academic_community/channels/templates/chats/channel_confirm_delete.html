@@ -1,0 +1,35 @@
+{% extends "chats/base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load chats %}
+
+{% block title %}Delete {{ channel }}{% endblock %}
+
+{% block headline %}Delete {{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+{% with all_channels_url=channel.relation.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel_type|verbose_channel_type_name_plural|combine:channel.relation.get_list_url channel.channel_id_name|combine:channel.relation.get_absolute_url "Delete"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="list-group mt-4 mb-4">
+    {% channel_item channel %}
+  </div>
+
+  <div class="alert alert-danger" role="alert">
+    <p>
+      Are you sure, you want to delete this channel? All comments, threads and
+      uploaded material will be removed. Uploaded material cannot be recovered.
+    </p>
+  </div>
+
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_button "Delete channel" button_type="submit"  %}
+  </form>
+{% endblock %}

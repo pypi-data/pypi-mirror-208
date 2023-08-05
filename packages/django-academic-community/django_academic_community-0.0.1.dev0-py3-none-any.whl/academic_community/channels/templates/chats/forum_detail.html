@@ -1,0 +1,44 @@
+{% extends "chats/channel_detail.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_badges %}
+{% load django_bootstrap5 %}
+{% load members %}
+{% load e2ee %}
+{% load chats %}
+
+{% block subtitle %}
+  {{ block.super }} {{ channel.channel_type.tracker }}: {{ channel.channel_type.status }}
+{% endblock %}
+
+{% block tabs %}
+
+  {% with subscription=channel|subscription_for:user active_tab=request.GET.tab|default:"threadsTab" %}
+    {% with disable_subscriptions=subscription|ifnotthen:"subscriberTab" %}
+      {% tab_list threadsTab="Threads" conversationTab="Full conversation" subscriberTab="Subscribers" disabled_tabs=thread_form|ifnotthen:"startThreadTab,"|str_add:disable_subscriptions %}
+        {% tab_content "threadsTab" %}
+          <div class="list-group">
+            {% for thread in channel.thread_set.all|order_by:"-date_created" %}
+              {% thread_item thread %}
+            {% empty %}
+              <div class="list-group-item text-muted">There are no threads in this forum</div>
+            {% endfor %}
+          </div>
+        {% endtab_content %}
+
+        {% tab_content "conversationTab" %}
+          {% include "chats/components/channel_conversation.html" %}
+        {% endtab_content %}
+
+        {% tab_content "subscriberTab" %}
+          {% if subscription %}
+            {% member_rows channel.subscribers.all %}
+          {% endif %}
+        {% endtab_content %}
+
+      {% endtab_list %}
+    {% endwith %}
+  {% endwith %}
+
+{% endblock tabs %}

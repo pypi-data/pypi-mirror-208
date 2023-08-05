@@ -1,0 +1,6 @@
+{% if object.start and object.duration %}
+  <span class="slot-time">
+    {{object.start|time:"H:i" }} &ndash;
+    {{object.start|add:object.duration|time:"H:i" }}
+  </span>
+{% endif %}

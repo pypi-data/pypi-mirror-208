@@ -1,0 +1,10 @@
+{% load chats %}
+
+<blockquote cite="{{ root_url }}{{ comment.get_absolute_url }}" data-mention-id="{{ comment.commentmentionlink.id }}" >
+  <p>
+    <a href="{% url 'members:members' %}{{ comment.user.communitymember.id }}" title="{{ comment.user.communitymember }}" class="badge user-badge rounded-pill text-decoration-none bg-light text-black m-2" data-object-id="{{ comment.user.id }}">
+      <i class="fas fa-user">&nbsp;</i> @{{ comment.user.username }}
+    </a> in {% mention_badge comment.commentmentionlink %}
+  </p>
+  {% comment_body comment.body %}
+</blockquote>

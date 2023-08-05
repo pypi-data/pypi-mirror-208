@@ -1,0 +1,46 @@
+{% extends "notifications/notification_mail.html" %}
+
+{% block body %}
+
+<p>Hello {{ settings.user.first_name }} {{ settings.user.last_name }},</p>
+
+{% with total=notification_list.count %}
+  <p>
+    you received {{ total }} new notification{{ total|pluralize }} notifications
+    on <a href='{{ index_url }}'>{{ index_url }}</a>. Please have a look at them at
+    <a href='{{ root_url }}{% url "notifications:inbox" %}'>
+      {{ root_url }}{% url "notifications:inbox" %}
+    </a>
+  </p>
+{% endwith %}
+
+<ul>
+  {% for notification in notification_list %}
+    <hr>
+    <li>
+      <b>{{ notification.subject }}</b>
+      {% if settings.include_bodies %}
+      {% if notification.reply_to %}
+        <p>
+          <b>Reply to:</b>
+          <a href="mailto:{{ notification.reply_to }}">
+            {{ notification.reply_to }}
+          </a>
+        </p>
+      {% endif %}
+        <details>
+          <summary>Message</summary>
+            {% include "notifications/components/notification_mail_body.html" %}
+        </details>
+      {% endif %}
+    </li>
+    <hr>
+  {% endfor %}
+</ul>
+
+<p>
+  Best regards,<br>
+  your Community Managers
+</p>
+
+{% endblock %}

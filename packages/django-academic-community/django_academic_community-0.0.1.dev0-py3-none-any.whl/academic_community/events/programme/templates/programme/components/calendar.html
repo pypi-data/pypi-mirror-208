@@ -1,0 +1,340 @@
+{% load sekizai_tags %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load events_programme %}
+
+{% if unscheduled_events %}
+  <div id='external-events' class="row card ms-1 w-100">
+    <div class="card-header">
+      <strong>Not yet scheduled</strong>
+    </div>
+
+    <div class="card-body">
+      {% for event in unscheduled_events %}
+        {% with bg_color=event.presentation_type.color|default:'#3788D8FF' font_color=event.presentation_type.font_color|default:'#fff' default_duration=default_duration|default_if_none:"01:00" %}
+          <div
+           role="button"
+           id="{{ event|object_id }}"
+           class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'
+           data-rest-uri="{{ event.rest_uri }}"
+           data-original-id="{{ event.id }}"
+           data-duration='{{ event.duration|default:default_duration }}'
+           data-background-color="{{ bg_color }}"
+           data-font-color="{{ font_color }}"
+           data-object-name="{{ event.object_name }}"
+           data-presentation-type="{{ event.presentation_type.id|default:'' }}"
+           style="background-color: {{ bg_color }}; border-color: {{ bg_color }};">
+            <div class='fc-event-main' style="color: {{ font_color }}">
+              {{ event }}
+            </div>
+          </div>
+        {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<div id="event-modals">
+  {% for event in unscheduled_events|add:events %}
+    {% calendar_modal event %}
+  {% endfor %}
+</div>
+
+<div id='calendar' class="row ms-1 w-100 mt-4"></div>
+
+{% addtoblock "css" %}
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
+{% endaddtoblock %}
+{% addtoblock "css" %}
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+<script>
+
+  var slotDurations = [
+    "00:05",
+    "00:10",
+    "00:15",
+    "00:30",
+    "00:45",
+    "01:00",
+    "02:00"
+  ];
+
+  function zoomIn() {
+    var slotDuration = calendar.getOption("slotDuration");
+    var durationIdx = slotDurations.indexOf(slotDuration);
+
+    if (durationIdx == 1) {
+      $(".fc-zoomIn-button").attr("disabled", true);
+    } else {
+      $(".fc-zoomIn-button").attr("disabled", false);
+    }
+    $(".fc-zoomOut-button").attr("disabled", false);
+    calendar.setOption("slotDuration", slotDurations[durationIdx - 1]);
+  }
+
+  function zoomOut() {
+    var slotDuration = calendar.getOption("slotDuration");
+    var durationIdx = slotDurations.indexOf(slotDuration);
+
+    if (durationIdx == slotDurations.length - 2) {
+      $(".fc-zoomOut-button").attr("disabled", true);
+    } else {
+      $(".fc-zoomOut-button").attr("disabled", false);
+    }
+    $(".fc-zoomIn-button").attr("disabled", false);
+    calendar.setOption("slotDuration", slotDurations[durationIdx + 1]);
+  }
+
+  function removeEvent(eventId) {
+    var event = calendar.getEventById(eventId);
+    if (event) {
+      var props = event.extendedProps;
+    } else {
+      event = document.getElementById(eventId);
+      props = event.dataset;
+    }
+    event.remove();
+    $.ajax({
+      url: props.restUri,
+      type: 'DELETE',
+      data: {},
+      headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+      success: function (data) {
+        var forms = $(`#agendaForm-${props.objectName}-${props.originalId}`);
+        if (forms.length) {
+          var prefix = forms[0].dataset.prefix;
+          var formIdx = parseInt(prefix.match(/[0-9]+$/g)[0]);
+          forms.remove();
+          var formCount = $(`input[name='${props.objectName}_set-TOTAL_FORMS']`);
+          if (formCount.length) {
+            var nForms = parseInt(formCount.val()) - 1;
+            for (let i = formIdx+1; i <= nForms; i++) {
+              // change names of other forms
+              $(`input[id^='id_${props.objectName}_set-${i}']`).each(
+                function(j, elem) {
+                  elem.id = elem.id.replace(
+                    `id_${props.objectName}_set-${i}`,
+                    `id_${props.objectName}_set-${i-1}`
+                  );
+                  elem.name = elem.name.replace(
+                    `${props.objectName}_set-${i}`,
+                    `${props.objectName}_set-${i-1}`
+                  );
+                }
+              )
+            }
+            formCount.val(nForms.toString());
+            var initalCount = $(`input[name='${props.objectName}_set-INITIAL_FORMS']`);
+            nForms = parseInt(formCount.val()) - 1;
+            initalCount.val(nForms.toString());
+          }
+        }
+      }
+    });
+  }
+
+  function updateEvent(event) {
+    var range = event._instance.range
+    var diff = new Date(range.end - range.start).toISOString().substr(11, 8)
+    $.ajax({
+      url: event.extendedProps.restUri,
+      type: 'PATCH',
+      data: {
+        start: event.startStr,
+        duration: diff
+      },
+      headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+      success: function (data) {
+        // update the form elements
+        var objectName = event.extendedProps.objectName;
+        var formElem = $(`input[id^=id_${objectName}][id$='-id'][value='${data.id}']`);
+        if (formElem.length) {
+          var formElemId = formElem.attr("id");
+          var startElemId = formElemId.replace(/-id$/g, "-start");
+          var durationElemId = formElemId.replace(/-id$/g, "-duration");
+          $(`#${startElemId}`).val(data.start);
+          $(`#${durationElemId}`).val(data.duration);
+          $(`#btn-remove-${event.id}`).attr("hidden", false);
+        }
+      }
+    });
+  }
+
+  function duplicateEvent(eventId) {
+    var event = calendar.getEventById(eventId);
+    var range = event._instance.range
+    var diff = new Date(range.end - range.start).toISOString().substr(11, 8)
+    $.ajax({
+      url: event.extendedProps.restUri + "../",
+      type: 'POST',
+      data: {
+        title: event.title,
+        start: event.startStr,
+        presentation_type: event.extendedProps.presentationType,
+        {% if session %}session: "{{ session.id }}",{% endif %}
+        duration: diff
+      },
+      headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+      success: function (data) {
+        calendar.addEvent({
+          title: event.title,
+          start: event.start,
+          duration: diff,
+          backgroundColor: event.backgroundColor,
+          borderColor: event.borderColor,
+          textColor: event.textColor,
+          {% if vmin and vmax %}constraint: "availableForEvents",{% endif %}
+          extendedProps: {
+            restUri: event.extendedProps.restUri + "../" + data.id,
+            originalId: data.id,
+            objectName: event.extendedProps.objectName,
+            presentationType: event.extendedProps.presentationType
+          }
+        });
+        $("#reloadInfo").removeClass("d-none");
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var containerEl = document.getElementById('external-events');
+    var checkbox = document.getElementById('drop-remove');
+
+    {% if editable and unscheduled_events %}
+    new FullCalendar.Draggable(containerEl, {
+      itemSelector: '.fc-event',
+      eventData: function(eventEl) {
+        return {
+          id: eventEl.id,
+          title: eventEl.innerText,
+          duration: eventEl.dataset.duration,
+          backgroundColor: eventEl.dataset.backgroundColor,
+          borderColor: eventEl.dataset.backgroundColor,
+          textColor: eventEl.dataset.fontColor,
+          {% if vmin and vmax %}constraint: "availableForEvents",{% endif %}
+          extendedProps: {
+            restUri: eventEl.dataset.restUri,
+            originalId: eventEl.dataset.originalId,
+            objectName: eventEl.dataset.objectName
+          }
+        };
+      }
+    });
+    {% endif %}
+
+    {% spaceless %}
+    var events = [
+      {% if vmin and vmax %}
+        {
+          groupId: 'availableForEvents',
+          start: "{{ vmin|date:'c' }}",
+          end: "{{ vmax|date:'c' }}",
+          {% if not display_available %}backgroundColor: "#fff",{% endif %}
+          display: "background"
+        },
+      {% endif %}
+      {% for event in events %}
+        {% with bg_color=event.presentation_type.color|default:'#3788D8FF' font_color=event.presentation_type.font_color|default:'#fff' %}
+          {
+            id: "{{ event|object_id }}",
+            title: "{{ event }}",
+            start: "{{ event.start|date:'c' }}",
+            end: "{{ event.start|add:event.duration|date:'c' }}",
+            backgroundColor: "{{ bg_color }}",
+            borderColor: "{{ bg_color }}",
+            textColor: "{{ font_color }}",
+            {% if vmin and vmax %}constraint: "availableForEvents",{% endif %}
+            extendedProps: {
+              restUri: "{{ event.rest_uri }}",
+              originalId: "{{ event.id }}",
+              presentationType: {{ event.presentation_type.id|default:'null' }},
+              objectName: "{{ event.object_name }}"
+            }
+          }{% if not forloop.last %},{% endif %}
+        {% endwith %}
+      {% endfor %}
+    ]
+    {% endspaceless %}
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prev,next today{% if vmin %},fullEvent{% endif %},timeGridDay',
+        right: 'zoomOut,zoomIn'
+      },
+      customButtons: {
+        zoomOut: {
+          text: 'Zoom out',
+          icon: "zoom-out",
+          click: zoomOut
+        },
+        zoomIn: {
+          text: 'Zoom in',
+          icon: "zoom-in",
+          click: zoomIn
+        },
+        fullEvent: {
+          text: "Full event",
+          click: function() {
+            calendar.changeView("allDays", "{{ vmin|date:'c' }}");
+          }
+        }
+      },
+      themeSystem: 'bootstrap5',
+      slotDuration: "{{ slot_duration|default:'00:30' }}",
+      nowIndicator: {% if vmin|in_the_past and vmax|in_the_future %}true{% else %}false{% endif %},
+      businessHours: true,
+      editable: {% if editable %}true{% else %}false{% endif %},
+      droppable: {% if editable %}true{% else %}false{% endif %},
+      events: events,
+      drop: function(info) {
+        info.draggedEl.parentNode.removeChild(info.draggedEl);
+      },
+      eventReceive: function(info) {
+        updateEvent(info.event);
+      },
+      eventResize: function(info) {
+        updateEvent(info.event);
+      },
+      eventDrop: function(info) {
+        updateEvent(info.event);
+      },
+      eventClick: function(info) {
+        info.jsEvent.preventDefault(); // don't let the browser navigate
+        $(`#${info.event.id}-modal`).modal("show");
+      },
+      nowIndicator: true,
+      scrollTime: "{{ vmin.hour|default:'08' }}:00:00",
+      views: {
+        allDays: {
+          type: 'timeGrid',
+          allDaySlot: false,
+          duration: { days: {{ ndays|default:7 }} },
+          buttonText: 'All days'
+        }
+      },
+      {% spaceless %}
+        {% if vmin %}
+          initialDate: "{{ vmin|date:'c' }}",
+        {% endif %}
+      {% endspaceless %}
+      initialView: '{{ initial_view|default:"allDays" }}'
+    });
+    calendar.render();
+    $("[class^='fc'][class*='-button']").addClass("btn-md-sm")
+  });
+
+  $('a[data-bs-toggle="tab"][id="calendarTab"]').on('shown.bs.tab', function (e) {
+    calendar.render();
+  })
+
+  </script>
+{% endaddtoblock %}

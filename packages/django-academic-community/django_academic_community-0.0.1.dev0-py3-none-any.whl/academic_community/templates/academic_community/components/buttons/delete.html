@@ -1,0 +1,8 @@
+{% load community_utils %}
+{% if show_button %}
+  <a class="button btn {{ button_class|default:'btn-primary btn-round' }} btn-delete {{ delete_button_class }}"
+   title="Delete this {{ object_name|default:'object' }}"
+   href="{{ delete_url }}" role="button" id="{{ button_id }}">
+    {{ button_text }}
+  </a>
+{% endif %}

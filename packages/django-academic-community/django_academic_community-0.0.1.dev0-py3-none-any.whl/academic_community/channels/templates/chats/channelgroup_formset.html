@@ -1,0 +1,59 @@
+{% extends "chats/base_detail.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load django_bootstrap5 %}
+{% load community_buttons %}
+{% load sekizai_tags %}
+
+{% block title %}
+  {% block headline %}
+    Manage channel groups
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url "Settings"|combine:"" "Groups"|combine:request.path %}
+{% endblock %}
+
+{% block action_buttons %}
+  {% url "chats:channelgroup-create" as create_group_url %}
+  {% create_modal_button form_attrs='action="'|add:create_group_url|add:'"'|safe%}
+    {% render_form new_group_form %}
+  {% endcreate_modal_button %}
+
+  {% addtoblock "js" %}
+    {{ new_group_form.media.js }}
+  {% endaddtoblock %}
+
+  {% addtoblock "css" %}
+    {{ new_group_form.media.css }}
+  {% endaddtoblock %}
+{% endblock %}
+
+
+{% block content %}
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    {{ formset.management_form }}
+    {{ formset.non_form_errors }}
+
+    {% for form in formset.forms %}
+      {% card header=form.instance.pk|ifnotthen:"Add a new group" card_class="mb-4" %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% if form.instance.pk and not form.instance.is_auto_group %}
+          {% edit_button form.instance True button_text="Select channels for this group" button_class="btn-link" %}
+        {% endif %}
+      {% endcard %}
+    {% endfor %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "Ok" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button "Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:request.path %}
+    </div>
+  </form>
+
+{% endblock content %}

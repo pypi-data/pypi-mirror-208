@@ -1,0 +1,7 @@
+{% load community_utils %}
+<a class="{{ profile_class }} p-0 position-relative btn {{ user.chatsettings.profile_button_class.classes|default:'btn-primary' }} btn-sm btn-round btn-profile" href="{{ url|default:user.communitymember.get_absolute_url }}" {% if profile_id %}id="{{ profile_id }}"{% endif %} role="button" {{ button_attrs }} {% if tooltip %}data-bs-toggle="tooltip" data-bs-title="{{ tooltip }}"{% endif %}>
+  {% get_initials user %}
+  {{ content }}
+  <span class="availability-symbol position-absolute translate-middle top-90 start-90" data-availability-id="{{ user.id }}">
+  </span>
+</a>

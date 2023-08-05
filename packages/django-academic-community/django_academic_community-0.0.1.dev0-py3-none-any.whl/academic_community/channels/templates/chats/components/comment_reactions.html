@@ -1,0 +1,8 @@
+{% load chats %}
+<div class="comment-reactions mx-2">
+  {% if comment.pk %}
+    {% for commentreaction in comment.commentreaction_set.all %}
+      {% commentreaction_button commentreaction %}
+    {% endfor %}
+  {% endif %}
+</div>

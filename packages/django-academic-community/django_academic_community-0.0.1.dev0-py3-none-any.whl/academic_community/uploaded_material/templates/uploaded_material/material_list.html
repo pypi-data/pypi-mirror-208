@@ -1,0 +1,33 @@
+{% extends "base_list_sidebar.html" %}
+
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load uploaded_material %}
+
+{% block title %}{{ view.model|verbose_model_name }}{% endblock %}
+
+{% block headline %}{{ view.model|verbose_model_name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs view.model|verbose_model_name|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% render_material_sidebar material_relation_model|default:None %}
+  {% endblock %}
+{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% with material_relation_model=material_relation_model|default:view.model %}
+    {% if user|combine:material_relation_model|can_add_material:view.kwargs %}
+      <a href="{% material_add_url %}" type="button" class="btn btn-primary btn-create btn-round">
+      </a>
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% material_cards material_list %}
+{% endblock %}

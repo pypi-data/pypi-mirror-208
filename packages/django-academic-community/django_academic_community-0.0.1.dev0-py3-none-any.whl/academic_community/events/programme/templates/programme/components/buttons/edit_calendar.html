@@ -1,0 +1,28 @@
+{% load sekizai_tags %}
+<button
+ type="button"
+ id="btnEditCalendar"
+ class="btn btn-primary btn-round {% if unlocked %}btn-unlocked{% else %}btn-locked{% endif %}"
+ aria-pressed="{% if unlocked %}true{% else %}false{% endif %}"
+ title="{% if unlocked %}Lock the calendar{% else %}Make the calendar editable{% endif %}"
+ onclick="toggleCalendarEditable()">
+</button>
+
+{% addtoblock "js" %}
+<script>
+  function toggleCalendarEditable() {
+    btn = $("#btnEditCalendar");
+    if (btn.hasClass("btn-unlocked")) {
+      btn.removeClass("btn-unlocked");
+      btn.addClass("btn-locked");
+      btn.attr("title", "Make the calendar editable");
+      calendar.setOption("editable", false);
+    } else {
+      btn.removeClass("btn-locked");
+      btn.addClass("btn-unlocked");
+      btn.attr("title", "Lock the calendar");
+      calendar.setOption("editable", true);
+    }
+  }
+</script>
+{% endaddtoblock %}

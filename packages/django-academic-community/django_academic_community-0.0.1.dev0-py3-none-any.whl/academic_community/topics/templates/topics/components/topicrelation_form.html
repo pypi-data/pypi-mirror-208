@@ -1,0 +1,28 @@
+{% load django_bootstrap5 %}
+
+<div class="row">
+
+  {% if form.left.field.widget.is_hidden %}
+    <div class="col-sm-2">
+      {{ form.instance.left.id_name|default:"This topic" }}
+    </div>
+  {% else %}
+    <div class="col-sm-5">
+      {% bootstrap_field form.left layout="horizontal" show_label=False %}
+    </div>
+  {% endif %}
+  <div class="col-sm-5">
+    {% bootstrap_field form.relation_type layout="horizontal" show_label=False %}
+  </div>
+  {% if form.right.field.widget.is_hidden %}
+    <div class="col-sm-2">
+      {{ form.instance.right.id_name|default:"This topic" }}
+    </div>
+  {% else %}
+    <div class="col-sm-5">
+      {% bootstrap_field form.right layout="horizontal" show_label=False %}
+    </div>
+  {% endif %}
+
+  {% bootstrap_form form exclude="left,right,relation_type" %}
+</div>

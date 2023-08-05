@@ -1,0 +1,18 @@
+{% load static %}
+{% load community_buttons %}
+
+<div class="card {{ card_class }} mb-0">
+  <div class="card-body p-1 d-flex align-items-start" id="{{ base_id|default_if_none:'' }}member-{{ communitymember.pk }}-header">
+    <button data-bs-toggle="collapse" type="button" class="btn btn-sm" data-bs-target="#{{ base_id|default_if_none:'' }}member-{{ communitymember.pk }}-collapse" aria-expanded={% if show %}"true"{% else %}"false"{% endif %} aria-controls="{{ base_id|default_if_none:'' }}member-{{ communitymember.pk }}-collapse">
+      <div class="card-title text-start">
+        {{ communitymember }}
+      </div>
+    </button>
+    {% orcid_button communitymember %}
+    {% email_button communitymember %}
+    {% if communitymember.user %}<span class="availability-symbol availability-tooltip mx-2" data-bs-toggle="tooltip" data-availability-id="{{ communitymember.user.id }}"></span>{% endif %}
+  </div>
+  <div id="{{ base_id|default_if_none:'' }}member-{{ communitymember.pk }}-collapse" class="collapse {% if show %}show{% endif %} {{ body_class }}" aria-labelledby="{{ base_id|default_if_none:'' }}member-{{ communitymember.pk }}-header">
+    {% include "members/components/communitymember_card_body.html" %}
+  </div>
+</div>

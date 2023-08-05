@@ -1,0 +1,12 @@
+{% spaceless %}
+<div class="form-row">
+  {% for widget in widget.subwidgets %}
+    <div class="col-auto">
+      {% include widget.template_name %}
+      <small class="form-text text-muted">
+        {{ widget.attrs.help_text }}
+      </small>
+    </div>
+  {% endfor %}
+</div>
+{% endspaceless %}

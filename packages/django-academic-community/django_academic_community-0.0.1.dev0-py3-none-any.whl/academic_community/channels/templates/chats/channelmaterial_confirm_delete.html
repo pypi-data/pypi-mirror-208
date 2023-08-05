@@ -1,0 +1,22 @@
+{% extends "uploaded_material/material_confirm_delete.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Delete Channel Material{% endblock %}
+
+{% block headline %}Delete Channel Material {{ material }}{% endblock %}
+{% block subtitle %}{{ channel }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "chats/components/channel_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+  {% url "chats:channelmaterialrelation-list" channel.channel_id as channelmaterial_url %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url channel|name_for:user|combine:channel.get_absolute_url "Material"|combine:channelmaterial_url material.name|combine:material.get_absolute_url "Delete"|combine:request.path %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% spaceless %}
+<p>
+  Hello {{ subscription.user }}!
+</p>
+<p>
+  Your subscription to<br><br>
+  <a href="{{ root_url }}{{ subscription.channel.get_absolute_url }}">{{ subscription.channel }}</a> <br><br>
+  has just been removed{% if reason %}, because {{ reason }}{% endif %}.
+</p>
+
+<p>
+  If you think this was a mistake, please get in touch with the creator of the
+  channel, {{ subscription.channel.user }},
+  or contact your community managers.
+</p>
+
+<p>
+  Have a nice day,<br>
+  Your Community Managers
+</p>
+{% endspaceless %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+
+{% block title %}Send mail{% endblock %}
+
+{% block headline %}Send mail{% endblock %}
+
+{% block content %}
+
+  <p>
+    Click the button below to send the following notification via mail to
+    {{ notification.user.email }}:
+  </p>
+
+  <p><b>Subject:</b> {{ notification.subject }}</p>
+
+  {{ notification.body }}
+
+  {% if not user.communitymember or user.communitymember.email.is_verified %}
+    <form role="form" method="post">
+      {% csrf_token %}
+
+      {% bootstrap_button "Send" button_type="submit"  %}
+    </form>
+  {% else %}
+    {% bootstrap_alert "Your email is not verified so you cannot send this mail here." alert_type='error' %}
+  {% endif %}
+
+{% endblock %}

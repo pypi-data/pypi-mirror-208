@@ -1,0 +1,10 @@
+{% if notification.encryption_key %}<Encrypted message>{% else %}{{ notification.plain_text_body }}{% endif %}
+
+{% spaceless %}
+{% if notification.usernotification %}
+{% with sender=notification.usernotification.outgoing_notification.sender %}
+From {{ sender }}
+
+{% endwith %}
+{% endif %}
+{% endspaceless %}

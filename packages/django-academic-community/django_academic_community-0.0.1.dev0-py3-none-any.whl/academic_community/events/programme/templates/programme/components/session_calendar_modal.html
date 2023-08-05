@@ -1,0 +1,32 @@
+{% load bootstrap_helpers %}
+{% load community_buttons %}
+{% load events_programme %}
+{% load community_utils %}
+
+{% modal event.title event|object_id|add:"-modal" %}
+  <div class="modal-body">
+    <ul class="list-group">
+      <li class="list-group-item p-2">
+        {% slot_date_time event %}
+      </li>
+    </ul>
+  </div>
+
+  <div class="modal-body d-flex justify-content-between">
+    {% details_button event button_text="View session agenda" %}
+    {% edit_button event %}
+  </div>
+  <div class="modal-body">
+    {% calendar_modal_content event %}
+  </div>
+  {% if editable and event.can_be_deleted %}
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="duplicateEvent('{{ event|object_id }}')" title="Duplicate this event">
+        <i class="far fa-clone"></i>
+      </button>
+      <button type="button" class="btn btn-link text-muted" data-bs-dismiss="modal" onclick="removeEvent('{{ event|object_id }}')" title="Remove this event">
+        <i class="far fa-trash-alt"></i>
+      </button>
+    </div>
+  {% endif %}
+{% endmodal %}

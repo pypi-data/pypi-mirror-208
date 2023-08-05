@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load members %}
+{% load cms_tags %}
+
+{% block headline %}Edit {{ slot }}{% endblock %}
+{% block title %}{{ slot }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% if not session.event.single_session_mode %}
+    {% url "events:programme:session-list" slot.event.slug as programme_url %}
+    {% breadcrumbs slot.event.name|combine:slot.event.get_absolute_url "Programme"|combine:programme_url slot.session.title|combine:slot.session.get_absolute_url slot.title|combine:slot.get_absolute_url "Edit"|combine:request.path %}
+  {% else %}
+    {% breadcrumbs slot.event.name|combine:slot.event.get_absolute_url slot.title|combine:slot.get_absolute_url "Edit"|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  {% block form_content %}
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+
+
+      <div class="row row-cols-auto m-3">
+        {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+        {% bootstrap_button "Reset" button_type="reset"  %}
+        {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=slot.get_absolute_url %}
+      </div>
+    </form>
+  {% endblock %}
+
+
+{% endblock %}

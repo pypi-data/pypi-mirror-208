@@ -1,0 +1,50 @@
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+
+<button type="button" class="btn btn-primary btn-round btn-create" data-bs-toggle="modal" data-bs-target="#create-modal">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="create-modal" aria-labelledby="create-modal-label" aria-hidden="true">
+  <div class="mw-75 modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-modal-label">
+          Create new {{ object_name|default_if_none:"object" }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form role="form" method="post" {{ form_attrs }}>
+        <div class="modal-body">
+          {% csrf_token %}
+          {{ content }}
+        </div>
+        <div class="modal-footer">
+          {% bootstrap_button "Submit" button_type="submit"  name="_save" %}
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% addtoblock "js" %}
+  {% if show_modal %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        $(`#create-modal`).modal("show");
+      })
+    </script>
+  {% endif %}
+
+  <script>
+    $('#create-modal').on('shown.bs.modal', function (e) {
+      var elems = $('.django-select2')
+      if (elems.length) {
+        $('.django-select2').djangoSelect2({theme: "classic", dropdownParent: $('#create-modal')});
+        $(".django-select2:required").next().addClass("required");
+      }
+    })
+  </script>
+
+{% endaddtoblock %}

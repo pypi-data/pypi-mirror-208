@@ -1,0 +1,281 @@
+{% load static %}
+{% load sekizai_tags %}
+
+<a class="btn btn-notifications {{ button_class }}" role="button" href="{% url 'notifications:inbox' %}">
+  {{ button_text }}
+  {% with unread_notifications=user.unread_notifications %}
+    <span class="notification-badge badge rounded-pill bg-danger {% if not unread_notifications %}invisible{% endif %}">
+      <span class="notification-count">{{ unread_notifications }}</span>
+      <span class="visually-hidden">unread notifications</span>
+    </span>
+  {% endwith %}
+</a>
+
+{% addtoblock "js" %}
+
+<script>
+
+  var websocketConnectionAttemps = 0;
+  var websocketConnectionEstablished = false;
+
+  function updateNotificationCount() {
+    $.ajax({
+      url: "{% url 'rest:notification-count' %}",
+      type: 'GET',
+      data: {},
+      headers:{'X-CSRFTOKEN': '{{ csrf_token }}'},
+      success: function (data) {
+        document.querySelectorAll(".notification-badge").forEach(
+          function(notificationBadge) {
+            if (data.unread_notifications) {
+              notificationBadge.classList.remove("invisible");
+            } else {
+              notificationBadge.classList.add("invisible");
+            }
+          }
+        )
+        document.querySelectorAll(".notification-count").forEach(
+          function(notificationCount) {
+            let count = parseInt(notificationCount.innerHTML);
+            notificationCount.innerHTML = data.unread_notifications;
+          }
+        )
+      }
+    });
+  }
+
+  function newToast(data) {
+    let toastElem = document.createElement("div");
+    toastElem.id = "notification-toast-" + data.id;
+    toastElem.classList.add("toast");
+    toastElem.setAttribute("role", "alert");
+    toastElem.setAttribute("aria-live", "assertive");
+    toastElem.setAttribute("aria-atomic", "true");
+    toastElem.setAttribute("data-bs-autohide", "false");
+    toastElem.innerHTML = `
+      {% filter escapejs %}
+        {% include "notifications/templatetags/notification_toast_template.html" %}
+      {% endfilter %}
+      `;
+
+    toastElem.innerHTML = toastElem.innerHTML
+      .replace(new RegExp("NOTIFICATIONID", "g"), data.id)
+      .replace(new RegExp("NOTIFICATIONURL", "g"), data.url)
+      .replace(new RegExp("SUBJECT", "g"), data.subject)
+      .replace(new RegExp("BODY", "g"), data.body_truncated)
+      .replace(new RegExp("NOW", "g"), Date.now());
+
+    // remove images
+    let images = toastElem.getElementsByTagName('img');
+    let l = images.length;
+    let imgReplacement = document.createElement("i");
+    imgReplacement.classList.add("bi");
+    imgReplacement.classList.add("bi-image");
+    for (var i = 0; i < l; i++) {
+        images[0].parentNode.replaceChild(imgReplacement, images[0]);
+    }
+
+    refreshTime(toastElem.getElementsByClassName("time-since")[0]);
+
+    return toastElem;
+  }
+
+  async function queryUserStatus() {
+    if (websocketConnectionEstablished) {
+      let users = [];
+      document.querySelectorAll("[data-availability-id]").forEach(
+        elem => {
+          users.push(parseInt(elem.dataset.availabilityId));
+        }
+      )
+      if (users.length) {
+        notificationSocket.send(JSON.stringify({users: users}));
+      }
+    }
+  }
+
+  function openNotificationSocket() {
+
+    let lastTimeFocused = new Date();
+
+    function handleNotification(data) {
+
+      updateNotificationCount();
+
+      if (data.display_popup) {
+
+        let event = new CustomEvent("notification", {
+          bubbles: true,
+          cancelable: true,
+          detail: data
+        })
+
+        document.dispatchEvent(event);
+
+        if (data.notification_type == "chatnotification") {
+          var modifyList = false;
+          var sidebarElement;
+          var unreadItems = document.getElementById("unread-channels");
+          document.querySelectorAll(".channel-item").forEach(
+            function(elem) {
+              if (elem.dataset.channelId == data.channel_id) {
+                if (elem.classList.contains("channel-sidebar-item")) {
+                  sidebarElement = elem;
+                }
+                if (data.channel_unread) {
+                  if (!elem.classList.contains("unread")) {
+                    elem.classList.add("unread");
+                    modifyList = true;
+                  }
+                } else {
+                  if (elem.classList.contains("unread")) {
+                    elem.classList.remove("unread");
+                    modifyList = true;
+                  }
+                }
+              }
+            }
+          )
+          if (unreadItems && modifyList && sidebarElement) {
+            if (data.unread) {
+              unreadItems.appendChild(sidebarElement.cloneNode(true))
+            } else {
+              unreadItems.querySelector(`a[data-channel-id="${data.channel_id}"]`).remove()
+            }
+            let unreadCard = document.getElementById("unread-channels-sidebar-item");
+            if (unreadItems.childElementCount) {
+              unreadCard.classList.remove("d-none");
+            } else {
+              unreadCard.classList.add("d-none");
+            }
+          }
+        }
+
+        if ((data.action == "update") || (data.action == "delete")) {
+          toastElem = document.getElementById("notification-toast-" + data.id);
+          if (toastElem) {
+            if ((!data.unread) || (data.action == "delete")) {
+              let toast = new bootstrap.Toast(toastElem);
+              toast.hide();
+            } else {
+              toastElem.querySelector(".toast-body").children[0].innerHTML = data.body;
+              toastElem.querySelector(".toast-header").children[0].innerHTML = data.subject;
+            }
+          }
+        } else if ((data.action == "create") && (data.unread) && (!event.defaultPrevented)) {
+
+          let toasts = document.getElementById('notificationToasts');
+
+          let toastElem = newToast(data);
+          toasts.appendChild(toastElem);
+
+          let toast = new bootstrap.Toast(toastElem)
+          toast.show()
+
+          let visibleToasts = document.querySelectorAll(".toast.show");
+          Array.from(visibleToasts).slice(0, -3).forEach(function(toastElem) {
+            let toast = new bootstrap.Toast(toastElem)
+            toast.hide()
+          })
+        }
+      }
+    }
+
+    function handleAvailability(data) {
+      // update the availability for a single user
+      document.querySelectorAll(`.availability-symbol[data-availability-id='${data.user}']`).forEach(
+        elem => {
+          elem.innerHTML = data.availability_symbol;
+        }
+      )
+      document.querySelectorAll(`.availability-text[data-availability-id='${data.user}']`).forEach(
+        elem => {
+          elem.innerHTML = data.availability;
+        }
+      )
+      document.querySelectorAll(`.availability-tooltip[data-availability-id='${data.user}']`).forEach(
+        elem => {
+          elem.dataset.bsTitle = data.availability;
+        }
+      )
+    }
+
+    function handleAvailabilities(data) {
+      // update the availability for multiple users
+      data.users.forEach(handleAvailability)
+    }
+
+    function handlePing(data) {
+      // send a pong if the document is focused or has been focused less than
+      // 5 minutes ago
+      notificationSocket.send(JSON.stringify({
+        type: "pong",
+        is_active: ((document.hasFocus() && document.visibilityState === 'visible') || ((new Date()) - lastTimeFocused) < 5 * 60 * 1000)
+      }));
+    }
+
+    notificationSocket = new WebSocket(
+      '{{ websocket_root_url }}/ws/notifications/'
+      + '{{ user.pk }}'
+      + '/'
+    );
+
+    notificationSocket.addEventListener("open", function(e) {
+      console.log("Websocket connection established.");
+      websocketConnectionAttemps = 0;
+      websocketConnectionEstablished = true;
+      queryUserStatus();
+    })
+
+    notificationSocket.addEventListener("message",  function(e) {
+      const data = JSON.parse(e.data);
+      if (data.type == "notification") {
+        handleNotification(data);
+      } else if (data.type == "availability") {
+        handleAvailability(data);
+        createTooltips();
+      } else if (data.type == "availabilities") {
+        handleAvailabilities(data);
+        createTooltips();
+      } else if (data.type == "ping") {
+        handlePing(data);
+      } else {
+        console.error("Cannot handle websocket message", data)
+      }
+    })
+
+    notificationSocket.addEventListener("close", function(event) {
+      websocketConnectionEstablished = false;
+      if (!event.wasClean) {
+        websocketConnectionAttemps++;
+        if (websocketConnectionAttemps < 5) {
+          console.error(`Websocket connection died. Reconnecting in 5 seconds... Attempt ${websocketConnectionAttemps} of 5.`);
+          setTimeout(openNotificationSocket, 5000);
+        } else {
+          console.error("Stop connecting after 5 attempts...");
+          displayMessageInToast(
+            "Lost connection to the websocket. Please <button type='button' onclick='window.location.reload()' class='btn btn-link'>reload the page</a>.",
+            autohide="false"
+          );
+        }
+      }
+    })
+
+    notificationSocket.addEventListener("error", function(error) {
+      console.error(`Chat socket closed unexpectedly. Reason: ${error.message}.`);
+    })
+    window.addEventListener("focus", function() {
+      let newTime = new Date();
+      if (newTime - lastTimeFocused > 5 * 60 * 1000) {
+        notificationSocket.send(JSON.stringify(
+          {
+            type: "pong", is_active: true}
+        ));
+      }
+      lastTimeFocused = newTime;
+    })
+  }
+  document.addEventListener("DOMContentLoaded", openNotificationSocket)
+</script>
+
+{% endaddtoblock %}

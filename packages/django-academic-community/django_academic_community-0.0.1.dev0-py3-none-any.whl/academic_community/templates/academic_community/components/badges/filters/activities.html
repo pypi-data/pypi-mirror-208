@@ -1,0 +1,5 @@
+{% load community_utils %}
+<a href="{{ url }}" class="badge rounded-pill text-decoration-none bg-secondary m-2">
+  {% close_icon %}
+  {{ object.abbreviation|default_if_none:object.name }}
+</a>

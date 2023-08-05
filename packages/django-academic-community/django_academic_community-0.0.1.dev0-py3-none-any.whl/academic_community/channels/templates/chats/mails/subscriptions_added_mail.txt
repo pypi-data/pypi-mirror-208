@@ -1,0 +1,19 @@
+Hello {{ user }}!
+
+You have just been subscribed to the following channels{% if reason %}, because {{ reason }}{% endif %}:
+
+{% for subcription in subscription_list %}
+{{ subscription.channel }}
+    - url: {{ root_url }}{{ subscription.channel.get_absolute_url }}
+    - edit subscription: {{ root_url }}{{ subscription.get_edit_url }}
+{% endfor %}
+
+You will receive notifications for any comments in these channels.
+Please visit any of the above urls to unsubscribe or modify your notifications
+for these channels.
+
+If you think this was a mistake, please get in touch with the creators of the
+individual channels or contact your community managers.
+
+Have a nice day,
+Your Community Managers

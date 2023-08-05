@@ -1,0 +1,25 @@
+{% extends "notifications/notificationsettings_form.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load sekizai_tags %}
+
+{% block headline %}Chat Notification Settings{% endblock %}
+
+{% block navbar %}
+
+  {{ block.super }}
+
+  {% card header="Want to configure a specific channel?" card_class="m-4" %}
+    <form>
+      <div class="d-flex">
+        <div class="w-100">
+          {% bootstrap_form channel_form %}
+        </div>
+        {% bootstrap_button "Configure" button_type="submit" extra_classes="ms-4 h-100 align-self-center" %}
+      </div>
+    </form>
+  {% endcard %}
+
+  <h2 class="mx-4">Global Chat Notification Settings</h2>
+
+{% endblock navbar%}

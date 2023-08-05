@@ -1,0 +1,302 @@
+$primary: #3B8BEB;
+$secondary: #C4DBF6;
+$success: #E7E3D4;
+$danger: #B23850;
+$warning: #EE8600;
+$info: #00887A;
+$light: #EBEDF1;
+$dark: #8590AA;
+
+$profile-background-colors: (
+  black: #000000,
+  dim-grey: #4D4D4D,
+  grey: #999999,
+  light-grey: #E6E6E6,
+  white: #FFFFFF,
+  red: #E64C4C,
+  orange: #E6994C,
+  yellow: #E6E64C,
+  light-green: #99E64C,
+  green: #4CE64C,
+  aquamarine: #4CE699,
+  turquoise: #4CE6E6,
+  light-blue: #4C99E6,
+  blue: #4C4CE6,
+  purple: #994CE6
+);
+
+$profile-colors: (
+  "black" #FFFFFF #000000,
+  "dim-grey" #FFFFFF #4D4D4D,
+  "grey" #000000 #999999,
+  "light-grey" #000000 #E6E6E6,
+  "red" #FFFFFF #E64C4C,
+  "orange" #000000 #E6994C,
+  "yellow" #000000 #E6E64C,
+  "light-green" #000000 #99E64C,
+  "green" #000000 #4CE64C,
+  "aquamarine" #000000 #4CE699,
+  "turquoise" #000000 #4CE6E6,
+  "light-blue" #000000 #4C99E6,
+  "blue" #FFFFFF #4C4CE6,
+  "purple" #FFFFFF #994CE6
+);
+
+$position-values: (
+  0: 0,
+  5: 5%,
+  10: 10%,
+  15: 15%,
+  20: 20%,
+  25: 25%,
+  30: 30%,
+  35: 35%,
+  40: 40%,
+  45: 45%,
+  50: 50%,
+  55: 55%,
+  60: 60%,
+  65: 65%,
+  70: 70%,
+  75: 75%,
+  80: 80%,
+  85: 85%,
+  90: 90%,
+  95: 95%,
+  100: 100%
+);
+
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 6,
+  7: $spacer * 12
+);
+
+
+
+// HACK: reverse some bulma styling
+.card {
+  box-shadow: none;
+  color: inherit;
+}
+
+
+@import 'bootstrap/scss/bootstrap';
+@import 'scss/buttons';
+@import 'scss/cookiealert';
+@import 'scss/sidebar';
+@import 'scss/top_nav';
+@import 'scss/institutions';
+@import 'scss/programme';
+@import 'scss/rjsf.scss';
+
+@each $prop, $abbrev in (width: mw, height: mh) {
+  @each $size, $length in $position-values {
+    .#{$abbrev}-#{$size} { max-#{$prop}: $length !important; }
+  }
+}
+
+@each $colorname, $colorvalue in $theme-colors {
+  .card-#{$colorname} {
+    & > .card-header {
+      background-color: $colorvalue;
+    }
+  }
+}
+
+@each $profilename, $profilefontcolor, $profilebackground-color in $profile-colors {
+  .btn-profile-#{$profilename} {
+    --bs-btn-color: #{$profilefontcolor};
+    color: var(--bs-btn-color);
+    --bs-btn-bg: #{$profilebackground-color};
+    --bs-btn-border-color: #{$profilebackground-color};
+    --bs-btn-hover-color: #{$profilefontcolor};
+    --bs-btn-hover-bg: #{shade-color($profilebackground-color, 10%)};
+    --bs-btn-hover-border-color: #{shade-color($profilebackground-color, 10%)};
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #{shade-color($profilebackground-color, 20%)};
+    --bs-btn-active-border-color: #{shade-color($profilebackground-color, 20%)};
+  }
+}
+
+@each $breakpoint, $px in $grid-breakpoints {
+  @each $pos, $val in $position-values {
+    @each $posname, $poskey in (top: top, start: left, bottom: bottom, right: right) {
+      .#{$posname}-#{$breakpoint}-#{$pos} {
+        @include media-breakpoint-up(#{$breakpoint}) {
+          #{$poskey}: #{$val} !important;
+        }
+      }
+    }
+  }
+}
+.btn-md-sm {
+  @include media-breakpoint-down(md) {
+    @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-border-radius-sm);
+  }
+}
+
+.btn-primary, .btn-dark {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-white-rgb), var(--bs-text-opacity)) !important;
+}
+
+.select2 {
+  max-width: 100%;
+  min-width: 50%;
+}
+
+
+.internal::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f023  ";
+}
+
+div.member_list_box {
+ max-width: 15%;
+}
+p.member_list_mail {
+    text-align: center;
+}
+
+@media only all and (max-width: 1200px) {
+    div.member_list_box {
+        max-width: 30%;
+        max-height: 10%;
+    }
+}
+
+@media only all and (max-width: 900px) {
+     div.member_list_box {
+         max-width: 30%;
+         max-height: 10%;
+     }
+}
+
+@media only all and (max-width: 600px) {
+     div.member_list_box {
+         max-width: 50%;
+         max-height: 10%;
+         flex-direction: inherit !important;
+     }
+
+}
+
+.required, :required {
+    border-color: red !important;
+    box-shadow: 2px 2px 10px rgba(200, 0, 0, 0.85);
+  }
+
+
+.captcha {
+    min-height: 10em;
+}
+
+
+.page-footer {
+    clear: both;
+    float: left;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    animation: intro 0.3s both;
+    animation-delay: 0.45s;
+    border-top: 1px solid #909090;
+    background-color: #d8d8d8;
+}
+
+.page-footer footer {
+    clear: both;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    padding: 0 1em 2em;
+}
+
+.footer-link {
+  font-weight: 400;
+  color: #2c2c2c;
+  text-decoration: none;
+}
+
+.pagination {
+  justify-content: center;
+}
+
+@include media-breakpoint-down(md) {
+  .overflow-md-scroll {
+    overflow-y: scroll;
+  }
+}
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 3px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+}
+
+
+.comment-card.unread {
+  border-width: 3px;
+  border-color: $dark;
+}
+
+
+.channel-sidebar-item.unread {
+  display: block !important;
+}
+
+
+@each $size, $length in (25: 25vh, 50: 50vh, 75: 75vh, 100: 100vh) {
+  .max-vh-#{$size} { max-height: $length !important; }
+}
+
+.marker-green {
+  background-color: #92f962;
+}
+.marker-yellow {
+  background-color: var(--bs-highlight-bg);
+}
+.marker-blue {
+  background-color: #72ccfd;
+}
+.marker-pink {
+  background-color: #cac407;
+}
+.pen-red {
+  color: #e71313;
+  background-color: transparent;  // to avoid bootstrap mark highlight
+}
+.pen-green {
+  color: #128a00;
+  background-color: transparent;  // to avoid bootstrap mark highlight
+}
+
+figure.table {
+  width: 100%;
+  & > table {
+    width: 100%;
+  }
+}
+
+.offcanvas-parent {
+  position: relative;
+  overflow: hidden;
+
+  & .offcanvas {
+    position: absolute;
+  }
+}
+
+.comment-popover {
+  z-index: 3000;
+}

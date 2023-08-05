@@ -1,0 +1,32 @@
+{% extends "chats/base_detail.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+  {% block headline %}
+    Edit channel group {{ form.instance }}
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channelgroup-settings" as groups_url %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url "Settings"|combine:"" "Groups"|combine:groups_url form.instance.name|combine:request.path %}
+{% endblock %}
+
+
+{% block content %}
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% bootstrap_form_errors form %}
+    {% render_form form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "Ok" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button "Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:request.path %}
+    </div>
+  </form>
+{% endblock content %}

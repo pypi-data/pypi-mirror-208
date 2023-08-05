@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load notification_helpers %}
+
+{% block headline %}
+  {% url 'notifications:inbox' as inbox_url %}
+  <a href="{{ next_url|default:inbox_url }}"><i class="fas fa-arrow-alt-circle-left"></i></a>
+  {{ notification.subject }}
+{% endblock %}
+
+{% block title %}{{ notification.subject }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "notifications:inbox" as inbox_url %}
+  {% breadcrumbs "Notifications"|combine:inbox_url notification.subject|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  {% notification_card notification show=True %}
+
+{% endblock %}

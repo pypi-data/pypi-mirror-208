@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap_helpers %}
+{% load institutions %}
+{% load activities %}
+{% load members %}
+{% load topics %}
+{% load events_programme %}
+{% load community_utils%}
+{% load events %}
+{% load uploaded_material %}
+{% load faqs %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block headline %}Search results{% endblock %}
+
+{% block head %}
+  {{ block.super }}
+
+  <link rel="stylesheet" href="{% static 'css/topics.css' %}">
+  <link rel="stylesheet" href="{% static 'css/topic_detail_content.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="accordion" id="search-results">
+  {% if organization_list %}
+    {% collapsible_card "Academic organizations" "organizations" "search-results" %}
+      {% with institution_row_class="mb-3 mb-lg-0 institution-list-row" %}
+        {% institution_rows organization_list %}
+      {% endwith %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if activity_list %}
+    {% collapsible_card "Working/Project Groups" "activities" "search-results" %}
+      {% activity_cards activity_list %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if activitymaterial_list %}
+    {% collapsible_card "Activity Material" "activitymaterial" "search-results" %}
+      {% material_cards activitymaterial_list material_relation_model="activities"|combine:"ActivityMaterialRelation" %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% with communitymember_row_class="mb-3 mb-md-0 communitymember-list-row" %}
+    {% if active_communitymember_list %}
+      {% collapsible_card "Active Community Members" "active-members" "search-results" %}
+        {% member_rows active_communitymember_list children=False %}
+      {% endcollapsible_card %}
+    {% endif %}
+
+    {% if former_communitymember_list %}
+      {% collapsible_card "Former Community Members" "former-members" "search-results" %}
+        {% member_rows former_communitymember_list children=False %}
+      {% endcollapsible_card %}
+    {% endif %}
+
+    {% if non_communitymember_list %}
+      {% collapsible_card "Other People" "non-member-list" "search-results" %}
+        {% member_rows non_communitymember_list children=False %}
+      {% endcollapsible_card %}
+    {% endif %}
+  {% endwith %}
+
+  {% if active_topic_list %}
+    {% collapsible_card "Active topics" "active-topics" "search-results" %}
+      {% topic_rows active_topic_list %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if finished_topic_list %}
+    {% collapsible_card "Finished topics" "finished-topics" "search-results" %}
+      {% topic_rows finished_topic_list %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if topicmaterial_list %}
+    {% collapsible_card "Topic Material" "topicmaterial" "search-results" %}
+      {% material_cards topicmaterial_list %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if faq_list %}
+    {% collapsible_card "Frequently Asked Questions" "faqs" "search-results" %}
+      {% faq_list faq_list display_options="accordion" %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if event_list %}
+    {% collapsible_card "Events" "events" "search-results" %}
+      {% if event_list.current_events %}
+      {% section "Current" %}
+        {% event_cards event_list.current_events %}
+      {% endsection %}
+    {% endif %}
+    {% if event_list.upcoming_events %}
+      {% section "Upcoming" %}
+        {% event_cards event_list.upcoming_events %}
+      {% endsection %}
+    {% endif %}
+    {% if event_list.past_events %}
+      {% section "Past" %}
+        {% event_cards event_list.past_events %}
+      {% endsection %}
+    {% endif %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if session_list %}
+    {% collapsible_card "Event sessions" "sessions" "search-results" %}
+      {% with show_modal=True %}
+        {% show_programme_list session_list %}
+      {% endwith %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if contribution_list %}
+    {% collapsible_card "Event submissions" "contributions" "search-results" %}
+      {% contribution_rows contribution_list show_date=True %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if sessionmaterial_list %}
+    {% collapsible_card "Session Material" "sessionmaterial" "search-results" %}
+      {% material_cards sessionmaterial_list %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if contributionmaterial_list %}
+    {% collapsible_card "Contribution Material" "contributionmaterial" "search-results" %}
+      {% material_cards contributionmaterial_list %}
+    {% endcollapsible_card %}
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% load chats %}
+
+<div class="list-group ps-0">
+  {% for item, info, item1, info1 in annotated_list %}
+    <li class="list-group-item list-group-item-action border-top p-0">
+      <div class="d-flex">
+        {% if info1 and info1.open %}
+          <button class="btn align-self-center btn-caret mb-0 btn-round flex-shrink-1" data-bs-toggle="collapse" data-bs-target="#issue-collapse-{{item.id}}" aria-expanded="true">
+          </button>
+        {% endif %}
+        {% channel_item item.issue.channel channel_item_class="w-100" %}
+      </div>
+    </li>
+    {% if info1 and info1.open %}
+      <li class="list-group-item border-0 ps-3 py-0 ps-md-5">
+        <div class="collapse show" id="issue-collapse-{{item.id}}">
+          <ul class="list-group fw-normal">
+    {% endif %}
+
+    {% for close in info.close %}
+        </ul>
+      </li>
+    {% endfor %}
+  {% endfor %}
+</div>

@@ -1,0 +1,184 @@
+{% spaceless %}
+  {% load bootstrap_helpers %}
+  {% load community_buttons %}
+  {% load community_utils %}
+  {% load static %}
+  {% load sekizai_tags %}
+  {% load community_badges %}
+  {% load guardian_tags %}
+  {% load django_bootstrap5%}
+  {% load chats %}
+
+  {% addtoblock "css" %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  {% endaddtoblock %}
+
+  <div
+   class="card thread-card border-start border-5 border-secondary mb-4 {% if not subscription|has_read_comment:thread %}unread{% endif %} comment-card"
+   id="comment-{{thread.id }}-card"
+   data-comment-hash="{{ thread.md5 }}"
+   data-thread-before="{{ thread.previous_thread.md5 }}"
+   data-thread-after="{{ thread.next_thread.md5 }}"
+   data-time-created="{% if thread.pk %}{% widthratio thread.last_modification_date|date:"U" 1 1000 %}{% else %}{{ thread.last_modification_date }}{% endif %}"
+   data-comment-id="{{ thread.id }}">
+    <div class="comment-top"></div>
+    <a id="comment-{{ thread.md5 }}" class="anchor"></a>
+
+    {% include "chats/components/comment_popover.html" with comment=thread %}
+
+    <div class="card-body">
+      {% if not thread.pk or thread.topic %}
+        <h3 class="card-title thread-topic">{{ thread.topic }}</h3>
+      {% endif %}
+
+      <div class="d-flex">
+
+        {{ thread.user_profile }}
+
+        <a href="{{ channel.get_absolute_url }}/{{ thread.md5 }}" class="mx-4 text-muted">
+          wrote
+          <span class="time-since" data-time-created="{% if thread.pk %}{% widthratio thread.last_modification_date|date:"U" 1 1000 %}{% else %}{{ thread.last_modification_date }}{% endif %}"></span>
+        </a>
+      </div>
+
+      <div id="comment-{{thread.id }}-body">
+        {% if thread.pk and thread.encryption_key %}
+          {% comment_body '<p class="placeholder-glow"><span class="placeholder w-100"></span><span class="placeholder w-25"></span></p>' %}
+        {% else %}
+          {% comment_body thread.body %}
+        {% endif %}
+      </div>
+
+      {% with expanded=thread|is_expanded_for:user|op_or:expand %}
+        <div class="my-2 text-end d-flex flex-row-reverse">
+          {% if not channel.get_absolute_url|same_url:request.path %}
+            <a href="{{ thread.parent_channel.get_absolute_url }}?comment={{ thread.md5 }}">
+              View in channel
+            </a>
+          {% endif %}
+
+          {% comment_reactions thread %}
+
+          <button class="btn text-muted thread-comments-controller {% if not thread.pk or not thread.threadcomment_set.exists %}d-none{% endif %}" type="button" id="thread-{{ thread.id }}-comments-controller" data-bs-toggle="collapse" data-bs-target="#thread-{{ thread.id }}-comments-wrapper" aria-expanded="{{ expanded|ifthenelse:',true,false' }}" aria-controls="thread-{{ thread.id }}-comments-wrapper">
+            <i class="far fa-comment-dots"></i>
+            <span class="controller-text ms-2">
+              {% if thread.pk %}
+                {% with replies=thread.threadcomment_set.count %}
+                  {{ expanded|ifthenelse:',Hide,View' }} {{replies}} repl{{ replies|pluralize:'y,ies' }}
+                {% endwith %}
+              {% endif %}
+            </span>
+          </button>
+
+          <button type="button" class="btn text-muted" onclick="focusEditor({{ thread.id }})">
+            <i class="bi bi-reply-fill"></i>
+          </button>
+
+        </div>
+
+        <div id="thread-{{ thread.id }}-comments-wrapper" class="thread-comments-collapse collapse {% if expanded %}show{% endif %}">
+
+          <form action="{% url 'chats:toggle-thread-expand' channel.channel_id '1' %}/../{{ thread.id }}">
+            <div class="row px-4">
+              {% if user.is_authenticated %}
+                <div class="form-check form-switch col" data-bs-toggle="tooltip" data-bs-title="Always show the comments in this thread on page reload">
+                  <input class="form-check-input" id="thread-expand-form-{{thread.id}}-expand_for_user" type="checkbox" role="switch" name="expand_for_user" onchange="submitSwitchAsJSON(event)" {% check_user_expand thread %}>
+                  <label class="form-check-label" for="thread-expand-form-{{thread.id}}-expand_for_user">Keep expanded</label>
+                </div>
+              {% endif %}
+              {% if user|can_change_channel:channel %}
+                <div class="form-check form-switch col" data-bs-toggle="tooltip" data-bs-title="Expand the comments in this thread for everyone.">
+                  <input class="form-check-input" type="checkbox" id="thread-expand-form-{{thread.id}}-expand_for_all" role="switch" name="expand_for_all" onchange="submitSwitchAsJSON(event)" {% if not thread.pk %}${comment.expand_for_all}{% elif thread.expand_for_all %}checked{% endif %}>
+                  <label class="form-check-label" for="thread-expand-form-{{thread.id}}-expand_for_all">Expand for all</label>
+                </div>
+              {% endif %}
+            </div>
+          </form>
+
+          <div id="thread-{{ thread.id }}-comments" class="thread-comments border-start border-5 border-dark rounded-start">
+            {% for comment in thread.threadcomment_set.all %}
+              {% threadcomment_card comment %}
+            {% endfor %}
+          </div>
+
+          {% if threadcomment_form %}
+            <form role="form" onsubmit="publishComment(event)">
+              {% bootstrap_form threadcomment_form exclude="body" %}
+              <div class="d-flex align-items-center">
+                <div class="w-100 m-2">
+                  {% bootstrap_field threadcomment_form.body show_help=False show_label=False %}
+                </div>
+                <div class="flex-shrink-1">
+                  {% bootstrap_button '<i class="fas fa-paper-plane"></i>' id="thread-comment-"|str_add:thread.id|str_add:"-submit" button_type="submit" extra_classes="me-2 px-4" %}
+                </div>
+              </div>
+            </form>
+          {% endif %}
+        </div>
+      {% endwith %}
+
+    </div>
+
+  </div>
+
+{% endspaceless %}
+
+{% addtoblock "js" %}
+  <script>
+    function submitSwitchAsJSON(event) {
+      let elem = event.srcElement;
+      let form = elem.form;
+      body = {};
+      body[elem.getAttribute("name")] = elem.checked;
+      return fetch(
+        form.action,
+        {
+          "method": "PATCH",
+          body: JSON.stringify(body),
+          headers: {
+            'X-CSRFTOKEN': "{{ csrf_token }}",
+            'Content-Type': 'application/json'
+          }
+        }
+      ).then(
+        (response) => {
+          if (response.status == 200) {
+            displayMessageInToast('<i class="fas fa-check"></i> Submitted')
+          } else {
+            displayMessageInToast('<i class="fas fa-times"></i> Failed')
+          }
+        }
+      )
+    }
+  </script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>
+    function changeThreadButtonTextHandler(event) {
+      document.querySelectorAll(
+        `.thread-comments-controller[aria-controls=${event.target.id}]`
+      ).forEach((elem) => changeThreadButtonText(elem, event.target))
+    }
+
+    function changeThreadButtonText(elem, srcElem) {
+      let controllerElem = elem.querySelector(".controller-text");
+      let replies = srcElem.querySelector(".thread-comments").childElementCount;
+      let replyText = replies == 1 ? "reply" : "replies"
+      if (elem.getAttribute("aria-expanded") == "true") {
+        controllerElem.innerHTML = `Hide ${replies} ${replyText}`
+      } else {
+        controllerElem.innerHTML = `View ${replies} ${replyText}`
+      }
+    }
+
+    window.addEventListener("load", function () {
+      document.querySelectorAll(".thread-comments-collapse").forEach(
+        (elem) => {
+          elem.addEventListener("shown.bs.collapse", changeThreadButtonTextHandler)
+          elem.addEventListener("hidden.bs.collapse", changeThreadButtonTextHandler)
+        }
+      )
+    })
+  </script>
+{% endaddtoblock %}

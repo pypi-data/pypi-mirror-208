@@ -1,0 +1,84 @@
+{% extends "chats/base_detail.html" %}
+
+{% load community_utils %}
+{% load chats %}
+{% load bootstrap_helpers %}
+{% load sekizai_tags %}
+{% load static %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.get_list_url channel|name_for:user|combine:channel.get_absolute_url thread|combine:thread.get_absolute_url threadcomment|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block title %}{% block headline %}{{ thread }}{% endblock %}{% endblock %}
+{% block subtitle %}in {{ channel }}{% endblock %}
+
+{% block content %}
+  {% threadcomment_card threadcomment %}
+
+  {% if threadcomment.encryption_key %}
+    {{ threadcomment.serializer.data|json_script:"threadcomment-data" }}
+  {% endif %}
+
+  {% addtoblock "js" %}
+    <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    <script src='{% static "js/e2ee/utils.js" %}'></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    <script src="https://cdn.jsdelivr.net/npm/xss@v1.0.14/dist/xss.min.js"></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    {% if threadcomment.encryption_key %}
+      <script>
+        window.addEventListener("load", function() {
+
+          async function decryptComment(comment) {
+            if (comment.encryption_key) {
+              let encryptionKey = new ExistingEncryptionKey(
+                {
+                  'X-CSRFTOKEN': "{{ csrf_token }}",
+                  'Content-Type': 'application/json'
+                },
+                "{% url 'e2ee:home' %}",
+                comment.encryption_key
+              );
+              return encryptionKey.decryptAndVerfiyString(
+                comment.body, comment.signature, comment.user.id
+              ).then(
+                filterXSS
+              ).catch(
+                err => `
+                  <p><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Could not decrypt comment" data-bs-content="Reason: ${err}"><i class="fas fa-info-circle"></i> Encrypted Message</span></p>
+                `
+              )
+            } else {
+              return Promise.resolve(comment.body)
+            }
+          }
+
+          function createPopovers() {
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+          }
+
+          let comment = JSON.parse(
+            document.getElementById("threadcomment-data").textContent
+          );
+          decryptComment(comment).then(
+            message => {
+              $(`#comment-{{ threadcomment.pk }}-body`).html(message);
+                createPopovers();
+            }
+          )
+        })
+      </script>
+    {% endif %}
+  {% endaddtoblock %}
+{% endblock %}

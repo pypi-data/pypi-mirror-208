@@ -1,0 +1,26 @@
+
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+
+<div id="ca-form">
+
+  {{ contributingauthor_formset.management_form }}
+  {{ affiliation_formset.management_form }}
+  {{ author_formset.management_form }}
+
+  {% bootstrap_formset_errors contributingauthor_formset %}
+  {% bootstrap_formset_errors affiliation_formset %}
+  {% bootstrap_formset_errors author_formset %}
+
+  {{ content }}
+
+  {% addtoblock "js" %}
+    <script>
+      {% include "programme/components/contributingauthor_formset/form_creation.js" %}
+    </script>
+  {% endaddtoblock %}
+
+  <button id="add-ca-form" type="button" class="btn btn-primary mt-4" onclick="addContributingAuthorForm()">
+    <i class="fas fa-plus-circle"></i> Add another co-author
+  </button>
+</div>

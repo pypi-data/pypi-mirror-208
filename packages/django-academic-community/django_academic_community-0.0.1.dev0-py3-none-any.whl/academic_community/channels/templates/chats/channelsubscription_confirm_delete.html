@@ -1,0 +1,47 @@
+{% extends "chats/base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load chats %}
+
+{% block title %}Unsubscribe from {{ channel }}{% endblock %}
+
+{% block headline %}Unsubscribe from {{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url channel|name_for:user|combine:channel.get_absolute_url "Unsubscribe"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="list-group mt-4 mb-4">
+    {% channel_item channel %}
+  </div>
+
+  <div class="alert alert-warning" role="alert">
+    <p>
+      Are you sure, you want to unsubscribe from the this channel?
+      You may loose view permissions on the channel if you do so.
+    </p>
+    <p>
+      If you just want to stop getting notifications for this channel,
+      <a href="{% url 'chats:edit-channelsubscription' channel.channel_id %}">
+        unfollow this channel
+      </a> or
+      <a href="{% url 'notifications:settings-channel' channel.channel_id %}">
+        edit your notification settings
+      </a>.
+    </p>
+    <p>
+      Note that you might be subscribed again when someone mentions you in a
+      comment.
+    </p>
+  </div>
+
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_button "I really want to unsubscribe" button_type="submit"  %}
+  </form>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load guardian_tags %}
+
+{% url "events:programme:edit-session" session.event.slug session.id as base_url %}
+{% url "events:programme:edit-session-contributions" session.event.slug session.id as contributions_url %}
+{% url "events:programme:edit-session-agenda" session.event.slug session.id as agenda_url %}
+{% url "events:programme:sessionmaterial-list" session.event.slug session.id as sessionmaterial_url %}
+{% url "events:programme:session-notify" session.event.slug session.id as session_notification_url %}
+
+{% include "events/components/event_sidebar.html" with event=session.event %}
+
+{% collapsible_card "Session attributes" "session-form-links" "" card_class="border-dark shadow" body_class="p-0" show=True header_class="p-0" %}
+  <div class="list-group">
+    {% get_obj_perms user for session as "session_perms" %}
+    {% if perms.programme.change_session or "change_session" in session_perms %}
+      <a href="{{ base_url }}" class="list-group-item list-group-item-action {% if base_url|same_url:request.path %}active{% endif %}">
+        General settings
+      </a>
+      <a href="{{ contributions_url }}?availability=True" class="list-group-item list-group-item-action {% if contributions_url|same_url:request.path %}active{% endif %}">
+        Select contributions
+      </a>
+      <a href="{{ agenda_url }}" class="list-group-item list-group-item-action {% if agenda_url|same_url:request.path %}active{% endif %}">
+        Edit the agenda
+      </a>
+      <a href="{{ session_notification_url }}" class="list-group-item list-group-item-action {% if session_notification_url|same_url:request.path %}active{% endif %}">
+        Notify contributors
+      </a>
+    {% endif %}
+    <a href="{{ sessionmaterial_url }}" class="list-group-item list-group-item-action {% if sessionmaterial_url|same_url:request.path %}active{% endif %}">
+      Session Material
+    </a>
+  </div>
+{% endcollapsible_card %}

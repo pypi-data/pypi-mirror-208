@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Edit memberships in {{ topic.id_name }}{% endblock %}
+
+{% block headline %}Edit memberships in {{ topic }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "topics:topics" as topic_list_url %}
+  {% with topic_list_url=topic_list_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Topics"|combine:topic_list_url topic.id_name|combine:topic.get_absolute_url "Edit members"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% bootstrap_formset form %}
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=topic.get_absolute_url %}
+    </div>
+  </form>
+{% endblock %}

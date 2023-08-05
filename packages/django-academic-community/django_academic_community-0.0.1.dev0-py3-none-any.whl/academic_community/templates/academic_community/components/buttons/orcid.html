@@ -1,0 +1,10 @@
+{% load static %}
+
+{% if orcid %}
+  <a itemprop="sameAs" content="https://orcid.org/{{ orcid }}"
+     href="https://orcid.org/{{ orcid }}"
+     rel="me noopener noreferrer" class="align-top">
+      <img src="{% static 'images/orcid.svg' %}" style="width:1em;margin-left:.5em;" alt="ORCID iD icon" class="orcid-icon">
+      {% if show_orcid %}{{ orcid }}{% endif %}
+  </a>
+{% endif %}

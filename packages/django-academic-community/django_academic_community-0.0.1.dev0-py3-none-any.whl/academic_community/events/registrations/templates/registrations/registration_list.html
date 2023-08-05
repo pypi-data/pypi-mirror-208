@@ -1,0 +1,44 @@
+{% extends "base_list_sidebar.html" %}
+{% load members %}
+{% load guardian_tags %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Registrations for {{ event }}{% endblock %}
+
+{% block headline %}Registrations for {{ event }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:registrations:registration-list" event.slug as registration_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Registrations"|combine:request.path %}
+{% endblock %}
+
+{% block action_buttons %}
+  {% get_obj_perms user for event as "event_perms" %}
+  {% if perms.events.change_event or "change_event" in event_perms %}
+    <a class="button btn btn-primary btn-round btn-send" title="Send a notification to registered participants"
+      href='{% url "events:event-notify" event.slug %}?registration={{ event.pk }}'></a>
+    <a class="button btn btn-primary btn-round btn-create" title="Manually add a new registration"
+     href='{% url "events:registrations:registration-create-admin" event.slug %}'></a>
+    <a class="button btn btn-primary btn-round" title="Download all registration information"
+     href='{% url "rest:event-api-root" event.slug %}registrations/'><i class="fas fa-download"></i></a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  <p>There are currently {{ registration_list|length }} registrations.</p>
+
+  {% with communitymember_row_class="mb-3 mb-md-0 communitymember-list-row" %}
+    {% for registration in registration_list %}
+      {% member_row registration.member show_logo=False children=False %}
+    {% endfor %}
+  {% endwith %}
+{% endblock %}

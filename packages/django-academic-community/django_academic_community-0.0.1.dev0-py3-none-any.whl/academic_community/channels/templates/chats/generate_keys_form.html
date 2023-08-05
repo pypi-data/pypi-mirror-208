@@ -1,0 +1,119 @@
+{% extends "chats/base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load chats %}
+{% load members %}
+{% load e2ee %}
+{% load static %}
+{% load sekizai_tags %}
+
+{% block title %}Create E2E-Keys for {{ channel }}{% endblock %}
+
+{% block headline %}Create missing End-to-End encryption keys{% endblock %}
+{% block subtitle %}{{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel|name_for:user|combine:channel.get_absolute_url "Generate keys"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  {% if not missing_subscriber_keys %}
+    <p>
+      You're done! Every subscriber has the keys he or she needs.
+    </p>
+  {% else %}
+    <p>
+      Please generate end-to-end encryption keys for the following channel
+    </p>
+    <div class="list-group my-4">
+      {% channel_item channel %}
+    </div>
+    <div>
+      {% if not request.session|e2ee_enabled %}
+        {% bootstrap_alert "End to end encryption is not enabled for this session! Please reload the page and enter you passphrase to enable it." alert_type="danger" %}
+      {% endif %}
+      <button id="btn-generate-keys" class="btn btn-primary my-4 {% if not request.session|e2ee_enabled %}disabled{% endif %}">
+        Generate keys
+      </button>
+    </div>
+    <p>
+      The following subscribers do not have all the keys they need:
+    </p>
+    {% with communitymember_row_class="mb-3 mb-md-0 communitymember-list-row" %}
+      {% member_rows missing_subscriber_keys.keys children=False %}
+    {% endwith %}
+    <div>
+      {% for subscriber in missing_subscriber_keys.keys %}
+        {% if not subscriber.communitymember %}
+          <a href="#" title="{{ subscriber }}" class="badge user-badge rounded-pill text-decoration-none bg-light text-black m-2">
+            <i class="fas fa-user">&nbsp;</i> @{{ subscriber }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if missing_e2e_subscribers %}
+    <p>
+      {% with num_miss=missing_e2e_subscribers|length %}
+        There {{ num_miss|pluralize:"is,are" }} {{ num_miss }} subscriber{{ num_miss|pluralize }}
+        that {{ num_miss|pluralize:"does,do" }} not have end-to-end encryption
+        enabled yet. {{ num_miss|pluralize:"This user,They" }} cannot have
+        access to this channel:
+      {% endwith %}
+    </p>
+    {% with communitymember_row_class="mb-3 mb-md-0 communitymember-list-row" %}
+      {% member_rows missing_e2e_subscribers children=False %}
+    {% endwith %}
+  {% endif %}
+
+  {% addtoblock "js" %}
+    <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    <script src='{% static "js/e2ee/utils.js" %}'></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    {% spaceless %}
+      <script>
+        window.addEventListener("load", function () {
+
+          async function generateKeys(event) {
+            // create encryption keys for new subscribers
+            let encryptionKeyStore = new EncryptionKeyStore(
+              {
+                'X-CSRFTOKEN': "{{ csrf_token }}",
+                'Content-Type': 'application/json'
+              },
+              "{% url 'e2ee:home' %}"
+            );
+            let promises = []
+            {% for key, subscribers in key_subscriber_map.items %}
+              promises.push(
+                encryptionKeyStore.getKey("{{ key }}").then(
+                  async (key) => await key.uploadKeyManyForUser([{{ subscribers|join:', ' }}])
+                )
+              )
+            {% endfor %}
+            await Promise.all(promises).then(
+              () => {
+                window.location = "{{ next_url|default:channel.get_absolute_url }}"
+              }
+            )
+          }
+
+          document.getElementById("btn-generate-keys").addEventListener(
+            "click", generateKeys
+          )
+
+        })
+      </script>
+    {% endspaceless %}
+  {% endaddtoblock %}
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% load bootstrap_helpers %}
+{% load uploaded_material %}
+{% load events_programme %}
+{% load members %}
+{% load guardian_tags %}
+
+{% include "events/components/event_sidebar.html" with event=session.event hide_event_card=True %}
+{% if session.presentation_type %}
+  {% card %}
+  <b>{{ session.presentation_type }}</b>
+  {% endcard %}
+{% endif %}
+{% with body_class="p-0" %}
+  {% if session.conveners.count %}
+    {% card header="Conveners" %}
+      {% for convener in session.conveners.all %}
+        {% member_card convener %}
+      {% endfor %}
+    {% endcard %}
+  {% endif %}
+  {% collapsible_card "Connection details" "connection-details" "" body_class="p-0" show=True header_class="p-0" %}
+    <ul class="list-group">
+      <li class="list-group-item p-2">
+        {% slot_date_time session %}
+      </li>
+      {% for room in session.meeting_rooms.all %}
+        <li class="list-group-item p-0">
+          {% meetingroom_card room %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endcollapsible_card %}
+  {% if not hide_material|default:False %}
+    {% with sessionmaterial_list=session.sessionmaterialrelation_set.pinned %}
+      {% get_obj_perms user for session as "session_perms" %}
+      {% if sessionmaterial_list or perms.programme.change_session or "change_session" in session_perms %}
+      {% collapsible_card "Session Material" "sessionmaterial" "" body_class="p-0" show=True header_class="p-0" %}
+        {% material_links sessionmaterial_list.model session_pk=session.pk event_slug=session.event.slug %}
+        {% material_cards sessionmaterial_list limit=3 truncate_name=True %}
+      {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+{% endwith %}

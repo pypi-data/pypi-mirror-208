@@ -1,0 +1,21 @@
+Hello {{ subscription.user }}!
+
+Your subscription to
+
+{{ subscription.channel }}
+
+at
+
+{{ root_url }}{{ subscription.channel.get_absolute_url }}
+
+has just been removed{% if reason %}, because {{ reason }}{% endif %}.
+
+You will not receive any notifications for comments in this channel and you
+might have lost the permission to view the channel.
+
+If you think this was a mistake, please get in touch with the creator of the
+channel, {{ subscription.channel.user }},
+or contact your community managers.
+
+Have a nice day,
+Your Community Managers

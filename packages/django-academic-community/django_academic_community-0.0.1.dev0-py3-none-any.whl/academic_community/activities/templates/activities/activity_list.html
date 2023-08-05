@@ -1,0 +1,58 @@
+{% extends "base_list.html" %}
+{% load static %}
+{% load activities %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block head_meta %}
+  {% with meta_title="Working Groups" meta_description="Working groups in the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block headline %}Working Groups{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "Working groups"|combine:request.path %}
+{% endblock %}
+
+
+{% block filter_modal %}
+  {% login_alert %}
+  <h2>Filter by</h2>
+  {% with form=filter.form %}
+
+    {% collapsible_card "General properties" "filter-general" "" show=True %}
+      {% bootstrap_field form.name__search %}
+      {% bootstrap_field form.abbreviation__istartswith %}
+      {% bootstrap_field form.description__search %}
+      {% bootstrap_field form.category %}
+    {% endcollapsible_card %}
+
+    {% if user.is_staff %}
+      {% collapsible_card "Members and organizations" "filter-members" "" %}
+        {% bootstrap_field form.members %}
+        {% bootstrap_field form.organizations %}
+      {% endcollapsible_card %}
+    {% endif %}
+
+    {% if user.is_staff %}
+      {% collapsible_card "Start or end date" "filter-start_date" %}
+        {% bootstrap_field form.start_date %}
+        {% bootstrap_field form.start_date__lte %}
+        {% bootstrap_field form.start_date__range %}
+        {% bootstrap_field form.start_date__gte %}
+        {% bootstrap_field form.end_date %}
+        {% bootstrap_field form.end_date__lte %}
+        {% bootstrap_field form.end_date__range %}
+        {% bootstrap_field form.end_date__gte %}
+      {% endcollapsible_card %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% activity_cards activity_list %}
+{% endblock %}

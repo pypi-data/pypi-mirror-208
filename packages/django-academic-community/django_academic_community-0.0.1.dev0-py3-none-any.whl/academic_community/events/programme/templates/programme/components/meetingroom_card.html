@@ -1,0 +1,19 @@
+{% load events_programme %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load bootstrap_helpers %}
+{% load guardian_tags %}
+
+{% card body_class="p-2" %}
+  <h6 class="card-title text-start fw-bold d-flex justify-content-between">
+    <span>{{ object }}</span> <span>{% connect_button object %}</span>
+  </h6>
+  {% get_obj_perms user for meetingroom as "meetingroom_perms" %}
+  {% if perms.programme.view_meetingroom or "view_meetingroom" in meetingroom_perms %}
+    <div class="card-body d-flex justify-content-between">
+      {% details_button meetingroom %}
+      {% edit_button meetingroom None button_class="btn-sm btn-primary" button_text="Edit" %}
+    </div>
+  {% endif %}
+
+{% endcard %}

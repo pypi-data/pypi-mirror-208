@@ -1,0 +1,96 @@
+{% extends "base_list_sidebar.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load guardian_tags %}
+{% load community_buttons %}
+{% load events_programme %}
+{% load cms_tags %}
+
+{% block title %}Edit Programme{% endblock %}
+
+{% block headline %}Edit the event programme{% endblock %}
+{% block subtitle %}{{ event }}{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% get_obj_perms user for event as "event_perms" %}
+  {% if perms.events.schedule_session or "schedule_session" in event_perms %}
+    {% create_modal_button object_name="Session" show_modal=form.errors %}
+      <input type="hidden" name="session_form" value="true">
+      {% bootstrap_form session_form %}
+    {% endcreate_modal_button %}
+  {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  {{ session_form.media }}
+
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:programme:session-list" event.slug as programme_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Programme"|combine:programme_url "Edit"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {% with active_tab="calendarTab" %}
+    {% tab_list calendarTab="Calendar" sessionTab="List" %}
+      {% tab_content "calendarTab" %}
+        {% get_obj_perms user for event as "event_perms" %}
+        {% if perms.events.schedule_session or "schedule_session" in event_perms %}
+          {% show_calendar session_list editable=True vmin=event.start_time|date:"c" vmax=event.end_time|date:"c" slot_duration="00:15" %}
+        {% else %}
+          {% show_calendar session_list editable=False vmin=event.start_time|date:"c" vmax=event.end_time|date:"c" slot_duration="00:15" %}
+        {% endif %}
+      {% endtab_content %}
+      {% tab_content "sessionTab" %}
+
+        <div class="alert alert-warning m-4 d-none" role="alert" id="reloadInfo">
+          New objects have been added to the calendar.
+          <a href="{{ request.path }}" class="alert-link">Reload</a> the page to update the list.
+        </div>
+
+        <form role="form" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="session_formset" value="true">
+          {{ session_formset.management_form }}
+          {{ session_formset.non_form_errors }}
+          {% bootstrap_formset_errors session_formset %}
+
+          {% for form in session_formset.forms %}
+            {% ifchanged form.instance.start.day %}
+              <h3 class="m-4">
+                {% if form.instance.start %}
+                  {{ form.instance.start|date:"DATE_FORMAT" }}
+                {% elif not form.instance.id %}
+                  Add a new session
+                {% else %}
+                  Not yet scheduled
+                {% endif %}
+              </h3>
+            {% endifchanged %}
+            {% render_agenda_form form %}
+          {% endfor %}
+
+          <div class="row row-cols-auto m-3">
+            {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+            {% bootstrap_button "Reset" button_type="reset"  %}
+            {% url "events:programme:session-list" event.slug as session_list_url %}
+            {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=session_list_url %}
+          </div>
+        </form>
+      {% endtab_content %}
+    {% endtab_list %}
+  {% endwith %}
+{% endblock %}

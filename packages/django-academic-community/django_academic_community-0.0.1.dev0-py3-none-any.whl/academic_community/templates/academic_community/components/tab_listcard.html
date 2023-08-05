@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="card-header">
+    {% if header %}<span>{{ header }}</span>{% endif %}
+    <ul class="nav nav-tabs card-header-tabs" id="{{ tablist_id|default:'tablist' }}" role="tablist">
+      {% for tabid, tab in tabs.items %}
+        <li class="nav-item" role="presentation">
+          <a class="nav-link {% if tabid == active_tab %}active{% endif %}" id="{{ tabid }}" data-bs-toggle="tab" href="#{{ tabid }}-content" role="tab" aria-controls="{{ tabid }}-content" aria-selected="true">
+            {{ tab }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card-body">
+    <div class="tab-content" id="{{ tablist_id|default:'tablist' }}-content">
+      {{ content }}
+    </div>
+  </div>
+</div>

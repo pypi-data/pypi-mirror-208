@@ -1,0 +1,47 @@
+{% load community_utils %}
+{% load events_programme %}
+{% load sekizai_tags %}
+
+{% spaceless %}
+  <div class="card-title text-start font-italic">
+    {% for contributingauthor in contributingauthor_list %}
+      {% format_author contributingauthor initials=forloop.first|invert affiliations=affiliations %}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  </div>
+{% endspaceless %}
+
+{% if affiliations %}
+<div id="affiliations" class="text-muted small footnotes">
+  <ol>
+    {% for affiliation in affiliations %}
+    <li data-affiliation="{{ forloop.counter }}" class="affiliation">
+      {{ affiliation }}
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+{% endif %}
+
+{% addtoblock "js" %}
+  {% if affiliations %}
+    <script>
+      $(document).ready(
+        function () {
+          $(".author-affiliation, .affiliation")
+            .mouseenter(
+              function() {
+                $(`.author-affiliation[data-affiliation='${this.dataset.affiliation}'`).addClass("fw-bold");
+                $(`.affiliation[data-affiliation='${this.dataset.affiliation}'`).addClass("fw-bold");
+              }
+            )
+            .mouseleave(
+              function() {
+                $(".affiliation").removeClass("fw-bold");
+                $(".author-affiliation").removeClass("fw-bold");
+              }
+            );
+        }
+      )
+    </script>
+  {% endif %}
+{% endaddtoblock %}

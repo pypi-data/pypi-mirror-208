@@ -1,0 +1,31 @@
+{% extends "base_list_sidebar.html" %}
+
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load members %}
+{% load events_programme %}
+{% load cms_tags %}
+{% load guardian_tags %}
+
+{% block headline %}Notify participants of {{ event.name }}{% endblock %}
+
+{% block title %}Notify participants of {{ event.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Notify participants"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  {% include "notifications/outgoingnotification_form_content.html" %}
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base_detail.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load events_programme %}
+{% load cms_tags %}
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+
+{% block headline %}Import presentation types for {{ event }}{% endblock %}
+{% block subtitle %}{{ other_event }}{% endblock %}
+
+{% block title %}Import presentation types for {{ event }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:programme:edit-presentationtypes" event.slug as presentationtype_list_url %}
+  {% url "events:programme:event-import-presentationtypes" event.slug as presentationtype_import_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Edit"|combine:event.get_edit_url "Presentation types"|combine:presentationtype_list_url "Select import event"|combine:presentationtype_import_url "Import"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% card card_class="mb-3" %}
+    <p>
+      Select the presentation types that you want to import.
+    </p>
+  {% endcard %}
+
+  <form role="form" method="post" class="mt-4">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% url "events:programme:event-import-presentationtypes" event.slug as presentationtype_import_url %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=presentationtype_import_url %}
+    </div>
+  </form>
+
+{% endblock %}

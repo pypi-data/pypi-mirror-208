@@ -1,0 +1,8 @@
+{% load humanize %}
+{% load community_utils %}
+<a href="{{ url }}" class="badge rounded-pill text-decoration-none bg-primary m-2" title="Remove this filter">
+  {% close_icon %}
+  {{ label }}:
+  {% if not object.lower %}before{% else %}{{ object.lower|naturalday }} to{% endif %}
+  {% if not object.upper %}today{% else %}{{ object.upper|naturalday }}{% endif %}
+</a>

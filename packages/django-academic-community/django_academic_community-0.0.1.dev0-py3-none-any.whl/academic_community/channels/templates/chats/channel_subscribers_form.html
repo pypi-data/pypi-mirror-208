@@ -1,0 +1,103 @@
+{% extends "chats/base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load chats %}
+{% load static %}
+{% load sekizai_tags %}
+
+{% block title %}Subscribers for {{ channel }}{% endblock %}
+
+{% block headline %}Edit channel subscribers{% endblock %}
+{% block subtitle %}{{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel|name_for:user|combine:channel.get_absolute_url "Edit subscribers"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  Add or remove subscribers for the following channel:
+
+  <div class="list-group mt-4 mb-4">
+    {% channel_item channel %}
+  </div>
+
+  {{ channel.subscribers|values_list:"pk"|json_script:"current-subscribers" }}
+
+  <form role="form" method="post" {% if channel.e2e_encrypted %}onsubmit="createEncryptionKeys(this, event);"{% endif %}>
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "Update subscribers" button_type="submit"  %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:channel.get_absolute_url %}
+    </div>
+  </form>
+
+  {% addtoblock "js" %}
+    <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    <script src='{% static "js/e2ee/utils.js" %}'></script>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    {% spaceless %}
+      {% if channel.e2e_encrypted %}
+        <script>
+          async function createEncryptionKeys(form, event) {
+            // create encryption keys for new subscribers
+            const currentSubscribers = JSON.parse(
+              document.getElementById('current-subscribers').textContent
+            ).slice(1, -1);
+            const updatedSubscribers = Array.from(
+              document.querySelector("select[name='subscribers']").options
+            ).map(o => o.value);
+            let newSubscribers = updatedSubscribers.filter(
+              pk => !currentSubscribers.includes(pk)
+            )
+            if (newSubscribers.length) {
+              event.preventDefault();
+              let headers = {
+                'X-CSRFTOKEN': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+              };
+              return fetch(
+                "{% url 'chats:channel-keys' channel.channel_id %}",
+                {
+                  "method": "GET",
+                  headers: headers
+                }
+              ).then(
+                response => {
+                  if (response.status == 200) {
+                    return response.json().then(
+                      keys => {
+                        let promises = [];
+                        keys.forEach((keyData) => {
+                          let key = new DownloadedEncryptionKey(headers, "{% url 'e2ee:home' %}", keyData);
+                          promises.push(key.uploadKeyManyForUser(newSubscribers));
+                        })
+                        Promise.all(promises).then(() => form.submit())
+                      }
+                    );
+                  } else {
+                    alert("Failed to fetch encryption keys. See the console for more.")
+                    event.preventDefault();
+                    return
+                  }
+                }
+              )
+            }
+          }
+        </script>
+      {% endif %}
+    {% endspaceless %}
+  {% endaddtoblock %}
+
+{% endblock %}

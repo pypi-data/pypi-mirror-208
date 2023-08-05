@@ -1,0 +1,24 @@
+{% extends "notifications/notification_mail.txt" %}
+{% block body %}
+Hello {{ settings.user.first_name }} {{ settings.user.last_name }},
+{% with total=notification_list.count %}
+you received {{ total }} new notification{{ total|pluralize }} notifications
+on {{ index_url }}. Please have a look at them on
+{{ root_url }}{% url "notifications:inbox" %}
+{% endwith %}
+
+{% spaceless %}
+{% for notification in notification_list %}
+-------------------------------------------------------------------------------
+Subject: {{ notification.subject }}
+{% if settings.include_bodies %}
+{% include "notifications/components/notification_mail_body.txt" %}
+{% endif %}
+{% endfor %}
+-------------------------------------------------------------------------------
+{% endspaceless %}
+
+Best regards,
+you're CLM-Community
+
+{% endblock %}

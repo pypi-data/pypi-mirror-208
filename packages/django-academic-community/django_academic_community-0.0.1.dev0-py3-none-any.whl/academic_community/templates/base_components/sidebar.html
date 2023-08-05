@@ -1,0 +1,58 @@
+{% load cms_tags %}
+{% load community_utils %}
+{% load cache %}
+
+
+{% cache 500 sidebar request.user.username %}
+<div id="sidebar" class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="menu-toggle">
+  <div class="offcanvas-body p-0">
+    <div class="list-group list-group-flush">
+      {% block sidebar %}
+        <a href="{% url 'institutions:institutions' %}?end_date__isnull=True" class="list-group-item list-group-item-action sidebar-item">
+          Institutions
+        </a>
+        <a href="{% url 'activities:activities' %}?end_date__isnull=True" class="list-group-item list-group-item-action sidebar-item">
+          Working Groups
+        </a>
+        <a href="{% url 'members:members' %}?end_date__isnull=True&is_member=True" class="list-group-item list-group-item-action sidebar-item">
+          Members
+        </a>
+        <a href="{% url 'material-list' %}" class="list-group-item list-group-item-action sidebar-item">
+          Community Material
+        </a>
+        <a href="{% url 'faqs:questioncategory-list' %}" class="list-group-item list-group-item-action sidebar-item">
+          FAQs
+        </a>
+        <a href="{% url 'contact:contact' %}" class="list-group-item list-group-item-action sidebar-item">
+          Contact
+        </a>
+        <a href="{% url 'topics:topics' %}?end_date__isnull=True" class="list-group-item list-group-item-action internal sidebar-item">
+          Topics
+        </a>
+        {% if user.is_manager or user.is_superuser %}
+          <a class="list-group-item list-group-item-action sidebar-item" href="{% url 'admin:index' %}" title="Access Django Management Area">
+            <i class="fas fa-users-cog"></i> Administration
+          </a>
+        {% endif %}
+        {% if perms.reversion.view_revision %}
+          <a href="{% url 'history:revision-list' %}" class="list-group-item list-group-item-action sidebar-item internal">
+            History
+          </a>
+        {% endif %}
+        <a href="{% url 'events:event-list' %}" class="list-group-item list-group-item-action sidebar-item">
+          Community events
+        </a>
+        {% get_main_nav_pages as main_nav_pages %}
+        {% for page in main_nav_pages %}
+          <a href="{{ page.get_absolute_url }}" class="list-group-item list-group-item-action sidebar-item">
+            {{ page.get_menu_title }}
+          </a>
+        {% endfor %}
+        <a href="{% url 'chats:channel-list'  %}" class="list-group-item list-group-item-action sidebar-item">
+          Channels
+        </a>
+      {% endblock %}
+    </div>
+  </div>
+</div>
+{% endcache %}

@@ -1,0 +1,155 @@
+{% load static %}
+{% load sekizai_tags %}
+{% load e2ee %}
+{% load community_utils %}
+
+{% if form.instance.encryption_key and request.session|e2ee_enabled %}
+  {% with js_id=form.instance|object_id|str_add:"-js" %}
+    {{ form.instance.serializer.data|json_script:js_id }}
+  {% endwith %}
+{% endif %}
+
+{% addtoblock "js" %}
+  <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src='{% static "js/e2ee/utils.js" %}'></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src="https://cdn.jsdelivr.net/npm/xss@v1.0.14/dist/xss.min.js"></script>
+  <script src='{% static "js/channels/filterxss.js" %}'></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  {% spaceless %}
+    {% if form.instance.pk %}
+      <script>
+        window.addEventListener("load", function() {
+          {% if form.instance.encryption_key %}
+            {% with js_id=form.instance|object_id|str_add:"-js" %}
+              let comment = JSON.parse(
+                document.getElementById("{{ js_id }}").textContent
+              )
+            {% endwith %}
+            let encryptionKey = new ExistingEncryptionKey(
+              {
+                'X-CSRFTOKEN': "{{ csrf_token }}",
+                'Content-Type': 'application/json'
+              },
+              "{% url 'e2ee:home' %}",
+              comment.encryption_key
+            );
+            encryptionKey.decryptAndVerfiyString(
+              comment.body,
+              comment.signature,
+              comment.user.id
+            ).then(
+              body => {
+                let editorID = document.querySelector("[name=body]").id;
+                let editor = window.CKEditor.editors[editorID];
+                // sanitize body and insert into the editor
+                editor.setData(filterHTML(body));
+              }
+            )
+          {% else %}
+            let encryptionKey = new EncryptionKey(
+              {
+                'X-CSRFTOKEN': "{{ csrf_token }}",
+                'Content-Type': 'application/json'
+              },
+              "{% url 'e2ee:home' %}"
+            )
+          {% endif %}
+
+          const formElem = document.getElementById("{{ comment_form_id|default:'comment-form' }}");
+          formElem.addEventListener('submit', (e) => {
+            let formData = new FormData(formElem);
+
+            if ((formData.get("e2e_encrypted") == "on") || formData.get("encryption_key")){
+              e.preventDefault();
+
+              let editorID = document.querySelector("[name=body]").id;
+              let editor = window.CKEditor.editors[editorID];
+              encryptionKey.encryptAndSignString(
+                filterHTML(editor.getData())
+              ).then(
+                async ({message, signature}) => {
+                  {% if not form.instance.encryption_key %}
+                    await encryptionKey.createKey();
+                    formData.set("encryption_key", encryptionKey.uuid);
+                  {% endif %}
+                  formData.set("body", message);
+                  formData.set("signature", signature);
+                  const request = new XMLHttpRequest();
+                  request.open(formElem.method, formElem.action);
+                  request.onload = (progress) => {
+                    if (window.location == request.responseURL) {
+                      window.document.innerHTML = request.response;
+                    } else {
+                      window.location = request.responseURL;
+                    }
+                  }
+                  request.send(formData);
+                }
+              )
+            }
+          });
+        })
+      </script>
+    {% else %}
+      <script>
+        window.addEventListener("load", function() {
+          let encryptionKey = new EncryptionKey(
+            {
+              'X-CSRFTOKEN': "{{ csrf_token }}",
+              'Content-Type': 'application/json'
+            },
+            "{% url 'e2ee:home' %}"
+          );
+
+          const formElem = document.getElementById("{{ comment_form_id|default:'comment-form' }}");
+          formElem.addEventListener('submit', (e) => {
+            let formData = new FormData(formElem);
+
+            if (formData.get("e2e_encrypted") == "on") {
+              e.preventDefault();
+
+              let editorID = document.querySelector("[name=body]").id;
+              let editor = window.CKEditor.editors[editorID];
+              encryptionKey.createKey().then(
+                async response => {
+                  if (response.status == 201) {
+                    encryptionKey.encryptAndSignString(
+                      filterHTML(editor.getData())
+                    ).then(
+                      ({message, signature}) => {
+                        formData.set("body", message);
+                        formData.set("signature", signature);
+                        formData.set("encryption_key", encryptionKey.uuid);
+                        const request = new XMLHttpRequest();
+                        request.open(formElem.method, formElem.action);
+                        request.onload = (progress) => {
+                          if (window.location == request.responseURL) {
+                            window.document.innerHTML = request.response;
+                          } else {
+                            window.location = request.responseURL;
+                          }
+                        }
+                        request.send(formData);
+                      }
+                    )
+                  } else {
+                    console.error(response);
+                    throw response.statusText;
+                  }
+                }
+              )
+            }
+          });
+        })
+      </script>
+    {% endif %}
+  {% endspaceless%}
+{% endaddtoblock %}

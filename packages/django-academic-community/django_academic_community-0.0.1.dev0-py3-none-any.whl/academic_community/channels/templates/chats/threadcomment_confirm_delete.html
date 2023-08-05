@@ -1,0 +1,32 @@
+{% extends "chats/base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load chats %}
+
+{% block title %}Delete {{ threadcomment }}{% endblock %}
+
+{% block headline %}Delete {{ threadcomment }}{% endblock %}
+
+{% block breadcrumbs %}
+{% with all_channels_url=channel.get_list_url|str_add:"/.." %}
+  {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.get_list_url channel|name_for:user|combine:channel.get_absolute_url thread|combine:thread.get_absolute_url threadcomment|combine:threadcomment.get_absolute_url "Delete comment"|combine:request.path %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="alert alert-danger" role="alert">
+    <p>
+      Are you sure, you want to delete this comment?
+    </p>
+  </div>
+
+  {% threadcomment_card threadcomment %}
+
+  <form role="form" method="post" class="mt-4">
+    {% csrf_token %}
+
+    {% bootstrap_button "Delete comment" button_type="submit"  %}
+  </form>
+{% endblock %}

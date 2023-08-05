@@ -1,0 +1,8 @@
+{% if user.is_staff %}
+  <a href="{{ url }}" class="badge rounded-pill text-decoration-none bg-light text-black m-2">
+    <i class="fas fa-paperclip"></i>
+    <abbr title="There {{ active_topic_count|pluralize:'is,are' }} {{ active_topic_count }} active topic{{ active_topic_count|pluralize }} related to {{ object }}">
+      {{ active_topic_count }} Topic{{ active_topic_count|pluralize }}
+    </abbr>
+  </a>
+{% endif %}

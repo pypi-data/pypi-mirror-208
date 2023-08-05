@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block head_meta %}
+  {% with meta_title="FAQs" meta_description="Frequently asked questions" %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block headline %}FAQs{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'faqs:questioncategory-list' as faq_list_url %}
+  {% breadcrumbs "FAQs"|combine:faq_list_url %}
+{% endblock %}
+
+{% block content %}
+  {% if questioncategory_list.count %}
+    <p>
+      The following list of frequently asked questions shall give you some hints
+      how to edit, navigate and use this website.
+    </p>
+    <p>
+      If anything is missing, please do not hesitate to
+      <a href="{% url 'contact:contact' %}">
+        contact the website and community managers
+      </a>.
+    </p>
+    {% for questioncategory in questioncategory_list %}
+      <div class="mb-4">
+        <h3 id="{{ questioncategory.slug }}">
+          <a name="{{ questioncategory.slug }}">{{ questioncategory }}</a>
+          <a href="#{{ questioncategory.slug }}" class="text-dark small"><i class="fas fa-link"></i></a>
+        </h3>
+        {% include "faqs/questioncategory_detail_content.html" %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>
+      We are working on a list of FAQs to help you navigate with this site.
+      Until then, please do not hesitate to
+      <a href="{% url 'contact:contact' %}">
+        contact the website and community managers
+      </a>.
+    </p>
+  {% endif %}
+{% endblock %}

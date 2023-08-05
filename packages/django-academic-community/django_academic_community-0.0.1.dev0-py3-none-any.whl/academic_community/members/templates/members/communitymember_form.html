@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Edit the profile of {{ communitymember }}{% endblock %}
+
+{% block headline %}Edit the profile of {{ communitymember }}{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  {{ form.academicmemberships.media }}
+  {{ form.topicmemberships.media }}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url communitymember|combine:communitymember.get_absolute_url "Edit"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    {% collapsible_card "Academic Memberships" "academicmembership" "" show=form.academicmemberships.errors|length %}
+          {{ form.academicmemberships.management_form }}
+          {{ form.academicmemberships.non_form_errors }}
+          {% bootstrap_formset form.academicmemberships %}
+    {% endcollapsible_card %}
+    {% collapsible_card "Topic Memberships" "topicmembership" "" show=form.topicmemberships.errors|length %}
+      {{ form.topicmemberships.management_form }}
+      {{ form.topicmemberships.non_form_errors }}
+      {% bootstrap_formset form.topicmemberships %}
+    {% endcollapsible_card %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=communitymember.get_absolute_url %}
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+
+<script>
+  $(document).ready(function () {
+
+    {% for form in form.institution_form.forms %}
+      $("#institution-form-content").html(`
+        {% include "institutions/institution_form_content.html" %}
+      `);
+      $("#city-form-content").html(`
+        {% bootstrap_form_errors form.city_form %}
+        {% bootstrap_form form.city_form %}
+        `
+      );
+    {% endfor %}
+    {% for form in form.department_form.forms %}
+      $("#department-form-content").html(`
+        {% include "institutions/department_form_content.html" %}
+      `);
+    {% endfor %}
+    {% for form in form.unit_form.forms %}
+      $("#unit-form-content").html(`
+        {% include "institutions/unit_form_content.html" %}
+      `);
+    {% endfor %}
+  })
+</script>
+
+{% endblock %}

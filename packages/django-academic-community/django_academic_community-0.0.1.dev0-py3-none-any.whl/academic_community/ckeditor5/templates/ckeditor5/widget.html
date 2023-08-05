@@ -1,0 +1,8 @@
+{% if editor_type == "classic" %}
+<textarea  name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+{% if widget.value %}{{ widget.value }}{% endif %}</textarea>
+{% else %}
+<div  name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+{% if widget.value %}{{ widget.value }}{% endif %}</div>
+{% endif %}
+{{ config|json_script:script_id}}

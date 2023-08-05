@@ -1,0 +1,56 @@
+{% extends "base_list_sidebar.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load events_programme %}
+{% load cms_tags %}
+{% load django_bootstrap5 %}
+
+{% block headline %}Edit the {{ meetingroom }} Meeting Room{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:programme:session-list" meetingroom.event.slug as programme_url %}
+  {% url "events:programme:meetingroom-list" meetingroom.event.slug as meetingroom_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url meetingroom.event.name|combine:meetingroom.event.get_absolute_url "Programme"|combine:programme_url "Meeting rooms"|combine:meetingroom_list_url meetingroom.name|combine:meetingroom.get_absolute_url "Edit"|combine:meetingroom.get_absolute_url "Bookings"|combine:request.path %}
+{% endblock %}
+
+{% block filter_modal %}
+  {% login_alert %}
+  <h2>Filter by</h2>
+  {% with form=filter.form %}
+    {% bootstrap_form form %}
+  {% endwith %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "programme/components/meetingroom_form_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  <div id='available-sessions' class="row card w-100">
+    <div class="card-header">
+      <strong>Available sessions</strong>
+    </div>
+
+    <div class="card-body overflow-auto" style="max-height: 300px">
+      {% show_programme_list session_list select_for_room=meetingroom %}
+    </div>
+  </div>
+
+  <div id="session-modals">
+    {% for session in session_list %}
+      {% if meetingroom not in session.meeting_rooms.all %}
+        {% calendar_modal session %}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% show_calendar meetingroom.session_set.all editable=False vmin="2021-09-20T08:00:00" vmax="2021-09-24T18:00:00" %}
+
+{% endblock %}

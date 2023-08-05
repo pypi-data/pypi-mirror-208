@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block breadcrumbs %}
+  {% url 'activities:activities' as activities_url %}
+  {% with activities_url=activities_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Working groups"|combine:activities_url activity.abbreviation|combine:activity.get_absolute_url "Edit"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block title %}Edit {{ activity }}{% endblock %}
+
+{% block headline %}Edit {{ activity.name }}{% endblock %}
+{% block subtitle %}{{ activity.category.abbreviation }} {{ activity.abbreviation }}{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% bootstrap_form_errors form %}
+    {% bootstrap_form form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "Ok" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button "Cancel" extra_classes="ms-auto" button_type="link" href=activity.get_absolute_url %}
+    </div>
+  </form>
+{% endblock %}

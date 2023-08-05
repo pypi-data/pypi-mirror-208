@@ -1,0 +1,49 @@
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load guardian_tags %}
+{% load events_programme %}
+{% load uploaded_material %}
+
+<div class="d-flex">
+  {% for convener in session.conveners.all %}
+    {% member_badge convener %}
+  {% endfor %}
+
+
+  {% get_obj_perms user for session as "session_perms" %}
+  {% if perms.programme.change_session or "change_session" in session_perms %}
+    <a class="button btn btn-sm btn-primary ms-auto btn-send" title="Send a notification to coauthors"
+      href='{% url "events:programme:session-notify" session.event.slug session.pk %}?session={{ session.pk }}'>
+      Contact session contributors
+    </a>
+  {% endif %}
+</div>
+
+<div class="mt-4 mb-4">
+  {{ session.abstract|truncatewords_html:200 }}
+</div>
+
+{% with meetingroom_list=session.meeting_rooms.all %}
+  {% if meetingroom_list %}
+    <h4>Meeting room{{ meetingroom_list|pluralize }}</h4>
+    {% meetingroom_cards meetingroom_list row_class='row-cols-1 row-cols-lg-2' %}
+  {% endif %}
+{% endwith %}
+
+{% with sessionmaterial_list=session.sessionmaterialrelation_set.all %}
+  {% if sessionmaterial_list %}
+    {% collapsible_card "Session Material" session|object_id|add:"-sessionmaterial" "" body_class="p-0" %}
+      {% url "events:programme:sessionmaterial-list" session.event.slug session.pk as material_list_url %}
+      {% material_links sessionmaterial_list.model session_pk=session.pk event_slug=session.event.slug %}
+      {% material_cards sessionmaterial_list limit=5 %}
+    {% endcollapsible_card %}
+  {% endif %}
+{% endwith %}
+
+
+{% if session.contribution_set.all %}
+  {% collapsible_card "Contributions" session|object_id|add:"-contributions" "" show=True body_class="p-0" %}
+    {% contribution_rows session.contribution_set.all show_time=True %}
+  {% endcollapsible_card %}
+{% endif %}

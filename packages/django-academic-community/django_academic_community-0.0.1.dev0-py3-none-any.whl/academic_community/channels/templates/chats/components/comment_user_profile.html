@@ -1,0 +1,4 @@
+{% load community_utils %}
+{% with date_created=comment.date_created|date time_created=comment.date_created|time %}
+  {% profile comment.user profile_class="mb-2" tooltip=comment.user|str_add:" wrote on "|str_add:date_created|str_add:" at "|str_add:time_created %}{% endprofile %}
+{% endwith %}

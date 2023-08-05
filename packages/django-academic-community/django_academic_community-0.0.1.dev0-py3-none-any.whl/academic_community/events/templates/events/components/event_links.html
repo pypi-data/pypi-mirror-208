@@ -1,0 +1,73 @@
+{% load bootstrap_helpers %}
+{% load guardian_tags %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load events %}
+
+{% url 'events:programme:session-list' event.slug as session_list_url %}
+{% url 'events:programme:contribution-list' event.slug as contribution_list_url %}
+{% url 'events:programme:meetingroom-list' event.slug as meetingroom_list_url %}
+
+{% url 'events:registrations:registration-create' event.slug as registration_url %}
+{% url 'events:programme:contribution-create' event.slug as submission_url %}
+{% url 'events:registrations:registration-list' event.slug as registration_list_url %}
+{% url 'events:programme:edit-presentationtypes' event.slug as presentationtype_url %}
+
+
+{% get_obj_perms user for event as "member_perms" %}
+
+<div class="list-group">
+
+  <a href="{{ event.get_absolute_url }}" class="list-group-item list-group-item-action {% if event.get_absolute_url|same_url:request.path %}active{% endif %}">
+    Event Details
+  </a>
+
+  {% if not event.single_session_mode and user|can_view_programme:event %}
+    <a href="{{ session_list_url }}" class="list-group-item list-group-item-action {% if session_list_url|same_url:request.path %}active{% endif %}">
+      Programme
+    </a>
+  {% endif %}
+
+  {% if event.display_submissions %}
+    <a href="{{ contribution_list_url }}" class="list-group-item list-group-item-action {% if contribution_list_url|same_url:request.path %}active{% endif %}">
+      Submissions
+    </a>
+  {% endif %}
+
+  {% if user|can_view_programme:event %}
+    <a href="{{ meetingroom_list_url }}" class="list-group-item list-group-item-action {% if meetingroom_list_url|same_url:request.path %}active{% endif %}">
+      Meeting Rooms
+    </a>
+  {% endif %}
+
+  {% if perms.events.change_event or "change_event" in member_perms %}
+    <a href="{{ registration_list_url }}" class="list-group-item list-group-item-action {% if registration_list_url|same_url:request.path %}active{% endif %}">
+      View Registrations
+    </a>
+  {% endif %}
+
+  {% with is_active=event.get_edit_url|same_url:request.path|ifthen:"active" %}
+    {% edit_button event None button_class='list-group-item list-group-item-primary list-group-item-action '|add:is_active button_text="Edit event properties" %}
+  {% endwith %}
+
+  {% if perms.events.change_event or "change_event" in member_perms %}
+    <a class="button btn list-group-item list-group-item-primary list-group-item-action btn-edit {% if presentationtype_url|same_url:request.path %}active{% endif %}"
+     title="Edit the presentation types for this event."
+     href="{{ presentationtype_url }}?next={% url_for_next %}" role="button">
+      Edit presentation types
+    </a>
+  {% endif %}
+
+  {% with is_active=registration_url|same_url:request.path|ifthen:"active" %}
+    {% with button_class='list-group-item list-group-item-primary list-group-item-action '|add:is_active display_button=event.display_registration_button %}
+      {% registration_button event %}
+    {% endwith %}
+  {% endwith %}
+
+  {% with is_active=submission_url|same_url:request.path|ifthen:"active" %}
+    {% with button_class='list-group-item list-group-item-primary list-group-item-action '|add:is_active display_button=event.display_submission_button %}
+      {% submission_button event %}
+    {% endwith %}
+  {% endwith %}
+
+</div>

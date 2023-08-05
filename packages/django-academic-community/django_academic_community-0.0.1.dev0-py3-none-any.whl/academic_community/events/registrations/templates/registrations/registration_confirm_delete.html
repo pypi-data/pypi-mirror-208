@@ -1,0 +1,47 @@
+{% extends "base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load guardian_tags %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+
+{% block title %}Withdraw Registration for {{ event }}{% endblock %}
+
+{% block headline %}Withdraw Registration for {{ event }}{% endblock %}
+{% block subtitle %}{{ registration }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:registration:registration-create" as registration_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Register"|combine:registration_url "Withdraw"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  {% get_obj_perms user for registration as "member_perms" %}
+
+  {% if not perms.registrations.delete_registration and "delete_registration" not in member_perms and not event.registration_possible %}
+    <div class="alert alert-warning" role="alert">
+      {% if event.registration_end %}
+        Registration for this event closed on {{ event.registration_end }}.
+      {% endif %}
+      Your account is not allowed to withdraw the registration here. Please
+      <a href="{{ event.get_absolute_url }}">
+        contact
+      </a>
+      the event organizers if you want to withdraw your registration.
+    </div>
+  {% else %}
+    <form role="form" method="post">
+      {% csrf_token %}
+
+      {% bootstrap_button "Unregister" button_type="submit"  %}
+    </form>
+  {% endif %}
+{% endblock %}

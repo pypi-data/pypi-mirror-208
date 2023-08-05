@@ -1,0 +1,10 @@
+{% load uploaded_material %}
+{% load django_bootstrap5 %}
+
+{% material_cards material_list.all %}
+
+{% if is_paginated %}
+<div class="mt-4 mb-4">
+  {% bootstrap_pagination page_obj extra=request.GET.urlencode parameter_name=page_parameter_name %}
+</div>
+{% endif %}

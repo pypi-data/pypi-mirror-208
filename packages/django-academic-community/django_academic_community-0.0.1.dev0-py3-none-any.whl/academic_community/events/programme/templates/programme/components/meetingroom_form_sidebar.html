@@ -1,0 +1,18 @@
+{% load community_utils %}
+{% load bootstrap_helpers %}
+
+{% url "events:programme:edit-meetingroom" meetingroom.event.slug meetingroom.id as base_url %}
+{% url "events:programme:edit-meetingroom-bookings" meetingroom.event.slug meetingroom.id as bookings_url %}
+
+{% include "events/components/event_sidebar.html" with event=meetingroom.event %}
+
+{% collapsible_card "Meetingroom details" "meetingroom-links" "" body_class="p-0" card_class="border-dark shadow" show=True header_class="p-0" %}
+  <div class="list-group">
+    <a href="{{ base_url }}" class="list-group-item list-group-item-action {% if base_url|same_url:request.path %}active{% endif %}">
+      General settings
+    </a>
+    <a href="{{ bookings_url }}?meeting_rooms={{ meetingroom.id }}" class="list-group-item list-group-item-action {% if bookings_url|same_url:request.path %}active{% endif %}">
+      Bookings
+    </a>
+  </div>
+{% endcollapsible_card %}

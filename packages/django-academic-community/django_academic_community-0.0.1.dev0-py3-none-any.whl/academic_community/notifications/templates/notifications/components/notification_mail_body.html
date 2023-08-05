@@ -1,0 +1,15 @@
+{% if notification.encryption_key %}<i>Encrypted message</i>{% else %}{{ notification.body }}{% endif %}
+{% spaceless %}
+{% if notification.usernotification %}
+{% with sender=notification.usernotification.outgoing_notification.sender %}
+  <p>
+    <b>From:</b>
+    {% if sender.communitymember %}
+      <a href="{{ sender.communitymember.get_absolute_url }}">{{ sender }}</a>
+    {% else %}
+      {{ sender }}
+    {% endif %}
+  </p>
+{% endwith %}
+{% endif %}
+{% endspaceless %}

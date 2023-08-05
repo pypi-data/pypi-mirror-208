@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load members %}
+{% load topics %}
+
+{% block title %}Approve topic membership{% endblock %}
+
+{% block headline %}Approve {{ topicmembership.member }} as new member in {{ topicmembership.topic }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "topics:topics" as topic_list_url %}
+  {% url "topics:topicmembership-formset" topicmembership.topic.id_name as topicmembers_url %}
+  {% with topic_list_url=topic_list_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Topics"|combine:topic_list_url topicmembership.topic.id_name|combine:topicmembership.topic.get_absolute_url "Edit members"|combine:topicmembers_url "Approve "|add:topicmembership.member.display_name|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% url "topics:topicmembership-formset" topicmembership.topic.id_name as topicmembers_url %}
+  {% if topicmembership.approved %}
+    <p>
+      {{ topicmembership.member }} has already been approved.
+      Click <a href="{{ topicmembers_url }}">here</a> manage the members of
+      this topic.
+    </p>
+  {% else %}
+    <p>
+      Do you want to approve
+      <a href="{{ topicmembership.member.get_absolute_url }}">
+        {{ topicmembership.member }}
+      </a> as a member of
+      <a href="{{ topicmembership.topic.get_absolute_url }}">
+        {{ topicmembership.topic }}
+      </a>?
+    </p>
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+
+      <div class="row row-cols-auto m-3">
+        {% bootstrap_button "Yes" button_type="submit" extra_classes="me-2" %}
+        {% bootstrap_button content="No" extra_classes="ms-auto" button_type="link" href=topicmembership.topic.get_absolute_url %}
+      </div>
+    </form>
+    <div class="card-group mb-4">
+      {% member_card topicmembership.member card_class="col-12 col-sm-3 me-4 mb-4" show=True %}
+      {% topic_card topicmembership.topic card_class="col-12 col-sm-9" show=True %}
+    </div>
+  {% endif %}
+{% endblock %}

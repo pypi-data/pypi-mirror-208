@@ -1,0 +1,132 @@
+{% extends "base_detail.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load uploaded_material %}
+{% load django_bootstrap5 %}
+
+{% block title %}Upload {{ form.instance|verbose_model_name }}{% endblock %}
+{% block headline %}
+  {% if form.instance.pk %}
+    Edit {{ form.instance }}
+  {% else %}
+    Upload {{ form.instance|verbose_model_name }}
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+
+  {% if form.instance.pk %}
+    {% breadcrumbs form.instance|verbose_model_name|combine:form.instance.get_list_url form.instance.name|combine:form.instance.get_absolute_url "Edit"|combine:request.path %}
+  {% else %}
+    {% breadcrumbs form.instance|verbose_model_name|combine:form.instance.get_list_url "New"|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% render_material_sidebar material_relation_model|default:form.instance %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {% block form_content %}
+    <form role="form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% tab_list MaterialTab="General properties" PermissionsTab="Permissions" MetaTab="Meta informations" RelationsTab="Relations to other content" active_tab="MaterialTab" %}
+        {% tab_content "MaterialTab" is_active_tab=True %}
+          <div class="m-4">
+            {% bootstrap_field form.name %}
+            {% bootstrap_field form.description %}
+            {% bootstrap_field form.content %}
+            {% bootstrap_field form.license %}
+            {% bootstrap_field form.category %}
+            {% bootstrap_field form.keywords %}
+            {% bootstrap_field form.upload_material %}
+            {% bootstrap_field form.external_url %}
+          </div>
+        {% endtab_content %}
+        {% tab_content "PermissionsTab" %}
+          <div class="m-4">
+            <div class="alert alert-info" role="alert">
+              Note that if you share this material, it will be available
+              <a class="alert-link" href='{% url "material-list" %}'>
+                in the list of community material
+              </a>
+              for the groups and users you enter down below.<br>
+              If you want to make material available for working group members,
+              topic members, etc., you should use the <i>Relations</i> tab
+              above.
+            </div>
+
+            {% bootstrap_field form.group_view_permission %}
+            {% bootstrap_field form.group_change_permission %}
+            {% bootstrap_field form.user_view_permission %}
+            {% bootstrap_field form.user_change_permission %}
+          </div>
+        {% endtab_content %}
+        {% tab_content "MetaTab" %}
+          <div class="m-4">
+            <div class="alert alert-info" role="alert">
+              This is optional information. If you do not fill it out, these
+              fields will be filled automatically for material that is not
+              hosted with an external url.
+            </div>
+            {% bootstrap_form form exclude="name,description,content,license,category,keywords,upload_material,external_url,group_view_permission,group_change_permission,user_view_permission,user_change_permission" %}
+          </div>
+        {% endtab_content %}
+        {% tab_content "RelationsTab" %}
+          <div class="m-4">
+            <div class="alert alert-info" role="alert">
+              You can create a relation between this material and other objects
+              on the website. The material will then show up on their
+              corresponding webpage, and it will be made accessible for the
+              corresponding members.
+            </div>
+          </div>
+          {% material_tab_list inlines active_tab=inlines|first|material_tab_id %}
+            {% for inline in inlines %}
+              {% tab_content inline|material_tab_id is_active_tab=forloop.first %}
+                <div class="m-2">
+                  {{ inline.management_form }}
+                  {{ inline.non_form_errors }}
+                  {% for form in inline.forms %}
+                    {% if form.instance.pk %}
+                      {% with related_object=form.instance|get_attr:form.instance.related_permission_field %}
+                        {% card header=related_object card_class="mb-4" %}
+                          {% details_button related_object %}
+                          {% bootstrap_form form %}
+                        {% endcard %}
+                      {% endwith %}
+                    {% else %}
+                      {% card header="Add a new relation" card_class="mb-4" %}
+                        {% bootstrap_form form %}
+                      {% endcard %}
+                      {% endif %}
+                  {% endfor %}
+                </div>
+              {% endtab_content %}
+            {% endfor %}
+          {% endmaterial_tab_list %}
+        {% endtab_content %}
+      {% endtab_list %}
+
+      <div class="row row-cols-auto m-3">
+        {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+        {% bootstrap_button "Reset" button_type="reset"  %}
+        {% if form.instance.pk %}
+          {% with material_relation=material_relation|default:form.instance %}
+            {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:material_relation.get_absolute_url %}
+            {% bootstrap_button content='<i class="far fa-trash-alt"></i>' extra_classes="ms-2" button_type="link" href=material_relation.get_delete_url|add:'?next='|add:form.instance.get_list_url %}
+          {% endwith %}
+        {% else %}
+          {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=form.instance.get_list_url %}
+        {% endif %}
+      </div>
+    </form>
+  {% endblock %}
+
+{% endblock %}

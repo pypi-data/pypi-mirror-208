@@ -1,0 +1,40 @@
+{% spaceless %}
+  {% load bootstrap_helpers %}
+  {% load community_buttons %}
+  {% load community_utils %}
+  {% load community_badges %}
+  {% load guardian_tags %}
+  {% load chats %}
+
+  {% if user|can_view_channel:channel_relation %}
+    <div class="card comment-card {{ channel_card_class }} {% if not subscription|has_read_comment:channel %}unread{% endif %}" id="comment-{{channel.id }}-card" data-comment-hash="{{ channel.md5 }}" data-comment-id="{{ channel.id }}">
+      <div class="comment-top"></div>
+      <a id="comment-{{ channel.md5 }}" class="anchor"></a>
+      {% include "chats/components/comment_popover.html" with comment=channel %}
+      <div class="card-body">
+
+        <div class="d-flex">
+
+          {{ channel.user_profile }}
+
+          <a href="{% if channel.pk %}{{ channel_relation.get_absolute_url }}{% else %}{{ request.path }}?comment={{ channel.md5 }}{% endif %}" class="mx-4 text-muted">
+            wrote
+            <span class="time-since" data-time-created="{% if channel.pk %}{% widthratio channel.last_modification_date|date:"U" 1 1000 %}{% else %}{{ channel.last_modification_date }}{% endif %}"></span>
+          </a>
+        </div>
+        <div id="comment-{{channel.id }}-body">
+          {% if channel.encryption_key %}
+            {% comment_body '<p class="placeholder-glow"><span class="placeholder w-100"></span><span class="placeholder w-25"></span></p>' %}
+          {% else %}
+            {% comment_body channel.body %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="my-2 text-end d-flex flex-row-reverse">
+        {% comment_reactions channel %}
+      </div>
+
+    </div>
+  {% endif %}
+{% endspaceless %}

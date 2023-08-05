@@ -1,0 +1,114 @@
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load events_programme %}
+{% load cms_tags %}
+
+{% block headline %}Edit {{ session }}{% endblock %}
+{% block title %}{{ session }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "programme/components/session_form_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  {{ slot_form.media }}
+
+{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% create_modal_button object_name="Slot" %}
+    <input type="hidden" name="slot_form" value="true">
+    {% bootstrap_form slot_form %}
+  {% endcreate_modal_button %}
+  {% with unlocked=True %}
+    {% edit_calendar_button %}
+  {% endwith %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% if not session.event.single_session_mode %}
+    {% url "events:programme:session-list" session.event.slug as programme_url %}
+    {% breadcrumbs "Events"|combine:event_list_url session.event.name|combine:session.event.get_absolute_url "Programme"|combine:programme_url session.title|combine:session.get_absolute_url "Edit"|combine:session.get_edit_url "Agenda"|combine:request.path %}
+  {% else %}
+    {% breadcrumbs "Events"|combine:event_list_url session.event.name|combine:session.event.get_absolute_url "Edit"|combine:session.get_edit_url "Agenda"|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="alert alert-warning m-4 d-none" role="alert" id="reloadInfo">
+    New objects have been added to the calendar.
+    <a href="{{ request.path }}" class="alert-link">Reload</a> the page to update the list.
+  </div>
+
+  {% with active_tab="calendarTab" %}
+    {% tab_list calendarTab="Calendar" slotTab="regular slots" contributionsTab="contributions" %}
+      {% tab_content "calendarTab" %}
+        {% show_calendar session.contribution_set.all session.slot_set.all editable=True display_available=True vmin=session.start vmax=session.start|add:session.duration default_duration="00:15" slot_duration="00:15" %}
+      {% endtab_content %}
+      {% tab_content "slotTab" %}
+        <div class="alert alert-warning m-4 d-none" role="alert" id="reloadInfo">
+          New objects have been added to the calendar.
+          <a href="{{ request.path }}" class="alert-link">Reload</a> the page to update the list.
+        </div>
+
+        <form role="form" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="slot_formset" value="true">
+          {{ slot_formset.management_form }}
+          {{ slot_formset.non_form_errors }}
+          {% bootstrap_formset_errors slot_formset %}
+
+          {% for form in slot_formset.forms %}
+            {% render_agenda_form form %}
+          {% endfor %}
+
+          {% bootstrap_button "OK" button_type="submit"  %}
+          {% bootstrap_button "Reset" button_type="reset"  %}
+        </form>
+      {% endtab_content %}
+      {% tab_content "contributionsTab" %}
+        {% if not contribution_formset.forms|length %}
+          {% url "events:programme:edit-session-contributions" session.event.slug session.id as contributions_url %}
+          <div class="alert alert-info m-4" role="alert">
+            Click <a href="{{ contributions_url }}?availability=True" class="alert-link">here</a>
+            to assign contributions to this session.
+          </div>
+        {% else %}
+          <div class="alert alert-warning m-4 d-none" role="alert" id="reloadInfo">
+            New objects have been added to the calendar.
+            <a href="{{ request.path }}" class="alert-link">Reload</a> the page to update the list.
+          </div>
+
+          <form role="form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="contribution_formset" value="true">
+            {{ contribution_formset.management_form }}
+            {{ contribution_formset.non_form_errors }}
+            {% bootstrap_formset_errors contribution_formset %}
+
+            {% for form in contribution_formset.forms %}
+              {% render_agenda_form form %}
+            {% endfor %}
+
+            {% bootstrap_button "OK" button_type="submit"  %}
+            {% bootstrap_button "Reset" button_type="reset"  %}
+          </form>
+        {% endif %}
+      {% endtab_content %}
+    {% endtab_list %}
+  {% endwith %}
+{% endblock %}

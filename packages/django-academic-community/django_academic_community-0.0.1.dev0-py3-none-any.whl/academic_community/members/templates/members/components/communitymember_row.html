@@ -1,0 +1,18 @@
+{% load institutions %}
+{% load community_utils %}
+{% load members %}
+
+<div class="card-group border-bottom border-dark {{ communitymember_row_class }} communitymember-row">
+  {% member_card communitymember card_class="col-lg-4" %}
+  <div class="card communitymember-affitilaion-card mb-0">
+    {% with member_id=communitymember.id|stringformat:"s" %}
+      {% with base_id=base_id|default_if_none:""|add:"member-"|add:member_id|add:"-" %}
+        {% if membership_organization %}
+          {% organization_row membership_organization %}
+        {% else %}
+          {% affiliation_rows communitymember.active_memberships %}
+        {% endif %}
+      {% endwith %}
+    {% endwith %}
+  </div>
+</div>
