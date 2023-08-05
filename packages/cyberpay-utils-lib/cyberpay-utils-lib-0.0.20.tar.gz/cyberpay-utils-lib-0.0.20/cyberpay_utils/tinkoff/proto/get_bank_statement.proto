@@ -1,0 +1,21 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+import "cyberpay_utils/tinkoff/proto/bank_statement_operation.proto";
+
+// Request
+message GetBankStatementRequest {
+  string account_number = 1;
+  optional string from_date = 2;
+  optional string till_date = 3;
+}
+
+// Response
+message GetBankStatementResponse {
+  string account_number = 1;
+  float saldo_in = 2;
+  float income = 3;
+  float outcome = 4;
+  float saldo_out = 5;
+  repeated BankStatementOperation operation = 6;
+}

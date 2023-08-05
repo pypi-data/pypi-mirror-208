@@ -1,0 +1,38 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+message BankStatementOperation {
+  string operation_id = 1;
+  string id = 2;
+  string date = 3;
+  float amount = 4;
+  string draw_date = 5;
+  string payer_name = 6;
+  optional string payer_inn = 7;
+  optional string payer_account = 8;
+  optional string payer_corr_account = 9;
+  string payer_bic = 10;
+  string payer_bank = 11;
+  string charge_date = 12;
+  string recipient = 13;
+  optional string recipient_inn = 14;
+  string recipient_account = 15;
+  optional string recipient_corr_account = 16;
+  string recipient_bic = 17;
+  string recipient_bank = 18;
+  optional string payment_type = 19;
+  string operation_type = 20;
+  optional string uin = 21;
+  string payment_purpose = 22;
+  string creator_status = 23;
+  optional string payer_kpp = 24;
+  optional string recipient_kpp = 25;
+  optional string kbk = 26;
+  optional string oktmo = 27;
+  optional string tax_evidence = 28;
+  optional string tax_period = 29;
+  optional string tax_doc_number = 30;
+  optional string tax_doc_date = 31;
+  optional string tax_type = 32;
+  optional string execution_order = 33;
+}

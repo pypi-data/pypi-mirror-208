@@ -1,0 +1,52 @@
+syntax = "proto3";
+package user_service.proto;
+
+import "cyberpay_utils/user/proto/user.proto";
+
+service UserService {
+  rpc AuthUser(AuthUserRequest) returns (AuthUserResponse) {}
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse) {}
+  rpc CreateManager(CreateManagerRequest) returns (User) {}
+  rpc GetCompanyUsersJson(GetCompanyUsersJsonRequest)
+      returns (GetCompanyUsersJsonResponse) {}
+  rpc EditUserById(EditUserByIdRequest) returns (User) {}
+  rpc GetUserDataForContractJson(GetUserDataForContractJsonRequest)
+      returns (GetUserDataForContractJsonResponse) {}
+}
+
+// Requests
+message AuthUserRequest {
+  string login = 1;
+  string password = 2;
+}
+message GetUserByIdRequest { uint64 id = 1; }
+message CreateManagerRequest {
+  string email = 2;
+  string name = 5;
+  string surname = 6;
+  optional string patronymic = 7;
+  string phone = 8;
+}
+message GetCompanyUsersJsonRequest {
+  string type = 1;
+  string filter_params = 2;
+}
+message EditUserByIdRequestData {
+  optional string email = 2;
+  optional string login = 3;
+  optional string name = 5;
+  optional string surname = 6;
+  optional string patronymic = 7;
+  optional string phone = 8;
+}
+message EditUserByIdRequest {
+  uint64 id = 1;
+  EditUserByIdRequestData data = 2;
+}
+message GetUserDataForContractJsonRequest { string id = 1; }
+
+// Responses
+message AuthUserResponse { User user = 1; }
+message GetUserByIdResponse { User user = 1; }
+message GetCompanyUsersJsonResponse { string data = 1; }
+message GetUserDataForContractJsonResponse { string data = 1; }

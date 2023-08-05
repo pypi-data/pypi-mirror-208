@@ -1,0 +1,71 @@
+syntax = "proto3";
+package email.proto;
+
+import "google/protobuf/empty.proto";
+
+service Email {
+  rpc SendLoginPasswordEmail(SendLoginPasswordEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendNewEmployeeEmail(SendNewEmployeeEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendContractEmail(SendContractEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendCloseDocumentEmail(SendCloseDocumentEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendOtpCodeEmail(SendOtpCodeEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendNewTaskEmail(SendNewTaskEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendNewSupportRequestEmail(SendNewSupportRequestEmailRequest)
+      returns (google.protobuf.Empty) {}
+  rpc SendResetPasswordEmail(SendResetPasswordEmailRequest)
+      returns (google.protobuf.Empty) {}
+}
+
+// Requests
+message SendLoginPasswordEmailRequest {
+  repeated string emails = 1;
+  string login = 3;
+  string password = 4;
+}
+message SendNewEmployeeEmailRequest {
+  repeated string emails = 1;
+  string url = 3;
+  string company = 4;
+}
+message SendContractEmailRequest {
+  repeated string emails = 1;
+  repeated string files = 2;
+  string user = 3;
+  string company = 4;
+}
+message SendCloseDocumentEmailRequest {
+  repeated string emails = 1;
+  repeated string files = 2;
+  string user = 3;
+  string company = 4;
+}
+message SendOtpCodeEmailRequest {
+  repeated string emails = 1;
+  string user = 3;
+  string code = 4;
+}
+message SendNewTaskEmailRequest {
+  repeated string emails = 1;
+  repeated string files = 2;
+  string user = 3;
+  string company = 4;
+}
+message SendNewSupportRequestEmailRequest {
+  repeated string emails = 1;
+  repeated string files = 2;
+  string user = 3;
+  string contact_email = 4;
+  string contact_phone = 5;
+  string message = 6;
+}
+message SendResetPasswordEmailRequest {
+  repeated string emails = 1;
+  string login = 3;
+  string link = 4;
+}

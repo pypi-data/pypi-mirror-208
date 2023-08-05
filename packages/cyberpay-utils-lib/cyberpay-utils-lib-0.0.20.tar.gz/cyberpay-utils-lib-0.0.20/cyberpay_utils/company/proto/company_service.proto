@@ -1,0 +1,14 @@
+syntax = "proto3";
+package company_service.proto;
+
+import "google/protobuf/empty.proto";
+
+service CompanyService {
+  rpc SubscibeCompany(SubscibeCompanyRequest) returns (google.protobuf.Empty) {}
+}
+
+// Requests
+message SubscibeCompanyRequest {
+  string code = 1;
+  uint64 user_id = 2;
+}

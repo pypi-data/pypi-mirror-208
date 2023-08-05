@@ -1,0 +1,11 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+// Request
+message GetDealIsValidRequest { string deal_id = 1; }
+
+// Response
+message GetDealIsValidResponse {
+  bool is_valid = 1;
+  string reasons = 2;
+}

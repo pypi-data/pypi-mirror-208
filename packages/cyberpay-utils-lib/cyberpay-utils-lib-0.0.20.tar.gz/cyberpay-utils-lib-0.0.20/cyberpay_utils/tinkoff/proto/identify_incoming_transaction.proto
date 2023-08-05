@@ -1,0 +1,13 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+// Request
+message IdentifyIncomingTransactionRequest {
+  string operation_id = 1;
+  repeated AmountDistributionItem amount_distribution = 2;
+}
+
+message AmountDistributionItem {
+  string beneficiary_id = 1;
+  float amount = 2;
+}

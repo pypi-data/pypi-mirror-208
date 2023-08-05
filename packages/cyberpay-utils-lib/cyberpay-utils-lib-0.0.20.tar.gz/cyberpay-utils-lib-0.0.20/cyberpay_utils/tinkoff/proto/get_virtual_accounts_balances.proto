@@ -1,0 +1,26 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+// Request
+message GetVirtualAccountsBalancesRequest {
+  optional string account_number = 1;
+  optional string beneficiary_id = 2;
+  optional uint32 offset = 3;
+  optional uint32 limit = 4;
+}
+
+// Response
+message GetVirtualAccountsBalancesResponse {
+  uint32 offset = 1;
+  uint32 limit = 2;
+  uint32 size = 3;
+  uint32 total = 4;
+  repeated BalanceListItem results = 5;
+}
+
+message BalanceListItem {
+  string beneficiary_id = 1;
+  string account_number = 2;
+  float amount = 3;
+  float amount_on_hold = 4;
+}
