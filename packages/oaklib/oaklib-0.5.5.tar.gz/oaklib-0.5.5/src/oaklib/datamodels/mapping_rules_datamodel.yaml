@@ -1,0 +1,134 @@
+id: https://w3id.org/oak/mapping-rules-datamodel
+title: Mapping Rules Datamodel
+name: mapping-rules-datamodel
+description: >-
+  A datamodel for specifying lexical mapping rules.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  mappingrules: https://w3id.org/oak/mapping-rules-datamodel/
+  skos: http://www.w3.org/2004/02/skos/core#
+  pav: http://purl.org/pav/
+  schema: http://schema.org/
+  sh: https://w3id.org/shacl/
+  prov: http://www.w3.org/ns/prov#
+
+default_prefix: mappingrules
+default_range: string
+
+default_curi_maps:
+  - semweb_context
+
+emit_prefixes:
+  - linkml
+  - rdf
+  - rdfs
+  - xsd
+  - owl
+
+imports:
+  - linkml:types
+  - lexical_index
+
+
+
+#==================================
+# Classes                         #
+#==================================
+classes:
+  MappingRuleCollection:
+    tree_root: true
+    description: A collection of mapping rules
+    attributes:
+      rules:
+        description: all rules
+        range: MappingRule
+        multivalued: true
+        inlined: true
+      minimum_confidence:
+        range: float
+
+  MappingRule:
+    description: An individual mapping rule, if preconditions match the postconditions are applied
+    attributes:
+      description:
+      oneway:
+        ifabsent: False
+        range: boolean
+        description: if true then subject and object can be switched and predicate inverted
+      preconditions:
+        range: Precondition
+        slot_uri: sh:condition
+        description: all of the criteria that must be true before a rule is fired
+      postconditions:
+        range: Postcondition
+        description: conditions that apply if preconditions match
+      synonymizer:
+        range: Synonymizer
+        description: Normalizing rules to labels. 
+
+  Precondition:
+    description: A pattern to be matched against an individual SSSOM mapping
+    attributes:
+      subject_source_one_of:
+        multivalued: true
+      object_source_one_of:
+        multivalued: true
+      mapping_source_one_of:
+        multivalued: true
+      subject_match_field_one_of:
+        multivalued: true
+      object_match_field_one_of:
+        multivalued: true
+      transformations_included_in:
+        multivalued: true
+      predicate_id_one_of:
+        multivalued: true
+
+
+  Postcondition:
+    attributes:
+      predicate_id:
+        comments:
+          - if the rule is invertible, then the predicate is inverted, e.g. skos broad becomes narrow
+      weight:
+        description: Weighting of the rule, positive increases the confidence, negative decreases
+        range: float
+        see_also:
+          - https://en.wikipedia.org/wiki/Logit
+          - https://upload.wikimedia.org/wikipedia/commons/5/57/Logit.png
+
+  Synonymizer:
+   attributes:
+    the_rule:
+      description: Description of the rule.
+      range: string
+    match:
+      description: Reg-ex rule to match substrings in labels.
+      range: string
+    match_scope:
+      description: Scope of the reg-ex rule
+      range: string
+    replacement:
+      description: Reg-ex rule to replace substrings in labels
+      range: string
+    qualifier:
+      description: Type of match for the new synonym generated.
+      range: string
+    prefix:
+      description: The rule applies to nodes of a specific prefix.
+      range: string
+    tests:
+      description: Unit tests for each rules.
+      range: Test
+  
+  Test:
+   attributes:
+    input:
+     description: Input string for the rule.
+    output:
+     description: Output based on the rule.
+    prefix:
+      description: The prefix that qualifies for the rule.
+     
