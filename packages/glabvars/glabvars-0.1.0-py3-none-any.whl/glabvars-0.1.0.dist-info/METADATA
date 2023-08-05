@@ -1,0 +1,92 @@
+Metadata-Version: 2.1
+Name: glabvars
+Version: 0.1.0
+Summary: A Python wrapper for retrieving Gitlab CI/CD variables
+Author-email: Wouter Donders <wouter@42analytics.eu>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2023, 42Analytics
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://42analytics.eu
+Project-URL: Documentations, https://gitlab.com/42analytics1/public/glabvars
+Project-URL: Source, https://gitlab.com/42analytics1/public/glabvars
+Project-URL: Download, https://gitlab.com/42analytics1/public/glabvars/-/packages
+Project-URL: Tracker, https://gitlab.com/42analytics1/public/glabvars/-/issues
+Classifier: Development Status :: 4 - Beta
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: BSD License
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic (>=1.10.7)
+
+# Glabvars
+
+A Python wrapper for retrieving Gitlab Ci/CD variables to enable injecting them into locally running GitLab CI/CD pipelines run with `gitlab-ci-local`.
+
+Features:
+- Retrieve [project-level CI/CD variables](https://docs.gitlab.com/ee/ci/variables/#for-a-project)
+- Retrieve (inherited) [group-level CI/CD variables](https://docs.gitlab.com/ee/ci/variables/#for-a-group)
+- Support for [environment-scoped CI/CD variables](https://docs.gitlab.com/ee/ci/environments/#limit-the-environment-scope-of-a-cicd-variable)
+- Support variable-type (normal) and [file-type CI/CD variables](https://docs.gitlab.com/ee/ci/variables/#use-file-type-cicd-variables)
+- Export to `gitlab-ci-local` YAML configuration file
+
+# Usage
+
+Run the `glabvars` CLI app inside a git repository with a Gitlab remote.
+The application can return a YAML configuration string for `gitlab-ci-local` to `stdout`.
+You can pipe this output to `.gitlab-ci-local-variables.yml` so that `gitlab-ci-local` can use the variables.
+```shell
+glabvars --target gcl > .gitlab-ci-local-variables.yml
+```
+
+# Installation
+Install with `pip` to install globally:
+
+```shell
+pip install glabvars
+```
+
+Or alternatively with `pipx` to isolate dependencies of `glabvars` from other globally installed Python apps (requires `pipx`):
+```shell
+pipx install glabvars
+```
+
+# Requirements
+You must have [`glab`](https://gitlab.com/gitlab-org/cli) installed and be authenticated with the relevant Gitlab instance to retrieve the CI/CD variables.
+Check whether you are authenticated by calling `glab auth status`.
+
+# Future work
+Make it extensible to other targets.
