@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: es7s
+Version: 3.23.0.dev0
+Summary: es7s system (un-)installer, shared code, settings manager
+Project-URL: Homepage, https://github.com/es7s/core
+Author-email: Aleksandr Shavykin <0.delameter@gmail.com>
+License: MIT
+Keywords: cli,console,daemon,es7s,monitor,prmopt,shell,system,terminal
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Environment :: No Input/Output (Daemon)
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Terminals
+Requires-Python: >=3.10
+Requires-Dist: click~=8.1
+Requires-Dist: psutil~=5.9
+Requires-Dist: pytermor
+Requires-Dist: python-daemon~=2.3
+Requires-Dist: python-levenshtein==0.21
+Requires-Dist: pyyaml==6.0
+Requires-Dist: requests[socks]==2.28.1
+Provides-Extra: dev
+Requires-Dist: pygobject-stubs==2.4.0; extra == 'dev'
+Provides-Extra: gtk
+Requires-Dist: pycairo~=1.23; extra == 'gtk'
+Requires-Dist: pygobject~=3.42; extra == 'gtk'
+Description-Content-Type: text/markdown
+
+<div align="center">
+   <img src="https://s3.eu-north-1.amazonaws.com/dp2.dl/readme/es7s/core/logo.svg" width="96" height="96"><br>
+   <img src="https://s3.eu-north-1.amazonaws.com/dp2.dl/readme/es7s/core/label.png" width="200" height="64">
+</div>
+
+<div align="center">
+  <img src="https://img.shields.io/badge/python-3.10-3776AB?logo=python&logoColor=white&labelColor=333333">
+  <a href="https://github.com/pypa/hatch"><img alt="Hatch project" src="https://img.shields.io/badge/hatch-1.6-4051b5.svg?logo=wegame&logoColor=white&labelColor=333333"></a>
+  <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+  <br>
+  <a href="https://pepy.tech/project/es7s/"><img alt="Downloads" src="https://pepy.tech/badge/es7s"></a>
+  <a href="https://pypi.org/project/es7s/"><img alt="PyPI" src="https://img.shields.io/pypi/v/es7s"></a>
+  <a href='https://coveralls.io/github/es7s/core?branch=dev'><img src='https://coveralls.io/repos/github/es7s/core/badge.svg?branch=dev' alt='Coverage Status' /></a>
+</div>
+<h1> </h1>
+
+es7s system core: installer, CLI entrypoint, config manager, shared code
+
+## Installation
+
+```shell 
+git clone git@github.com:es7s/core.git /tmp/es7s
+./tmp/es7s/install.sh
+```
