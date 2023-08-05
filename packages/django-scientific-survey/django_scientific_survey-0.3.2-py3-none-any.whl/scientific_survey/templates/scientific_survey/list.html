@@ -1,0 +1,23 @@
+{% extends 'scientific_survey/base.html' %}
+{% load i18n %}
+{% load survey_extras %}
+
+{% block body %}
+<div id="intro">
+	<h1>{% trans "Welcome to the Django Survey app"%}</h1>
+
+	<ul>
+		{% for survey in surveys %}
+      {% if survey.id in started_surveys %}
+        {% if started_surveys|get_by_key:survey.id %}
+  		    <li><a href="{{ started_surveys|get_by_key:survey.id }}">{% trans "Continue the Survey"%} {{survey.name}}</a></li>
+        {% else %}
+          <li><a href="{{ survey.get_absolute_url }}">{% trans "Take the Survey"%} {{survey.name}}</a></li>
+        {% endif %}
+      {% else %}
+        <li><a href="{{ survey.get_absolute_url }}">{% trans "Take the Survey"%} {{survey.name}}</a></li>
+      {% endif %}
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
