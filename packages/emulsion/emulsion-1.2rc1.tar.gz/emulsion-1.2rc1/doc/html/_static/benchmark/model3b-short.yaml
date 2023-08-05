@@ -1,0 +1,187 @@
+---
+model_name: stochastic_SIR_demo_structured_individuals
+
+model_info:
+  abstract: 'This model is a simple discrete-time, stochastic, hybrid
+  SIR model with demography and structured population. Individuals
+  have a variable shedding level.'
+  author: 'Sebastien Picault (sebastien.picault@inra.fr)'
+
+time_info:
+  time_unit: days
+  delta_t: 1
+  origin: 'January 1'
+  total_duration: '365'
+
+levels:
+  population:
+    desc: 'level of the population'
+    aggregation_type: hybrid
+    contains:
+      - individuals
+    aggregate_vars:
+      - name: beta
+        collect: beta_i
+        operator: 'sum'
+  individuals:
+    desc: 'level of the individuals'
+
+grouping:
+  population:
+    infection:
+      machine_name: health_state
+      key_variables: [health_state, age_group]
+    aging:
+      machine_name: age_group
+      key_variables: [age_group]
+
+processes:
+  population:
+    - infection
+    - aging
+
+state_machines:
+  health_state:
+    desc: 'The state machine which defines the evolution of health states'
+    states:
+      - S:
+          name: 'Susceptible'
+          desc: 'suceptible of becoming infected'
+          fillcolor: 'deepskyblue'
+          default: yes
+      - I:
+          name: 'Infectious'
+          desc: 'infected and able to transmit the disease'
+          fillcolor: 'red'
+          on_enter:
+            - set_var: 'beta_i_max'
+              value: 'initial_beta_i'
+            - set_var: 'beta_i'
+              value: 'beta_i_max'
+          on_stay:
+            - set_var: 'beta_i'
+              value: 'IfThenElse(duration_in_health_state <= shedding_threshold,
+              beta_i_max,
+              beta_i_max * duration_in_health_state / shedding_threshold)'
+          on_exit:
+            - set_var: 'beta_i'
+              value: 0
+      - R:
+          name: 'Resistant'
+          desc: 'recovered and resistant to new infections'
+          fillcolor: 'limegreen'
+    transitions:
+      - from: S
+        to: I
+        rate: 'is_J * force_infection_juveniles + is_A * force_infection_adults'
+      - {from: I, to: R, rate: 'gamma'}
+  age_group:
+    desc: 'The state machine which defines the evolution of age groups'
+    states:
+      - J:
+          name: 'Juvenile'
+          desc: 'juvenile individuals'
+          fillcolor: 'orange'
+      - A:
+          name: 'Adult'
+          desc: 'adult individuals (producing new juveniles)'
+          fillcolor: 'brown'
+      - D:
+          name: 'Dead'
+          desc: 'compartment to put dead individuals'
+          fillcolor: white
+          autoremove: yes
+    transitions:
+      - {from: J, to: A, rate: 'm'}
+      - {from: J, to: D, rate: 'mu_J * total_population / K'}
+      - {from: A, to: D, rate: 'mu_A * total_population / K'}
+    productions:
+      - {from: A, to: J, rate: 'b', prototype: 'newborn'}
+
+parameters:
+  initial_population_size:
+    desc: 'initial number of individuals in the population'
+    value: 100
+  initial_infected:
+    desc: 'initial number of infectious individuals in the population'
+    value: 1
+  initial_beta_i:
+    desc: 'initial transmission rate for newly infected individuals'
+    value: '0.1 * (0.5 + random_gamma(0.5, 0.5))'
+  shedding_threshold:
+    desc: 'duration after which shedding increases with time (days)'
+    value: 15
+  between_group_factor:
+    desc: 'factor accounting for between-group transmission'
+    value: 0.1
+  gamma:
+    desc: 'recovery rate'
+    value: '1/30'
+  b:
+    desc: 'the birth rate (/day)'
+    value: 0.005
+  m:
+    desc: 'maturation rate, at which juveniles become adults (/day)'
+    value: '1/50'
+  mu_J:
+    desc: 'base mortality rate for juveniles (/day)'
+    value: 0.01
+  mu_A:
+    desc: 'base mortality rate for adults (/day)'
+    value: 0.0025
+  K:
+    desc: 'carriage capacity for the environment'
+    value: 150
+  force_infection_juveniles:
+    desc: 'force of infection experienced by juveniles'
+    value: 'beta_I_J * total_I_J / (total_J + 1e-9) +
+    between_group_factor * beta_I_A * total_I_A / (total_A + 1e-9)'
+  force_infection_adults:
+    desc: 'force of infection experienced by adults'
+    value: 'beta_I_A * total_I_A / (total_A + 1e-9) +
+    between_group_factor * beta_I_J * total_I_J / (total_J + 1e-9)'
+  prevalence_J:
+    desc: 'prevalence in juvenile group'
+    value: 'total_I_J / (total_J + 1e-9)'
+  prevalence_A:
+    desc: 'prevalence in adult group'
+    value: 'total_I_A / (total_A + 1e-9)'
+
+prototypes:
+  individuals:
+    - healthy:
+        desc: 'healthy individuals'
+        health_state: S
+        age_group: random
+        beta_i: 0
+        beta_i_max: 0
+    - infected:
+        desc: 'infected individuals'
+        health_state: I
+        age_group: J
+        beta_i: 'initial_beta_i'
+        beta_i_max: 'initial_beta_i'
+    - newborn:
+        desc: 'newborn individuals assuming no vertical transmission'
+        health_state: S
+        age_group: J
+        beta_i: 0
+        beta_i_max: 0
+
+initial_conditions:
+  population:
+    - prototype: healthy
+      amount: 'initial_population_size - initial_infected'
+    - prototype: infected
+      amount: 'initial_infected'
+
+outputs:
+  type: csv
+  population:
+    period: 1
+    extra_vars:
+      - prevalence_A
+      - prevalence_J
+      - beta_I_J
+      - beta_I_A
+...

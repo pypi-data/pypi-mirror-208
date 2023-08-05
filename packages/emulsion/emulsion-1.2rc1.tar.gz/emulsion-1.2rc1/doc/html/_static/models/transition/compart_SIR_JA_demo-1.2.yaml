@@ -1,0 +1,52 @@
+levels:
+  population:
+    desc: 'level of the population'
+    aggregation_type: 'compartment'
+    contains:
+      - individuals
+  # In a compartment-based model, the individuals level is not simulated explicitly
+  individuals:
+    desc: 'level of individuals'
+
+
+
+
+
+
+
+
+
+
+processes:
+  individuals:
+    - health_state
+    - age_group
+
+state_machines:
+  age_group:
+    desc: 'The state machine which defines the evolution of age groups.'
+    ...
+    productions:
+      - {from: A, to: J, rate: 'birth', prototype: 'newborn'}
+
+prototypes:
+  individuals:
+    - healthy:
+        desc: 'healthy individuals'
+        health_state: S
+        age_group: random
+    - infected:
+        desc: 'infected individuals'
+        health_state: I
+        age_group: random
+    - newborn:
+        desc: 'newly created individuals'
+        health_state: default
+        age_group: J
+
+initial_conditions:
+  population:
+    - prototype: healthy
+      amount: 'initial_population_size - initial_infected'
+    - prototype: infected
+      amount: 'initial_infected'

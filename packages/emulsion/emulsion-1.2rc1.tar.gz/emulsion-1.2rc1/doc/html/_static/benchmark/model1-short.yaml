@@ -1,0 +1,81 @@
+---
+model_name: stochastic_compart_SIR
+model_info:
+  abstract: 'This model is a simple discrete-time, stochastic,
+  compartment-based SIR model. In EMULSION, a model is characterized
+  by several sections (time_info, processes, state_machines, etc.)
+  which are explained below.
+  '
+  author: 'Sebastien Picault (sebastien.picault@inra.fr)'
+
+time_info:
+  time_unit: days
+  delta_t: 1
+  origin: 'January 1'
+  total_duration: '365'
+
+levels:
+  population:
+    desc: 'level of the population'
+    aggregation_type: compartment
+
+grouping:
+  population:
+    infection:
+      machine_name: health_state
+      key_variables: [health_state]
+
+processes:
+  population:
+    - infection
+
+state_machines:
+  health_state:
+    desc: 'The state machine which defines the evolution of health
+    states
+    '
+    states:
+      - S:
+          name: 'Susceptible'
+          desc: 'suceptible of becoming infected'
+          fillcolor: 'deepskyblue'
+      - I:
+          name: 'Infectious'
+          desc: 'infected and able to transmit the disease'
+          fillcolor: 'red'
+      - R:
+          name: 'Resistant'
+          desc: 'recovered and resistant to new infections'
+          fillcolor: 'limegreen'
+    transitions:
+      - {from: S, to: I, rate: 'beta * total_I / total_population'}
+      - {from: I, to: R, rate: 'gamma'}
+
+parameters:
+  initial_population_size:
+    desc: 'initial number of individuals in the population'
+    value: 100
+  initial_infected:
+    desc: 'initial number of infectious individuals in the population'
+    value: 10
+  beta:
+    desc: 'transmission rate from infectious individuals (/day)'
+    value: 0.1
+  gamma:
+    desc: 'recovery rate'
+    value: '1/30'
+
+initial_conditions:
+  population:
+    - population:
+        - total: 'initial_population_size'
+        - vars: [S]
+          amount: 'initial_population_size - initial_infected'
+        - vars: [I]
+          amount: 'initial_infected'
+
+outputs:
+  type: csv
+  population:
+    period: 1
+...

@@ -1,0 +1,54 @@
+levels:
+  population:
+    desc: 'level of the population'
+    aggregation_type: 'compartment'
+
+
+
+
+
+
+grouping:
+  population:
+    infection:
+      machine_name: health_state
+      key_variables: [health_state]
+    aging:
+      machine_name: age_group
+      key_variables: [age_group]
+
+processes:
+  population:
+    - infection
+    - aging
+
+
+state_machines:
+  age_group:
+    desc: 'The state machine which defines the evolution of age groups.'
+    ...
+    productions:
+      - {from: A, to: J, rate: 'birth'}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+initial_conditions:
+  population:
+    - population:
+        - total: 'initial_population_size'
+        - vars: [S]
+          amount: 'initial_population_size - initial_infected'
+        - vars: [I]
+          amount: 'initial_infected'

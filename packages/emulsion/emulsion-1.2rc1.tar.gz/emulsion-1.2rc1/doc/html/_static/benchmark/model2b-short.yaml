@@ -1,0 +1,130 @@
+---
+model_name: stochastic_compart_SIR_demo_variable
+
+model_info:
+  abstract: 'This model is a simple discrete-time, stochastic,
+  compartment-based SIR model with demography. The transmission rate
+  varies over time.
+  '
+  author: 'Sebastien Picault (sebastien.picault@inra.fr)'
+
+time_info:
+  time_unit: days
+  delta_t: 1
+  origin: 'January 1'
+  total_duration: '365'
+
+levels:
+  population:
+    desc: 'level of the population'
+    aggregation_type: compartment
+
+grouping:
+  population:
+    infection:
+      machine_name: health_state
+      key_variables: [health_state]
+    aging:
+      machine_name: age_group
+      key_variables: [age_group]
+
+processes:
+  population:
+    - infection
+    - aging
+
+state_machines:
+  health_state:
+    desc: 'The state machine which defines the evolution of health
+    states
+    '
+    states:
+      - S:
+          name: 'Susceptible'
+          desc: 'suceptible of becoming infected'
+          fillcolor: 'deepskyblue'
+          default: yes
+      - I:
+          name: 'Infectious'
+          desc: 'infected and able to transmit the disease'
+          fillcolor: 'red'
+      - R:
+          name: 'Resistant'
+          desc: 'recovered and resistant to new infections'
+          fillcolor: 'limegreen'
+    transitions:
+      - {from: S, to: I, rate: 'beta * total_I / total_population'}
+      - {from: I, to: R, rate: 'gamma'}
+  age_group:
+    desc: 'The state machine which defines the evolution of age
+    groups.
+    '
+    states:
+      - J:
+          name: 'Juvenile'
+          desc: 'juvenile individuals'
+          fillcolor: 'orange'
+      - A:
+          name: 'Adult'
+          desc: 'adult individuals (producing new juveniles)'
+          fillcolor: 'brown'
+      - D:
+          name: 'Dead'
+          desc: 'compartment to put dead individuals'
+          fillcolor: white
+          autoremove: yes
+    transitions:
+      - {from: J, to: A, rate: 'm'}
+      - {from: J, to: D, rate: 'mu_J * total_population / K'}
+      - {from: A, to: D, rate: 'mu_A * total_population / K'}
+    productions:
+      - {from: A, to: J, rate: 'b'}
+
+parameters:
+  initial_population_size:
+    desc: 'initial number of individuals in the population'
+    value: 100
+  initial_infected:
+    desc: 'initial number of infectious individuals in the population'
+    value: 10
+  beta0:
+    desc: 'initial transmission rate from infectious individuals (/day)'
+    value: 0.1
+  beta:
+    desc: 'transmission rate from infectious individuals (/day)'
+    value: 'beta0 * (1 + sin(time / 20))'
+  gamma:
+    desc: 'recovery rate'
+    value: '1/30'
+  b:
+    desc: 'the birth rate (/day)'
+    value: 0.005
+  m:
+    desc: 'maturation rate, at which juveniles become adults (/day)'
+    value: '1/50'
+  mu_J:
+    desc: 'base mortality rate for juveniles (/day)'
+    value: 0.01
+  mu_A:
+    desc: 'base mortality rate for adults (/day)'
+    value: 0.0025
+  K:
+    desc: 'carriage capacity for the environment'
+    value: 150
+
+initial_conditions:
+  population:
+    - population:
+        - total: 'initial_population_size'
+        - vars: [S]
+          amount: 'initial_population_size - initial_infected'
+        - vars: [I]
+          amount: 'initial_infected'
+
+outputs:
+  type: csv
+  population:
+    period: 1
+    extra_vars:
+      - beta
+...

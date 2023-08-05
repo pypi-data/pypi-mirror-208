@@ -1,0 +1,22 @@
+levels:
+  population:
+    desc: 'level of the population'
+    aggregation_type: 'hybrid'
+    contains:
+      - individuals
+      individuals:
+    desc: 'level of the individuals'
+
+grouping:
+  population:
+    infection: [health_state]
+    aging: [age_group]
+
+
+
+
+
+processes:
+  individuals:
+    - health_state: infection
+    - age_group: aging
