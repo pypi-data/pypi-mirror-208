@@ -1,0 +1,33 @@
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+
+[tool.poetry]
+name = "mlaas-sdk"
+version = "0.4.0"
+description = "IoT-NGIN MLaaS Polyglot Model Sharing Framework Python SDK"
+authors = ["ivanvmoreno <ivan@ivan.build>"]
+readme = "README.md"
+license = "MIT"
+repository = "https://gitlab.com/h2020-iot-ngin/enhancing_iot_intelligence/t3_4/ml-model-sharing"
+keywords = ["iot-ngin"]
+packages = [{include = "mlaas_sdk"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.28.2"
+pydantic = "^1.10.7"
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://gitlab.com/api/v4/projects/28814753/packages/pypi/"
+default = false
+secondary = true
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
