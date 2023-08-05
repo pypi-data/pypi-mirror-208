@@ -1,0 +1,196 @@
+Metadata-Version: 2.1
+Name: graph-ensembles
+Version: 0.2.2
+Summary: The graph ensemble package contains a set of methods to build fitness based graph ensembles from marginal information.
+Home-page: https://github.com/LeonardoIalongo/graph-ensembles
+Author: Leonardo Niccolò Ialongo
+Author-email: leonardo.ialongo@gmail.com
+License: GNU General Public License v3
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.0
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: numpy (>=1.22)
+Requires-Dist: numba (>=0.56.4)
+Requires-Dist: scipy (>=1.0)
+Requires-Dist: pandas (>=1.1)
+Requires-Dist: networkx (>=1.0)
+Provides-Extra: dev
+Requires-Dist: pytest (==7.3.1) ; extra == 'dev'
+Requires-Dist: coverage (==7.2.5) ; extra == 'dev'
+Requires-Dist: pytest-cov (==4.0.0) ; extra == 'dev'
+Requires-Dist: flake8 (==6.0.0) ; extra == 'dev'
+Requires-Dist: wheel (==0.40.0) ; extra == 'dev'
+Requires-Dist: matplotlib (==3.7.1) ; extra == 'dev'
+Requires-Dist: check-manifest (==0.49) ; extra == 'dev'
+Requires-Dist: setuptools (==67.7.2) ; extra == 'dev'
+Requires-Dist: twine (==4.0.2) ; extra == 'dev'
+Requires-Dist: tox (==4.5.1) ; extra == 'dev'
+
+.. image:: https://travis-ci.com/LeonardoIalongo/graph-ensembles.svg?branch=master
+    :target: https://travis-ci.com/LeonardoIalongo/graph-ensembles
+
+=================
+Graph ensembles
+=================
+
+The graph ensemble package contains a set of methods to build fitness based 
+graph ensembles from marginal information. These methods can be used to build 
+randomized ensembles preserving the marginal information provided. 
+
+* Free software: GNU General Public License v3
+* Documentation: https://graph-ensembles.readthedocs.io.
+
+
+Installation
+------------
+Install using:
+
+.. code-block:: python
+
+   pip install graph_ensembles
+
+Usage
+-----
+Currently only the RandomGraph and StripeFitnessModel are fully implemented.
+An example of how it can be used is the following. 
+For more see the example notebooks in the examples folder.
+
+.. code-block:: python
+
+    import graph_ensembles as ge
+    import pandas as pd
+
+    v = pd.DataFrame([['ING', 'NL'],
+                     ['ABN', 'NL'],
+                     ['BNP', 'FR'],
+                     ['BNP', 'IT']],
+                     columns=['name', 'country'])
+
+    e = pd.DataFrame([['ING', 'NL', 'ABN', 'NL', 1e6, 'interbank', False],
+                     ['BNP', 'FR', 'ABN', 'NL', 2.3e7, 'external', False],
+                     ['BNP', 'IT', 'ABN', 'NL', 7e5, 'interbank', True],
+                     ['BNP', 'IT', 'ABN', 'NL', 3e3, 'interbank', False],
+                     ['ABN', 'NL', 'BNP', 'FR', 1e4, 'interbank', False],
+                     ['ABN', 'NL', 'ING', 'NL', 4e5, 'external', True]],
+                     columns=['creditor', 'c_country',
+                              'debtor', 'd_country',
+                              'value', 'type', 'EUR'])
+
+    g = ge.Graph(v, e, v_id=['name', 'country'],
+                 src=['creditor', 'c_country'],
+                 dst=['debtor', 'd_country'],
+                 edge_label=['type', 'EUR'],
+                 weight='value')
+
+    # Initialize model
+    model = ge.StripeFitnessModel(g)
+
+    # Fit model parameters
+    model.fit()
+
+    # Sample from the ensemble
+    model.sample()
+
+Development
+-----------
+Please work on a feature branch and create a pull request to the development 
+branch. If necessary to merge manually do so without fast forward:
+
+.. code-block:: bash
+
+    git merge --no-ff myfeature
+
+To build a development environment run:
+
+.. code-block:: bash
+
+    python3 -m venv env 
+    source env/bin/activate 
+    pip install -e '.[dev]'
+
+For testing:
+
+.. code-block:: bash
+
+    pytest --cov
+
+Credits
+-------
+This is a project by `Leonardo Niccolò Ialongo <https://datasciencephd.eu/students/leonardo-niccol%C3%B2-ialongo/>`_ and `Emiliano Marchese <https://www.imtlucca.it/en/emiliano.marchese/>`_, under 
+the supervision of `Diego Garlaschelli <https://networks.imtlucca.it/members/diego>`_.
+
+
+
+=======
+History
+=======
+
+0.2.2 (2023-05-11)
+------------------
+* Created submodule spark for allowing some models to be parallelize computations using spark
+
+0.2.1 (2021-08-03)
+------------------
+* Added option for faster computation of average nearest neighbour properties by allowing for multiple links between the same nodes.
+* Added compression option in to_networkx function.
+
+0.2.0 (2021-07-12)
+------------------
+* Added likelihood and nearest neighbour properties.
+* Revisited API for measures to ensure correct recompute if necessary.
+
+0.1.3 (2021-04-29)
+------------------
+* Added new option for fitting the stripe model that ensures that the minimum non-zero expected degree is one
+* Corrected issue in expected degree calculations
+
+0.1.2 (2021-04-07)
+------------------
+* Added scale invariant probability functional to all models
+* Improved methods for convergence with change in API, xtol now a relative measure
+* Added pagerank and trophic depth to the library
+* Added methods for graph conversion to networkx
+* Added methods for computing the adjacency matrix as a sparse matrix
+
+0.1.1 (2021-03-29)
+------------------
+* Fixed bug in stripe expected degree computation
+* Added testing of expected degree performance
+
+0.1.0 (2021-03-29)
+------------------
+* Added the block model and group info to graphs
+* Added fast implementation of theoretical expected degrees
+* Fixed some compatibility issues with multiple item assignments
+
+0.0.4 (2021-03-15)
+------------------
+* Fixed issues with slow pandas index conversion
+
+0.0.3 (2021-03-14)
+------------------
+* Large changes in API with great improvements in usability
+* Added sampling function
+* Added RandomGraph model
+* Added Graph classes for ease of use
+
+
+0.0.2 (2020-11-13)
+------------------
+* Added steps for CI. 
+* Corrected broken links. 
+* Removed support for python 3.5 and 3.6
+
+0.0.1 (2020-10-28)
+------------------
+
+* First release on PyPI. StripeFitnessModel available, all other model classes still dummies.
+
