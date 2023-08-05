@@ -1,0 +1,47 @@
+<table>
+    <tr>
+      <td style="white-space: nowrap;">Log</td><td><span class="nowrap">{{ patient_log_identifier }}</span></td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">Filing</td><td><span class="nowrap">{{ filing_identifier }}</span></td>
+    </tr>
+    <tr>
+      <td style="white-space: nowrap;">Stable</td>
+      <td style="{% if stable != "Yes"%}background-color: red{% endif %}">{{ stable }}</td>
+    </tr>
+
+  {% if add_screening_url %}
+    <tr>
+      <td style="white-space: nowrap;"><a title="click to screen" href="{{ add_screening_url }}">Screen</a></td>
+      <td style="background-color: orange"><a title="click to screen" style="color: black" href="{{ add_screening_url }}">PENDING</a></td>
+    </tr>
+  {% else %}
+    <tr>
+      <td style="color:darkgreen;white-space: nowrap;">Screened </td>
+      <td style="white-space: nowrap;"><a title="Go to screening form" href="{{ change_screening_url }}"><span class="nowrap">{{ screening_identifier }}</span></a></td>
+    </tr>
+  {% endif  %}
+  {% if screening_identifier and eligible %}
+    {% if add_consent_url %}
+      <tr>
+        <td style="white-space: nowrap;"><a title="click to consent" href="{{ add_consent_url }}">Consent</a></td>
+        <td style="background-color: orange"><a title="click to consent" style="color: black" href="{{ add_consent_url }}">PENDING</a></td>
+      </tr>
+    {% else %}
+      <tr>
+        <td style="color:darkgreen;white-space: nowrap;">Consented</td><td style="white-space: nowrap;"><a title="Go to consent form" href="{{ change_consent_url }}"><span class="nowrap">{{ subject_identifier }}</span></a></td>
+      </tr>
+    {% endif  %}
+  {% else %}
+    {% if screening_identifier %}
+      <tr>
+        <td colspan="2">INELIGIBLE</td>
+      </tr>
+    {% endif  %}
+  {% endif  %}
+  {% if group_identifier %}
+    <tr>
+      <td style="white-space: nowrap;">Group</td><td>{{ group_identifier }}</td>
+    </tr>
+  {% endif %}
+</table>
