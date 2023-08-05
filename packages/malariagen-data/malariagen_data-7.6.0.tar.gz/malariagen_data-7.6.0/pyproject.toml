@@ -1,0 +1,77 @@
+[tool.poetry]
+name = "malariagen_data"
+version = "7.6.0"
+description = "A package for accessing and analysing MalariaGEN data."
+authors = [
+    "Alistair Miles <alistair.miles@sanger.ac.uk>",
+    "Chris Clarkson <cc28@sanger.ac.uk>",
+    "Lee Hart <lee.hart@sanger.ac.uk>",
+    "Kathryn Murie <km22@sanger.ac.uk>",
+    "Nace Kranjc <n.kranjc@imperial.ac.uk>",
+    "Kelly Bennett <kb25@sanger.ac.uk>",
+    "Sanjay Nagi <sanjay.nagi@lstmed.ac.uk>",
+]
+license = "MIT"
+
+[tool.poetry.dependencies]
+# numba cannot yet support python 3.11
+python = ">=3.8,<3.11"
+# numba cannot yet support numpy 1.24
+numpy = "<1.24"
+numba = "*"
+# force llvmlite above broken version
+llvmlite = ">0.34"
+scipy = "*"
+pandas = "*"
+zarr = "*"
+dask = {version="*", extras=["array"]}
+fsspec = "*"
+gcsfs = "*"
+BioPython = "*"
+scikit-allel = "*"
+xarray = "*"
+plotly = "*"
+# https://github.com/bokeh/bokeh/issues/12614
+# bokeh 3.0 has a problem with stretch sizing modes
+bokeh = "<3.0"
+statsmodels = "*"
+# 0.17.0 appears to be broken on colab
+ipyleaflet = ">0.17.0"
+ipywidgets = "*"
+# https://stackoverflow.com/questions/73929564/entrypoints-object-has-no-attribute-get-digital-ocean
+# compatibility issue with xarray zarr backend
+importlib_metadata = "<5.0"
+# https://github.com/malariagen/malariagen-data-python/issues/299
+# bug in ipinfo 4.4.1
+ipinfo = "!=4.4.1"
+igv-notebook = ">=0.2.3"
+tqdm = "*"
+dash = "*"
+dash-cytoscape = "*"
+jupyter-dash = "*"
+numpydoc_decorator = ">=2.0.0"
+typing_extensions = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-xdist = "*"
+pytest-cases = "*"
+pytest-cov = "*"
+notebook = "*"
+jupyterlab = "*"
+pre-commit = "*"
+black = "*"
+snakeviz = "*"
+mypy = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.isort]
+profile = "black"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
