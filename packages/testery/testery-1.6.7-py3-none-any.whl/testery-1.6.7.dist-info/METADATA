@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: testery
+Version: 1.6.7
+Summary: Testery CLI
+Home-page: https://github.com/testery/testery-cli
+Author: Testery
+Author-email: chris.harbert@testery.io
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+Requires-Dist: Click
+Requires-Dist: python-dateutil
+Requires-Dist: requests
+Requires-Dist: requests-toolbelt
+
+# Testery CLI
+
+To install you must have Python 3 and pip installed, then run:
+
+`pip install --upgrade testery`
+
+#### Create Test Run
+
+Starts a test run.
+
+```
+testery create-test-run --token <yourTesteryApiToken> --project <projectKeyFromTestery> --build-id <uniqueBuildIdOfYourChoice> --environment <environmentToBeTested> --wait-for-results
+```
+
+When set, `--fail-on-failure`, will return an exit code of 1 if there are test failures.
+
+*Output Formats*
+
+- teamcity
+- pretty
+- json
+- appveyor
+- octopus
+
+#### Create Test Environment
+
+Creates an environment where tests may be run.
+
+```
+testery create-environment --token <yourTesteryApiToken> --key "<key>" --name "<name>" --variable "KEY1=FOO1" --variable "KEY2=FOO2" --variable "secure:KEY3=SECRET"
+```
+
