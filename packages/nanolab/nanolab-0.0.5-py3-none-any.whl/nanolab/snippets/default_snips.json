@@ -1,0 +1,69 @@
+{   
+    "setup_ledger_and_config": {
+        "mandatory_vars": [
+            "LEDGER",
+            "SETUP_NODES",
+            "NL_CONFIG",
+            "REMOTE_IP"
+        ],
+        "commands": [
+            {
+                "type": "bash",
+                "command": "[ -f nl_config.toml ] && nanomock down || true"
+            },
+            {
+                "type": "bash",               
+                "command": "cp {NL_CONFIG} nl_config.toml"
+            },
+            {
+                "type": "bash",
+                "command": "nanomock conf_edit --payload '{{\"path\" : \"remote_address\",  \"value\" : \"{REMOTE_IP}\"}}'"
+            },
+            {
+                "type": "bash",
+                "command": "nanomock conf_edit --payload '{{\"path\" : \"representatives.docker_tag\",  \"value\" : \"{docker_tag}\"}}'"
+            },          
+            {
+                "type": "bash",
+                "command": "nanomock create && nanomock reset"
+            },
+            {
+                "type": "bash",
+                "command": "for i in {SETUP_NODES}; do cp {LEDGER} ./nano_nodes/$i/NanoTest/data.ldb; done"
+            },
+            {
+                "type": "bash",
+                "command": "nanomock start && nanomock init_wallets"
+            }
+        ]
+    },
+
+    "setup_easy": {
+        "mandatory_vars": [
+            "NL_CONFIG",
+            "REMOTE_IP"
+        ],
+        "commands": [
+            {
+                "type": "bash",
+                "command": "[ -f nl_config.toml ] && nanomock down || true"
+            },
+            {
+                "type": "bash",                
+                "command": "cp {NL_CONFIG} nl_config.toml"
+            },
+            {
+                "type": "bash",
+                "command": "nanomock conf_edit --payload '{\"nested_path\" : \"remote_address\",  \"value\" : \"{{REMOTE_IP}}\"}'"
+            },
+            {
+                "type": "bash",
+                "command": "nanomock conf_edit --payload '{\"nested_path\" : \"representatives.docker_tag\",  \"value\" : \"{{docker_tag}}\"}'"
+            },           
+            {
+                "type": "bash",
+                "command": "nanomock create && nanomock reset && nanomock start && nanomock init && nanomock restart_wait_sync"
+            }
+        ]
+    }
+}
