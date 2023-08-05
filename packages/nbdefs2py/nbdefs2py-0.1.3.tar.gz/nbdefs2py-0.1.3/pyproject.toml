@@ -1,0 +1,60 @@
+[build-system]
+build-backend = "hatchling.build"
+requires      = ["hatchling"]
+
+[project]
+authors = [{name = "Murilo Cunha", email = "murilo@dataroots.io"}]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ["nbformat>=5.7"]
+description = ''
+dynamic = ["version"]
+keywords = []
+license = "MIT"
+name = "nbdefs2py"
+readme = "README.md"
+requires-python = ">=3.8"
+
+[project.urls]
+Documentation = "https://github.com/datarootsio/nbdefs2py#readme"
+Issues        = "https://github.com/datarootsio/nbdefs2py/issues"
+Source        = "https://github.com/datarootsio/nbdefs2py"
+
+[tool.hatch.version]
+path = "nbdefs2py/__about__.py"
+
+[tool.hatch.envs.dev]
+dependencies = ["pre-commit>=3.2.0", "pytest", "pytest-cov", "ipykernel"]
+[tool.hatch.envs.dev.scripts]
+cov    = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=nbdefs2py --cov=tests {args}"
+hooks  = "pre-commit run --hook-stage pre-commit --hook-stage pre-push --all-files"
+no-cov = "cov --no-cov {args}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["37", "38", "39", "310", "311"]
+
+[tool.coverage.run]
+branch   = true
+omit     = ["nbdefs2py/__about__.py"]
+parallel = true
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.ruff]
+fix            = true
+force-exclude  = true
+ignore         = ["EM", "D203", "D212"]
+select         = ["ALL"]
+target-version = "py38"
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["S101"]

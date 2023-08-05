@@ -1,0 +1,29 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.2.0
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+- repo: https://github.com/psf/black
+  rev: 22.3.0
+  hooks:
+    - id: black
+- repo: https://github.com/charliermarsh/ruff-pre-commit
+  rev: v0.0.218
+  hooks:
+    - id: ruff
+      args: ["--force-exclude", "--fix"]
+- repo: https://github.com/murilo-cunha/mirrors-pyre
+  rev: v0.9.17
+  hooks:
+    - id: pyre-check
+      additional_dependencies: ["nbformat==5.7.2"]
+- repo: local
+  hooks:
+    - id: pytest
+      name: pytest
+      language: python
+      entry: hatch run dev:pytest --cov-fail-under=100 -v
+      types: [python]
+      pass_filenames: false
+      stages: [push]
