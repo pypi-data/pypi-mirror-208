@@ -1,0 +1,22 @@
+{# -*- coding: utf-8 -*-
+
+  Copyright (C) 2021 Graz University of Technology.
+
+  Invenio-Records-Marc21 is free software; you can redistribute it and/or modify it
+  under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+<div class="top-bottom-padded" id="marc21-landing-page-record-title">
+  <h1 class="wrap-overflowing-text">
+    {% for title in marcrecord.get('titles') %}
+    {{title}}
+    {% endfor %}
+  </h1>
+
+  <div style="margin: 14px 0 21px 0;">
+  {% for author in marcrecord.get("authors") %}
+  <span>{{author.get("a") | join(", ")}}</span>
+  {% endfor %}
+  </div>
+  {# TODO: affiliation #}
+</div>
