@@ -1,0 +1,73 @@
+
+# Get output from tests.
+modules:
+  - .test_map_names
+---
+mandatory: True
+code: |
+  map_name_tests = TestMapNames()
+  map_name_tests.setUp()
+  ran_tests
+---
+event: ran_tests
+question: map_names() tests
+css: |
+  <style>
+    .passed code {
+      color: black;
+    }
+    .failed code {
+      color: red;
+    }
+  </style>
+subquestion: |
+  # Selected scenarios
+
+  <%
+      results = map_name_tests.test_mapped_scenarios(run_from_yaml=True)
+      # both are a dictionary of scenarios (interview order, attachment block)
+      # to the list of tests for that scenario
+      failed = results["errored"]  
+      passed = results["passed"]
+  %>
+
+  Failed: ${ sum([len(failed[sc]) for sc in failed.keys()]) }[BR]
+  Passed: ${ sum([len(passed[sc]) for sc in passed.keys()]) }
+
+  ## Failed:
+
+  % for scenario in failed:
+    % if len(failed[scenario]):
+    <h3 class="failed">${scenario}</h3>
+    % endif
+    % for one_test in failed[scenario]:
+    <strong class="failed">${one_test["test"]}:</strong>[BR]${one_test["result"]}
+    % endfor
+  % endfor
+
+  ## Passed:
+
+  <span class="passed">
+  % for scenario in passed:
+  <h3>${scenario}</h3>
+  % for one_test in passed[scenario]:
+  `${one_test}`[BR]
+  % endfor
+  % endfor
+  </span>
+---
+comment: |
+  ${one_test.replace("_", "\\_")}[BR]
+  Failed: ${ len(failed) }
+  Passed: ${ len(passed) }
+
+  Failed:
+  % for one_test in passed:
+    **${one_test["test"]}:**[BR]${one_test["result"]}[BR][BR]
+  % endfor
+
+  Passed:
+  % for one_test in passed:
+    ${one_test}[BR]
+  % endfor
+---
