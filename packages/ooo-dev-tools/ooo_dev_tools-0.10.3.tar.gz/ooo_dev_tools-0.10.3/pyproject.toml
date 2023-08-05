@@ -1,0 +1,85 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "ooo-dev-tools"
+version = "0.10.3"
+description = "LibreOffice Developer Tools"
+license = "Apache Software License"
+readme = "README.rst"
+authors = [
+    ":Barry-Thomas-Paul: Moss <bigbytetech@gmail.com>"
+]
+keywords = ["odev", "libreoffice", "openoffice", "macro", "uno", "ooouno", "pyuno"]
+homepage = "https://github.com/Amourspirit/python_ooo_dev_tools"
+documentation = "https://python-ooo-dev-tools.readthedocs.io/en/latest/index.html"
+repository = "https://github.com/Amourspirit/python-ooouno-ex"
+packages = [
+    { include = "ooodev" }
+]
+classifiers = [
+    "Topic :: Office/Business",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+ooouno = ">=0.2.5"
+Pillow = ">=9.2.0"
+typing-extensions = {version = ">=4.4.0", python = "<3.8"}
+lxml = ">=4.9.2"
+
+[[tool.poetry.source]]
+name = "pypi-test"
+url = "https://test.pypi.org/legacy/"
+default = false
+secondary = false
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.2.0"
+hypothesis = ">=6.56.4"
+thefuzz = ">=0.19.0"
+python-Levenshtein = ">=0.20.7"
+lo-dev-search = {version = ">=2.0.2", platform = "linux"}
+ruff = ">=0.0.254"
+black = {extras = ["d"], version = ">=23.1.0"}
+oooenv = ">=0.1.1"
+pytest-mock = ">=3.10"
+
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^6.2"
+sphinx-toolbox = ">=3.2.0"
+sphinx-tabs = ">=3.4.1"
+sphinx-rtd-dark-mode = ">=1.2.4"
+sphinx-autodoc-typehints = ">=1.19.4"
+sphinxcontrib-spelling = ">=8.0.0"
+sphinx_design = ">=0.3.0"
+sphinxcontrib-apidoc = ">=0.3.0"
+esbonio = ">=0.16.1"
+# pygls = {version = ">=0.12.4,<1.0", python = ">=3.7,<3.12"}
+sphinx-substitution-extensions = ">=2022.2.16"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+markers = [
+    "skip_headless: skips a test in headless mode",
+    "skip_not_headless_os: skips a test in GUI mode for give os"
+]
+
+[tool.ruff]
+extended-select=["ANN", "C4", "N", "SIM", "TCH"]
+ignore=[]
+show-fixes=true
+target="py37"
