@@ -1,0 +1,14 @@
+{% extends "wafer/base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+{% with profile=object.user.userprofile %}
+  {% if profile.is_registered %}
+    <h1>{% trans 'Update registration' context 'conference' %}</h1>
+  {% else %}
+    <h1>{% trans 'Register' context 'conference' %}</h1>
+  {% endif %}
+{% endwith %}
+{% crispy form %}
+{% endblock %}
