@@ -1,0 +1,86 @@
+[tool.poetry]
+name = "troposphere-awscommunity-applicationautoscaling-scheduledaction"
+version = "0.0.1"
+description = "Troposphere resource for AwsCommunity::ApplicationAutoscaling::ScheduledAction"
+authors = ["John \"Preston\" Mille <john@ews-network.net>"]
+readme = "README.md"
+packages = [{include = "troposphere_awscommunity_applicationautoscaling_scheduledaction"}]
+keywords = ["troposphere", "aws-cloudformation"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+license = "LICENSE"
+include = [
+  "LICENSE",
+]
+exclude = ["*.pyc", "*~", "*pycache*"]
+
+[tool.poetry.urls]
+"Source" = "https://github.com/JohnPreston/troposphere-awscommunity-applicationautoscaling-scheduledaction.git"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+troposphere = "^4.3.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+isort = "^5.12.0"
+pre-commit = "^3.3.1"
+pytest = "^7.3.1"
+coverage = "^7.2.5"
+pyupgrade = "^3.4.0"
+tbump = "^6.9.0"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+known_first_party = "kelvin"
+
+[tool.tbump]
+github_url = "https://github.com/JohnPreston/troposphere-awscommunity-applicationautoscaling-scheduledaction.git"
+
+[tool.tbump.version]
+current = "0.0.1"
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  (?:(?P<rc>[\S]+))?
+  '''
+
+[tool.tbump.git]
+message_template = "Bump to {new_version}"
+tag_template = "v{new_version}"
+
+[[tool.tbump.file]]
+src = "pyproject.toml"
+
+[[tool.tbump.file]]
+src = "troposphere_awscommunity_applicationautoscaling_scheduledaction/__init__.py"
+
+[[tool.tbump.before_commit]]
+name = "Files format"
+cmd = "make conform"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
