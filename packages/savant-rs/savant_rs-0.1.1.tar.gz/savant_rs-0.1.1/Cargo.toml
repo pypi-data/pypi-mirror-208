@@ -1,0 +1,48 @@
+[package]
+name = "savant_rs"
+version = "0.1.1"
+edition = "2021"
+authors = ["Ivan Kudriavtsev <ivan.a.kudryavtsev@gmail.com>"]
+description = "Savant rust optimization library"
+homepage = "https://github.com/insight-platform/savant-rs"
+repository = "https://github.com/insight-platform/savant-rs"
+readme = "README.md"
+keywords = ["computer-vision", "video-processing"]
+categories = ["algorithms", "data-structures", "computer-vision"]
+license="Apache-2.0"
+rust-version = "1.66"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+itertools = "0.10"
+anyhow = "1.0"
+thiserror = "1.0"
+geo = "0.24"
+rayon = "1.7"
+env_logger = "0.10"
+rkyv = { version = "0.7", features = ["validation", "archive_le"] }
+numpy = "0.18"
+pyo3-log = "0.8"
+derive_builder = "0.12"
+num_cpus = "1.15"
+
+[dependencies.pyo3]
+version = "0.18"
+
+[build-dependencies]
+pyo3-build-config = "0.18"
+
+[profile.release]
+opt-level = 3
+
+[profile.bench]
+opt-level = 3
+
+[package.metadata.maturin]
+python-source = "python"
+
+[features]
+extension-module = ["pyo3/extension-module"]
+default = ["extension-module"]
