@@ -1,0 +1,3 @@
+from kolibri.features.text.tf_idf_featurizer import TFIDFFeaturizer
+from kolibri.features.text.tfidf_weighted_embedder import TfidfWeightedEmbedder
+from kolibri.features.text.tf_idf_topics_vectorizer import TFIDFTopicFeaturizer
