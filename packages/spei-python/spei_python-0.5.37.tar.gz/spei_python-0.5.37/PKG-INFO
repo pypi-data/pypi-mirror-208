@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: spei-python
+Version: 0.5.37
+Summary: 
+Author: gonz
+Author-email: gonzasestopal@gmail.com
+Requires-Python: >=3.7,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: cryptography (==3.4.7)
+Requires-Dist: lxml (>=4.9.1,<5.0.0)
+Requires-Dist: pydantic (>=1.8.2,<2.0.0)
+Requires-Dist: requests (>=2.27.1,<3.0.0)
+Description-Content-Type: text/markdown
+
+[![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+
+spei-python
+===========
+
+A library for accessing the SPEI API for python.
+
+
+## Installation
+Use the package manager [poetry](https://pypi.org/project/poetry/) to install.
+
+    poetry install spei-python
+
+## Test
+Tested with [mamba](https://mamba-framework.readthedocs.io/en/latest/), install poetry dev packages and then run tests.
+
+    poetry run make test
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Checksum Generator
+This repo includes a utility to generate [firma digital aplicada](https://www.notion.so/fondeadoraroot/Algoritmo-de-Firma-e-Karpay-SPEI-02e6c25b7c5943bea054ae37c9605bdc)
+
+```sh
+python bin/generate_checksum.py bin/message.json
+```
+

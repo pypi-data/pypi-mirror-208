@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "spei-python"
+version = "0.5.37"
+description = ""
+authors = ["gonz <gonzasestopal@gmail.com>"]
+readme = "README.md"
+packages = [{include = "spei"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+lxml = "^4.9.1"
+pydantic = "^1.8.2"
+requests = "^2.27.1"
+cryptography = "==3.4.7"
+
+[tool.poetry.dev-dependencies]
+add-trailing-comma = "^2.2.3"
+commitizen = "^2.27.1"
+expects = "^0.9.0"
+Faker = "^13.12.0"
+isort = "^5.10.1"
+mamba = "^0.11.2"
+wemake-python-styleguide = "^0.16.1"
+pyformat = "^0.7"
+mypy = "^0.960"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.5.37"
+tag_format = "v$version"
+bump_message = "bump: Semantic Release Bot: Release Version: $new_version 🤖🚀 [skip ci]"
+version_files = [
+    "pyproject.toml:version",
+]
+
