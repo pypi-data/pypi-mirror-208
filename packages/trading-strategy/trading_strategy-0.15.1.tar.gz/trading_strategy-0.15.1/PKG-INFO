@@ -1,0 +1,130 @@
+Metadata-Version: 2.1
+Name: trading-strategy
+Version: 0.15.1
+Summary: DEX and cryptocurrency trading data for Python - OHCLV, Uniswap, others
+Home-page: https://tradingstrategy.ai
+License: AGPL
+Keywords: algorithmic trading,ethereum,polygon,avalanche,arbiotrum,cryptocurrency,uniswap,quantitative finance,binance,blockchain,pancakeswap,polygon,web3
+Author: Mikko Ohtamaa
+Author-email: mikko@tradingstrategy.ai
+Requires-Python: >=3.10,<3.11
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Provides-Extra: backtrader
+Provides-Extra: direct-feed
+Provides-Extra: qstrader
+Requires-Dist: coloredlogs (>=15.0.1,<16.0.0)
+Requires-Dist: dash (>=2.7.1,<3.0.0) ; extra == "direct-feed"
+Requires-Dist: dataclasses-json (>=0.5.4,<0.6.0)
+Requires-Dist: jsonlines (>=3.1.0,<4.0.0)
+Requires-Dist: pandas (>=1.3.5,<2.0.0)
+Requires-Dist: plotly (>=5.1.0,<6.0.0)
+Requires-Dist: pyarrow (==10.0.1)
+Requires-Dist: requests (>=2.28.1,<3.0.0)
+Requires-Dist: scipy (>=1.6.1,<2.0.0) ; extra == "qstrader"
+Requires-Dist: tqdm (>=4.61.2,<5.0.0)
+Requires-Dist: tqdm-loggable (>=0.1.2,<0.2.0)
+Requires-Dist: trading-strategy-backtrader (>=0.1,<0.2) ; extra == "backtrader"
+Requires-Dist: trading-strategy-qstrader (>=0.5.0,<0.6.0) ; extra == "qstrader"
+Requires-Dist: typer (>=0.7.0,<0.8.0) ; extra == "direct-feed"
+Requires-Dist: web3-ethereum-defi (==0.18.1) ; extra == "direct-feed"
+Project-URL: Repository, https://github.com/tradingstrategy-ai/trading-strategy
+Description-Content-Type: text/markdown
+
+[![PyPI version](https://badge.fury.io/py/trading-strategy.svg)](https://badge.fury.io/py/trading-strategy)
+
+[![CI Status](https://github.com/tradingstrategy-ai/trading-strategy/actions/workflows/python-app.yml/badge.svg)](https://github.com/tradingstrategy-ai/trading-strategy/actions/workflows/python-app.yml)
+
+[![pip installation works](https://github.com/tradingstrategy-ai/trading-strategy/actions/workflows/pip-install.yml/badge.svg)](https://github.com/tradingstrategy-ai/trading-strategy/actions/workflows/pip-install.yml)
+
+<a href="https://tradingstrategy.ai">
+  <img src="https://raw.githubusercontent.com/tradingstrategy-ai/trading-strategy/master/logo.svg" width="384">
+</a>
+
+# Trading Strategy framework for Python
+
+Trading Strategy framework is a Python framework for algorithmic trading on decentralised exchanges. 
+It is using [backtesting data](https://tradingstrategy.ai/trading-view/backtesting) and [real-time price feeds](https://tradingstrategy.ai/trading-view)
+from [Trading Strategy Protocol](https://tradingstrategy.ai/). 
+
+# Use cases
+
+* Analyse cryptocurrency investment opportunities on [decentralised exchanges (DEXes)](https://tradingstrategy.ai/trading-view/exchanges)
+
+* Creating trading algorithms and trading bots that trade on DEXes
+
+* Deploy trading strategies as on-chain smart contracts where users can invest and withdraw with their wallets
+
+# Features
+
+* Supports multiple blockchains like [Ethereum mainnet](https://tradingstrategy.ai/trading-view/ethereum), 
+  [Binance Smart Chain](https://tradingstrategy.ai/trading-view/binance) and 
+  [Polygon](https://tradingstrategy.ai/trading-view/polygon)
+
+* Access trading data from on-chain decentralised exchanges like
+  [SushiSwap](https://tradingstrategy.ai/trading-view/ethereum/sushi), [QuickSwap](https://tradingstrategy.ai/trading-view/polygon/quickswap) and [PancakeSwap](https://tradingstrategy.ai/trading-view/binance/pancakeswap-v2)
+
+* Integration with Jupyter Notebook for easy manipulation of data.
+  See [example notebooks](https://tradingstrategy.ai/docs/programming/code-examples/index.html).
+
+* Write [algorithmic trading strategies](https://tradingstrategy.ai/docs/programming/strategy-examples/index.html) for  decentralised exchange 
+
+# Getting started 
+
+See [the Getting Started tutorial](https://tradingstrategy.ai/docs/programming/code-examples/getting-started.html) and the rest of the [Trading Strategy documentation](https://tradingstrategy.ai/docs/).
+
+# Prerequisites
+
+* Python 3.10
+
+# Installing the package
+
+**Note**: Unless you are an experienced Python developer, [try the Binder cloud hosted Jupyter notebook examples first](https://tradingstrategy.ai/docs/programming/code-examples/index.html).
+
+You can install this package with 
+
+[Poetry](https://python-poetry.org/) as a dependency:
+
+```shell
+poetry add trading-strategy -E direct-feed
+```
+
+Poetry, local development:
+
+```shell
+poetry install -E direct-feed
+```
+
+Pip:
+
+```shell
+pip install "trading-strategy[direct-feed]" 
+```
+
+# Documentation
+
+- [Read Trading Strategy documentation](https://tradingstrategy.ai/docs/).
+- [Documentation Github repository](https://github.com/tradingstrategy-ai/docs).
+
+Community
+---------
+
+* [Trading Strategy website](https://tradingstrategy.ai)
+
+* [Blog](https://tradingstrategy.ai/blog)
+
+* [Twitter](https://twitter.com/TradingProtocol)
+
+* [Discord](https://tradingstrategy.ai/community#discord) 
+
+* [Telegram channel](https://t.me/trading_protocol)
+
+* [Changelog and version history](https://github.com/tradingstrategy-ai/trading-strategy/blob/master/CHANGELOG.md)
+
+[Read more documentation how to develop this package](https://tradingstrategy.ai/docs/programming/development.html).
+
+# License
+
+GNU AGPL 3.0. 
+
