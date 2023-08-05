@@ -1,0 +1,26 @@
+general:
+  projectName: dozi
+  serviceName: {name-your-service}
+  slack: {name-your-service}-gke
+  buildInfo:
+    ContainerImageVersion: 3.8-slim
+stages:
+  build:
+    buildDocker:
+      dockerArgs:
+        ENABLE_DVC: false
+      dockerFilePath: Dockerfile
+  sca:
+    sonarqube: false
+  deploy:
+    argocd:
+      cloud: gcp
+      project: data-apps
+      namespace: {name-your-service}
+      chart: zi-standard-workload
+      chartVersion: 3.0.5
+  prepare:
+    dvc:
+      source: gs://dozi-stg-ds-apps-1-ds-apps-ds-ml-artifacts/{name-your-service}
+  release:
+    semanticRelease: false
