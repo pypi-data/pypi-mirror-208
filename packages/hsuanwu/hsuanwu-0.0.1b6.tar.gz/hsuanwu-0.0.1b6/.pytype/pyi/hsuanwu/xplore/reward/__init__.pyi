@@ -1,0 +1,25 @@
+# (generated with --quick)
+
+import hsuanwu.xplore.reward.base
+import hsuanwu.xplore.reward.girm
+import hsuanwu.xplore.reward.icm
+import hsuanwu.xplore.reward.ngu
+import hsuanwu.xplore.reward.pseudo_counts
+import hsuanwu.xplore.reward.re3
+import hsuanwu.xplore.reward.revd
+import hsuanwu.xplore.reward.ride
+import hsuanwu.xplore.reward.rise
+import hsuanwu.xplore.reward.rnd
+from typing import List, Type
+
+ALL_IRS_MODULES: List[str]
+BaseIntrinsicRewardModule: Type[hsuanwu.xplore.reward.base.BaseIntrinsicRewardModule]
+GIRM: Type[hsuanwu.xplore.reward.girm.GIRM]
+ICM: Type[hsuanwu.xplore.reward.icm.ICM]
+NGU: Type[hsuanwu.xplore.reward.ngu.NGU]
+PseudoCounts: Type[hsuanwu.xplore.reward.pseudo_counts.PseudoCounts]
+RE3: Type[hsuanwu.xplore.reward.re3.RE3]
+REVD: Type[hsuanwu.xplore.reward.revd.REVD]
+RIDE: Type[hsuanwu.xplore.reward.ride.RIDE]
+RISE: Type[hsuanwu.xplore.reward.rise.RISE]
+RND: Type[hsuanwu.xplore.reward.rnd.RND]
