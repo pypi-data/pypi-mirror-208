@@ -1,0 +1,61 @@
+Metadata-Version: 2.1
+Name: pvai
+Version: 0.0.3
+Summary: Data processing package
+Project-URL: Homepage, https://github.com/pypa/sampleproject
+Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
+Author-email: Francis De Voogt <francisdevoogt@hotmail.com>
+License-File: LICENSE.txt
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# PVAI
+
+PVAI is a Python library for data processing and analysis.
+
+Build by [ParkView AI](https://parkviewai.com/).
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install pvai.
+
+```bash
+pip install pvai
+```
+
+## list of importable sections
+
+- cleaning 
+  - cat_clean_dict
+  - num_clean_dist
+- analysis
+  - POD
+
+## Usage
+
+```python
+from pvai.analysis import POD
+import pvai.categorical as pcat
+
+# get POD object
+test_obj = POD()
+
+# clean categorical samples
+cat_dict,unwanted_samples = pcat.cat_clean_num(...)
+
+```
+## Dependencies
+- numpy
+- pandas
+- matplotlib
+
+## Contributing
+
+Coming in the future.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
