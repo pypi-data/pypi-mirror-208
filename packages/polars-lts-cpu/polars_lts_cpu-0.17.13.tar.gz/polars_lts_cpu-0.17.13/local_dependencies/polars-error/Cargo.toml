@@ -1,0 +1,34 @@
+[package]
+name = "polars-error"
+version = "0.29.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/pola-rs/polars"
+description = "Error definitions for the Polars DataFrame library"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+regex = { version = "1.6", optional = true }
+thiserror= "^1"
+
+[dependencies.arrow]
+package = "arrow2"
+# git = "https://github.com/jorgecarleitao/arrow2"
+git = "https://github.com/ritchie46/arrow2"
+# rev = "1491c6e8f4fd100f53c358e4f3ef1536d9e75090"
+# path = "../arrow2"
+branch = "polars_2023-05-09"
+version = "0.17"
+default-features = false
+features = [
+  "compute_aggregate",
+  "compute_arithmetics",
+  "compute_boolean",
+  "compute_boolean_kleene",
+  "compute_cast",
+  "compute_comparison",
+  "compute_concatenate",
+  "compute_filter",
+  "compute_if_then_else",
+]

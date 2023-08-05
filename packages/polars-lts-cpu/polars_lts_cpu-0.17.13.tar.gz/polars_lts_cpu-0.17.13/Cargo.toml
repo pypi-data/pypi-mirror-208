@@ -1,0 +1,187 @@
+[package]
+name = "py-polars"
+version = "0.17.13"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace]
+# prevents package from thinking it's in the workspace
+[target.'cfg(any(not(target_os = "linux"), use_mimalloc))'.dependencies]
+mimalloc = { version = "*", default-features = false }
+
+[target.'cfg(all(target_os = "linux", not(use_mimalloc)))'.dependencies]
+jemallocator = { version = "0.5", features = ["disable_initial_exec_tls"] }
+
+[dependencies]
+ahash = "0.8"
+ciborium = "0.2.0"
+lexical-core = "0.8"
+# todo: unfix when compilation problem is solved
+libc = "0.2"
+ndarray = "0.15"
+numpy = "0.18"
+once_cell = "1"
+polars-algo = { path = "local_dependencies/polars-algo", default-features = false }
+polars-core = { path = "local_dependencies/polars-core", features = ["python"], default-features = false }
+polars-lazy = { path = "local_dependencies/polars-lazy", features = ["python"], default-features = false }
+pyo3 = { version = "0.18.0", features = ["abi3-py37", "extension-module", "multiple-pymethods"] }
+pyo3-built = { version = "0.4", optional = true }
+serde_json = { version = "1", optional = true }
+smartstring = "1"
+thiserror = "^1.0"
+
+# features are only there to enable building a slim binary for the benchmark in CI
+[features]
+avro = ["polars/avro"]
+parquet = ["polars/parquet"]
+ipc = ["polars/ipc"]
+is_in = ["polars/is_in"]
+json = ["polars/serde", "serde_json", "polars/json"]
+trigonometry = ["polars/trigonometry"]
+sign = ["polars/sign"]
+asof_join = ["polars/asof_join"]
+cross_join = ["polars/cross_join"]
+pct_change = ["polars/pct_change"]
+repeat_by = ["polars/repeat_by"]
+# also includes simd
+nightly = ["polars/nightly"]
+streaming = ["polars/streaming"]
+meta = ["polars/meta"]
+search_sorted = ["polars/search_sorted"]
+decompress = ["polars/decompress"]
+lazy_regex = ["polars/lazy_regex"]
+csv = ["polars/csv"]
+object = ["polars/object"]
+extract_jsonpath = ["polars/extract_jsonpath"]
+pivot = ["polars/pivot"]
+top_k = ["polars/top_k"]
+propagate_nans = ["polars/propagate_nans"]
+sql = ["polars/sql"]
+build_info = ["dep:pyo3-built", "dep:built"]
+performant = ["polars/performant"]
+timezones = ["polars/timezones"]
+cse = ["polars/cse"]
+merge_sorted = ["polars/merge_sorted"]
+list_take = ["polars/list_take"]
+list_count = ["polars/list_count"]
+binary_encoding = ["polars/binary_encoding"]
+
+all = [
+  "json",
+  "parquet",
+  "ipc",
+  "avro",
+  "is_in",
+  "repeat_by",
+  "trigonometry",
+  "sign",
+  "asof_join",
+  "cross_join",
+  "pct_change",
+  "search_sorted",
+  "merge_sorted",
+  "meta",
+  "decompress",
+  "lazy_regex",
+  "csv",
+  "extract_jsonpath",
+  "timezones",
+  "object",
+  "pivot",
+  "top_k",
+  "build_info",
+  "cse",
+  "propagate_nans",
+  "polars/groupby_list",
+  "polars/fused",
+  "sql",
+  "binary_encoding",
+  "streaming",
+  "performant",
+  "list_take",
+  "list_count",
+]
+
+# we cannot conditionally activate simd
+# https://github.com/rust-lang/cargo/issues/1197
+# so we have an indirection and compile
+# with --no-default-features --features=all for targets without simd
+default = [
+  "all",
+  "nightly",
+]
+
+[dependencies.polars]
+path = "local_dependencies/polars"
+default-features = false
+features = [
+  "dynamic_groupby",
+  "zip_with",
+  "lazy",
+  "strings",
+  "temporal",
+  "random",
+  "fmt",
+  "dtype-full",
+  "rows",
+  "private",
+  "round_series",
+  "is_first",
+  "is_unique",
+  "dot_product",
+  "concat_str",
+  "row_hash",
+  "reinterpret",
+  "mode",
+  "cum_agg",
+  "rolling_window",
+  "interpolate",
+  "rank",
+  "diff",
+  "moment",
+  "arange",
+  "true_div",
+  "dtype-categorical",
+  "diagonal_concat",
+  "horizontal_concat",
+  "abs",
+  "ewma",
+  "dot_diagram",
+  "dataframe_arithmetic",
+  "string_encoding",
+  "product",
+  "ndarray",
+  "unique_counts",
+  "log",
+  "serde-lazy",
+  "partition_by",
+  "semi_anti_join",
+  "list_eval",
+  "cumulative_eval",
+  "list_to_struct",
+  "to_dummies",
+  "string_justify",
+  "string_from_radix",
+  "arg_where",
+  "date_offset",
+  "approx_unique",
+]
+
+[lib]
+name = "polars"
+crate-type = ["cdylib"]
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+
+# This is ignored here; would be set in .cargo/config.toml.
+# Should not be used when packaging
+# target-cpu = "native"
+
+[build-dependencies]
+built = { version = "0.6", features = ["chrono", "git2"], optional = true }
+
+[patch.crates-io]
+# simd-json = { git = "https://github.com/ritchie46/simd-json", branch = "alignment" }

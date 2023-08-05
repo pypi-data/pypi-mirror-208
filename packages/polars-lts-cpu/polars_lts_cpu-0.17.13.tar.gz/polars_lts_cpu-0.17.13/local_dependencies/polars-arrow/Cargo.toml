@@ -1,0 +1,51 @@
+[package]
+name = "polars-arrow"
+version= "0.29.0"
+authors = ["ritchie46 <ritchie46@gmail.com>"]
+edition = "2021"
+license = "MIT"
+description = "Arrow interfaces for Polars DataFrame library"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = { version = "0.4", default-features = false, features = ["std"], optional = true }
+chrono-tz = { version = "0.8", optional = true }
+hashbrown= { version = "0.13.1", features = ["rayon", "ahash"] }
+multiversion= "0.7"
+num-traits= "0.2"
+polars-error = { version = "0.29.0", path = "../polars-error" }
+serde = { version = "1", features = ["derive"], optional = true }
+thiserror= "^1"
+
+[features]
+nightly = ["hashbrown/nightly"]
+strings = []
+compute = ["arrow/compute_cast"]
+temporal = ["arrow/compute_temporal"]
+bigidx = []
+performant = []
+like = ["arrow/compute_like"]
+timezones = ["chrono-tz", "chrono"]
+simd = []
+
+[dependencies.arrow]
+package = "arrow2"
+# git = "https://github.com/jorgecarleitao/arrow2"
+git = "https://github.com/ritchie46/arrow2"
+# rev = "1491c6e8f4fd100f53c358e4f3ef1536d9e75090"
+# path = "../arrow2"
+branch = "polars_2023-05-09"
+version = "0.17"
+default-features = false
+features = [
+  "compute_aggregate",
+  "compute_arithmetics",
+  "compute_boolean",
+  "compute_boolean_kleene",
+  "compute_cast",
+  "compute_comparison",
+  "compute_concatenate",
+  "compute_filter",
+  "compute_if_then_else",
+]
