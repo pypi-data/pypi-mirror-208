@@ -1,0 +1,96 @@
+{% extends "core/base.html" %}
+{% load static i18n rules %}
+
+{% block page_title %}
+  {% trans "Posters" %}
+{% endblock %}
+{% block browser_title %}
+  {% trans "Posters" %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    {% for group in poster_groups %}
+      <div class="col s12 m6 l4 xl3">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-title">{{ group.name }}</div>
+            {% with current_poster=group.current_poster %}
+              {% if current_poster %}
+                <p class="margin-bottom">
+                  <i class="material-icons left">picture_as_pdf</i>
+                  <a href="{{ current_poster.pdf.url }}" target="_blank">
+                    {% blocktrans with week=current_poster.week year=current_poster.year %}
+                      Week {{ week }}/{{ year }}
+                    {% endblocktrans %}
+                  </a>
+                </p>
+                <p>
+                  <i class="material-icons left">schedule</i>
+                  {{ current_poster.valid_from }}–{{ current_poster.valid_to }}
+                </p>
+              {% else %}
+                <p>
+                  <i class="material-icons left">picture_as_pdf</i>
+                  {% trans "There is no poster for this week." %}
+                </p>
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div class="card-action">
+            <a href="{% url "poster_show_current" group.slug %}" target="_blank">
+              {% trans "Show current PDF" %}
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% has_perm "resint.upload_poster_rule" user as can_upload_poster %}
+  {% if can_upload_poster %}
+    <a class="waves-effect waves-light btn green right" href="{% url "poster_upload" %}">
+      <i class="material-icons left">add</i>
+      {% trans "Upload new poster" %}
+    </a>
+  {% endif %}
+
+  <h2>{% trans "All uploaded posters" %}</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>{% trans "Group" %}</th>
+      <th>{% trans "Week" %}</th>
+      <th>{% trans "Valid from ... to" %}</th>
+      <th>{% trans "Actions" %}</th>
+    </tr>
+    </thead>
+    {% for poster in poster_list %}
+      <tr>
+        <td>{{ poster.group }}</td>
+        <td>{{ poster.week }}/{{ poster.year }}</td>
+        <td>{{ poster.valid_from }}–{{ poster.valid_to }}</td>
+        <td>
+          <a class="btn-flat waves-effect waves-green" href="{{ poster.pdf.url }}" target="_blank">
+            <i class="material-icons left">picture_as_pdf</i> {% trans "Show" %}
+          </a>
+
+          {% has_perm "resint.edit_poster_rule" user poster as can_edit_poster %}
+          {% if can_edit_poster %}
+            <a class="btn-flat orange-text waves-effect waves-orange" href="{% url "poster_edit"  poster.id %}">
+              <i class="material-icons left">edit</i> {% trans "Edit" %}
+            </a>
+          {% endif %}
+          {% has_perm "resint.delete_poster_rule" user poster as can_delete_poster %}
+          {% if can_delete_poster %}
+            <a class="btn-flat red-text waves-effect waves-red" href="{% url "poster_delete"  poster.id %}">
+              <i class="material-icons left">delete</i> {% trans "Delete" %}
+            </a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+
+{% endblock %}

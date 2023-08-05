@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% load material_form i18n rules %}
+
+{% block browser_title %}{% blocktrans %}Poster groups{% endblocktrans %}{% endblock %}
+
+{% block content %}
+  {% has_perm "resint.add_postergroup_rule" user as can_add_poster_group %}
+  {% if can_add_poster_group %}
+    <a class="waves-effect waves-light btn green modal-trigger right" href="{% url "create_poster_group" %}">
+      <i class="material-icons left">add</i>{% blocktrans %}Create new poster group{% endblocktrans %}
+    </a>
+  {% endif %}
+
+  <h1>{% blocktrans %}Poster groups{% endblocktrans %}</h1>
+
+  <table>
+    <thead>
+    <tr>
+      <th>{% blocktrans %}Name{% endblocktrans %}</th>
+      <th>{% blocktrans %}Filename{% endblocktrans %}</th>
+      <th>{% blocktrans %}Publishing day{% endblocktrans %}</th>
+      <th>{% blocktrans %}Publishing time{% endblocktrans %}</th>
+      <th>{% blocktrans %}Default PDF file{% endblocktrans %}</th>
+      <th>{% blocktrans %}Actions{% endblocktrans %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for poster_group in postergroup_list %}
+      <tr>
+        <td>{{ poster_group.name }}</td>
+        <td>
+          <a href="{% url "poster_show_current" poster_group.slug %}" target="_blank">
+            <code>{{ poster_group.filename }}</code></a>
+        </td>
+        <td>{{ poster_group.publishing_day_name }}</td>
+        <td>{{ poster_group.publishing_time }}</td>
+        <td>
+          <a href="{{ poster_group.default_pdf.url }}" class="btn-flat" target="_blank">
+            <i class="material-icons left">picture_as_pdf</i>
+            {% trans "Open" %}
+          </a>
+        </td>
+        <td>
+          {% has_perm "resint.edit_postergroup_rule" user poster_group as can_edit_poster_group %}
+          {% if can_edit_poster_group %}
+            <a href="{% url 'edit_poster_group' poster_group.id %}"
+               class="waves-effect waves-light btn-flat orange-text">
+              <i class="material-icons left">edit</i>
+              {% trans "Edit" %}
+            </a>
+          {% endif %}
+
+          {% has_perm "resint.delete_postergroup_rule" user poster_group as can_delete_poster_group %}
+          {% if can_delete_poster_group %}
+            <a href="{% url 'delete_poster_group' poster_group.id %}"
+               class="waves-effect waves-light btn-flat red-text">
+              <i class="material-icons left">delete</i>
+              {% trans "Delete" %}
+            </a>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">{% blocktrans %}There are no poster groups available.{% endblocktrans %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
