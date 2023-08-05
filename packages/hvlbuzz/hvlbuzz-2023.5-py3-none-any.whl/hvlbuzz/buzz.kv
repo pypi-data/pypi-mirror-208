@@ -1,0 +1,955 @@
+#:kivy 1.10.0
+# Kv codde loaded by name convention class BuzzApp(App) -> buzz.kv
+<Label>:
+    font_name: 'font/FreeSans.ttf'
+
+<BlackLabel@Label>:
+    font_name: 'font/FreeSans.ttf'
+    color: 0, 0, 0, 1
+
+<LineConfigLabel@Label>:
+    font_name: 'font/FreeSans.ttf'
+    color: 0, 0, 0, 1
+    canvas.before:
+        Color:
+            rgba: 0.75, 0.75, 0.75, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<TableHeaderLabel>:
+    font_name: 'font/FreeSans.ttf'
+    font_size: '12sp'
+    color: 1, 1, 1, 1
+    size_hint_y: None
+    height: 50
+    text_size: self.width, None
+    halign: 'center'
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<TableContentLabel>:
+    font_name: 'font/FreeSans.ttf'
+    font_size: '12sp'
+    color: 0, 0, 0, 1
+    size_hint_y: None
+    height: 50
+    text_size: self.width, None
+    halign: 'center'
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.x + 1, self.y + 1
+            size: self.width - 2, self.height - 2
+
+<Button>:
+    font_name: 'font/FreeSans.ttf'
+
+<ActionPrevious>:
+    font_name: 'font/FreeSans.ttf'
+
+<ActionButton>:
+    font_name: 'font/FreeSans.ttf'
+    text_size: self.size
+    halign: "left"
+    valign: "middle"
+    padding_x:20
+<TabbedPanelItem>:
+    font_name: 'font/FreeSans.ttf'
+
+<HelpDoc>:
+
+    e_field_btn: e_field_btn
+    b_field_btn: b_field_btn
+    epri_btn: epri_btn
+    bpa_btn: bpa_btn
+    criepi_btn: criepi_btn
+    rst_doc: rst_doc
+    close: close
+
+    BoxLayout:
+        size_hint: 1, 1
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint: 1, 0.1
+
+            Button:
+                id: e_field_btn
+                text: 'E-field CSM'
+                on_release: root.change_rst_source(self.text)
+
+            Button:
+                id: b_field_btn
+                text: 'B-field'
+                on_release: root.change_rst_source(self.text)
+
+            Button:
+                id: epri_btn
+                text: 'EPRI AN'
+                on_release: root.change_rst_source(self.text)
+
+            Button:
+                id: bpa_btn
+                text: 'BPA AN'
+                on_release: root.change_rst_source(self.text)
+
+            Button:
+                id: criepi_btn
+                text: 'CRIEPI AN'
+                on_release: root.change_rst_source(self.text)
+
+        RstDocument:
+            id: rst_doc
+
+        Button:
+            id: close
+            size_hint: 1, 0.1
+            text: 'Close'
+            on_release: root.close()
+
+
+<ImageButton>:
+    size_hint: 1, 1
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    color: 0, 0, 0, 1
+
+<FloatInput>:
+    size_hint_y: None
+    height: 30
+    write_tab: False
+    multiline: False
+    text_validate_unfocus: False
+    font_name: 'font/FreeSans.ttf'
+
+<IntegerInput>:
+    size_hint_y: None
+    height: 30
+    write_tab: False
+    multiline: False
+    text_validate_unfocus: False
+    font_name: 'font/FreeSans.ttf'
+
+<Tooltip>:
+    size_hint: None, None
+    size: self.texture_size[0]+5, self.texture_size[1]+5
+    canvas.before:
+        Color:
+            rgba: 0.1961, 0.6431, 0.8078, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<SystemSelector>:
+
+    system_selector: system_selector
+
+    Button:
+        id: system_selector
+        text: 'Select System \u25BC'
+        text_size: self.size
+        halign: "left"
+        valign: "middle"
+        padding_x:20
+<ConfigToolbar>:
+
+    button_layout: button_layout
+
+    BoxLayout:
+        id: button_layout
+
+<SystemAddPopup>:
+
+    system_type: system_type
+    voltage: voltage
+    current: current
+    con_radius: con_radius
+    num_con: num_con
+    bundle_radius: bundle_radius
+    con_angle_offset: con_angle_offset
+    line_one_x: line_one_x
+    line_two_x: line_two_x
+    line_three_x: line_three_x
+    line_one_y: line_one_y
+    line_two_y: line_two_y
+    line_three_y: line_three_y
+
+    line_one_label: line_one_label
+    line_two_label: line_two_label
+    line_three_label: line_three_label
+
+    title: 'Add a System to the Current Tower'
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 1
+            BoxLayout:
+                Label:
+                    text: 'System Type'
+                Button:
+                    id: system_type
+
+            BoxLayout:
+                Label:
+                    text: 'Voltage'
+                BoxLayout:
+                    FloatLayout:
+                        FloatInput:
+                            id: voltage
+                            pos_hint: {'x': 0, 'center_y': .5}
+                    Label:
+                        text: '[kV]'
+
+            BoxLayout:
+                Label:
+                    text: 'Current per Conductor'
+                BoxLayout:
+                    FloatLayout:
+                        FloatInput:
+                            id: current
+                            pos_hint: {'x': 0, 'center_y': .5}
+                    Label:
+                        text: '[kA]'
+
+            BoxLayout:
+                Label:
+                    text: 'Number of Conductors'
+                BoxLayout:
+                    FloatLayout:
+                        IntegerInput:
+                            id: num_con
+                            pos_hint: {'x': 0, 'center_y': .5}
+                            on_text: root.suggest_con_angle_offset(self.text)
+                    Label:
+                        text: ''
+
+            BoxLayout:
+                Label:
+                    text: 'Conductor Diameter'
+                BoxLayout:
+                    FloatLayout:
+                        FloatInput:
+                            id: con_radius
+                            pos_hint: {'x': 0, 'center_y': .5}
+                    Label:
+                        text: '[mm]'
+
+            BoxLayout:
+                Label:
+                    text: 'Bundle Spacing'
+                BoxLayout:
+                    FloatLayout:
+                        FloatInput:
+                            id: bundle_radius
+                            pos_hint: {'x': 0, 'center_y': .5}
+                    Label:
+                        text: '[mm]'
+
+            BoxLayout:
+                Label:
+                    text: 'Conductor Angle Offset'
+                BoxLayout:
+                    FloatLayout:
+                        FloatInput:
+                            id: con_angle_offset
+                            pos_hint: {'x': 0, 'center_y': .5}
+                            allow_negative: True
+                    Label:
+                        text: '[\u00B0]'
+
+        BoxLayout:
+            size_hint: 1, 0.5
+            GridLayout:
+                cols: 4
+                rows: 3
+                Label:
+                    text: 'Coordinates'
+                Label:
+                    id: line_one_label
+                    text: 'Line 1'
+                Label:
+                    id: line_two_label
+                    text: 'Line 2'
+                Label:
+                    id: line_three_label
+                    text: 'Line 3'
+                Label:
+                    text: 'x [m]'
+                FloatLayout:
+                    FloatInput:
+                        id: line_one_x
+                        pos_hint: {'x': 0, 'center_y': .5}
+                        allow_negative: True
+                FloatLayout:
+                    FloatInput:
+                        id: line_two_x
+                        pos_hint: {'x': 0, 'center_y': .5}
+                        allow_negative: True
+                FloatLayout:
+                    FloatInput:
+                        id: line_three_x
+                        pos_hint: {'x': 0, 'center_y': .5}
+                        allow_negative: True
+                Label:
+                    text: 'y [m]'
+                FloatLayout:
+                    FloatInput:
+                        id: line_one_y
+                        pos_hint: {'x': 0, 'center_y': .5}
+                FloatLayout:
+                    FloatInput:
+                        id: line_two_y
+                        pos_hint: {'x': 0, 'center_y': .5}
+                FloatLayout:
+                    FloatInput:
+                        id: line_three_y
+                        pos_hint: {'x': 0, 'center_y': .5}
+
+        BoxLayout:
+            size_hint: 1, 0.2
+            Button:
+                text: 'Cancel'
+                on_release: root.cancel()
+            Button:
+                text: 'Add System'
+                on_press: root.add_system()
+
+<SystemConfig>:
+
+    system_type: system_type
+    voltage: voltage
+    current: current
+    con_radius: con_radius
+    num_con: num_con
+    bundle_radius: bundle_radius
+    con_angle_offset: con_angle_offset
+
+    orientation: 'vertical'
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'System Type'
+        BlackLabel:
+            size_hint: 0.4, 1
+            id: system_type
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Voltage'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: voltage
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[kV]'
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Current per Conductor'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: current
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[kA]'
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Number of Conductor(s)'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                IntegerInput:
+                    id: num_con
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: ''
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Conductor Diameter'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: con_radius
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[mm]'
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Bundle Spacing'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: bundle_radius
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[mm]'
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Conductor Angle Offset'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: con_angle_offset
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+                    allow_negative: True
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[\u00B0]'
+
+<LineConfig>:
+
+    title: title
+    line_x: line_x
+    line_y: line_y
+
+    orientation: 'vertical'
+
+    LineConfigLabel:
+        id: title
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'X-Coordinate'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: line_x
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+                    allow_negative: True
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[m]'
+
+    BoxLayout:
+        BlackLabel:
+            size_hint: 0.6, 1
+            text: 'Y-Coordinate'
+        BoxLayout:
+            size_hint: 0.4, 1
+            FloatLayout:
+                size_hint: 0.7, 1
+                FloatInput:
+                    id: line_y
+                    size_hint_x: 0.9
+                    pos_hint: {'center_x': 0.5, 'center_y': .5}
+            BlackLabel:
+                size_hint: 0.3, 1
+                text: '[m]'
+
+<ConfigLayout>:
+
+    system_config_layout: system_config_layout
+    line_configs_layout: line_configs_layout
+
+    BoxLayout:
+        id: system_config_layout
+        size_hint: 1, 0.45
+    BoxLayout:
+        id: line_configs_layout
+        size_hint: 1, 0.55
+
+<TableLayout>:
+    orientation: 'lr-tb'
+    cols: 10
+
+<DataTabbedPanel>:
+
+    audible_noise: audible_noise
+    table: table
+    electric_field: electric_field
+    magnetic_field: magnetic_field
+
+    do_default_tab: False
+    background_image: ''
+    tab_width: 116
+    tab_pos: 'top_mid'
+
+    TabbedPanelItem:
+        id: audible_noise
+        text: 'Audible Noise'
+    TabbedPanelItem:
+        id: table
+        text: 'Table'
+    TabbedPanelItem:
+        id: electric_field
+        text: 'Electric Field'
+    TabbedPanelItem:
+        id: magnetic_field
+        text: 'Magnetic Field'
+
+<MainLayout>:
+
+    data_tabbed_panel: data_tabbed_panel
+    config_layout: config_layout
+    selector_and_toolbar: selector_and_toolbar
+
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        ActionBar:
+            ActionView:
+                ActionPrevious:
+                    title: 'Buzz'
+                    app_icon: 'images/buzz_logo.png'
+                    with_previous: False
+                ActionOverflow:
+                    dropdown_width: 180
+                    ActionButton:
+                        text: 'New Tower Config\u2026'
+                        on_release: root.show_new()
+                    ActionButton:
+                        text: 'Load Tower Config\u2026'
+                        on_release: root.show_load()
+                    ActionButton:
+                        text: 'Save Tower Config\u2026'
+                        on_release: root.show_save()
+                    ActionButton:
+                        text: 'Export PNG\u2026'
+                        on_release: root.show_export_png()
+                    ActionButton:
+                        text: 'Export PDF\u2026'
+                        on_release: root.show_export_pdf()
+                    ActionButton:
+                        text: 'Export CSV\u2026'
+                        on_release: root.show_export_csv()
+                    ActionButton:
+                        text: 'Settings'
+                        on_release: app.open_settings()
+                    ActionButton:
+                        text: 'Help'
+                        on_release: root.show_helpdoc()
+                    ActionButton:
+                        text: 'About HVL Buzz'
+                        on_release: root.show_aboutbox()
+
+        BoxLayout:
+            orientation: 'horizontal'
+
+            BoxLayout:
+                id: data_tabbed_panel
+                size_hint: 0.58, 1
+
+            Splitter:
+                size_hint: 0.42, 1
+
+                BoxLayout:
+                    orientation: 'vertical'
+
+                    BoxLayout:
+                        id: selector_and_toolbar
+                        size_hint: 1, 0.1
+
+                    BoxLayout:
+                        id: config_layout
+
+<BuzzNewDialog>:
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+
+        Label:
+            text: "This action will erase all the information from all the systems in the current tower configuration. Do you really want to create a new tower configuration?"
+            size_hint_y: None
+            text_size: self.width, None
+            halign: 'center'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: 'Cancel'
+                on_release: root.cancel()
+
+            Button:
+                text: 'Create New'
+                on_release: root.clear_tower()
+
+<BuzzLoadDialog>:
+
+    load_filechooser: load_filechooser
+    text_input: text_input
+    drive_spinner: drive_spinner
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+
+        FileChooserListView:
+            id: load_filechooser
+            filters: ['*.json']
+            on_selection: root.text_input.text = root.load_filechooser.path
+            on_subentry_to_entry: root.text_input.text = root.load_filechooser.path
+            on_submit:root.text_input.text = root.load_filechooser.path
+            on_entries_cleared:root.text_input.text = root.load_filechooser.path
+            on_entry_added:root.text_input.text = root.load_filechooser.path
+            on_submit: root.load(load_filechooser.path, load_filechooser.selection)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+
+            TextInput:
+                id: text_input
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Choose directory'
+                on_text_validate: root.load(load_filechooser.path, load_filechooser.selection)
+                on_text_validate: root.load_filechooser.path=text_input.text
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Spinner:
+                id: drive_spinner
+                text: "Select Windows Drive Letter \u25BC" 
+                values: drive_spinner.values
+                on_text:
+                    root.load_filechooser.path=drive_spinner.text
+            Label:
+                text: ''
+ 
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: 'Cancel'
+                on_release: root.cancel()
+
+            Button:
+                text: 'Load'
+                on_release: root.load(load_filechooser.path, load_filechooser.selection)
+
+<BuzzSaveDialog>:
+
+    save_filechooser: save_filechooser
+    text_input: text_input
+    text_input_dir: text_input_dir
+    drive_spinner: drive_spinner
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+
+        FileChooserListView:
+            id: save_filechooser
+            filters: ['*.json']
+            on_selection: root.text_input_dir.text = root.save_filechooser.path
+            on_subentry_to_entry: root.text_input_dir.text = root.save_filechooser.path
+            on_submit:root.text_input_dir.text = root.save_filechooser.path
+            on_entries_cleared:root.text_input_dir.text = root.save_filechooser.path
+            on_entry_added:root.text_input_dir.text = root.save_filechooser.path
+            
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+
+            TextInput:
+                id: text_input_dir
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Choose directory'
+                on_text_validate: root.save_filechooser.path=text_input_dir.text
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Spinner:
+                id: drive_spinner
+                text: "Select Windows Drive Letter \u25BC" 
+                values: drive_spinner.values
+                on_text:
+                    root.save_filechooser.path=drive_spinner.text
+            Label:
+                text: ''
+        
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            TextInput:
+                id: text_input
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Filename'
+                on_text_validate: root.save(save_filechooser.path, text_input.text)
+            BoxLayout:
+                size_hint_y: None
+                height: 30
+                Button:
+                    text: 'Cancel'
+                    on_release: root.cancel()
+
+                Button:
+                    text: 'Save'
+                    on_release: root.save(save_filechooser.path, text_input.text)
+
+<ExportCSVDialog>:
+
+    export_csv_filechooser: export_csv_filechooser
+    text_input: text_input
+    text_input_dir: text_input_dir
+    drive_spinner: drive_spinner
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+
+        FileChooserListView:
+            id: export_csv_filechooser
+            filters: ['*.csv']
+            on_selection: root.text_input_dir.text = root.export_csv_filechooser.path
+            on_subentry_to_entry: root.text_input_dir.text = root.export_csv_filechooser.path
+            on_submit:root.text_input_dir.text = root.export_csv_filechooser.path
+            on_entries_cleared:root.text_input_dir.text = root.export_csv_filechooser.path
+            on_entry_added:root.text_input_dir.text = root.export_csv_filechooser.path
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+
+            TextInput:
+                id: text_input_dir
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Choose directory'
+                on_text_validate: root.export_csv_filechooser.path=text_input_dir.text
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Spinner:
+                id: drive_spinner
+                text: "Select Windows Drive Letter \u25BC" 
+                values: drive_spinner.values
+                on_text:
+                    root.export_csv_filechooser.path=drive_spinner.text
+            Label:
+                text: ''
+                
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            TextInput:
+                id: text_input
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Filename'
+                on_text_validate: root.export_csv(export_csv_filechooser.path, text_input.text)
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: 'Cancel'
+                on_release: root.cancel()
+            Button:
+                text: 'Export CSV'
+                on_release: root.export_csv(export_csv_filechooser.path, text_input.text)
+
+<ExportPDFDialog>:
+
+    text_input: text_input
+    export_pdf_filechooser: export_pdf_filechooser
+    text_input_dir: text_input_dir
+    drive_spinner: drive_spinner
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+
+        FileChooserListView:
+            id: export_pdf_filechooser
+            filters: ['*.pdf']
+            on_selection: root.text_input_dir.text = root.export_pdf_filechooser.path
+            on_subentry_to_entry: root.text_input_dir.text = root.export_pdf_filechooser.path
+            on_submit:root.text_input_dir.text = root.export_pdf_filechooser.path
+            on_entries_cleared:root.text_input_dir.text = root.export_pdf_filechooser.path
+            on_entry_added:root.text_input_dir.text = root.export_pdf_filechooser.path
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+
+            TextInput:
+                id: text_input_dir
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Choose directory'
+                on_text_validate: root.export_pdf_filechooser.path=text_input_dir.text
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Spinner:
+                id: drive_spinner
+                text: "Select Windows Drive Letter \u25BC" 
+                values: drive_spinner.values
+                on_text:
+                    root.export_pdf_filechooser.path=drive_spinner.text
+            Label:
+                text: ''
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            TextInput:
+                id: text_input
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Filename'
+                on_text_validate: root.export_pdf(export_pdf_filechooser.path, text_input.text)
+            BoxLayout:
+                size_hint_y: None
+                height: 30
+                Button:
+                    text: 'Cancel'
+                    on_release: root.cancel()
+                Button:
+                    text: 'Export PDF'
+                    on_release: root.export_pdf(export_pdf_filechooser.path, text_input.text)
+
+<ExportPNGDialog>:
+
+    dropdown_button: dropdown_button
+    export_png_filechooser: export_png_filechooser
+    text_input: text_input
+    text_input_dir: text_input_dir
+    drive_spinner: drive_spinner
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint: 1, 0.2
+
+            Label:
+                text: 'Plot to Export:'
+            Button:
+                id: dropdown_button
+                text: 'Choose Plot \u25BC'
+
+        FileChooserListView:
+            id: export_png_filechooser
+            filters: ['*.png']
+            on_selection: root.text_input_dir.text = root.export_png_filechooser.path
+            on_subentry_to_entry: root.text_input_dir.text = root.export_png_filechooser.path
+            on_submit:root.text_input_dir.text = root.export_png_filechooser.path
+            on_entries_cleared:root.text_input_dir.text = root.export_png_filechooser.path
+            on_entry_added:root.text_input_dir.text = root.export_png_filechooser.path
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+
+            TextInput:
+                id: text_input_dir
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Choose directory'
+                on_text_validate: root.export_png_filechooser.path=text_input_dir.text
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Spinner:
+                id: drive_spinner
+                text: "Select Windows Drive Letter \u25BC" 
+                values: drive_spinner.values
+                on_text:
+                    root.export_png_filechooser.path=drive_spinner.text
+            Label:
+                text: ''
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            TextInput:
+                id: text_input
+                size_hint_y: None
+                height: 30
+                multiline: False
+                hint_text: 'Filename'
+                on_text_validate: root.export_png(export_png_filechooser.path, text_input.text, dropdown_button.text)
+            BoxLayout:
+                size_hint_y: None
+                height: 30
+                Button:
+                    text: 'Cancel'
+                    on_release: root.cancel()
+
+                Button:
+                    text: 'Export PNG'
+                    on_release: root.export_png(export_png_filechooser.path, text_input.text, dropdown_button.text)
