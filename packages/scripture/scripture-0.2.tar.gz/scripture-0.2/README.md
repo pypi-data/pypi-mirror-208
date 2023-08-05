@@ -1,0 +1,5 @@
+# Scripture AI
+## How to Use
+Create a .csv file with the format *question,answer*. Then, load the data by running *scriptureai.init(path_to_csv)*. Once the data is loaded, Scripture will understand any questions given to it that match or are simiar to those in the data. To ask the AI a question, run *scriptureai.query(question)*, and to train the AI with the built in system you can use *scriptureai.train(questionlist,answerlist,path_to_csv)* or just use your own methods to add data to the csv file.
+## Why Scripture AI?
+Scripture is a great and useful tool for creating your own AI for a specific purpose or knowledge base. It is simple, intuative, easy to use and completely free. Unlike AIs that have complicated neural networks and take months of work to train and use, Scripture can be used with some basic python knowledge and an internet connection. Creating your own specialised AI is hard, but Scripture makes it ridiculously easy.
