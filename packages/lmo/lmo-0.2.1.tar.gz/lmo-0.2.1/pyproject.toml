@@ -1,0 +1,75 @@
+[build-system]
+requires = ["poetry-core", "oldest-supported-numpy"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "lmo"
+version = "0.2.1"
+description = "L-Moments for robust statistics."
+authors = ["Joren Hammudoglu <jhammudoglu@gmail.com>"]
+readme = "README.md"
+license = "BSD-3-Clause"
+homepage = "https://github.com/jorenham/lmo/"
+repository = "https://github.com/jorenham/lmo/"
+classifiers = [
+    "Development Status :: 4 - Beta",
+
+    "Natural Language :: English",
+
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering",
+
+    "Typing :: Typed",
+
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/jorenham/lmo/issues"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+numpy = ">=1.21"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3"
+hypothesis = {extras = ["numpy"], version = "^6.75"}
+pyright = "^1.1"
+ruff = "^0.0.263"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.3"
+mkdocs-material = "^9.1.9"
+mkdocstrings = {extras = ["python"], version = "^0.21.2"}
+mkdocs-include-markdown-plugin = "^4.0.4"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "info"
+testpaths = ["tests"]
+
+[tool.pyright]
+include = ["lmo"]
+exclude = [".git", ".github", "build", "dist", "**/__pycache__", "**/.pytest_cache"]
+venvPath = ".venv"
+pythonVersion = "3.10"
+pythonPlatform = "Linux"
+typeCheckingMode = "strict"
+
+[tool.ruff]
+line-length = 80
+target-version = "py310"
+
+[tool.ruff.pydocstyle]
+convention = "google"
