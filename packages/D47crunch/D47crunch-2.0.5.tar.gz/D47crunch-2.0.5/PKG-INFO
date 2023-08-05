@@ -1,0 +1,65 @@
+Metadata-Version: 2.1
+Name: D47crunch
+Version: 2.0.5
+Summary: Standardization and analytical error propagation of Δ47 and Δ48 clumped-isotope measurements
+Author-email: Mathieu Daëron <mathieu@daeron.fr>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Requires-Dist: numpy >=1.21
+Requires-Dist: scipy >=1.7.0
+Requires-Dist: matplotlib >=3.4.2
+Requires-Dist: lmfit >=1.0.2
+Project-URL: Documentation, https://mdaeron.github.io/D47crunch
+Project-URL: Home, https://github.com/mdaeron/D47crunch
+
+# D47crunch
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4314550.svg)](https://doi.org/10.5281/zenodo.4314550)
+
+Python library for processing and standardizing carbonate clumped-isotope analyses, from low-level data out of a dual-inlet mass spectrometer to final, “absolute” Δ<sub>47</sub> and Δ<sub>48</sub> values with fully propagated analytical error estimates.
+
+## Documentation
+
+For the full API and a short tutorial, see [https://mdaeron.github.io/D47crunch].
+
+[https://mdaeron.github.io/D47crunch]: https://mdaeron.github.io/D47crunch
+
+## Installation
+
+This should do the trick:
+
+```bash
+pip install D47crunch
+```
+
+Alternatively:
+
+1. download the [dev branch] or the [latest release] and unzip it
+2. rename the resulting directory to `D47crunch`
+3. chose one of one of the following options:
+	+ move the `D47crunch` directory to somewhere in your Python path
+	+ move the `D47crunch` directory to your desired working directory
+	+ move the `D47crunch` directory to any other location (e.g., `/foo/bar`) and include the following code snippet in your scripts:
+
+```py
+import sys
+sys.path.append('/foo/bar')
+```
+Having done any of the above you should now be able to `import D47crunch`, with the following requirements: [Python 3], [numpy], [matplotlib], [scipy], and [lmfit].
+
+[Python 3]: https://www.python.org
+[numpy]: https://numpy.org
+[lmfit]: https://lmfit.github.io
+[matplotlib]: https://matplotlib.org
+[scipy]: https://www.scipy.org
+[dev branch]: https://github.com/mdaeron/D47crunch/archive/dev.zip
+[latest release]: https://github.com/mdaeron/D47crunch/releases/latest
+
+## Contact
+
+All questions and suggestions are welcome and should be directed at [Mathieu Daëron](mailto:daeron@lsce.ipsl.fr?subject=[D47crunch]).
+
+
