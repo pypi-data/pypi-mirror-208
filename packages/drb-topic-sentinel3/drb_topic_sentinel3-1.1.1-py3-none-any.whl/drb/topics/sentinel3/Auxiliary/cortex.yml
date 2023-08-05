@@ -1,0 +1,52 @@
+# Sentinel-3 Auxiliary Product
+id: 811df024-1d70-41c6-b316-f33de2976a17
+subClassOf: b3e005b8-7f47-4ab4-b92d-69d0adf54095
+label: Sentinel-3 Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: (?i)S3._(AX|GN|MW|OL|SL|SR|SY)_......AX_.*\.SEN3
+---
+# Sentinel-3 POD Abstract class
+#
+# WARN this class is not a subclass of 'Sentinel-3 Product'
+#                                    or 'Sentinel-3 Auxiliary Product'
+#
+#  Based on GMES-GSEG-EOPG-FS-10-0075_v1.22_Sentinels\POD\Service\File\Format\Specification.pdf
+#
+id: 10a92612-b414-4bd8-8197-2e0233c6a22f
+label: Sentinel-3 EOF Precise Orbit Determination (POD) Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: S3._(...._AUX_(RESORB|PREORB|MOEORB|POEORB|PRCPTF)_|SR___ROE_AX).*EOF
+---
+# Sentinel-3 AUX_POEORB
+id: 4edce242-cbfc-4320-a113-776765a058d3
+subClassOf: 10a92612-b414-4bd8-8197-2e0233c6a22f
+label: Sentinel-3 EOF Precise Orbit Ephemerides Orbit File Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: S3(A|B)_...._AUX_POEORB_.*
+---
+# Sentinel-3 AUX_MOEORB
+id: f91556fd-d35c-4535-8c3e-372314afe973
+subClassOf: 10a92612-b414-4bd8-8197-2e0233c6a22f
+label: Sentinel-3 EOF Medium Orbit Ephemerides Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: S3(A|B)_...._AUX_MOEORB_.*
+---
+# Sentinel-3 AUX_PRCPTF
+id: 4eb7935d-4401-43d3-a723-448efbd055b4
+subClassOf: 10a92612-b414-4bd8-8197-2e0233c6a22f
+label: Sentinel-3 EOF Precise Platform Data Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: S3(A|B)_...._AUX_PRCPTF_.*
+---
+# Sentinel-3 SR___ROE_AX
+id: 4fa2441e-71d9-4531-9ae3-ba11af6804a6
+subClassOf: 10a92612-b414-4bd8-8197-2e0233c6a22f
+label: Sentinel-3 EOF NRT Restituted Orbit State Vectors Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: S3(A|B)_SR___ROE_AX_.*
