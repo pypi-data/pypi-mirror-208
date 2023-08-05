@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: neon-stt-plugin-nemo
+Version: 0.0.3a2
+Summary: Nemo STT plugin for Neon
+Home-page: https://github.com/NeonGeckoCom/neon-stt-plugin-nemo
+Author: Neongecko
+Author-email: developers@neon.ai
+License: BSD-3.0
+Keywords: mycroft plugin stt
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Text Processing :: Linguistic
+Classifier: Programming Language :: Python :: 3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: numpy
+Requires-Dist: ovos-plugin-manager (~=0.0.21)
+Requires-Dist: ovos-utils (~=0.0.30)
+Requires-Dist: streaming-stt-nemo (~=0.1)
+Requires-Dist: SpeechRecognition (~=3.8)
+Requires-Dist: mycroft-messagebus-client (~=0.10)
+Provides-Extra: docker
+Requires-Dist: ovos-stt-http-server (>=0.0.2a5) ; extra == 'docker'
+
+# NeonAI Nemo STT Plugin 
+[Mycroft](https://mycroft-ai.gitbook.io/docs/mycroft-technologies/mycroft-core/plugins) compatible
+Neon Nemo STT Plugin Speech-to-Text.
+
+# Configuration:
+```yaml
+stt:
+    module: neon_stt_plugin_nemo 
+    stt_module_name: {} 
+
+```
