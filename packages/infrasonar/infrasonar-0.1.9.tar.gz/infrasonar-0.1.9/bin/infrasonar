@@ -1,0 +1,1172 @@
+#!/usr/bin/env python
+import argparse
+import asyncio
+import getpass
+import json
+import os
+import pprint
+import re
+import sys
+import yaml
+import yamlloader
+from aiohttp import ClientSession
+from collections import OrderedDict
+from dataclasses import dataclass
+from setproctitle import setproctitle
+from typing import Any, Optional, Dict, List, Tuple
+
+__version__ = '0.1.9'  # Update version in setup as well
+
+
+_labels_example = """
+Invalid "labels". Expecting something like:
+
+labels:
+  dns: 1409
+  windows: 3257
+"""
+
+_configs_example = """
+Invalid "configs". Expecting something like:
+
+configs:
+  dns:
+    nameServers: ["8.8.8.8"]
+  tcp:
+    checkCertificatePorts: [443, 995, 993, 465, 3389, 989, 990, 636, 5986]
+    checkPorts: []
+"""
+
+_assets_example = """
+Invalid "assets". Expecting something like:
+
+assets:
+- name: foo.local
+  kind: Linux
+  labels: ["linux"]
+  collectors:
+  - key: ping
+  - key: lastseen
+  - key: tcp
+    config: tcp
+"""
+
+_collectors_example = """
+Invalid asset "collectors". Expecting something like:
+
+  collectors:
+  - key: dns
+    config:
+      nameServers: ["8.8.8.8"]
+  - key: ping
+  - key: tcp
+    config: tcp  # required tcp to exist in configs
+"""
+
+
+_kinds = (
+    'Asset',
+    'APC',
+    'Apple',
+    'Azure',
+    'Citrix',
+    'DNS',
+    'Dell',
+    'Docker',
+    'Eaton',
+    'Email',
+    'Firewall',
+    'FreeBSD',
+    'HP',
+    'Linux',
+    'NetApp',
+    'PaloAlto',
+    'PureStorage',
+    'Supermicro',
+    'Switch',
+    'Synology',
+    'UniFi',
+    'VMware',
+    'Website',
+    'Windows',
+)
+
+_modes = ('normal', 'maintenance', 'disabled')
+
+
+@dataclass
+class ApplyAssets:
+    api: str
+    token: str
+    verify_ssl: bool
+    add_only: bool
+    dry_run: bool
+    allow_unknown_collectors: bool
+    allow_unknown_kinds: bool
+    silent: bool
+    container_id: int
+    dest: Tuple[dict]
+    orig: Dict[int, dict]
+    labels: Dict[str, int]
+
+
+def _join(*parts):
+    return '/'.join((part.strip('/') for part in parts))
+
+
+def _headers(token: str):
+    return {'Authorization': f'Bearer {token}'}
+
+
+def _json_headers(token: str):
+    return {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+
+
+def _assetstr(name: str, asset_id: Optional[int]):
+    return \
+        f'asset "{name}" (assetId: {"new" if asset_id is None else asset_id})'
+
+
+_yaml_keys = {
+    'container',
+    'token',
+    'labels',
+    'configs',
+    'assets'
+}
+_asset_keys = {
+    'id',
+    'name',
+    'kind',
+    'description',
+    'mode',
+    'labels',
+    'collectors'
+}
+_collector_keys = set(['key', 'config'])
+_extract_name = re.compile(r'\w+')
+
+
+def _test_bool(o: Any, key: str, prop: str):
+    if not isinstance(o, bool):
+        sys.exit(f'Option "{prop}" ({key}) must be a boolean value')
+
+
+def _test_int(o: Any, key: str, prop: str):
+    if not isinstance(o, int):
+        sys.exit(f'Option "{prop}" ({key}) must be a integer value')
+
+
+def _test_float(o: Any, key: str, prop: str):
+    if not isinstance(o, float):
+        sys.exit(f'Option "{prop}" ({key}) must be a floating point value')
+
+
+def _test_string(o: Any, key: str, prop: str):
+    if not isinstance(o, str):
+        sys.exit(f'Option "{prop}" ({key}) must be a string value')
+
+
+def _test_listbool(o: Any, key: str, prop: str):
+    if not isinstance(o, list) or \
+            not all([isinstance(obj, bool) for obj in o]):
+        sys.exit(
+            f'Option "{prop}" ({key}) is required and must be '
+            'a list with boolean values')
+
+
+def _test_listint(o: Any, key: str, prop: str):
+    if not isinstance(o, list) or \
+            not all([isinstance(obj, int) for obj in o]) or \
+            len(set(o)) != len(o):
+        sys.exit(
+            f'Option "{prop}" ({key}) is required and must be '
+            'a list with unique interger values')
+
+
+def _test_listfloat(o: Any, key: str, prop: str):
+    if not isinstance(o, list) or \
+            not all([isinstance(obj, float) for obj in o]) or \
+            len(set(o)) != len(o):
+        sys.exit(
+            f'Option "{prop}" ({key}) is required and must be '
+            'a list with unique floating point values')
+
+
+def _test_liststring(o: Any, key: str, prop: str):
+    if not isinstance(o, list) or \
+            not all([isinstance(obj, str) for obj in o]) or \
+            len(set(o)) != len(o):
+        sys.exit(
+            f'Option "{prop}" ({key}) is required and must be '
+            'a list with unique string values')
+
+
+_TYPE_MAP = {
+    'Bool': _test_bool,
+    'Int': _test_int,
+    'Float': _test_float,
+    'String': _test_string,
+    'ListBool': _test_listbool,
+    'ListInt': _test_listint,
+    'ListFloat': _test_listfloat,
+    'ListString': _test_liststring,
+}
+
+
+async def aget_collectors(api: str, token: str, container_id: int,
+                          verify_ssl: bool):
+    args = '?field=key&options=key,type,default'
+
+    url = _join(api, f'container/{container_id}/collectors{args}')
+    async with ClientSession(headers=_headers(token)) as session:
+        async with session.get(url, ssl=verify_ssl) as r:
+            if r.status != 200:
+                msg = await r.text()
+                raise Exception(f'{msg} (error code: {r.status})')
+            resp = await r.json()
+            return resp
+
+
+_collectors = {}
+
+
+def _load_collectos(api: str, token: str, container_id: int,
+                    verify_ssl: bool):
+    """Returns {collectorkey: {option: [verify_func, default], ..}, ..}
+    """
+    global _collectors
+
+    data = asyncio.run(aget_collectors(api, token, container_id, verify_ssl))
+    _collectors = {
+        c['key']: {
+            o['key']: (_TYPE_MAP[o['type']], o['default'])
+            for o in c['options']
+        } if c['options'] else None
+        for c in data
+    }
+
+
+def check_collector(collector: dict, configs: dict,
+                    allow_unknown_collectors: bool):
+    too_much = set(collector.keys()) - _collector_keys
+    if too_much:
+        sys.exit(f'Unexpected key in collector: "{too_much.pop()}"')
+
+    key = collector.get('key')
+    if key is None:
+        sys.exit('Missing required collector property: "key"')
+    if not isinstance(key, str):
+        sys.exit('Collector key must be a string')
+
+    if not allow_unknown_collectors and key not in _collectors:
+        sys.exit(
+            f'Unknown collector "{key}" (use --allow-unknown-collectors '
+            'to ignore this error)')
+
+    validate = _collectors.get(key, False)
+
+    config = collector.get('config')
+    if config is not None:
+        if isinstance(config, str):
+            if config not in configs:
+                sys.exit(f'Collector config "{config}" missing in configs')
+            config = collector['config'] = configs[config]
+        elif not isinstance(config, dict):
+            sys.exit(
+                f'Collector config for "{key}" must be a string or object')
+        elif not config:
+            collector['config'] = None  # empty to None
+
+    if validate is False:
+        return
+
+    if config is None:
+        config = {}
+
+    if validate is None:
+        if config:
+            sys.exit(f'Collector "{key}" does not allow config')
+    else:
+        too_much = set(config.keys()) - set(validate.keys())
+        if too_much:
+            sys.exit(
+                f'Unexpected property in collector {key}: "{too_much.pop()}"')
+        for k, tester in validate.items():
+            func, dval = tester
+            func(config.get(k, dval), key, k)
+
+
+def check_asset(asset: dict, labels: dict, allow_unknown_kinds: bool):
+    too_much = set(asset.keys()) - _asset_keys
+    if too_much:
+        sys.exit(f'Unexpected key in asset: "{too_much.pop()}"')
+
+    asset_id = asset.get('id')
+    if asset_id is not None and not isinstance(asset_id, int):
+        sys.exit('Asset id must be an integer')
+
+    name = asset.get('name')
+    if name is not None and not isinstance(name, str):
+        sys.exit('Asset name must be a string')
+
+    if name is None and id is None:
+        sys.exit('Missing required asset property: "name" or "id"')
+
+    description = asset.get('description')
+    if description is not None and not isinstance(description, str):
+        sys.exit('Asset description must be a string')
+
+    mode = asset.get('mode')
+    if mode is not None and mode not in _modes:
+        sys.exit(
+            'Asset mode must be one of "normal", "maintenance" or "disabled"')
+
+    kind = asset.get('kind')
+    if kind is not None and kind not in _kinds and not allow_unknown_kinds:
+        sys.exit(
+            f'Invalid asset kind: "{kind}" '
+            f'(must be one of: {", ".join(_kinds)} or '
+            'use --allow-unknown-kinds)')
+
+    asset_labels = asset.get('labels')
+    if asset_labels is not None:
+        if not labels:
+            sys.exit('missing labels in yaml')
+
+        if not isinstance(asset_labels, list) or \
+                not all([isinstance(o, str) for o in asset_labels]):
+            sys.exit('Asset labels must be a list of strings')
+
+        for idx, label in enumerate(asset_labels):
+            if label not in labels:
+                sys.exit(f'Asset label "{label}" missing in labels')
+            asset_labels[idx] = labels[label]
+
+
+def check_asset_collectors(asset: dict, configs: dict,
+                           allow_unknown_collectors: bool):
+    collectors = asset.get('collectors')
+    if collectors is not None:
+        if not isinstance(collectors, list) or \
+                not all([isinstance(o, dict) for o in collectors]):
+            sys.exit(_collectors_example)
+        for collector in collectors:
+            check_collector(collector, configs, allow_unknown_collectors)
+
+
+def sanity_check(data: dict, allow_unknown_collectors: bool,
+                 allow_unknown_kinds: bool, api: str, verify_ssl: bool):
+    too_much = set(data.keys()) - _yaml_keys
+    if too_much:
+        sys.exit(f'Unexpected key in yaml: "{too_much.pop()}"')
+
+    token = data.get('token')
+    labels = data.get('labels')
+    configs = data.get('configs')
+    assets = data.get('assets')
+    container_id = data.get('container')
+
+    if container_id is not None and not isinstance(container_id, int):
+        sys.exit('container must be an interger or null')
+
+    if labels is None:
+        labels = {}
+    if configs is None:
+        configs = {}
+    if assets is None:
+        assets = []
+
+    if not isinstance(labels, dict) or \
+            not all([isinstance(o, int) for o in labels.values()]):
+        sys.exit(_labels_example)
+
+    if not isinstance(configs, dict) or \
+            not all([isinstance(o, dict) for o in configs.values()]):
+        sys.exit(_configs_example)
+
+    if not isinstance(assets, list) or \
+            not all([isinstance(o, dict) for o in assets]):
+        sys.exit(_assets_example)
+
+    for asset in assets:
+        check_asset(asset, labels, allow_unknown_kinds)
+
+    if token is None:
+        try:
+            ttype = 'container'
+            if container_id:
+                if all(('id' in a for a in assets)):
+                    ttype = 'user or container'
+
+            data['token'] = getpass.getpass(f'Enter {ttype} token: ')
+        except KeyboardInterrupt:
+            sys.exit('Cancelled')
+    elif not isinstance(token, str):
+        sys.exit('token must be a string or null')
+
+    _load_collectos(api, data['token'], container_id, verify_ssl)
+    for asset in assets:
+        check_asset_collectors(asset, configs, allow_unknown_collectors)
+
+
+def collector_by_key(asset: dict, key: str):
+    collectors = asset.get('collectors')
+    if collectors:
+        for c in collectors:
+            if c['key'] == key:
+                return {
+                    'key': key,
+                    'config': c.get('config') or None
+                }
+
+
+def make_changes(changes: bool):
+    if not changes:
+        print('-'*80)
+    return True
+
+
+def config_eq(orig, dest, control):
+    if orig == dest:
+        return True
+
+    if control is None:
+        return False
+
+    if dest:
+        for key, dval in dest.items():
+            v = control[key][1]
+            oval = v if orig is None else orig.get(key, v)
+            if dval != oval:
+                return False
+
+    if orig:
+        for key, oval in orig.items():
+            v = control[key][1]
+            dval = v if dest is None else dest.get(key, v)
+            if dval != oval:
+                return False
+
+    return True
+
+
+async def apply_asset(aa: ApplyAssets, dest: dict):
+    headers = _headers(aa.token)
+    jheaders = _json_headers(aa.token)
+    vssl = aa.verify_ssl
+    api = aa.api
+    silent = aa.silent
+    dry_run = aa.dry_run
+    changes = False
+
+    asset_id = dest.get('id')
+    if asset_id is None:
+        name = dest['name']
+        url = _join(api, f'asset/{name}/id')
+        async with ClientSession(headers=headers) as session:
+            async with session.get(url, ssl=vssl) as r:
+                if r.status == 404:
+                    asset_id = None
+                elif r.status != 200:
+                    msg = await r.text()
+                    raise Exception(f'{msg} (error code: {r.status})')
+                else:
+                    resp = await r.json()
+                    asset_id = resp['assetId']
+
+        if asset_id is None:
+            changes = make_changes(changes)
+            orig = {
+                'name': name,
+                'mode': 'normal',
+                'kind': 'Asset',
+                'description': '',
+                'collectors': [],
+                'labels': []
+            }
+            if not silent:
+                print(f'Create a new asset for "{name}"...')
+
+            if not dry_run:
+                await asyncio.sleep(0.5)
+                url = _join(api, f'container/{aa.container_id}/asset')
+                data = {"name": name}
+                async with ClientSession(headers=jheaders) as session:
+                    async with session.post(url, json=data, ssl=vssl) as r:
+                        if r.status != 201:
+                            msg = await r.text()
+                            raise Exception(f'{msg} (error code: {r.status})')
+                        resp = await r.json()
+                        asset_id = resp['assetId']
+                if not silent:
+                    print(f'New asset id for "{name}": {asset_id}')
+        else:
+            orig = aa.orig[asset_id]
+
+    else:
+        orig = aa.orig[asset_id]
+        name = dest.get('name', orig['name'])
+
+    for prop in ('name', 'kind', 'description', 'mode'):
+        val = dest.get(prop)
+        if val is not None and orig[prop] != val:
+            changes = make_changes(changes)
+            if not silent:
+                print(
+                    f'Change {prop} to "{val}" '
+                    f'for {_assetstr(name, asset_id)}')
+
+            if not dry_run:
+                await asyncio.sleep(0.5)
+                data = {prop: val}
+                url = _join(api, f'asset/{asset_id}/{prop}')
+                async with ClientSession(headers=jheaders) as session:
+                    async with session.patch(url, json=data, ssl=vssl) as r:
+                        if r.status != 204:
+                            msg = await r.text()
+                            raise Exception(f'{msg} (error code: {r.status})')
+
+    collectors = dest.get('collectors')
+    if collectors is not None:
+        for collector in collectors:
+            key = collector['key']
+            config = collector.get('config')
+            oc = collector_by_key(orig, key)
+            control = _collectors.get(key)
+            if oc and config_eq(oc.get('config'), config, control):
+                continue
+
+            changes = make_changes(changes)
+            if not silent:
+                prefix = 'Update collector' if oc else 'Add collector'
+                print(f'{prefix} "{key}" on {_assetstr(name, asset_id)}')
+
+            if not dry_run:
+                await asyncio.sleep(0.5)
+                url = _join(api, f'asset/{asset_id}/collector/{key}')
+                if config is None:
+                    async with ClientSession(headers=headers) as session:
+                        async with session.post(url, ssl=vssl) as r:
+                            if r.status != 204:
+                                msg = await r.text()
+                                raise Exception(
+                                    f'{msg} (error code: {r.status})')
+                else:
+                    data = {'config': config}
+                    async with ClientSession(headers=jheaders) as session:
+                        async with session.post(url, json=data, ssl=vssl) as r:
+                            if r.status != 204:
+                                msg = await r.text()
+                                raise Exception(
+                                    f'{msg} (error code: {r.status})')
+        if not aa.add_only:
+            dkeys = {c['key'] for c in collectors}
+            okeys = {c['key'] for c in orig['collectors']}
+            rkeys = okeys - dkeys
+            for key in rkeys:
+                changes = make_changes(changes)
+                if not silent:
+                    prefix = 'Remove collector'
+                    print(f'{prefix} "{key}" from {_assetstr(name, asset_id)}')
+                if not dry_run:
+                    await asyncio.sleep(0.5)
+                    url = _join(api, f'asset/{asset_id}/collector/{key}')
+                    async with ClientSession(headers=headers) as session:
+                        async with session.delete(url, ssl=vssl) as r:
+                            if r.status != 204:
+                                msg = await r.text()
+                                raise Exception(
+                                    f'{msg} (error code: {r.status})')
+
+    labels = dest.get('labels')
+    if labels is not None:
+        for lid in labels:
+            if lid in orig['labels']:
+                continue
+
+            changes = make_changes(changes)
+            if not silent:
+                print(f'Add label {lid} on {_assetstr(name, asset_id)}')
+
+            if not dry_run:
+                await asyncio.sleep(0.5)
+                url = _join(api, f'asset/{asset_id}/label/{lid}')
+                async with ClientSession(headers=headers) as session:
+                    async with session.post(url, ssl=vssl) as r:
+                        if r.status != 204:
+                            msg = await r.text()
+                            raise Exception(f'{msg} (error code: {r.status})')
+
+        if not aa.add_only:
+            rlabels = set(orig['labels']) - set(labels)
+            for lid in rlabels:
+                changes = make_changes(changes)
+                if not silent:
+                    print(f'Remove label {lid} on {_assetstr(name, asset_id)}')
+
+                if not dry_run:
+                    await asyncio.sleep(0.5)
+                    url = _join(api, f'asset/{asset_id}/label/{lid}')
+                    async with ClientSession(headers=headers) as session:
+                        async with session.delete(url, ssl=vssl) as r:
+                            if r.status != 204:
+                                msg = await r.text()
+                                raise Exception(
+                                    f'{msg} (error code: {r.status})')
+
+    return changes
+
+
+async def fetch_assets(aa: ApplyAssets):
+    headers = _headers(aa.token)
+    args = '?fields=id,name,kind,description,mode,labels&collectors=key,config'
+    url = _join(aa.api, f'container/{aa.container_id}/assets{args}')
+    async with ClientSession(headers=headers) as session:
+        async with session.get(url, ssl=aa.verify_ssl) as r:
+            if r.status != 200:
+                msg = await r.text()
+                raise Exception(f'{msg} (error code: {r.status})')
+            assets = await r.json()
+
+    aa.orig = {a['id']: a for a in assets}
+
+
+async def async_prepare_assets(aa: ApplyAssets):
+    headers = _headers(aa.token)
+    url = _join(aa.api, 'container/id')
+    if not aa.container_id:
+        async with ClientSession(headers=headers) as session:
+            async with session.get(url, ssl=aa.verify_ssl) as r:
+                if r.status != 200:
+                    msg = await r.text()
+                    raise Exception(f'{msg} (error code: {r.status})')
+                resp = await r.json()
+                aa.container_id = resp['containerId']
+
+    url = _join(aa.api, f'container/{aa.container_id}?fields=name')
+    async with ClientSession(headers=headers) as session:
+        async with session.get(url, ssl=aa.verify_ssl) as r:
+            if r.status != 200:
+                msg = await r.text()
+                raise Exception(f'{msg} (error code: {r.status})')
+            resp = await r.json()
+            container_name = resp['name']
+
+    if not aa.silent:
+        print(f'Container: {container_name} ({aa.container_id})')
+
+    for name, lid in aa.labels.items():
+        url = _join(aa.api, f'label/{lid}?fields=name')
+        async with ClientSession(headers=headers) as session:
+            async with session.get(url, ssl=aa.verify_ssl) as r:
+                if r.status != 200:
+                    msg = await r.text()
+                    raise Exception(f'{msg} (error code: {r.status})')
+                resp = await r.json()
+                lname = resp['name']
+                if not aa.silent:
+                    print(f'Label "{name}" ({lid}) actual name: {lname}')
+
+    await fetch_assets(aa)
+
+
+async def async_apply_assets(aa: ApplyAssets):
+    changes = False
+    for asset in aa.dest:
+        changes = (await apply_asset(aa, asset)) or changes
+
+    if not changes:
+        make_changes(changes)
+        print('No asset changes are detected')
+
+
+def apply_assets(filename: str, api: str, verify_ssl: bool, add_only: bool,
+                 dry_run: bool, allow_unknown_collectors: bool,
+                 allow_unknown_kinds: bool, silent: bool):
+    try:
+        with open(filename, 'r') as fp:
+            data = yaml.safe_load(fp)
+    except Exception as e:
+        msg = str(e) or type(e).__name__
+        sys.exit(msg)
+
+    if not isinstance(data, dict):
+        sys.exit('Expecting the yaml to conain a dict')
+
+    sanity_check(
+        data,
+        allow_unknown_collectors,
+        allow_unknown_kinds,
+        api,
+        verify_ssl)
+
+    labels = data.get('labels', {})
+    container_id = data.get('container', 0)
+    assets = data.get('assets')
+    token = data['token']
+    if assets:
+        aa = ApplyAssets(
+            api=api,
+            token=token,
+            verify_ssl=verify_ssl,
+            add_only=add_only,
+            dry_run=dry_run,
+            allow_unknown_collectors=allow_unknown_collectors,
+            allow_unknown_kinds=allow_unknown_kinds,
+            silent=silent,
+            container_id=container_id,
+            dest=tuple(assets),
+            orig={},
+            labels=labels
+        )
+        try:
+            asyncio.run(async_prepare_assets(aa))
+            if not silent and not dry_run:
+                answer = input(
+                    '\n'
+                    'Check the above and make sure you performed a dry-run.\n'
+                    'Do you want to continue? (y/n): ')
+                if answer.lower() != 'y':
+                    raise KeyboardInterrupt
+            asyncio.run(async_apply_assets(aa))
+        except KeyboardInterrupt:
+            print('Cancelled')
+        except Exception as e:
+            msg = str(e) or type(e).__name__
+            print(msg)
+        else:
+            if not silent:
+                print('-'*80)
+                job = \
+                    'dry-run (no changes are applied)' if dry_run else 'apply'
+                print(f'Finished {job} for {len(assets)} asset(s)')
+    elif not silent:
+        print('No assets to apply')
+
+
+async def aget_assets(api: str, token: str, container_id: int,
+                      verify_ssl: bool, fields: Optional[set],
+                      kind: Optional[str], not_kind: Optional[str],
+                      mode: Optional[str], not_mode: Optional[str],
+                      collector: Optional[str], not_collector: Optional[str],
+                      label: Optional[int], not_label: Optional[int]):
+
+    if 'collectors' in fields:
+        fields.remove('collectors')
+        collectors = '&collectors=key,config'
+    else:
+        collectors = ''
+
+    args = ','.join(fields)
+    args = f'?fields={args}{collectors}'
+
+    if kind:
+        args += f'&kind={kind}'
+    if not_kind:
+        args += f'&not-kind={not_kind}'
+    if mode:
+        args += f'&mode={mode}'
+    if not_mode:
+        args += f'&not-mode={not_mode}'
+    if collector:
+        args += f'&collector={collector}'
+    if not_collector:
+        args += f'&not-collector={not_collector}'
+    if label:
+        args += f'&label={label}'
+    if not_label:
+        args += f'&not-label={not_label}'
+
+    url = _join(api, f'container/{container_id}/assets{args}')
+    async with ClientSession(headers=_headers(token)) as session:
+        async with session.get(url, ssl=verify_ssl) as r:
+            if r.status != 200:
+                msg = await r.text()
+                raise Exception(f'{msg} (error code: {r.status})')
+            resp = await r.json()
+            return resp
+
+
+async def aget_asset(api: str, token: str, asset_id: int,
+                     verify_ssl: bool, fields: Optional[set]):
+
+    if 'collectors' in fields:
+        fields.remove('collectors')
+        collectors = '&collectors=key,config'
+    else:
+        collectors = ''
+
+    fields.add('container')
+
+    args = ','.join(fields)
+    args = f'?fields={args}{collectors}'
+
+    url = _join(api, f'asset/{asset_id}{args}')
+    async with ClientSession(headers=_headers(token)) as session:
+        async with session.get(url, ssl=verify_ssl) as r:
+            if r.status != 200:
+                msg = await r.text()
+                raise Exception(f'{msg} (error code: {r.status})')
+            resp = await r.json()
+            return [resp]
+
+
+def get_label_ids(res: list) -> tuple:
+    label_ids = set()
+    for asset in res:
+        label_ids.update(set(asset['labels']))
+    return tuple(label_ids)
+
+
+def make_label_name(labels: dict, name: str):
+    n = '_'.join(_extract_name.findall(name))
+    nn, i = n, 0
+    while nn in labels:
+        nn = f'{n}_{i}'
+
+    return nn
+
+
+async def async_get_labels(api: str, token: str, verify_ssl: bool,
+                           label_ids: tuple):
+    labels = {}
+    for lid in label_ids:
+        url = _join(api, f'label/{lid}?fields=name')
+        async with ClientSession(headers=_headers(token)) as session:
+            async with session.get(url, ssl=verify_ssl) as r:
+                if r.status != 200:
+                    msg = await r.text()
+                    raise Exception(f'{msg} (error code: {r.status})')
+                resp = await r.json()
+                name = make_label_name(labels, resp['name'])
+                labels[name] = lid
+    return labels
+
+
+def mod_assets_res(assets: list, labels: dict, include_defaults: bool):
+    labels = {v: k for k, v in labels.items()}
+    ordered = []
+    for asset in assets:
+        a = OrderedDict()
+        if 'id' in asset:
+            a['id'] = asset['id']
+        if 'name' in asset:
+            a['name'] = asset['name']
+        if 'kind' in asset:
+            a['kind'] = asset['kind']
+        if 'mode' in asset:
+            a['mode'] = asset['mode']
+        if 'description' in asset:
+            a['description'] = asset['description']
+
+        alabels = asset.get('labels')
+        if alabels:
+            a['labels'] = [labels[lid] for lid in alabels]
+        collectors = asset.get('collectors')
+        if collectors:
+            cc = []
+            for collector in collectors:
+                c = OrderedDict()
+                c['key'] = collector['key']
+                config = collector['config']
+
+                if not include_defaults and config:
+                    control = _collectors.get(c['key'])
+                    if control is not None:
+                        for k in tuple(config.keys()):
+                            if k in control:
+                                if config[k] == control[k][1]:
+                                    del config[k]
+                if config:
+                    c['config'] = config
+                cc.append(c)
+            a['collectors'] = cc
+        ordered.append(a)
+
+    assets.clear()
+    assets.extend(ordered)
+
+
+def get_assets(container_id: int, api: str, verify_ssl: bool, output: str,
+               token: Optional[str], fields: Optional[list],
+               include_defaults: bool,
+               kind: Optional[str], not_kind: Optional[str],
+               mode: Optional[str], not_mode: Optional[str],
+               collector: Optional[str], not_collector: Optional[str],
+               label: Optional[int], not_label: Optional[int]):
+    if fields is None:
+        fields = set(_asset_keys)
+    else:
+        fields = set(fields)
+
+    if 'id' not in fields and 'name' not in fields:
+        sys.exit('At least field "name" or "id" is required')
+
+    if token is None:
+        try:
+            token = getpass.getpass('Enter user or container token: ')
+        except KeyboardInterrupt:
+            sys.exit('Cancelled')
+
+    with_labels = 'labels' in fields
+
+    try:
+        assets = asyncio.run(aget_assets(
+            api, token, container_id, verify_ssl, fields,
+            kind, not_kind, mode, not_mode, collector, not_collector,
+            label, not_label))
+        labels = {}
+        if with_labels:
+            label_ids = get_label_ids(assets)
+            if label_ids:
+                labels = asyncio.run(async_get_labels(
+                    api, token, verify_ssl, label_ids))
+
+        _load_collectos(api, token, container_id, verify_ssl)
+
+        mod_assets_res(assets, labels, include_defaults)
+
+        data = OrderedDict()
+        data['container'] = container_id
+        if labels:
+            data['labels'] = labels
+
+        data['assets'] = assets
+
+    except KeyboardInterrupt:
+        print('Cancelled')
+    except Exception as e:
+        msg = str(e) or type(e).__name__
+        print(msg)
+    else:
+        if output == 'json':
+            json.dump(data, sys.stdout)
+        elif output == 'yaml':
+            yaml.dump(data, sys.stdout,
+                      Dumper=yamlloader.ordereddict.CDumper)
+
+
+def get_asset(asset_id: int, api: str, verify_ssl: bool, output: str,
+              token: Optional[str], fields: Optional[list],
+              include_defaults: bool):
+    if fields is None:
+        fields = set(_asset_keys)
+    else:
+        fields = set(fields)
+
+    if 'id' not in fields and 'name' not in fields:
+        sys.exit('At least field "name" or "id" is required')
+
+    if token is None:
+        try:
+            token = getpass.getpass('Enter user or container token: ')
+        except KeyboardInterrupt:
+            sys.exit('Cancelled')
+
+    with_labels = 'labels' in fields
+
+    try:
+        assets = asyncio.run(aget_asset(
+            api, token, asset_id, verify_ssl, fields))
+        container_id = assets[0]['container']
+
+        labels = {}
+        if with_labels:
+            label_ids = get_label_ids(assets)
+            if label_ids:
+                labels = asyncio.run(async_get_labels(
+                    api, token, verify_ssl, label_ids))
+
+        _load_collectos(api, token, container_id, verify_ssl)
+
+        mod_assets_res(assets, labels, include_defaults)
+
+        data = OrderedDict()
+        data['container'] = container_id
+        if labels:
+            data['labels'] = labels
+
+        data['assets'] = assets
+
+    except KeyboardInterrupt:
+        print('Cancelled')
+    except Exception as e:
+        msg = str(e) or type(e).__name__
+        print(msg)
+    else:
+        if output == 'json':
+            json.dump(data, sys.stdout)
+        elif output == 'yaml':
+            yaml.dump(data, sys.stdout,
+                      Dumper=yamlloader.ordereddict.CDumper)
+
+
+if __name__ == '__main__':
+    setproctitle('infrasonar')
+
+    parser = argparse.ArgumentParser(prog='infrasonar')
+    parser.add_argument(
+        '--version',
+        action='store_true',
+        help='Show version and exit')
+    parser.add_argument(
+        '--api',
+        default='https://api.infrasonar.com',
+        help='URL for the API')
+    parser.add_argument(
+        '--skip-verify-ssl',
+        action='store_true',
+        help='No verify SSL for API requests')
+
+    action = parser.add_subparsers(help='action', dest='action')
+
+    action_apply_assets = \
+        action.add_parser('apply-assets', help='Apply assets')
+    action_apply_assets.add_argument('filename')
+    action_apply_assets.add_argument(
+        '-a', '--add-only',
+        action='store_true',
+        help='Only add labels and collectors but do not remove existing ones')
+    action_apply_assets.add_argument(
+        '-d', '--dry-run',
+        action='store_true',
+        help='Dry run (do apply changes)')
+    action_apply_assets.add_argument(
+        '--allow-unknown-collectors',
+        action='store_true',
+        help='Allow collectors unknown to this toolkit')
+    action_apply_assets.add_argument(
+        '--allow-unknown-kinds',
+        action='store_true',
+        help='Allow kinds unknown to this toolkit')
+    action_apply_assets.add_argument(
+        '--silent',
+        action='store_true',
+        help='Silent (no output)')
+
+    action_get_assets = \
+        action.add_parser('get-assets', help='Get container assets')
+
+    action_get_assets.add_argument('containerId', type=int)
+    action_get_assets.add_argument('-f', '--field',
+                                   choices=list(_asset_keys),
+                                   action='append',
+                                   help=(
+                                    'Fields to return. If not specified, '
+                                    'all fields will be returned'))
+    action_get_assets.add_argument('-k', '--kind',
+                                   choices=list(_kinds),
+                                   help=(
+                                    'Only assets with the given kind'))
+    action_get_assets.add_argument('-K', '--not-kind',
+                                   choices=list(_kinds),
+                                   help=(
+                                    'Only assets with another kind than the '
+                                    'given kind'))
+    action_get_assets.add_argument('-m', '--mode',
+                                   choices=_modes,
+                                   help=(
+                                    'Only assets with the given mode'))
+    action_get_assets.add_argument('-M', '--not-mode',
+                                   choices=_modes,
+                                   help=(
+                                    'Only assets with another mode than the '
+                                    'given mode'))
+    action_get_assets.add_argument('-c', '--collector',
+                                   type=str,
+                                   help=(
+                                    'Only assets with the given collector'))
+    action_get_assets.add_argument('-C', '--not-collector',
+                                   type=str,
+                                   help=(
+                                    'Only assets without the given collector'))
+    action_get_assets.add_argument('-l', '--label',
+                                   type=str,
+                                   help=(
+                                    'Only assets with the given label Id'))
+    action_get_assets.add_argument('-L', '--not-label',
+                                   type=str,
+                                   help=(
+                                    'Only assets without the given label Id'))
+    action_get_assets.add_argument('-o', '--output',
+                                   choices=['json', 'yaml'],
+                                   default='yaml')
+    action_get_assets.add_argument('-i', '--include-defaults',
+                                   action='store_true',
+                                   help=(
+                                    'Include default collector configuration '
+                                    'values'))
+    action_get_assets.add_argument('--token',
+                                   default=None,
+                                   help='Token for authentication')
+
+    action_get_asset = \
+        action.add_parser('get-asset', help='Get a single asset')
+
+    action_get_asset.add_argument('assetId', type=int)
+    action_get_asset.add_argument('-f', '--field',
+                                  choices=list(_asset_keys),
+                                  action='append',
+                                  help=(
+                                    'Fields to return. If not specified, '
+                                    'all fields will be returned'))
+    action_get_asset.add_argument('-o', '--output',
+                                  choices=['json', 'yaml'],
+                                  default='yaml')
+    action_get_asset.add_argument('-i', '--include-defaults',
+                                  action='store_true',
+                                  help=(
+                                    'Include default collector configuration '
+                                    'values'))
+    action_get_asset.add_argument('--token',
+                                  default=None,
+                                  help='Token for authentication')
+
+    args = parser.parse_args()
+
+    if args.version:
+        print(f'InfraSonar toolkit version {__version__}')
+        sys.exit(0)
+
+    if args.action == 'apply-assets':
+        apply_assets(
+            args.filename,
+            args.api,
+            not args.skip_verify_ssl,
+            args.add_only,
+            args.dry_run,
+            args.allow_unknown_collectors,
+            args.allow_unknown_kinds,
+            args.silent)
+    elif args.action == 'get-assets':
+        get_assets(
+            args.containerId,
+            args.api,
+            not args.skip_verify_ssl,
+            args.output,
+            args.token,
+            args.field,
+            args.include_defaults,
+            args.kind,
+            args.not_kind,
+            args.mode,
+            args.not_mode,
+            args.collector,
+            args.not_collector,
+            args.label,
+            args.not_label)
+    elif args.action == 'get-asset':
+        get_asset(
+            args.assetId,
+            args.api,
+            not args.skip_verify_ssl,
+            args.output,
+            args.token,
+            args.field,
+            args.include_defaults)
+    else:
+        parser.print_help()
