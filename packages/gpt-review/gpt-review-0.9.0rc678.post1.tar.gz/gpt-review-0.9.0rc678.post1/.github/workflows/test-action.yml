@@ -1,0 +1,54 @@
+on: [pull_request_target]
+
+jobs:
+  add_pr_comment:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    name: OpenAI PR Comment
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - run: |
+          sudo apt-get update
+          python3 -m venv .env
+          source .env/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install gpt-review
+
+      - run: |
+          source .env/bin/activate
+
+          gpt github review \
+            --access-token $GITHUB_TOKEN \
+            --pull-request $PR_NUMBER \
+            --repository $REPOSITORY_NAME
+
+          pip install -e .
+
+          gpt github review \
+            --access-token $GITHUB_TOKEN \
+            --pull-request $PR_NUMBER \
+            --repository $REPOSITORY_NAME
+        env:
+          GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_ORG_KEY: ${{ secrets.OPENAI_ORG_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          REPOSITORY_NAME: ${{ github.repository }}
+          AZURE_OPENAI_API: ${{ secrets.AZURE_OPENAI_API }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          LINK: "https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+          FILE_SUMMARY: false
+          TEST_SUMMARY: false
+          BUG_SUMMARY: false
+          RISK_SUMMARY: false
+          RSIK_BREAKING: false
