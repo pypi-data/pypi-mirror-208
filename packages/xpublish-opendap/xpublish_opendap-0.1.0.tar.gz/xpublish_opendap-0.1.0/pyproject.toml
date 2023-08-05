@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xpublish_opendap"
+description = ""
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = []
+license = { file = "LICENSE.txt" }
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering",
+]
+
+dynamic = ["version", "dependencies"]
+
+[project.urls]
+"Homepage" = "https://github.com/xpublish-community/xpublish-opendap/"
+
+[project.entry-points."xpublish.plugin"]
+opendap = "xpublish_opendap.plugin:OpenDapPlugin"
+
+[tool.setuptools]
+packages = ["xpublish_opendap"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools_scm]
+write_to = "xpublish_opendap/_version.py"
+
+[tool.check-manifest]
+ignore = ["xpublish_opendap/_version.py"]
+
+[tool.ruff]
+select = [
+    "A",   # flake8-builtins
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "D",   # pydocstyle
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "I",   # isort
+    "PL",  # pylint
+    "T20", # flake8-print
+    "UP",  # pyupgrade
+    "W",   # pycodestyle warnings
+]
+
+[tool.ruff.pydocstyle]
+# Use Google-style docstrings.
+convention = "google"
+
+[tool.ruff.flake8-bugbear]
+# Allow fastapi.Depends and other dependency injection style function arguments
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
