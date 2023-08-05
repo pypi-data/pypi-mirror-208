@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "pyspaceaware"
+version = "0.2.37"
+description = "A package for Space Domain Awareness simulation, including orbit and attitude propagation, catalog management, with a focus on generating light curves for human-made satellites and debris"
+authors = ["Liam Robinson <robin502@purdue.edu>"]
+readme = "README.md"
+packages = [{include = "pyspaceaware", from = "src"}]
+include = [{path = "src/pyspaceaware", format = "sdist"},
+{path = "src/pyspaceaware/ctools/synthetic/synthetic_include", format = "sdist"},
+{path = "src/pyspaceaware/ctools/synthetic/synthetic_lib", format = "sdist"},
+{path = "src/pyspaceaware/ctools/engine/engine_include", format = "sdist"},
+{path = "src/pyspaceaware/ctools/engine/engine_lib", format = "sdist"}]
+documentation = "https://liamrobinson1.github.io/pyspaceawaredocs/pyspaceaware.html"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: MacOS",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+numpy = "==1.24.2"
+scipy = "==1.10.1"
+pyvista = "==0.38.5"
+colorcet = "==3.0.1"
+sgp4 = "==2.21"
+spacetrack = "==0.16.0"
+aiohttp = "==3.8.4"
+python-dotenv = "1.0.0"
+astropy = "==5.2.2"
+trimesh = "==3.21.5"
+rtree = "==1.0.1"
+pyembree = "==0.1.12"
+tqdm = "==4.65.0"
+
+[project.urls]
+"Homepage" = "https://github.com/liamrobinson1/PyLightCurves"
+"Bug Tracker" = "https://github.com/liamrobinson1/PyLightCurves/issues"
+"Documentation" = "https://liamrobinson1.github.io/pyspaceawaredocs/pyspaceaware.html"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
