@@ -1,0 +1,112 @@
+Metadata-Version: 2.1
+Name: widget_code_input
+Version: 3.6.0
+Summary: A widget to allow input of a python function, with syntax highlighting.
+Project-URL: Homepage, https://github.com/osscar-org/widget-code-input
+Author-email: Dou Du and Giovanni Pizzi <dou.du@epfl.ch>
+License: Copyright (c) 2022 Dou Du and Giovanni Pizzi
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+License-File: LICENSE.txt
+Keywords: IPython,Jupyter,Widgets
+Classifier: Framework :: Jupyter
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.7
+Requires-Dist: ipywidgets>=7.0.0
+Provides-Extra: docs
+Requires-Dist: jupyter-sphinx; extra == 'docs'
+Requires-Dist: nbsphinx; extra == 'docs'
+Requires-Dist: nbsphinx-link; extra == 'docs'
+Requires-Dist: pypandoc; extra == 'docs'
+Requires-Dist: pytest-check-links; extra == 'docs'
+Requires-Dist: recommonmark; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme; extra == 'docs'
+Requires-Dist: sphinx>=1.5; extra == 'docs'
+Provides-Extra: examples
+Provides-Extra: test
+Requires-Dist: nbval; extra == 'test'
+Requires-Dist: pytest-cov; extra == 'test'
+Requires-Dist: pytest>=6.0; extra == 'test'
+Description-Content-Type: text/markdown
+
+
+# widget-code-input
+
+A widget to allow input of a python function, with syntax highlighting.
+
+## Try it with Binder !
+
+* Simple usage of the widget code input
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/osscar-org/widget-code-input/develop?labpath=%2Fexamples%2Fintroduction.ipynb)
+
+* Impact distance of a projectile ( a exmaple for using the widget-code-input for a educational notebook )
+
+- Text for the exercise: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/osscar-org/widget-code-input/develop?urlpath=%2Fvoila%2Frender%2Fdemos%2Fprojectile-notebook.ipynb)
+
+- The interactive exercise: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/osscar-org/widget-code-input/develop?urlpath=%2Fvoila%2Frender%2Fdemos%2Fprojectile-inline.ipynb)
+
+## Installation
+
+You can install using `pip`:
+
+```bash
+pip install widget_code_input
+```
+
+Or if you use jupyterlab:
+
+```bash
+pip install widget_code_input
+jupyter lab build
+```
+
+If you are using Jupyter Notebook 5.2 or earlier, you may also need to enable
+the nbextension:
+```bash
+jupyter nbextension enable --py [--sys-prefix|--user|--system] widget_code_input
+```
+There are seven different code themes can be chosen. They are "eclipse",
+"idea", "material", "midnight", "monokai", "nord" and "solarized".
+You can check the appearance of the code themes at:
+
+[https://codemirror.net/demo/theme.html](https://codemirror.net/demo/theme.html)
+
+
+## Acknowledgements
+
+We acknowledge support from the EPFL Open Science Fund via the [OSSCAR](http://www.osscar.org) project.
+
+<img src='https://www.osscar.org/_images/logos.png' width='700'>
