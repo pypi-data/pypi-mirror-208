@@ -1,0 +1,329 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0">
+        <title>Khoj</title>
+
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 144 144%22><text y=%22.86em%22 font-size=%22144%22>🦅</text></svg>">
+        <link rel="icon" type="image/png" sizes="144x144" href="/static/assets/icons/favicon-144x144.png">
+        <link rel="manifest" href="/static/khoj.webmanifest">
+    </head>
+    <script type="text/javascript" src="static/assets/org.min.js"></script>
+    <script type="text/javascript" src="static/assets/markdown-it.min.js"></script>
+
+    <script>
+        function render_image(item) {
+            return `
+            <a href="${item.entry}" class="image-link">
+                <img id=${item.score} src="${item.entry}?${Math.random()}"
+                    title="Effective Score: ${item.score}, Meta: ${item.additional.metadata_score}, Image: ${item.additional.image_score}"
+                    class="image">
+            </a>`
+        }
+
+        function render_org(query, data, classPrefix="") {
+            var orgCode = data.map(function (item) {
+                return `${item.entry}`
+            }).join("\n")
+            var orgParser = new Org.Parser();
+            var orgDocument = orgParser.parse(orgCode);
+            var orgHTMLDocument = orgDocument.convert(Org.ConverterHTML, { htmlClassPrefix: classPrefix });
+            return orgHTMLDocument.toString();
+        }
+
+        function render_markdown(query, data) {
+            var md = window.markdownit();
+            return md.render(data.map(function (item) {
+                return `${item.entry}`
+            }).join("\n"));
+        }
+
+        function render_ledger(query, data) {
+            return `<div id="results-ledger">` + data.map(function (item) {
+                return `<p>${item.entry}</p>`
+            }).join("\n") + `</div>`;
+        }
+
+        function render_json(data, query, type) {
+            if (type === "markdown") {
+                return render_markdown(query, data);
+            } else if (type === "org") {
+                return render_org(query, data);
+            } else if (type === "music") {
+                return render_org(query, data, "music-");
+            } else if (type === "image") {
+                return data.map(render_image).join('');
+            } else if (type === "ledger") {
+                return render_ledger(query, data);
+            } else {
+                return `<div id="results-plugin">`
+                    + data.map((item) => `<p>${item.entry}</p>`).join("\n")
+                    + `</div>`;
+            }
+        }
+
+        function search(rerank=false) {
+            // Extract required fields for search from form
+            query = document.getElementById("query").value.trim();
+            type = document.getElementById("type").value;
+            results_count = document.getElementById("results-count").value || 6;
+            console.log(`Query: ${query}, Type: ${type}`);
+
+            // Short circuit on empty query
+            if (query.length === 0)
+                return;
+
+            // If set query field in url query param on rerank
+            if (rerank)
+                setQueryFieldInUrl(query);
+
+            // Generate Backend API URL to execute Search
+            url = type === "image"
+                ? `/api/search?q=${encodeURIComponent(query)}&t=${type}&n=${results_count}`
+                : `/api/search?q=${encodeURIComponent(query)}&t=${type}&n=${results_count}&r=${rerank}`;
+
+            // Execute Search and Render Results
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById("results").innerHTML =
+                        `<div id=results-${type}>`
+                        + render_json(data, query, type)
+                        + `</div>`;
+                });
+        }
+
+        function updateIndex() {
+            type = document.getElementById("type").value;
+            fetch(`/api/update?t=${type}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById("results").innerHTML =
+                        render_json(data);
+                });
+        }
+
+        function incrementalSearch(event) {
+            type = document.getElementById("type").value;
+            // Search with reranking on 'Enter'
+            if (event.key === 'Enter') {
+                search(rerank=true);
+            }
+            // Limit incremental search to text types
+            else if (type !== "image") {
+                search(rerank=false);
+            }
+        }
+
+        function populate_type_dropdown() {
+            // Populate type dropdown field with enabled content types only
+            fetch("/api/config/types")
+                .then(response => response.json())
+                .then(enabled_types => {
+                    document.getElementById("type").innerHTML =
+                    enabled_types
+                    .map(type => `<option value="${type}">${type.slice(0,1).toUpperCase() + type.slice(1)}</option>`)
+                    .join('');
+
+                    return enabled_types;
+                })
+                .then(enabled_types => {
+                    // Set type field to content type passed in URL query parameter, if valid
+                    var type_via_url = new URLSearchParams(window.location.search).get("t");
+                    if (type_via_url && enabled_types.includes(type_via_url))
+                        document.getElementById("type").value = type_via_url;
+                });
+        }
+
+        function setTypeFieldInUrl(type) {
+            var url = new URL(window.location.href);
+            url.searchParams.set("t", type.value);
+            window.history.pushState({}, "", url.href);
+        }
+
+        function setCountFieldInUrl(results_count) {
+            var url = new URL(window.location.href);
+            url.searchParams.set("n", results_count.value);
+            window.history.pushState({}, "", url.href);
+        }
+
+        function setQueryFieldInUrl(query) {
+            var url = new URL(window.location.href);
+            url.searchParams.set("q", query);
+            window.history.pushState({}, "", url.href);
+        }
+
+        window.onload = function () {
+            // Dynamically populate type dropdown based on enabled content types and type passed as URL query parameter
+            populate_type_dropdown();
+
+            // Set results count field with value passed in URL query parameters, if any.
+            var results_count = new URLSearchParams(window.location.search).get("n");
+            if (results_count)
+                document.getElementById("results-count").value = results_count;
+
+            // Fill query field with value passed in URL query parameters, if any.
+            var query_via_url = new URLSearchParams(window.location.search).get("q");
+            if (query_via_url)
+                document.getElementById("query").value = query_via_url;
+        }
+    </script>
+
+    <body>
+        <h1>Khoj</h1>
+
+        <!--Add Text Box To Enter Query, Trigger Incremental Search OnChange -->
+        <input type="text" id="query" class="option" onkeyup=incrementalSearch(event) autofocus="autofocus" placeholder="What is the meaning of life?">
+
+        <div id="options">
+            <!--Add Dropdown to Select Query Type -->
+            <select id="type" class="option" onchange="setTypeFieldInUrl(this)"></select>
+
+            <!--Add Button To Regenerate -->
+            <button id="update" class="option" onclick="updateIndex()">Update</button>
+
+            <!--Add Results Count Input To Set Results Count -->
+            <input type="number" id="results-count" min="1" max="100" value="6" placeholder="results count" onchange="setCountFieldInUrl(this)">
+         </div>
+
+        <!-- Section to Render Results -->
+        <div id="results"></div>
+    </body>
+
+    <style>
+        @media only screen and (max-width: 600px) {
+            body {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr 1fr minmax(80px, 100%);
+            }
+            body > * {
+                grid-column: 1;
+            }
+        }
+        @media only screen and (min-width: 600px) {
+            body {
+                display: grid;
+                grid-template-columns: 1fr min(70vw, 100%) 1fr;
+                grid-template-rows: 1fr 1fr 1fr minmax(80px, 100%);
+                padding-top: 60vw;
+            }
+            body > * {
+                grid-column: 2;
+            }
+        }
+
+        body {
+            padding: 0px;
+            margin: 0px;
+            background: #f8fafc;
+            color: #475569;
+            text-align: center;
+            font-family: roboto, karma, segoe ui, sans-serif;
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.5em;
+        }
+        body > * {
+            padding: 10px;
+            margin: 10px;
+        }
+        h1 {
+            font-weight: 200;
+            color: #017eff;
+        }
+
+        #options {
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr minmax(70px, 0.5fr);
+        }
+        #options > * {
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #475569;
+            background: #f9fafc
+        }
+        .option:hover {
+            box-shadow: 0 0 11px #aaa;
+        }
+        #options > select {
+            margin-right: 10px;
+        }
+        #options > button {
+            margin-right: 10px;
+        }
+
+        #query {
+            font-size: larger;
+        }
+        #results {
+            font-size: medium;
+            margin: 0px;
+            line-height: 20px;
+        }
+        #results-image {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .image-link {
+            place-self: center;
+        }
+        .image {
+            width: 20vw;
+            border-radius: 10px;
+            border: 1px solid #475569;
+        }
+        #json {
+            white-space: pre-wrap;
+        }
+        #results-plugin,
+        #results-ledger {
+            text-align: left;
+            white-space: pre-line;
+        }
+         #results-markdown {
+            text-align: left;
+        }
+        #results-music,
+        #results-org {
+            text-align: left;
+            white-space: pre-line;
+        }
+        #results-music h3,
+        #results-org h3 {
+            margin: 20px 0 0 0;
+            font-size: larger;
+        }
+        span.music-task-status,
+        span.task-status {
+            color: white;
+            padding: 3.5px 3.5px 0;
+            margin-right: 5px;
+            border-radius: 5px;
+            background-color: #eab308;
+            font-size: medium;
+        }
+        span.music-task-status.todo,
+        span.task-status.todo {
+            background-color: #3b82f6
+        }
+        span.music-task-status.done,
+        span.task-status.done {
+            background-color: #22c55e;
+        }
+        span.music-task-tag,
+        span.task-tag {
+            color: white;
+            padding: 3.5px 3.5px 0;
+            margin-right: 5px;
+            border-radius: 5px;
+            border: 1px solid #475569;
+            background-color: #ef4444;
+            font-size: small;
+        }
+    </style>
+
+</html>
