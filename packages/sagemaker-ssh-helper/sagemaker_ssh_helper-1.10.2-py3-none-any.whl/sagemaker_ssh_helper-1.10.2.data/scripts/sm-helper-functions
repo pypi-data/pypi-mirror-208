@@ -1,0 +1,155 @@
+#!/bin/bash
+
+function _silent_install() {
+  install_path="/usr/local/bin"
+
+  dir=$(dirname "$0")
+  script=$1
+  mod=$2
+
+  install -C -v "$dir"/"$script" "$install_path"/
+  if [ -n "$mod" ]; then
+    chmod "$mod" "$install_path"/"$script"
+  fi
+}
+
+function _install_helper_scripts() {
+  dir=$(dirname "$0")
+
+  # Scripts may not be available in PATH during bootstrap, so we manually copy scripts into /usr/local/bin/.
+  _silent_install sm-helper-functions
+  _silent_install sm-connect-ssh-proxy +x
+  _silent_install sm-wait +x
+  _silent_install sm-start-ssh +x
+  _silent_install sm-save-env +x
+  _silent_install sm-init-ssm +x
+  _silent_install sm-ssh-ide +x
+  _silent_install sm-local-start-ssh +x
+  _silent_install sm-local-ssh-ide +x
+  _silent_install sm-local-ssh-training +x
+}
+
+function _is_centos() {
+  command -v yum >/dev/null 2>&1
+}
+
+function _is_macos() {
+  uname | grep ^Darwin >/dev/null
+}
+
+function _install_unzip() {
+  if _is_centos; then
+    yum install -y unzip
+  else
+    apt-get install -y --no-install-recommends unzip
+  fi
+}
+
+function _install_aws_cli_linux() {
+  curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+  unzip -o -q -d /tmp/ /tmp/awscliv2.zip
+  /tmp/aws/install --update
+}
+
+function _install_aws_cli_macos() {
+  curl -sS "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "/tmp/AWSCLIV2.pkg"
+  sudo installer -pkg /tmp/AWSCLIV2.pkg -target /
+}
+
+function _install_aws_cli() {
+  echo "sagemaker-ssh-helper: Installing AWS CLI v2"
+  which aws || echo "sagemaker-ssh-helper: No previous installation of AWS CLI detected"
+  which pip >/dev/null 2>&1 && pip uninstall -y awscli
+
+  # See: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+  if _is_macos; then
+    _install_aws_cli_macos
+  else
+    _install_aws_cli_linux
+  fi
+}
+
+function _install_ssm_agent_ubuntu() {
+  curl -sS -o /tmp/amazon-ssm-agent.deb "https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb"
+  dpkg -i /tmp/amazon-ssm-agent.deb
+}
+
+function _install_ssm_agent_centos() {
+  yum install -y "https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm" \
+    || echo "Already installed?"
+}
+
+function _install_ssm_agent() {
+  echo "sagemaker-ssh-helper: Installing SSM Agent"
+  # See https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html
+  if _is_centos; then
+    _install_ssm_agent_centos
+  else
+    _install_ssm_agent_ubuntu
+  fi
+}
+
+function _install_session_manager_plugin_ubuntu() {
+  curl -sS "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" \
+    -o "/tmp/session-manager-plugin.deb"
+  dpkg -i /tmp/session-manager-plugin.deb
+}
+
+function _install_session_manager_plugin_centos() {
+  yum install -y "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" \
+    || echo "Already installed?"
+}
+
+function _install_session_manager_plugin_macos() {
+  curl -sS "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/session-manager-plugin.pkg" \
+    -o "/tmp/session-manager-plugin.pkg"
+  sudo installer -pkg /tmp/session-manager-plugin.pkg -target /
+  sudo rm -f /usr/local/bin/session-manager-plugin
+  sudo ln -s /usr/local/sessionmanagerplugin/bin/session-manager-plugin /usr/local/bin/session-manager-plugin
+}
+
+function _install_session_manager_plugin() {
+  # See https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
+  if _is_centos; then
+    _install_session_manager_plugin_centos
+  elif _is_macos; then
+    _install_session_manager_plugin_macos
+  else
+    _install_session_manager_plugin_ubuntu
+  fi
+  session-manager-plugin
+}
+
+
+
+function _install_curl_ubuntu() {
+  apt-get install -y --no-install-recommends curl
+}
+
+function _install_curl_centos() {
+  yum install -y curl
+}
+
+function _install_curl() {
+  if _is_centos; then
+    _install_curl_centos
+  else
+    _install_curl_ubuntu
+  fi
+}
+
+function _install_jq() {
+  if _is_centos; then
+    yum install -y jq
+  else
+    apt-get install -y --no-install-recommends jq
+  fi
+}
+
+function _install_sudo() {
+  if _is_centos; then
+    yum install -y sudo
+  else
+    apt-get install -y --no-install-recommends sudo
+  fi
+}

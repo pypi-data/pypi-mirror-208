@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: sagemaker-ssh-helper
+Version: 1.10.2
+Summary: A helper library to connect into Amazon SageMaker with AWS Systems Manager and SSH
+Home-page: https://github.com/aws-samples/sagemaker-ssh-helper
+Author: Amazon Web Services
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: MIT No Attribution License (MIT-0)
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: sagemaker (>=2.145.0)
+Requires-Dist: psutil
+Provides-Extra: cdk
+Requires-Dist: aws-cdk-lib (==2.64.0) ; extra == 'cdk'
+Requires-Dist: constructs (<11.0.0,>=10.0.0) ; extra == 'cdk'
+Provides-Extra: dev
+Requires-Dist: sagemaker-pytorch-training ; extra == 'dev'
+Requires-Dist: sagemaker-pytorch-inference ; extra == 'dev'
+Requires-Dist: torch-model-archiver ; extra == 'dev'
+Requires-Dist: tox ; extra == 'dev'
+Requires-Dist: wheel ; extra == 'dev'
+Requires-Dist: build ; extra == 'dev'
+Requires-Dist: twine ; extra == 'dev'
+Requires-Dist: pydevd-pycharm (~=222.4459.20) ; extra == 'dev'
+Requires-Dist: scikit-learn ; extra == 'dev'
+Provides-Extra: dev-macos
+Requires-Dist: tensorflow-macos (==2.9.2) ; extra == 'dev-macos'
+Requires-Dist: numpy (==1.22.4) ; extra == 'dev-macos'
+Provides-Extra: test
+Requires-Dist: coverage ; extra == 'test'
+Requires-Dist: flake8 ; extra == 'test'
+Requires-Dist: mock ; extra == 'test'
+Requires-Dist: pydocstyle ; extra == 'test'
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: pytest-html ; extra == 'test'
+Requires-Dist: bandit ; extra == 'test'
+Requires-Dist: aws-cdk-lib (==2.64.0) ; extra == 'test'
+Requires-Dist: constructs (<11.0.0,>=10.0.0) ; extra == 'test'
+Requires-Dist: sagemaker-studio-image-build ; extra == 'test'
+Requires-Dist: sagemaker-training ; extra == 'test'
+
+SageMaker SSH Helper is a library that helps you to securely connect to Amazon SageMaker's training jobs, processing jobs, realtime inference endpoints, and SageMaker Studio notebook containers for fast interactive experimentation, remote debugging, and advanced troubleshooting.
+
+For the full description see [README.md](https://github.com/aws-samples/sagemaker-ssh-helper/blob/main/README.md).
