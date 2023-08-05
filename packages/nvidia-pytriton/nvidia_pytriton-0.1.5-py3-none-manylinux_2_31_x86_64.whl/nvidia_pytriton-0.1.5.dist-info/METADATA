@@ -1,0 +1,191 @@
+Metadata-Version: 2.1
+Name: nvidia-pytriton
+Version: 0.1.5
+Summary: PyTriton - Flask/FastAPI-like interface to simplify Triton's deployment in Python environments.
+License: Apache 2.0
+Project-URL: Documentation, https://triton-inference-server.github.io/pytriton
+Project-URL: Source, https://github.com/triton-inference-server/pytriton
+Project-URL: Tracker, https://github.com/triton-inference-server/pytriton/issues
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development
+Classifier: Topic :: Scientific/Engineering
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Operating System :: Unix
+Requires-Python: <4,>=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: numpy (~=1.21)
+Requires-Dist: protobuf (>=3.7.0)
+Requires-Dist: pyzmq (~=23.0)
+Requires-Dist: sh (~=1.14)
+Requires-Dist: tritonclient[all]
+Requires-Dist: typing-inspect (~=0.6.0)
+Requires-Dist: wrapt (>=1.11.0)
+Requires-Dist: dataclasses ; python_version < "3.7"
+Provides-Extra: dev
+Requires-Dist: nvidia-pytriton[test] ; extra == 'dev'
+Requires-Dist: nvidia-pytriton[doc] ; extra == 'dev'
+Requires-Dist: black (>=22.8) ; extra == 'dev'
+Requires-Dist: build (>=0.8) ; extra == 'dev'
+Requires-Dist: ipython (>=7.16) ; extra == 'dev'
+Requires-Dist: isort (>=5.10) ; extra == 'dev'
+Requires-Dist: pdbpp (>=0.10) ; extra == 'dev'
+Requires-Dist: pudb (>=2022.1.3) ; extra == 'dev'
+Requires-Dist: pip (>=21.3) ; extra == 'dev'
+Requires-Dist: pre-commit (>=2.20.0) ; extra == 'dev'
+Requires-Dist: twine (>=4.0) ; extra == 'dev'
+Provides-Extra: doc
+Requires-Dist: GitPython (>=3.1.30) ; extra == 'doc'
+Requires-Dist: mike (>=1.1.0) ; extra == 'doc'
+Requires-Dist: mkdocs-htmlproofer-plugin (>=0.8.0) ; extra == 'doc'
+Requires-Dist: mkdocs-material (>=8.5.6) ; extra == 'doc'
+Requires-Dist: mkdocstrings[python] (>=0.19.0) ; extra == 'doc'
+Provides-Extra: test
+Requires-Dist: pytest (~=7.2) ; extra == 'test'
+Requires-Dist: pytest-mock (~=3.8) ; extra == 'test'
+Requires-Dist: pytest-codeblocks (~=0.16.1) ; extra == 'test'
+Requires-Dist: pytype (!=2021.11.18,!=2022.2.17) ; extra == 'test'
+Requires-Dist: pre-commit (>=2.20.0) ; extra == 'test'
+Requires-Dist: tox (>=3.23.1) ; extra == 'test'
+Requires-Dist: tqdm (>=4.64.1) ; extra == 'test'
+Requires-Dist: psutil (~=5.1) ; extra == 'test'
+Requires-Dist: py-spy (~=0.3) ; extra == 'test'
+
+..
+    Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+PyTriton
+==========
+
+PyTriton is a Flask/FastAPI-like interface that simplifies Triton's deployment in Python environments.
+The library allows serving Machine Learning models directly from Python through
+NVIDIA's `Triton Inference Server`_.
+
+.. _Triton Inference Server: https://github.com/triton-inference-server
+
+In PyTriton, as in Flask or FastAPI, you can define any Python function that executes a machine learning model prediction and exposes
+it through an HTTP/gRPC API. PyTriton installs Triton Inference Server in your environment and uses it for handling
+HTTP/gRPC requests and responses. Our library provides a Python API that allows attaching a Python function to Triton
+and a communication layer to send/receive data between Triton and the function. This solution helps utilize the
+performance features of Triton Inference Server, such as dynamic batching or response cache, without changing your model
+environment. Thus, it improves the performance of running inference on GPU for models implemented in Python. The solution is
+framework-agnostic and can be used along with frameworks like PyTorch, TensorFlow, or JAX.
+
+
+Installation
+--------------
+
+The package can be installed from `pypi`_ using:
+
+.. _pypi: https://pypi.org/project/nvidia-pytriton/
+
+.. code-block:: text
+
+    pip install -U nvidia-pytriton
+
+
+Example
+---------
+
+The example presents how to run Python model in Triton Inference Server without need to change the current working
+environment. In the example we are using a simple `Linear` PyTorch model.
+
+The requirement for the example is to have installed PyTorch in your environment. You can do it running:
+
+
+.. code-block:: text
+
+    pip install torch
+
+In the next step define the `Linear` model:
+
+.. code-block:: python
+
+    import torch
+
+    model = torch.nn.Linear(2, 3).to("cuda").eval()
+
+Create a function for handling inference request:
+
+.. code-block:: python
+
+    import numpy as np
+    from pytriton.decorators import batch
+
+
+    @batch
+    def infer_fn(**inputs: np.ndarray):
+        (input1_batch,) = inputs.values()
+        input1_batch_tensor = torch.from_numpy(input1_batch).to("cuda")
+        output1_batch_tensor = model(input1_batch_tensor)  # Calling the Python model inference
+        output1_batch = output1_batch_tensor.cpu().detach().numpy()
+        return [output1_batch]
+
+
+In the next step, create the connection between the model and Triton Inference Server using the bind method:
+
+.. code-block:: python
+
+    from pytriton.model_config import ModelConfig, Tensor
+    from pytriton.triton import Triton
+
+    # Connecting inference callback with Triton Inference Server
+    with Triton() as triton:
+        # Load model into Triton Inference Server
+        triton.bind(
+            model_name="Linear",
+            infer_func=infer_fn,
+            inputs=[
+                Tensor(dtype=np.float32, shape=(-1,)),
+            ],
+            outputs=[
+                Tensor(dtype=np.float32, shape=(-1,)),
+            ],
+            config=ModelConfig(max_batch_size=128)
+        )
+
+Finally, serve the model with Triton Inference Server:
+
+.. code-block:: python
+
+    from pytriton.triton import Triton
+
+    with Triton() as triton:
+        ...  # Load models here
+        triton.serve()
+
+The `bind` method is creating a connection between Triton Inference Server and the `infer_fn` which handle
+the inference queries. The `inputs` and `outputs` describe the model inputs and outputs that are exposed in
+Triton. The config field allows more parameters for model deployment.
+
+The `serve` method is blocking and at this point the application will wait for incoming HTTP/gRPC requests. From that
+moment the model is available under name `Linear` in Triton server. The inference queries can be sent to
+`localhost:8000/v2/models/Linear/infer` which are passed to the `infer_fn` function.
+
+Links
+-------
+
+* Documentation: https://triton-inference-server.github.io/pytriton
+* Source: https://github.com/triton-inference-server/pytriton
+* Issues: https://github.com/triton-inference-server/pytriton/issues
+* Changelog: https://github.com/triton-inference-server/pytriton/blob/main/CHANGELOG.md
+* Known Issues: https://github.com/triton-inference-server/pytriton/blob/main/docs/known_issues.md
+* Contributing: https://github.com/triton-inference-server/pytriton/blob/main/CONTRIBUTING.md
