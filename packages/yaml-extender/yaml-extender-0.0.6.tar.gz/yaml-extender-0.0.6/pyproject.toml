@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=36.2.2", "wheel>=0.28.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yaml-extender"
+description = "Extends the common .yaml syntax to provide more complex configuration options"
+authors = [
+  {name = "Simon Gallitscher", email = "adun.sg@gmx.de"}
+]
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+license = {file = 'LICENSE'}
+keywords = ["yaml", "configuration", "extension"]
+dynamic = ["version", "readme"]
+dependencies = [
+  "pyyaml"
+]
+
+[project.urls]
+homepage = "https://github.com/AdunSG/yaml-extender"
+
+[project.scripts]
+yaml-extender = "reader.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+  "coverage",
+  "pytest"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "yaml_extender.__version__"}
+readme = {file = "README.rst"}
+
+[tool.coverage.run]
+branch = true
+command_line = "-m pytest"
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 85
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+min_version = 3.8
+skip_missing_interpreters = true
+envlist = py38,test
+
+[testenv]
+usedevelop=true
+skip_install=true
+
+[testenv:test]
+skip_install = false
+deps =
+    coverage
+    pytest
+commands =
+    coverage run --rcfile=pyproject.toml --source src/
+    coverage report --rcfile=pyproject.toml
+
+"""
