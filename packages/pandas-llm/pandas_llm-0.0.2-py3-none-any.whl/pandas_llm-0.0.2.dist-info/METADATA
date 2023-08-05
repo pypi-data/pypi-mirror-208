@@ -1,0 +1,96 @@
+Metadata-Version: 2.1
+Name: pandas-llm
+Version: 0.0.2
+Summary: Conversational Pandas Dataframes
+Home-page: https://github.com/DashyDashOrg/pandas-llm
+Download-URL: https://github.com/DashyDashOrg/pandas-llm/releases/tag/v0.0.2
+Author: DashyDash
+Author-email: alessio@dashydash.com
+License: MIT
+Project-URL: Bug Tracker, https://github.com/DashyDashOrg/pandas-llm/issues
+Keywords: pypi,pandas-llm,pandas,llm,ai,openai,chatgpt
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp (>=3.8.4)
+Requires-Dist: aiosignal (>=1.3.1)
+Requires-Dist: async-timeout (>=4.0.2)
+Requires-Dist: attrs (>=23.1.0)
+Requires-Dist: certifi (>=2023.5.7)
+Requires-Dist: charset-normalizer (>=3.1.0)
+Requires-Dist: frozenlist (>=1.3.3)
+Requires-Dist: idna (>=3.4)
+Requires-Dist: multidict (>=6.0.4)
+Requires-Dist: numpy (>=1.24.3)
+Requires-Dist: openai (>=0.27.6)
+Requires-Dist: pandas (>=2.0.1)
+Requires-Dist: python-dateutil (>=2.8.2)
+Requires-Dist: pytz (>=2023.3)
+Requires-Dist: requests (>=2.30.0)
+Requires-Dist: RestrictedPython (>=6.0)
+Requires-Dist: six (>=1.16.0)
+Requires-Dist: tqdm (>=4.65.0)
+Requires-Dist: tzdata (>=2023.3)
+Requires-Dist: urllib3 (>=2.0.2)
+Requires-Dist: yarl (>=1.9.2)
+
+# pandas-llm
+
+pandas-llm is a lightweight Python library that extends pandas to allow querying datasets using OpenAI prompts. This powerful tool leverages the natural language processing capabilities of OpenAI to offer intuitive, language-based querying of your pandas dataframes.
+
+## Installation
+
+Install pandas-llm using pip:
+
+```shell
+pip install pandas_llm
+```
+
+## Features
+- Query pandas dataframes using natural language prompts.
+- Leverage the power of OpenAI's language models in your data analysis.
+- Seamless integration with existing pandas functions.
+
+## Usage
+Here's a quick example of how to use pandas-llm:
+
+```python
+import os
+import pandas as pd
+from pandas_llm import PandasLLM
+
+# your key
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+# Data
+# Please note that these names, ages, and donations are randomly generated 
+# and do not correspond to real individuals or their donations.
+data = [('John Doe', 25, 50), 
+        ('Jane Smith', 38, 70),
+        ('Alex Johnson', 45, 80),
+        ('Jessica Brown', 60, 40),
+        ('Michael Davis', 22, 90),
+        ('Emily Wilson', 30, 60),
+        ('Daniel Taylor', 35, 75),
+        ('Sophia Moore', 40, 85),
+        ('David Thomas', 50, 65),
+        ('Olivia Jackson', 29, 55)]
+df = pd.DataFrame(data, columns=['name', 'age', 'donation'])
+
+conv_df = PandasLLM(data=df, config={ "openai_api_key":OPENAI_API_KEY})
+result = conv_df.prompt("What is the average donation of people older than 30 who donated more than $50?")
+
+print(f"Result ({type(result)}):\n {result}")
+```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
+
+## License
+MIT
