@@ -1,0 +1,169 @@
+:py:mod:`abacusai.model_monitor`
+================================
+
+.. py:module:: abacusai.model_monitor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   abacusai.model_monitor.ModelMonitor
+
+
+
+
+.. py:class:: ModelMonitor(client, modelMonitorId=None, name=None, createdAt=None, projectId=None, trainingFeatureGroupId=None, predictionFeatureGroupId=None, predictionFeatureGroupVersion=None, trainingFeatureGroupVersion=None, alertConfig=None, biasMetricId=None, latestBiasMetricVersionId=None, predictionMetricId=None, latestPredictionMetricVersionId=None, metricConfigs=None, featureGroupMonitorConfigs=None, metricTypes=None, modelId=None, starred=None, batchPredictionId=None, monitorType=None, edaConfigs=None, refreshSchedules={}, latestMonitorModelVersion={})
+
+   Bases: :py:obj:`abacusai.return_class.AbstractApiClass`
+
+   A model monitor
+
+   :param client: An authenticated API Client instance
+   :type client: ApiClient
+   :param modelMonitorId: The unique identifier of the model monitor.
+   :type modelMonitorId: str
+   :param name: The user-friendly name for the model monitor.
+   :type name: str
+   :param createdAt: Date and time at which the model was created.
+   :type createdAt: str
+   :param projectId: The project this model belongs to.
+   :type projectId: str
+   :param trainingFeatureGroupId: Feature group IDs that this model monitor is monitoring.
+   :type trainingFeatureGroupId: list[str]
+   :param predictionFeatureGroupId: Feature group IDs that this model monitor is monitoring.
+   :type predictionFeatureGroupId: list[str]
+   :param predictionFeatureGroupVersion: Feature group version that this model monitor is monitoring.
+   :type predictionFeatureGroupVersion: list[str]
+   :param trainingFeatureGroupVersion: Feature group version that this model monitor is monitoring.
+   :type trainingFeatureGroupVersion: list[str]
+   :param alertConfig: Alerting configuration for this model monitor.
+   :type alertConfig: dict
+   :param biasMetricId: The bias metric ID
+   :type biasMetricId: str
+   :param latestBiasMetricVersionId: Lastest prediction metric instance for bias
+   :type latestBiasMetricVersionId: str
+   :param predictionMetricId: The prediction metric ID for the model monitor
+   :type predictionMetricId: str
+   :param latestPredictionMetricVersionId: Lastest prediction metric instance for decile and other analysis
+   :type latestPredictionMetricVersionId: str
+   :param metricConfigs: Configurations for model monitor
+   :type metricConfigs: dict
+   :param featureGroupMonitorConfigs: Configurations for feature group monitor
+   :type featureGroupMonitorConfigs: dict
+   :param metricTypes: List of metric types
+   :type metricTypes: dict
+   :param modelId: Model ID that this model monitor is monitoring.
+   :type modelId: list[str]
+   :param starred: Whether this model monitor is starred.
+   :type starred: bool
+   :param batchPredictionId: The batch prediction ID this model monitor monitors
+   :type batchPredictionId: str
+   :param monitorType: The type of the monitor, one of MODEL_MONITOR, or FEATURE_GROUP_MONITOR
+   :type monitorType: str
+   :param edaConfigs: The configs for EDA
+   :type edaConfigs: dict
+   :param latestMonitorModelVersion: The latest model monitor version.
+   :type latestMonitorModelVersion: ModelMonitorVersion
+   :param refreshSchedules: List of refresh schedules that indicate when the next model version will be trained.
+   :type refreshSchedules: RefreshSchedule
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: to_dict()
+
+      Get a dict representation of the parameters in this class
+
+      :returns: The dict value representation of the class parameters
+      :rtype: dict
+
+
+   .. py:method:: rerun()
+
+      Re-runs the specified model monitor.
+
+      :param model_monitor_id: Unique string identifier of the model monitor to re-run.
+      :type model_monitor_id: str
+
+      :returns: The model monitor that is being re-run.
+      :rtype: ModelMonitor
+
+
+   .. py:method:: refresh()
+
+      Calls describe and refreshes the current object's fields
+
+      :returns: The current object
+      :rtype: ModelMonitor
+
+
+   .. py:method:: describe()
+
+      Retrieves a full description of the specified model monitor.
+
+      :param model_monitor_id: Unique string identifier associated with the model monitor.
+      :type model_monitor_id: str
+
+      :returns: Description of the model monitor.
+      :rtype: ModelMonitor
+
+
+   .. py:method:: get_summary()
+
+      Gets the summary of a model monitor across versions.
+
+      :param model_monitor_id: A unique string identifier associated with the model monitor.
+      :type model_monitor_id: str
+
+      :returns: An object describing integrity, bias violations, model accuracy and drift for the model monitor.
+      :rtype: ModelMonitorSummary
+
+
+   .. py:method:: list_versions(limit = 100, start_after_version = None)
+
+      Retrieves a list of versions for a given model monitor.
+
+      :param limit: The maximum length of the list of all model monitor versions.
+      :type limit: int
+      :param start_after_version: The ID of the version after which the list starts.
+      :type start_after_version: str
+
+      :returns: A list of model monitor versions.
+      :rtype: ModelMonitorVersion
+
+
+   .. py:method:: rename(name)
+
+      Renames a model monitor
+
+      :param name: The new name to apply to the model monitor.
+      :type name: str
+
+
+   .. py:method:: delete()
+
+      Deletes the specified Model Monitor and all its versions.
+
+      :param model_monitor_id: Unique identifier of the Model Monitor to delete.
+      :type model_monitor_id: str
+
+
+   .. py:method:: list_monitor_alerts_for_monitor()
+
+      Retrieves the list of monitor alerts for a specified monitor.
+
+      :param model_monitor_id: The unique ID associated with the model monitor.
+      :type model_monitor_id: str
+
+      :returns: A list of monitor alerts.
+      :rtype: MonitorAlert
+
+
+
