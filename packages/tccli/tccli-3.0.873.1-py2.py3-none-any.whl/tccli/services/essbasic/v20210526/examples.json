@@ -1,0 +1,403 @@
+{
+  "actions": {
+    "ChannelBatchCancelFlows": [
+      {
+        "document": "指定需要批量撤销的签署流程Id，批量撤销合同\n客户指定需要撤销的签署流程Id，最多100个，超过100不处理；接口失败后返回错误信息",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelBatchCancelFlows\n<公共请求参数>\n\n{\n    \"FlowIds\": [\n        \"testx\"\n    ],\n    \"Agent\": {\n        \"ProxyAppId\": \"testx\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"testx\"\n        },\n        \"AppId\": \"testx\",\n        \"ProxyOrganizationOpenId\": \"testx\"\n    },\n    \"CancelMessage\": \"撤销测试\",\n    \"CancelMessageFormat\": \"0\"\n}",
+        "output": "{\n    \"Response\": {\n        \"FailMessages\": [],\n        \"RequestId\": \"c5e01d20-xxxxxx09d3d32b00\"\n    }\n}",
+        "title": "根据签署流程id批量撤销合同"
+      }
+    ],
+    "ChannelCancelFlow": [
+      {
+        "document": "撤销签署流程",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCancelFlow\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"test\"\n    },\n    \"FlowId\": \"test\",\n    \"CancelMessage\": \"test\",\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"AppId\": \"test\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"s16221xxxx12775546\"\n    }\n}",
+        "title": "撤销签署流程"
+      }
+    ],
+    "ChannelCancelMultiFlowSignQRCode": [
+      {
+        "document": "ChannelCancelMultiFlowSignQRCode",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCancelMultiFlowSignQRCode\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"test\",\n        \"ClientIp\": \"test\",\n        \"CustomUserId\": \"test\",\n        \"ProxyIp\": \"test\",\n        \"Channel\": \"test\"\n    },\n    \"QrCodeId\": \"test\",\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOrganizationId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\",\n            \"ClientIp\": \"test\",\n            \"CustomUserId\": \"test\",\n            \"ProxyIp\": \"test\",\n            \"Channel\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"AppId\": \"test\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"id\"\n    }\n}",
+        "title": "ChannelCancelMultiFlowSignQRCode"
+      }
+    ],
+    "ChannelCreateBatchCancelFlowUrl": [
+      {
+        "document": "指定需要批量撤回的签署流程Id，获取批量撤销链接\n客户指定需要撤回的签署流程Id，最多100个，超过100不处理；接口调用成功返回批量撤回合同的链接，通过链接跳转到电子签小程序完成批量撤回",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateBatchCancelFlowUrl\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"AppId\": \"test\"\n    },\n    \"FlowIds\": [\n        \"id\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"BatchCancelFlowUrl\": \"url\",\n        \"FailMessages\": [],\n        \"UrlExpireOn\": \"\",\n        \"RequestId\": \"id\"\n    }\n}",
+        "title": "根据签署流程id创建批量撤回url"
+      }
+    ],
+    "ChannelCreateBoundFlows": [
+      {
+        "document": "领取未归属的合同",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateBoundFlows\n<公共请求参数>\n\n{\n    \"FlowIds\": [\n        \"test\"\n    ],\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"AppId\": \"test\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"s16221xxxx12775546\"\n    }\n}",
+        "title": "领取合同"
+      }
+    ],
+    "ChannelCreateConvertTaskApi": [
+      {
+        "document": "创建一个文件转换任务",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateConvertTaskApi\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"d2b****b66f954d7cc\",\n        \"ProxyOrganizationOpenId\": \"yDxAyUyK****cb7u0jQn0Zh7f7\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"732aaef****541b89c49e0cc\"\n        },\n        \"AppId\": \"ed68bc6***********0214e4e\"\n    },\n    \"ResourceType\": \"docx\",\n    \"ResourceName\": \"hello.docx\",\n    \"ResourceId\": \"yDRvQUUg*********zjERW6iCFCEl\"\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"0218bd4xxxxefef6c83d2\",\n        \"TaskId\": \"20220*********589282\"\n    }\n}",
+        "title": "创建转换任务"
+      }
+    ],
+    "ChannelCreateEmbedWebUrl": [
+      {
+        "document": "获取创建印章的嵌入WEB链接",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateEmbedWebUrl\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"\",\n        \"Channel\": \"CHANNEL\",\n        \"CustomUserId\": \"1\",\n        \"ClientIp\": \"1.1.1.1\",\n        \"ProxyIp\": \"0.0.0.0\"\n    },\n    \"BusinessId\": \"\",\n    \"EmbedType\": \"CREATE_SEAL\",\n    \"Agent\": {\n        \"AppId\": \"1\",\n        \"ProxyOrganizationOpenId\": \"1\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"1\",\n            \"Channel\": \"1\",\n            \"CustomUserId\": \"1\",\n            \"ClientIp\": \"1\",\n            \"ProxyIp\": \"1\"\n        },\n        \"ProxyAppId\": \"1\",\n        \"ProxyOrganizationId\": \"1\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"WebUrl\": \"https://test.ess.com/seal-create?embed=1&code=testcode&channel=PROXYCHANNEL\",\n        \"RequestId\": \"2\"\n    }\n}",
+        "title": "获取创建印章的嵌入WEB链接"
+      }
+    ],
+    "ChannelCreateFlowByFiles": [
+      {
+        "document": "使用文件创建签署流程",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateFlowByFiles\n<公共请求参数>\n\n{\n    \"FlowName\": \"name\",\n    \"Agent\": {\n        \"ProxyAppId\": \"id\",\n        \"ProxyOrganizationOpenId\": \"id\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"id\"\n        },\n        \"AppId\": \"id\"\n    },\n    \"CustomShowMap\": \"合同名称:{合同名称} {发起方企业} {发起方姓名};国家:中国;发起方:{发起方企业};签署方1:  {签署方1企业};签署方2:  {签署方2企业}{签署方2姓名};签署方3:  {签署方3姓名}\",\n    \"FlowApprovers\": [\n        {\n            \"OpenId\": \"id\",\n            \"OrganizationName\": \"name\",\n            \"Name\": \"name\",\n            \"ApproverType\": \"type\",\n            \"Mobile\": \"mobile\",\n            \"OrganizationOpenId\": \"id\",\n            \"SignComponents\": [\n                {\n                    \"ComponentRecipientId\": \"id\",\n                    \"ComponentValue\": \"test\",\n                    \"GenerateMode\": \"test\",\n                    \"ComponentWidth\": 0.0,\n                    \"FileIndex\": 0,\n                    \"ComponentName\": \"test\",\n                    \"ComponentDateFontSize\": 0,\n                    \"ComponentExtra\": \"test\",\n                    \"ComponentType\": \"test\",\n                    \"ComponentPage\": 1,\n                    \"ComponentDescription\": \"test\",\n                    \"ComponentRequired\": true,\n                    \"ComponentPosX\": 0.0,\n                    \"ComponentPosY\": 0.0,\n                    \"ComponentId\": \"test\",\n                    \"DocumentId\": \"test\",\n                    \"ComponentHeight\": 0.0\n                }\n            ]\n        }\n    ],\n    \"Components\": [\n        {\n            \"ComponentRecipientId\": \"test\",\n            \"ComponentValue\": \"test\",\n            \"GenerateMode\": \"test\",\n            \"ComponentWidth\": 0.0,\n            \"FileIndex\": 0,\n            \"ComponentName\": \"test\",\n            \"ComponentDateFontSize\": 0,\n            \"ComponentExtra\": \"test\",\n            \"ComponentType\": \"test\",\n            \"ComponentPage\": 0,\n            \"ComponentDescription\": \"test\",\n            \"ComponentRequired\": true,\n            \"ComponentPosX\": 0.0,\n            \"ComponentPosY\": 0.0,\n            \"ComponentId\": \"test\",\n            \"DocumentId\": \"test\",\n            \"ComponentHeight\": 0.0\n        }\n    ],\n    \"CallbackUrl\": \"test\",\n    \"ApproverVerifyType\": \"VerifyCheck\",\n    \"FileIds\": [\n        \"test\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"FlowId\": \"id\",\n        \"RequestId\": \"id\"\n    }\n}",
+        "title": "使用文件创建签署流程"
+      }
+    ],
+    "ChannelCreateFlowGroupByFiles": [
+      {
+        "document": "通过多文件创建合同组签署流程",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateFlowGroupByFiles\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"AppId\": \"test\"\n    },\n    \"FlowGroupName\": \"testx\",\n    \"ApproverVerifyType\": \"VerifyCheck\",\n    \"FlowFileInfos\": [\n        {\n            \"FlowName\": \"\",\n            \"FlowApprovers\": [\n                {\n                    \"ApproverType\": \"testx\",\n                    \"OrganizationName\": \"testx\",\n                    \"OrganizationOpenId\": \"testx\",\n                    \"OpenId\": \"testx\",\n                    \"SignComponents\": [\n                        {\n                            \"GenerateMode\": \"testx\",\n                            \"ComponentName\": \"testx\",\n                            \"FileIndex\": 0,\n                            \"ComponentType\": \"testx\"\n                        },\n                        {\n                            \"GenerateMode\": \"testx\",\n                            \"ComponentName\": \"testx\",\n                            \"FileIndex\": 0,\n                            \"ComponentType\": \"testx\"\n                        }\n                    ]\n                }\n            ],\n            \"FileIds\": [\n                \"testx\"\n            ]\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"FlowGroupId\": \"test\",\n        \"FlowIds\": [\n            \"test\",\n            \"test\"\n        ],\n        \"RequestId\": \"test\"\n    }\n}",
+        "title": "通过多文件创建合同组签署流程"
+      }
+    ],
+    "ChannelCreateFlowReminds": [
+      {
+        "document": "对合同中尚未完成的用户推送催办",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateFlowReminds\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf***********200fef3d\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc***********3aff766cac\"\n        },\n        \"AppId\": \"id\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8***********0ee248f04\"\n    },\n    \"FlowIds\": [\n        \"id\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"RemindFlowRecords\": [\n            {\n                \"CanRemind\": true,\n                \"FlowId\": \"id\",\n                \"RemindMessage\": \"签署人 xxx: 此签署人已催办过；\"\n            }\n        ],\n        \"RequestId\": \"s167xxxx8x4184252\"\n    }\n}",
+        "title": "合同催办"
+      }
+    ],
+    "ChannelCreateFlowSignReview": [
+      {
+        "document": "提交企业签署流程审批结果",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateFlowSignReview\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"622201xxxx508023314\"\n        },\n        \"ProxyOrganizationOpenId\": \"shaxxxxang-testorg-pay\",\n        \"AppId\": \"15edb41xxxxff533ac0185ebb0b\"\n    },\n    \"FlowId\": \"id\",\n    \"ReviewType\": \"PASS\",\n    \"ReviewMessage\": \"企业内部审核通过，允许签署\"\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"s16221xxxx12775546\"\n    }\n}",
+        "title": "提交企业签署流程审批结果"
+      }
+    ],
+    "ChannelCreateFlowSignUrl": [
+      {
+        "document": "发起流程后，给其中的C端签署人创建签署链接",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateFlowSignUrl\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf***********200fef3d\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc***********3aff766cac\"\n        },\n        \"AppId\": \"test\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8***********0ee248f04\"\n    },\n    \"FlowApproverInfos\": [\n        {\n            \"Mobile\": \"test\",\n            \"Name\": \"test\"\n        }\n    ],\n    \"FlowId\": \"test\"\n}",
+        "output": "{\n    \"Response\": {\n        \"FlowApproverUrlInfos\": [\n            {\n                \"ApproverType\": \"PERSON\",\n                \"Mobile\": \"test\",\n                \"Name\": \"test\",\n                \"SignUrl\": \"test\"\n            }\n        ],\n        \"RequestId\": \"s1672313474209059745\"\n    }\n}",
+        "title": "创建个人用户H5签署链接"
+      }
+    ],
+    "ChannelCreateMultiFlowSignQRCode": [
+      {
+        "document": "ChannelCreateMultiFlowSignQRCode",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateMultiFlowSignQRCode\n<公共请求参数>\n\n{\n    \"FlowName\": \"test\",\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"AppId\": \"test\"\n    },\n    \"FlowEffectiveDay\": 0,\n    \"TemplateId\": \"test\",\n    \"MaxFlowNum\": 0,\n    \"QrEffectiveDay\": 0,\n    \"CallbackUrl\": \"test\"\n}",
+        "output": "{\n    \"Response\": {\n        \"QrCode\": {\n            \"QrCodeUrl\": \"test\",\n            \"ExpiredTime\": 5,\n            \"QrCodeId\": \"test\"\n        },\n        \"SignUrls\": {\n            \"EffectiveTime\": \"test\",\n            \"HttpSignUrl\": \"test\",\n            \"AppSignUrl\": \"test\"\n        },\n        \"RequestId\": \"test\"\n    }\n}",
+        "title": "ChannelCreateMultiFlowSignQRCode"
+      }
+    ],
+    "ChannelCreatePrepareFlow": [
+      {
+        "document": "创建预发起合同链接-BBC",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreatePrepareFlow\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test-open_org_id\",\n        \"AppId\": \"test-channel_app_id\"\n    },\n    \"ResourceId\": \"test_resource_id\",\n    \"ResourceType\": 1,\n    \"FlowInfo\": {\n        \"FlowName\": \"无序BBC发起填写全部无法编辑\",\n        \"NeedSignReview\": true,\n        \"FlowType\": \"快速生成创建合同链接\",\n        \"FlowDescription\": \"无序BBC发起填写全部无法编辑\",\n        \"Deadline\": 1708497660,\n        \"FormFields\": [\n            {\n                \"ComponentId\": \"ComponentId_16\",\n                \"ComponentName\": \"单行文本\",\n                \"ComponentValue\": \"单行文本\"\n            }\n        ]\n    },\n    \"FlowOption\": {\n        \"CanEditFlow\": false\n    },\n    \"FlowApproverList\": [\n        {\n            \"ApproverType\": 0,\n            \"OrganizationId\": \"\",\n            \"OrganizationOpenId\": \"test-open_org_id\",\n            \"OrganizationName\": \"test百货-子公司\",\n            \"UserId\": \"\",\n            \"OpenId\": \"testOpenId\",\n            \"ApproverName\": \"\",\n            \"ApproverMobile\": \"\",\n            \"RecipientId\": \"yDw9XUUgyg3ervqtUrQhCRCfEBQfKtBx\",\n            \"PreReadTime\": 300,\n            \"IsFullText\": true,\n            \"NotifyType\": \"\",\n            \"ApproverOption\": {\n                \"CanEditApprover\": false\n            },\n            \"NotChannelOrganization\": false\n        },\n        {\n            \"ApproverType\": 0,\n            \"OrganizationId\": \"\",\n            \"OrganizationOpenId\": \"\",\n            \"OrganizationName\": \"测试SAAS企业\",\n            \"UserId\": \"\",\n            \"OpenId\": \"\",\n            \"ApproverName\": \"张三\",\n            \"ApproverMobile\": \"18888888888\",\n            \"RecipientId\": \"yDw9XUUgyg3ervqkUrQhCRur6kMcOYn0\",\n            \"PreReadTime\": 10,\n            \"IsFullText\": true,\n            \"NotifyType\": \"\",\n            \"ApproverOption\": {\n                \"CanEditApprover\": false\n            },\n            \"NotChannelOrganization\": true\n        },\n        {\n            \"ApproverType\": 1,\n            \"OrganizationId\": \"\",\n            \"OrganizationOpenId\": \"\",\n            \"OrganizationName\": \"\",\n            \"UserId\": \"\",\n            \"OpenId\": \"\",\n            \"ApproverName\": \"李四\",\n            \"ApproverMobile\": \"15555555555\",\n            \"RecipientId\": \"yDw9XUUgyg3ervq1UrQhCRyWnKMeua1Z\",\n            \"PreReadTime\": 10,\n            \"IsFullText\": true,\n            \"NotifyType\": \"\",\n            \"ApproverOption\": {\n                \"CanEditApprover\": false\n            },\n            \"NotChannelOrganization\": true\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"PrepareFlowUrl\": \"https://test.ess.tencent.cn/new-contract-create/template/channel?embed=1&expiredOn=1678073737&code=yDwn2UUgygkpxtidUy5ozz8jhVMwzQNQ&businessId=yDwn2UUgygkpxtigUy5ozzEd7YgDtJTZ&byTemplate=template&channel=PROXYCHANNEL&themeId=channel_web_theme_d69192f65cf1e0da4fcd8024ea34afa5\",\n        \"PreviewFlowUrl\": \"\",\n        \"RequestId\": \"s1678073437432767156\"\n    }\n}",
+        "title": "创建预发起合同链接"
+      }
+    ],
+    "ChannelCreateReleaseFlow": [
+      {
+        "document": "1. 使用原流程的签署人\n2. 包含了详细的解除内容",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateReleaseFlow\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf***********200fef3d\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8***********0ee248f04\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc***********3aff766cac\"\n        },\n        \"AppId\": \"65f***********aa382cc5ed0e\"\n    },\n    \"NeedRelievedFlowId\": \"待解除的流程编号xx\",\n    \"ReliveInfo\": {\n        \"Reason\": \"解除理由xx\",\n        \"RemainInForceItem\": \"保留条款xx\",\n        \"OriginalExpenseSettlement\": \"原合同费用结算xx\",\n        \"OriginalOtherSettlement\": \"原合同其他约定xx\",\n        \"OtherDeals\": \"其他约定xx\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"FlowId\": \"yDRsF*****************cbBRXBW6Rd\",\n        \"RequestId\": \"s1669186754600597655\"\n    }\n}",
+        "title": "发起解除协议（默认情况，使用原流程的签署人）"
+      },
+      {
+        "document": "1. 使用本企业的签署人\n2. 包含了详细的解除内容\n3. 替换原流程中本企业的签署人\n4. 被替换的原流程中的签署人ApproverNumber=1（即第二个签署人，在原流程签署人列表中的第二位）\n\n扩展信息：\n针对ApproverNumber举个例子，\n例如在原流程中共有三个签署人（a, b, c），\n那么a是第一位(ApproverNumber=0)，b是第二位(ApproverNumber=1)，c是第三位(ApproverNumber=2)，\n注意这里的顺序不是签署顺序，仅仅是签署人列表中的自然顺序，签署人列表的获取可以参考DescribeFlowDetailInfo接口。",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateReleaseFlow\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf***********200fef3d\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8***********0ee248f04\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc***********3aff766cac\"\n        },\n        \"AppId\": \"65f***********aa382cc5ed0e\"\n    },\n    \"NeedRelievedFlowId\": \"待解除的流程编号test\",\n    \"ReleasedApprovers\": [\n        {\n            \"ApproverNumber\": 1,\n            \"Name\": \"张三\",\n            \"Mobile\": \"13********\",\n            \"ApproverType\": \"ORGANIZATION\",\n            \"OrganizationName\": \"test\"\n        }\n    ],\n    \"ReliveInfo\": {\n        \"Reason\": \"解除理由test\",\n        \"RemainInForceItem\": \"保留条款test\",\n        \"OriginalExpenseSettlement\": \"原合同费用结算test\",\n        \"OriginalOtherSettlement\": \"原合同其他约定test\",\n        \"OtherDeals\": \"其他约定test\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"FlowId\": \"yDRsF*****************cbBRXBW6Rd\",\n        \"RequestId\": \"s16692xxx82203341\"\n    }\n}",
+        "title": "发起解除协议（使用本企业的签署人，替换用原流程中本企业的签署人）"
+      }
+    ],
+    "ChannelCreateSealPolicy": [
+      {
+        "document": "给指定用户下发印章授权",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateSealPolicy\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"d2b****b66f954d7cc\",\n        \"ProxyOrganizationOpenId\": \"yDxAyUyK****cb7u0jQn0Zh7f7\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"732aaef****541b89c49e0cc\"\n        },\n        \"AppId\": \"ed68bc6***********0214e4e\"\n    },\n    \"SealId\": \"yDRTZxxxxxJNR\",\n    \"UserIds\": [\n        \"yDdzlxxxxxopk\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"UserIds\": [\n            \"yDdzlxxxxxopk\"\n        ],\n        \"RequestId\": \"fdasfavdavxxxx\"\n    }\n}",
+        "title": "创建印章授权"
+      }
+    ],
+    "ChannelCreateUserRoles": [
+      {
+        "document": "示例",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelCreateUserRoles\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"abc\",\n        \"Channel\": \"abc\",\n        \"CustomUserId\": \"abc\",\n        \"ClientIp\": \"abc\",\n        \"ProxyIp\": \"abc\"\n    },\n    \"Agent\": {\n        \"AppId\": \"abc\",\n        \"ProxyOrganizationOpenId\": \"abc\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"abc\",\n            \"Channel\": \"abc\",\n            \"CustomUserId\": \"abc\",\n            \"ClientIp\": \"abc\",\n            \"ProxyIp\": \"abc\"\n        },\n        \"ProxyAppId\": \"abc\",\n        \"ProxyOrganizationId\": \"abc\"\n    },\n    \"UserIds\": [\n        \"abc\"\n    ],\n    \"RoleIds\": [\n        \"abc\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"FailedCreateRoleData\": [],\n        \"RequestId\": \"abc\"\n    }\n}",
+        "title": "示例"
+      }
+    ],
+    "ChannelDeleteRoleUsers": [
+      {
+        "document": "解绑用户与角色绑定关系",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelDeleteRoleUsers\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"abc\",\n        \"Channel\": \"abc\",\n        \"CustomUserId\": \"abc\",\n        \"ClientIp\": \"abc\",\n        \"ProxyIp\": \"abc\"\n    },\n    \"RoleId\": \"abc\",\n    \"UserIds\": [\n        \"abc\"\n    ],\n    \"Agent\": {\n        \"AppId\": \"abc\",\n        \"ProxyOrganizationOpenId\": \"abc\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"abc\",\n            \"Channel\": \"abc\",\n            \"CustomUserId\": \"abc\",\n            \"ClientIp\": \"abc\",\n            \"ProxyIp\": \"abc\"\n        },\n        \"ProxyAppId\": \"abc\",\n        \"ProxyOrganizationId\": \"abc\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"RoleId\": \"abc\",\n        \"RequestId\": \"abc\"\n    }\n}",
+        "title": "解绑用户与角色关系"
+      }
+    ],
+    "ChannelDeleteSealPolicies": [
+      {
+        "document": "删除指定印章下多个授权信息",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelDeleteSealPolicies\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"d2b****b66f954d7cc\",\n        \"ProxyOrganizationOpenId\": \"yDxAyUyK****cb7u0jQn0Zh7f7\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"732aaef****541b89c49e0cc\"\n        },\n        \"AppId\": \"ed68bc6***********0214e4e\"\n    },\n    \"SealId\": \"yDRTZxxxxxJNR\",\n    \"UserIds\": [\n        \"yDxxxTZxxxxxJNR\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"yDasdfasdfxxxxxJNR\"\n    }\n}",
+        "title": "删除指定印章下多个授权信息"
+      }
+    ],
+    "ChannelDescribeEmployees": [
+      {
+        "document": "查询员工",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelDescribeEmployees\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"AppId\": \"test\"\n    },\n    \"Filters\": [\n        {\n            \"Values\": [\n                \"\"\n            ],\n            \"Key\": \"\"\n        }\n    ],\n    \"Limit\": \"20\",\n    \"Offset\": \"0\"\n}",
+        "output": "{\n    \"Response\": {\n        \"Employees\": [\n            {\n                \"CreatedOn\": 1658114069,\n                \"Department\": {\n                    \"DepartmentId\": \"dp-8a801d51xxxx820e2aed8155f2\",\n                    \"DepartmentName\": \"test企业\"\n                },\n                \"DisplayName\": \"test\",\n                \"Email\": \"\",\n                \"Mobile\": \"123testtest4567\",\n                \"OpenId\": \"\",\n                \"Roles\": [\n                    {\n                        \"RoleId\": \"ea4ab302xxxx80dd388e6da6902\",\n                        \"RoleName\": \"法人\"\n                    },\n                    {\n                        \"RoleId\": \"4fcbf3624xxxxdf77e30ea6c63\",\n                        \"RoleName\": \"超级管理员\"\n                    },\n                    {\n                        \"RoleId\": \"9b7dcf74abxxxxb57c9fecf8e9\",\n                        \"RoleName\": \"业务员\"\n                    },\n                    {\n                        \"RoleId\": \"4dff1ceaxxxxx6fc061010b\",\n                        \"RoleName\": \"企业员工\"\n                    }\n                ],\n                \"UserId\": \"yDRtvUUgygqxxxxO4zjESsMBKpnZs\",\n                \"Verified\": true,\n                \"VerifiedOn\": 1658114065,\n                \"QuiteJob\": 0\n            }\n        ],\n        \"Limit\": 20,\n        \"Offset\": 0,\n        \"RequestId\": \"s16635xxxx97576195\",\n        \"TotalCount\": 1\n    }\n}",
+        "title": "查询员工"
+      }
+    ],
+    "ChannelDescribeOrganizationSeals": [
+      {
+        "document": "查询子客企业电子印章，需要操作者具有管理印章权限\n客户指定需要获取的印章数量和偏移量，数量最多100，超过100按100处理；入参InfoType控制印章是否携带授权人信息，为1则携带，为0则返回的授权人信息为空数组。接口调用成功返回印章的信息列表还有企业印章的总数。",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelDescribeOrganizationSeals\n<公共请求参数>\n\n{\n    \"InfoType\": \"1\",\n    \"Limit\": \"1\",\n    \"Agent\": {\n        \"AppId\": \"xxxx015042c9a35e0984a9657b0ec\",\n        \"ProxyOrganizationOpenId\": \"test1_xxxxpen_organization1\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"xxxtest1\"\n        }\n    },\n    \"Offset\": \"0\"\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"8ff****2-be87-af68a7842493\",\n        \"Seals\": [\n            {\n                \"AuthorizedUsers\": [\n                    {\n                        \"OpenId\": \"xxxtest1\"\n                    }\n                ],\n                \"CreateOn\": 163549000069,\n                \"Creator\": \"xxxtest1\",\n                \"FailReason\": \"\",\n                \"IsAllTime\": true,\n                \"SealId\": \"yDxHTUUgydj94zlcUuO4zjESIzF*****\",\n                \"SealName\": \"测试环境_测试\",\n                \"SealPolicyId\": \"\",\n                \"SealStatus\": \"SUCCESS\",\n                \"SealType\": \"OFFICIAL\",\n                \"Url\": \"https://***************.jpg\"\n            }\n        ],\n        \"TotalCount\": 35\n    }\n}",
+        "title": "查询子客企业电子印章"
+      }
+    ],
+    "ChannelDescribeRoles": [
+      {
+        "document": "示例",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelDescribeRoles\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"abc\",\n        \"Channel\": \"abc\",\n        \"CustomUserId\": \"abc\",\n        \"ClientIp\": \"abc\",\n        \"ProxyIp\": \"abc\"\n    },\n    \"Agent\": {\n        \"AppId\": \"abc\",\n        \"ProxyOrganizationOpenId\": \"abc\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"abc\",\n            \"Channel\": \"abc\",\n            \"CustomUserId\": \"abc\",\n            \"ClientIp\": \"abc\",\n            \"ProxyIp\": \"abc\"\n        },\n        \"ProxyAppId\": \"abc\",\n        \"ProxyOrganizationId\": \"abc\"\n    },\n    \"Filters\": [\n        {\n            \"Key\": \"abc\",\n            \"Values\": [\n                \"abc\"\n            ]\n        }\n    ],\n    \"Offset\": 1,\n    \"Limit\": \"abc\"\n}",
+        "output": "{\n    \"Response\": {\n        \"Offset\": 1,\n        \"Limit\": 1,\n        \"TotalCount\": 1,\n        \"ChannelRoles\": [\n            {\n                \"RoleId\": \"abc\",\n                \"RoleName\": \"abc\",\n                \"RoleStatus\": 1\n            }\n        ],\n        \"RequestId\": \"abc\"\n    }\n}",
+        "title": "示例"
+      }
+    ],
+    "ChannelGetTaskResultApi": [
+      {
+        "document": "查询文件转换任务",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelGetTaskResultApi\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"d2b****b66f954d7cc\",\n        \"ProxyOrganizationOpenId\": \"yDxAyUyK****cb7u0jQn0Zh7f7\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"732aaef****541b89c49e0cc\"\n        },\n        \"AppId\": \"ed68bc6***********0214e4e\"\n    },\n    \"TaskId\": \"2022*********589282\"\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"3f08b529-f13e-4129-85a4-9585fd794656\",\n        \"ResourceId\": \"yDRt2*********EytoAXw44x\",\n        \"TaskId\": \"2022*********4589282\",\n        \"TaskMessage\": \"任务处理完成\",\n        \"TaskStatus\": 8,\n        \"PreviewUrl\": \"https://xxxxx\"\n    }\n}",
+        "title": "查询转换任务"
+      }
+    ],
+    "ChannelUpdateSealStatus": [
+      {
+        "document": "停用子客企业的印章",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelUpdateSealStatus\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"d2b****b66f954d7cc\",\n        \"ProxyOrganizationOpenId\": \"yDxAyUyK****cb7u0jQn0Zh7f7\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"732aaef****541b89c49e0cc\"\n        },\n        \"AppId\": \"ed68bc6***********0214e4e\"\n    },\n    \"SealId\": \"yDRTZxxxxxJNR\",\n    \"Status\": \"DISABLE\",\n    \"Reason\": \"变更原因-停用\"\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"s187098654322345\"\n    }\n}",
+        "title": "停用印章"
+      }
+    ],
+    "ChannelVerifyPdf": [
+      {
+        "document": "示例-验证不通过",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelVerifyPdf\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"testxxxx_test1\"\n    },\n    \"FlowId\": \"yDRvzUUgxxxxygxxxx4zjEuYdDnsxeT\",\n    \"Agent\": {\n        \"ProxyAppId\": \"id\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test1_xxxxx_test1\"\n        },\n        \"AppId\": \"7f3497f01xxxa35e0984a9657b0ec\",\n        \"ProxyOrganizationOpenId\": \"test1_cxxxx_organization1\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"PdfVerifyResults\": [],\n        \"RequestId\": \"8709904xxxxxx7-d1bc7420345f\",\n        \"VerifyResult\": 4\n    }\n}",
+        "title": "示例-验证不通过"
+      },
+      {
+        "document": "示例-验证通过",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ChannelVerifyPdf\n<公共请求参数>\n\n{\n    \"Operator\": {\n        \"OpenId\": \"testxxxx_test1\"\n    },\n    \"FlowId\": \"yDRvzUUgxxxxygxxxx4zjEuYdDnsxeT\",\n    \"Agent\": {\n        \"ProxyAppId\": \"id\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test1_clara_test1\"\n        },\n        \"AppId\": \"7f3497f01xxxa35e0984a9657b0ec\",\n        \"ProxyOrganizationOpenId\": \"test1_cxxxx_organization1\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"PdfVerifyResults\": [\n            {\n                \"CertNotAfter\": 0,\n                \"CertNotBefore\": 0,\n                \"CertSn\": \"\",\n                \"ComponentHeight\": 0,\n                \"ComponentPage\": 0,\n                \"ComponentPosX\": 0,\n                \"ComponentPosY\": 0,\n                \"ComponentWidth\": 0,\n                \"SignAlgorithm\": \"\",\n                \"SignPlatform\": \"\",\n                \"SignTime\": 0,\n                \"SignType\": 0,\n                \"SignerName\": \"\",\n                \"VerifyResult\": 0\n            },\n            {\n                \"CertNotAfter\": 0,\n                \"CertNotBefore\": 0,\n                \"CertSn\": \"\",\n                \"ComponentHeight\": 0,\n                \"ComponentPage\": 0,\n                \"ComponentPosX\": 0,\n                \"ComponentPosY\": 0,\n                \"ComponentWidth\": 0,\n                \"SignAlgorithm\": \"\",\n                \"SignPlatform\": \"\",\n                \"SignTime\": 0,\n                \"SignType\": 0,\n                \"SignerName\": \"\",\n                \"VerifyResult\": 0\n            },\n            {\n                \"CertNotAfter\": 0,\n                \"CertNotBefore\": 0,\n                \"CertSn\": \"\",\n                \"ComponentHeight\": 0,\n                \"ComponentPage\": 0,\n                \"ComponentPosX\": 0,\n                \"ComponentPosY\": 0,\n                \"ComponentWidth\": 0,\n                \"SignAlgorithm\": \"\",\n                \"SignPlatform\": \"\",\n                \"SignTime\": 0,\n                \"SignType\": 0,\n                \"SignerName\": \"\",\n                \"VerifyResult\": 0\n            },\n            {\n                \"CertNotAfter\": 1646376026000,\n                \"CertNotBefore\": 1646289626000,\n                \"CertSn\": \"1912050077215241\",\n                \"ComponentHeight\": 39.999969482422,\n                \"ComponentPage\": 3,\n                \"ComponentPosX\": 327.10998535156,\n                \"ComponentPosY\": 321.78002929688,\n                \"ComponentWidth\": 62.780029296875,\n                \"SignAlgorithm\": \"SHA1withRSA\",\n                \"SignPlatform\": \"腾讯电子签\",\n                \"SignTime\": 1646289626000,\n                \"SignType\": 0,\n                \"SignerName\": \"程英\",\n                \"VerifyResult\": 0\n            },\n            {\n                \"CertNotAfter\": 1646376026000,\n                \"CertNotBefore\": 1646289626000,\n                \"CertSn\": \"1912050077215241\",\n                \"ComponentHeight\": 12,\n                \"ComponentPage\": 3,\n                \"ComponentPosX\": 343.5299987793,\n                \"ComponentPosY\": 404.7799987793,\n                \"ComponentWidth\": 69.940002441406,\n                \"SignAlgorithm\": \"SHA1withRSA\",\n                \"SignPlatform\": \"腾讯电子签\",\n                \"SignTime\": 1646289626000,\n                \"SignType\": 0,\n                \"SignerName\": \"程英\",\n                \"VerifyResult\": 0\n            },\n            {\n                \"CertNotAfter\": 1778601599000,\n                \"CertNotBefore\": 1620835200000,\n                \"CertSn\": \"4c5a00000000000001839b86\",\n                \"ComponentHeight\": 0,\n                \"ComponentPage\": 1,\n                \"ComponentPosX\": 0,\n                \"ComponentPosY\": 842,\n                \"ComponentWidth\": 0,\n                \"SignAlgorithm\": \"SHA1withRSA\",\n                \"SignPlatform\": \"腾讯电子签\",\n                \"SignTime\": 1646289627000,\n                \"SignType\": 1,\n                \"SignerName\": \"深圳xxxx公司\",\n                \"VerifyResult\": 0\n            }\n        ],\n        \"RequestId\": \"9c683673-axxx2-648f67d46fad\",\n        \"VerifyResult\": 1\n    }\n}",
+        "title": "示例-验证通过"
+      }
+    ],
+    "CreateChannelFlowEvidenceReport": [
+      {
+        "document": "获取全部签署完成得合同得出出证报告，返回报告 ID",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateChannelFlowEvidenceReport\n<公共请求参数>\n\n{\n    \"FlowId\": \"yDR0PUUhw8ahh****KyK18G1h3FK5ccC\",\n    \"Agent\": {\n        \"ProxyOrganizationOpenId\": \"test1_clara_xxxxxrganization1\",\n        \"AppId\": \"7f349*********984a9657b0ec\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"channel-super-*****-openId0001\"\n        }\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"ReportUrl\": \"\",\n        \"Status\": \"EvidenceStatusSuccess\",\n        \"ReportId\": \"yDRspUUgyxxxxxUur7PA0xEQpJXh2b\",\n        \"RequestId\": \"s166141****028448367\"\n    }\n}",
+        "title": "创建并返回出证报告"
+      }
+    ],
+    "CreateConsoleLoginUrl": [
+      {
+        "document": "生成默认的控制台链接",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateConsoleLoginUrl\n<公共请求参数>\n\n{\n    \"ProxyOrganizationName\": \"子客企业名称\",\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"testx\",\n        \"AppId\": \"test\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"ConsoleUrl\": \"https://xxx.xxxx.tencent.com/?channel=PROXYCHANNEL&expiredTime=1631712951&code=123456asdfghjk&menuStatus=ENABLE\",\n        \"IsActivated\": false,\n        \"ProxyOperatorIsVerified\": false,\n        \"RequestId\": \"s16221xxx14775648\"\n    }\n}",
+        "title": "生成默认的控制台链接"
+      },
+      {
+        "document": "生成到模板详情的控制台链接",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateConsoleLoginUrl\n<公共请求参数>\n\n{\n    \"ProxyOrganizationName\": \"子客企业名称\",\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"AppId\": \"test\"\n    },\n    \"Module\": \"TEMPLATE\",\n    \"ModuleId\": \"test\",\n    \"MenuStatus\": \"ENABLE\"\n}",
+        "output": "{\n    \"Response\": {\n        \"ConsoleUrl\": \"https://xxx.xxxx.tencent.com/template-preview?channel=PROXYCHANNEL&expiredTime=1631712951&code=123456asdfghjk&templateId=yDxlzxxxoTxQfVnyxs&menuStatus=ENABLE\",\n        \"IsActivated\": false,\n        \"ProxyOperatorIsVerified\": false,\n        \"RequestId\": \"s16221xxx14775648\"\n    }\n}",
+        "title": "生成到模板详情的控制台链接"
+      }
+    ],
+    "CreateFlowsByTemplates": [
+      {
+        "document": "双方企业均认证 发起示例",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateFlowsByTemplates\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17b***********0200fef3d\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8b***********68c0ee248f04\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc***********3aff766cac\"\n        },\n        \"AppId\": \"65fb0c59***********a382cc5ed0e\"\n    },\n    \"FlowInfos\": [\n        {\n            \"FlowName\": \"测试流程一\",\n            \"TemplateId\": \"005c***********4f7f64e8c\",\n            \"FlowDescription\": \"测试流程一的描述信息\",\n            \"FlowType\": \"合同\",\n            \"Deadline\": 1604910797,\n            \"CallbackUrl\": \"\",\n            \"FormFields\": [\n                {\n                    \"ComponentName\": \"姓名\",\n                    \"ComponentValue\": \"李四\"\n                }\n            ],\n            \"FlowApprovers\": [\n                {\n                    \"ApproverType\": \"ORGANIZATION\",\n                    \"OpenId\": \"00498cc8***********aff766cac\",\n                    \"RecipientId\": \"yDxjbUU***********zjEuCkSaxt8n\"\n                },\n                {\n                    \"ApproverType\": \"ORGANIZATION\",\n                    \"OpenId\": \"eezi_openid\",\n                    \"OrganizationOpenId\": \"organization1_open_id\",\n                    \"OrganizationName\": \"鹅鹅子的企业\",\n                    \"RecipientId\": \"yDxjbUU***********ChJBkK7qS\"\n                }\n            ]\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"CustomerData\": [\n            \"\"\n        ],\n        \"FlowIds\": [\n            \"yDxMqU***********vaigGvi\"\n        ],\n        \"PreviewUrls\": [\n            \"\"\n        ],\n        \"ErrorMessages\": [\n            \"\"\n        ],\n        \"TaskInfos\": [\n            {\n                \"TaskId\": \"taskid\",\n                \"TaskStatus\": \"status\"\n            }\n        ],\n        \"RequestId\": \"s16294xxxxx0001803\"\n    }\n}",
+        "title": "B2B 模板发起示例"
+      },
+      {
+        "document": "使用模板批量创建签署流程",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateFlowsByTemplates\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf***********200fef3d\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8***********0ee248f04\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc***********3aff766cac\"\n        },\n        \"AppId\": \"65f***********aa382cc5ed0e\"\n    },\n    \"FlowInfos\": [\n        {\n            \"FlowName\": \"测试签署流程一\",\n            \"TemplateId\": \"005c7f***********4f7f64e8c\",\n            \"FlowDescription\": \"测试签署流程一的描述信息\",\n            \"FlowType\": \"合同\",\n            \"Deadline\": 1604910797,\n            \"CallbackUrl\": \"\",\n            \"FormFields\": [\n                {\n                    \"ComponentName\": \"姓名\",\n                    \"ComponentValue\": \"李四\"\n                }\n            ],\n            \"FlowApprovers\": [\n                {\n                    \"Name\": \"李四\",\n                    \"Mobile\": \"13888888888\",\n                    \"Deadline\": 1604910798\n                }\n            ]\n        },\n        {\n            \"FlowName\": \"测试签署流程二\",\n            \"TemplateId\": \"005c7***********oqwnrf4e8c\",\n            \"FlowDescription\": \"测试签署流程二的描述信息\",\n            \"FlowType\": \"合同\",\n            \"Deadline\": 1604910797,\n            \"CallbackUrl\": \"\",\n            \"FormFields\": [\n                {\n                    \"ComponentName\": \"姓名\",\n                    \"ComponentValue\": \"张三\"\n                }\n            ],\n            \"FlowApprovers\": [\n                {\n                    \"Name\": \"鹅鹅子\",\n                    \"ApproverType\": \"PERSON\",\n                    \"Mobile\": \"13200000000\",\n                    \"Deadline\": 1663336465\n                },\n                {\n                    \"Name\": \"发起方\",\n                    \"ApproverType\": \"ORGANIZATION\",\n                    \"Mobile\": \"13700000000\",\n                    \"OpenId\": \"12345678\",\n                    \"Deadline\": 1663336465\n                }\n            ]\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"CustomerData\": [\n            \"\",\n            \"\"\n        ],\n        \"FlowIds\": [\n            \"yDxM***********trvvaigGvi\",\n            \"yDxMq***********1trvvaigGv2\"\n        ],\n        \"PreviewUrls\": [\n            \"\",\n            \"\"\n        ],\n        \"ErrorMessages\": [\n            \"\",\n            \"\"\n        ],\n        \"TaskInfos\": [\n            {\n                \"TaskId\": \"taskid\",\n                \"TaskStatus\": \"status\"\n            }\n        ],\n        \"RequestId\": \"s162944xxxxx3\"\n    }\n}",
+        "title": "使用模板批量创建签署流程"
+      }
+    ],
+    "CreateSealByImage": [
+      {
+        "document": "第三方应用平台通过图片为第三方平台子客企业代创建印章，需要电子签人工审核",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateSealByImage\n<公共请求参数>\n\n{\n    \"SealImage\": \"base64\",\n    \"SealName\": \"测试\",\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf*****200fef3d\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc8*********xxx3aff766cac\"\n        },\n        \"ProxyOrganizationOpenId\": \"d7c13a8*********968c0ee248f04\",\n        \"AppId\": \"65fb0c59*********382cc5ed0e\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"SealId\": \"\",\n        \"RequestId\": \"s16294xxxxx0001803\"\n    }\n}",
+        "title": "第三方应用平台通过图片为第三方平台子客企业代创建印章"
+      }
+    ],
+    "CreateSignUrls": [
+      {
+        "document": "创建链接,适用于APP或者小程序跳转",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: CreateSignUrls\n<公共请求参数>\n\n{\n    \"FlowIds\": [\n        \"test-flow-id\"\n    ],\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"AppId\": \"test\"\n    },\n    \"Endpoint\": \"APP\"\n}",
+        "output": "{\n    \"Response\": {\n        \"ErrorMessages\": [\n            \"test\"\n        ],\n        \"SignUrlInfos\": [\n            {\n                \"SignUrl\": \"test\",\n                \"OrganizationName\": \"test\",\n                \"Name\": \"test\",\n                \"ApproverType\": \"test\",\n                \"Mobile\": \"test\",\n                \"CustomUserId\": \"test\",\n                \"Deadline\": 0,\n                \"SignOrder\": 0,\n                \"SignId\": \"test\",\n                \"IdCardNumber\": \"testtesttestx\",\n                \"OpenId\": \"test\",\n                \"FlowId\": \"test-flow-id\",\n                \"FlowGroupId\": \"\"\n            }\n        ],\n        \"RequestId\": \"test\"\n    }\n}",
+        "title": "批量创建签署参与者签署H5链接"
+      }
+    ],
+    "DescribeChannelFlowEvidenceReport": [
+      {
+        "document": "获取全部签署完成的合同的出证报告，返回报告 URL",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeChannelFlowEvidenceReport\n<公共请求参数>\n\n{\n    \"ReportId\": \"yDR0PUUhw8ahh****KyK18G1h3FK5ccC\",\n    \"Agent\": {\n        \"ProxyOrganizationOpenId\": \"test1_claxxxanization1\",\n        \"AppId\": \"7f349*********984a9657b0ec\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"channel-super-*****-openId0001\"\n        }\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"ReportUrl\": \"\",\n        \"Status\": \"EvidenceStatusSuccess\",\n        \"RequestId\": \"s166141****028448367\"\n    }\n}",
+        "title": "创建并返回出证报告"
+      }
+    ],
+    "DescribeExtendedServiceAuthInfo": [
+      {
+        "document": "查询企业扩展服务授权信息",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeExtendedServiceAuthInfo\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"admin-open-id\"\n        },\n        \"ProxyOrganizationOpenId\": \"org-open-id\",\n        \"AppId\": \"APPID12344556667777777\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"AuthInfo\": [\n            {\n                \"Name\": \"企业与港澳台居民*签署合同\",\n                \"OperateOn\": 1671692727,\n                \"OperatorOpenId\": \"admin-open-id\",\n                \"Status\": \"DISABLE\",\n                \"Type\": \"OVERSEA_SIGN\"\n            },\n            {\n                \"Name\": \"使用手机号验证签署方身份\",\n                \"OperateOn\": 1673331249,\n                \"OperatorOpenId\": \"admin-open-id\",\n                \"Status\": \"DISABLE\",\n                \"Type\": \"MOBILE_CHECK_APPROVER\"\n            },\n            {\n                \"Name\": \"企业静默签（自动签署）\",\n                \"OperateOn\": 1672989237,\n                \"OperatorOpenId\": \"admin-open-id\",\n                \"Status\": \"DISABLE\",\n                \"Type\": \"AUTO_SIGN\"\n            },\n            {\n                \"Name\": \"下载企业合同/文件\",\n                \"OperateOn\": 1673331721,\n                \"OperatorOpenId\": \"admin-open-id\",\n                \"Status\": \"ENABLE\",\n                \"Type\": \"DOWNLOAD_FLOW\"\n            },\n            {\n                \"Name\": \"骑缝章\",\n                \"OperateOn\": 1673331246,\n                \"OperatorOpenId\": \"admin-openid\",\n                \"Status\": \"DISABLE\",\n                \"Type\": \"PAGING_SEAL\"\n            }\n        ],\n        \"RequestId\": \"s16733xxx81\"\n    }\n}",
+        "title": "查询企业扩展服务授权信息"
+      }
+    ],
+    "DescribeFlowDetailInfo": [
+      {
+        "document": "查询签署流程合同的详细信息",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeFlowDetailInfo\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"子客企业经办人id\"\n        },\n        \"ProxyOrganizationOpenId\": \"子客企业第三方id\",\n        \"AppId\": \"16fd2f7d7xxxxx5f8d501d57b5ec\"\n    },\n    \"FlowIds\": [\n        \"yDxjGUUgydjxxxxxzjERvGKmZJeX\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"ApplicationId\": \"16fd2f7d7axxxxxd501d57b5ec\",\n        \"FlowInfo\": [\n            {\n                \"CreateOn\": 1638954201,\n                \"CustomData\": \"{\\\"hello\\\": 123}\",\n                \"DeadLine\": 1689688460,\n                \"FlowApproverInfos\": [\n                    {\n                        \"ApproveMessage\": \"\",\n                        \"ApproveName\": \"签署方1\",\n                        \"ApproveStatus\": \"PENDING\",\n                        \"ApproveTime\": 0,\n                        \"ApproveType\": \"PERSON\",\n                        \"Mobile\": \"签署方手机号码(11位数字)\",\n                        \"ProxyOperatorOpenId\": \"us-a9f05aaxxxxxe963ff3f935d7fa39\",\n                        \"ProxyOrganizationName\": \"第三方平台子客企业名称\",\n                        \"ProxyOrganizationOpenId\": \"第三方平台子客企业OpenId\",\n                        \"ReceiptId\": \"签署人信息\",\n                        \"SignOrder\": 1\n                    },\n                    {\n                        \"ApproveMessage\": \"\",\n                        \"ApproveName\": \"签署方2\",\n                        \"ApproveStatus\": \"PENDING\",\n                        \"ApproveTime\": 0,\n                        \"ApproveType\": \"ORGANIZATION\",\n                        \"Mobile\": \"签署方手机号码(11位数字)\",\n                        \"ProxyOperatorOpenId\": \"us-a9f05axxxxxf935d7fa39\",\n                        \"ProxyOrganizationName\": \"第三方平台子客企业名称\",\n                        \"ProxyOrganizationOpenId\": \"第三方平台子客企业OpenId\",\n                        \"ReceiptId\": \"签署人信息\",\n                        \"SignOrder\": 0\n                    }\n                ],\n                \"FlowId\": \"yDxjGUUgxxxxxvGKmZJeX\",\n                \"FlowMessage\": \"\",\n                \"FlowName\": \"示例1\",\n                \"FlowStatus\": \"INIT\",\n                \"FlowType\": \"示例\"\n            }\n        ],\n        \"ProxyOrganizationOpenId\": \"第三方平台子客企业OpenId\",\n        \"FlowGroupName\": \"\",\n        \"FlowGroupId\": \"\",\n        \"RequestId\": \"s16399xxxx603599\"\n    }\n}",
+        "title": "查询签署流程合同的详细信息"
+      }
+    ],
+    "DescribeResourceUrlsByFlows": [
+      {
+        "document": "根据签署流程信息批量获取资源下载链接",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeResourceUrlsByFlows\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"AppId\": \"test\"\n    },\n    \"FlowIds\": [\n        \"test\"\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"FlowResourceUrlInfos\": [\n            {\n                \"FlowId\": \"123\",\n                \"ResourceUrlInfos\": [\n                    {\n                        \"Url\": \"https://\",\n                        \"Type\": \"test\",\n                        \"Name\": \"test\"\n                    }\n                ]\n            }\n        ],\n        \"ErrorMessages\": [\n            \"\"\n        ],\n        \"RequestId\": \"12345\"\n    }\n}",
+        "title": "根据签署流程信息批量获取资源下载链接"
+      }
+    ],
+    "DescribeTemplates": [
+      {
+        "document": "查询有效模板列表",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeTemplates\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"d2b****b66f954d7cc\",\n        \"ProxyOrganizationOpenId\": \"yDxAyUyK****cb7u0jQn0Zh7f7\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"732aaef****541b89c49e0cc\"\n        },\n        \"AppId\": \"ed68bc6***********0214e4e\"\n    },\n    \"TemplateId\": \"templated_test_id\",\n    \"ContentType\": 1,\n    \"Offset\": 0,\n    \"Limit\": 2\n}",
+        "output": "{\n    \"Response\": {\n        \"Templates\": [\n            {\n                \"ChannelAutoSave\": 0,\n                \"PdfUrl\": \"test\",\n                \"Description\": \"test\",\n                \"Recipients\": [\n                    {\n                        \"RecipientType\": \"test\",\n                        \"Description\": \"test\",\n                        \"RoutingOrder\": 0,\n                        \"SignType\": 0,\n                        \"RecipientId\": \"test\",\n                        \"IsPromoter\": true,\n                        \"RequireValidation\": true,\n                        \"RoleName\": \"test\",\n                        \"RequireSign\": true\n                    }\n                ],\n                \"TemplateName\": \"test\",\n                \"CreatedOn\": 1234567890,\n                \"Creator\": \"test\",\n                \"ChannelTemplateName\": \"test\",\n                \"SignComponents\": [\n                    {\n                        \"ComponentValue\": \"test\",\n                        \"FileIndex\": 0,\n                        \"OffsetX\": 0.0,\n                        \"OffsetY\": 0.0,\n                        \"ComponentType\": \"test\",\n                        \"ComponentPosX\": 1241.15,\n                        \"ComponentPosY\": 125.12,\n                        \"GenerateMode\": \"test\",\n                        \"KeywordIndexes\": [\n                            0\n                        ],\n                        \"ComponentDateFontSize\": 0,\n                        \"RelativeLocation\": \"test\",\n                        \"ComponentHeight\": 12.142,\n                        \"ComponentDescription\": \"test\",\n                        \"ComponentRequired\": true,\n                        \"ComponentId\": \"test\",\n                        \"ComponentRecipientId\": \"test\",\n                        \"KeywordPage\": 0,\n                        \"ComponentWidth\": 1.1,\n                        \"ComponentName\": \"test\",\n                        \"ChannelComponentId\": \"test\",\n                        \"ComponentExtra\": \"test\",\n                        \"ComponentPage\": 1,\n                        \"KeywordOrder\": \"test\",\n                        \"DocumentId\": \"test\"\n                    }\n                ],\n                \"TemplateType\": 0,\n                \"IsPromoter\": true,\n                \"PreviewUrl\": \"test\",\n                \"Components\": [\n                    {\n                        \"ComponentValue\": \"test\",\n                        \"FileIndex\": 0,\n                        \"OffsetX\": 0.0,\n                        \"OffsetY\": 0.0,\n                        \"ComponentType\": \"test\",\n                        \"ComponentPosX\": 1241.15,\n                        \"ComponentPosY\": 125.12,\n                        \"GenerateMode\": \"test\",\n                        \"KeywordIndexes\": [\n                            0\n                        ],\n                        \"ComponentDateFontSize\": 0,\n                        \"RelativeLocation\": \"test\",\n                        \"ComponentHeight\": 12.142,\n                        \"ComponentDescription\": \"test\",\n                        \"ComponentRequired\": true,\n                        \"ComponentId\": \"test\",\n                        \"ComponentRecipientId\": \"test\",\n                        \"KeywordPage\": 0,\n                        \"ComponentWidth\": 1.1,\n                        \"ComponentName\": \"test\",\n                        \"ChannelComponentId\": \"test\",\n                        \"ComponentExtra\": \"test\",\n                        \"ComponentPage\": 1,\n                        \"KeywordOrder\": \"test\",\n                        \"DocumentId\": \"test\"\n                    }\n                ],\n                \"TemplateId\": \"test\",\n                \"TemplateVersion\": \"test\",\n                \"ChannelTemplateId\": \"test\"\n            }\n        ],\n        \"TotalCount\": 1,\n        \"Limit\": 1,\n        \"RequestId\": \"test\",\n        \"Offset\": 1\n    }\n}",
+        "title": "查询有效模板列表"
+      },
+      {
+        "document": "返回所有component",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeTemplates\n<公共请求参数>\n\n{\n    \"QueryAllComponents\": \"true\",\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"test1xxxxx_test1\"\n        },\n        \"AppId\": \"7f3497fxxx35e0984a9657b0ec\",\n        \"ProxyOrganizationOpenId\": \"test1_clarxxxnization1\",\n        \"ProxyOrganizationId\": \"yDxHwUyKxxxBNLMLjthsmk\"\n    },\n    \"TemplateId\": \"yDR0JUUgygxxxxjESIpKDSkE9\"\n}",
+        "output": "{\n    \"Response\": {\n        \"Templates\": [\n            {\n                \"TemplateId\": \"test\",\n                \"TemplateName\": \"test\",\n                \"Description\": \"test\",\n                \"Components\": [\n                    {\n                        \"ComponentId\": \"test\",\n                        \"ComponentType\": \"test\",\n                        \"ComponentName\": \"test\",\n                        \"ComponentRequired\": true,\n                        \"ComponentRecipientId\": \"test\",\n                        \"FileIndex\": 0,\n                        \"GenerateMode\": \"test\",\n                        \"ComponentWidth\": 0,\n                        \"ComponentHeight\": 0,\n                        \"ComponentPage\": 0,\n                        \"ComponentPosX\": 0,\n                        \"ComponentPosY\": 0,\n                        \"ComponentExtra\": \"test\",\n                        \"ComponentValue\": \"test\",\n                        \"ComponentDateFontSize\": 0,\n                        \"DocumentId\": \"test\",\n                        \"ComponentDescription\": \"test\",\n                        \"OffsetX\": 0,\n                        \"OffsetY\": 0,\n                        \"ChannelComponentId\": \"test\",\n                        \"KeywordOrder\": \"test\",\n                        \"KeywordPage\": 0,\n                        \"RelativeLocation\": \"test\",\n                        \"KeywordIndexes\": [\n                            0\n                        ]\n                    }\n                ],\n                \"Recipients\": [\n                    {\n                        \"RecipientId\": \"test\",\n                        \"RecipientType\": \"test\",\n                        \"Description\": \"test\",\n                        \"RoleName\": \"test\",\n                        \"RequireValidation\": true,\n                        \"RequireSign\": true,\n                        \"SignType\": 0,\n                        \"RoutingOrder\": 0,\n                        \"IsPromoter\": true\n                    }\n                ],\n                \"SignComponents\": [\n                    {\n                        \"ComponentId\": \"test\",\n                        \"ComponentType\": \"test\",\n                        \"ComponentName\": \"test\",\n                        \"ComponentRequired\": true,\n                        \"ComponentRecipientId\": \"test\",\n                        \"FileIndex\": 0,\n                        \"GenerateMode\": \"test\",\n                        \"ComponentWidth\": 0,\n                        \"ComponentHeight\": 0,\n                        \"ComponentPage\": 0,\n                        \"ComponentPosX\": 0,\n                        \"ComponentPosY\": 0,\n                        \"ComponentExtra\": \"test\",\n                        \"ComponentValue\": \"test\",\n                        \"ComponentDateFontSize\": 0,\n                        \"DocumentId\": \"test\",\n                        \"ComponentDescription\": \"test\",\n                        \"OffsetX\": 0,\n                        \"OffsetY\": 0,\n                        \"ChannelComponentId\": \"test\",\n                        \"KeywordOrder\": \"test\",\n                        \"KeywordPage\": 0,\n                        \"RelativeLocation\": \"test\",\n                        \"KeywordIndexes\": [\n                            0\n                        ]\n                    }\n                ],\n                \"TemplateType\": 0,\n                \"IsPromoter\": true,\n                \"Creator\": \"test\",\n                \"CreatedOn\": 0,\n                \"PreviewUrl\": \"test\",\n                \"PdfUrl\": \"test\",\n                \"ChannelTemplateId\": \"test\",\n                \"ChannelTemplateName\": \"test\",\n                \"ChannelAutoSave\": 0,\n                \"TemplateVersion\": \"test\"\n            }\n        ],\n        \"TotalCount\": 0,\n        \"Limit\": 1,\n        \"Offset\": 1,\n        \"RequestId\": \"test\"\n    }\n}",
+        "title": "返回所有component"
+      },
+      {
+        "document": "模糊搜索模板名",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeTemplates\n<公共请求参数>\n\n{\n    \"TemplateName\": \"顺序签署\",\n    \"QueryAllComponents\": \"true\",\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"test1xxxa_test1\"\n        },\n        \"AppId\": \"7f3497f015xxxxe0984a9657b0ec\",\n        \"ProxyOrganizationOpenId\": \"test1_claraxxxanization1\",\n        \"ProxyOrganizationId\": \"yDxHwUyKQxxx4zjEBNLMLjthsmk\"\n    },\n    \"Limit\": \"2\"\n}",
+        "output": "{\n    \"Response\": {\n        \"Templates\": [\n            {\n                \"TemplateId\": \"test\",\n                \"TemplateName\": \"test\",\n                \"Description\": \"test\",\n                \"Components\": [\n                    {\n                        \"ComponentId\": \"test\",\n                        \"ComponentType\": \"test\",\n                        \"ComponentName\": \"test\",\n                        \"ComponentRequired\": true,\n                        \"ComponentRecipientId\": \"test\",\n                        \"FileIndex\": 0,\n                        \"GenerateMode\": \"test\",\n                        \"ComponentWidth\": 0,\n                        \"ComponentHeight\": 0,\n                        \"ComponentPage\": 0,\n                        \"ComponentPosX\": 0,\n                        \"ComponentPosY\": 0,\n                        \"ComponentExtra\": \"test\",\n                        \"ComponentValue\": \"test\",\n                        \"ComponentDateFontSize\": 0,\n                        \"DocumentId\": \"test\",\n                        \"ComponentDescription\": \"test\",\n                        \"OffsetX\": 0,\n                        \"OffsetY\": 0,\n                        \"ChannelComponentId\": \"test\",\n                        \"KeywordOrder\": \"test\",\n                        \"KeywordPage\": 0,\n                        \"RelativeLocation\": \"test\",\n                        \"KeywordIndexes\": [\n                            0\n                        ]\n                    }\n                ],\n                \"Recipients\": [\n                    {\n                        \"RecipientId\": \"test\",\n                        \"RecipientType\": \"test\",\n                        \"Description\": \"test\",\n                        \"RoleName\": \"test\",\n                        \"RequireValidation\": true,\n                        \"RequireSign\": true,\n                        \"SignType\": 0,\n                        \"RoutingOrder\": 0,\n                        \"IsPromoter\": true\n                    }\n                ],\n                \"SignComponents\": [\n                    {\n                        \"ComponentId\": \"test\",\n                        \"ComponentType\": \"test\",\n                        \"ComponentName\": \"test\",\n                        \"ComponentRequired\": true,\n                        \"ComponentRecipientId\": \"test\",\n                        \"FileIndex\": 0,\n                        \"GenerateMode\": \"test\",\n                        \"ComponentWidth\": 0,\n                        \"ComponentHeight\": 0,\n                        \"ComponentPage\": 0,\n                        \"ComponentPosX\": 0,\n                        \"ComponentPosY\": 0,\n                        \"ComponentExtra\": \"test\",\n                        \"ComponentValue\": \"test\",\n                        \"ComponentDateFontSize\": 0,\n                        \"DocumentId\": \"test\",\n                        \"ComponentDescription\": \"test\",\n                        \"OffsetX\": 0,\n                        \"OffsetY\": 0,\n                        \"ChannelComponentId\": \"test\",\n                        \"KeywordOrder\": \"test\",\n                        \"KeywordPage\": 0,\n                        \"RelativeLocation\": \"test\",\n                        \"KeywordIndexes\": [\n                            0\n                        ]\n                    }\n                ],\n                \"TemplateType\": 0,\n                \"IsPromoter\": true,\n                \"Creator\": \"test\",\n                \"CreatedOn\": 0,\n                \"PreviewUrl\": \"test\",\n                \"PdfUrl\": \"test\",\n                \"ChannelTemplateId\": \"test\",\n                \"ChannelTemplateName\": \"test\",\n                \"ChannelAutoSave\": 0,\n                \"TemplateVersion\": \"test\"\n            }\n        ],\n        \"TotalCount\": 0,\n        \"Limit\": 1,\n        \"Offset\": 1,\n        \"RequestId\": \"test\"\n    }\n}",
+        "title": "模糊搜索模板名"
+      }
+    ],
+    "DescribeUsage": [
+      {
+        "document": "第三方平台用量查询-需要汇总",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeUsage\n<公共请求参数>\n\n{\n    \"StartDate\": \"2020-07-11\",\n    \"EndDate\": \"2020-07-12\",\n    \"Agent\": {\n        \"AppId\": \"testappid1\"\n    },\n    \"NeedAggregate\": true\n}",
+        "output": "{\n    \"Response\": {\n        \"Total\": 2,\n        \"Details\": [\n            {\n                \"Date\": \"2020-09-22\",\n                \"ProxyOrganizationOpenId\": \"org1\",\n                \"Usage\": 100,\n                \"ProxyOrganizationName\": \"合作企业\",\n                \"FlowChannel\": \"test\",\n                \"Cancel\": 0\n            },\n            {\n                \"Date\": \"2020-09-22\",\n                \"ProxyOrganizationOpenId\": \"org2\",\n                \"Usage\": 166,\n                \"ProxyOrganizationName\": \"合作企业\",\n                \"FlowChannel\": \"test\",\n                \"Cancel\": 0\n            }\n        ],\n        \"RequestId\": \"id\"\n    }\n}",
+        "title": "第三方平台用量查询-需要汇总"
+      },
+      {
+        "document": "第三方平台用量查询查询-无需汇总",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: DescribeUsage\n<公共请求参数>\n\n{\n    \"StartDate\": \"2020-07-11\",\n    \"EndDate\": \"2020-07-12\",\n    \"Agent\": {\n        \"AppId\": \"testappid1\"\n    },\n    \"NeedAggregate\": false\n}",
+        "output": "{\n    \"Response\": {\n        \"Total\": 4,\n        \"Details\": [\n            {\n                \"Date\": \"2020-07-11\",\n                \"ProxyOrganizationOpenId\": \"org1\",\n                \"Usage\": 50,\n                \"ProxyOrganizationName\": \"合作企业\",\n                \"FlowChannel\": \"test\",\n                \"Cancel\": 0\n            },\n            {\n                \"Date\": \"2020-07-12\",\n                \"ProxyOrganizationOpenId\": \"org1\",\n                \"Usage\": 50,\n                \"ProxyOrganizationName\": \"合作企业\",\n                \"FlowChannel\": \"test\",\n                \"Cancel\": 0\n            },\n            {\n                \"Date\": \"2020-07-11\",\n                \"ProxyOrganizationOpenId\": \"org2\",\n                \"Usage\": 80,\n                \"ProxyOrganizationName\": \"合作企业\",\n                \"FlowChannel\": \"test\",\n                \"Cancel\": 0\n            },\n            {\n                \"Date\": \"2020-07-12\",\n                \"ProxyOrganizationOpenId\": \"org2\",\n                \"Usage\": 86,\n                \"ProxyOrganizationName\": \"合作企业\",\n                \"FlowChannel\": \"test\",\n                \"Cancel\": 0\n            }\n        ],\n        \"RequestId\": \"id\"\n    }\n}",
+        "title": "第三方平台用量查询查询-无需汇总"
+      }
+    ],
+    "GetDownloadFlowUrl": [
+      {
+        "document": "生成批量下载控制连接地址",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: GetDownloadFlowUrl\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf9c2xxxxx1f4d0200fef3d\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8xxxxe9e3968c0ee248f04\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"00498cc8500be9cxxxxxxx3aff766cac\"\n        },\n        \"AppId\": \"65fb0c5910xxxxaa382cc5ed0e\"\n    },\n    \"DownLoadFlows\": [\n        {\n            \"FlowIdList\": [\n                \"test-flow-id1\",\n                \"test-flow-id2\"\n            ],\n            \"FileName\": \"文件夹1\"\n        },\n        {\n            \"FlowIdList\": [\n                \"test-flow-id3\",\n                \"test-flow-id4\"\n            ],\n            \"FileName\": \"文件夹2\"\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"DownLoadUrl\": \"https://xxx.xxxx.tencent.com/template-preview?channel=PROXYCHANNEL&expiredTime=1639587153&code=yDxjKUUgydjf9pxxxx4adWk38k&token=yDxjKxxxpruUuO4zjES4adWk38k&operate=downloadFlow\",\n        \"RequestId\": \"s16221xxx14775648\"\n    }\n}",
+        "title": "生成批量下载控制连接地址"
+      }
+    ],
+    "ModifyExtendedService": [
+      {
+        "document": "开通企业静默签署扩展服务",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ModifyExtendedService\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"admin-open-id\"\n        },\n        \"ProxyOrganizationOpenId\": \"org-open-id\",\n        \"AppId\": \"APPID122344555\"\n    },\n    \"ServiceType\": \"AUTO_SIGN\",\n    \"Operate\": \"CLOSE\"\n}",
+        "output": "{\n    \"Response\": {\n        \"OperateUrl\": \"\",\n        \"RequestId\": \"s1673342276656659884\"\n    }\n}",
+        "title": "关闭静默签署"
+      },
+      {
+        "document": "开通企业静默签署扩展服务",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ModifyExtendedService\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"admin-open-id\"\n        },\n        \"ProxyOrganizationOpenId\": \"org-open-id\",\n        \"AppId\": \"APPID122344555\"\n    },\n    \"ServiceType\": \"AUTO_SIGN\",\n    \"Operate\": \"OPEN\"\n}",
+        "output": "{\n    \"Response\": {\n        \"OperateUrl\": \"https://res.ess.tencent.cn/cdn/h5-activity-dev/jump-mp.html?to=OPEN_SERVER_SIGN&request_token=xxxxx&organizationId=xxxxx&channelType=xxxxx&expired_time=1673428532&login=1&verify=1\",\n        \"RequestId\": \"s1673342132009427709\"\n    }\n}",
+        "title": "开通企业静默签署"
+      },
+      {
+        "document": "开通骑缝章扩展服务",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: ModifyExtendedService\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"admin-open-id\"\n        },\n        \"ProxyOrganizationOpenId\": \"org-open-id\",\n        \"AppId\": \"APPID122344555\"\n    },\n    \"ServiceType\": \"PAGING_SEAL\",\n    \"Operate\": \"OPEN\"\n}",
+        "output": "{\n    \"Response\": {\n        \"OperateUrl\": \"\",\n        \"RequestId\": \"s1673342239896659883\"\n    }\n}",
+        "title": "开通骑缝章"
+      }
+    ],
+    "OperateChannelTemplate": [
+      {
+        "document": "查询模板库中的模板信息",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: OperateChannelTemplate\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf9c2xxxx611f4d0200fef3d\",\n        \"ProxyOrganizationId\": \"00498cc8500be9cxxxxxxx3aff766cac\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8b8134xxxx968c0ee248f04\",\n        \"AppId\": \"65fb0c59104xxxxa382cc5ed0e\"\n    },\n    \"TemplateId\": \"yDxlkUyKxxxxxxxxxjEvToNRI2MuTr\",\n    \"OperateType\": \"select\"\n}",
+        "output": "{\n    \"Response\": {\n        \"AppId\": \"16fd2f7d7axxxxxf8d501d57b5ec\",\n        \"AuthTag\": \"all\",\n        \"FailMessageList\": [],\n        \"OperateResult\": \"all-success\",\n        \"ProxyOrganizationOpenIds\": [\n            \"子客企业1\",\n            \"子客企业2\"\n        ],\n        \"TemplateId\": \"yDxlkUyKQDpMxxxxxoNRI2MuTr\",\n        \"RequestId\": \"s16395xxxxx249716125\"\n    }\n}",
+        "title": "查询模板库中的模板信息"
+      }
+    ],
+    "PrepareFlows": [
+      {
+        "document": "创建待发起文件",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: PrepareFlows\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"test\",\n        \"ProxyOrganizationOpenId\": \"test\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"test\"\n        },\n        \"AppId\": \"x\"\n    },\n    \"JumpUrl\": \"http://www.test.com\",\n    \"FlowInfos\": [\n        {\n            \"FlowName\": \"测试签署流程一\",\n            \"TemplateId\": \"test\",\n            \"FlowDescription\": \"测试签署流程一的描述信息\",\n            \"FlowType\": \"合同\",\n            \"Deadline\": 1604910797,\n            \"CallbackUrl\": \"\",\n            \"FormFields\": [\n                {\n                    \"ComponentName\": \"姓名\",\n                    \"ComponentValue\": \"李四\"\n                }\n            ],\n            \"FlowApprovers\": [\n                {\n                    \"Name\": \"李四\",\n                    \"Mobile\": \"13888888888\",\n                    \"Deadline\": 1604910798\n                }\n            ]\n        },\n        {\n            \"FlowName\": \"测试签署流程二\",\n            \"TemplateId\": \"test\",\n            \"FlowDescription\": \"测试签署流程二的描述信息\",\n            \"FlowType\": \"合同\",\n            \"Deadline\": 1604910797,\n            \"CallbackUrl\": \"\",\n            \"FormFields\": [\n                {\n                    \"ComponentName\": \"姓名\",\n                    \"ComponentValue\": \"张三\"\n                }\n            ],\n            \"FlowApprovers\": [\n                {\n                    \"Name\": \"鹅鹅子\",\n                    \"ApproverType\": \"PERSON\",\n                    \"Mobile\": \"13200000000\",\n                    \"Deadline\": 1663336465\n                },\n                {\n                    \"Name\": \"发起方\",\n                    \"ApproverType\": \"ORGANIZATION\",\n                    \"Mobile\": \"13700000000\",\n                    \"OpenId\": \"12345678\",\n                    \"Deadline\": 1663336465\n                }\n            ]\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"ConfirmUrl\": \"https://www.xx.com\",\n        \"RequestId\": \"id\"\n    }\n}",
+        "title": "创建待发起文件"
+      }
+    ],
+    "SyncProxyOrganization": [
+      {
+        "document": "同步企业信息",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: SyncProxyOrganization\n<公共请求参数>\n\n{\n    \"ProxyOrganizationName\": \"子客企业名称\",\n    \"UniformSocialCreditCode\": \"code\",\n    \"BusinessLicense\": \"l\",\n    \"ProxyLegalName\": \"name\",\n    \"Agent\": {\n        \"ProxyOperator\": {\n            \"OpenId\": \"proxy-operator-openid\"\n        },\n        \"ProxyOrganizationOpenId\": \"proxy-organization-openid\",\n        \"AppId\": \"test-appid\"\n    }\n}",
+        "output": "{\n    \"Response\": {\n        \"RequestId\": \"s16221xxx14775648\"\n    }\n}",
+        "title": "同步企业信息"
+      }
+    ],
+    "SyncProxyOrganizationOperators": [
+      {
+        "document": "同步子客企业经办人列表",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: SyncProxyOrganizationOperators\n<公共请求参数>\n\n{\n    \"OperatorType\": \"CREATE\",\n    \"Agent\": {\n        \"ProxyAppId\": \"c17bdf9c2a7bdxxxx11f4d0200fef3d\",\n        \"ProxyOrganizationOpenId\": \"d7c13a8bxxxx9e3968c0ee248f04\",\n        \"AppId\": \"65fb0c5910xxx0aa382cc5ed0e\"\n    },\n    \"ProxyOrganizationOperators\": [\n        {\n            \"IdCardNumber\": \"61012xxxxx30000\",\n            \"Name\": \"张三\",\n            \"Mobile\": \"187xxxxx000\",\n            \"IdCardType\": \"ID_CARD\",\n            \"Id\": \"00498cc8500be9cxxxxxxx3aff766cac\"\n        },\n        {\n            \"IdCardNumber\": \"61012xxxxx03130001\",\n            \"Name\": \"李四\",\n            \"Mobile\": \"1000xxxxx000000\",\n            \"IdCardType\": \"ID_CARD\",\n            \"Id\": \"11498cc8500be9cxxxxxxx3aff766cac\"\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"FailedList\": [\n            {\n                \"Id\": \"11498cc8500be9cxxxxxxx3aff766cac\",\n                \"Message\": \"手机号码不合法\"\n            }\n        ],\n        \"RequestId\": \"s1631673278484637219\",\n        \"Status\": 2\n    }\n}",
+        "title": "同步子客企业经办人列表"
+      }
+    ],
+    "UploadFiles": [
+      {
+        "document": "多文件上传",
+        "input": "POST / HTTP/1.1\nHost: essbasic.tencentcloudapi.com\nContent-Type: application/json\nX-TC-Action: UploadFiles\n<公共请求参数>\n\n{\n    \"Agent\": {\n        \"ProxyAppId\": \"abc\",\n        \"ProxyOperator\": {\n            \"OpenId\": \"abc\"\n        },\n        \"AppId\": \"abc\"\n    },\n    \"BusinessType\": \"TEMPLATE\",\n    \"FileInfos\": [\n        {\n            \"FileBody\": \"iVBORw0KGgoAAAANSUhxxxxAElEQVR4Xu3dbah1W5eQ7HmoAAAAASUVORK5CYII=\",\n            \"FileName\": \"a.pdf\"\n        }\n    ]\n}",
+        "output": "{\n    \"Response\": {\n        \"FileIds\": [\n            \"d54e****************A2b7562\"\n        ],\n        \"FileUrls\": [\n            \"https://a.b.com/d5****************2b7562\"\n        ],\n        \"TotalCount\": 1,\n        \"RequestId\": \"4fecd****************bdbb7e5\"\n    }\n}",
+        "title": "多文件上传接口"
+      }
+    ]
+  },
+  "version": "1.0"
+}
