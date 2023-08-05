@@ -1,0 +1,172 @@
+Metadata-Version: 2.1
+Name: tfx-addons
+Version: 0.6.0
+Summary: TFX Addons libraries
+Home-page: https://github.com/tensorflow/tfx-addons
+Author: The Tensorflow Authors
+Project-URL: Bug Tracker, https://github.com/tensorflow/tfx-addons/issues
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: all
+Requires-Dist: ml-metadata (<1.11.0,>=1.6.0) ; extra == 'all'
+Requires-Dist: model-card-toolkit (<3.0.0,>=2.0.0) ; extra == 'all'
+Requires-Dist: pydantic (<2.0,>=1.8.0) ; extra == 'all'
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'all'
+Requires-Dist: slackclient (<3.0,>=2.9.0) ; extra == 'all'
+Requires-Dist: firebase-admin (<6.0.0,>=5.0.0) ; extra == 'all'
+Requires-Dist: feast (<0.23.0,>=0.21.3) ; extra == 'all'
+Requires-Dist: scikit-learn (<2.0.0,>=1.0.2) ; extra == 'all'
+Requires-Dist: huggingface-hub (<1.0.0,>=0.10.0) ; extra == 'all'
+Requires-Dist: kfp (<2.0,>=1.8) ; extra == 'all'
+Requires-Dist: xgboost (>=1.0.0) ; extra == 'all'
+Requires-Dist: ml-pipelines-sdk (<1.11.0,>=1.6.0) ; extra == 'all'
+Requires-Dist: pandas (<2.0,>=1.0.0) ; extra == 'all'
+Requires-Dist: tensorflow (>=2.0.0) ; extra == 'all'
+Provides-Extra: ci_max
+Requires-Dist: tfx (~=1.10.0) ; extra == 'ci_max'
+Requires-Dist: tensorflow (~=2.9.0) ; extra == 'ci_max'
+Provides-Extra: ci_min
+Requires-Dist: tfx (~=1.6.0) ; extra == 'ci_min'
+Requires-Dist: tensorflow (~=2.8.0) ; extra == 'ci_min'
+Provides-Extra: feast_examplegen
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'feast_examplegen'
+Requires-Dist: feast (<0.23.0,>=0.21.3) ; extra == 'feast_examplegen'
+Provides-Extra: feature_selection
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'feature_selection'
+Requires-Dist: scikit-learn (<2.0.0,>=1.0.2) ; extra == 'feature_selection'
+Provides-Extra: firebase_publisher
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'firebase_publisher'
+Requires-Dist: firebase-admin (<6.0.0,>=5.0.0) ; extra == 'firebase_publisher'
+Provides-Extra: huggingface_pusher
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'huggingface_pusher'
+Requires-Dist: huggingface-hub (<1.0.0,>=0.10.0) ; extra == 'huggingface_pusher'
+Provides-Extra: message_exit_handler
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'message_exit_handler'
+Requires-Dist: kfp (<2.0,>=1.8) ; extra == 'message_exit_handler'
+Requires-Dist: slackclient (<3.0,>=2.9.0) ; extra == 'message_exit_handler'
+Requires-Dist: pydantic (<2.0,>=1.8.0) ; extra == 'message_exit_handler'
+Provides-Extra: mlmd_client
+Requires-Dist: ml-pipelines-sdk (<1.11.0,>=1.6.0) ; extra == 'mlmd_client'
+Requires-Dist: ml-metadata (<1.11.0,>=1.6.0) ; extra == 'mlmd_client'
+Provides-Extra: model_card_generator
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'model_card_generator'
+Requires-Dist: model-card-toolkit (<3.0.0,>=2.0.0) ; extra == 'model_card_generator'
+Provides-Extra: pandas_transform
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'pandas_transform'
+Requires-Dist: pandas (<2.0,>=1.0.0) ; extra == 'pandas_transform'
+Provides-Extra: sampling
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'sampling'
+Requires-Dist: tensorflow (>=2.0.0) ; extra == 'sampling'
+Provides-Extra: schema_curation
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'schema_curation'
+Provides-Extra: test
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pylint ; extra == 'test'
+Requires-Dist: pre-commit ; extra == 'test'
+Requires-Dist: isort ; extra == 'test'
+Requires-Dist: yapf ; extra == 'test'
+Provides-Extra: xgboost_evaluator
+Requires-Dist: tfx (<1.11.0,>=1.6.0) ; extra == 'xgboost_evaluator'
+Requires-Dist: xgboost (>=1.0.0) ; extra == 'xgboost_evaluator'
+
+# TFX Addons
+
+[![TFX Addons package CI](https://github.com/tensorflow/tfx-addons/actions/workflows/ci.yml/badge.svg)](https://github.com/tensorflow/tfx-addons/actions/workflows/ci.yml)
+[![TFX Addons CI for examples](https://github.com/tensorflow/tfx-addons/actions/workflows/ci_examples.yml/badge.svg)](https://github.com/tensorflow/tfx-addons/actions/workflows/ci_examples.yml)
+[![PyPI](https://badge.fury.io/py/tfx-addons.svg)](https://badge.fury.io/py/tfx-addons)
+
+
+SIG TFX-Addons is a community-led open source project. As such, the project depends on public contributions, bug fixes, and documentation. This project adheres to the [TensorFlow Code of Conduct](https://github.com/tensorflow/tensorflow/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+
+## Maintainership
+
+The maintainers of TensorFlow Addons can be found in the [CODEOWNERS](https://github.com/tensorflow/tfx-addons/blob/main/CODEOWNERS) file of the repo. If you would
+like to maintain something, please feel free to submit a PR. We encourage multiple 
+owners for all submodules.
+
+
+## Installation
+
+TFX Addons is available on PyPI for all OS. To install the latest version, 
+run the following:
+
+```
+pip install tfx-addons
+```
+
+To ensure you have a compatible version of dependencies for any given project, 
+you can specify the project name  as an extra requirement during install:
+
+```
+pip install tfx-addons[feast_examplegen,schema_curation]
+``` 
+
+To use TFX Addons:
+
+```python
+from tfx import v1 as tfx
+import tfx_addons as tfxa
+
+# Then you can easily load projects tfxa.{project_name}. Ex:
+
+tfxa.feast_examplegen.FeastExampleGen(...)
+
+```
+
+
+## TFX Addons projects
+
+* [tfxa.feast_examplegen](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/feast_examplegen) 
+* [tfxa.feature_selection](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/feature_selection)
+* [tfxa.firebase_publisher](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/firebase_publisher)
+* [tfxa.huggingface_pusher](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/huggingface_pusher)
+* [tfxa.message_exit_handler](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/message_exit_handler) 
+* [tfxa.mlmd_client](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/mlmd_client) 
+* [tfxa.model_card_generator](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/model_card_generator)
+* [tfxa.pandas_transform](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/pandas_transform) 
+* [tfxa.sampling](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/sampling)
+* [tfxa.schema_curation](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/schema_curation) 
+* [tfxa.xgboost_evaluator](https://github.com/tensorflow/tfx-addons/tree/main/tfx_addons/xgboost_evaluator)
+ 
+
+Check out [proposals](https://github.com/tensorflow/tfx-addons/tree/main/proposals) for a list of existing or upcoming projects proposals for TFX Addons.
+
+
+## Tutorials and examples
+See [`examples/`](examples/)
+for end-to-end examples of various addons.
+
+## Contributing
+
+TFX Addons is a community-led project. Please have a look at our contributing and development guides if you want to contribute to the project: [CONTRIBUTING.md](https://github.com/tensorflow/tfx-addons/blob/main/CONTRIBUTING.md)
+
+### Meeting cadence:
+
+We meet bi-weekly on Wednesday. Check out our [Meeting notes](https://docs.google.com/document/d/1T0uZPoZhwNStuKkeCNsfE-kfc-PINISKIitYxkTK3Gw/edit?resourcekey=0-N9vT9Tn171wYplyYn4IPjQ) and join [sig-tfx-addons@tensorflow.com](https://groups.google.com/a/tensorflow.org/g/sig-tfx-addons) to get invited to the meeting.
+
+## Package releases
+
+Check out [RELEASE.md](https://github.com/tensorflow/tfx-addons/blob/main/RELEASE.md) to learn how TFX Addons is released.
+
+## Resources
+
+- [sig-tfx-addons@tensorflow.org](https://groups.google.com/a/tensorflow.org/g/sig-tfx-addons) – Join our Google group
+- [tfx@tensorflow.org](https://groups.google.com/a/tensorflow.org/g/tfx) – General TFX mailing list
+- [TFX Addons Slack](https://tfxaddons.slack.com) -  join [here](https://join.slack.com/t/tfxaddons/shared_invite/zt-tu1981lj-npIhRSHF8gl9G0ldUovbcw)
+- [SIG Repository](http://github.com/tensorflow/tfx-addons) (this repo)
+- [SIG Charter](https://github.com/tensorflow/community/blob/master/sigs/tfx-addons/CHARTER.md)
+
