@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "goodboy"
+version = "0.2.4"
+description = "Data validation tool"
+license = "MIT"
+authors = ["Maxim Andryunin <maxim.andryunin@gmail.com>"]
+readme = "README.md"
+include = [
+    "src/goodboy/locale/**/*.mo"
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+typing-extensions = { version=">=4.0", python=">=3.6,<3.8" }
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+pytest-cov = "^3.0"
+Babel = "^2.9.1"
+mypy = "^0.910"
+black = "^22.6.0"
+
+[[tool.mypy.overrides]]
+module = "pytest.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "sphinx_rtd_theme"
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
