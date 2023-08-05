@@ -1,0 +1,27 @@
+environment
+    tabular_data
+        tabular_data_file = '<<dd.output_file_path>>'
+
+method
+    <<dd.study.type>>
+        partitions = <<aux.partitions|join(" ")>>
+
+model
+    single
+
+variables
+    continuous_design = <<len(dd.study.variables)>>
+        lower_bounds <<aux.lower_bounds|join(" ")>>
+        upper_bounds <<aux.upper_bounds|join(" ")>>
+        descriptors '<<dd.study.variables|join("' '")>>'
+
+responses
+    response_functions = <<len(dd.responses.descriptors)>>
+    descriptors '<<dd.responses.descriptors|join("' '")>>'
+    no_gradients
+    no_hessians
+
+interface
+    analysis_drivers "python.exe driver_link.py"
+        fork
+    # asynchronous evaluation_concurrency 4
