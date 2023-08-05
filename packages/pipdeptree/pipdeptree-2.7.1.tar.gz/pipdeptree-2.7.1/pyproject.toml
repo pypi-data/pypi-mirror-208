@@ -1,0 +1,73 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatch-vcs>=0.3",
+  "hatchling>=1.14",
+]
+
+[project]
+name = "pipdeptree"
+description = "Command line utility to show dependency tree of packages."
+readme = "README.md"
+keywords = [
+  "application",
+  "cache",
+  "directory",
+  "log",
+  "user",
+]
+license.file = "LICENSE"
+maintainers = [
+  { name = "Bernát Gábor", email = "gaborjbernat@gmail.com" },
+  { name = "Vineet Naik", email = "naikvin@gmail.com" },
+]
+requires-python = ">=3.7"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+]
+dynamic = [
+  "version",
+]
+optional-dependencies.graphviz = [
+  "graphviz>=0.20.1",
+]
+optional-dependencies.test = [
+  "covdefaults>=2.3",
+  "diff-cover>=7.5",
+  "pip>=23.1",
+  "pytest>=7.3.1",
+  "pytest-cov>=4",
+  "pytest-mock>=3.10",
+  "virtualenv<21,>=20.21",
+]
+urls.Changelog = "https://github.com/tox-dev/pipdeptree/blob/main/CHANGES.md"
+urls.Documentation = "https://github.com/tox-dev/pipdeptree/blob/main/README.md#pipdeptree"
+urls.Homepage = "https://github.com/tox-dev/pipdeptree"
+urls.Source = "https://github.com/tox-dev/pipdeptree"
+urls.Tracker = "https://github.com/tox-dev/pipdeptree/issues"
+scripts.pipdeptree = "pipdeptree:main"
+
+[tool.hatch]
+build.hooks.vcs.version-file = "src/pipdeptree/version.py"
+version.source = "vcs"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+known_first_party = ["pipdeptree"]
+
+[tool.coverage]
+html.show_contexts = true
+html.skip_covered = false
+paths.source = ["src", ".tox/*/lib/python*/site-packages", "*/src"]
+run.parallel = true
+run.plugins = ["covdefaults"]
