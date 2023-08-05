@@ -1,0 +1,148 @@
+Metadata-Version: 2.1
+Name: pandas-validate
+Version: 1.0.1
+Summary: A python package used for validating pandas dataframes.
+Author-email: Larry Green <larrygreen@duck.com>
+License: MIT License
+        
+        Copyright (c) 2023 larrygreen3
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/larrygreen3/pandas-validate
+Project-URL: Bug Tracker, https://github.com/larrygreen3/pandas-validate/issues
+Keywords: pandas,validate,validation,schema,types
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas
+Requires-Dist: dateparser
+Provides-Extra: build
+Requires-Dist: build ; extra == 'build'
+Requires-Dist: twine ; extra == 'build'
+Provides-Extra: dev
+Requires-Dist: pytest ; extra == 'dev'
+
+# pandas_validate
+
+<!-- Badges -->
+[![PyPI Latest Release](https://img.shields.io/pypi/v/pandas-validate.svg)](https://pypi.org/project/pandas-validate/)
+[![Package Status](https://img.shields.io/pypi/status/pandas-validate.svg)](https://pypi.org/project/pandas-validate/)
+[![License](https://img.shields.io/pypi/l/pandas.svg)](https://github.com/larrygreen3/pandas-validate/blob/main/LICENSE)
+[![Coverage](https://codecov.io/github/larrygreen3/pandas-validate/coverage.svg?branch=main)](https://codecov.io/gh/larrygreen3/pandas-validate)
+
+> A python package used for validating pandas dataframes.
+
+
+## ⚙️ Installation
+```sh
+python -m pip install pandas_validate
+```
+
+
+## 🚀 Usage
+
+```python
+# Imports
+import pandas as pd
+
+from pandas_validate import Schema
+from pandas_validate.columns import IntColumn, TextColumn
+
+
+# Define your Schema
+class MySchema(Schema):
+	IntField = IntColumn(min_value=3, max_value=10)
+	TextField = TextColumn(min_length=3, max_length=5, pattern="^[a-c]+$")
+
+
+# Get your DataFrame
+df = pd.DataFrame({
+	'IntField': [1, 6, 11, 7],
+	'TextField': ['ab', 'abcd', 'ccbbaa', 'ccb'],
+	'UnknownField': [1, 2, 3, 4]
+})
+
+
+# Validate your DataFrame
+validated_df, exceptions = MySchema.validate(df)
+```
+
+Results
+```python
+>>> print(validated_df)
+
+   IntField TextField
+0       NaN      None
+1       6.0      None
+2       NaN      None
+3       7.0       ccb
+
+
+>>> print(exceptions)
+
+         column  row   value                     error                                      error_details
+0      IntField  0.0       1  Column validation failed                                    The value 1 < 3
+1      IntField  2.0      11  Column validation failed                                  The value 11 < 10
+2     TextField  0.0      ab  Column validation failed                          The value ab is too short
+3     TextField  1.0    abcd  Column validation failed  The value abcd does not match the regular expr...
+4     TextField  2.0  ccbbaa  Column validation failed                       The value ccbbaa is too long
+5  UnknownField  NaN    None            Unknown Column     The column "UnknownField" is not in the Schema
+
+```
+
+
+
+## Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+
+[Current Contributors](https://github.com/larrygreen3/pandas-validate/graphs/contributors)
+
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome.<br />
+Feel free to check [issues page](https://github.com/larrygreen3/pandas-validate/issues) if you want to contribute.<br />
+[Check the contributing guide](CONTRIBUTING.md).<br />
+
+## Author
+
+👤 **Larry Green**
+
+- Github: [@larrygreen3](https://github.com/larrygreen3)
+
+## Show your support
+
+Please ⭐️ this repository if this project helped you!
+
+
+## 📝 License
+
+Copyright © 2023 [Larry Green](https://github.com/larrygreen3).<br />
+This project is [MIT](https://github.com/larrygreen3/pandas-validate/blob/master/LICENSE) licensed.
+
+---
