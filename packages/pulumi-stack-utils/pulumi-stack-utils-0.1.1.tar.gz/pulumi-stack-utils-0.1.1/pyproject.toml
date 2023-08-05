@@ -1,0 +1,37 @@
+[project]
+name = "pulumi-stack-utils"
+description = "Utilities for working with Pulumi stacks"
+readme = "README.md"
+license = { text = "BSD-2-Clause" }
+version = "0.1.1"
+authors = [
+    { name="James Arnold", email="james@rs21.io" }
+]
+dependencies = [
+    "boto3",
+    "pulumi",
+    "pyyaml",
+]
+keywords = ["pulumi", "iac"]
+
+[project.urls]
+repository = "https://github.com/rs21io/pulumi-stack-utils"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "pytest-pylint",
+]
+
+[tool.pylint.'FORMAT']
+max-line-length = 88
+good-names = "f,k,v,s3"
+
+[tool.pylint.'MASTER']
+ignore = "test"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = "C0114"
