@@ -1,0 +1,77 @@
+{
+    "test_snippet": {
+        "mandatory_vars": [
+            "file_name"            
+        ],
+        "commands": [
+            {
+                "type": "bash",
+                "command": "echo file {file_name}"
+            }
+        ]
+    },
+    "test_snippet_unused_mandatory_var": {
+        "mandatory_vars": [
+            "file_name",
+            "unused_mandatory_var"
+        ],
+        "commands": [
+            {
+                "type": "bash",
+                "command": "echo file {file_name}"
+            }
+        ]
+    },
+    "test_snippet_no_vars": {
+        "commands": [
+            {
+                "type": "bash",
+                "command": "echo 'No vars needed!'"
+            }
+        ]
+    },
+    "snippet_in_snippet": {
+        "commands": [
+            {
+                "type": "snippet",
+                "key": "test_snippet",
+                "variables": {
+                    "file_name": "test.txt"
+                }
+            }
+        ]
+    },
+    "nested_circular_in_snippet_p1": {
+        "commands": [
+            {
+                "type": "snippet",
+                "key": "nested_circular_in_snippet_p2",
+                "variables": {
+                    "file_name": "test.txt"
+                }
+            }
+        ]
+    },
+    "nested_circular_in_snippet_p2": {
+        "commands": [
+            {
+                "type": "snippet",
+                "key": "nested_circular_in_snippet_p1",
+                "variables": {
+                    "file_name": "test.txt"
+                }
+            }
+        ]
+    },
+    "circular_in_snippet": {
+        "commands": [
+            {
+                "type": "snippet",
+                "key": "circular_in_snippet",
+                "variables": {
+                    "file_name": "test.txt"
+                }
+            }
+        ]
+    }
+}
