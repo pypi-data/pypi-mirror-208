@@ -1,0 +1,322 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "9db1faf5",
+   "metadata": {},
+   "source": [
+    "# configurator report\n",
+    " This notebook contains the automatic `configurator` report based on preliminary PE results.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "934dbf2a",
+   "metadata": {},
+   "source": [
+    "\n",
+    "**Data provenance**\n",
+    "\n",
+    "|  |  |\n",
+    "|--|--|\n",
+    "| PE summary file | /Users/hestelles/Downloads/IGWN-GWTC2p1-v2-GW190814_211039_PEDataRelease_mixed_cosmo.h5 |\n",
+    "|  Data set       |  C01:IMRPhenomXPHM     |\n",
+    "| md5sum of file      |     0231d2a2338fd8f042887280a2ad4a6a     |\n",
+    "| git revision of data | N/A__DIRTY | \n",
+    "\n",
+    "**Settings**\n",
+    "\n",
+    "| | |\n",
+    "|--|--|\n",
+    "|$f_{\\rm low}$|20.0 Hz|\n",
+    "|$f_{\\rm ref}$|20.0 Hz|\n",
+    "|Max $\\ell$ for Nyquist check|3|\n",
+    "|Tolerance for railing|2.0|\n",
+    "|nbins for railing|50|\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d1ce0093",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%matplotlib inline\n",
+    "import pesummary\n",
+    "from pesummary.io import read\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import pandas as pd\n",
+    "%config InlineBackend.figure_format = 'retina'\n",
+    "import warnings\n",
+    "warnings.filterwarnings('ignore')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dbb833a0",
+   "metadata": {},
+   "source": [
+    "## Automatically generated analysis"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4695c807",
+   "metadata": {},
+   "source": [
+    "\n",
+    "* **Mass 2 has strong support for mass < 3 $M_{\\odot}$**\n",
+    "\n",
+    "\n",
+    "* **Equal masses are excluded at high confidence for this event!\n",
+    "Median mass ratio is below 1/3, highly unequal mass event!**\n",
+    "\n",
+    "\n",
+    "* **The median network matched filter SNR is above 25.0! Very loud event?**\n",
+    "\n",
+    "\n",
+    "* **$a_{1}$ is well constrained!\\n**\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0520618b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "file_name = '/Users/hestelles/Downloads/IGWN-GWTC2p1-v2-GW190814_211039_PEDataRelease_mixed_cosmo.h5'\n",
+    "data = read(file_name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d394cf6f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "samples_dict = data.samples_dict\n",
+    "posterior_samples = samples_dict['C01:IMRPhenomXPHM']\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "02874706",
+   "metadata": {},
+   "source": [
+    "## Summary of posterior sample parameters\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "91bad044",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "mtot = np.array(posterior_samples[\"total_mass\"])\n",
+    "q = np.array(posterior_samples[\"mass_ratio\"])\n",
+    "chi1z = np.array(posterior_samples[\"spin_1z\"])\n",
+    "chi2z = np.array(posterior_samples[\"spin_2z\"])\n",
+    "dist = np.array(posterior_samples[\"luminosity_distance\"])\n",
+    "chirp_mass = np.array(posterior_samples[\"chirp_mass\"])\n",
+    "\n",
+    "dc = {\n",
+    "    r\"$\\mathcal{M}$\": chirp_mass,\n",
+    "    r\"$M_{\\rm total}$\": mtot,\n",
+    "    r\"$q$\": q,\n",
+    "    r\"$d_{L}$\": dist,\n",
+    "    r\"$\\chi_{1z}$\": chi1z,\n",
+    "    r\"$\\chi_{2z}$\": chi2z\n",
+    "}\n",
+    "df = pd.DataFrame(dc)\n",
+    "try:\n",
+    "    from pandas_profiling import ProfileReport\n",
+    "    have_report = True\n",
+    "except:\n",
+    "    from IPython.core.display import display, HTML\n",
+    "    have_report = False\n",
+    "\n",
+    "have_report = False\n",
+    "if have_report:\n",
+    "    profile = ProfileReport(df, title='Pandas Profiling Report',minimal=True,progress_bar=False,\n",
+    "        html={\"navbar_show\": False})\n",
+    "    profile.to_widgets()\n",
+    "else:\n",
+    "    from IPython.core.display import display, HTML\n",
+    "    display(HTML(df.describe().to_html()))\n",
+    "    "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "86266a33",
+   "metadata": {},
+   "source": [
+    "## Posterior railing visual check"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "67fd95be",
+   "metadata": {},
+   "source": [
+    "Automatic checks on railing. Note that the **recommendations are ad-hoc** and may not result in posteriors not being cut off."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1225ddca",
+   "metadata": {},
+   "source": [
+    "\n",
+    "| |  | Recommendation  |\n",
+    "|--|--|--|\n",
+    "|chirp_mass|**<font color='green'>PASSED</font>**| | \n",
+    "|distance|**<font color='green'>PASSED</font>**| | \n",
+    "|mass_ratio|**<font color='green'>PASSED</font>**| | \n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5abfb5bc",
+   "metadata": {},
+   "source": [
+    "Plot of selected posterior parameters. **All masses are in the detector frame**.  The red dashed lines show the proposed $\\mathcal{M}$ bounds,[6.1954,6.5825]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c7c72bab",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "checks_passed = True\n",
+    "version = [int(x) for x in pd.__version__.split('.')]\n",
+    "if version[0]<1:\n",
+    "    j,k = 1,0\n",
+    "else:\n",
+    "    j,k = 0,0\n",
+    "\n",
+    "N = len(df.columns)\n",
+    "if N%3 == 0:\n",
+    "    n = N//3\n",
+    "else:\n",
+    "    n = np.floor(N/3)+1\n",
+    "\n",
+    "plt.rcParams['axes.titlesize'] =  'xx-large'   \n",
+    "plt.rcParams['font.size'] = 18\n",
+    "plt.rcParams['text.usetex'] = False\n",
+    "axes=df.hist(figsize=(12,8),bins=50,layout=(n,3),histtype=\"step\",density=True)\n",
+    "if checks_passed:\n",
+    "    axes[j,k].axvline(x=6.195429253510138, ls=\"--\", color=\"r\")\n",
+    "    axes[j,k].axvline(x=6.582464458187108, ls=\"--\", color=\"r\")\n",
+    "    _ = axes[j,k].set_xlim(0.95 * 6.195429253510138,1.05 * 6.582464458187108)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d086287b",
+   "metadata": {},
+   "source": [
+    "## MECO frequency check\n",
+    " The reference frequency is shown as a dashed green vertical line. If the reference frequency has been modified by the MECO test, the input value appears in red and the new value in green."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f63a4cc2",
+   "metadata": {},
+   "source": [
+    "\n",
+    "| |  | Recommendation  |\n",
+    "|--|--|--|\n",
+    "|f_ref|**<font color='green'>PASSED</font>**| | \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1ed32ecc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "import lalsimulation as LS\n",
+    "\n",
+    "def MECO_freq(m_total, q, chi1z, chi2z):\n",
+    "    eta = q / (1.0 + q) ** 2\n",
+    "    fmeco_tmp = LS.SimIMRPhenomXfMECO(eta, chi1z, chi2z)\n",
+    "    fmeco = LS.SimIMRPhenomXUtilsMftoHz(fmeco_tmp, m_total)\n",
+    "    return fmeco\n",
+    "\n",
+    "f_ref_input = 20.0\n",
+    "f_ref = 20.0\n",
+    "f_MECOs = np.array([\n",
+    "        MECO_freq(mt, 1 / qp, s1z, s2z)\n",
+    "        for mt, qp, s1z, s2z in list(zip(mtot, q, chi1z, chi2z))\n",
+    "    ])\n",
+    "plt.figure(figsize=(8,6))\n",
+    "plt.hist(f_MECOs,bins=50,histtype=\"step\",density=True)\n",
+    "plt.axvline(f_ref_input,ls=\"--\",color=\"r\")\n",
+    "plt.axvline(f_ref,ls=\"--\",color=\"g\")\n",
+    "plt.xlabel(r\"$f_{\\rm MECO}$ (Hz)\")\n",
+    "_ = plt.ylabel(r\"Probability density\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "846463c7",
+   "metadata": {},
+   "source": [
+    "## Recommended settings"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "24dffb99",
+   "metadata": {},
+   "source": [
+    "\n",
+    "|  |  |\n",
+    "|--|--|\n",
+    "|  seglen | 16.0 sec. |\n",
+    "|  srate       |  4096     |\n",
+    "|  $f_{\\rm start}$     | 13.3333 Hz|\n",
+    "|  $f_{\\rm ref}$     | 20.0 Hz|\n",
+    "| $\\mathcal{M}$ bounds | [6.1954,6.5825]|\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c696afa9",
+   "metadata": {},
+   "source": [
+    "## Extra information"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bb5818e0",
+   "metadata": {},
+   "source": [
+    "\n",
+    "|  |  |\n",
+    "|--|--|\n",
+    "|Date| 2023-04-12 09:51:58.908654|\n",
+    "|Script revision| ad853bac7cca41f13b704b059414ff09d8157603__DIRTY|\n",
+    "|Complete arguments | Namespace(output_dir='examples/test_GW190814', HM=True, q_min=None, ell_max=3, tolerance=2.0, nbins=50, flow=20.0, f_ref=20.0, bounds_tol=0.2, json_file='test.json', report_file='test.pdf', override_safeties=False, debug=False, include_dL_recommendations=False)|\n"
+   ]
+  }
+ ],
+ "metadata": {},
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

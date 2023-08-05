@@ -1,0 +1,58 @@
+[build-system]
+requires = [
+	"setuptools>=61.0",
+	"setuptools_scm[toml]>=3.4.3",
+	"wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_scheme = "release-branch-semver"
+
+[project]
+name = "pe-configurator"
+dynamic = ["version"]
+authors = [
+	{ name = "Hector Estelles", email = "hector.estelles@ligo.org" },
+	{ name = "Serguei Ossokine", email = "serguei.ossokine@ligo.org" },
+	{ name = "Daniel Williams", email = "daniel.williams@ligo.org" },
+]
+description = "Tools to identify waveform settings and prior bounds for gravitational wave parameter estimation."
+readme = "README.md"
+license = { text = "MIT" }
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent"
+]
+requires-python = ">=3.6"
+dependencies = [
+	"asimov>=0.4.0",
+	"lalsuite>=7.14",
+	"pandas",
+	"pesummary",
+	"nbformat",
+]
+
+[project.optional-dependencies]
+docs = [
+	"sphinx",
+]
+asimov = [
+       "asimov >= 0.4.0",
+]
+
+[project.scripts]
+peconfigurator = "peconfigurator.proc_samples:main"
+
+[project.urls]
+"Source code" = "https://git.ligo.org/pe/get_eob_settings"
+
+[tool.setuptools]
+include-package-data = true
+packages = [
+	"peconfigurator",
+]
+
+[project.entry-points.'asimov.pipelines']
+peconfigurator = 'peconfigurator.asimov:AsimovPipeline'
