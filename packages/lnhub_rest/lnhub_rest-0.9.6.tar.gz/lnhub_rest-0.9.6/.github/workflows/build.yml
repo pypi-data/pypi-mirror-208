@@ -1,0 +1,99 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main, staging]
+
+env:
+  BRANCH_NAME: ${{ github.base_ref || github.head_ref }}
+  STAGING_ENV_FILE: ${{secrets.LNHUB_REST_STAGING_ENV}}
+  PROD_ENV_FILE: ${{secrets.LNHUB_REST_PROD_ENV}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+        package:
+          - "lnhub-rest"
+          - "lndb"
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ACCESS_TOKEN_ALEX }}
+          fetch-depth: 0
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+      - name: Cache postgres
+        id: cache-postgres
+        uses: actions/cache@v3
+        with:
+          path: ~/postgres.tar
+          key: cache-postgres-0
+      - name: Cache postgres miss
+        if: steps.cache-postgres.outputs.cache-hit != 'true'
+        run: docker pull postgres:latest && docker image save postgres:latest --output ~/postgres.tar
+      - name: Cache postgres use
+        if: steps.cache-postgres.outputs.cache-hit == 'true'
+        run: docker image load --input ~/postgres.tar
+      - name: Supabase start
+        run: supabase start
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup environment variables
+        run: |
+          [ "$BRANCH_NAME" = "staging" ] && echo "${{secrets.LNHUB_REST_STAGING_ENV}}" >> $GITHUB_ENV
+          [ "$BRANCH_NAME" = "main" ] && echo "${{secrets.LNHUB_REST_PROD_ENV}}" >> $GITHUB_ENV
+      - name: Cache nox
+        uses: actions/cache@v3
+        with:
+          path: .nox
+          key: nox-${{ runner.os }}
+      - name: Cache pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Install CI dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -U laminci
+          pip install -U lamindb
+          sudo apt-get -y install graphviz
+          sudo apt-get install sqlite3-tools=3.37.2-2
+      - name: Lint
+        env:
+          LN_SERVER_DEPLOY: 1
+        run: |
+          nox -s lint
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+      - name: Configure Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - name: Local Tests
+        run: |
+          nox -s "test_local(package='${{ matrix.package }}')"
+      - name: Integration Tests
+        if: env.BRANCH_NAME == 'staging'
+        run: |
+          nox -s "test_integrations(lamin_env='${{ env.BRANCH_NAME }}', package='${{ matrix.package }}')"
+      - name: Codecov
+        if: matrix.python-version == '3.9'
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

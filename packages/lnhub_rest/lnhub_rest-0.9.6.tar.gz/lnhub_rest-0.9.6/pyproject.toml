@@ -1,0 +1,61 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "lnhub_rest"
+authors = [{name = "Lamin Labs", email = "laminlabs@gmail.com"}]
+readme = "README.md"
+dynamic = ["version", "description"]
+dependencies = [
+    # Do NOT add any lamin package as a dependency here!
+    # Neither laminci nor lndb nor lnschema_core etc.
+    # lnhub_rest needs to be upstream
+    "lamin_logger>=0.2.3",
+    "supabase==1.0.2",
+    "fastapi",
+    "uvicorn",
+    "sqlmodel",
+    "pandas",
+    "python-dotenv",
+    "alembic",
+    "psycopg2-binary",
+    "pyjwt",
+    "pytest_alembic==0.9.1",  # let's pin this as we use internals
+    "boto3", # for aiobotocore inside s3fs, to fix deps resolution
+    "deepdiff",
+]
+
+[project.urls]
+Home = "https://github.com/laminlabs/lnhub-rest"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "nox",
+]
+test = [
+    "pytest>=6.0",
+    "pytest-cov",
+    "nbproject",
+]
+
+[project.scripts]
+lnhub = "lnhub_rest.__main__:main"
+
+[tool.black]
+preview = true
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+markers = [
+    "integration: marks tests as integration tests (i.e. 'staging' or 'prod' branches)",
+    "local"
+]
+
+[tool.coverage.run]
+omit = [
+    "lnhub_rest/*",
+]
