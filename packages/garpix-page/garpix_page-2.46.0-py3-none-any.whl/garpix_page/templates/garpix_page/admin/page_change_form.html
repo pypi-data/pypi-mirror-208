@@ -1,0 +1,63 @@
+{% extends 'tabbed_admin/change_form.html' %}
+
+{% block extrahead %}
+<script>
+    const PAGE_LOCK_URL = {
+        'close_page_connection': "{% url 'page_lock_close_page_connection' %}",
+        'get_page_connection': "{% url 'page_lock_get_page_connection' %}",
+        'open_page_connection': "{% url 'page_lock_open_page_connection' %}"
+    }
+    window.PAGE_LOCK_URL = PAGE_LOCK_URL
+</script>
+{{ block.super }}
+{% endblock %}
+
+{% load static %}
+{% load page_lock_bar %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'garpix_page/css/admin/clone_styles.css' %}">
+<script src="{% static 'garpix_page/js/admin/clone.js' %}"></script>
+
+{% endblock %}
+
+{% block object-tools %}
+{{ block.super }}
+<div class="submit-row">
+    {{ object }}
+    <a href="#openModal" class="default submit-row-new_choice button">Клонировать страницу</a>
+</div>
+
+<div id="openModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Клонирование</h3>
+                <a href="#modal-close" title="Close" class="modal-close">×</a>
+            </div>
+            {% if original %}
+            <div class="modal-body">
+                <form action="{% url 'admin:garpix_page_basepage_full_clone' original.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="component__title">Введите новое название (опционально):</label><br>
+                        <input type="text" class="form-control" id="component__title" name="title">
+                    </div>
+                    <input type="submit" class="default submit-row-new_choice" value="Клонировать">
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <div class="g-page-lock">
+        {% page_lock_bar_plain %}
+    </div>
+{% endblock %}
