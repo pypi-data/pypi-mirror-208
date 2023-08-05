@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools >= 61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "generic-path"  # "gpath" is taken on PyPI, and "g-path" is too similar
+dynamic = ["version", "readme"]
+authors = [
+	{name = "Yu Shiyang", email = "yu.shiyang@gnayihs.uy"}
+]
+description = "Generalised abstract file path that provides path manipulations independent from the local environment"
+license = {text = "MPL-2.0"}
+classifiers = [
+	"Development Status :: 3 - Alpha",
+	"Intended Audience :: Developers",
+	"Intended Audience :: System Administrators",
+	"License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python :: 3 :: Only",
+	"Programming Language :: Python :: 3.7",
+	"Programming Language :: Python :: 3.8",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	#"Programming Language :: Python :: 3.12",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+	"Topic :: System :: Filesystems",
+	"Typing :: Typed",
+]
+keywords = ["python", "filepath", "filesystem", "cross-platform"]
+requires-python = ">=3.7"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest ~= 7.3.1", "coverage ~= 7.2.3", "pdoc ~= 13.1.1", "pyroma ~= 4.2", "build ~= 0.10.0", "tox ~= 4.5.1", "tox-extras >= 0.0.1"]
+test = ["pytest ~= 7.3.1", "coverage ~= 7.2.3"]
+docs = ["pdoc ~= 13.1.1"]
+metadata = ["pyroma ~= 4.2"]
+package = ["build ~= 0.10.0"]
+packagetest = ["twine ~= 4.0.2"]
+ci = ["tox ~= 4.5.1", "tox-extras >= 0.0.1"]
+publish = ["twine ~= 4.0.2"]
+
+[project.urls]
+# key is used verbatim on PyPI
+Homepage = "https://github.com/yushiyangk/GPath"
+Documentation = "https://gpath.gnayihs.uy/"
+Issues = "https://github.com/yushiyangk/GPath/issues"
+
+[tool.pytest.ini_options]
+addopts = "tests"
+
+[tool.coverage.run]
+source_pkgs = ["gpath"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*"]
+namespaces = false
+
+[tool.setuptools.dynamic]
+version = {attr = "gpath.__version__"}
+readme = {file = ["README.md", "CHANGELOG.md"], content-type = "text/markdown"}
