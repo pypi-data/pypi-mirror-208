@@ -1,0 +1,172 @@
+@charset "UTF-8";
+
+:root {
+    --menu-font-size: 1.05rem;
+    --menu-item-padding: 0.7rem;
+    --menu-z-index: 500;
+    
+    --menu-screen-color: hsla(0,0%,95%,0.95);
+    
+    
+    --menu-heading-text-color:  hsl(166, 100%, 25%);
+    --menu-heading-divider-color: hsl(155, 60%, 60%);
+    --menu-deactivated-text-color: hsl(204, 5%, 60%);
+
+}
+
+.navigation.dropdown .navigation-container,
+.navigation.dropdown .navigation-container > * {
+    display: block;
+    cursor: pointer;
+    white-space: nowrap;
+    
+    padding: 0px;
+    margin: 0px;
+}
+
+.navigation.dropdown {
+
+    position: fixed;
+    top: 0px;
+    left: 0px;
+
+    margin: 0px;
+    padding: 0px;
+}
+
+.navigation.dropdown .navigation-toggle-state,
+.navigation.dropdown .navigation-toggle {
+    display: none;
+}
+
+.navigation.dropdown .navigation-screen {
+
+    /*
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 100vw;
+    height: 100vh;
+
+    overflow: scroll;
+    */
+}
+
+
+@media all and (any-pointer: fine) and (any-hover: hover) {
+
+    .navigation.dropdown.placement-top-left {
+        top: 0px;
+        left: 0px;
+    }
+
+    .navigation.dropdown.placement-top-right {
+        top: 0px;
+        right: 0px;
+        left: unset;
+    }
+
+    .navigation.dropdown.placement-bottom-left {
+        top: unset;
+        bottom: 0px;
+        left: 0px;
+    }
+
+    .navigation.dropdown.placement-bottom-right {
+        top: unset;
+        bottom: 0px;
+        left: unset;
+        right: 0px;
+    }
+
+    .navigation.dropdown .navigation-container[data-navigation-root],
+    .navigation.dropdown .navigation-container[data-navigation-root] > .navigation-choices {
+        display: flex !important;
+        flex-flow: row nowrap;
+        width: fit-content;
+    }
+
+    .navigation.dropdown .navigation-container {
+        position: relative;  /* so that we can specify top: 0px for nested choices */
+    }
+
+    .navigation.dropdown .navigation-choices .navigation-choices {
+
+        /* menus below the top menu are hidden */
+
+        display: none;
+        position: absolute;
+        z-index: 500;
+    }
+
+    .navigation.dropdown .navigation-choices .navigation-choices .navigation-choices {
+        top: 0px; /* place at top of container */
+        left: 100%; /* place right of container */
+    }
+
+    .navigation.dropdown .navigation-container:hover > .navigation-choices {
+        display: unset; /* unset display: none on hover */
+    }
+}
+
+
+@media not all and (any-pointer: fine) and (any-hover: hover) {
+
+    .navigation.dropdown {
+        margin: 0px !important;
+    }
+
+    .navigation.dropdown .navigation-toggle {
+        display: unset;
+    }
+
+    .navigation.dropdown .navigation-toggle-state:checked ~ .navigation-screen {
+        background-color: var(--menu-screen-color);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+
+        width: 100vw;
+        height: 100vh;
+
+        overflow: scroll;
+    }
+    
+    .navigation.dropdown .navigation-toggle-state:not(:checked) ~ * > .navigation-container[data-navigation-root] {
+        display: none;
+    }
+    
+    .navigation.dropdown .navigation-choices .navigation-choices {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(240px, 1fr));
+    }
+    
+    .navigation.dropdown .navigation-choices .navigation-choices .navigation-choices {
+        display: unset;
+    }
+    
+    @media all and (max-width: 439px) {
+        .navigation.dropdown .navigation-choices .navigation-choices {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+    }
+    
+    @media all and (min-width: 440px) and (max-width: 719px) {
+        .navigation.dropdown .navigation-choices .navigation-choices {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+    }
+
+    @media all and (min-width: 720px) and (max-width: 1599px) {
+        .navigation.dropdown .navigation-choices .navigation-choices {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
+    }
+    
+    @media all and (min-width: 1600px) {
+        .navigation.dropdown .navigation-choices .navigation-choices {
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        }
+    }
+}

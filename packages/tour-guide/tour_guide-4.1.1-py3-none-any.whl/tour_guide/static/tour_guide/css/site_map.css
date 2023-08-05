@@ -1,0 +1,80 @@
+@charset "UTF-8";
+
+:root {
+    /*
+    --menu-font-size: 1.05rem;
+    --menu-item-padding: 0.7rem;
+    --menu-z-index: 500;
+
+    --menu-screen-color: hsla(0,0%,95%,0.95);
+
+
+    --menu-heading-text-color:  hsl(166, 100%, 25%);
+    --menu-heading-divider-color: hsl(155, 60%, 60%);
+    --menu-deactivated-text-color: hsl(204, 5%, 60%);
+    */
+}
+
+.navigation.site_map .navigation-container,
+.navigation.site_map .navigation-container > * {
+    display: block;
+    cursor: pointer;
+    /* white-space: nowrap; */
+
+    padding: 0px;
+    margin: 0px;
+}
+
+.navigation.site_map [data-navigation-root] > .navigation-option {
+    display: none;
+}
+
+.navigation.site_map .navigation-choices {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(240px, 1fr));
+    gap: 1em 1em;
+}
+
+.navigation.site_map .navigation-choices .navigation-choices {
+    display: unset;
+    grid-template-columns: unset;
+    gap: unset;
+}
+
+@media all and (max-width: 439px) {
+    .navigation.site_map .navigation-choices{
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media all and (min-width: 440px) {
+    .navigation.site_map .navigation-choices {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}
+
+/*
+@media all and (max-width: 439px) {
+    .navigation.site_map .navigation-choices .navigation-choices {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media all and (min-width: 440px) and (max-width: 719px) {
+    .navigation.site_map .navigation-choices .navigation-choices {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}
+
+@media all and (min-width: 720px) and (max-width: 1599px) {
+    .navigation.site_map .navigation-choices .navigation-choices {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+}
+
+@media all and (min-width: 1600px) {
+    .navigation.site_map .navigation-choices .navigation-choices {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    }
+}
+*/

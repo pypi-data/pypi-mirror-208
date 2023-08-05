@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+:root {
+    --menu-font-size: 1.05rem;
+    --menu-item-padding: 0.7rem;
+    --menu-z-index: 500;
+    
+    --menu-screen-color: hsla(0,0%,95%,0.95);
+    
+    
+    --menu-heading-text-color:  hsl(166, 100%, 25%);
+    --menu-heading-divider-color: hsl(155, 60%, 60%);
+    --menu-deactivated-text-color: hsl(204, 5%, 60%);
+
+}
+
+
+.navigation.breadcrumbs .navigation-choices {
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0px;
+    margin: 0px;
+}
+
+.navigation.breadcrumbs .navigation-option {
+    padding: 0px;
+    margin: 0px;
+}
+
+.navigation.breadcrumbs :not(:last-child) > .navigation-option::after {
+    content: " /  ";
+    padding-right: 0.25rem;
+}
