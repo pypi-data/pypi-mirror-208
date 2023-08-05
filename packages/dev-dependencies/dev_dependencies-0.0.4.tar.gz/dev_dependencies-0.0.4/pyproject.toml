@@ -1,0 +1,65 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+extend-exclude = '''
+(
+  _version\.py
+  |something-else
+)
+'''
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--verbose --doctest-modules --junitxml=junit/test-results.xml --cov=dev_dependencies --cov=tests --cov-report html --cov-report term --cov-fail-under=100 --capture=no"
+testpaths = ["tests"]
+
+
+[tool.coverage.run]
+branch = true
+omit = ["dev_dependencies/_version.py"]
+
+[tool.poetry]
+name = "dev-dependencies"
+version = "0.0.4"
+description = "An opinionated library of dev-time dependencies"
+authors = ["Justin Mills <vortexjj@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "dev_dependencies" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+# Types
+pydantic = "*"
+# Backup version parsing
+toml = "*"
+types-toml = "*"
+# Linting
+ruff = "*"
+# Formatting
+black = "*"
+# Typechecking
+mypy = "*"
+# Testing
+pytest = "*"
+pytest-mock = "*"
+hypothesis = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+pytest-md = "*"
+pytest-emoji = "*"
