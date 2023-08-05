@@ -1,0 +1,280 @@
+Metadata-Version: 2.1
+Name: generic-path
+Version: 0.4.4
+Summary: Generalised abstract file path that provides path manipulations independent from the local environment
+Author-email: Yu Shiyang <yu.shiyang@gnayihs.uy>
+License: MPL-2.0
+Project-URL: Homepage, https://github.com/yushiyangk/GPath
+Project-URL: Documentation, https://gpath.gnayihs.uy/
+Project-URL: Issues, https://github.com/yushiyangk/GPath/issues
+Keywords: python,filepath,filesystem,cross-platform
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System :: Filesystems
+Classifier: Typing :: Typed
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Provides-Extra: ci
+Requires-Dist: tox (~=4.5.1) ; extra == 'ci'
+Requires-Dist: tox-extras (>=0.0.1) ; extra == 'ci'
+Provides-Extra: dev
+Requires-Dist: pytest (~=7.3.1) ; extra == 'dev'
+Requires-Dist: coverage (~=7.2.3) ; extra == 'dev'
+Requires-Dist: pdoc (~=13.1.1) ; extra == 'dev'
+Requires-Dist: pyroma (~=4.2) ; extra == 'dev'
+Requires-Dist: build (~=0.10.0) ; extra == 'dev'
+Requires-Dist: tox (~=4.5.1) ; extra == 'dev'
+Requires-Dist: tox-extras (>=0.0.1) ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: pdoc (~=13.1.1) ; extra == 'docs'
+Provides-Extra: metadata
+Requires-Dist: pyroma (~=4.2) ; extra == 'metadata'
+Provides-Extra: package
+Requires-Dist: build (~=0.10.0) ; extra == 'package'
+Provides-Extra: packagetest
+Requires-Dist: twine (~=4.0.2) ; extra == 'packagetest'
+Provides-Extra: publish
+Requires-Dist: twine (~=4.0.2) ; extra == 'publish'
+Provides-Extra: test
+Requires-Dist: pytest (~=7.3.1) ; extra == 'test'
+Requires-Dist: coverage (~=7.2.3) ; extra == 'test'
+
+# GPath
+
+**GPath** is a Python package that provides a robust, generalised abstract file path that allows path manipulations independent from the local environment, maximising cross-platform compatibility.
+
+[![](https://img.shields.io/badge/PyPI--inactive?style=social&logo=pypi)](https://pypi.org/project/generic-path/) [![](https://img.shields.io/badge/GitHub--inactive?style=social&logo=github)](https://github.com/yushiyangk/GPath) [![](https://img.shields.io/badge/Documentation--inactive?style=social&logo=readthedocs)](https://gpath.gnayihs.uy/)
+
+## Install
+
+```
+pip install generic-path
+```
+
+## Basic examples
+
+Import GPath:
+```python
+from gpath import GPath
+```
+
+Create a GPath object and manipulate it:
+```python
+g = GPath("/usr/bin")
+
+common = GPath.find_common(g, "/usr/local/bin")  # GPath("/usr")
+relpath = g.relpath_from("/usr/local/bin")       # GPath("../../bin")
+joined = GPath.join("/usr/local/bin", relpath)   # GPath("/usr/bin")
+assert g == joined
+```
+
+For function arguments, strings or `os.PathLike` objects can be used interchangeably with GPaths.
+
+Binary operations are also supported:
+```python
+g1 = GPath("C:/Windows/System32")
+g2 = GPath("../SysWOW64/drivers")
+
+added = g1 + g2      # GPath("C:/Windows/SysWOW64/drivers")
+subtracted = g1 - 1  # GPath("C:/Windows")
+
+# Shift the imaginary current working directory in relative paths
+shifted_right = g2 >> 1  # GPath("../../SysWOW64/drivers")
+shifted_left = g2 << 1   # GPath("SysWOW64/drivers")
+```
+
+The `GPath.partition()` method is useful when dealing with paths from various different sources:
+```python
+partitions = GPath.partition("/usr/bin", "/usr/local/bin", "../../doc", "C:/Windows", "C:/Program Files")
+
+assert partitions == {
+	GPath("/usr")      : [GPath("bin"), GPath("local/bin")],
+	GPath("../../doc") : [GPath("")],
+	GPath("C:/")       : [GPath("Windows"), GPath("Program Files")],
+}
+```
+
+## Issues
+
+Found a bug? Please [file an issue](https://github.com/yushiyangk/GPath/issues), or, better yet, [submit a pull request](https://github.com/yushiyangk/GPath/pulls).
+
+## Compatibility
+
+The default `GPath()` interface supports the vast majority of valid file paths on Windows, Linux and macOS (and other POSIX-like operating systems), with some limited caveats.
+
+### Linux, macOS and POSIX
+
+If using `GPath()`,
+- any backslashes `\` (after parsing escape sequences) in the path will be treated as path separators
+- if the second character of the path is a colon <code><var>x</var>:</code>, the first character <var>`x`</var> will be treated as a drive letter
+
+These issues can be avoided by using `GPath.from_posix()` instead. This will cause all `\` and `:` to be treated as normal characters in file names.
+
+### Windows
+
+- trailing dots `.` and spaces ` ` will not be stripped
+- reserved MS-DOS device names (such as AUX, CLOCK$, COM0 through COM9, CON, LPT0 through LPT9, NUL, PRN) will be treated as normal file names
+
+## Development
+
+Clone the repository with `git clone https://github.com/yushiyangk/GPath.git`.
+
+The source for the package is entirely contained in `gpath.py`, with tests in `tests/`.
+
+### Virtual environment
+
+Create the venv using `python -m venv .`.
+
+To activate the venv, on Linux run `source Scripts/activate`, and on Windows run `Scripts/Activate.ps1` or `Scripts/activate.bat`.
+
+Later, to deactivate the venv, run `deactivate`.
+
+### Dependencies
+
+Run `pip install -r requirements.dev.txt`.
+
+### Install
+
+To install the package locally (in the venv) for development, run `pip install -e .`.
+
+### Tasks
+
+For unit tests, run `pytest`.
+
+To run unit tests across all supported Python versions, run `tox p -m testall`. This is slower than just `pytest`. Note that only Python versions that are installed locally will be run.
+
+To run the full set of tasks before package publication, run `tox p -m prepare`. Alternatively, see below for manually running individual steps in this process.
+
+#### Unit tests
+
+Run `pytest` or `coverage run -m pytest`.
+
+For coverage report, first run `coverage run -m pytest`, then either `coverage report -m` to print to stdout or `coverage html` to generate an HTML report in `htmlcov/`. Alternatively, run `tox r -m test` to do both steps automatically (slower).
+
+#### Documentation
+
+Run `tox r -m docs`.
+
+The documentation is generated in `docs/html/`, using template files in `docs/template/`. However, note that the favicon file must be placed at `docs/html/favicon.png` manually as pdoc is unable to do so.
+
+#### Packaging
+
+Before packaging, check the package metadata by running `pyroma .` or `tox r -m metadata`.
+
+To generate sdist and wheel packages, delete `dist/` and `generic_path.egg-info/` if they exist, then run `python -m build`. Run `twine check dist/*` to check that the packages were generated properly. Alternatively, run `tox r -m package` to do these steps automatically.
+
+### Config files
+
+- `MANIFEST.in` Additional files to include in published sdist package
+- `pyproject.toml` Package metadata, as well as configs for test and build tools
+- `requirements.dev.txt` Package dependencies for development, in pip format
+- `requirements.publish.txt` Package dependencies for publishing, in pip format
+- `tox.ini` Config file for tox
+
+### Troubleshooting
+
+#### Unable to uninstall the local package
+
+Sometimes, if gpath was installed using `pip install .`, pip might have difficulty uninstalling the package, giving the contradictory message
+<pre><code>Found existing installation: gpath <var>version</var>
+Can't uninstall 'gpath'. No files were found to uninstall.</code></pre>
+
+In this case, manually delete `build/` and `generic_path.egg-info/` if they exist, then run `pip uninstall generic-path` again. This should allow pip to successfully uninstall the package.
+
+#### Tox always fails with exit 1
+
+Delete the contents of `.tox/` and try again.
+
+## Changelog
+
+This project follows [PEP 440](https://peps.python.org/pep-0440/) and [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html). In addition to the guarantees specified by SemVer, for versions before 1.0, this project guarantees backwards compatibility of the API for patch version updates (0.<var>y</var>.<b><var>z</var></b>).
+
+The recommended version specifier is <code>generic-path ~= <var>x</var>.<var>y</var></code> for version 1.0 and later, and <code>generic-path ~= <var>0</var>.<var>y</var>.<var>z</var></code> for versions prior to 1.0.
+
+### 0.4.4
+
+- Added the ability to force GPath to interpret a path string as originating from a specific operating system, which prevents problems in edge cases, using the new `platform` argument in `GPath.__init__()`; this also propagates to new GPaths returned by operations
+	- Added the read-only property <code><var>g</var>.platform</code> for this propagating platform parameter
+	- Added static methods `from_posix()`, `from_windows()` (and aliases `from_linux()` and `from_macos()`) as alternative interfaces to call the constructor for a specific platform
+	- Added submodule `gpath.platform` with a `Platform` enum for specifying platforms (either as a string given in `gpath.platform.platform_names` or as a `gpath.Platform` object)
+- Added <code><var>g</var>.render()</code>, which returns a `RenderedPath` object for printing and sorting in a platform-specific manner
+	- Added submodule `gpath.render` containing subclasses of `RenderedPath` that define the render behaviour for each platform
+	- GenericRenderedPath resembles the previous behaviour of GPath, and prints with forward slashes `/`
+	- PosixRenderedPath ignores drive names when sorting and printing, and always prints with forward slashes `/`
+	- WindowsRenderedPath always prints with backslashes `\`
+- Fixed bug with encoding propagation in the copy constructor
+
+### 0.4.3
+
+- Fixed support for bytes in older versions of Python
+
+### 0.4.1, 0.4.2
+
+- Fixed documentation and readme
+
+### 0.4
+
+#### Breaking API changes
+
+- Replaced the following instance methods with read-only properties:
+	- <code><var>g</var>.get_parent_level()</code> → <code><var>g</var>.parent_level</code>
+	- <code><var>g</var>.get_parent_parts()</code> → <code><var>g</var>.parent_parts</code>
+	- <code><var>g</var>.get_device()</code> → <code><var>g</var>.drive</code> (renamed `device` to `drive`)
+	- <code><var>g</var>.is_absolute()</code> → <code><var>g</var>.absolute</code>
+	- <code><var>g</var>.is_root()</code> → <code><var>g</var>.root</code>
+- Replaced <code><var>g</var>.get_parts()</code> and <code><var>g</var>.from_parts()</code> with the read-only properties <code><var>g</var>.named_parts</code> and <code><var>g</var>.relative_parts</code>
+- Replaced `GPath.find_common()` with <code><var>g</var>.common_with()</code> and added <code><var>g1</var> & <var>g2</var></code> as an alias for <code><var>g</var>.common_with()</code> with default options
+- Removed the ability to sort GPaths, and removed the following comparison operators:
+	- <code><var>g1</var> < <var>g2</var></code>
+	- <code><var>g1</var> <= <var>g2</var></code>
+	- <code><var>g1</var> > <var>g2</var></code>
+	- <code><var>g1</var> >= <var>g2</var></code>
+- Removed package constants `PATH_SEPARATOR`, `PATH_CURRENT`, `PATH_PARENT`, and typedef `PathLike`
+
+#### Breaking behavioural changes
+
+- Changed <code><var>g1</var> + <var>g2</var></code>, <code><var>g1</var> / <var>g2</var></code> and <code><var>g</var>.join()</code> so that appending an absolute path overwrites the left operand; previously the left operand would be returned unchanged
+- Changed <code><var>g1</var> == <var>g2</var></code> so that it can return True even when the left operand is GPath-like but not a GPath object
+
+#### Other changes
+
+- Added <code><var>g</var>.as_absolute()</code>, <code><var>g</var>.as_relative()</code>, <code><var>g</var>.with_drive()</code>, <code><var>g</var>.without_drive()</code> for returning modified copies of the path
+- Added support for drive names in relative paths
+- Added support for instantiating a GPath with a bytes-like object, <code>GPath(<var>byteslike</var>)</code> (or, fixed the constructor that was previously broken for bytes-like objects)
+- Added an argument to `GPath.__init__()` to allow specifying encoding (default `'utf-8'`), which propagates to new GPaths when performing operations with other bytes-like operands
+- Added the read-only property <code><var>g</var>.encoding</code> for this propagating encoding
+- Added abstract base classes for GPath, from `collections.abc`
+- Fixed <code><var>g1</var> / <var>g2</var></code>
+- Fixed small errors in web documentation
+
+### 0.3
+
+- Renamed `GPath.current` to `GPath.current_dir` and `GPath.parent` to `GPath.parent_dir`
+- Renamed <code><var>g</var>.is_root()</code> to <code><var>g</var>.is_absolute()</code>
+- Renamed the optional arguments in <code><var>g</var>.find_common()</code> and <code><var>g</var>.partition()</code>, from `common_current` and `common_parent` to `allow_current` and `allow_parent`
+- Added a new <code><var>g</var>.is_root()</code> that checks whether the path is exactly root
+- Added <code><var>g</var>.\_\_div\_\_()</code> as an alias of <code><var>g</var>.\_\_add\_\_()</code>
+- Added web documentation at https://gpath.gnayihs.uy/
+
+### 0.2.1
+
+- Fixed basic example in README
+
+### 0.2
+
+- Added support for Python versions 3.7 through 3.9; previously only 3.10 and 3.11 were supported
+
+### 0.1
+
+- Initial version
