@@ -1,0 +1,23 @@
+[tool.bandit]
+exclude_dirs = [".git",".github",".tox","tests","pyclean/py2clean.py","pyclean/py3clean.py","pyclean/pypyclean.py"]
+
+[tool.black]
+color = true
+
+[tool.coverage.run]
+source = ["pyclean"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.isort]
+color_output = true
+profile = "black"
+
+[tool.pylint.master]
+disable = ["consider-using-f-string","raise-missing-from","use-dict-literal"]
+ignore = ["py2clean.py","py3clean.py","pypyclean.py"]
+output-format = "colorized"
+
+[tool.pytest.ini_options]
+addopts = "--color=yes --doctest-modules --ignore=pyclean/py2clean.py --ignore=pyclean/py3clean.py --ignore=pyclean/pypyclean.py --junitxml=tests/junit-report.xml --verbose"
