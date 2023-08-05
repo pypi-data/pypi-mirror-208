@@ -1,0 +1,170 @@
+Metadata-Version: 2.1
+Name: pocketrockit
+Version: 0.0.22
+Summary: pocketrockit
+Home-page: https://projects.om-office.de/frans/pocketrockit.git
+Author: Frans Fürst
+Author-email: frans.fuerst+gitlab@protonmail.com
+Requires-Python: >=3.8,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: asyncinotify (>=4.0.1,<5.0.0)
+Requires-Dist: pyfluidsynth (>=1.3.1,<2.0.0)
+Requires-Dist: pygame (>=2.3.0,<3.0.0)
+Project-URL: Repository, https://projects.om-office.de/frans/pocketrockit.git
+Description-Content-Type: text/markdown
+
+# POCKETROCKIT - A rocket in your pocket that rocks!
+
+Original project page: https://projects.om-office.de/frans/pocketrockit.git
+
+Write a music track in Python and play it while you write it (as you might know it from
+[Sonic Pi](https://sonic-pi.net/), but written in Python (`sonic.py` was not available on PyPi, though)).
+
+Write melodies, create rythm patterns, define endless simultaneously playing instruments, all in
+a .. well .. simple Python syntax.
+
+
+## Installation
+
+```sh
+[<PYTHON> -m] pip[3] install [--upgrade] pocketrockit
+```
+
+## Usage
+
+Workflow is not quite mature yet, so here is the short version for now.
+
+Create and enter a separate folder and provide required SoundFont files (configurable later,
+hard-coded for now).
+
+Pocketrockt expects two SoundFont files: `instrumental.sf2` and `drums.sf2`. You can download and
+move/rename any file that works for you, and you can also just create symlinks (this is what I do).
+
+This is just an example:
+
+```sh
+mkdir mytracks
+cd mytracks
+ln -s /usr/share/soundfonts/FluidR3_GM.sf2 instrumental.sf2
+wget https://musical-artifacts.com/artifacts/2744/JV_1080_Drums.sf2
+ln -s JV_1080_Drums.sf2 drums.sf2
+```
+The file `FluidR3_GM.sf2` was shipped with FluidSynth for me, and I got `JV_1080_Drums.sf2` from
+[here](https://musical-artifacts.com/artifacts/2744).
+
+
+Create a file `myfirsttrack.py` with the following content:
+
+```python
+#!/usr/bin/env python3
+
+from pocketrockit import Env, midiseq, player, track
+
+@track
+def my_first_track(env: Env):
+    """Guess!"""
+
+    env.bpm = 30
+    key = "A5"
+
+    @player
+    def metronome():
+        yield from midiseq("x x x x", channel=128, note=37)
+
+    @player
+    def melody1():
+        yield from midiseq(
+            "| . |"
+            "| .                .                .              (II I)      "
+            "| (II  VI-)        (IV- VI- . II-)  .              (II I)      "
+            "| (II  VI-)        (IV- VI- . II-)  .              (II III)    "
+            "| (IV  . III IV)   (. IV . II)     (III . II III)  (. III . I) "
+            ,
+            key="A5",
+            channel=13,
+            velocity=100,
+        )
+```
+
+Now - keeping the editor open for later use - execute this file. You can either make it executable
+and run it directly or you run `python3` instead:
+
+```sh
+chmod +x myfirsttrack.py
+./myfirsttrack.py
+
+# or
+
+python3 myfirsttrack.py
+```
+
+
+## Development & Contribution
+
+```sh
+pip3 install -U poetry pre-commit
+git clone --recurse-submodules https://projects.om-office.de/frans/pocketrockit.git
+cd pocketrockit
+pre-commit install
+# if you need a specific version of Python inside your dev environment
+poetry env use ~/.pyenv/versions/3.10.4/bin/python3
+poetry install
+```
+
+
+## Stuff to read / Sources
+
+### SoundFonts
+
+* https://musescore.org/en/handbook/3/soundfonts-and-sfz-files
+* https://www.producersbuzz.com/category/downloads/download-free-soundfonts-sf2/
+* https://archive.org/details/500-soundfonts-full-gm-sets
+* https://ia802502.us.archive.org/view_archive.php?archive=/27/items/500-soundfonts-full-gm-sets/500_Soundfonts_Full_GM_Sets.zip
+* https://musical-artifacts.com/artifacts?formats=sf2&tags=soundfont
+
+
+### Music stuff
+
+* https://pianoscales.org/major.html
+* https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies
+* https://onlinesequencer.net/181312
+* https://github.com/Rainbow-Dreamer
+* https://github.com/Rainbow-Dreamer/musicpy-daw
+* https://sound.stackexchange.com/
+
+
+### Tech stuff
+
+* https://stackoverflow.com/questions/20023545/running-pyfluidsynth-pyaudio-demo-many-problems-with-alsa-and-jack
+* https://www.ladspa.org/
+* [How can I record audio output from command line in Linux?](https://superuser.com/questions/1570333/how-can-i-record-audio-output-from-command-line-in-linux)
+
+
+## Notation
+
+* https://sneslab.net/wiki/Music_Macro_Language
+* https://objectcomputing.com/resources/publications/sett/january-2008-writing-music-in-java-two-approaches
+* https://mascii.org/
+* https://www.mobilefish.com/tutorials/rtttl/rtttl_quickguide_specification.html
+* https://pypi.org/project/musicpy/
+
+
+## Troubles
+
+* https://stackoverflow.com/questions/47247814/pygame-midi-init-function-errors
+
+* Missing `/usr/local/share/alsa/alsa.conf`
+```
+ALSA lib conf.c:4555:(snd_config_update_r) Cannot access file /usr/local/share/alsa/alsa.conf
+ALSA lib seq.c:935:(snd_seq_open_noupdate) Unknown SEQ default
+```
+
+```
+sudo mkdir /usr/local/share/alsa
+sudo ln -s /usr/share/alsa/alsa.conf /usr/local/share/alsa/alsa.conf
+```
+
