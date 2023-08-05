@@ -1,0 +1,2 @@
+"""Migrations."""
+from . import testing
