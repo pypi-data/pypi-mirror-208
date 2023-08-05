@@ -1,0 +1,99 @@
+# this file contains all relevant configuration taht are used by pyPhasesRecordLoader
+
+loader:
+
+  mesa: &mesa
+    dataBase: mesa
+    dataBaseVersion: 1.0.0 # needs to be raised every time new data is added
+
+    filePath: ./datasets/mesa
+    copyRawDataToLocal: True
+
+    dataset:
+      loaderName: RecordLoaderMESA
+      fromFiles: True # if the records are read from files or sql-database
+      downloader:
+        type: nsrr
+        listFilter: null
+        canReadRemote: True
+        basePath: mesa\polysomnography\edfs
+        extensions: [.edf, -nsrr.xml, .edf, -nsrr.xml]
+        basePathExtensionwise:
+          [
+            polysomnography\edfs,
+            polysomnography\annotations-events-nsrr,
+          ]
+        force: False
+        idPattern: .*/(.*).edf
+      filePattern: "*.edf"
+
+    # the channels that should be extracted from the edf files
+    sourceChannels:
+      - name: EKG
+        type: ecg
+      - name: EOG-L
+        type: eog
+      - name: EOG-R
+        type: eog
+      - name: EMG
+        type: emg
+        minimalSamplingRate: 200
+      - name: EEG1 # Fz-Cz
+        type: eeg
+        minimalSamplingRate: 200
+      - name: EEG2 # Cz-Oz
+        type: eeg
+        minimalSamplingRate: 200
+      - name: EEG3 # C4-M1
+        type: eeg
+        minimalSamplingRate: 200
+      - name: Pres
+        type: flow
+      - name: Flow
+        type: flow
+      - name: Snore
+        type: mic
+      - name: Thor
+        type: effort
+      - name: Abdo
+        type: effort
+      - name: Leg
+        type: movement
+        minimalSamplingRate: 200
+      - name: Therm
+        type: flow
+        optional: True
+      - name: Aux_AC
+        type: flow
+        optional: True
+      - name: FLOW_THERM
+        generated: True
+        requiresOne: [Therm, Aux_AC]
+        type: flow
+        optional: True # Ist bei den meisten edfs vorhanden, aber zB bei mesa-sleep-5864 gibt es keinen passenden Kanal
+      - name: Pos
+        steps: ["resampleSimple"]
+        type: body
+      - name: Pleth
+        type: ppg
+      - name: SpO2
+        type: sao2
+      - name: HR
+        type: hr
+      - name: DHR
+        type: hr
+
+    combineChannels:
+      # []
+      - name: FLOW_THERM
+        combineType: select
+        type: flow
+        channel: [Therm, Aux_AC]
+      # - name: EEG Ch2
+      #   combineType: select
+      #   type: eeg
+      #   channel: [EEG(sec), EEG2, EEG 2, EEG(SEC), EEG sec]
+      # - name: HR
+      #   type: hr
+      #   combineType: select
+      #   channel: [PR, H.R.]
