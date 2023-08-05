@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "AlekSIS-App-CSVImport"
+version = "3.0"
+packages = [
+    { include = "aleksis" }
+]
+readme = "README.rst"
+include = [
+    { path = "aleksis/**/*.mo", format = ["sdist", "wheel"] },
+    { path = "*.rst", format = "sdist" },
+    { path = "docs/*", format = "sdist" },
+    { path = "docs/**/*", format = "sdist" },
+    { path = "conftest.py", format = "sdist" },
+    { path = "tox.ini", format = "sdist" }
+]
+
+description = "AlekSIS (School Information System) — App for CSV import"
+authors = ["Dominik George <dominik.george@teckids.org>", "Jonathan Weth <dev@jonathanweth.de>"]
+license = "EUPL-1.2"
+homepage = "https://aleksis.org/"
+repository = "https://edugit.org/AlekSIS/Onboarding/AlekSIS-App-CSVImport"
+documentation = "https://aleksis.edugit.io/AlekSIS/docs/html/"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Education",
+    "Topic :: Education"
+]
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://edugit.org/api/v4/projects/461/packages/pypi/simple"
+secondary = true
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^1.0.0"
+phonenumbers = "^8.10"
+dateparser = "^1.0.0"
+aleksis-core = "^3.0"
+"ruamel.yaml" = "^0.17.19"
+tqdm = "^4.62.3"
+chardet = "^5.0.0"
+
+[tool.poetry.dev-dependencies]
+aleksis-builddeps = "*"
+
+[tool.poetry.plugins."aleksis.app"]
+csv_import = "aleksis.apps.csv_import.apps:CSVImportConfig"
+
+[tool.black]
+line-length = 100
+exclude = "/migrations/"
+
+[build-system]
+requires = ["poetry>=1.0"]
+build-backend = "poetry.masonry.api"
