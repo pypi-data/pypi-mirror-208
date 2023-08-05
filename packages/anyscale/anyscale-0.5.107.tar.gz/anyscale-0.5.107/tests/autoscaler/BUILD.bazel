@@ -1,0 +1,28 @@
+load("@py_deps//:requirements.bzl", "requirement")
+load("//bazel:python.bzl", "py_tests_with_shim")
+
+ray_tests = ["test_node_provider.py"]
+
+py_tests_with_shim(
+    size = "small",
+    srcs = glob(
+        [
+            "test_*.py",
+        ],
+        exclude = ray_tests,
+    ),
+    deps = [
+        requirement("pytest"),
+        "//frontend/cli:anyscale",
+    ],
+)
+
+py_tests_with_shim(
+    size = "small",
+    srcs = glob(ray_tests),
+    deps = [
+        requirement("pytest"),
+        requirement("ray"),
+        "//frontend/cli:anyscale",
+    ],
+)
