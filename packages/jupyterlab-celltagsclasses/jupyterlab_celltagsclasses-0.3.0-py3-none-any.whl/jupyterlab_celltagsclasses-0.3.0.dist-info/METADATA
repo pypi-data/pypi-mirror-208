@@ -1,0 +1,166 @@
+Metadata-Version: 2.1
+Name: jupyterlab_celltagsclasses
+Version: 0.3.0
+Summary: JLAB extension to add classes to cells based on their tags
+Project-URL: Homepage, https://github.com/parmentelat/jupyterlab-celltagsclasses
+Project-URL: Bug Tracker, https://github.com/parmentelat/jupyterlab-celltagsclasses/issues
+Project-URL: Repository, https://github.com/parmentelat/jupyterlab-celltagsclasses.git
+Author-email: Thierry Parmentelat <thierry.parmentelat@inria.fr>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2023, Thierry Parmentelat
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+License-File: LICENSE
+Classifier: Framework :: Jupyter
+Classifier: Framework :: Jupyter :: JupyterLab
+Classifier: Framework :: Jupyter :: JupyterLab :: 4
+Classifier: Framework :: Jupyter :: JupyterLab :: Extensions
+Classifier: Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# jupyterlab_celltagsclasses
+
+[![Github Actions Status](https://github.com/parmentelat/jupyterlab-celltagsclasses/workflows/Build/badge.svg)](https://github.com/parmentelat/jupyterlab-celltagsclasses/actions/workflows/build.yml)
+
+An extension to expose cell tags as CSS classes
+
+## Requirements
+
+- JupyterLab >= 4.0.0
+
+## Install
+
+To install the extension, execute:
+
+```bash
+pip install jupyterlab_celltagsclasses
+```
+
+## Uninstall
+
+To remove the extension, execute:
+
+```bash
+pip uninstall jupyterlab_celltagsclasses
+```
+
+## What it does
+
+### CSS classes
+
+each cell has its widget (the DOM element) classes kept in sync in terms of the cell's tags;  
+for example, adding tag `foobar` will result in the current cell having class `cell-tag-foobar` added
+
+specifically the DOM elements that are decorated have the `.jpCell` class set by jlab, like so, where we have set tag `celltagsclasses-test1`
+
+![](media/screenshot.png)
+
+### metadata management helper functions
+
+it also exports utilities to manage a cell's metadata, specifically for
+
+* getting, setting or unsetting a key/value pair
+* adding, removing items in a list inside the metadata (e.g. tags)
+* cleaning the metadata for empty/useless items
+
+to that effect, see the `md_get` and similar functions in `metadata.ts` (that can be imported right from the module)
+
+### helper: apply function on cells
+
+the `apply_on_cells` function allows you to write a function that works on an individual cell, and then call it on either
+
+* the active cell only
+* all the selected cells if relevant, otherwise the active cell
+* all the cells in the notebook
+
+for that you can pass it a `Scope` value that can be either `Active`, `Multiple`, or `All`
+
+## Development
+
+See the documentation on Jlab extensions for more details; the gist of it is
+
+### Development install
+
+```bash
+# Clone the repo to your local environment
+# Change directory to the jupyterlab_celltagsclasses directory
+# Install package in development mode
+pip install -e "."
+# Link your development version of the extension with JupyterLab
+jupyter labextension develop . --overwrite
+# Rebuild extension Typescript source after making changes
+jlpm build
+```
+
+You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
+
+```bash
+# Watch the source directory in one terminal, automatically rebuilding when needed
+jlpm watch
+# Run JupyterLab in another terminal
+jupyter lab
+```
+
+### Development uninstall
+
+```bash
+pip uninstall jupyterlab_celltagsclasses
+```
+
+In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
+command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
+folder is located. Then you can remove the symlink named `jupyterlab-celltagsclasses` within that folder.
+
+### Packaging the extension
+
+See [RELEASE](RELEASE.md)
+
+## testing
+
+### the metadata module
+
+probably suboptimal but that's my first..
+
+```terminal
+npm install -g typescript '@types/node'
+```
+
+```terminal
+rm src/*js
+tsc src/xpath*ts && node src/xpath-test.js
+```
+
+I have tried to use `ts-node` but to no avail so far
