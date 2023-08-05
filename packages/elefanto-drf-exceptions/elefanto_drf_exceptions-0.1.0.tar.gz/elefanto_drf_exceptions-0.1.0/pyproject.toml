@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "elefanto-drf-exceptions"
+version = "0.1.0"
+description = ""
+authors = ["Zhanibek <rzhanik@gmail.com>"]
+readme = "README.md"
+packages = [{include = "elefanto_drf_exceptions"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.2.1"
+djangorestframework = "^3.14.0"
+drf-standardized-errors = "^0.12.5"
+
+
+[tool.poetry.group.tests.dependencies]
+pytest-django = "^4.5.2"
+pytest-cov = "^4.0.0"
+flake8 = "^6.0.0"
+pytest-flake8 = "^1.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "elefanto_drf_exceptions"
+python_files = "tests.py test_*.py"
+python_classes = "*Test"
+addopts = "--cov=elefanto_drf_exceptions --cov-report term-missing"
+testpaths = [
+    "tests"
+]
