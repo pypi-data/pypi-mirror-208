@@ -1,0 +1,55 @@
+name: CI Tests
+
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - '*'
+  pull_request:
+
+jobs:
+  initial_checks:
+    # Mandatory checks before CI tests
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      coverage: false
+      envs: |
+        # Code style
+        - linux: codestyle
+
+  tests:
+    needs: initial_checks
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      coverage: codecov
+      libraries: |
+        apt:
+          - libxkbcommon-x11-0
+          - libgfortran5
+          - libhdf5-dev
+        brew:
+          - enchant
+
+      envs: |
+        # Standard tests
+        - linux: py38-test
+        - linux: py39-test
+        - linux: py310-test-dev
+        - linux: py311-test-dev
+
+        - macos: py311-test
+        - windows: py38-test
+        - windows: py39-test-dev
+        - macos: py310-test-dev
+          PLAT: arm64
+
+  publish:
+    needs: tests
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
+    with:
+      test_extras: test
+      test_command: pytest --pyargs glue_astronomy
+    secrets:
+      pypi_token: ${{ secrets.pypi_token }}
+
