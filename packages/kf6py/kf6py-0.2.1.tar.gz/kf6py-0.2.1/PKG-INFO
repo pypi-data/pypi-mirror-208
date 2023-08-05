@@ -1,0 +1,39 @@
+Metadata-Version: 2.1
+Name: kf6py
+Version: 0.2.1
+Summary: A small tool for calling APIs in Knowledge Forum
+Project-URL: Homepage, https://github.com/JerrisonChang/kf6api-py
+Project-URL: Bug Tracker, https://github.com/JerrisonChang/kf6api-py/issues
+Author-email: Jerrison Chang-Sundin <chunyen.cs@gmail.com>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Requires-Dist: beautifulsoup4<5,>=4
+Requires-Dist: requests<3,>=2.28
+Description-Content-Type: text/markdown
+
+# KF6 API for Python
+
+This is python package for calling KF6's API's, in hope to make it more friendly for learning analytic researchers.
+
+## usage
+``` python
+from kf6py import KF6API
+
+# we recommend using environment variables to store sensitive information
+kf6api = KF6API(kfurl, username, password)
+
+# see the communities you are interested in
+kf6api.get_my_communities()
+
+# see the view in a particular community
+kf6api.get_views("<community_id here>")
+
+# get the notes in a particular view
+kf6api.get_notes_from_view("<community_id>", "<view_id>")
+
+# create contribution in a view
+kf6api.create_contribution("<community_id>", "<view_id>", '<contribution_title>', "<contribution_content>")
+```
