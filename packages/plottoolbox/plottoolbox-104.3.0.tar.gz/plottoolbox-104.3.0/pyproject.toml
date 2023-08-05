@@ -1,0 +1,112 @@
+[build-system]
+requires = [
+    "setuptools>=45",
+    "setuptools_scm[toml]>=6.2",
+    "wheel",
+    "oldest-supported-numpy"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plottoolbox"
+dynamic = ["readme", "version"]
+description = "Command line script and Python library to make plots from data files."
+dependencies = [
+    "cltoolbox >= 1.0.0",
+    "numpy",
+    "scipy",
+    "pandas",
+    "pydantic",
+    "toolbox_utils >= 3.0.0, < 4.0.0",
+    "matplotlib"
+]
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "Tim Cera", email = "tim@cerazone.net"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+keywords = [
+    "time-series",
+    "cli-app",
+    "aggregate",
+    "fill",
+    "filter"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "cleanpy",
+    "twine",
+    "pytest",
+    "coverage",
+    "flake8",
+    "pytest-cov",
+    "pytest-mpl",
+    "pre-commit",
+    "black-nbconvert",
+    "blacken-docs",
+    "velin",
+    "isort",
+    "pyroma",
+    "pyupgrade",
+    "commitizen"
+]
+
+[project.scripts]
+plottoolbox = "plottoolbox.plottoolbox:_main"
+
+[project.urls]
+documentation = "https://timcera.bitbucket.io/plottoolbox/docs/index.html#plottoolbox-documentation"
+github = "https://github.com/timcera/plottoolbox"
+bitbucket = "https://bitbucket.org/timcera/plottoolbox/src/main/"
+
+[tool]
+
+[tool.check-manifest]
+ignore = [".travis.yml", "docs/_function_autosummary/*"]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+update_changelog_on_bump = true
+version = "104.3.0"
+version_files = ["VERSION"]
+
+[tool.isort]
+profile = "black"
+
+[tool.setuptools]
+license-files = ["LICENSE.txt"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+readme = {file = "README.rst"}
+version = {file = "VERSION"}
+
+[tool.setuptools.package-data]
+"SciencePlots.scienceplots" = ["**/*.mplstyle"]
+
+[tool.setuptools.packages.find]
+exclude = ["examples*", "tools*", "docs*", "plottoolbox.tests*"]
+namespaces = true
+where = ["src"]
+
+[tool.setuptools_scm]
