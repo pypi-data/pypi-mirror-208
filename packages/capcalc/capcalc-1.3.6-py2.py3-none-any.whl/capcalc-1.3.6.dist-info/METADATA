@@ -1,0 +1,86 @@
+Metadata-Version: 2.1
+Name: capcalc
+Version: 1.3.6
+Summary: Tools for performing coactivation pattern analysis on fMRI data.
+Home-page: https://github.com/bbfrederick/capcalc
+Author: Blaise Frederick
+Author-email: bbfrederick@mclean.harvard.edu
+License: Apache Software License
+Keywords: fMRI,correlation,clustering,states
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: scikit-learn
+Requires-Dist: matplotlib
+Requires-Dist: statsmodels
+Requires-Dist: nibabel
+Requires-Dist: versioneer
+Provides-Extra: doc
+Requires-Dist: sphinx (>=1.8.0) ; extra == 'doc'
+Requires-Dist: sphinx-rtd-theme ; extra == 'doc'
+Requires-Dist: sphinx-argparse ; extra == 'doc'
+Requires-Dist: sphinx-gallery ; extra == 'doc'
+Requires-Dist: m2r ; extra == 'doc'
+Requires-Dist: numpydoc ; extra == 'doc'
+Requires-Dist: recommonmark ; extra == 'doc'
+Requires-Dist: mistune (==0.8.4) ; extra == 'doc'
+
+Capcalc
+=======
+
+capcalc is a suite of python programs used to perform coactivation
+pattern analysis on time series data. It uses K-Means clustering to find
+a set of “activation states” that represent the covarying patterns in
+the data.
+
+HTML documentation is here: http://capcalc.readthedocs.io/en/latest/
+
+NOTE
+====
+
+This is an evolving code base. I’m constantly tinkering with it. That
+said, now that I’m releasing this to the world, I’m being somewhat more
+responsible about locking down stable release points. In between
+releases, however, I’ll be messing with things. **It’s very possible I
+could break something while doing this, so check back for status updates
+if you download the code in between releases**. I’ve finally become a
+little more modern and started adding automated testing, so as time goes
+by hopefully the “in between” releases will be somewhat more reliable.
+Check back often for exciting new features and bug fixes!
+
+Ok, I’m sold. What’s in here?
+=============================
+
+-  **roidecompose** - This program uses an atlas to extract timecourses
+   from a 4D nifti file, producing a text file with the averaged
+   timecourse from each region in the atlas (each integral value in
+   file) in each column. This can be input to capfromtcs. There are
+   various options for normalizing the timecourses.
+
+-  **capfromtcs** - This does the actual CAP calculation, performing a
+   k-means cluster analysis on the set of timecourses to find the best
+   representitive set of “states” in the file. Outputs the states found
+   and the dominant state in each timepoint of the timecourse.
+
+-  **maptoroi** - The inverse of roidecompose. Give it a set of cluster
+   timecourses and a template file, and it maps the values back onto the
+   rois
+
+-  **statematch** - Use this for aligning two state output files. Takes
+   two state timecourse files, and determines which states in the second
+   correspond to which states in the first. Generates a new ‘remapped’
+   file with the states in the second file expressed as states in the
+   first.
+
+
+
+
