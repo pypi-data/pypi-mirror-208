@@ -1,0 +1,5138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<list xmlns="http://www.wildpackets.com/xml/internationalization" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<fileversion>
+		6.2.0.19
+	</fileversion>
+<!--
+	6.2.0.19	Fixed a few misspellings
+	6.2.0.18	changed voip application name to voice & video
+	6.2.0.17	
+	6.2.0.16	update voip application protospecs
+	6.2.0.15	update voip-codec-telchemy table for Telchemy 2.3.012
+	6.2.0.14	add icontable
+	6.2.0.13	add string table voip-call-status
+	6.0.0.12	Changed the name of PROBLEM_ID_WIRELESS_AP_PROBE_REQUEST_IGNORED to PROBLEM_ID_WIRELESS_CLIENT_PROBE_REQUEST_IGNORED
+	6.0.0.11	Remove <helptopic> tags, add <layertable>
+	6.0.0.10	add PROBLEM_ID_LOW_R_FACTOR, PROBLEM_ID_LOW_PMOS, PROBLEM_ID_RTP_EXCESSIVE_JITTER_DETECTED, PROBLEM_ID_RTP_EXCESSIVE_PACKET_LOSS_DETECTED
+	6.0.0.9 	Move problem <desc>, <cause>, and <remedy> fields to separate HTML files
+	6.0.0.8 	add string tables
+	6.0.0.7 	add PROBLEM_ID_SIP_POST_DIAL_DELAY and PROBLEM_ID_H225_Q931_DROP
+	6.0.0.6 	add <serverport> and <clientport> elements
+	6.0.0.5 	add apdex events, new <float-format>, <float-multiply> value fields, %if-other%...%fi-other% conditional message substitution
+	6.0.0.4 	remove PROBLEM_ID_SIP_REJECT in favor of more specific PROBLEM_ID_SIP_REDIRECTION, PROBLEM_ID_SIP_CLIENT_AUTH_REQUIRED, PROBLEM_ID_SIP_CLIENT_ERROR, PROBLEM_ID_SIP_SERVER_ERROR, and PROBLEM_ID_SIP_GLOBAL_ERROR
+	6.0.0.3 	remove "VoIP" from event names like "RTP (VoIP) Excessive Jitter"
+	6.0.0.2 	move wireless, VoIP, and network policy events out of layers to their own top-level groups
+	6.0.0.1 	add <application> nodes to support multi-protocol applications like "web" and "mail"
+-->
+<!--
+		message substitutions
+
+		%dns-error-value%
+		%h225-q931-cause%
+		%h225-ras-message%
+		%h245-response-message%
+		%other-packet-number%
+		%period%
+		%period-min%
+		%period-timestamp%
+		%see-other-packet%			shorthand for %if-other%(see packet %other-packet-number%)%fi-other%
+		%signed-value%
+		%source-role%
+		%text%
+		%value%
+		%value-max%						
+		%value-threshold%
+		%if-other%...%fi-other%		"..." string hidden if no other packet number				
+	-->
+<!-- formatting edict: text will be randomly reflowed by XML editors. Hard returns no longer required, and may be stripped out next time anybody reflows the text. Big long single-line entries are permitted (encouraged, even): turn on word wrap in your editor. -->
+	<!-- Disabled apdex TCP protocols only -->
+	<disabled-apdex-protocols>
+		<protocol protospec="AOL"/>
+		<protocol protospec="CIFS/SMB"/>
+		<protocol protospec="Citrix CGP"/>
+		<protocol protospec="Citrix ICA"/>
+		<protocol protospec="MSN Messenger"/>
+		<protocol protospec="SSH"/>
+		<protocol protospec="TELNET"/>
+		<protocol protospec="Yahoo"/>
+		<protocol protospec="H.323"/>
+	</disabled-apdex-protocols>
+	<layertable>
+		<layer value="10">Network Policy</layer>
+		<layer value="9">VoIP</layer>
+		<layer value="8">WAN</layer>
+		<layer value="7">Wireless</layer>
+		<layer value="6">Client/Server</layer>
+		<layer value="5">Application</layer>
+		<layer value="4">Session</layer>
+		<layer value="3">Transport</layer>
+		<layer value="2">Network</layer>
+		<layer value="1">Data Link</layer>
+		<layer value="0">Physical</layer>
+	</layertable>
+<!-- client/server -->
+	<problem id="PROBLEM_ID_BUSY_NETWORK">
+		<guid>
+			{EF640ADB-F62C-48EC-86B0-A426EDF43852}
+		</guid>
+		<name>
+			Busy Network or Server 
+		</name>
+		<sensitivity />
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_INEFFICIENT_CLIENT">
+		<guid>
+			{6E14453D-1E69-41E5-B016-663EF5C438EC}
+		</guid>
+		<name>
+			Inefficient Client 
+		</name>
+		<sensitivity />
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_LOW_SC_THROUGHPUT">
+		<guid>
+			{0A52238B-DE4E-466F-9495-D0282751CCDF}
+		</guid>
+		<name>
+			Low Server-to-Client Throughput 
+		</name>
+		<message>
+			Low Server-to-Client Throughput (%value% kBytes/second) 
+		</message>
+		<value>
+			<unit>
+				kBytes/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				1
+			</left>
+			<right>
+				25000
+			</right>
+			<logscale />
+		</assist>
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_LOW_CS_THROUGHPUT">
+		<guid>
+			{2BB0E185-CACA-4FD8-8376-6784AC08E047}
+		</guid>
+		<name>
+			Low Client-to-Server Throughput 
+		</name>
+		<message>
+			Low Client-to-Server Throughput (%value% kBytes/second) 
+		</message>
+		<value>
+			<unit>
+				kBytes/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				1
+			</left>
+			<right>
+				25000
+			</right>
+			<logscale />
+		</assist>
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_CLIENT_NOT_RESPONDING">
+		<guid>
+			{4C0F2653-FCFE-4F56-92E6-2ABA9136637E}
+		</guid>
+		<name>
+			Non-Responsive Client 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_SERVER_NOT_RESPONDING">
+		<guid>
+			{BB823FDA-465D-4FB0-8C6E-5AA989B50006}
+		</guid>
+		<name>
+			Non-Responsive Server 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_ONE_WAY_TRAFFIC">
+		<guid>
+			{8C720B4F-F0C9-403D-BA08-33B2396D4B72}
+		</guid>
+		<name>
+			One-Way Traffic 
+		</name>
+		<value>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				5
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			client/server
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_SLOW_SERVER_RESPONSE_TIME">
+		<guid>
+			{39190D75-2FCD-4BC4-B80A-498A1FE9359A}
+		</guid>
+		<name>
+			Slow Server Response Time 
+		</name>
+		<message>
+			Slow Server Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			client/server
+		</layer>
+	</problem>
+<!-- application -->
+
+<!-- apdex -->
+
+	<problem id="PROBLEM_ID_APDEX_CLIENT_LOW_SCORE">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{21511687-04BF-4656-B775-4AE4305D7DE0}
+		</guid>
+		<name>
+			Apdex Score - Client Too Low
+		</name>
+		<message>
+			Apdex Score - Client Too Low %text%
+		</message>
+		<value>
+			<unit>
+				Apdex Score (0.00-0.99)
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				99
+			</max>
+			<float-format>
+				%0.2f
+			</float-format>
+			<float-multiply>
+				0.01
+			</float-multiply>
+		</value>
+		<layer>
+			application
+		</layer>
+		<group>
+			Apdex
+		</group>
+	</problem>
+	<!-- Secret event to trigger an event for EVERY Apdex task, if you want to follow its statistics gathering.
+	<problem id="PROBLEM_ID_APDEX_TASK_ENDED">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{A26D6CD2-3DDF-4ebb-8B43-C2E38ABEFB7A}
+		</guid>
+		<name>
+			Apdex Task Ended 
+		</name>
+		<message>
+			Apdex Task Ended (%period% from packet %other-packet-number%) %text%
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			Apdex
+		</group>
+	</problem>
+	-->
+	<problem id="PROBLEM_ID_APDEX_TASK_ENDED_TOLERATING">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{21032C14-184D-4b22-985F-41786CBA80E6}
+		</guid>
+		<name>
+			Apdex Task Ended - Tolerating User
+		</name>
+		<message>
+			Apdex Task Ended - Tolerating User (%period% from packet %other-packet-number%) %text%
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			Apdex
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_APDEX_TASK_ENDED_FRUSTRATED">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{C3E7C192-1012-459a-8C34-16058FF218C3}
+		</guid>
+		<name>
+			Apdex Task Ended - Frustrated User
+		</name>
+		<message>
+			Apdex Task Ended - Frustrated User (%period% from packet %other-packet-number%) %text%
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			Apdex
+		</group>
+	</problem>
+	<!-- dhcp -->
+	<problem id="PROBLEM_ID_DHCP_LOW_LEASE_TIME">
+		<guid>
+			{F01F0CC2-BD98-4341-86B4-FF0FA66CAAFB}
+		</guid>
+		<name>
+			DHCP Low Lease Time 
+		</name>
+		<message>
+			DHCP Low Lease Time (%value% minutes, threshold=%value-threshold% minutes) 
+		</message>
+		<value>
+			<unit>
+				minutes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			application
+		</layer>
+		<group>
+			DHCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_DHCP_MULTIPLE_SERVER_RESPONSE">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{546E3888-0AAD-4939-B510-AA9CB17A93D0}
+		</guid>
+		<name>
+			DHCP Multiple Server Response
+		</name>
+		<message>
+			DHCP Multiple Server Response %see-other-packet%
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			DHCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_DHCP_REJECTED">
+		<guid>
+			{93083F80-D022-4606-8FE9-3DEBA064E357}
+		</guid>
+		<name>
+			DHCP Request Rejected 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			DHCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_DHCP_REQUEST_STORM">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{4D4EDE44-BCC4-4478-9D43-E0507F2D1E64}
+		</guid>
+		<name>
+			DHCP Request Storm 
+		</name>
+		<message>
+			DHCP Request Storm (%value% requests per %period%)
+		</message>
+		<value>
+			<unit>
+				requests
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<layer>
+			application
+		</layer>
+		<group>
+			DHCP
+		</group>
+	</problem>
+<!-- dns -->
+	<problem id="PROBLEM_ID_DNS_SLOW_RESPONSE_TIME">
+		<guid>
+			{79501830-3801-452C-A8CD-A5BB26ED6B96}
+		</guid>
+		<name>
+			DNS Slow Response Time 
+		</name>
+		<message>
+			DNS Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				480
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+		<group>
+			DNS
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_DNS_SERVER_ERROR">
+		<guid>
+			{85B68566-CD98-48A3-82A5-44E21B5502D4}
+		</guid>
+		<name>
+			DNS Error 
+		</name>
+		<message>
+			DNS Error (%dns-error-value%) 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			DNS
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_DNS_NON_EXISTENT_DOMAIN">
+		<guid>
+			{CF874879-28C0-4CC8-A989-A588B58B0453}
+		</guid>
+		<name>
+			DNS Non-Existent Host or Domain 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			DNS
+		</group>
+	</problem>
+<!-- ftp -->
+	<problem id="PROBLEM_ID_FTP_CONTROL_SLOW">
+		<guid>
+			{FE53A7F3-39FD-4042-B3AA-9A2C8D07F5EC}
+		</guid>
+		<name>
+			FTP Slow Response Time 
+		</name>
+		<message>
+			FTP Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+	</problem>
+<!-- http -->
+	<problem id="PROBLEM_ID_HTTP_REQUEST_NOT_FOUND">
+		<guid>
+			{5ECEAB3F-AFA2-4530-BFDA-99E3CE9D08E0}
+		</guid>
+		<name>
+			HTTP Request Not Found 
+		</name>
+		<message>
+			HTTP Request Not Found (%value% - %text%) 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			HTTP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_HTTP_CLIENT_ERROR">
+		<guid>
+			{5660C618-F89F-4ED8-BF33-01502BFD03DD}
+		</guid>
+		<name>
+			HTTP Client Error 
+		</name>
+		<message>
+			HTTP Client Error (%value% - %text%) 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			HTTP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_HTTP_SERVER_ERROR">
+		<guid>
+			{3CCDE706-9A3B-4E4E-BACF-1A93A6204906}
+		</guid>
+		<name>
+			HTTP Server Error 
+		</name>
+		<message>
+			HTTP Server Error (%value% - %text%) 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			HTTP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_HTTP_SLOW_RESPONSE_TIME">
+		<guid>
+			{D461B135-B23E-47F7-909A-E8359B6BD319}
+		</guid>
+		<name>
+			HTTP Slow Response Time 
+		</name>
+		<message>
+			HTTP Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+		<group>
+			HTTP
+		</group>
+	</problem>
+<!-- kerberos -->
+	<problem id="PROBLEM_ID_KERBEROS_REJECTED">
+		<guid>
+			{C081453B-F9DB-4511-8791-0656AF917F1E}
+		</guid>
+		<name>
+			Kerberos Request Rejected 
+		</name>
+		<layer>
+			application
+		</layer>
+	</problem>
+<!-- ldap -->
+	<problem id="PROBLEM_ID_LDAP_SLOW_RESPONSE_TIME">
+		<guid>
+			{33600973-4F5E-4299-990B-C82C7393C398}
+		</guid>
+		<name>
+			LDAP Slow Response Time 
+		</name>
+		<message>
+			LDAP Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				480
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+	</problem>
+<!-- nfs -->
+	<problem id="PROBLEM_ID_NFS_RETRANSMISSION">
+		<guid>
+			{772F26C2-C6A0-420C-821B-BD76A450AA25}
+		</guid>
+		<name>
+			NFS Retransmission 
+		</name>
+		<message>
+			NFS Retransmission %see-other-packet% 
+		</message>
+		<layer>
+			application
+		</layer>
+	</problem>
+<!-- tns/oracle -->
+	<problem id="PROBLEM_ID_TNS_LOGIN_REJECT">
+		<guid>
+			{0FCED04B-3BAB-4C99-8218-9EFC4F7ACD12}
+		</guid>
+		<name>
+			Oracle Logon Denied 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			Oracle
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TNS_SLOW_RESPONSE_TIME">
+		<guid>
+			{40252839-5944-440C-9192-A80D65E262A5}
+		</guid>
+		<name>
+			Oracle Slow Response Time 
+		</name>
+		<message>
+			Oracle Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+		<group>
+			Oracle
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TNS_REFUSED">
+		<guid>
+			{F6CB3993-C291-43DB-ACBC-11AF3F895D04}
+		</guid>
+		<name>
+			Oracle TNS Connection Refused 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			Oracle
+		</group>
+	</problem>
+<!-- pop3 -->
+	<problem id="PROBLEM_ID_POP3_LOGIN_REJECTED">
+		<guid>
+			{1BC9FFE5-7238-4804-A24B-520A8C1ED482}
+		</guid>
+		<name>
+			POP3 Login Failed 
+		</name>
+		<message>
+			POP3 Login Failed %see-other-packet% 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			POP3
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_POP3_REJECTED">
+		<guid>
+			{D87D7363-DECE-4DF6-AB0C-15E4EDD3F57B}
+		</guid>
+		<name>
+			POP3 Server Returned Error 
+		</name>
+		<message>
+			POP3 Server Returned Error %see-other-packet% 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			POP3
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_POP3_SLOW_RESPONSE_TIME">
+		<guid>
+			{EEC188B6-35FC-44FD-AF52-4F1B519AE31D}
+		</guid>
+		<name>
+			POP3 Slow Response Time 
+		</name>
+		<message>
+			POP3 Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+		<group>
+			POP3
+		</group>
+	</problem>
+<!-- smb -->
+	<problem id="PROBLEM_ID_SMB_LOGON_FAILURE">
+		<guid>
+			{6A2EB29D-BB96-47F9-ABF4-354346B828B3}
+		</guid>
+		<name>
+			SMB Logon or Access Denied 
+		</name>
+		<message>
+			SMB Logon or Access Denied %see-other-packet% 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMB/CIFS
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SMB_ERROR">
+		<guid>
+			{622D11B2-727D-43C6-AEED-9D93F9C55AC5}
+		</guid>
+		<name>
+			SMB Command Rejected 
+		</name>
+		<message>
+			SMB Command Rejected %see-other-packet% 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMB/CIFS
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SMB_BAD_NETWORK_NAME">
+		<guid>
+			{196E8DBE-B5EB-4C8E-AE38-000E986DE702}
+		</guid>
+		<name>
+			SMB Invalid Network Resource 
+		</name>
+		<message>
+			SMB Invalid Network Resource %see-other-packet% 
+		</message>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMB/CIFS
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SMB_LOOP_ON_REQUEST">
+		<guid>
+			{BD709626-1CE4-4EFA-9BF9-ED3D9A15B354}
+		</guid>
+		<name>
+			SMB Repeated or Looped Transaction 
+		</name>
+		<message>
+			SMB Repeated or Looped Transaction %see-other-packet% 
+		</message>
+		<value>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMB/CIFS
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SMB_EXCESSIVE_LOOPS">
+		<guid>
+			{4244DA5D-B437-4AF0-9F8E-006610CC97D9}
+		</guid>
+		<name>
+			SMB Excessive Transaction Loops 
+		</name>
+		<message>
+			SMB Excessive Transaction Loops (%value%% of command packets, see packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				99
+			</max>
+		</value>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMB/CIFS
+		</group>
+	</problem>
+<!-- smtp -->
+	<problem id="PROBLEM_ID_SMTP_REJECTED">
+		<guid>
+			{EB863371-9F1B-4E0C-90AD-263E2A8663F3}
+		</guid>
+		<name>
+			SMTP Server Returned Error 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMTP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SMTP_SLOW_RESPONSE_TIME">
+		<guid>
+			{46CF9370-6F89-47FA-A311-7F610F5758D4}
+		</guid>
+		<name>
+			SMTP Slow Response Time 
+		</name>
+		<message>
+			SMTP Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+		<group>
+			SMTP
+		</group>
+	</problem>
+<!-- ms sql server -->
+	<problem id="PROBLEM_ID_SQL_LOGIN_REJECTED">
+		<guid>
+			{C6FCC746-FF77-42B9-8B50-6CEBE678AF35}
+		</guid>
+		<name>
+			SQL Server Failed Login 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			SQL
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SQL_CLIENT_ERROR">
+		<guid>
+			{7A2C9E0D-EE9E-46DD-9E66-84CBDEB5F629}
+		</guid>
+		<name>
+			SQL Server Client Error 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			SQL
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SQL_FATAL_ERROR">
+		<guid>
+			{4D00251C-CB5A-44C0-A1D0-CED095838BEC}
+		</guid>
+		<name>
+			SQL Server Fatal Error 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			SQL
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SQL_RESOURCE_ERROR">
+		<guid>
+			{813DB4D7-98E0-44C2-A32F-4EFB1710775B}
+		</guid>
+		<name>
+			SQL Server Resource Error 
+		</name>
+		<layer>
+			application
+		</layer>
+		<group>
+			SQL
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SQL_SLOW_RESPONSE_TIME">
+		<guid>
+			{E0102684-E586-4EC1-8C41-9F147D07699C}
+		</guid>
+		<name>
+			SQL Server Slow Response Time 
+		</name>
+		<message>
+			SQL Server Slow Response Time (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<assist>
+			<left>
+				240
+			</left>
+			<right>
+				1
+			</right>
+		</assist>
+		<layer>
+			application
+		</layer>
+		<group>
+			SQL
+		</group>
+	</problem>
+<!-- smb part two -->
+	<problem id="PROBLEM_ID_SMB_BROWSER_ELECT">
+		<guid>
+			{D8AE3A27-1FD5-49C2-80AC-482F7B4D63CC}
+		</guid>
+		<name>
+			Windows Master Browser Election 
+		</name>
+		<layer>
+			application
+		</layer>
+	</problem>
+<!-- session -->
+<!-- netbios -->
+	<problem id="PROBLEM_ID_NETBIOS_SESSION_REFUSED">
+		<guid>
+			{EAD07183-D433-4E07-BDB2-29DD428CB617}
+		</guid>
+		<name>
+			NetBIOS (over IP) Session Refused 
+		</name>
+		<layer>
+			session
+		</layer>
+	</problem>
+<!-- other session stuff -->
+<!-- transport -->
+	<problem id="PROBLEM_ID_RSVP_ERROR">
+		<guid>
+			{F8EFC91E-DBDD-41da-9A4C-31E87341E93D}
+		</guid>
+		<name>
+			RSVP Error 
+		</name>
+		<message>
+			RSVP Error (%text%)
+		</message>
+		<layer>
+			transport
+		</layer>
+	</problem>
+<!-- tcp -->
+	<problem id="PROBLEM_ID_TCP_RESET_CONN_REJECTED">
+		<guid>
+			{517F9DED-8D5E-49F1-80D6-9630E1B228DD}
+		</guid>
+		<name>
+			TCP Connection Refused 
+		</name>
+		<message>
+			TCP Connection Refused %see-other-packet% 
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RESET_CONN_LOST">
+		<guid>
+			{AAC02F5D-B9AA-4850-9333-64BA11AB2FCB}
+		</guid>
+		<name>
+			TCP Connection Lost 
+		</name>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RESET_CONN_INACTIVE">
+		<guid>
+			{EEB9CCCE-21CA-46C6-A2D5-9FF2CF911708}
+		</guid>
+		<name>
+			TCP Inactive Connection Reset 
+		</name>
+		<message>
+			TCP Inactive Connection Reset (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				5
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RESET_CONN_GENERIC">
+		<guid>
+			{162D707B-8E72-4445-9246-90FC0C7EEE3F}
+		</guid>
+		<name>
+			TCP Connection Reset 
+		</name>
+		<message>
+			TCP Connection Reset by %source-role% 
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_TRIPLE_DUPLICATE_ACK">
+		<guid>
+			{131AFBA8-D86E-43a1-B90F-6DA42C775CE6}
+		</guid>
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<name>
+			TCP Triple Duplicate ACK 
+		</name>
+		<message>
+			TCP Triple Duplicate ACK (see packet %other-packet-number%) 
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RETRANSMISSION_EXCESSIVE">
+		<guid>
+			{0B1B1BB3-3EEA-4790-AF96-7B34744366CE}
+		</guid>
+		<name>
+			TCP Too Many Retransmissions 
+		</name>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				99
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RETRANSMISSION_FAST_3ACK">
+		<guid>
+			{7448DC92-D038-4a6b-960B-B0194CCBE46C}
+		</guid>
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<name>
+			TCP Fast Retransmission (by ACK) 
+		</name>
+		<message>
+			TCP Fast Retransmission (by ACK) %see-other-packet% 
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RETRANSMISSION_FAST">
+		<guid>
+			{2565A1D9-8C0D-407C-9A92-5383CC1DD9EF}
+		</guid>
+		<name>
+			TCP Fast Retransmission (by time) 
+		</name>
+		<message>
+			TCP Fast Retransmission (by time) (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RETRANSMISSION_SLOW">
+		<guid>
+			{5093E524-6B77-46C3-AD0D-3AD282540A9A}
+		</guid>
+		<name>
+			TCP Slow First Retransmission 
+		</name>
+		<message>
+			TCP Slow First Retransmission (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_SLOW_SEGMENT_RECOVERY">
+		<guid>
+			{11547F59-554E-432f-8828-4506233A6036}
+		</guid>
+		<name>
+			TCP Slow Segment Recovery 
+		</name>
+		<message>
+			TCP Slow Segment Recovery (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_RETRANSMISSION_GENERIC">
+		<guid>
+			{93618476-6EA7-4FF3-86BE-D57066752301}
+		</guid>
+		<name>
+			TCP Retransmission 
+		</name>
+		<message>
+			TCP Retransmission %if-other%(%period% from packet %other-packet-number%)%fi-other%
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_CHECKSUM">
+		<guid>
+			{3AAC4A20-29FE-4EB2-9097-99239592C411}
+		</guid>
+		<name>
+			TCP Invalid Checksum 
+		</name>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_IDLE_TOO_LONG">
+		<guid>
+			{8BC04129-4F45-4F1D-AD14-EC47AE77B06B}
+		</guid>
+		<name>
+			TCP Idle Too Long 
+		</name>
+		<message>
+			TCP Idle Too Long (since %period-timestamp%) 
+		</message>
+		<value>
+			<unit>
+				minutes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				720
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_LOW_MSS">
+		<guid>
+			{B496679B-0747-409C-BD85-5E72DFC673A8}
+		</guid>
+		<name>
+			TCP Low Starting MSS 
+		</name>
+		<message>
+			TCP Low Starting MSS (%value% bytes) 
+		</message>
+		<value>
+			<unit>
+				bytes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_REPEATED_SYN">
+		<guid>
+			{EFF48EBD-2616-499A-BA6E-765C122BF46D}
+		</guid>
+		<name>
+			TCP Repeated Connect Attempt 
+		</name>
+		<message>
+			TCP Repeated Connect Attempt %see-other-packet% 
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_SLOW_ACK">
+		<guid>
+			{D53B8FFD-E75E-4D13-A990-9050E4C6A905}
+		</guid>
+		<name>
+			TCP Slow Acknowledgement 
+		</name>
+		<message>
+			TCP Slow Acknowledgement (%period% from packet %other-packet-number%) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_WINDOW_LOW">
+		<guid>
+			{3AEB429A-F0AA-4CD2-B3C3-777D5BA8D54F}
+		</guid>
+		<name>
+			TCP Low Window 
+		</name>
+		<message>
+			TCP Low Window (%value% of %value-max% bytes) 
+		</message>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				50
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_WINDOW_STUCK">
+		<guid>
+			{CDEDDF7C-A8D0-4837-B441-6F0A87F259E5}
+		</guid>
+		<name>
+			TCP Stuck Window 
+		</name>
+		<message>
+			TCP Stuck Window (%value% of %value-max% bytes) 
+		</message>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				99
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_WINDOW_ZERO">
+		<guid>
+			{C5011E3C-AE92-4DEE-A196-0C2254F43842}
+		</guid>
+		<name>
+			TCP Zero Window 
+		</name>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_SEGMENT_OUT_OF_SEQUENCE">
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<guid>
+			{8FFEED0F-DF28-49B6-833F-59863DB790EF}
+		</guid>
+		<name>
+			TCP Segment Out of Sequence
+		</name>
+		<message>
+			TCP Segment Out of Sequence (got %value%, expected %value-max%) %see-other-packet%
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_SEGMENT_OUTSIDE_WINDOW">
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<guid>
+			{E7B4732E-B446-4A2D-A720-26D691C2B323}
+		</guid>
+		<name>
+			TCP Segment Outside Window 
+		</name>
+		<message>
+			TCP Segment Outside Window (sequence %value%, outside window %value-max%-%value-threshold%) %see-other-packet%
+		</message>
+		<value>
+			<unit>
+				additional windows 
+			</unit>
+			<min>
+				0
+			</min>
+			<max>
+				10
+			</max>
+		</value>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_SEGMENT_MISSING">
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<guid>
+			{E09CBCB6-0BDC-4AD0-8D6E-489CC06C3B21}
+		</guid>
+		<name>
+			TCP Segment Acked But Missing
+		</name>
+		<message>
+			TCP Segment Acked But Missing (acked up to %value%, gap %value-max%-%value-threshold% never captured)
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_KEEP_ALIVE">
+		<firstappeared>
+			11.0.0
+		</firstappeared>
+		<guid>
+			{F0524EA9-032B-43B3-BFEB-B424943FE469}
+		</guid>
+		<name>
+			TCP Keep-Alive
+		</name>
+		<message>
+			TCP Keep-Alive
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_KEEP_ALIVE_ACK">
+		<firstappeared>
+			11.0.0
+		</firstappeared>
+		<guid>
+			{B333615F-7FAA-421F-BF9C-5F8544E040D3}
+		</guid>
+		<name>
+			TCP Keep-Alive ACK
+		</name>
+		<message>
+			TCP Keep-Alive ACK
+		</message>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_TCP_HEADER_INCOMPLETE">
+		<firstappeared>
+			11.1.0
+		</firstappeared>	
+		<guid>
+			{642BCF0B-93DE-407F-8B3A-F18709FBDAFB}
+		</guid>
+		<name>
+			TCP Header Incomplete
+		</name>
+		<layer>
+			transport
+		</layer>
+		<group>
+			TCP
+		</group>
+	</problem>	
+<!-- udp -->
+	<problem id="PROBLEM_ID_UDP_CHECKSUM">
+		<guid>
+			{657D3D5F-C194-49E1-8A22-8DC3F2C4B149}
+		</guid>
+		<name>
+			UDP Invalid Checksum 
+		</name>
+		<layer>
+			transport
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_UDP_LENGTH_TOO_BIG">
+		<firstappeared>
+			11.1.0
+		</firstappeared>	
+		<guid>
+			{B6934FDC-66CA-4EFC-99A5-D45FB1D773FB}
+		</guid>
+		<name>
+			UDP Length Exceeds Packet Length
+		</name>
+		<layer>
+			transport
+		</layer>
+	</problem>		
+<!-- network -->
+<!-- ip -->
+	<problem id="PROBLEM_ID_IP_HEADER_CHECKSUM">
+		<guid>
+			{EA38990B-1DF2-4D1B-BB43-6E077D11EAAB}
+		</guid>
+		<name>
+			IP Invalid Header Checksum 
+		</name>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_LOCAL_ROUTING">
+		<guid>
+			{8A42C738-5B0F-4C53-B664-068637748840}
+		</guid>
+		<name>
+			IP Local Routing 
+		</name>
+		<message>
+			IP Local Routing %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_NETWORK_DUPLICATE">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{D0B1A94C-6328-4661-8A9F-F392F35E0110}
+		</guid>
+		<name>
+			IP Network Duplicated Packet 
+		</name>
+		<message>
+			IP Network Duplicated Packet %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_LOW_TTL">
+		<guid>
+			{9EA8F58A-0431-4B83-9F86-EEDE8B4B27F1}
+		</guid>
+		<name>
+			IP Low Time-To-Live 
+		</name>
+		<message>
+			IP Low Time-To-Live (%value% hops) 
+		</message>
+		<value>
+			<unit>
+				hops
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				255
+			</max>
+		</value>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_MISSING_FRAGMENT">
+		<guid>
+			{437F4E79-5521-49DF-8FD9-85B388F57309}
+		</guid>
+		<name>
+			IP Missing Fragment 
+		</name>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_CRC">
+		<guid>
+			{24973AA9-D107-4C7C-9F05-6A835C227084}
+		</guid>
+		<name>
+			IP Packet w/CRC Frame Error 
+		</name>
+		<message>
+			IP Packet with CRC Frame Error %text% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_ZERO_BROADCAST_ADDRESS">
+		<guid>
+			{3E676441-ED21-40DD-9238-91BF59CE9527}
+		</guid>
+		<name>
+			IP Zero Address in Broadcast 
+		</name>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_IP_LENGTH_TOO_BIG">
+		<guid>
+			{5A0095EB-B91A-45C3-B338-58FE5313BD79}
+		</guid>
+		<name>
+			IP Length Exceeds Packet Length 
+		</name>
+		<layer>
+			network
+		</layer>
+		<group>
+			IP
+		</group>
+	</problem>	
+<!-- ipsec -->
+	<problem id="PROBLEM_ID_ESP_OUT_OF_SEQUENCE">
+		<firstappeared>
+			10.0.0
+		</firstappeared>
+		<guid>
+			{DFD8D3CC-1F6B-4C49-8D1A-6E4BC86A7F64}
+		</guid>
+		<name>
+			ESP Out of Sequence
+		</name>
+		<message>
+			ESP Out of Sequence for SPI %text% (got %value%, expected %value-max%)
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			IPsec
+		</group>
+	</problem>
+<!-- icmp -->
+	<problem id="PROBLEM_ID_ICMP_NETWORK_UNREACHABLE">
+		<guid>
+			{DB8119A1-8795-4F44-931B-494DD93A96F6}
+		</guid>
+		<name>
+			ICMP Network Unreachable 
+		</name>
+		<message>
+			ICMP Network Unreachable %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_HOST_UNREACHABLE">
+		<guid>
+			{E94D6844-3C27-4D0A-B2FF-60505052BD24}
+		</guid>
+		<name>
+			ICMP Host Unreachable 
+		</name>
+		<message>
+			ICMP Host Unreachable %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_PROTOCOL_UNREACHABLE">
+		<guid>
+			{CCAD7B96-49AE-4D18-93EF-5C3E20A33D9B}
+		</guid>
+		<name>
+			ICMP Protocol Unreachable 
+		</name>
+		<message>
+			ICMP Protocol Unreachable %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_PORT_UNREACHABLE">
+		<guid>
+			{6DA16511-F50E-410F-BCF2-9BA891B6DDD4}
+		</guid>
+		<name>
+			ICMP Port Unreachable 
+		</name>
+		<message>
+			ICMP Port Unreachable %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_FRAGMENTATION_NEEDED">
+		<guid>
+			{045D2F3B-8B32-4DDD-B6C0-951C78A1D1BB}
+		</guid>
+		<name>
+			ICMP Fragmentation Needed 
+		</name>
+		<message>
+			ICMP Fragmentation Needed and Don't Fragment was set %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_SOURCE_ROUTE_FAILED">
+		<guid>
+			{6B32D8B5-47B4-4155-9943-694C2C7E829B}
+		</guid>
+		<name>
+			ICMP Source Route Failed 
+		</name>
+		<message>
+			ICMP Source Route Failed %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_HOST_UNKNOWN">
+		<guid>
+			{6DCFAC38-D7CD-4255-A808-33B166FCFCFF}
+		</guid>
+		<name>
+			ICMP Host Unknown 
+		</name>
+		<message>
+			ICMP Destination Host Unknown %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_NET_UNREACHABLE_TOS">
+		<guid>
+			{650093A4-7B7A-4DAA-BD21-B938B9EEDDB4}
+		</guid>
+		<name>
+			ICMP Net Unreachable TOS 
+		</name>
+		<message>
+			ICMP Network Unreachable for TOS %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_HOST_UNREACHABLE_TOS">
+		<guid>
+			{00F75A3F-8C14-4763-BF4F-699151813368}
+		</guid>
+		<name>
+			ICMP Host Unreachable TOS 
+		</name>
+		<message>
+			ICMP Host Unreachable for TOS %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_COMMUNICATION_ADMIN_PROHIBITED">
+		<guid>
+			{30EBF37B-B902-4693-BB99-F87B84659DA0}
+		</guid>
+		<name>
+			ICMP Comm Admin Prohibited 
+		</name>
+		<message>
+			ICMP Communication Administratively Prohibited %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_HOST_PRECEDENCE_VIOLATION">
+		<guid>
+			{D24C2A6F-4EFF-4119-9628-5AF290548A5A}
+		</guid>
+		<name>
+			ICMP Host Precedence Violation 
+		</name>
+		<message>
+			ICMP Host Precedence Violation %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_PRECEDENCE_CUTOFF_IN_EFFECT">
+		<guid>
+			{693DC8DA-2EFB-4756-B726-3ADBA543F243}
+		</guid>
+		<name>
+			ICMP Precedence Cutoff 
+		</name>
+		<message>
+			ICMP Precedence Cutoff in Effect %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_REDIRECT_HOST_DATAGRAM">
+		<guid>
+			{236045E3-89D3-4AE9-AB52-D15FECFD7C0E}
+		</guid>
+		<name>
+			ICMP Host Redirect 
+		</name>
+		<message>
+			ICMP Redirect Datagram for Host %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_REDIRECT_TOS_HOST_DATAGRAM">
+		<guid>
+			{FD16C019-2314-425B-88ED-F1420DA40C00}
+		</guid>
+		<name>
+			ICMP Host TOS Redirect 
+		</name>
+		<message>
+			ICMP Redirect Datagram for Type of Service and Host %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_TTL_EXCEEDED">
+		<guid>
+			{F2748152-C4C1-4F6C-8EDE-2A0F328205A7}
+		</guid>
+		<name>
+			ICMP TTL Exceeded 
+		</name>
+		<message>
+			ICMP Time to Live Exceeded in Transit %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_FRAGMENT_REASSEMBLY_TIME_EXCEEDED">
+		<guid>
+			{A629F7E0-CDDA-4ED1-AAFB-13816EAB9537}
+		</guid>
+		<name>
+			ICMP Fragmentation Time Exceeded 
+		</name>
+		<message>
+			ICMP Fragment Reassembly Time Exceeded %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_PARAMETER_PROBLEM">
+		<guid>
+			{99C88004-160E-49DC-83F3-C7BC2D2639C4}
+		</guid>
+		<name>
+			ICMP Parameter Problem 
+		</name>
+		<message>
+			ICMP Parameter Problem %see-other-packet% 
+		</message>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_ICMP_OBSOLETE_MESSAGE">
+		<guid>
+			{01B2A114-F208-4EAA-A435-9E406B0AE3B2}
+		</guid>
+		<name>
+			ICMP Obsolete Message 
+		</name>
+		<layer>
+			network
+		</layer>
+		<group>
+			ICMP
+		</group>
+	</problem>
+<!-- data link -->
+	<problem id="PROBLEM_ID_802_1X_ATTACK">
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<guid>
+			{E68560AD-B2C9-401C-937A-FD94BF277E87}
+		</guid>
+		<name>
+			802.1X Dictionary Attack
+		</name>
+		<message>
+			802.1X Dictionary Attack (%value% failures per second)
+		</message>
+		<value>
+			<unit>
+				failures/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_ARP_STORM">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{BB06C9F5-7F96-4589-8883-0062409B0927}
+		</guid>
+		<name>
+			ARP Request Storm 
+		</name>
+		<message>
+			ARP Request Storm (%value% requests per %period%)
+		</message>
+		<value>
+			<unit>
+				requests
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_BROADCAST_STORM">
+		<guid>
+			{0D65FAC5-D557-43FF-A5B4-3B971EE54C15}
+		</guid>
+		<name>
+			Broadcast Storm 
+		</name>
+		<message>
+			Broadcast Storm (>= %value-threshold% packets/second for at least %period-min%) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</minperiod>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_MULTICAST_STORM">
+		<guid>
+			{63CB6D34-FCB8-4BF6-94DF-961190B2027F}
+		</guid>
+		<name>
+			Multicast Storm 
+		</name>
+		<message>
+			Multicast Storm (>= %value-threshold% packets/second for at least %period-min%) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</minperiod>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_SEVERE_BROADCAST_STORM">
+		<guid>
+			{052669BF-084F-48F0-9196-2F58E85FD9A6}
+		</guid>
+		<name>
+			Severe Broadcast Storm 
+		</name>
+		<message>
+			Severe Broadcast Storm (>= %value-threshold% packets/second for at least %period-min%) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</minperiod>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_SEVERE_MULTICAST_STORM">
+		<guid>
+			{B1CD7D89-81F3-4844-9FEB-93D2123288B1}
+		</guid>
+		<name>
+			Severe Multicast Storm 
+		</name>
+		<message>
+			Severe Multicast Storm (>= %value-threshold% packets/second for at least %period-min%) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</minperiod>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_BPDU_TOPOLOGY_CHANGE">
+		<guid>
+			{4BE09A6A-8D94-4D92-AAD3-07995ABB40F5}
+		</guid>
+		<name>
+			Spanning Tree Topology Change 
+		</name>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<problem id="PROBLEM_ID_EAP_AUTH_FAILURE">
+		<guid>
+			{CBE15EC1-637A-46a8-A716-2B39A44FCCB6}
+		</guid>
+		<name>
+			EAP Authentication Failure 
+		</name>
+		<layer>
+			datalink
+		</layer>
+	</problem>
+	<!--- WAN -->
+	<problem id="PROBLEM_ID_FRAME_RELAY_FECN">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{C62AA502-3EF0-42dc-AC85-35E144D3FE37}
+		</guid>
+		<name>
+			Frame Relay Excessive FECN
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</minperiod>
+		<group>
+			WAN
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_FRAME_RELAY_BECN">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{10AE635C-4FD3-4302-95E5-9602A0E92413}
+		</guid>
+		<name>
+			Frame Relay Excessive BECN
+		</name>
+		 <value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</minperiod>
+		<group>
+			WAN
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_FRAME_RELAY_LMI_STATUS_CHANGE">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{81939127-5D0E-4a45-A5A8-31577D137271}
+		</guid>
+		<name>
+			Frame Relay DLCI Status Change 
+		</name>
+		<group>
+			WAN
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_PPP_REJECT">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{4C23D7F8-5EB0-4e49-8A43-2EA4B7D212F4}
+		</guid>
+		<name>
+			PPP Reject
+		</name>
+		<message>
+			PPP Reject (%text%)
+		</message>
+		<group>
+			WAN
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_PPP_CONFIGURE_NAK">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{14CAF64C-3A55-4811-B101-449A8DA3BB7F}
+		</guid>
+		<name>
+			PPP Configure NAK 
+		</name>
+		<group>
+			WAN
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_PPP_TERMINATE_REQUEST">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{3692AA6B-CDAF-4aa6-8B1A-D1318C99D921}
+		</guid>
+		<name>
+			PPP Terminate-Request
+		</name>
+		<group>
+			WAN
+		</group>
+	</problem>
+<!-- physical -->
+<!-- LAN -->
+	<problem id="PROBLEM_ID_LAN_CRC">
+		<guid>
+			{2510BE99-B2A0-46AA-9EA3-224CE86AFE6C}
+		</guid>
+		<name>
+			Too Many Physical Errors 
+		</name>
+		<message>
+			Too Many Physical Errors (%value% packets/second) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<layer>
+			physical
+		</layer>
+		<group>
+			LAN
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_LAN_MAC_FLOODING">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{7153B12D-EA0E-4f5b-9A19-3B7F1B4FBD95}
+		</guid>
+		<name>
+			MAC Flooding
+		</name>
+		<value>
+			<unit>
+				nodes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				120
+			</max>
+		</minperiod>
+		<layer>
+			physical
+		</layer>
+	</problem>
+<!-- Network Policy -->
+	<problem id="PROBLEM_ID_NETWORK_POLICY_VENDOR_ID">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{9E192B68-ED63-4e3e-B0C8-BB1E80759BA3}
+		</guid>
+		<name>
+			Network Policy Violation - Vendor ID 
+		</name>
+		<message>
+			Network Policy Violation - Vendor ID %text% 
+		</message>
+		<configure />
+		<group>
+			Network Policy
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_NETWORK_POLICY_CHANNEL">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{E7284EF0-D50A-4b9d-9360-C67CABA7FBC5}
+		</guid>
+		<name>
+			Network Policy Violation - Channel 
+		</name>
+		<message>
+			Network Policy Violation - Channel %text% 
+		</message>
+		<configure />
+		<group>
+			Network Policy
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_NETWORK_POLICY_ESSID">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{D82EC446-C714-4a33-9B63-3326F08769CE}
+		</guid>
+		<name>
+			Network Policy Violation - ESSID 
+		</name>
+		<message>
+			Network Policy Violation - ESSID %text% 
+		</message>
+		<configure />
+		<group>
+			Network Policy
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_NETWORK_POLICY_ENCRYPTION">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{4927E3DC-5161-439d-80F8-F5E89533748D}
+		</guid>
+		<name>
+			Network Policy Violation - WLAN Encryption 
+		</name>
+		<message>
+			Network Policy Violation - WLAN Encryption %text% 
+		</message>
+		<configure />
+		<group>
+			Network Policy
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_NETWORK_POLICY_AUTHENTICATION">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{F468A205-D924-475d-8513-692FDDCF65F7}
+		</guid>
+		<name>
+			Network Policy Violation - WLAN Authentication 
+		</name>
+		<message>
+			Network Policy Violation - WLAN Authentication %text% 
+		</message>
+		<configure />
+		<group>
+			Network Policy
+		</group>
+	</problem>
+	
+<!-- VoIP -->
+	<problem id="PROBLEM_ID_H225_RAS_REJECT">
+		<guid>
+			{A1D197B1-8C48-40C6-A1D3-9737B50CE3A3}
+		</guid>
+		<name>
+			H.225 RAS Reject 
+		</name>
+		<message>
+			H.225 RAS Reject (%h225-ras-message%, see packet %other-packet-number%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_H225_Q931_DROP">
+		<guid>
+			{10E08BCA-EE16-4b42-A384-3447D27AE73D}
+		</guid>
+		<firstappeared>
+			6.0.0.7
+		</firstappeared>
+		<name>
+			H.225 Call Signaling (Q.931) - Call Dropped
+		</name>
+		<message>
+			H.225 Call Signaling (Q.931) - Call Dropped (%h225-q931-cause%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_H225_Q931_REJECT">
+		<guid>
+			{F9936AAD-3471-414C-882C-50145A6635D7}
+		</guid>
+		<name>
+			H.225 Call Signaling (Q.931) - Call Rejected
+		</name>
+		<message>
+			H.225 Call Signaling (Q.931) - Call Rejected (%h225-q931-cause%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_H245_REJECT">
+		<guid>
+			{445AB601-13F7-4390-A6BB-36FA96061B8B}
+		</guid>
+		<name>
+			H.245 Control Reject 
+		</name>
+		<message>
+			H.245 Control Reject (%h245-response-message%, see packet %other-packet-number%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_LOW_PMOS">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{C3E5ED07-83F7-442c-82E4-5F2BFCD83768}
+		</guid>
+		<name>
+			Low MOS-CQ
+		</name>
+		<message>
+			Low MOS-CQ (%value% threshold=%value-threshold%)
+		</message>
+		<value>
+			<unit>
+				MOS
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				500
+			</max>
+			<float-format>
+				%0.2f
+			</float-format>
+			<float-multiply>
+				0.01
+			</float-multiply>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_LOW_R_FACTOR">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{121AFF9A-A28F-4777-AFF8-78A964F9F712}
+		</guid>
+		<name>
+			Low R Factor Conversational
+		</name>
+		<message>
+			Low R Factor Conversational (%value% threshold=%value-threshold%)
+		</message>
+		<value>
+			<unit>
+				R Factor
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				120
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_MGCP_400_ERROR">
+		<guid>
+			{A5FA34BB-FB8C-4b8b-A4E2-5DF1461C8181}
+		</guid>
+		<name>
+			MGCP - Transient Error
+		</name>
+		<message>
+			MGCP - Transient Error (%value%: %mgcp-error%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_MGCP_500_ERROR">
+		<guid>
+			{F6CD1E0C-ED52-4b31-9490-0C230A0EA952}
+		</guid>
+		<name>
+			MGCP - Permanent Error
+		</name>
+		<message>
+			MGCP - Permanent Error (%value%: %mgcp-error%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_MGCP_900_ERROR">
+		<guid>
+			{EE1347E0-31FE-4f1a-AC8A-71A4B7F30707}
+		</guid>
+		<name>
+			MGCP - Connection Deleted or Restart in Progress
+		</name>
+		<message>
+			MGCP - Connection Deleted or Restart in Progress (%value%: %mgcp-error%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_EXCESSIVE_JITTER_DETECTED">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{42946061-19C5-459d-AA0B-1E5779A3DF32}
+		</guid>
+		<name>
+			RTP Excessive Jitter Detected
+		</name>
+		<message>
+			RTP Excessive Jitter Detected (%value%ms threshold=%value-threshold%ms)
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_EXCESSIVE_JITTER">
+		<guid>
+			{3B211950-CDB6-4241-A322-054B95A1385B}
+		</guid>
+		<name>
+			RTP Excessive Jitter Reported
+		</name>
+		<message>
+			RTP Excessive Jitter Reported (%value%ms threshold=%value-threshold%ms)
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_EXCESSIVE_PACKET_LOSS_DETECTED">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{8B11BDCC-E96F-43d5-B02C-AEF0512BB7D0}
+		</guid>
+		<name>
+			RTP Excessive Packet Loss Detected
+		</name>
+		<message>
+			RTP Excessive Packet Loss Detected (%value%% threshold=%value-threshold%%)
+		</message>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				99
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_EXCESSIVE_PACKET_LOSS">
+		<guid>
+			{4B3E1C7F-5BBA-4F2F-8EFE-A839FAFFDB58}
+		</guid>
+		<name>
+			RTP Excessive Packet Loss Reported
+		</name>
+		<message>
+			RTP Excessive Packet Loss Reported (%value%% threshold=%value-threshold%%)
+		</message>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				99
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_PACKET_NOT_MARKED_FOR_QOS">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{EE25D852-5CA6-404d-8447-407AFDF06D3D}
+		</guid>
+		<name>
+			RTP Not Marked for QoS
+		</name>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_PACKET_LATE">
+		<guid>
+			{4F4BDDE2-6433-4972-8DBC-D82E1FE7E163}
+		</guid>
+		<name>
+			RTP Late Packet Arrival 
+		</name>
+		<message>
+			RTP Late Packet Arrival (%period% from packet %other-packet-number%, expected %period-min%) 
+		</message>
+		<value>
+			<unit>
+				multiplier
+			</unit>
+			<min>
+				2
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_RTP_PACKET_OUT_OF_SEQUENCE">
+		<guid>
+			{5FC70F0F-0356-474A-A764-BD49492F619D}
+		</guid>
+		<name>
+			RTP Packet Out of Sequence 
+		</name>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SCCP_STATION_ALARM_ADVISORY">
+		<guid>
+			{225A5E6A-EC5D-4C5F-AE7E-CBFB90F16A31}
+		</guid>
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<name>
+			SCCP Station Alarm - Advisory
+		</name>
+		<message>
+			SCCP Station Alarm - Advisory (%text%)
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SCCP_STATION_ALARM_CRITICAL">
+		<guid>
+			{3D65E8BA-9B05-472E-8456-CE1EA66AD6A0}
+		</guid>
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<name>
+			SCCP Station Alarm - Critical Alert
+		</name>
+		<message>
+			SCCP Station Alarm - Critical Alert (%text%)
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SCCP_STATION_QOS_ERROR_NOTIFY">
+		<guid>
+			{40032CB5-DE3F-4b75-8949-E00190838082}
+		</guid>
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<name>
+			SCCP Station QoS Error
+		</name>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SCCP_STATION_REGISTER_REJECT">
+		<guid>
+			{4F7832E8-14B7-4E95-BE50-9C4C14B79A51}
+		</guid>
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<name>
+			SCCP Station Register Reject
+		</name>
+		<message>
+			SCCP Station Register Reject (%text%)
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SIP_POST_DIAL_DELAY">
+		<guid>
+			{C715B9BC-451E-4d32-BF59-8D0D2CB08D02}
+		</guid>
+		<firstappeared>
+			6.0.0.7
+		</firstappeared>
+		<name>
+			SIP Post-Dial Delay Exceeded
+		</name>
+		<message>
+			SIP Post-Dial Delay Exceeded (%period%)
+		</message>
+		<value>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				30
+			</max>
+		</value>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SIP_REDIRECTION">
+		<guid>
+			{3FF55C0E-94FD-4c82-BBE1-39FEE68C1D0C}
+		</guid>
+		<firstappeared>
+			6.0.0.4
+		</firstappeared>
+		<name>
+			SIP Redirection
+		</name>
+		<message>
+			SIP Redirection (%value% - %text%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SIP_CLIENT_AUTH_REQUIRED">
+		<guid>
+			{4E4A4756-2E9C-4151-8F1D-7E841A76A7FE}
+		</guid>
+		<firstappeared>
+			6.0.0.4
+		</firstappeared>
+		<name>
+			SIP Client Authentication Required
+		</name>
+		<message>
+			SIP Client Authentication Required (%value% - %text%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SIP_CLIENT_ERROR">
+		<guid>
+			{7BBB11B1-3B56-4a06-85A6-403ADB13A708}
+		</guid>
+		<firstappeared>
+			6.0.0.4
+		</firstappeared>
+		<name>
+			SIP Client Error
+		</name>
+		<message>
+			SIP Client Error (%value% - %text%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SIP_SERVER_ERROR">
+		<guid>
+			{D30B142D-1956-4b92-9DF9-473913A4E3CC}
+		</guid>
+		<firstappeared>
+			6.0.0.4
+		</firstappeared>
+		<name>
+			SIP Server Error
+		</name>
+		<message>
+			SIP Server Error (%value% - %text%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<problem id="PROBLEM_ID_SIP_GLOBAL_ERROR">
+		<guid>
+			{D96E2166-CE10-4e3f-BB21-2FEEF0681DEF}
+		</guid>
+		<firstappeared>
+			6.0.0.4
+		</firstappeared>
+		<name>
+			SIP Global Error
+		</name>
+		<message>
+			SIP Global Error (%value% - %text%) 
+		</message>
+		<group>
+			VoIP
+		</group>
+	</problem>
+	<!-- wireless -->
+	<problem id="PROBLEM_ID_WIRELESS_CRC">
+		<guid>
+			{148EDC61-8465-4247-B754-9A42AAED517A}
+		</guid>
+		<name>
+			Wireless - Too Many Physical Errors 
+		</name>
+		<message>
+			Wireless - Too Many Physical Errors (%value% packets/second) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance		  
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_QBSS_CLIENT_TOO_MANY">
+		<guid>
+			{DD44FD42-6383-4197-A3A7-A1EA94C048C1}
+		</guid>
+		<name>
+			Wireless AP - QBSS Client Too Many 
+		</name>
+		<message>
+			Wireless AP - QBSS Client Too Many(%value% clients)
+		</message>
+		<value>
+			<unit>
+				clients
+			</unit>
+			<min>
+				2
+			</min>
+			<max>
+				2004
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_EXPOSSED_SSID">
+		<guid>
+			{2302EBF5-5118-4cfe-BDDD-1068292AE563}
+		</guid>
+		<name>
+			Wireless AP - Broadcasting ESSID 
+		</name>
+		<message>
+			Wireless AP - Broadcasting ESSID (%text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_INCONSISTENT_CONFIGURATION">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{8D565425-64DA-4911-A0B8-44B9D129E639}
+		</guid>
+		<name>
+			Wireless AP - Inconsistent Configuration 
+		</name>
+		<message>
+			Wireless AP - Inconsistent Configuration (see other access point %text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_STOLEN">
+		<guid>
+			{84FE8BE5-56E6-4578-8EC3-CF02AADFFA8F}
+		</guid>
+		<name>
+			Wireless AP - Missing
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_MIXED_MODE">
+		<guid>
+			{5BC6CF7C-408A-4f65-95C2-2E117355C4F3}
+		</guid>
+		<name>
+			Wireless AP - Mixed Mode 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_NOT_CONFIG">
+		<guid>
+			{D7582CD3-4A56-4299-9644-22D82FA92ADB}
+		</guid>
+		<name>
+			Wireless AP - Not Configured 
+		</name>
+		<message>
+			Wireless AP - Not Configured (%text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_N_CAPABLE">
+		<guid>
+			{2ABB1A57-ACED-40DE-A692-E5EF5547E1AE}
+		</guid>
+		<name>
+			Wireless AP - 802.11n Capable
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_N_DUAL_CHANNEL">
+		<guid>
+			{10B4856B-BBDA-4A13-BCF1-84C30102BF9E}
+		</guid>
+		<name>
+			Wireless AP - 802.11n Dual Channel Capable
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_CRC">
+		<guid>
+			{D6B6847E-DA42-4b30-B222-6D649072377F}
+		</guid>
+		<name>
+			Wireless AP - Physical Errors 
+		</name>
+		<message>
+			Wireless AP - Physical Errors (%value% packets/second) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_FAKE">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{A2DE8F93-DF07-41a4-A93C-C5675A1E51DB}
+		</guid>
+		<name>
+			Wireless AP - Possible Spoof
+		</name>
+		<message>
+			Wireless AP - Possible Spoof (%value% Access Points) 
+		</message>
+		<value>
+			<unit>
+				nodes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				400
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				minutes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_QOS_MISSING">
+		<guid>
+			{C9887FC1-3F35-41DF-9BF0-2DFB4E891F01}
+		</guid>
+		<name>
+			Wireless AP - QoS Not Enabled
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_REPEATER_MODE">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{1ABA3866-C086-4d2c-BB24-AE8EC2EFD2EF}
+		</guid>
+		<name>
+			Wireless AP - Repeater Mode Detected 
+		</name>
+		<message>
+			Wireless AP - Repeater Mode Detected (%text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_RESTARTED">
+		<guid>
+			{AF5F26DF-D8F9-4995-B938-E985BF366DC8}
+		</guid>
+		<name>
+			Wireless AP - Restarted 
+		</name>
+		<value>
+			<unit>
+				minutes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_ROGUE">
+		<guid>
+			{409B8CFA-266D-45c2-9C2C-96379FB80C27}
+		</guid>
+		<name>
+			Wireless AP - Rogue 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_TOO_MANY">
+		<guid>
+			{39776F12-8A7A-4dd6-BC5B-D60A3FC57B98}
+		</guid>
+		<name>
+			Wireless AP - Too Many 
+		</name>
+		<message>
+			Wireless AP - Too Many (%value% Access Points) 
+		</message>
+		<value>
+			<unit>
+				nodes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				200
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_TOO_MANY_CLIENTS">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{42E53CA4-777F-4a5e-B62A-1E1216202910}
+		</guid>
+		<name>
+			Wireless AP - Too Many Clients 
+		</name>
+		<message>
+			Wireless AP - Too Many Clients (%value% clients) 
+		</message>
+		<value>
+			<unit>
+				clients
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				100
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				5
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_TOO_MANY_RETRIES">
+		<guid>
+			{C5DE6D94-3A69-4a0d-B580-EA68C29CB836}
+		</guid>
+		<name>
+			Wireless AP - Too Many Retries 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				200
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_WEAK_SIGNAL">
+		<guid>
+			{46C6CCAC-61D2-45f0-B8E8-6410B2584CBD}
+		</guid>
+		<name>
+			Wireless AP - Weak Signal 
+		</name>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				0
+			</min>
+			<max>
+				100
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AP_NO_WEP">
+		<guid>
+			{C237C25F-CB50-4de7-B38B-7733BD5002EC}
+		</guid>
+		<name>
+			Wireless AP - WEP Not Required 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_ADHOC_DETECTED">
+		<guid>
+			{E070427E-B04A-46bb-B35C-503611C12353}
+		</guid>
+		<name>
+			Wireless Ad Hoc Detected 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_ASSOCIATION_ATTACK">
+		<guid>
+			{DACC475D-5FF9-4cbd-AFED-6E778C91CB9F}
+		</guid>
+		<name>
+			Wireless Association Attack 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				200
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_ASSOCIATION_DENIED">
+		<guid>
+			{A98D1DFD-EEED-4d69-A810-A169C36C9959}
+		</guid>
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<name>
+			Wireless Association Denied 
+		</name>
+		<message>
+			Wireless Association Denied (%value%: %wireless-assoc-denied%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AUTH_ATTACK">
+		<guid>
+			{3FD22CCF-D7F1-4e28-A942-FE695F400FE1}
+		</guid>
+		<name>
+			Wireless Authentication Attack 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				200
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_AUTH_DENIED">
+		<guid>
+			{01024225-C7BB-4c86-9C46-9BA89F6D4260}
+		</guid>
+		<name>
+			Wireless Authentication Denied 
+		</name>
+		<message>
+			Wireless Authentication Denied (%value%: %wireless-auth-denied%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CHANNEL_BLEED">
+		<guid>
+			{A4DD13EA-461A-4f46-9906-CA2947C237F1}
+		</guid>
+		<name>
+			Wireless Channel Overlap 
+		</name>
+		<message>
+			Wireless Channel Overlap (from Channel %value%) 
+		</message>
+		<value>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				60
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_ROGUE_AP_ASSOCIATION">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{2CB00AA8-89C1-4deb-B62E-72B2860C1F5B}
+		</guid>
+		<name>
+			Wireless Client - Associated with Rogue Access Point 
+		</name>
+		<message>
+			Wireless Client - Associated with Rogue Access Point (access point %text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_EXCESSIVE_ROAM_TIME">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{7886B426-E22E-442c-A167-622A400CD014}
+		</guid>
+		<name>
+			Wireless Client - Excessive Roam Time 
+		</name>
+		<message>
+			Wireless Client - Excessive Roam Time (%value% milliseconds, threshold=%value-threshold% milliseconds) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				32767
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_HIGH_FRAGMENTATION_RATE">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{13824315-49C1-4109-9D37-24BADE0D9F98}
+		</guid>
+		<name>
+			Wireless Client - High Fragmentation Rate 
+		</name>
+		<message>
+			Wireless Client - High Fragmentation Rate (%value%%, threshold=%value-threshold%%) 
+		</message>
+		<value>
+			<unit>
+				%
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				100
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_PROBE_REQUEST_IGNORED">
+		<firstappeared>
+			6.0.0
+		</firstappeared>
+		<guid>
+			{FF54CE7E-4730-497e-B6FF-19E32E090C56}
+		</guid>
+		<name>
+			Wireless Client - No Response to Probe Request 
+		</name>
+		<message>
+			Wireless Client - No Response to Probe Request (ESSID %text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_CRC">
+		<guid>
+			{688BE2AF-5865-441c-889B-F608F19143BE}
+		</guid>
+		<name>
+			Wireless Client - Physical Errors 
+		</name>
+		<message>
+			Wireless Client - Physical Errors (%value% packets/second) 
+		</message>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_POWER_SAVE_INTERVAL_EXCEEDED">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{49A5C27D-9192-4a1c-AB11-5C21FEA95F24}
+		</guid>
+		<name>
+			Wireless Client - Power Save Interval Exceeded 
+		</name>
+		<message>
+			Wireless Client - Power Save Interval Exceeded (%value% beacons, Listen Interval=%value-threshold%, see packet %other-packet-number%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_POWER_SAVE_LISTEN_INTERVAL_TOO_LONG">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{1BEE3B9A-CE91-4ea5-9E49-4BD0F1C56609}
+		</guid>
+		<name>
+			Wireless Client - Power Save Listen Interval Too Long 
+		</name>
+		<message>
+			Wireless Client - Power Save Listen Interval Too Long (%value%x, threshold=%value-threshold%x) 
+		</message>
+		<value>
+			<unit>
+				x
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				100
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_POWER_SAVE_MISSED_PACKET">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{1B5DD0F2-3EE3-4a9d-9531-88945620A2BD}
+		</guid>
+		<name>
+			Wireless Client - Power Save Missed Packet 
+		</name>
+		<message>
+			Wireless Client - Power Save Missed Packet %see-other-packet% 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_PROBE_RESPONSE_IGNORED">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{18F3D999-DC46-4635-8488-72BFE318DD75}
+		</guid>
+		<name>
+			Wireless Client - Probe Response Not Accepted 
+		</name>
+		<message>
+			Wireless Client - Probe Response Not Accepted %see-other-packet% 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_DHCP_SERVER">
+		<guid>
+			{5310BB56-0F91-464B-8975-E19649E8E19E}
+		</guid>
+		<name>
+			Wireless Client - Acting as DHCP Server
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_ROGUE">
+		<guid>
+			{1F41BC9F-180D-44a9-B694-B174C407D81A}
+		</guid>
+		<name>
+			Wireless Client - Rogue 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_TOO_MANY_RETRIES">
+		<guid>
+			{C39E9D34-462E-4032-AED9-1EA5AC243369}
+		</guid>
+		<name>
+			Wireless Client - Too Many Retries 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				200
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_USING_AP_MAC">
+		<guid>
+			{DECA6D4E-E7C5-43b2-B73F-6EBBE402C52D}
+		</guid>
+		<name>
+			Wireless Client - Using Access Point Address 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_USING_AP_SSID">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{394025BB-8672-43f3-A20E-9F913B012786}
+		</guid>
+		<name>
+			Wireless Client - Using Access Point ESSID 
+		</name>
+		<message>
+			Wireless Client - Using Access Point ESSID %text% 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_CLIENT_WEAK_SIGNAL">
+		<guid>
+			{EFCDEF4B-158B-4052-8435-F7AE0F1AB0BA}
+		</guid>
+		<name>
+			Wireless Client - Weak Signal 
+		</name>
+		<value>
+			<unit>
+				percent
+			</unit>
+			<min>
+				0
+			</min>
+			<max>
+				100
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_DATA_RATE_CHANGE">
+		<guid>
+			{801F9D69-8041-4ca2-B21C-7589F09A0C68}
+		</guid>
+		<name>
+			Wireless Data Rate Change 
+		</name>
+		<message>
+			Wireless Data Rate Change (%text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_DEAUTH">
+		<guid>
+			{73AB65E0-F410-47e2-9ABA-2961E71FF495}
+		</guid>
+		<name>
+			Wireless Data Sent But Not Associated 
+		</name>
+		<message>
+			Wireless Data Sent But Not Associated (%text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_DEAUTH_ATTACK">
+		<guid>
+			{9D6D8442-0610-489c-854C-1B00BD74E9A7}
+		</guid>
+		<name>
+			Wireless Deauthentication Attack 
+		</name>
+		<value>
+			<unit>
+				packets
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				200
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_DURATION_ATTACK">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{EFA2B1DA-8D75-4469-85CD-5D00C3B0E057}
+		</guid>
+		<name>
+			Wireless Duration Attack 
+		</name>
+		<message>
+			Wireless Duration Attack (%value% microseconds, threshold=%value-threshold% microseconds) 
+		</message>
+		<value>
+			<unit>
+				microseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				32767
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_EXCESSIVE_DATA_RATE_CHANGE">
+		<guid>
+			{C954812E-E176-446c-9DE8-082BCE225DA8}
+		</guid>
+		<name>
+			Wireless Excessive Data Rate Change 
+		</name>
+		<value>
+			<unit>
+				packets/second
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_EXCESSIVE_PROBE_REQUESTS">
+		<guid>
+			{247B684E-03BF-4649-BA36-FAF890064AFF}
+		</guid>
+		<name>
+			Wireless Excessive Probe Requests 
+		</name>
+		<value>
+			<unit>
+				requests
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				255
+			</max>
+		</value>
+		<minperiod>
+			<unit>
+				seconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				240
+			</max>
+		</minperiod>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_EXCESSIVE_RTS">
+		<guid>
+			{72355E5A-9E4E-43fa-9E8D-D7D9BE23D0F1}
+		</guid>
+		<name>
+			Wireless Excessive RTS 
+		</name>
+		<message>
+			Wireless Excessive RTS (%value% percent) 
+		</message>
+		<value>
+			<unit>
+				percentage
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				100
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_FRAG_TOO_SMALL">
+		<guid>
+			{7FF713CA-6787-4B9C-827B-4BFC6273A2C7}
+		</guid>
+		<name>
+			Wireless Fragmentation Packet Size Too Small
+		</name>
+		<message>
+			Wireless Fragmentation Packet Size Too Small (&lt;%value%)
+		</message>
+		<value>
+			<unit>
+				bytes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				2347
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_G_SHORT_SLOT">
+		<guid>
+			{0CECFB3F-D13D-45df-A8CC-CF07D6E606E5}
+		</guid>
+		<name>
+			Wireless g Device Short Time Slot 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_HIGH_BEACON_RATE">
+		<guid>
+			{9EE66252-ADBB-4d48-8B61-D53378A80626}
+		</guid>
+		<name>
+			Wireless High Beacon Rate 
+		</name>
+		<message>
+			Wireless High Beacon Rate - (%value% milliseconds between beacons) 
+		</message>
+		<value>
+			<unit>
+				milliseconds
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				65535
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_LOW_SNR">
+		<guid>
+			{416B6ACB-FC6E-420a-AAD0-80C204C05F2F}
+		</guid>
+		<name>
+			Wireless Low Signal-to-Noise Ratio
+		</name>
+		<message>
+			Wireless Low Signal-to-Noise Ratio (%value% packets/second)
+		</message>
+		<sensitivity />
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_PSPF_VIOLATION">
+		<guid>
+			{94E700FF-ADBB-4EDE-9E38-CD8107C4F175}
+		</guid>
+		<name>
+			Wireless PSPF Violation
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_REASSOCIATION_DENIED">
+		<guid>
+			{7EBDE004-A09A-400d-9C39-DAF12750F1FE}
+		</guid>
+		<name>
+			Wireless Reassociation Denied 
+		</name>
+		<message>
+			Wireless Reassociation Denied (%text%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_RF_INTERFERENCE">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{AB7F5581-1FF0-4ba4-B3EB-E924A4DCC5D4}
+		</guid>
+		<name>
+			Wireless RF Interference 
+		</name>
+		<sensitivity />
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_RF_JAMMING">
+		<firstappeared>
+			5.8.0
+		</firstappeared>
+		<guid>
+			{03C3B305-3F97-4aaf-926F-D1BC09A587D0}
+		</guid>
+		<name>
+			Wireless RF Jamming 
+		</name>
+		<message>
+			Wireless RF Jamming (%signed-value% dBm, threshold=%signed-value-threshold% dBm)
+		</message>
+		<value>
+			<unit>
+				dBm
+			</unit>
+			<min>
+				-120
+			</min>
+			<max>
+				0
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_RTS_CTS_PKTS_SIZE_SMALL">
+		<firstappeared>
+			6.2.0
+		</firstappeared>
+		<guid>
+			{B6BE1DDA-FCC1-41D9-8568-43FE74626E06}
+		</guid>
+		<name>
+			Wireless RTS/CTS Data Packets Too Small
+		</name>
+		<message>
+			Wireless RTS/CTS Data Packets Too Small (packet &lt;%value%)
+		</message>
+		<value>
+			<unit>
+				bytes
+			</unit>
+			<min>
+				1
+			</min>
+			<max>
+				2347
+			</max>
+		</value>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_SAME_SND_RCV">
+		<guid>
+			{1FECCFB4-A90C-4c90-A381-8A331393FBB3}
+		</guid>
+		<name>
+			Wireless Same Send &amp; Receive Address 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_SECURITY_ERROR">
+		<guid>
+			{BED2A86E-7685-4374-A853-76260960692C}
+		</guid>
+		<name>
+			Wireless Security Error 
+		</name>
+		<message>
+			Wireless Security Error (%value%: %wireless-security-error%) 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_SRC_BROADCAST">
+		<guid>
+			{F050066D-6E59-4a7b-A804-66B89358A730}
+		</guid>
+		<name>
+			Wireless Source Address is Broadcast 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_SRC_MULTICAST">
+		<guid>
+			{4457F869-7B6C-4ea4-8C19-C4D294DDC019}
+		</guid>
+		<name>
+			Wireless Source Address is Multicast 
+		</name>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Security
+		</subgroup>
+	</problem>
+	<problem id="PROBLEM_ID_WIRELESS_RETRY">
+		<guid>
+			{0F462391-CF65-4921-AA44-301F902C0E81}
+		</guid>
+		<name>
+			Wireless Transmission Retry 
+		</name>
+		<message>
+			Wireless Transmission Retry %see-other-packet% 
+		</message>
+		<group>
+			Wireless
+		</group>
+		<subgroup>
+			Performance
+		</subgroup>
+	</problem>
+	<!-- string table for VoIP codecs -->
+	<stringtable id="voip-codec-telchemy">
+		<default value="-1">unknown</default>
+		<value value="0">G.711 µ-law</value>
+		<value value="1">G.711 µ-law with PLC</value>
+		<value value="2">G.723.1 5.3K</value>
+		<value value="3">Deprecated1</value>
+		<value value="4">G.723.1 6.3K</value>
+		<value value="5">Deprecated2</value>
+		<value value="6">G.728</value>
+		<value value="7">Deprecated3</value>
+		<value value="8">G.729</value>
+		<value value="9">Deprecated4</value>
+		<value value="10">G.729A</value>
+		<value value="11">Deprecated5</value>
+		<value value="12">user-defined 1</value>
+		<value value="13">user-defined 2</value>
+		<value value="14">user-defined 3</value>
+		<value value="15">user-defined 4</value>
+		<value value="16">GSM 6.10 full-rate</value>
+		<value value="17">GSM 6.10 half-rate</value>
+		<value value="18">GSM 6.10 enhanced full-rate</value>
+		<value value="19">Lucent/elemedia SX7300/8300</value>
+		<value value="20">Lucent/elemedia SX9600</value>
+		<value value="21">G.711 A-law</value>
+		<value value="22">G.711 A-law with PLC</value>
+		<value value="23">Deprecated6</value>
+		<value value="24">G.726 ADPCM 16K</value>
+		<value value="25">G.726 ADPCM 24K</value>
+		<value value="26">G.726 ADPCM 32K</value>
+		<value value="27">G.726 ADPCM 40K</value>
+		<value value="28">GIPS enhanced G.711 µ-law</value>
+		<value value="29">GIPS enhanced G.711 A-law</value>
+		<value value="30">GIPS iLBC</value>
+		<value value="31">GIPS iSAC</value>
+		<value value="32">GIPS iPCM wideband</value>
+		<value value="33">G.729E8k0</value>
+		<value value="34">G.729E11k8</value>
+		<value value="35">wideband linear PCM</value>
+		<value value="36">wideband linear PCM with PLC</value>
+		<value value="37">G.722 64K</value>
+		<value value="38">G.722 56K</value>
+		<value value="39">G.722 48K</value>
+		<value value="40">G.722.1 32K</value>
+		<value value="41">G.722.1 24K</value>
+		<value value="42">G.722.2 23.85K</value>
+		<value value="43">G.722.2 23.05K</value>
+		<value value="44">G.722.2 19.85K</value>
+		<value value="45">G.722.2 18.25K</value>
+		<value value="46">G.722.2 15.85K</value>
+		<value value="47">G.722.2 14.25K</value>
+		<value value="48">G.722.2 12.85K</value>
+		<value value="49">G.722.2 8.85K</value>
+		<value value="50">G.722.2 6.6K</value>
+		<value value="51">QCELP 8K</value>
+		<value value="52">QCELP 13K</value>
+		<value value="53">EVRC</value>
+		<value value="54">SMV 8.12K</value>
+		<value value="55">SMV 5.79K</value>
+		<value value="56">SMV 4.44K</value>
+		<value value="57">SMV 3.95K</value>
+		<value value="58">AMR narrowband 12.2K</value>
+		<value value="59">AMR narrowband 10.2K</value>
+		<value value="60">AMR narrowband 7.95K</value>
+		<value value="61">AMR narrowband 7.4K</value>
+		<value value="62">AMR narrowband 6.7K</value>
+		<value value="63">AMR narrowband 5.9K</value>
+		<value value="64">AMR narrowband 5.15K</value>
+		<value value="65">AMR narrowband 4.75K</value>
+		<value value="66">iLBC 13.3K</value>
+		<value value="67">iLBC 15.2K</value>
+		<value value="68">G.711 u-law 56k</value>
+		<value value="69">G.711 u-law/PLC 56k</value>
+		<value value="70">G.711 A-law 56k</value>
+		<value value="71">G.711 A-law/PLC 56k</value>
+		<value value="72">G.723.1-Annex</value>
+		<value value="73">Speex NB 2.15k</value>
+		<value value="74">Speex NB 5.95k</value>
+		<value value="75">Speex NB 8k</value>
+		<value value="76">Speex NB 11k</value>
+		<value value="77">Speex NB 15k</value>
+		<value value="78">Speex NB 18.2k</value>
+		<value value="79">Speex NB 24.6k</value>
+		<value value="80">Speex NB 3.95k</value>
+		<value value="81">Speex WB 12.8k</value>
+		<value value="82">Speex WB 16.8k</value>
+		<value value="83">Speex WB 20.6k</value>
+		<value value="84">Speex WB 23.8k</value>
+		<value value="85">Speex WB 27.8k</value>
+		<value value="86">Speex WB 34.2k</value>
+		<value value="87">Speex WB 42.2k</value>
+		<value value="88">BroadVoice BV16</value>
+		<value value="89">BroadVoice BV32</value>
+		<value value="90">IS 54</value>
+		<value value="91">PDC 6.7k</value>
+		<value value="92">AMBE2Plus 2.4k</value>
+		<value value="93">AMBE2Plus 3.2k</value>
+		<value value="94">AMBE2Plus 4k</value>
+		<value value="95">AMBE2Plus 4.8k</value>
+		<value value="96">EVRC Half Rate</value>
+		<value value="97">EVRC Eighth Rate</value>
+		<value value="98">EVRC Quarter Rate</value>
+		<value value="99">MS RT Audio 24k</value>
+		<value value="100">MS RT Audio 18k</value>
+		<value value="101">MS RT Audio 8.8k</value>
+		<value value="160">MPEG Audio Layer 1</value>   
+		<value value="161">MPEG Audio Layer 2</value>   
+		<value value="162">MPEG Audio Layer 3</value>   
+		<value value="163">MPEG-2 AAC</value>         
+		<value value="164">AC-3 Audio</value>         
+		<value value="165">MPEG-4 AAC</value>         
+		<value value="166">MPEG-4 LD-AAC</value>     
+		<value value="167">MPEG-4 HE-AAC</value>     
+		<value value="192">JPEG-compressed Video</value>
+		<value value="193">MPEG Video</value>
+		<value value="194">MPEG-2 Transport</value>
+		<value value="195">H.261</value>
+		<value value="196">H.263</value>
+		<value value="197">H.263+</value>
+		<value value="198">H.264</value>
+		<value value="199">MPEG-4 Video</value>
+		<value value="200">VIDEO USER1</value>
+		<value value="201">VIDEO USER2</value>
+		<value value="202">VIDEO USER3</value>
+		<value value="203">VIDEO USER4</value>
+		<value value="204">VC1</value>
+
+	</stringtable>
+
+	<stringtable id="dns-error-value">
+		<firstappeared>6.0.0.8</firstappeared>
+		<value value="1" >Format Error</value>
+		<value value="2" >Server Failure</value>
+		<value value="3" >Nonexistent Domain</value>
+		<value value="4" >Not Implemented</value>
+		<value value="5" >Query Refused</value>
+		<value value="6" >Name Exists when it should not</value>
+		<value value="7" >RR Set Exists when it should not</value>
+		<value value="8" >RR Set that should exist does not</value>
+		<value value="9" >Server Not Authoritative for zone</value>
+		<value value="10">Name not contained in zone</value>
+	</stringtable>
+
+	<stringtable id="h225-ras-message">
+		<firstappeared>6.0.0.8</firstappeared>
+		<value value="0" >Discovery by this Gatekeeper</value>
+		<value value="2" >Gatekeeper Reject</value>
+		<value value="3" >Registration Request</value>
+		<value value="5" >Registration Reject</value>
+		<value value="6" >Unregistration Request</value>
+		<value value="8" >Unregistration Reject</value>
+		<value value="9" >Admission Request</value>
+		<value value="11">Admission Reject</value>
+		<value value="12">Bandwidth Request</value>
+		<value value="14">Bandwidth Reject</value>
+		<value value="15">Disengage Request</value>
+		<value value="17">Disengage Reject</value>
+		<value value="18">Location Request</value>
+		<value value="20">Location Reject</value>
+	</stringtable>
+
+	<stringtable id="h225-q931-cause">
+		<firstappeared>6.0.0.8</firstappeared>
+		<default value="0">Unknown Cause Code</default>
+		<value value="1"  >Unallocated Number</value>
+		<value value="2"  >No Route to Specified Transit Network</value>
+		<value value="3"  >No Route to Destination</value>
+		<value value="4"  >Send Special Information Tone</value>
+		<value value="5"  >Misdialed Trunk Prefix</value>
+		<value value="6"  >Channel Unacceptable</value>
+		<value value="7"  >Call Awarded and Being Delivered in Established Channel</value>
+		<value value="8"  >Preemption</value>
+		<value value="9"  >Preemption - Circuit Reserved for Reuse</value>
+		<value value="16" >Normal Call Clearing</value>
+		<value value="17" >User Busy</value>
+		<value value="18" >No User Responding</value>
+		<value value="19" >No Answer From User</value>
+		<value value="20" >Subscriber Absent</value>
+		<value value="21" >Call Rejected</value>
+		<value value="22" >Number Changed</value>
+		<value value="26" >Non-Selected User Clearing</value>
+		<value value="27" >Destination Out of Order</value>
+		<value value="28" >Invalid Number Format</value>
+		<value value="29" >Facility Rejected</value>
+		<value value="30" >Response to STATUS ENQUIRY</value>
+		<value value="31" >Unspecified</value>
+		<value value="34" >No Circuit/Channel Available</value>
+		<value value="38" >Network Out of Order</value>
+		<value value="39" >Permanent Frame Mode Connection Out of Service</value>
+		<value value="40" >Permanent Frame Mode Connection Operational</value>
+		<value value="41" >Temporary Failure</value>
+		<value value="42" >Switching Equipment Congestion</value>
+		<value value="43" >Access Information Discarded</value>
+		<value value="44" >Requested Circuit/Channel Not Available</value>
+		<value value="46" >Precedence Call Blocked</value>
+		<value value="47" >Resource Unavailable</value>
+		<value value="49" >Quality of Service Not Available</value>
+		<value value="50" >Requested Facility Not Subscribed</value>
+		<value value="53" >Outgoing Calls Barred within CUG</value>
+		<value value="55" >Incoming Calls Barred within CUG</value>
+		<value value="57" >Bearer Capability Not Authorized</value>
+		<value value="58" >Bearer Capability Not Presently Available</value>
+		<value value="62" >Inconsistency in Designated Outgoing Access Info and Subscriber Class</value>
+		<value value="63" >Service or Option Not Available, Unspecified</value>
+		<value value="65" >Bearer Capability Not Implemented</value>
+		<value value="66" >Channel Type Not Implemented</value>
+		<value value="69" >Requested Facility Not Implemented</value>
+		<value value="70" >Only Restricted Digital Info Bearer Capability Is Available</value>
+		<value value="79" >Service or Option Not Implemented, Unspecified</value>
+		<value value="81" >Invalid Call Reference Value</value>
+		<value value="82" >Identified Channel Does Not Exist</value>
+		<value value="83" >A Suspended Call Exists, But This Call Identity Does Not</value>
+		<value value="84" >Call Identity In Use</value>
+		<value value="85" >No Call Suspended</value>
+		<value value="86" >Call Having Requested Call Identity Has Been Cleared</value>
+		<value value="87" >User Not Member of CUG</value>
+		<value value="88" >Incompatible Destination</value>
+		<value value="90" >Non-existent CUG</value>
+		<value value="91" >Invalid Transit Network Selection</value>
+		<value value="95" >Invalid Message - Unspecified</value>
+		<value value="96" >Mandatory Information Element Is Missing</value>
+		<value value="97" >Message Type Non-Existent or Not Implemented</value>
+		<value value="98" >Message Not Compatible With Call State or Message Type Non-Existent or Not Implemented</value>
+		<value value="99" >Information Element/Parameter Non-Existent or Not Implemented</value>
+		<value value="100">Invalid Information Element Contents</value>
+		<value value="101">Message Not Compatible With Call State</value>
+		<value value="102">Recovery On Timer Expiry</value>
+		<value value="103">Parameter Non-Existent or Not Implemented, Passed On</value>
+		<value value="110">Message with Unrecognized Parameter, Discarded</value>
+		<value value="111">Protocol Error - Unspecified</value>
+		<value value="127">Interworking - Unspecified</value>
+	</stringtable>
+
+	<stringtable id="h245-response-message">
+		<firstappeared>6.0.0.8</firstappeared>
+		<value value="2" >Master/Slave Determination</value>
+		<value value="4" >Terminal Capability</value>
+		<value value="6" >Open Logical Channel</value>
+		<value value="9" >Request Channel Close</value>
+		<value value="11">Multiplex Entry Send</value>
+		<value value="13">Request Multiplex Entry</value>
+		<value value="15">Request Mode</value>
+		<value value="18">Maintenance Loop</value>
+	</stringtable>
+
+	<stringtable id="wireless-assoc-denied">
+		<firstappeared>6.0.0.8</firstappeared>
+		<default value="-1">unknown</default>
+		<value value="0">Successful</value>
+		<value value="1">Unspecified failure</value>
+		<value value="2">Reserved</value>
+		<value value="3">Reserved</value>
+		<value value="4">Reserved</value>
+		<value value="5">Reserved</value>
+		<value value="6">Reserved</value>
+		<value value="7">Reserved</value>
+		<value value="8">Reserved</value>
+		<value value="9">Reserved</value>
+		<value value="10">Cannot support all requested capabilities</value>
+		<value value="11">Reassociation denied due to inability to confirm</value>
+		<value value="12">Association denied due to reason outside the scope</value>
+		<value value="13">Responding station does not support the specified auth</value>
+		<value value="14">Received an authentication frame with authentication</value>
+		<value value="15">Authentication rejected because of challenge failure</value>
+		<value value="16">Authentication rejected due to timeout waiting for next</value>
+		<value value="17">Association denied because AP is unable to handle additional</value>
+		<value value="18">Association denied due to requesting station not supporting all</value>
+		<value value="19">Association denied due to requesting station not supporting the short</value>
+		<value value="20">Association denied due to requesting station not supporting the PBCC</value>
+		<value value="21">Association denied due to requesting station not supporting the channel</value>
+	</stringtable>
+
+	<stringtable id="wireless-auth-denied">
+		<firstappeared>6.0.0.8</firstappeared>
+		<default value="-1">unknown</default>
+		<value value="1" >Unspecified failure</value>
+		<value value="13">Requested authentication algorithm not supported</value>
+		<value value="14">Unexpected authentication sequence number</value>
+		<value value="15">Authentication rejected; the response to the challenge failed</value>
+		<value value="16">Authentication rejected; the next frame in the sequence did not arrive in the expected window</value>
+	</stringtable>
+
+
+	<stringtable id="wireless-security-error">
+		<firstappeared>6.0.0.8</firstappeared>
+		<value value="13">Invalid Information Element</value>
+		<value value="14">MIC failure</value>
+		<value value="15">4-way handshake timeout</value>
+		<value value="16">Group key update timeout</value>
+		<value value="17">Information element in 4-way handshake different from (Re-)associate request/Probe response/Beacon</value>
+		<value value="18">Multicast Cipher is not valid</value>
+		<value value="19">Unicast Cipher is not valid</value>
+		<value value="20">AKMP is not valid</value>
+		<value value="21">Unsupported RSNE version</value>
+		<value value="22">Invalid RSNE Capabilities</value>
+		<value value="23">IEEE 802.1x Authentication failed</value>
+	</stringtable>
+
+	<stringtable id="mgcp-error">
+		<firstappeared>6.0.0.8</firstappeared>
+		<value value="400">The transaction could not be executed, due to transient error</value>
+		<value value="401">The phone is already off hook</value>
+		<value value="402">The phone is already on hook</value>
+		<value value="403">The transaction could not be executed, because the endpoint does not have sufficient resources at this time</value>
+		<value value="404">Insufficient bandwidth at this time</value>
+		<value value="405">The transaction could not be executed, because the endpoint is ""restarting""</value>
+		<value value="406">Transaction time-out</value>
+		<value value="407">Transaction aborted</value>
+		<value value="409">The transaction could not be executed because of internal overload</value>
+		<value value="410">No endpoint available</value>
+		<value value="500">The transaction could not be executed, because the endpoint is unknown</value>
+		<value value="501">The transaction could not be executed, because the endpoint is not ready</value>
+		<value value="502">The transaction could not be executed, because the endpoint does not have sufficient resources</value>
+		<value value="503">"All of" wildcard too complicated</value>
+		<value value="504">Unknown or unsupported command</value>
+		<value value="505">Unsupported RemoteConnectionDescriptor</value>
+		<value value="506">Unable to satisfy both LocalConnectionOptions and RemoteConnectionDescriptor</value>
+		<value value="507">Unsupported functionality</value>
+		<value value="508">Unknown or unsupported quarantine handling</value>
+		<value value="509">Error in RemoteConnectionDescriptor</value>
+		<value value="510">The transaction could not be executed, because a protocol error was detected</value>
+		<value value="511">The transaction could not be executed, because the command contained an unrecognized extension</value>
+		<value value="512">The transaction could not be executed, because the gateway is not equipped to detect one of the requested events</value>
+		<value value="513">The transaction could not be executed, because the gateway is not equipped to generate one of the requested signals</value>
+		<value value="514">The transaction could not be executed, because the gateway cannot send the specified announcement</value>
+		<value value="515">The transaction refers to an incorrect connection-id ( may have been already deleted)</value>
+		<value value="516">The transaction refers to an unknown call-id</value>
+		<value value="517">Unsupported or invalid mode</value>
+		<value value="518">Unsupported or unknown package</value>
+		<value value="519">Endpoint does not have a digit map</value>
+		<value value="520">The transaction could not be executed, because the endpoint is ""restarting""</value>
+		<value value="521">Endpoint redirected to another Call Agent</value>
+		<value value="522">No such event or signal</value>
+		<value value="523">Unknown action or illegal combination of actions</value>
+		<value value="524">Internal inconsistency in LocalConnectionOptions</value>
+		<value value="525">Unknown extension in LocalConnectionOptions</value>
+		<value value="526">Insufficient bandwidth</value>
+		<value value="527">Missing RemoteConnectionDescriptor</value>
+		<value value="528">Incompatible protocol version</value>
+		<value value="529">Internal hardware failure</value>
+		<value value="530">CAS signaling protocol error</value>
+		<value value="531">Failure of a grouping of trunks (e.g. facility failure)</value>
+		<value value="532">Unsupported value(s) in LocalConnectionOptions</value>
+		<value value="533">Response too large</value>
+		<value value="534">Codec negotiation failure </value>
+		<value value="535">Packetization period not supported</value>
+		<value value="536">Unknown or unsupported RestartMethod</value>
+		<value value="537">Unknown or unsupported digit map extension</value>
+		<value value="538">Event/signal parameter error (e.g., missing, erroneous, unsupported, unknown, etc.)</value>
+		<value value="539">Invalid or unsupported command parameter</value>
+		<value value="540">Per endpoint connection limit exceeded</value>
+		<value value="541">Invalid or unsupported LocalConnectionOptions</value>
+		<value value="900">Endpoint malfunctioning</value>
+		<value value="901">Endpoint taken out of service</value>
+		<value value="902">Loss of lower layer connectivity (e.g., downstream sync)</value>
+		<value value="903">QoS resource reservation was lost</value>
+		<value value="904">Manual intervention</value>
+		<value value="905">Facility failure (e.g., DS-0 failure)</value>
+	</stringtable>
+	
+	<stringtable id="voip-call-status">
+		<firstappeared>6.2.0.13</firstappeared>
+		<default value="0">unknown</default>
+		<value value="0">unknown</value>
+		<value value="1">setting up</value>
+		<value value="2">open</value>
+		<value value="3">idle</value>
+		<value value="4">closing</value>
+		<value value="5">closed</value>
+	</stringtable>
+
+	<!-- applications for Application hierarchy -->
+	<application>
+		<name>Web</name>
+		<firstappeared>6.0.0.1</firstappeared>
+		<protospec>HTTP</protospec>
+		<protospec>HTTPS</protospec>
+		<protospec>HTTP Proxy</protospec>
+	</application>
+	<application>
+		<name>Mail</name>
+		<firstappeared>6.0.0.1</firstappeared>
+		<protospec>POP3</protospec>
+		<protospec>POP3s</protospec>
+		<protospec>IMAP</protospec>
+		<protospec>IMAPS</protospec>
+		<protospec>SMTP</protospec>
+	</application>
+	<application>
+		<name>FTP</name>
+		<firstappeared>6.0.0.1</firstappeared>
+		<protospec>FTP</protospec>
+		<protospec>1408 FTP Data</protospec>
+		<protospec>1407 FTP Control</protospec>
+	</application>
+	<application>
+		<name>IM</name>
+		<firstappeared>6.0.0.1</firstappeared>
+		<protospec>AOL</protospec>
+		<protospec>Yahoo</protospec>
+		<protospec>MSN Messenger</protospec>
+	</application>
+	<application>
+		<name>Voice &amp; Video</name>
+		<firstappeared>6.0.0.1</firstappeared>
+		<protospec>RTP</protospec>
+		<protospec>RTCP</protospec>
+		<protospec>RTSP</protospec>
+		<protospec>SIP</protospec>
+		<protospec>SIP over TLS</protospec>
+		<protospec>SCCP</protospec>
+		<protospec>MGCP</protospec>
+		<protospec>H.323</protospec>
+		<protospec>H.225 RAS</protospec>
+		<protospec>MEGACO</protospec>
+	</application>
+	<application>
+		<name>P2P File Sharing</name>
+		<firstappeared>6.0.0.1</firstappeared>
+		<protospec>BitTorrent</protospec>
+		<protospec>Gnutella</protospec>
+	</application>
+	<!--
+	<application>
+		<name>Windows File Sharing</name>
+		<firstappeared>6.2.0.14</firstappeared>
+		<protospec>SMB</protospec>
+		<protospec>CIFS</protospec>
+	</application>
+	-->
+
+	<!-- icontable is used to create a mapping of applications to icons. It contains one
+		 <defaulticon> element that declares the icon to use when a more specific icon association
+		 is not present. Multiple <icon> children map specific applications, by name, to icon files.
+		 Icon files should contain, at a minimum, 16x16 and 48x48 images.
+		 first appeared 6.2.0.14 -->
+	<icontable>
+		<defaulticon>icons/stopwatch.ico</defaulticon>
+		<icon application="Web">icons/earth_network.ico</icon>
+		<icon application="Mail">icons/mail_exchange.ico</icon>
+		<icon application="FTP">icons/folder_network.ico</icon>
+		<icon application="IM">icons/messages.ico</icon>
+		<icon application="VoIP">icons/telephone.ico</icon>
+		<icon application="P2P File Sharing">icons/cube_molecule.ico</icon>
+		<!--
+		<icon application="Windows File Sharing">icons/windows_button.ico</icon>
+		-->
+	</icontable>
+
+	<!-- serverport and clientport to help expert decide which node is the server and which is the client
+		 first appeared 6.0.0.6 -->
+	<serverport>1352</serverport>		<!-- LOTUS_NOTES		   		-->
+	<serverport>1433</serverport>		<!-- MSSQLSERVER				-->
+	<serverport>1498</serverport>		<!-- SYBASE1					-->
+	<serverport>2638</serverport>		<!-- SYBASE2					-->
+	<serverport>1503</serverport>		<!-- MSNETMEETING				-->
+	<serverport>1524</serverport>		<!-- INGRES				   		-->
+	<serverport>1521</serverport>		<!-- TNS_SERVER					-->
+	<serverport>1525</serverport>		<!-- TNS_SERVER2				-->
+	<serverport>1527</serverport>		<!-- TNS_SERVER3				-->
+	<serverport>1571</serverport>		<!-- TNS_SERVER4				-->
+	<serverport>1575</serverport>		<!-- TNS_SERVER5				-->
+	<serverport>1666</serverport>		<!-- PERFORCE					-->
+	<serverport>1719</serverport>		<!-- H225_RAS					-->
+	<serverport>1720</serverport>		<!-- H323_CALL_SETUP_OVER_TCP	-->
+	<serverport>1863<overridesyn/></serverport>	<!-- MSN instant messenger, port number is more important than SYN flags		-->
+	<serverport>2049</serverport>		<!-- NFS						-->
+	<serverport>2382-2383</serverport>	<!-- MS_OLAP					-->
+	<serverport>3264</serverport>		<!-- CC_MAIL					-->
+	<serverport>3300-3301</serverport>	<!-- SAP						-->
+	<serverport>3306</serverport>		<!-- MYSQL						-->
+	<serverport>3689</serverport>		<!-- DAAP						-->
+	<serverport>5190</serverport>		<!-- AOL instant messenger		-->
+	<serverport>5050</serverport>		<!-- Yahoo instant messenger	-->
+	<serverport>6000-6063</serverport>	<!-- X_WINDOWS					-->
+	<serverport>6367</serverport>		<!-- PEEK_REMOTE				-->
+	<serverport>8080</serverport>		<!-- HTTP Proxy					-->
+	<clientport>1645</clientport>		<!-- RADIUS_CLIENT				-->
+	<clientport>1812</clientport>		<!-- RADIUS2_CLIENT				-->
+</list>
