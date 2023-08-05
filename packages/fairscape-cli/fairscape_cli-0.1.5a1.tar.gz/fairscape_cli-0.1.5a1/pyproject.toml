@@ -1,0 +1,61 @@
+[project]
+name = "fairscape-cli"
+version = "0.1.0"
+description = "CLI tool for B2AI metadata validation and ROCrate creation"
+readme = "README.md"
+authors = [
+        { name = "Max Levinson",    email = "mal8ch@virginia.edu"},
+        { name = "Sadnan Al Manir", email = "sadnanalmanir@gmail.com"},
+        { name = "Tim Clark",       email = "twc8q@virginia.edu"}
+]
+license = {file= "LICENSE"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3"]
+keywords = ["fairscape", "reproducibility", "fair", "b2ai"]
+dependencies = [
+        "pydantic",
+        "fairscape-models",
+        "pyld"
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/fairscape/fairscape-cli"
+
+
+[tool.poetry]
+name = "fairscape-cli"
+version = "0.1.5a1"
+description = "A cli for validating metadata, packaging ROCrates, and interacting with the FAIRSCAPE API"
+authors = ["mlev71 <max.adam.levinson@gmail.com>"]
+license = "LICENSE"
+readme = "README.md"
+packages = [{include = "fairscape_cli"}]
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "^1.10.7"
+pyld = "^2.0.3"
+click = "^8.1.3"
+fairscape-models = "^0.1.2"
+imageio = "^2.27.0"
+pandas = "^2.0.0"
+prettytable = "^3.7.0"
+
+
+[tool.poetry.scripts]
+fairscape-cli = "fairscape_cli.main:cli"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.test]
+
+[tool.poetry.group.test.dependencies]
+pytest= "^7.2.2"
+autopep8 = "^2.0.2"
+
