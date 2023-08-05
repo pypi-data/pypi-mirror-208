@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pandas-validate"
+version = "1.0.1"
+description = "A python package used for validating pandas dataframes."
+readme = "README.md"
+authors = [
+  { name="Larry Green", email="larrygreen@duck.com" },
+]
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering"
+]
+keywords = ["pandas", "validate", "validation", "schema", "types"]
+dependencies = [
+    "pandas",
+    "dateparser"
+]
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+build = ["build", "twine"]
+dev = ["pytest"]
+
+[project.urls]
+"Homepage" = "https://github.com/larrygreen3/pandas-validate"
+"Bug Tracker" = "https://github.com/larrygreen3/pandas-validate/issues"
