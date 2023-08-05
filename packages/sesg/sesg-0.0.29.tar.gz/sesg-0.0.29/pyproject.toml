@@ -1,0 +1,123 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+# code style
+ruff = {cmd = "ruff src/", help = "Lints the project, fixing errors."}
+black = {cmd = "black src/", help = "Formats the code."}
+toml-sort = {cmd = "toml-sort pyproject.toml", help = "Sorts pyproject.toml file."}
+# packaging
+export-dependencies = {script = "scripts.export-dependencies:main", help = "Exports dependencies to a requirements.txt format, one file for each group of depencies."}
+
+[tool.poe.tasks.docs]
+help = "Starts mkdocs development server."
+sequence = [
+  {ref = "ruff"},
+  {cmd = "mkdocs serve"}
+]
+
+[tool.poe.tasks.format]
+help = "Formats the package with toml-sort, ruff, and black."
+sequence = ["toml-sort", "ruff", "black"]
+
+[tool.poe.tasks.publish-package]
+help = "Builds the package and publishes to PyPI."
+sequence = [
+  {ref = "export-dependencies"},
+  {script = "scripts.publish-package:main"}
+]
+
+[tool.poe.tasks.test]
+help = "Run tests against the package."
+sequence = [
+  {cmd = "pytest -s -x --cov=sesg --cov-report=xml -vv src/sesg/ tests/"},
+  {cmd = "coverage html"}
+]
+
+[tool.poetry]
+name = "sesg"
+version = "0.0.29"
+description = "SeSG is a tool developed to help Systematic Literature Review researchers, specifically at the step of building a search string."
+authors = ["Demetrius Panovitch <demetrius.mp789@gmail.com>"]
+license = "GPL-3.0-only"
+readme = "README.md"
+packages = [
+  {include = "sesg", from = "src"}
+]
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+  "Development Status :: 3 - Alpha",
+  "Natural Language :: English",
+  "Intended Audience :: Science/Research"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+bertopic = "^0.14.1"
+aiometer = "^0.4.0"
+httpx = "^0.24.0"
+graphviz = "^0.20.1"
+scikit-learn = "^1.2.2"
+torch = "^2.0.0"
+nltk = "^3.8.1"
+numpy = "1.23.5"
+umap-learn = "^0.5.3"
+rapidfuzz = "^3.0.0"
+
+[tool.poetry.group.dev.dependencies]
+python-dotenv = "^1.0.0"
+pre-commit = "^3.2.2"
+poethepoet = "^0.19.0"
+
+[tool.poetry.group.doc.dependencies]
+mkdocs-material = "^9.1.6"
+mkdocstrings = "^0.21.2"
+mkdocstrings-python = "^0.9.0"
+mkdocs-gen-files = "^0.4.0"
+mkdocs-literate-nav = "^0.6.0"
+mkdocs-section-index = "^0.3.5"
+
+[tool.poetry.group.lint.dependencies]
+black = "^23.3.0"
+ruff = "^0.0.261"
+toml-sort = "^0.23.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.3.0"
+pytest-cov = "^4.0.0"
+
+[tool.poetry.urls]
+Documentation = "https://sesg.readthedocs.io/en/latest/"
+"Source Code" = "https://github.com/demetrius-mp/sesg"
+"Issue Tracker" = "https://github.com/demetrius-mp/sesg/issues"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "--doctest-modules"
+
+[tool.ruff]
+extend-select = [
+  # isort
+  "I001",
+  # https://www.pydocstyle.org/en/stable/error_codes.html
+  "D"
+]
+unfixable = ["F841"]
+exclude = [".venv"]
+ignore-init-module-imports = true
+fix = true
+
+[tool.ruff.isort]
+lines-after-imports = 2
+
+[tool.ruff.per-file-ignores]
+"scripts/*" = ["D"]
+"tests/*" = ["D", "E501", "F811", "F401"]
+"docs/scripts/*" = ["D"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.tomlsort]
+in_place = true
