@@ -1,0 +1,76 @@
+Metadata-Version: 2.1
+Name: similarity-ranker
+Version: 1.0.0
+Description-Content-Type: text/markdown
+
+# Similarity Ranker
+這個專案是用來找到與給定查詢句子最相似的嵌入向量。使用的是 Hugging Face Transformers 的 `paraphrase-multilingual-MiniLM-L12-v2` 模型。
+
+## 環境設置
+
+在開始之前，首先確保你已經安裝了以下的 Python 庫：
+```
+python3 -m pip install similarity-ranker
+```
+
+## 使用方法
+
+### 作為命令行工具使用
+你可以通過運行以下命令來使用 similarity_ranker.py：
+
+```
+python3 -m similarity_ranker \
+  --prompt "你的查詢句子" \
+  --txt-folder "包含 txt 文件的文件夾" \
+  --embeddings-folder "包含嵌入向量文件的文件夾" \
+  --output-json "輸出 JSON 文件名（可選）"
+```
+
+### 作為模塊導入使用
+首先，導入 `similarity_ranker`：
+
+```python
+from similarity_ranker import query_embeddings, save_ranking_to_json
+```
+
+然後，使用 `query_embeddings` 函數獲取查詢句子的相似度排名：
+
+```python
+prompt = "你的查詢句子"
+embeddings_folder = "包含嵌入向量文件的文件夾"
+ranking = query_embeddings(prompt, embeddings_folder)
+```
+
+接著，使用 `save_ranking_to_json` 函數將排名結果保存為 JSON 文件：
+
+```python
+txt_folder = "包含 txt 文件的文件夾"
+output_file = "輸出 JSON 文件名"
+save_ranking_to_json(prompt, ranking, txt_folder, output_file)
+```
+
+## 範例
+
+假設你有以下文件結構：
+
+```
+data/
+  txt/
+    file1.txt
+    file2.txt
+    ...
+  embeddings/
+    file1.pt
+    file2.pt
+    ...
+```
+
+你可以通過運行以下命令找到與查詢句子最相似的嵌入向量：
+
+```
+python3 -m similarity_ranker \
+  --prompt "你的查詢句子" \
+  --txt-folder "data/txt" \
+  --embeddings-folder "data/embeddings" \
+  --output-json "data/top_similarity.json"
+```
