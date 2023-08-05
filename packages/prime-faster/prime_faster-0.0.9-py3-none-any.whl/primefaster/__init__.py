@@ -1,0 +1,1 @@
+from primefaster.primefaster import *
