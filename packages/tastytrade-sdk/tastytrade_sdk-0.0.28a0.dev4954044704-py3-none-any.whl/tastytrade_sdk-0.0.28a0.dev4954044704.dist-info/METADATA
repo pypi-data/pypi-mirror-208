@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: tastytrade-sdk
+Version: 0.0.28a0.dev4954044704
+Summary: A python wrapper around the tastytrade open API
+License: MIT
+Author: Aaron Mamparo
+Author-email: aaronmamparo@gmail.com
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: injector (>=0.20.1,<0.21.0)
+Requires-Dist: requests (==2.29.0)
+Requires-Dist: strenum (>=0.4.10,<0.5.0)
+Description-Content-Type: text/markdown
+
+[![Read the Docs (version)](https://img.shields.io/readthedocs/tastytrade-sdk/latest)](https://tastytrade-sdk.readthedocs.io/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/tastytrade-sdk)](https://pypi.org/project/tastytrade-sdk/)
+[![PyPI - License](https://img.shields.io/pypi/l/tastytrade-sdk)](LICENSE)
+[![Code style: pylint](https://img.shields.io/badge/Pylint-10.00/10-green)](https://pypi.org/project/pylint/)
+
+# tastytrade-sdk-python
+
+A python wrapper around the [tastytrade open API](https://developer.tastytrade.com/)
+
+## Getting Started
+
+### Install
+```shell
+pip install tastytrade-sdk
+```
+
+### Use It
+```python
+from tastytrade_sdk import Tastytrade
+
+tastytrade = Tastytrade()
+
+tastytrade.login(
+    username='jane.doe@email.com',
+    password='password'
+)
+
+tastytrade.instruments.get_active_equities()
+```
+
+
+## Read the Docs
+https://tastytrade-sdk.readthedocs.io/
