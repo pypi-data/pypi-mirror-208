@@ -1,0 +1,41 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    oel76_box_name: ubuntu/xenial64
+    cli_provider: vagrant
+    ubuntu_xenial_box_name: ubuntu/xenial64
+    help:
+      message: |
+        Essentially, this is a:
+        - Stripped down ansible playbook that holds bash functions represented in YAML syntax
+        - Embedded functions are meant to facilitate interaction with the vagrant command, e.g. providing some custom cli options and the like
+      epilog:
+      examples:
+        - You want to fire up an Ubuntu Xenial x64 machine: |
+            tasks run --xenial
+        - You want to fire up an Oracle Enterprise Linux 7.6 x64 machine: |
+            tasks run --oel76
+    required_parameters:
+    optional_parameters:
+      --xenial: vagrant_up_xenial ## Invoke the 'vagrant_up_xenial' shell function
+      --oel76: vagrant_up_oel76 ## Invoke the 'vagrant_up_oel76' shell function
+    functions:
+      vagrant_up_oel76:
+        shell: bash
+        help: Bring up an Oracle Enterprise Linux 7.6 x64 Virtual Machine
+        source: |-
+          vagrant box add --name ${oel76_box_name} ${oel76_box_url}
+          vagrant init ol76
+          echo Bringing oracle vm up ...
+          vagrant up
+      vagrant_up_xenial:
+        shell: bash
+        help: Bring up an Ubuntu Xenial x64 Virtual Machine
+        source: |-
+          vagrant box add ${ubuntu_xenial_box_name}
+          vagrant init ${ubuntu_xenial_box_name}
+          echo Bringing Ubuntu vm up ...
+          vagrant up
+...
