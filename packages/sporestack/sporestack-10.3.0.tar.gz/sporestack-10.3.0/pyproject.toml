@@ -1,0 +1,73 @@
+[tool.pytest.ini_options]
+addopts = "--strict-markers --disable-socket"
+
+[tool.ruff]
+select = [
+    "F",   # pyflakes
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "N",   # pep8-naming
+    "RUF", # Unused noqa + more
+    "ANN", # Type annotations
+    "UP",  # pyupgrade
+]
+
+ignore = [
+    "ANN101", # Type annotations for self
+    "ANN401", # Allow ANY
+]
+
+unfixable = [
+    "F401", # Don't try to automatically remove unused imports
+    "RUF100", # Unused noqa
+    "F841",  # Unused variable
+]
+
+target-version = "py37"
+update-check = false
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.run]
+omit = ["tests/*", "build/*"]
+
+[tool.mypy]
+files = "."
+plugins = ["pydantic.mypy"]
+exclude = "(build|site-packages|__pycache__)"
+strict = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+[project]
+name = "sporestack"
+authors = [ {name = "SporeStack", email="support@sporestack.com"} ]
+readme = "README.md"
+requires-python = "~=3.7"
+dynamic = ["version", "description"]
+keywords = ["bitcoin", "monero", "vps"]
+license = {file = "LICENSE.txt"}
+dependencies = [
+    "pydantic",
+    "httpx[socks]",
+    "segno",
+    "typer",
+]
+
+[project.urls]
+Homepage = "https://sporestack.com"
+Source = "https://git.sporestack.com/SporeStack/sporestack-python"
+Changelog = "https://git.sporestack.com/SporeStack/sporestack-python/src/branch/master/CHANGELOG.md"
+
+[project.scripts]
+sporestack = "sporestack.cli:cli"
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"

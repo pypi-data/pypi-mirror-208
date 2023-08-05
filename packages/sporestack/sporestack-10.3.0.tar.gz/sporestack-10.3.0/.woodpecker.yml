@@ -1,0 +1,55 @@
+pipeline:
+  pre-commit:
+    group: pre-commit-test
+    image: python:3.11
+    commands:
+      - pip install pre-commit==2.20.0
+      - pre-commit run --all-files
+
+  python-3.7:
+    group: test
+    image: python:3.7-alpine
+    commands:
+      - pip install pipenv==2022.10.25
+      - pipenv install --dev --deploy
+      - pipenv run almake test-pytest  # We only test with pytest on 3.7
+
+  python-3.8:
+    group: test
+    image: python:3.8
+    commands:
+      - pip install pipenv==2022.10.25
+      - pipenv install --dev --deploy
+      - pipenv run almake test
+      - pipenv run almake build-dist
+      - sha256sum dist/*
+
+  python-3.9:
+    group: test
+    image: python:3.9
+    commands:
+      - pip install pipenv==2022.10.25
+      - pipenv install --dev --deploy
+      - pipenv run almake test
+      - pipenv run almake build-dist
+      - sha256sum dist/*
+
+  python-3.10:
+    group: test
+    image: python:3.10
+    commands:
+      - pip install pipenv==2022.10.25
+      - pipenv install --dev --deploy
+      - pipenv run almake test
+      - pipenv run almake build-dist
+      - sha256sum dist/*
+
+  python-3.11:
+    group: test
+    image: python:3.11
+    commands:
+      - pip install pipenv==2022.10.25
+      - pipenv install --dev --deploy
+      - pipenv run almake test
+      - pipenv run almake build-dist
+      - sha256sum dist/*
