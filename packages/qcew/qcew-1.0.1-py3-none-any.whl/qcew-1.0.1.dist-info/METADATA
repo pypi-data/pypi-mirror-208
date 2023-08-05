@@ -1,0 +1,104 @@
+Metadata-Version: 2.1
+Name: qcew
+Version: 1.0.1
+Summary: A package for retrieving Quarterly Census of Employment and Wages (QCEW) data.
+Home-page: https://github.com/TrentLThompson/qcew
+Author: Trent Thompson
+Author-email: 808trent@gmail.com
+Keywords: QCEW,BLS,employment,wages,statistics
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# qcew
+
+A package for retrieving Quarterly Census of Employment and Wages ([QCEW](https://www.bls.gov/cew/)) data from the Bureau of Labor Statistics' [database](https://www.bls.gov/cew/downloadable-data-files.htm).
+
+## Requirements
+- Python ≥ 3.8
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install qcew.
+
+```bash
+pip install qcew
+```
+
+## Usage
+
+```python
+import qcew
+
+# Get the entire quarterly census of employment and wages database for 2020.
+data = qcew.get_qcew_data(
+    year="2020",
+    annual=False,
+    fields=None
+)
+
+# Get annual average employment and pay data for the United States from 2001 to 2021.
+data = qcew.get_qcew_data_slice(
+    area_slice=True,
+    qcew_codes=["US000"],
+    years=[str(i) for i in range(2001, 2022)],
+    annual_data=True,
+    fields=[
+        "area_fips",
+        "own_code",
+        "industry_code",
+        "year",
+        "annual_avg_emplvl",
+        "avg_annual_pay"
+        ]
+    )
+
+# Get monthly employment data for the state of Hawaii as well as Honolulu County, HI in 2020.
+data = qcew.get_qcew_data_slice(
+    area_slice=True,
+    qcew_codes=[
+        "15000", # Hawaii -- Statewide
+        "15003", # Honolulu County, HI
+        ],
+    years=["2020"],
+    annual_data=False,
+    fields=[
+        "area_fips",
+        "own_code",
+        "industry_code",
+        "year",
+        "qtr",
+        "month1_emplvl",
+        "month2_emplvl",
+        "month3_emplvl"
+        ]
+    )
+
+# Get annual average employment and pay data for the manufacturing sector as a whole from 2010 to 2020.
+data = qcew.get_qcew_data_slice(
+    area_slice=False,
+    qcew_codes=[
+        "31-33", # NAICS code for manufacturing sector.
+        ],
+    years=[str(i) for i in range(2010, 2021)],
+    annual_data=False,
+    fields=[
+        "area_fips",
+        "own_code",
+        "industry_code",
+        "year",
+        "annual_avg_emplvl",
+        "avg_annual_pay"
+        ]
+    )
+```
+
+## License
+Distributed under the MIT license. See [LICENSE](/LICENSE) for more information.
