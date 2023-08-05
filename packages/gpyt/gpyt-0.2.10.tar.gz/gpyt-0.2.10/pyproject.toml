@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "gpyt"
+version = "0.2.10"
+description = "GPT on the command line."
+authors = ["Justin Stitt <jstitt007@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+openai = "^0.27.5"
+pyperclip = "^1.8.2"
+textual = {extras = ["dev"], version = "^0.22.3"}
+openai-async = "^0.0.3"
+pydantic = "^1.10.7"
+gpt4free = "^1.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+gpyt = 'gpyt.app:main'
