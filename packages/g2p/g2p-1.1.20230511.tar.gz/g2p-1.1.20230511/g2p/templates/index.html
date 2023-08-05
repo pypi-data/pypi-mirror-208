@@ -1,0 +1,188 @@
+<!DOCTYPE doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>g2p Studio</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.css">
+    <link rel="stylesheet" type="text/css" href="https://handsontable.com/static/css/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
+    <!-- <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"> -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class='row'>
+            <div class='columns twelve center-text'>
+                <h4 id='title'>Gⁱ-to-Pⁱ Studio
+                    <span id="log">(Disconnected)</span></h4>
+                <hr>
+                <p>Welcome to the g2p Studio. Here, you can try out new lookup tables and export them to csv for use with either <a href='//github.com/roedoejet/g2p'>g2p</a> or <a href='//github.com/roedoejet/convertextract'>convertextract</a>. If you write
+                    a lookup table that you want to add to the main g2p repo, please make a <a href='//github.com/roedoejet/g2p/pulls'>pull
+                        request</a>.</p>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='columns twelve center-text'>
+                <form id='textForm' name="textForm">
+                    <input id='standard-radio' type="radio" name="texttype" value="plain" checked> Standard
+                    <input id='animated-radio' type="radio" name="texttype" value="animated"> Animate
+                </form>
+            </div>
+        </div>
+        <br>
+        <div id='standard' class='row'>
+            <div class='columns six center-text'>
+                <textarea id='input' spellcheck="false" maxlength="200"></textarea>
+            </div>
+            <div class='columns six center-text'>
+                <textarea id='output' spellcheck="false"></textarea>
+            </div>
+        </div>
+        <div id='animated' style='display: none'>
+            <div class='row'>
+                <div class='columns twelve center-text'>
+                    <form autocomplete='off' autocorrect='off'>
+                        <input autocomplete='off' autocorrect='off' id='indexInput' type="text" name="usrname" maxlength="10">
+                    </form>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='columns twelve center-text'>
+                    <div id="echart" style="width:100%; min-width: 500px; height:500px;"></div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class='row'>
+            <div class='columns twelve center-text'>
+                <h4>Languages</h4><button id='show-langs' style='margin-bottom: 20px;'>Show Languages
+                    Animation</button><button id='hide-langs' style='display: none; margin-bottom: 20px;'>Hide
+                    Languages Animation</button>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='columns twelve center-text'>
+                <div id="langsechart" style="width:100%; min-width: 400px; height:400px; display: none;"></div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='columns six'>
+                <h5>Select a mapping</h5>
+                <h6>Input Language</h6>
+                <select id="input-langselect">
+                    <option value="custom">Custom</option>
+                </select>
+                <h6>Output Language</h6>
+                <select id="output-langselect">
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+            <div class='columns six mg-top'>
+                <h5>Settings</h5>
+                <ul id='settings-nav' class="nav nav-tabs">
+                    <li class="active title settings"><a>Custom</a></li>
+                </ul>
+                <div id='settings-container'>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='columns twelve'>
+                <h4>Custom Rules</h4>
+                <button id='hot-add'>Add Rule</button>
+                <button id="export-rules">Export</button>
+                <ul id='table-nav' class="nav nav-tabs">
+                    <li class="active title rules"><a>Custom</a></li>
+                </ul>
+                <div id='table-container'>
+                </div>
+                <h4>Rule Creator</h4>
+                <button id='clear'>Clear</button>
+                <button id='add'>Add to Rules</button>
+                <button id='exportJS'>Export JavaScript</button>
+                <button id='exportPY'>Export Python</button>
+                <div id="blockly-container" class="blockly-editor">
+                    <div id="blockly-div" style="height: 480px; width: 100%;"></div>
+                    <xml id="toolbox" style="display: none">
+                        <category name="Actions" colour="330">
+                            <block type="create_rule"></block>
+                        </category>
+                        <category name="Input" colour="220">
+                            <block type="lists_create_empty"></block>
+                            <block type="lists_create_with"></block>
+                            <block type="lists_getIndex"></block>
+                            <block type="text"></block>
+                            <block type="text_join"></block>
+                            <block type="math_number"></block>
+                            <block type="math_arithmetic">
+                            </block>
+                            <block type="abbreviations"></block>
+                            <block type='variables_get'></block>
+                            <block type='variables_set'></block>
+                        </category>
+                        <category name="Loops" colour="120" icon="icon_loops">
+                            <block type="controls_forEach"></block>
+                        </category>
+                        <!-- <category custom="VARIABLE" name="Variables" colour="440">
+                        </category> -->
+                    </xml>
+                </div>
+            </div>
+        </div>
+        <div class='row mg-top mg-bot'>
+            <div class='columns twelve'>
+                <h4>Custom Abbreviations</h4>
+                <p>Follow the example below to create your own abbreviations to use in your rules.</p>
+                <button id='varhot-add-row'>Add Row</button>
+                <button id='varhot-add-col'>Add Column</button>
+                <button id="export-abbs">Export</button>
+                <ul id='abbs-nav' class="nav nav-tabs">
+                    <li class="active title abbs"><a>Custom</a></li>
+                </ul>
+                <div id='abbs-table-container'>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.slim.js"
+        integrity="sha256-w9DVlb/Yjkq3lOk0YpBPzeL+FZvaNALjmkJoZQYGc0I="
+        crossorigin="anonymous">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts.min.js"
+        integrity="sha256-XNiBJGZuErA+MsbKwxuTqNMimobZMsVS79SkTUroRz4="
+        crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/blockly@2.20190722.1/blockly.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blockly@2.20190722.1/blocks.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blockly@2.20190722.1/msg/en.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blockly@2.20190722.1/javascript.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blockly@2.20190722.1/python.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script src="{{ url_for('static', filename='blockly_main.js') }}"></script>
+<script src="{{ url_for('static', filename='echart_custom.js') }}"></script>
+<script src="{{ url_for('static', filename='custom.js') }}"></script>
+<script src="{{ url_for('static', filename='blocks.js') }}"></script>
+
+</html>
