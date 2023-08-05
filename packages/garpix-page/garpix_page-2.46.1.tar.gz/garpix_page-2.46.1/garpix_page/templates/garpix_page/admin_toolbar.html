@@ -1,0 +1,88 @@
+{% if user.is_authenticated and user.is_staff %}
+{% load static %}
+<style>
+body {
+    padding-top: 48px;
+    margin: 0;
+}
+.gx-admin-toolbar {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 15px 25px;
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.gx-admin-toolbar__start {
+    display: flex;
+    gap: 15px;
+}
+
+.gx-admin-toolbar * {
+    box-sizing: border-box;
+}
+
+.gx-admin-toolbar a {
+    color: #fff;
+}
+
+.gx-admin-toolbar a:hover {
+    color: #dadada;
+}
+
+
+.gx-admin-edit-block {
+    position: absolute;
+    margin: 5px;
+    width: 25px;
+    height: 25px;
+    z-index: 100;
+    background-color: black;
+    background-image: url('/static-backend/garpix_page/images/icons/gx-admin-edit.svg');
+    background-repeat: no-repeat;
+    background-size: 15px;
+    background-position: center;
+    border-radius: 50%;
+    transition: none;
+}
+
+.gx-admin-component-highlight {
+    box-shadow: orange inset 0 0px 0px 1px;
+}
+
+</style>
+
+<script defer src="{% static 'garpix_page/js/gx-admin-edit-component.js' %}"></script>
+
+<div class="gx-admin-toolbar">
+    <div class="gx-admin-toolbar__start">
+        <div class="gx-admin-toolbar__user">Hi, {{ user }}</div>
+        <div>
+            <a target="_blank" href="{{ object.get_admin_url_edit_object }}">Изменить страницу</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if 'cache_cleared' in message.tags %}
+                    <span style="color: lightgreen">{{ message }}</span>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div>
+                <a href="{% url 'admin:admin_clear_cache' %}">Clear cache</a>
+            </div>
+        {% endif %}
+
+    </div>
+    <div class="gx-admin-toolbar__end">
+        <a target="_blank" href="{% url 'admin:index' %}">Админ панель</a>
+    </div>
+</div>
+
+{% endif %}
