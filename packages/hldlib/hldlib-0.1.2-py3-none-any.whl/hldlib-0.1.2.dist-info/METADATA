@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: hldlib
+Version: 0.1.2
+Summary: A Python package for working with Hyper Light Drifter files
+Project-URL: Homepage, https://github.com/sakhezech/hldlib
+Author-email: Sakhezech <contact@sakhezech.ru>
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+
+# hldlib
+
+A Python package for working with Hyper Light Drifter files.
+
+## TODO list
+- way better documentation
+- make **dependencies** their own class; something like
+```py
+class Dependencies:
+    depends_on: list[int]
+    depends_type: "flag" | "enemy"
+    actor: HLDType | -999999
+    delay: int
+
+    @classmethod
+    def from_string(cls, string: str): ...
+
+    def to_string(self) -> str: ...
+```
+- make **room_settings** their own class and add level pngs; something like
+```py
+class RoomSettings:
+    w: int # width
+    h: int # height
+    bg: str | Path # or PIL.Image idk
+    ...
+
+    @classmethod
+    def from_string(cls, string: str): ...
+
+    def to_string(self) -> str: ...    
+```
+
+## Examples
+[Here.](https://github.com/sakhezech/hldlib/tree/master/examples)

@@ -1,0 +1,1 @@
+class HLDError(Exception): pass
