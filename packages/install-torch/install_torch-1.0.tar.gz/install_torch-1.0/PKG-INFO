@@ -1,0 +1,66 @@
+Metadata-Version: 2.1
+Name: install-torch
+Version: 1.0
+Summary: This script can be used to automatically install torch and CUDA.
+License: MIT
+Author: Mikołaj Badyl
+Author-email: mbadyl@outlook.com
+Requires-Python: >=3.7
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: beautifulsoup4 (>=4.12.2,<5.0.0)
+Requires-Dist: requests (==2.26.0)
+Requires-Dist: requests-html (>=0.10.0,<0.11.0)
+Requires-Dist: rich (>=13.3.5,<14.0.0)
+Requires-Dist: tqdm (>=4.65.0,<5.0.0)
+Requires-Dist: wget (>=3.2,<4.0)
+Description-Content-Type: text/markdown
+
+# Install torch
+
+This script can be used to automatically install torch and CUDA. 
+
+## How it works?
+
+1. The user is prompted to select whether they want to install the CPU or GPU version of torch.
+2. If the GPU version is selected, the user is prompted to enter the version of CUDA they want to install.
+3. The script checks if CUDA is already installed and if it is not, it downloads and installs the version specified by the user.
+4. The script then downloads and installs the appropriate version of torch based on the user's initial selection.
+
+## Requirements
+
+This script requires the following Python packages:
+
+- rich
+- beautifulsoup4
+- wget
+- requests
+- requests-html
+- tqdm
+
+You can install these packages by running `pip install -r requirements.txt`.
+
+## Usage
+
+To use this script install it using pip:
+
+```bash
+pip install install_torch
+install-torch
+```
+
+Alternatively, you can download the script and run it directly using Python:
+
+```bash
+git clone https://github.com/hawier-dev/install_torch.git
+python install_torch.py
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

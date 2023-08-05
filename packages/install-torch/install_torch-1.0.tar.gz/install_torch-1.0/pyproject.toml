@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "install-torch"
+version = "1.0"
+description = "This script can be used to automatically install torch and CUDA."
+authors = ["Mikołaj Badyl <mbadyl@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+rich = "^13.3.5"
+wget = "^3.2"
+requests = "2.26.0"
+requests-html = "^0.10.0"
+tqdm = "^4.65.0"
+beautifulsoup4 = "^4.12.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+install-torch = "install_torch:main"
