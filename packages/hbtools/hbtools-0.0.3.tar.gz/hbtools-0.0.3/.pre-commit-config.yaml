@@ -1,0 +1,49 @@
+ci:
+  autoupdate_schedule: monthly
+  autofix_commit_msg: "ci: [pre-commit.ci] auto fixes [...]"
+  autoupdate_commit_msg: "ci: [pre-commit.ci] autoupdate"
+  autofix_prs: true
+  autoupdate_branch: ''
+  submodules: false
+
+default_language_version:
+  python: python3.11
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-docstring-first
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.265"
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.300
+    hooks:
+    - id: pyright
+      # FIXME: Using "hbtools" here is not ideal, stop using pre-commit for pyright and set it up as a separate GA.
+      additional_dependencies: ["opencv-python>=4.7", "opencv-stubs", "numpy>=1.21", "term_image", "pytest", "nox", "hbtools"]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-bugbear
+          - flake8-comprehensions
+          - flake8-docstrings
+          - flake8-builtins
+          - flake8-quotes
+          - pep8-naming
+          - flake8-import-order
+          - flake8-noqa
+          - flake8-broken-line
+          - flake8-commas
+          - Flake8-pyproject

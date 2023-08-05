@@ -1,0 +1,133 @@
+[build-system]
+requires = ["hatchling>=1.10.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hbtools"
+authors = [{name="Bagard Hoel"}]
+description = "Package containing a few python utils functions."
+readme = "README.md"
+classifiers = [
+            "License :: OSI Approved :: MIT License",
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 3.10",
+            "Programming Language :: Python :: 3.11",
+            "Operating System :: OS Independent",
+            "Intended Audience :: Developers",
+]
+license = {text = "MIT"}
+dynamic = ["version"]
+dependencies = ["opencv-python>=4.7", "numpy>=1.21", "typing_extensions; python_version < '3.11'"]
+requires-python = ">=3.10"
+
+[project.urls]
+"Homepage" = "https://github.com/hoel-bagard/hbtools"
+"Bug Tracker" = "https://github.com/hoel-bagard/hbtools/issues"
+
+[project.optional-dependencies]
+terminal = ["Pillow", "term_image"]
+dev = ["pre-commit", "pip-tools", "ruff", "pyright", "opencv-stubs", "term_image"]
+build = ["hatch"]
+test = ["pytest", "nox"]
+flake8 = ["flake8", "flake8-bugbear", "flake8-comprehensions", "flake8-docstrings", "flake8-builtins", "flake8-quotes", "pep8-naming", "flake8-import-order", "flake8-noqa", "flake8-broken-line", "flake8-commas", "Flake8-pyproject"]
+
+[tool.hatch.version]
+path = "src/hbtools/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/.pytest_cache",
+  "/build",
+  "/dist",
+  "/docs",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hbtools"]
+
+[tool.hatch.envs.pypi.scripts]
+# hatch run pypi:publish_test
+publish_test = "hatch build --clean && hatch publish -r test"
+publish = "hatch build --clean && hatch publish"
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib",]
+
+[tool.ruff]
+select = ["ALL"]
+# D1: Do not require docstrings
+# D203: one-blank-line-before-class  (incompatible)
+# D213: multi-line-summary-second-line  (incompatible)
+# D407: Missing dashed underline after section ("Args", "Returns")
+# ERA001: Found commented-out code
+# PLR2004: Magic value used in comparison, consider replacing X with a constant variable
+# T201: `print` found
+ignore = ["D1", "D203", "D213", "D407", "ERA001", "PLR2004", "T201", "TRY"]
+line-length = 120
+
+[tool.ruff.per-file-ignores]
+"noxfile.py" = ["ANN001"]
+# FBT001: Boolean positional arg in function definition
+# INP001 File `X` is part of an implicit namespace package. Add an `__init__.py`.
+# S101: Use of `assert` detected
+"tests/*.py" = ["FBT001", "INP001", "S101"]
+
+[tool.ruff.isort]
+order-by-type = false
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+
+[tool.pyright]
+include = ["src/hbtools"]
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
+
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+reportMissingModuleSource = false
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportUnusedImport = true
+reportUnusedClass = "warning"
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportDuplicateImport = "warning"
+reportUntypedNamedTuple = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedClassDecorator = "warning"
+reportMissingSuperCall = false
+reportUnknownArgumentType = "warning"
+reportUnknownLambdaType = "warning"
+reportUnknownVariableType = "warning"
+reportUnknownMemberType = false
+reportMissingParameterType = "warning"
+reportMissingTypeArgument = "warning"
+reportCallInDefaultInitializer = false
+reportUnnecessaryIsInstance = "warning"
+reportUnnecessaryCast = "warning"
+reportUnnecessaryComparison = "warning"
+reportImplicitStringConcatenation = false
+reportUnusedCallResult = false
+reportUnusedExpression = "warning"
+reportUnnecessaryTypeIgnoreComment = "warning"
+reportMatchNotExhaustive = "warning"
+
+[tool.flake8]
+max-line-length = 120
+docstring-convention = "google"
+import-order-style = "smarkets"
+inline-quotes = "double"
+exclude = ["env", "venv", ".nox"]
+# D1: Do not require docstrings
+# NQA102 "# noqa: X" has no matching violations
+ignore = ["D1", "NQA102"]
+
+[tool.pylint.messages_control]
+max-line-length = 120
+disable = [
+    "no-member",
+    "import-outside-toplevel",
+]
