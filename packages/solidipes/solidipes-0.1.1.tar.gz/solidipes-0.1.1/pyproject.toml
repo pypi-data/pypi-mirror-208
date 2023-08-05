@@ -1,0 +1,95 @@
+[tool.poetry]
+name = "solidipes"
+version = "0.1.1"
+description = "Python package for the DCSM project"
+authors = [
+	"Son Pham-Ba <son.phamba@epfl.ch>",
+	"Guillaume Anciaux <guillaume.anciaux@epfl.ch>"
+]
+license = ""
+readme = "README.md"
+packages = [{include = "solidipes"}]
+homepage = "https://gitlab.com/groups/dcsm"
+repository = "https://gitlab.com/dcsm/solidipes"
+documentation = "https://solidipes.readthedocs.io/en/latest/"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12,!=3.9.7"
+filetype = "^1.2.0"
+pandas = ">=1.5.3"
+openpyxl = "^3.1.1"
+meshio = {extras = ["all"], version = "^5.3.4"}
+pyvista = "^0.38.1"
+trame = "^2.2.6"
+streamlit = "^1.17.0"
+stpyvista = "^0.0.6"
+datasize = "^1.0.0"
+ipydatawidgets = "4.3.2"
+streamlit-tree-select = "^0.0.5"
+streamlit-js-eval = "^0.1.5"
+scipy = ">=1.10.1"
+sympy = ">=1.11.1"
+requests = "^2.28.2"
+pyyaml = "^6.0"
+tqdm = "^4.65.0"
+streamlit-option-menu = "^0.3.2"
+requests-toolbelt = "^0.10.1"
+argcomplete = "^3.0.5"
+streamlit-ace = "^0.1.1"
+markdown = "^3.4.3"
+python-gitlab = "^3.14.0"
+matplotlib = ">=3.7.1"
+svglib = "^1.5.1"
+reportlab = "^3.6.13"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.0.4"
+build = "^0.10.0"
+pytest = "^7.2.1"
+jupyter = "^1.0.0"
+jupyterlab = "^3.6.1"
+jupyterlab-widgets = "^3.0.5"
+itkwidgets = "^0.32.5"
+sphinx = "^5.3.0"
+sphinx-rtd-theme = "^1.2.0"
+myst-parser = "^0.18.1"
+coverage = "^7.2.1"
+pillow = "^9.4.0"
+pixelmatch = "^0.3.0"
+seleniumbase = "^4.14.2"
+requests-mock = "^1.10.0"
+git-changelog = "^1.0.0"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.3.1"
+pillow = "^9.5.0"
+pixelmatch = "^0.3.0"
+seleniumbase = "^4.14.2"
+requests-mock = "^1.10.0"
+
+[build-system]
+requires = ["poetry-core", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "semver"
+
+[tool.poetry-dynamic-versioning.substitution]
+files = [
+	"solidipes/__init__.py",
+	"docs/conf.py"
+]
+
+[tool.poetry.scripts]
+solidipes = "solidipes.scripts.main:main_PYTHON_ARGCOMPLETE_OK"
+
+[tool.black]
+line-length = 120
+preview = true
+
+[tool.isort]
+line_length = 120
+profile = "black"
