@@ -1,0 +1,1 @@
+System.register(["./LocalizationProvider-legacy-ad9a1efe.js","./index-legacy-2a198550.js","./useThemeProps-legacy-2e3e08b3.js"],(function(e,t){"use strict";return{setters:[function(t){e({LocalizationProvider:t.L,MuiPickersAdapterContext:t.M})},null,null],execute:function(){}}}));
