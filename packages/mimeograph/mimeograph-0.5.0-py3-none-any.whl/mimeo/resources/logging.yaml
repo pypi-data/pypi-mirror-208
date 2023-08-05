@@ -1,0 +1,37 @@
+version: 1
+
+formatters:
+  regular:
+    format: '[mimeo] %(levelname)s - %(message)s'
+  detailed:
+    format: '[mimeo] [%(filename)s:%(lineno)d] %(levelname)-5s - %(message)s'
+
+filters:
+  regularFilter:
+    (): mimeo.logging.RegularFilter
+  detailedFilter:
+    (): mimeo.logging.DetailedFilter
+
+handlers:
+  regular:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: regular
+    filters: [regularFilter]
+    stream: ext://sys.stdout
+  detailed:
+    class: logging.StreamHandler
+    level: 0
+    formatter: detailed
+    filters: [detailedFilter]
+    stream: ext://sys.stdout
+
+loggers:
+  mimeo:
+    level: INFO
+    handlers: [regular, detailed]
+    propagate: no
+
+root:
+  level: WARNING
+  handlers: [regular]
