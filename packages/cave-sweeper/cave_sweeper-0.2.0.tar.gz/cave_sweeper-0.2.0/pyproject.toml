@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "cave-sweeper"
+version = "0.2.0"
+description = ""
+authors = ["André Lima"]
+readme = "README.md"
+packages = [{include = "cave_sweeper"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+sweep = "cave_sweeper.renderers:render_selection_window"
