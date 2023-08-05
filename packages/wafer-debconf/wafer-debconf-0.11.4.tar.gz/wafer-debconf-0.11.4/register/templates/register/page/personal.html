@@ -1,0 +1,11 @@
+{% extends "register/form.html" %}
+{% block extra_foot %}
+  <script type="text/javascript">
+    'use strict';
+    $(function() {
+      if ($('#shipping_address').length) {
+        hookDependentVisibility($('#t_shirt_size'), $('#shipping_address'));
+      }
+    });
+  </script>
+{% endblock %}

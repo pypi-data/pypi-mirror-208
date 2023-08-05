@@ -1,0 +1,15 @@
+{% extends 'wafer/base.html' %}
+{% load countries %}
+
+{% block content %}
+<h1>Conference Statistics</h1>
+<ul>
+  {% if "register" in settings.INSTALLED_APPS %}
+  <li><a href="{% url 'register-statistics' %}">Registration Statistics</a></li>
+  {% endif %}
+  <li><a href="{% url 'content-statistics' %}">Content Statistics</a></li>
+  {% if "volunteers" in settings.INSTALLED_APPS %}
+  <li><a href="{% url 'wafer_volunteer_statistics' %}">Volunteer Statistics</a></li>
+  {% endif %}
+</ul>
+{% endblock content %}

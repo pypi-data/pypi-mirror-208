@@ -1,0 +1,35 @@
+variables:
+  BACKPORTS_PACKAGES: |
+    python3-django
+    python3-django-countries
+  PACKAGES: |
+    ca-certificates
+    gettext
+    fonts-fork-awesome
+    libjs-bootstrap4
+    libjs-eonasdan-bootstrap-datetimepicker
+    libjs-jquery
+    libjs-moment
+    libjs-moment-timezone
+    python3
+    python3-django-compressor
+    python3-pil
+    python3-pip
+    python3-pytest
+    python3-pytest-django
+    python3-pytest-mock
+    python3-setuptools
+    python3-yaml
+
+.install: &install
+  - apt-get -q update
+  - apt-get install -qy -t bullseye-backports $BACKPORTS_PACKAGES
+  - apt-get install -qy $PACKAGES
+
+before_script: *install
+
+test:
+  image: 'debian:bullseye-backports'
+  script:
+    - python3 -m pip install -r requirements.txt
+    - python3 -m pytest
