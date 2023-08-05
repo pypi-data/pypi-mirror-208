@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2023 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+*/
+.jp-ForceGraph {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.jp-ForceGraph iframe {
+  flex: 1;
+  border: solid 1px rgba(0, 0, 0, 0);
+  overflow: hidden;
+  transition: border-color 0.5s;
+}
+
+.jp-ForceGraph iframe:hover {
+  border-color: var(--jp-border-color2);
+  transition: border-color 0.5s;
+}
+
+/*
+When drag events occur, `lm-mod-override-cursor` is added to the body.
+Because iframes steal all cursor events, the following two rules are necessary
+to suppress pointer events while resize drags are occurring. There may be a
+better solution to this problem.
+*/
+body.lm-mod-override-cursor .jp-ForceGraph {
+  position: relative;
+}
+
+body.lm-mod-override-cursor .jp-ForceGraph::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+}

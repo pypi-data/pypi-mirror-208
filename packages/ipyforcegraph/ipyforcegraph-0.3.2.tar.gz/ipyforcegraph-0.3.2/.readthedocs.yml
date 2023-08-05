@@ -1,0 +1,23 @@
+version: 2
+
+build:
+  os: ubuntu-20.04
+  tools:
+    python: mambaforge-4.10
+  jobs:
+    pre_build:
+      - doit list
+      - doit setup
+      - doit list
+      - doit build
+      - doit list
+      - doit lite
+      - doit list
+
+sphinx:
+  builder: html
+  configuration: docs/conf.py
+  fail_on_warning: true
+
+conda:
+  environment: docs/environment.yml
