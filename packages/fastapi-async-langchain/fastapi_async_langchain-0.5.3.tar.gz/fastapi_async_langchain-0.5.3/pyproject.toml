@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "fastapi-async-langchain"
+version = "0.5.3"
+description = "Ship production-ready LangChain projects with FastAPI"
+authors = ["Ajinkya Indulkar <26824103+ajndkr@users.noreply.github.com>"]
+readme = "README.md"
+homepage = "https://github.com/ajndkr/fastapi-async-langchain"
+repository = "https://github.com/ajndkr/fastapi-async-langchain"
+license = "MIT"
+packages = [{include = "fastapi_async_langchain"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.95.1"
+langchain = ">=0.0.166"
+urllib3 = "<=1.26.15"  # added due to poetry errors
+python-dotenv = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+ignore = ["E501"]
