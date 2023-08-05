@@ -1,0 +1,68 @@
+Metadata-Version: 2.1
+Name: spatialprofilingtoolbox
+Version: 0.13.3
+Summary: Toolbox for spatial analysis of single cell data.
+Author-email: James Mathews <mathewj2@mskcc.org>
+Project-URL: documentation, https://github.com/nadeemlab/SPT
+Project-URL: repository, https://github.com/nadeemlab/SPT
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Classifier: Intended Audience :: Science/Research
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: psycopg2 (==2.9.3)
+Requires-Dist: adiscstudies (==0.11.0)
+Provides-Extra: all
+Requires-Dist: matplotlib (==3.5.3) ; extra == 'all'
+Requires-Dist: umap-learn (==0.5.3) ; extra == 'all'
+Requires-Dist: fastapi (<0.69.0,>=0.68.0) ; extra == 'all'
+Requires-Dist: uvicorn (<0.16.0,>=0.15.0) ; extra == 'all'
+Requires-Dist: Jinja2 (==3.0.1) ; extra == 'all'
+Requires-Dist: pandas (>=1.1.5) ; extra == 'all'
+Requires-Dist: numpy (==1.22.3) ; extra == 'all'
+Requires-Dist: scipy (==1.8.0) ; extra == 'all'
+Requires-Dist: scikit-learn (==1.1.2) ; extra == 'all'
+Requires-Dist: pyshp (==2.2.0) ; extra == 'all'
+Requires-Dist: tabulate (==0.8.10) ; extra == 'all'
+Provides-Extra: apiserver
+Requires-Dist: fastapi (<0.69.0,>=0.68.0) ; extra == 'apiserver'
+Requires-Dist: uvicorn (<0.16.0,>=0.15.0) ; extra == 'apiserver'
+Requires-Dist: pandas (>=1.1.5) ; extra == 'apiserver'
+Requires-Dist: scipy (==1.8.0) ; extra == 'apiserver'
+Requires-Dist: numpy (==1.22.3) ; extra == 'apiserver'
+Requires-Dist: pyshp (==2.2.0) ; extra == 'apiserver'
+Requires-Dist: scikit-learn (==1.1.2) ; extra == 'apiserver'
+Requires-Dist: Pillow (==9.3.0) ; extra == 'apiserver'
+Provides-Extra: building
+Requires-Dist: Jinja2 (==3.0.1) ; extra == 'building'
+Provides-Extra: cggnn
+Requires-Dist: cg-gnn ; extra == 'cggnn'
+Provides-Extra: countsserver
+Requires-Dist: pandas (>=1.1.5) ; extra == 'countsserver'
+Requires-Dist: numpy (==1.22.3) ; extra == 'countsserver'
+Requires-Dist: scikit-learn (==1.1.2) ; extra == 'countsserver'
+Provides-Extra: db
+Requires-Dist: pandas (>=1.1.5) ; extra == 'db'
+Requires-Dist: pyshp (==2.2.0) ; extra == 'db'
+Provides-Extra: dev
+Requires-Dist: autopep8 ; extra == 'dev'
+Requires-Dist: mypy ; extra == 'dev'
+Requires-Dist: pylint ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Provides-Extra: workflow
+Requires-Dist: matplotlib (==3.5.3) ; extra == 'workflow'
+Requires-Dist: umap-learn (==0.5.3) ; extra == 'workflow'
+Requires-Dist: numpy (==1.22.3) ; extra == 'workflow'
+Requires-Dist: scipy (==1.8.0) ; extra == 'workflow'
+Requires-Dist: scikit-learn (==1.1.2) ; extra == 'workflow'
+Requires-Dist: pyshp (==2.2.0) ; extra == 'workflow'
+Requires-Dist: pandas (>=1.1.5) ; extra == 'workflow'
+Requires-Dist: Jinja2 (==3.0.1) ; extra == 'workflow'
+Requires-Dist: tabulate (==0.8.10) ; extra == 'workflow'
+
+
+<p align="center">
+<img src="docs/image_assets/SPT_logo_blue_on_transparent.png" width="400">
+</p>
+
+The Spatial Profiling Toolbox (SPT) is a lightweight deployment framework for cell analysis computation in the context of histopathology. The pipelines are orchestrated with [Nextflow](https://www.nextflow.io/) and support [Singularity](https://sylabs.io/guides/latest/user-guide/)/[Docker](https://hub.docker.com/r/nadeemlab/spt) containerization.
