@@ -1,0 +1,122 @@
+Metadata-Version: 2.1
+Name: sanpy-ephys
+Version: 0.1.11
+Summary: Whole cell current-clamp analysis.
+Home-page: http://github.com/cudmore/SanPy
+Author: Robert H Cudmore
+Author-email: robert.cudmore@gmail.com
+License: GNU General Public License, Version 3
+Classifier: Programming Language :: Python :: 3
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: mkdocs ; extra == 'dev'
+Requires-Dist: mkdocs-material ; extra == 'dev'
+Requires-Dist: mkdocs-jupyter ; extra == 'dev'
+Requires-Dist: mkdocstrings ; extra == 'dev'
+Requires-Dist: mkdocstrings-python ; extra == 'dev'
+Requires-Dist: tornado ; extra == 'dev'
+Requires-Dist: pyinstaller ; extra == 'dev'
+Requires-Dist: ipython ; extra == 'dev'
+Requires-Dist: tox ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest-qt ; extra == 'dev'
+Requires-Dist: flake8 ; extra == 'dev'
+Requires-Dist: jupyter ; extra == 'dev'
+Requires-Dist: pooch ; extra == 'dev'
+Provides-Extra: gui
+Requires-Dist: numpy ; extra == 'gui'
+Requires-Dist: pandas (==1.5) ; extra == 'gui'
+Requires-Dist: scipy ; extra == 'gui'
+Requires-Dist: pyabf ; extra == 'gui'
+Requires-Dist: tifffile ; extra == 'gui'
+Requires-Dist: matplotlib ; extra == 'gui'
+Requires-Dist: seaborn ; extra == 'gui'
+Requires-Dist: requests ; extra == 'gui'
+Requires-Dist: tables ; extra == 'gui'
+Requires-Dist: scikit-image (==0.19.3) ; extra == 'gui'
+Requires-Dist: h5py ; extra == 'gui'
+Requires-Dist: qtpy ; extra == 'gui'
+Requires-Dist: pyqtgraph ; extra == 'gui'
+Requires-Dist: pyqtdarktheme ; extra == 'gui'
+Requires-Dist: PyQt5 ; extra == 'gui'
+Provides-Extra: test
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: flake8 ; extra == 'test'
+
+
+[![Python](https://img.shields.io/badge/python-3.8|3.9|3.10|3.11-blue.svg)](https://www.python.org/downloads/release/python-3111/)
+[![tests](https://github.com/cudmore/SanPy/workflows/Test/badge.svg)](https://github.com/cudmore/SanPy/actions)
+[![codecov](https://codecov.io/gh/cudmore/SanPy/branch/master/graph/badge.svg?token=L7L3FB04IP)](https://codecov.io/gh/cudmore/SanPy)
+[![OS](https://img.shields.io/badge/OS-Linux|Windows|macOS-blue.svg)]()
+[![License](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/cudmore/SanPy/blob/master/LICENSE)
+
+
+## SanPy is software for whole-cell current clamp analysis
+
+SanPy is designed to analyze action potentials and extract a number of parameters including spike time, voltage threshold, half-widths, interval statistics, and lots more.
+
+SanPy is optimized for a wide range of whole-cell current-clamp recordings including cardiac myocytes and neurons.
+
+Please see the [SanPy documentation](https://cudmore.github.io/SanPy/).
+
+### SanPy preprint on bioRxiv
+
+Guarina L, Johnson TL, Griffith T, Santana LF, Cudmore RH (2023) SanPy: A whole-cell electrophysiology analysis pipeline. bioRxiv 2023.05.06.539660; doi: [https://doi.org/10.1101/2023.05.06.539660](https://doi.org/10.1101/2023.05.06.539660)]
+
+### Desktop Application
+
+We provide desktop applications for macOS and Windows users. Go to the [download page](https://cudmore.github.io/SanPy/download/) to get started. No command line, no complicated installation, just an easy to use point and click GUI!
+
+**Footnote:** We are waiting to get a Microsoft software certificate so we can ship the Windows exe version. Please check back in a bit. In the meantime, the SanPy desktop application can always be [installed from source](https://cudmore.github.io/SanPy/install/)
+
+<IMG SRC="docs/docs/img/sanpy-app.png" width=600>
+
+### Plugins
+ 
+The desktop application comes bundled with a growing number of plugins. See our [plugin documentation page](https://cudmore.github.io/SanPy/plugins/).
+
+<table style="border=1px">
+<tr>
+    <td>
+    <IMG SRC="docs/docs/img/plugins/plot-recording.png" width=300>
+    </td>
+    <td>
+    <IMG SRC="docs/docs/img/plugins/spike-clips.png" width=300>
+    </td>
+</tr>
+<tr>
+    <td>
+    <IMG SRC="docs/docs/img/plugins/plot-fi.png" width=300>
+    </td>
+    <td>
+    <IMG SRC="docs/docs/img/plugins/scatter-plot.png" width=300>
+    </td>
+</tr>
+</table>
+
+### Contributing to SanPy
+
+To install SanPy from source, see our [install instructions](https://cudmore.github.io/SanPy/install/).
+
+To make SanPy extensible, users can create their own file loaders, analysis, and plugins. Please see our [API documentation](https://cudmore.github.io/SanPy/api/overview) with lots of examples to get started.
+
+### Contact
+
+If you find the code in this repository interesting, please email Robert Cudmore at UC Davis (rhcudmore@ucdavis.edu) and we can get you started. We are looking for users and collaborators.
