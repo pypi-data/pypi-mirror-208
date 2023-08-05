@@ -1,0 +1,18 @@
+{% extends 'officekit/blocks/name_list_block.html' %}
+{% load wagtailcore_tags %}
+
+{% block name_outer_open_tag %}<li>{% endblock %}
+{% block name_outer_close_tag %}</li>{% endblock %}
+{% block name_separator %}{% if not all_authors_have_visual %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block person_name %}
+<span>{{ block.super }}</span>
+{% endblock %}
+
+{% block organisation_name %}
+<span>{{ block.super }}</span>
+{% endblock %}
+
+{% block list_close_tag %}
+{{ block.super }}
+{% endblock %}

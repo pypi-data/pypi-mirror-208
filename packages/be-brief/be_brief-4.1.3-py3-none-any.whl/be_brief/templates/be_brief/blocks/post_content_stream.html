@@ -1,0 +1,10 @@
+{% load static wagtailcore_tags wagtail_preference_blocks_tags %}
+{% if self.stream_block.meta.container_element %}
+<{{ self.stream_block.meta.container_element }}{% if container_styles %} style="{{ container_styles }}"{% endif %}{% if container_classes %} class="{{ container_classes }}"{% endif %}>
+{% endif %}
+{% for child_block in value %}
+{% include_block_with_hints child_block with anchor_category='' %}
+{% endfor %}
+{% if self.stream_block.meta.container_element %}
+</{{ self.stream_block.meta.container_element }}>
+{% endif %}

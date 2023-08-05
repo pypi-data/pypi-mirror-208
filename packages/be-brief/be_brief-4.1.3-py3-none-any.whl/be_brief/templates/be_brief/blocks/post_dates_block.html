@@ -1,0 +1,8 @@
+{% load wagtailcore_tags %}
+<div class="record-dates">
+{% if value.last_published_at == value.first_published_at %}
+<span class="date">Published <span class="date"><span class="date-day-month">{{ value.first_published_at|date:"j F" }}</span> <span class="date-year">{{ value.first_published_at|date:"Y" }}</span></span></span>
+{% else %}
+    <span>Last updated <span class="date"><span class="date-day-month">{{ value.last_published_at|date:"j F" }}</span> <span class="date-year">{{ value.first_published_at|date:"Y" }}</span></span>,</span><span> first published <span class="date"><span class="date-day-month">{{ value.first_published_at|date:"j F" }}</span> <span class="date-year">{{ value.first_published_at|date:"Y" }}</span></span>.</span>
+{% endif %}
+</div>
