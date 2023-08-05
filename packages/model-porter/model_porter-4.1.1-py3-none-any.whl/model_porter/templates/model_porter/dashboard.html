@@ -1,0 +1,20 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n wagtailadmin_tags %}
+{% block titletag %}{% blocktrans with title='Import / Export' %}{{ title }}{% endblocktrans %}{% endblock %}
+{% block content %}
+    {% trans "Repository Management" as model_porter_str %}
+    {% url "model_porter:start_import" as import_link %}
+    {% trans "Import Repository" as import_str %}
+    {% trans "Export Repository" as export_str %}
+    {% fragment as model_porter_actions %}
+        <div class="dropdown dropdown-button match-width">
+            <a href="{{ import_link }}" class="button bicolor button--icon">{% icon name="doc-full-inverse" wrapped=1 %}{{ import_str }}</a>
+            <div class="dropdown-toggle">{% icon name="arrow-down" %}</div>
+            <ul>
+                <li><a class="button bicolor button--icon" href="{{ report_link }}">{% icon name="download" wrapped=1 %}{{ export_str }}</a></li>
+            </ul>
+        </div>
+    {% endfragment %}
+    {% include "wagtailadmin/shared/header.html" with title=model_porter_str icon="cogs" extra_actions=model_porter_actions %}
+
+{% endblock %}
