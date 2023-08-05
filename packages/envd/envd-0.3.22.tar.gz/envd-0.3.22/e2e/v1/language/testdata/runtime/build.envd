@@ -1,0 +1,18 @@
+# syntax=v1
+
+
+def build():
+    base(dev=True)
+    install.python()
+    install.python_packages(
+        name=[
+            "numpy",
+        ]
+    )
+    shell("zsh")
+    runtime.command(
+        commands={
+            "numpy": "python demo.py",
+            "root": "sudo ls /root",
+        }
+    )

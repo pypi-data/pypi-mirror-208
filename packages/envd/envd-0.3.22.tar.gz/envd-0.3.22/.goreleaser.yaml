@@ -1,0 +1,145 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+before:
+  hooks:
+    - go mod tidy
+universal_binaries:
+  - id: envd
+    replace: false
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    id: envd
+    main: ./cmd/envd
+    binary: envd
+    ldflags:
+      - -s -w
+      - -X github.com/tensorchord/envd/pkg/version.version={{ .Version }}
+      - -X github.com/tensorchord/envd/pkg/version.buildDate={{ .Date }}
+      - -X github.com/tensorchord/envd/pkg/version.gitCommit={{ .Commit }}
+      - -X github.com/tensorchord/envd/pkg/version.gitTreeState=clean
+      - -X github.com/tensorchord/envd/pkg/version.gitTag={{ .Tag }}
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    id: envd-sshd
+    main: ./cmd/envd-sshd
+    binary: envd-sshd
+    ldflags:
+      - -s -w
+      - -X github.com/tensorchord/envd/pkg/version.version={{ .Version }}
+      - -X github.com/tensorchord/envd/pkg/version.buildDate={{ .Date }}
+      - -X github.com/tensorchord/envd/pkg/version.gitCommit={{ .Commit }}
+      - -X github.com/tensorchord/envd/pkg/version.gitTreeState=clean
+archives:
+  - id: envd
+    format: binary
+    builds:
+      - envd
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+  - id: envd-sshd
+    format: binary
+    builds:
+      - envd-sshd
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  use: github
+  sort: asc
+  groups:
+    - title: 'Exciting New Features 🎉'
+      regexp: "^.*feat.*"
+      order: 0
+    - title: 'Bug Fix 🛠'
+      regexp: "^.*(Fix|fix|bug).*"
+      order: 1
+    - title: 'Refactor 🏗️'
+      regexp: "^.*refact.*"
+      order: 2
+    - title: 'Documentation 🖊️'
+      regexp: "^.*docs.*"
+      order: 3
+    - title: 'Others:'
+      order: 999
+dockers:
+- image_templates:
+  - "tensorchord/envd-from-scratch:v{{ .Version }}-amd64"
+  use: buildx
+  dockerfile: base-images/envd/envd.Dockerfile
+  ids:
+  - envd
+  build_flag_templates:
+  - "--platform=linux/amd64"
+- image_templates:
+  - "tensorchord/envd-from-scratch:v{{ .Version }}-arm64v8"
+  use: buildx
+  goarch: arm64
+  ids:
+  - envd
+  dockerfile: base-images/envd/envd.Dockerfile
+  build_flag_templates:
+  - "--platform=linux/arm64/v8"
+- image_templates:
+  - "tensorchord/envd-sshd-from-scratch:v{{ .Version }}-amd64"
+  use: buildx
+  dockerfile: base-images/envd-sshd/envd-sshd.Dockerfile
+  ids:
+  - envd-sshd
+  build_flag_templates:
+  - "--platform=linux/amd64"
+- image_templates:
+  - "tensorchord/envd-sshd-from-scratch:v{{ .Version }}-arm64v8"
+  use: buildx
+  goarch: arm64
+  ids:
+  - envd-sshd
+  dockerfile: base-images/envd-sshd/envd-sshd.Dockerfile
+  build_flag_templates:
+  - "--platform=linux/arm64/v8"
+docker_manifests:
+- name_template: tensorchord/envd-sshd-from-scratch:v{{ .Version }}
+  image_templates:
+  - tensorchord/envd-sshd-from-scratch:v{{ .Version }}-amd64
+  - tensorchord/envd-sshd-from-scratch:v{{ .Version }}-arm64v8
+- name_template: tensorchord/envd-from-scratch:v{{ .Version }}
+  image_templates:
+  - tensorchord/envd-from-scratch:v{{ .Version }}-amd64
+  - tensorchord/envd-from-scratch:v{{ .Version }}-arm64v8
+# See https://github.com/tensorchord/envd/issues/908
+# brews:
+#   - name: envd
+#     ids:
+#       - envd
+#     tap:
+#       owner: tensorchord
+#       name: homebrew-tap
+#     commit_author:
+#       name: TensorChord
+#       email: envd-maintainers@tensorchord.ai
+#     folder: Formula
+#     homepage: https://envd.tensorchord.ai/
+#     description: Development environment for data science and AI/ML teams
+#     license: Apache-2.0
+#     skip_upload: auto
+#     caveats: |
+#       Please run `envd bootstrap` first to bootstrap
+#     test: |
+#       system "#{bin}/envd version"
