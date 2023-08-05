@@ -1,0 +1,110 @@
+[tool.poetry]
+name = "event-vision-library"
+version = "0.0.1"
+description = "Event Vision Library"
+authors = ["Shintaro Shiba <shiba.shintaro@gmail.com>", "Friedhelm Hamann <friedhelmha2@gmail.com>"]
+maintainers = [
+    "Shintaro Shiba <shiba.shintaro@gmail.com>",
+    "Friedhelm Hamann <friedhelmha2@gmail.com>",
+]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/shiba24/event-vision-library"
+repository = "https://github.com/shiba24/event-vision-library"
+documentation = "https://event-vision-library.readthedocs.io"
+packages = [
+    { include = "evlib", from = "src" },
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+]
+
+[tool.poetry.urls]
+Changelog = "https://github.com/shiba24/event-vision-library/releases"
+
+[tool.poetry.dependencies]
+python = "^3.7,<3.11"
+click = ">=8.0.1"
+wheel = ">=0.38.4"
+numpy = ">=1.21.2"
+h5py = ">=3.2"
+expelliarmus = ">=1.1.12"
+dv = ">=1.0.11"
+opencv-python = ">=4.6"
+scipy = [
+    {version = "==1.9.1", python = ">=3.8,<3.11"},
+    {version = "<=1.9.1", python = "==3.7"}
+]  # TODO check newer version of scipy
+torch = [
+    {version = ">=2.0.0", python = ">=3.8,<3.11"},
+    {version = "<=2.0.0", python = "==3.7"}
+]  # TODO check newer version of torch
+# check https://github.com/python-poetry/poetry/issues/6409 and https://github.com/pytorch/pytorch/issues/76557
+pillow = ">=9.5.0"
+matplotlib = ">=3.5.3"
+
+[tool.poetry.dev-dependencies]
+Pygments = ">=2.10.0"
+black = ">=21.10b0"
+coverage = {extras = ["toml"], version = ">=6.2"}
+darglint = ">=1.8.1"
+flake8 = ">=4.0.1"
+flake8-bandit = ">=2.1.2"
+flake8-bugbear = ">=21.9.2"
+flake8-docstrings = ">=1.6.0"
+flake8-rst-docstrings = ">=0.2.5"
+furo = ">=2021.11.12"
+isort = ">=5.10.1"
+mypy = ">=0.930"
+pep8-naming = ">=0.12.1"
+pre-commit = ">=2.16.0"
+pre-commit-hooks = ">=4.1.0"
+pytest = ">=6.2.5"
+pyupgrade = ">=2.29.1"
+sphinx = ">=4.3.2"
+sphinx-autobuild = ">=2021.3.14"
+sphinx-click = ">=3.0.2"
+xdoctest = {extras = ["colors"], version = ">=0.15.10"}
+myst-parser = {version = ">=0.16.1"}
+
+[tool.poetry.scripts]
+event-vision-library = "evlib.__main__:main"
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+tests = ["tests", "*/tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["evlib", "tests"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 20
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+force_single_line = true
+lines_after_imports = 2
+line_length = 119
+
+[tool.mypy]
+strict = true
+warn_unreachable = true
+pretty = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+allow_untyped_calls = true
+ignore_missing_imports = true
+disallow_any_generics = false
+mypy_path = "src"
+implicit_reexport = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
