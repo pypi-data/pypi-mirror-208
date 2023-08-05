@@ -1,0 +1,47 @@
+Metadata-Version: 2.1
+Name: django-fragments
+Version: 0.1.4
+Summary: Custom template tags for common html idioms in Django.
+Home-page: https://mv3.dev
+Author: Marcelino G. Veloso III
+Author-email: mars@veloso.one
+Requires-Python: >=3.11,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: Pytest
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Typing :: Typed
+Requires-Dist: beautifulsoup4 (>=4.12.2,<5.0.0)
+Requires-Dist: django (>=4.2,<5.0)
+Requires-Dist: django-widget-tweaks (>=1.4.12,<2.0.0)
+Requires-Dist: markdown (>=3.3.7,<4.0.0)
+Project-URL: Documentation, https://mv3.dev/django-fragments
+Project-URL: Repository, https://github.com/justmars/django-fragments
+Description-Content-Type: text/markdown
+
+# django-fragments
+
+![Github CI](https://github.com/justmars/django-fragments/actions/workflows/main.yml/badge.svg)
+
+## Purpose
+
+Used for partial template rendering of: `<input>`, `<svg>` tags. Originally for a Django [boilerplate](https://start-django.fly.dev), refactored out into an independent library.
+
+## Setup
+
+After installation, e.g. `pip install django-fragments`
+
+```py
+INSTALLED_APPS = [
+    "django_fragments", # add this
+]
+...
+FRAGMENTS = {
+    "icons_prefix": "heroicons", # prefix to use for icons
+    "icons_path": BASE_DIR / "templates" / "xxx" # type: Path, location where svg icons will be stored
+}
+```
+
+See [documentation](https://justmars.github.io/django-fragments).
+
