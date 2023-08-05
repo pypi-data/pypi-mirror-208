@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "nester-struct"
+dynamic = [
+  "authors",
+  "urls",
+  "description",
+  "keywords",
+  "license",
+  "classifiers",
+  "version"
+]
+
+[project.scripts]
+nester = "nester.nester_commands:cli"
+
+[tool.setuptools_scm]
+root = "."
+relative_to = "src/nester/__init__.py"
+
+[tool.isort]
+profile = "black"
+
+[tool.towncrier]
+directory = "changelog.d"
+filename = "changelog/v{version}.md"
+package = "src/nester"
+start_string = "<!--Towncrier release notes start-->"
+underlines = ["", "", ""]
+template = "changelog.d/changelog_template.jinja"
+title_format = "# Nester [{version}](https://github.com/ByteOtter/nester/tree/v{version}) - {project_date}"
+issue_format = "[#{issue}](https://github.com/ByteOtter/nester/issues/{issue})"
+single_file = false
+wrap = true
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
