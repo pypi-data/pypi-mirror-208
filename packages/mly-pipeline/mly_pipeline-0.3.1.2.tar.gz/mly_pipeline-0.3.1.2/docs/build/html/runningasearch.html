@@ -1,0 +1,278 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Running a search &#8212; mlyPipeline 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Setting up a search" href="settingupasearch.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="settingupasearch.html" title="Setting up a search"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mlyPipeline 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Running a search</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="running-a-search">
+<h1>Running a search<a class="headerlink" href="#running-a-search" title="Permalink to this heading">¶</a></h1>
+<p>To run the search you only have to get inside the search directory and run the <code class="docutils literal notranslate"><span class="pre">runall.sh</span></code> script. This will take care of everything else. The <code class="docutils literal notranslate"><span class="pre">runall.sh</span></code> script is a constantly running script that check if all the functionalities are running as expected. It is something you want to run on the background and let it run when you log out of your machine. To do that we use nohup. Here is an example of how to run the search using nohup.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nohup<span class="w"> </span>sh<span class="w"> </span>runall.sh<span class="w"> </span><span class="p">&amp;</span>&gt;<span class="w"> </span>runall.out<span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+<p>This will run the <code class="docutils literal notranslate"><span class="pre">runall.sh</span></code> script on the background and it will not terminate when you close your terminal. The output and error messages will all go into <code class="docutils literal notranslate"><span class="pre">runall.out</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before you start any type of search, check the config file to make sure the parameters that are there are the ones you want.</p>
+</div>
+<div class="section" id="pickle-format">
+<h2>Pickle format<a class="headerlink" href="#pickle-format" title="Permalink to this heading">¶</a></h2>
+<p>Many files that are saved during a search will be of pickle format. This format preserves the python object to be saved. The types of objects saved are python dictionary, mly.DataPod, mly.DataSet and pandas.DataFrame. We save them in such format to be able to change them for different purposes.</p>
+</div>
+<div class="section" id="online-search-timeline">
+<h2>Online Search Timeline<a class="headerlink" href="#online-search-timeline" title="Permalink to this heading">¶</a></h2>
+<p>By the moment the pipeline starts running and from now on there is a constant production of processed data instances and inference results. Both of which are saved and organised for post processing.</p>
+<ul class="simple">
+<li><p>The script requests at least 16 seconds of data for each inference. These 16 seconds are usually the most recent 16 seconds. We call these data the buffer or <strong>buffer instance</strong>.</p></li>
+<li><p>The buffer is whitened, bandpassed (20,512 Hz) and then the central second (7.5,8.5) is cropped. This is a <strong>timeseries data instance</strong>.</p></li>
+<li><p>The <strong>timeseries data instance</strong> is used to create the pearson <strong>correlation data instance</strong>, which is used in coherency model (model2).</p></li>
+<li><p>The timseries and correlation data instances are fed to the models to produce an <strong>inference result</strong>.</p></li>
+</ul>
+<div class="section" id="with-every-inference">
+<h3>With every inference<a class="headerlink" href="#with-every-inference" title="Permalink to this heading">¶</a></h3>
+<p>If the <strong>inference result</strong> is above the detection threshold:</p>
+<ul class="simple">
+<li><p>The <strong>inference</strong> result is saved in json format inside <code class="docutils literal notranslate"><span class="pre">output_directory</span></code> and in labeled as a <strong>trigger</strong>.</p></li>
+<li><p>A series of actions related to <a class="reference internal" href="#trigger-handling"><span class="std std-ref">trigger handling</span></a> take place.</p></li>
+</ul>
+<p>If the <strong>inference result</strong> is below the detection threshold:</p>
+<ul class="simple">
+<li><p>The <strong>inference</strong> result is saved in json format inside <code class="docutils literal notranslate"><span class="pre">output_directory</span></code>.</p></li>
+<li><p>The timeseries data are split to individual detector timeseries in mly.DataPod objects. Then they are saved in <code class="docutils literal notranslate"><span class="pre">masterDirectory/temp/H,L,V</span></code> directories in pickle (.pkl) format for later background estimation tests.</p></li>
+<li><p>The buffer which is also a mly.DataPod is saved  inside <code class="docutils literal notranslate"><span class="pre">bufferDirectory/temp</span></code> again in pickle format. It is going to be used later for efficiency testing.</p></li>
+</ul>
+</div>
+<div class="section" id="how-manager-py-manages-the-search-part-1">
+<h3>How manager.py manages the search part 1<a class="headerlink" href="#how-manager-py-manages-the-search-part-1" title="Permalink to this heading">¶</a></h3>
+<p>The manager script runs around every five minutes to organise all the products of the search.</p>
+<ul class="simple">
+<li><p>Collates all the <strong>inference result</strong> in <code class="docutils literal notranslate"><span class="pre">output_directory</span></code> together. The parameter <strong>maxDataFrameSize</strong> is defining the size of the collation the manager will do, the default is 3600. When the json files exceed that number it creates pandas.DataFrame with all of them and saves it in pickle (.pkl) format. <strong>Note here that 3600 is not necessarily mean every hour</strong>. The collation file created has the GPS of the first and the GPS of the last inference that includes in its name (STARTGPS-ENDGPS_3600.pkl).</p></li>
+<li><p>Every hour it collates the <strong>timeseries data instances</strong> inside <code class="docutils literal notranslate"><span class="pre">masterDirectory/temp/H,</span> <span class="pre">L,</span> <span class="pre">V</span></code> for each detector respectively and save them as an mly.DataSet object in pickle (.pkl) format at <code class="docutils literal notranslate"><span class="pre">masterDirectory/H,</span> <span class="pre">L,</span> <span class="pre">V</span></code> for each detector respectively. All those files will have the same name but they will be in different directories. Note the difference with the previous point here. This happens every hour, so the new files created will have as many data were used within the hour and not necessarily 3600.</p></li>
+<li><p>Collates all the <strong>buffer instances</strong> in <code class="docutils literal notranslate"><span class="pre">bufferDirectory/temp</span></code> into one <strong>buffer dataset</strong>. The parameter <strong>howOften</strong> in the <code class="docutils literal notranslate"><span class="pre">eff_config</span></code> of the configuration file determine how many buffers are needed to do this collation. The <strong>buffer dataset</strong> is saved in pickle (.pkl) format with a standard name <code class="docutils literal notranslate"><span class="pre">bufferDirectory/BUFFER_SET.pkl</span></code>. Every time the collation takes place the <strong>buffer set</strong> is replaced.</p></li>
+<li><p>After the creation of a new <strong>buffer set</strong>, it is used to issue an <span class="xref std std-ref">efficiency test script</span> that will provide us with the estimated efficiencies of selected waveforms the last hour.</p></li>
+</ul>
+<p>There are some other tasks the manager does but the need some extra context.</p>
+</div>
+<div class="section" id="continuous-false-alarm-rate-estimation">
+<h3>Continuous False Alarm Rate estimation<a class="headerlink" href="#continuous-false-alarm-rate-estimation" title="Permalink to this heading">¶</a></h3>
+<p>The continuous FAR estimation is a mandatory tool to make sure we constantly know the rate of false events our model trigger on and accordingly correct our event thresholds.
+There are two <strong>modes</strong> of this functionality, hence two different scripts running at the same time. Those two script are working on the same directories and files inside <code class="docutils literal notranslate"><span class="pre">falseAlarmRates</span></code> directory.
+The parameters mentioned here are all inside <strong>far_config</strong> section in the configuration file of the search.</p>
+<p><strong>continuesFAR –mode generation</strong></p>
+<ul class="simple">
+<li><p>The generation mode looks for new unused dataset files inside <code class="docutils literal notranslate"><span class="pre">masterDirectory/H,</span> <span class="pre">L,</span> <span class="pre">V</span></code>.</p></li>
+<li><p>For each one of these datasets it will organize the generation of time-lagged background combinations of the detector data.</p></li>
+<li><p>The total lags it will attempt to create are specified in <strong>lags</strong> parameter.</p></li>
+<li><p>The number of jobs between which it will distribute this generation is specified by <strong>batches</strong> parameter.</p></li>
+<li><p>It will create a dagman with all these jobs and submit it.</p></li>
+<li><p>Each of these jobs will create a dataset with time-lagged data along with their correlation data and save them in <code class="docutils literal notranslate"><span class="pre">falseAlarmRates/temp</span></code> directory.</p></li>
+<li><p>Then the script will go to the next unused file inside <code class="docutils literal notranslate"><span class="pre">masterDirectory/H,</span> <span class="pre">L,</span> <span class="pre">V</span></code>, <strong>or wait until this is possible</strong>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The script will not produce condor jobs indefinitely. Before it continuous to a new unused file, it checks to see how many condor jobs are already running and how many “generations” of files have been already produced. The parameters used to determine that are <strong>parallelGenerations</strong> and <strong>batches</strong>. It will wait until this statement is no longer true: <code class="docutils literal notranslate"><span class="pre">condor_jobs_running</span> <span class="pre">&gt;=</span> <span class="pre">batches*(parallelGenerations-1))</span> <span class="pre">or</span> <span class="pre">files_in_temp</span> <span class="pre">&gt;=</span> <span class="pre">parallelGenerations*batches</span></code></p>
+</div>
+<p><strong>continuesFAR –mode inference</strong></p>
+<ul class="simple">
+<li><p>The inference mode looks for dataset produced by the –mode generation script and puts them in the queue for inference.</p></li>
+<li><p>After it loads a time-lagged file from <code class="docutils literal notranslate"><span class="pre">falseAlarmRates/temp</span></code>, it produces its inference results and it saves the inference result inside <code class="docutils literal notranslate"><span class="pre">falseAlarmRates</span></code> directory.</p></li>
+<li><p>Then it deletes the time-lagged file it used.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The specific script has some known issues that originate the the subpackages it uses. This is taken into account within runall.sh, and there are special loops that check and restart it.</p>
+</div>
+</div>
+<div class="section" id="efficiency-tests">
+<h3>Efficiency Tests<a class="headerlink" href="#efficiency-tests" title="Permalink to this heading">¶</a></h3>
+<p>The efficiency tests script is called once a <strong>buffer set</strong> has been created through the manager script. All the parameters related to the efficiency tests are in the <strong>eff_config</strong> section of the configuration file.</p>
+<ul class="simple">
+<li><p>There are two metrics used in the efficiency tests, <strong>SNR</strong> and <strong>hrss</strong>. Each metric has its own corresponding waveforms <strong>injectionsWithSNR</strong> and <strong>injectionsWithHRSS</strong> respectively.</p></li>
+<li><p>The waveforms are located inside <strong>injectionDirectoryPath</strong> which is in mly user directory in CIT.</p></li>
+<li><p>Each metric has also its corresponding intervals to test on, <strong>injectionSNR</strong> and <strong>injectionHRSS</strong> respectively. Both of them have default values with big steps and to be practical they need to be changed by hand when needed.</p></li>
+<li><p><strong>If you do not want an efficiency test, you can empty those parameter list.</strong></p></li>
+<li><p>For each of one of these intervals specified there will be <strong>testSize</strong> amount of different waveforms being tested. The bigger the <strong>testSize</strong> the smoother the efficiency curve produced.</p></li>
+<li><p>All those tests on different waveforms are done through condor, and their result is a dictionary with scores saved in pickle (.pkl) format inside <code class="docutils literal notranslate"><span class="pre">efficiencies</span></code>.</p></li>
+<li><p>One of these jobs is the final job where it creates the plot with the efficiencies of different waveforms.</p></li>
+<li><p>When a new efficiency test starts, the files of the old one are moved inside <code class="docutils literal notranslate"><span class="pre">efficiencies/history</span></code> directory for future reference.</p></li>
+<li><p>A new efficiency test will not start if the previous one has not finished yet. To make sure this suits your need of testing, change <strong>howOften</strong> or/and <strong>testSize</strong> or/and the intervals you test accordingly.</p></li>
+</ul>
+</div>
+<div class="section" id="trigger-handling">
+<h3>Trigger handling<a class="headerlink" href="#trigger-handling" title="Permalink to this heading">¶</a></h3>
+<p>As the search runs, when there is an inference that provides a FAR abobe the threshold defined in config, a subscript is issued tp generate all the extra information needed for this new event.</p>
+<ul class="simple">
+<li><p>Parameter estimation (duration, central time, frequency bandwidth and central frequency).</p></li>
+<li><p>Creating a GraceDB event (if a <code class="docutils literal notranslate"><span class="pre">trigger_destination</span></code> has been specified in the config).</p></li>
+<li><p>Generation of the skymap.</p></li>
+<li><p>Updating the GraceDB event with the skymap info.</p></li>
+<li><p>Creating an event directory with the GraceDB id and the GPS of the event in the directory name. This directory will be located in <strong>triggerplot_directory</strong>.</p></li>
+<li><p>Creating plots and saving them inside that directory.</p></li>
+<li><p>Putting the trigger <code class="docutils literal notranslate"><span class="pre">.json</span></code> file inside <strong>trigger_directory</strong>.</p></li>
+</ul>
+</div>
+<div class="section" id="how-manager-py-manages-the-search-part-2">
+<h3>How manager.py manages the search part 2<a class="headerlink" href="#how-manager-py-manages-the-search-part-2" title="Permalink to this heading">¶</a></h3>
+<p>Now that we have described how continuous FAR works, we will add some more things that the manager script does that are, important.</p>
+<ul class="simple">
+<li><p>Every time the manager runs, it checks the new background tests that have been produced by the continuous FAR inference script.</p></li>
+<li><p>It collates them according to their “generation” or hour of production, or more technically according to the dagman they came from.</p></li>
+<li><p>Those groups we call them hourly groups. The collations of hourly groups are saved in <code class="docutils literal notranslate"><span class="pre">falseAlarmRates/hourly</span></code> directory.</p></li>
+<li><p>If there are any inference files that do not have a group created yet, it creates one for them.</p></li>
+<li><p>At the end it deletes the files used for the production of the hourly files.</p></li>
+<li><p>Then it collates all the hourly files ever produced to create the current most updated FAR estimation of the background.</p></li>
+<li><p>This estimation is saved in <code class="docutils literal notranslate"><span class="pre">falseAlarmRates/FARfile/</span></code> an its name is <code class="docutils literal notranslate"><span class="pre">FARfile_#######</span></code> where the hashes represent the total test number. This is a number that changes every time an update is made.</p></li>
+<li><p>Along with the main FARfile, there are two interpolation files created.</p></li>
+<li><p>One interpolates score values into FAR values. It is used to decide the FAR of each inference.</p></li>
+<li><p>The second does the opposite, interpolates FAR values into score values. It is used to identify the scores of current thresholds.</p></li>
+<li><p>Both of these interpolations, have also a copy of themselves as a reserve, in case the file is getting updated at the point where an interpolation is requested.</p></li>
+<li><p>Finally, the manager does a big change once per search. When the estimation of the background has enough tests, the <code class="docutils literal notranslate"><span class="pre">farfile</span></code> parameter changes to point on the FARfile of the current search, instead of the initial. Currently we use 1 year of tests as minimum for this change to take place.</p></li>
+<li><p>The manager then quits to force runall.sh to restart all the scripts with the new configuration file.</p></li>
+</ul>
+</div>
+<div class="section" id="monitoring-the-search">
+<h3>Monitoring the search<a class="headerlink" href="#monitoring-the-search" title="Permalink to this heading">¶</a></h3>
+<p>To monitor that the search is running normally you can open the <code class="docutils literal notranslate"><span class="pre">.out</span></code> files that correspond to each subscript. Although there are many other things that you can check as the time passes, noted below. Additionally you can check the log files created inside log directory which will have usefull info about the latest actions that took place.
+After the first two minutes
+—————————</p>
+<p>After you run the runall.sh script, the search scripts will already have some output. Use your favourite editor to open the <code class="docutils literal notranslate"><span class="pre">search_step_#.out</span></code> files
+and see if there is any output in them. As the inference on the processed data takes place, you should start seeing <code class="docutils literal notranslate"><span class="pre">.json</span></code> files appearing inside the output_directory.</p>
+<p>You can also check in bufferDirectory and see that there are some pickle files (mly.DataPod(s)) saved there too.</p>
+<p>The processed timeseries data instances that were used for the inference are also saved inside masterDirectory/temp/ in individual detector directories (H, L, V). These will be used later to produce time-lagged background test instances later.</p>
+</div>
+<div class="section" id="after-the-first-ten-minutes">
+<h3>After the first ten minutes<a class="headerlink" href="#after-the-first-ten-minutes" title="Permalink to this heading">¶</a></h3>
+<p>Five minutes after you start the search, the manager script will run for the first time and will take all the <code class="docutils literal notranslate"><span class="pre">.json</span></code> files in output_directory and put them together in one pandas.Dataframe file, saved in pickle format.
+The first pickle frame file to appear is called <code class="docutils literal notranslate"><span class="pre">tempFrame.pkl</span></code>.
+If you look in the output_directory, you will see that file along with some json files too.</p>
+</div>
+<div class="section" id="after-roughly-an-hour">
+<h3>After roughly an hour<a class="headerlink" href="#after-roughly-an-hour" title="Permalink to this heading">¶</a></h3>
+<p>After an hour, or at least after 3600 inferences have been done, you will see that inside the output_directory there is the first collated output file as described before.</p>
+<p>Now that at least one hourly dataset has been saved in the masterDirectory we can generate our first time-lagged data to do a background estimation. Inside <code class="docutils literal notranslate"><span class="pre">continuesFAR_generation.out</span></code> you will see the first condor dagmans to be submitted.
+When the first jobs have finished they will save the time-lagged data in <code class="docutils literal notranslate"><span class="pre">falseAlarmRates/temp</span></code> directory. Each job will save an individual file.</p>
+<p>The inference script is constantly checking to see if there are any files created for inference. When it sees them you will star seeing the inference information inside <code class="docutils literal notranslate"><span class="pre">continuous_FAR_inference_#######</span></code>.
+<strong>The continuous FAR inference mode output has a number attached to it. That number is the unix time it was created and it can help us troubleshooting the script. So do not worry if you see many of them appearing over time.</strong></p>
+<p>After two hours you will also be able to see the first efficiency results and plots inside <code class="docutils literal notranslate"><span class="pre">efficiencies</span></code>.</p>
+</div>
+</div>
+<div class="section" id="offline-search-timeline">
+<h2>Offline search timeline<a class="headerlink" href="#offline-search-timeline" title="Permalink to this heading">¶</a></h2>
+<p>For offline search, after the the offline_search script is run, it will create a number of condor jobs whose number is related to the number of segments the search is run on. While the jobs are run, any potential triggers will be saved in trigger_directory and also their corresponding trigger directory will be created inside triggerplot_directory.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Running a search</a><ul>
+<li><a class="reference internal" href="#pickle-format">Pickle format</a></li>
+<li><a class="reference internal" href="#online-search-timeline">Online Search Timeline</a><ul>
+<li><a class="reference internal" href="#with-every-inference">With every inference</a></li>
+<li><a class="reference internal" href="#how-manager-py-manages-the-search-part-1">How manager.py manages the search part 1</a></li>
+<li><a class="reference internal" href="#continuous-false-alarm-rate-estimation">Continuous False Alarm Rate estimation</a></li>
+<li><a class="reference internal" href="#efficiency-tests">Efficiency Tests</a></li>
+<li><a class="reference internal" href="#trigger-handling">Trigger handling</a></li>
+<li><a class="reference internal" href="#how-manager-py-manages-the-search-part-2">How manager.py manages the search part 2</a></li>
+<li><a class="reference internal" href="#monitoring-the-search">Monitoring the search</a></li>
+<li><a class="reference internal" href="#after-the-first-ten-minutes">After the first ten minutes</a></li>
+<li><a class="reference internal" href="#after-roughly-an-hour">After roughly an hour</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#offline-search-timeline">Offline search timeline</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="settingupasearch.html"
+                          title="previous chapter">Setting up a search</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/runningasearch.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="settingupasearch.html" title="Setting up a search"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mlyPipeline 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Running a search</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Vasileios Skliris.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

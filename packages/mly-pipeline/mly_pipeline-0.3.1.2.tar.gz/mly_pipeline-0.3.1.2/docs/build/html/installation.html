@@ -1,0 +1,169 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installation &#8212; mlyPipeline 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up a search" href="settingupasearch.html" />
+    <link rel="prev" title="Welcome to MLy-Pipeline’s documentation!" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="settingupasearch.html" title="Setting up a search"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to MLy-Pipeline’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mlyPipeline 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<p>The search functionality needs a provision of real-time data (data that become available in real time) from a predefined directory.
+This directory needs to be accessible directly from the location where the search scripts will be running.
+Usually the real-time data directory is located in the CIT LIGO cluster and we will use it as the default place to run the search.
+For more information about how to access it see <a class="reference external" href="https://computing.docs.ligo.org/guide/computing-centres/ldg/">here</a>.</p>
+<div class="section" id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>MLy-Pipeline and MLy need a series of python packages and authentications. We summarized all those dependencies into one conda environment</dt><dd><p>that you can source using the following command:</p>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>/home/mly/mly-env
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-mly-pipeline">
+<h2>Installation of MLy-pipeline<a class="headerlink" href="#installation-of-mly-pipeline" title="Permalink to this heading">¶</a></h2>
+<p>Now you are ready to install MLy-pipeline. First you will have to clone the git repository of the pipeline:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@git.ligo.org:mly/mlyPipeline.git
+</pre></div>
+</div>
+<p>Or if you haven’t set an ssh key yet use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://git.ligo.org/mly/mlyPipeline.git
+</pre></div>
+</div>
+<p>This will create a directory called <code class="docutils literal notranslate"><span class="pre">mlyPipeline</span></code>. Now get into the directory that was created by using <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">mlyPipeline</span></code>.
+For review purposes makes sure you checkout to the version of the pipeline that is provided, current review version <strong>v0.2</strong>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>vX.x
+</pre></div>
+</div>
+<p>Where <strong>X.x</strong> is the version of the tag you need. If you type <code class="docutils literal notranslate"><span class="pre">ls</span></code> you will see the list of its contents. One of the directories is <code class="docutils literal notranslate"><span class="pre">mly</span></code>, this is the submodule with the core packages to run MLy-Pipeline.
+It will be currently empty, we have to initiate it. Given that you are in <code class="docutils literal notranslate"><span class="pre">mlyPipeline</span></code> directory type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--remote
+</pre></div>
+</div>
+<p>You might be requested to provide you GitLab username and password. If not it is still fine. The last command might needed to be used again later if there are any updates in <code class="docutils literal notranslate"><span class="pre">mly</span></code>.
+Now get in the mlyPipeline/mly directory by typing <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">mly</span></code>. The mly submodule will be on the master branch, we can check that by typing <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span></code>. This will show all the branches available, and next to the active branch there will be an asterisc.
+We want mly submodule also to be on the same review version. You can do that by typing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>vX.x
+</pre></div>
+</div>
+<p>Check again with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span></code> command to verify that <strong>v0.2</strong> is the active tag.
+And that’s it! You successfully installed MLy-Pipeline and you are ready to run the search.
+Now check <a class="reference internal" href="settingupasearch.html#setting-up-a-search"><span class="std std-ref">Setting up a search</span></a> to set up your search directory and run the search.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#environment">Environment</a></li>
+<li><a class="reference internal" href="#installation-of-mly-pipeline">Installation of MLy-pipeline</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Welcome to MLy-Pipeline’s documentation!</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="settingupasearch.html"
+                          title="next chapter">Setting up a search</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="settingupasearch.html" title="Setting up a search"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to MLy-Pipeline’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mlyPipeline 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Vasileios Skliris.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>
