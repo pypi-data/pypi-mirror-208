@@ -1,0 +1,89 @@
+Metadata-Version: 2.1
+Name: heaserver
+Version: 1.0.0a119
+Summary: The server side of HEA.
+Home-page: https://risr.hci.utah.edu
+Author: Research Informatics Shared Resource, Huntsman Cancer Institute, Salt Lake City, UT
+Author-email: Andrew.Post@hci.utah.edu
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: heaobject (~=1.0.0a54)
+Requires-Dist: aiohttp[speedups] (~=3.8.3)
+Requires-Dist: aiohttp-remotes (~=1.2.0)
+Requires-Dist: motor (~=3.1.2)
+Requires-Dist: motor-types (~=1.0.0b1)
+Requires-Dist: tzlocal (~=4.3)
+Requires-Dist: accept-types (~=0.4.1)
+Requires-Dist: mongoquery (~=1.4.2)
+Requires-Dist: jsonschema (~=4.17.3)
+Requires-Dist: jsonmerge (~=1.9.0)
+Requires-Dist: requests (>=2.29)
+Requires-Dist: types-requests (>=2.29)
+Requires-Dist: boto3 (==1.26.126)
+Requires-Dist: botocore (==1.29.126)
+Requires-Dist: boto3-stubs[essential] (==1.26.126)
+Requires-Dist: botocore-stubs[essential] (==1.29.125)
+Requires-Dist: freezegun (~=1.0.0)
+Requires-Dist: regex (~=2023.5.5)
+Requires-Dist: aio-pika (==9.0.5)
+Requires-Dist: PyJWT (==2.6.0)
+Requires-Dist: simpleeval (~=0.9.13)
+
+# HEA Server Framework
+[Research Informatics Shared Resource](https://risr.hci.utah.edu), [Huntsman Cancer Institute](https://healthcare.utah.edu/huntsmancancerinstitute/), Salt Lake City, UT
+
+The HEA Server Framework contains shared code for creating HEA microservices.
+
+## Version 1
+Initial release.
+
+## Runtime requirements
+* Python 3.10.10 or greater.
+
+## Development environment
+
+### Build requirements
+* Any development environment is fine.
+* On Windows, you also will need:
+    * Build Tools for Visual Studio 2019, found at https://visualstudio.microsoft.com/downloads/. Select the C++ tools.
+    * git, found at https://git-scm.com/download/win.
+* On Mac, Xcode or the command line developer tools is required, found in the Apple Store app.
+* Python 3.10: Download and install Python 3.10 from https://www.python.org, and select the options to install for all users and add
+Python to your environment variables. The install for all users option will help keep you from accidentally installing
+packages into your Python installation's site-packages directory instead of to your virtualenv environment, described
+below.
+* Create a virtualenv environment using the `python -m venv <venv_directory>` command, substituting `<venv_directory>`
+with the directory name of your virtual environment. Run `source <venv_directory>/bin/activate` (or `<venv_directory>/Scripts/activate` on Windows) to activate the virtual
+environment. You will need to activate the virtualenv every time before starting work, or your IDE may be able to do
+this for you automatically. **Note that PyCharm will do this for you, but you have to create a new Terminal panel
+after you newly configure a project with your virtualenv.**
+* From the project's root directory, and using the activated virtualenv, run `pip install wheel` followed by
+  `pip install -r requirements_dev.txt`. **Do NOT run `python setup.py develop`. It will break your environment.**
+
+### Running tests
+Run tests with the `pytest` command from the project root directory. To improve performance, run tests in multiple
+processes with `pytest -n auto`.
+
+### Running integration tests
+* Install Docker
+* On Windows, install pywin32 version >= 223 from https://github.com/mhammond/pywin32/releases. In your venv, make sure that
+`include-system-site-packages` is set to `true`.
+
+### Packaging and releasing this project
+See the [RELEASING.md](RELEASING.md) file for details.
