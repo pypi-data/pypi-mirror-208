@@ -1,0 +1,47 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "atsphinx-og-article"
+authors = [{name = "Kazuya Takei", email = "myself@attakei.net"}]
+license = {file = "LICENSE"}
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Framework :: Sphinx",
+  "Framework :: Sphinx :: Extension",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Documentation :: Sphinx",
+]
+readme = "README.rst"
+dependencies = [
+  "python-dateutil",
+  "sphinx",
+]
+dynamic = ["version", "description"]
+
+[project.optional-dependencies]
+test = [
+  "beautifulsoup4 == 4.*",
+  "pytest ==7.*",
+]
+doc = [
+  "furo",
+  "rst-pypi-ref",
+  "sphinx",
+]
+
+[project.urls]
+Documentation = "https://atsphinx-og-article.readthedocs.io/en/stable/"
+Source = "https://github.com/atsphinx/og-article"
+
+[tool.flit.module]
+name = "atsphinx.og_article"
+
+[tool.flit.sdist]
+exclude = [".github", "tests"]
