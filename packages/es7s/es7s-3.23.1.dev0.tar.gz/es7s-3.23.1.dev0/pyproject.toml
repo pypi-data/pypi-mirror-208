@@ -1,0 +1,183 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "es7s"
+dynamic = ["version"]
+description = "es7s system (un-)installer, shared code, settings manager"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+platforms = ["linux"]
+keywords = [
+    "es7s", "cli", "terminal", "console", "system", "monitor", "prmopt", "shell", "daemon",
+]
+authors = [
+    { name = "Aleksandr Shavykin", email = "0.delameter@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Console",
+    "Environment :: No Input/Output (Daemon)",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Terminals",
+]
+dependencies = [
+    "click~=8.1",
+    "psutil~=5.9",
+    "pytermor",
+    "python-daemon~=2.3",
+    "PyYAML==6.0",
+    "requests[socks]==2.28.1",
+    "python-Levenshtein==0.21",
+]
+
+# pip install pygobject-stubs --no-cache-dir --config-settings=config=Gtk3,Gdk3,Soup2
+[project.optional-dependencies]
+dev = [
+    "PyGObject-stubs==2.4.0",
+]
+gtk = [
+    "pycairo~=1.23",
+    "pygobject~=3.42",
+]
+
+[project.scripts]
+es7s = "es7s.cli.__main__:main"
+es7s-daemon = "es7s.d.__main__:main"
+es7s-indicators = "es7s.gtk.__main__:main"
+es7s-edit-image = "es7s.cli.__main__:edit_image"
+
+[project.urls]
+Homepage = "https://github.com/es7s/core"
+
+[project.package-data]
+es7s = "data/*"
+
+# ---------------------------------------------------------
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/es7s",
+    "/tests",
+]
+
+[tool.hatch.envs.default.scripts]
+version = "python -m es7s.cli -V"
+cli = "python -m es7s.cli"
+daemon = "python -m es7s.d"
+
+[tool.hatch.envs.test.scripts]
+test = "pytest tests"
+test-debug = "pytest tests -v --log-file-level=DEBUG --log-file=logs/testrun.log"
+cover = "coverage run -m pytest; coverage html"
+depends = "bash pydeps.sh es7s misc/depends LR"
+
+[tool.hatch.envs.dev.scripts]
+indic = "python -m es7s.gtk"
+profile-import = [
+    "for m in cli d gtk; do python -qX importtime -c 'import es7s.'$m'' 2>&1 | tail -1 ; done"
+]
+profile-import-tuna = [
+    "python -X importtime -m es7s.cli exec list-dir 2> import.log",
+    "tuna import.log"
+]
+profile-cli = [
+    "python -mcProfile -o cli.prof -m es7s.cli exec list-dir",
+    "tuna cli.prof"
+]
+
+[tool.hatch.envs.test]
+extra-dependencies = [
+    "coverage[toml]~=6.4",
+    "flake8~=5.0",
+    "pydeps~=1.10",
+    "pytest~=7.1",
+    "pytermor @ git+ssh://git@github.com/delameter/pytermor@dev"
+]  # @TEMP ^
+
+[tool.hatch.envs.build]
+extra-dependencies = [
+    "build~=0.8",
+    "setuptools~=65.3",
+    "twine~=4.0",
+    "pytermor @ git+ssh://git@github.com/delameter/pytermor@dev"
+]  # @TEMP ^
+
+[tool.hatch.envs.dev]
+extra-dependencies = [
+    "es7s[gtk]",
+    "es7s[dev]",
+    "line-profiler-pycharm~=1.1.0",
+    "pytermor @ file:///home/a.shavykin/dl/pytermor"
+]  # @TEMP ^
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+path = "es7s/_version.py"
+
+# ---------------------------------------------------------
+
+[flake8]
+max-line-length = 100
+extend-ignore = ["E203", "E227"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+
+[tool.pytest.ini_options]
+testpaths = [
+    "es7s",
+    "tests",
+]
+addopts = [
+    "-p", "no:doctest",
+    "--strict-config",
+    "--strict-markers",
+    "--maxfail", "5",
+]
+xfail_strict = true
+markers = [
+    "logger_params(**kwargs): logger params",
+    "io_params(**kwargs): io params",
+]
+
+# ---------------------------------------------------------
+
+[tool.coverage.run]
+source = ["es7s"]
+branch = true
+omit = [
+    "*/__init__.py",
+    "pytermor/__main__.py",
+]
+dynamic_context = "test_function"
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
+ignore_errors = true
+
+[tool.coverage.html]
+directory = "misc/coverage"
+title = "es7s coverage report"
+
+# ---------------------------------------------------------

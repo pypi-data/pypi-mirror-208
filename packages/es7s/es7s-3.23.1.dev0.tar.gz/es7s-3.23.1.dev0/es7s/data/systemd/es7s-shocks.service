@@ -1,0 +1,15 @@
+[Unit]
+Description=es7s/shocks
+Wants=network-online.target
+After=network.target network-online.target multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+RuntimeDirectory=es7s-shocks
+ExecStart=/home/%USER/.es7s/bin/shocks ${PORT} ${DEST} -i ${KEY}
+User=%UID
+Environment=/home/%USER/.es7s/shocks.env
+
+[Install]
+WantedBy=multi-user.target
