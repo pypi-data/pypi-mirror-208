@@ -1,0 +1,132 @@
+[build-system]
+requires = ["setuptools>=64.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pastas"
+dynamic = ["version"]
+description = "Pastas is an open-source Python framework for the analysis of groundwater time series."
+license = { file = "LICENSE" }
+readme = "README.rst"
+authors = [{ name = "Collenteur et al. 2019" }]
+maintainers = [
+    { name = "R.A. Collenteur", email = "raoulcollenteur@gmail.com" },
+    { name = "M. Bakker", email = "markbak@gmail.com" },
+    { name = "R. Calje", email = "r.calje@artesia-water.nl" },
+    { name = "F. Schaars", email = "f.schaars@artesia-water.nl" },
+    { name = "D.A. Brakenhoff", email = "d.brakenhoff@artesia-water.nl" },
+    { name = "O. Ebbens", email = "o.ebbens@artesia-water.nl" },
+    { name = "M.A. Vonk", email = "vonk.mart@gmail.com" },
+]
+requires-python = ">= 3.8"
+dependencies = [
+    "numpy >= 1.17, < 1.24",
+    "matplotlib >= 3.1",
+    "pandas >= 1.1",
+    "scipy >= 1.8",
+    "numba >= 0.51",
+]
+keywords = ["hydrology", "groundwater", "timeseries", "analysis"]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: Other Audience',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Topic :: Scientific/Engineering :: Hydrology',
+]
+
+[project.urls]
+homepage = "https://pastas.dev"
+repository = "https://github.com/pastas/pastas"
+documentation = "https://pastas.readthedocs.io/en/latest/"
+
+[project.optional-dependencies]
+solvers = ["lmfit >= 1.0.0"]
+latexify = ["latexify-py"]
+full = ["pastas[latexify,solvers]"]
+formatting = ["isort", "black[jupyter]"]
+linting = ["flake8"]
+pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
+ci = [
+    "pastas[pytesting,solvers]",
+    "jupyter",
+    "coverage",
+    "corner",
+    "emcee",
+    "tqdm",
+]
+rtd = [
+    "pastas[solvers]",
+    "nbsphinx",
+    "Ipython",
+    "ipykernel",
+    "pydata-sphinx-theme",
+    "sphinx>=3.1, <6.0",
+    "sphinxcontrib-bibtex",
+    "requests",
+    "numpydoc",
+    "sphinx-design",
+]
+dev = ["tox", "pastas[formatting,linting,ci,rtd]"]
+numbascipy = ["numba-scipy >= 0.3.1"]
+
+[tool.setuptools.dynamic]
+version = { attr = "pastas.version.__version__" }
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --durations=0"
+markers = ["notebooks: run notebooks", "bnotebooks: run benchmark notebooks"]
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    requires = tox>=4
+    env_list = format, lint, notebooks, py{38,39,310,311}
+
+    [testenv]
+    description = run unit tests
+    extras = ci
+    commands =
+            pytest tests -m "not notebooks" -m "not bnotebooks"
+
+    [testenv:all]
+    description = run all unit tests (including Notebooks) and obtain coverage
+    extras = ci
+    commands =
+            coverage run -m pytest tests -m "not bnotebooks"
+            coverage xml
+
+    [testenv:notebooks]
+    description = run the benchmark notebooks
+    extras = ci
+    commands =
+            pytest tests -m "bnotebooks"
+
+    [testenv:format]
+    description = run formatters
+    basepython = python3.9
+    extras = formatting
+    commands =
+            black pastas --check --diff
+            isort pastas --diff --profile=black
+
+    [testenv:lint]
+    description = run linters
+    basepython = python3.9
+    extras = linting
+    commands =
+            flake8 pastas --count --show-source --exit-zero --max-line-length=88 --ignore=E203,W503,W504
+            flake8 pastas --count --exit-zero --max-line-length=88 --statistics --ignore=E203,W503,W504
+
+"""
