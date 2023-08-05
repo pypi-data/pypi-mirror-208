@@ -1,0 +1,543 @@
+{
+  "version": "1.0",
+  "status": "OK",
+  "ts": "2023-04-25T17:23:12.844Z",
+  "eltype": "parseql",
+  "statement": [
+    {
+      "pos": "0-507",
+      "ds": [
+        {
+          "pos": "0-507",
+          "type": "root",
+          "subType": "inline",
+          "out": {
+            "exprs": [
+              {
+                "pos": "7-34",
+                "exprs": [
+                  {
+                    "value": "'E='",
+                    "eltype": "const"
+                  },
+                  {
+                    "pos": "13-3",
+                    "refatt": "eid",
+                    "fullref": "eid",
+                    "dboref": "C1",
+                    "eltype": "attr"
+                  },
+                  {
+                    "value": "', '",
+                    "eltype": "const"
+                  },
+                  {
+                    "pos": "24-8",
+                    "refatt": "fullname",
+                    "refds": "empm",
+                    "fullref": "empm.fullname",
+                    "attref": "115-24",
+                    "eltype": "attr"
+                  }
+                ],
+                "alias": "empentry",
+                "type": "CONCAT",
+                "eltype": "op"
+              },
+              {
+                "pos": "50-19",
+                "alias": "sofar22",
+                "type": "agg",
+                "name": "SUM",
+                "exprs": [
+                  {
+                    "pos": "54-6",
+                    "refatt": "payout",
+                    "fullref": "payout",
+                    "dboref": "C2",
+                    "eltype": "attr"
+                  }
+                ],
+                "eltype": "func"
+              }
+            ],
+            "eltype": "out"
+          },
+          "in": {
+            "exprs": [
+              {
+                "pos": "80-2",
+                "type": "table",
+                "subType": "physical",
+                "refds": "sf",
+                "fullref": "sf",
+                "eltype": "ds"
+              },
+              {
+                "type": "outer",
+                "subType": "left",
+                "definedAs": "explicit",
+                "ds": {
+                  "pos": "98-258",
+                  "alias": "empm",
+                  "type": "table",
+                  "subType": "inline",
+                  "out": {
+                    "exprs": [
+                      {
+                        "pos": "115-24",
+                        "exprs": [
+                          {
+                            "pos": "115-5",
+                            "refatt": "fname",
+                            "refds": "hr",
+                            "refdb": "dbnm",
+                            "refsch": "schemaname",
+                            "fullref": "dbnm.schemaname.hr.fname",
+                            "dboref": "C5",
+                            "eltype": "attr"
+                          },
+                          {
+                            "pos": "122-5",
+                            "refatt": "lname",
+                            "fullref": "lname",
+                            "dboref": "C6",
+                            "eltype": "attr"
+                          }
+                        ],
+                        "alias": "fullname",
+                        "type": "CONCAT",
+                        "eltype": "op"
+                      }
+                    ],
+                    "eltype": "out"
+                  },
+                  "in": {
+                    "exprs": [
+                      {
+                        "pos": "159-22",
+                        "alias": "hr1",
+                        "type": "table",
+                        "subType": "physical",
+                        "refdb": "dbnm",
+                        "refds": "hr",
+                        "refsch": "schemaname",
+                        "fullref": "dbnm.schemaname.hr",
+                        "eltype": "ds"
+                      },
+                      {
+                        "pos": "197-23",
+                        "alias": "hr2",
+                        "type": "table",
+                        "subType": "physical",
+                        "refdb": "dbnm",
+                        "refds": "crm",
+                        "refsch": "schemaname",
+                        "fullref": "dbnm.schemaname.crm",
+                        "eltype": "ds"
+                      }
+                    ],
+                    "eltype": "in"
+                  },
+                  "filter": [
+                    {
+                      "type": "regular",
+                      "op": {
+                        "pos": "237-104",
+                        "exprs": [
+                          {
+                            "pos": "237-21",
+                            "exprs": [
+                              {
+                                "pos": "237-7",
+                                "refatt": "ind",
+                                "refds": "hr2",
+                                "fullref": "hr2.ind",
+                                "dboref": "C7",
+                                "eltype": "attr"
+                              },
+                              {
+                                "value": "'%Male%'",
+                                "eltype": "const"
+                              }
+                            ],
+                            "type": "LIKE",
+                            "eltype": "op"
+                          },
+                          {
+                            "pos": "275-66",
+                            "exprs": [
+                              {
+                                "pos": "275-1",
+                                "exprs": [
+                                  {
+                                    "value": "'mr '",
+                                    "eltype": "const"
+                                  },
+                                  {
+                                    "pos": "282-9",
+                                    "refatt": "fname",
+                                    "refds": "hr1",
+                                    "fullref": "hr1.fname",
+                                    "eltype": "attr"
+                                  },
+                                  {
+                                    "value": "' '",
+                                    "eltype": "const"
+                                  },
+                                  {
+                                    "pos": "298-5",
+                                    "refatt": "lname",
+                                    "fullref": "lname",
+                                    "eltype": "attr"
+                                  }
+                                ],
+                                "type": "CONCAT",
+                                "eltype": "op"
+                              },
+                              {
+                                "pos": "306-35",
+                                "type": "string_binary",
+                                "name": "LOWER",
+                                "exprs": [
+                                  {
+                                    "pos": "312-28",
+                                    "exprs": [
+                                      {
+                                        "pos": "312-9",
+                                        "refatt": "title",
+                                        "refds": "hr2",
+                                        "fullref": "hr2.title",
+                                        "dboref": "C8",
+                                        "eltype": "attr"
+                                      },
+                                      {
+                                        "value": "' '",
+                                        "eltype": "const"
+                                      },
+                                      {
+                                        "pos": "328-12",
+                                        "refatt": "fullname",
+                                        "refds": "hr2",
+                                        "fullref": "hr2.fullname",
+                                        "dboref": "C9",
+                                        "eltype": "attr"
+                                      }
+                                    ],
+                                    "type": "CONCAT",
+                                    "eltype": "op"
+                                  }
+                                ],
+                                "eltype": "func"
+                              }
+                            ],
+                            "type": "EQ",
+                            "eltype": "op"
+                          }
+                        ],
+                        "type": "AND",
+                        "eltype": "op"
+                      },
+                      "eltype": "filter"
+                    }
+                  ],
+                  "eltype": "ds"
+                },
+                "op": {
+                  "pos": "365-40",
+                  "exprs": [
+                    {
+                      "pos": "365-22",
+                      "exprs": [
+                        {
+                          "pos": "365-3",
+                          "refatt": "enm",
+                          "fullref": "enm",
+                          "dboref": "C3",
+                          "eltype": "attr"
+                        },
+                        {
+                          "pos": "369-18",
+                          "exprs": [
+                            {
+                              "value": "'['",
+                              "eltype": "const"
+                            },
+                            {
+                              "pos": "374-8",
+                              "refatt": "fullname",
+                              "refds": "empm",
+                              "fullref": "empm.fullname",
+                              "attref": "115-24",
+                              "eltype": "attr"
+                            },
+                            {
+                              "value": "']'",
+                              "eltype": "const"
+                            }
+                          ],
+                          "type": "CONCAT",
+                          "eltype": "op"
+                        }
+                      ],
+                      "type": "EQ",
+                      "eltype": "op"
+                    },
+                    {
+                      "pos": "398-7",
+                      "exprs": [
+                        {
+                          "pos": "398-2",
+                          "refatt": "yr",
+                          "fullref": "yr",
+                          "dboref": "C4",
+                          "eltype": "attr"
+                        },
+                        {
+                          "value": 2022,
+                          "eltype": "const"
+                        }
+                      ],
+                      "type": "EQ",
+                      "eltype": "op"
+                    }
+                  ],
+                  "type": "AND",
+                  "eltype": "op"
+                },
+                "eltype": "join"
+              }
+            ],
+            "eltype": "in"
+          },
+          "filter": [
+            {
+              "type": "regular",
+              "op": {
+                "pos": "415-15",
+                "exprs": [
+                  {
+                    "pos": "415-4",
+                    "refatt": "dept",
+                    "fullref": "dept",
+                    "dboref": "C10",
+                    "eltype": "attr"
+                  },
+                  {
+                    "value": "'basement'",
+                    "eltype": "const"
+                  }
+                ],
+                "type": "EQ",
+                "eltype": "op"
+              },
+              "eltype": "filter"
+            }
+          ],
+          "agg": {
+            "type": "regular",
+            "exprs": [
+              {
+                "pos": "444-8",
+                "refatt": "fullname",
+                "refds": "empm",
+                "fullref": "empm.fullname",
+                "attref": "115-24",
+                "eltype": "attr"
+              },
+              {
+                "pos": "454-3",
+                "refatt": "eid",
+                "fullref": "eid",
+                "eltype": "attr"
+              }
+            ],
+            "filter": [
+              {
+                "type": "regular",
+                "op": {
+                  "pos": "468-12",
+                  "exprs": [
+                    {
+                      "pos": "468-8",
+                      "type": "agg",
+                      "name": "COUNT",
+                      "exprs": [
+                        {
+                          "value": 9,
+                          "eltype": "const"
+                        }
+                      ],
+                      "eltype": "func"
+                    },
+                    {
+                      "value": 10,
+                      "eltype": "const"
+                    }
+                  ],
+                  "type": "GTE",
+                  "eltype": "op"
+                },
+                "eltype": "filter"
+              }
+            ],
+            "eltype": "agg"
+          },
+          "sort": {
+            "exprs": [
+              {
+                "pos": "492-7",
+                "direction": "desc",
+                "refatt": "sofar22",
+                "fullref": "sofar22",
+                "attref": "50-19",
+                "eltype": "attr"
+              },
+              {
+                "direction": "asc",
+                "refoutidx": "1",
+                "eltype": "attr"
+              }
+            ],
+            "eltype": "sort"
+          },
+          "eltype": "ds"
+        }
+      ],
+      "antiPatterns": [
+        {
+          "type": "AP_18",
+          "pos": [
+            "506-1"
+          ],
+          "eltype": "antiPattern"
+        },
+        {
+          "type": "AP_11",
+          "pos": [
+            "54-6",
+            "122-5",
+            "298-5",
+            "365-3",
+            "398-2",
+            "415-4",
+            "454-3"
+          ],
+          "eltype": "antiPattern"
+        }
+      ],
+      "rawInput": "SELECT 'E='||eid||', '||fullname empentry\t\n      ,SUM(payout) sofar22\t\n\t\n  FROM sf\t\n  LEFT\t\n  JOIN(\t\n       SELECT fname||lname as fullname\t\n\t\n\t\n         FROM dbnm.schemaname.hr hr1\t\n             ,dbnm.schemaname.crm hr2\t\n        WHERE  hr2.ind LIKE '%Male%'\n\t\n          AND 'mr '||hr1.fname||' '||lname = lower(hr2.title||' '||hr2.fullname)\t\n\t\n      )empm\t\n    ON enm='['||fullname||']'\t\n\t\n   AND yr=2022\n\t\n WHERE dept='basement'\t\n\t\n GROUP BY fullname, eid\t\n\t\nHAVING COUNT(9)>=10\t\n ORDER BY sofar22 desc, 1",
+      "eltype": "statement"
+    }
+  ],
+  "xml": "<?xml version='1.0' encoding='UTF-8'?>\n<parSeQL version=\"1.0\" status=\"OK\" ts=\"2023-04-25T17:23:12.844Z\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"https://flowhigh.sonra.io/flowhigh_v1.0.xsd\">\n  <statements>\n    <statement pos=\"0-507\">\n      <ds pos=\"0-507\" type=\"root\" subType=\"inline\">\n        <out>\n          <op pos=\"7-34\" alias=\"empentry\" type=\"CONCAT\">\n            <const>'E='</const>\n            <attr pos=\"13-3\" refatt=\"eid\" fullref=\"eid\" dboref=\"C1\"/>\n            <const>', '</const>\n            <attr pos=\"24-8\" refatt=\"fullname\" refds=\"empm\" fullref=\"empm.fullname\" attref=\"115-24\"/>\n          </op>\n          <func pos=\"50-19\" alias=\"sofar22\" type=\"agg\" name=\"SUM\">\n            <attr pos=\"54-6\" refatt=\"payout\" fullref=\"payout\" dboref=\"C2\"/>\n          </func>\n        </out>\n        <in>\n          <ds pos=\"80-2\" type=\"table\" subType=\"physical\" refds=\"sf\" fullref=\"sf\"/>\n          <join type=\"outer\" subType=\"left\" definedAs=\"explicit\">\n            <ds pos=\"98-258\" alias=\"empm\" type=\"table\" subType=\"inline\">\n              <out>\n                <op pos=\"115-24\" alias=\"fullname\" type=\"CONCAT\">\n                  <attr pos=\"115-5\" refatt=\"fname\" refds=\"hr\" refdb=\"dbnm\" refsch=\"schemaname\" fullref=\"dbnm.schemaname.hr.fname\" dboref=\"C5\"/>\n                  <attr pos=\"122-5\" refatt=\"lname\" fullref=\"lname\" dboref=\"C6\"/>\n                </op>\n              </out>\n              <in>\n                <ds pos=\"159-22\" alias=\"hr1\" type=\"table\" subType=\"physical\" refdb=\"dbnm\" refds=\"hr\" refsch=\"schemaname\" fullref=\"dbnm.schemaname.hr\"/>\n                <ds pos=\"197-23\" alias=\"hr2\" type=\"table\" subType=\"physical\" refdb=\"dbnm\" refds=\"crm\" refsch=\"schemaname\" fullref=\"dbnm.schemaname.crm\"/>\n              </in>\n              <filter type=\"regular\">\n                <op pos=\"237-104\" type=\"AND\">\n                  <op pos=\"237-21\" type=\"LIKE\">\n                    <attr pos=\"237-7\" refatt=\"ind\" refds=\"hr2\" fullref=\"hr2.ind\" dboref=\"C7\"/>\n                    <const>'%Male%'</const>\n                  </op>\n                  <op pos=\"275-66\" type=\"EQ\">\n                    <op pos=\"275-1\" type=\"CONCAT\">\n                      <const>'mr '</const>\n                      <attr pos=\"282-9\" refatt=\"fname\" refds=\"hr1\" fullref=\"hr1.fname\"/>\n                      <const>' '</const>\n                      <attr pos=\"298-5\" refatt=\"lname\" fullref=\"lname\"/>\n                    </op>\n                    <func pos=\"306-35\" type=\"string_binary\" name=\"LOWER\">\n                      <op pos=\"312-28\" type=\"CONCAT\">\n                        <attr pos=\"312-9\" refatt=\"title\" refds=\"hr2\" fullref=\"hr2.title\" dboref=\"C8\"/>\n                        <const>' '</const>\n                        <attr pos=\"328-12\" refatt=\"fullname\" refds=\"hr2\" fullref=\"hr2.fullname\" dboref=\"C9\"/>\n                      </op>\n                    </func>\n                  </op>\n                </op>\n              </filter>\n            </ds>\n            <op pos=\"365-40\" type=\"AND\">\n              <op pos=\"365-22\" type=\"EQ\">\n                <attr pos=\"365-3\" refatt=\"enm\" fullref=\"enm\" dboref=\"C3\"/>\n                <op pos=\"369-18\" type=\"CONCAT\">\n                  <const>'['</const>\n                  <attr pos=\"374-8\" refatt=\"fullname\" refds=\"empm\" fullref=\"empm.fullname\" attref=\"115-24\"/>\n                  <const>']'</const>\n                </op>\n              </op>\n              <op pos=\"398-7\" type=\"EQ\">\n                <attr pos=\"398-2\" refatt=\"yr\" fullref=\"yr\" dboref=\"C4\"/>\n                <const>2022</const>\n              </op>\n            </op>\n          </join>\n        </in>\n        <filter type=\"regular\">\n          <op pos=\"415-15\" type=\"EQ\">\n            <attr pos=\"415-4\" refatt=\"dept\" fullref=\"dept\" dboref=\"C10\"/>\n            <const>'basement'</const>\n          </op>\n        </filter>\n        <agg type=\"regular\">\n          <attr pos=\"444-8\" refatt=\"fullname\" refds=\"empm\" fullref=\"empm.fullname\" attref=\"115-24\"/>\n          <attr pos=\"454-3\" refatt=\"eid\" fullref=\"eid\"/>\n          <filter type=\"regular\">\n            <op pos=\"468-12\" type=\"GTE\">\n              <func pos=\"468-8\" type=\"agg\" name=\"COUNT\">\n                <const>9</const>\n              </func>\n              <const>10</const>\n            </op>\n          </filter>\n        </agg>\n        <sort>\n          <attr pos=\"492-7\" direction=\"desc\" refatt=\"sofar22\" fullref=\"sofar22\" attref=\"50-19\"/>\n          <attr direction=\"asc\" refoutidx=\"1\"/>\n        </sort>\n      </ds>\n      <antiPatterns type=\"AP_18\">\n        <pos>506-1</pos>\n      </antiPatterns>\n      <antiPatterns type=\"AP_11\">\n        <pos>54-6</pos>\n        <pos>122-5</pos>\n        <pos>298-5</pos>\n        <pos>365-3</pos>\n        <pos>398-2</pos>\n        <pos>415-4</pos>\n        <pos>454-3</pos>\n      </antiPatterns>\n      <rawInput>SELECT 'E='||eid||', '||fullname empentry\t\n      ,SUM(payout) sofar22\t\n\t\n  FROM sf\t\n  LEFT\t\n  JOIN(\t\n       SELECT fname||lname as fullname\t\n\t\n\t\n         FROM dbnm.schemaname.hr hr1\t\n             ,dbnm.schemaname.crm hr2\t\n        WHERE  hr2.ind LIKE '%Male%'\n\t\n          AND 'mr '||hr1.fname||' '||lname = lower(hr2.title||' '||hr2.fullname)\t\n\t\n      )empm\t\n    ON enm='['||fullname||']'\t\n\t\n   AND yr=2022\n\t\n WHERE dept='basement'\t\n\t\n GROUP BY fullname, eid\t\n\t\nHAVING COUNT(9)>=10\t\n ORDER BY sofar22 desc, 1</rawInput>\n    </statement>\n  </statements>\n  <DBOHier>\n    <dbo oid=\"C1\" type=\"COLUMN\" name=\"eid\"/>\n    <dbo oid=\"C2\" type=\"COLUMN\" name=\"payout\"/>\n    <dbo oid=\"T1\" type=\"TABLE\" name=\"sf\"/>\n    <dbo oid=\"C3\" type=\"COLUMN\" name=\"enm\"/>\n    <dbo oid=\"C4\" type=\"COLUMN\" name=\"yr\"/>\n    <dbo oid=\"T2\" type=\"TABLE\" name=\"empm\"/>\n    <dbo oid=\"D1\" type=\"DB\" name=\"dbnm\">\n      <dbo oid=\"S1\" type=\"SCHEMA\" name=\"schemaname\">\n        <dbo oid=\"T3\" type=\"TABLE\" name=\"hr\">\n          <dbo oid=\"C5\" type=\"COLUMN\" name=\"fname\"/>\n        </dbo>\n        <dbo oid=\"T4\" type=\"TABLE\" name=\"crm\">\n          <dbo oid=\"C7\" type=\"COLUMN\" name=\"ind\"/>\n          <dbo oid=\"C8\" type=\"COLUMN\" name=\"title\"/>\n          <dbo oid=\"C9\" type=\"COLUMN\" name=\"fullname\"/>\n        </dbo>\n      </dbo>\n    </dbo>\n    <dbo oid=\"C6\" type=\"COLUMN\" name=\"lname\"/>\n    <dbo oid=\"C10\" type=\"COLUMN\" name=\"dept\"/>\n  </DBOHier>\n</parSeQL>\n",
+  "DBOHier": {
+    "dbo": [
+      {
+        "oid": "C1",
+        "type": "COLUMN",
+        "name": "eid",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "C2",
+        "type": "COLUMN",
+        "name": "payout",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "T1",
+        "type": "TABLE",
+        "name": "sf",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "C3",
+        "type": "COLUMN",
+        "name": "enm",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "C4",
+        "type": "COLUMN",
+        "name": "yr",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "T2",
+        "type": "TABLE",
+        "name": "empm",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "D1",
+        "type": "DB",
+        "name": "dbnm",
+        "dbo": [
+          {
+            "oid": "S1",
+            "type": "SCHEMA",
+            "name": "schemaname",
+            "dbo": [
+              {
+                "oid": "T3",
+                "type": "TABLE",
+                "name": "hr",
+                "dbo": [
+                  {
+                    "oid": "C5",
+                    "type": "COLUMN",
+                    "name": "fname",
+                    "eltype": "dBO"
+                  }
+                ],
+                "eltype": "dBO"
+              },
+              {
+                "oid": "T4",
+                "type": "TABLE",
+                "name": "crm",
+                "dbo": [
+                  {
+                    "oid": "C7",
+                    "type": "COLUMN",
+                    "name": "ind",
+                    "eltype": "dBO"
+                  },
+                  {
+                    "oid": "C8",
+                    "type": "COLUMN",
+                    "name": "title",
+                    "eltype": "dBO"
+                  },
+                  {
+                    "oid": "C9",
+                    "type": "COLUMN",
+                    "name": "fullname",
+                    "eltype": "dBO"
+                  }
+                ],
+                "eltype": "dBO"
+              }
+            ],
+            "eltype": "dBO"
+          }
+        ],
+        "eltype": "dBO"
+      },
+      {
+        "oid": "C6",
+        "type": "COLUMN",
+        "name": "lname",
+        "eltype": "dBO"
+      },
+      {
+        "oid": "C10",
+        "type": "COLUMN",
+        "name": "dept",
+        "eltype": "dBO"
+      }
+    ],
+    "eltype": "dBOHier"
+  }
+}
