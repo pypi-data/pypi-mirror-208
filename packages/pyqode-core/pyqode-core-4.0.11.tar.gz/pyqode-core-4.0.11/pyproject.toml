@@ -1,0 +1,26 @@
+[build-system]
+requires = ["flit_core >=3.4"]
+build-backend = "flit_core.buildapi"
+[project]
+name = "pyqode-core"
+authors = [
+    {name = "Colin Duquesnoy", email = "colin.duquesnoy@gmail.com"},
+    {name = "Sebastiaan Mathôt", email = "s.mathot@cogsci.nl"}
+]
+readme = "README.rst"
+license = {file = "LICENSE"}
+requires-python = ">=3.7"
+dynamic = ["version", "description"]
+dependencies = [
+    "future",
+    "qtawesome",
+    "pathspec"
+]
+keywords = ["CodeEdit", "PyQt", "editor", "widget", "qt"]
+[tool.flit.sdist]
+exclude = ["test", "examples", "forms"]
+[tool.flit.module]
+name = "pyqode.core"
+[project.urls]
+Documentation = "https://github.com/open-cogsci/pyqode.core"
+Source = "https://github.com/open-cogsci/pyqode.core"
