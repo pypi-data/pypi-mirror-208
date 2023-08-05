@@ -1,0 +1,12 @@
+[Unit]
+Description = Devstack a10-health-manager.service
+
+[Service]
+ExecReload = /bin/kill -HUP $MAINPID
+TimeoutStopSec = 300
+KillMode = process
+ExecStart = /usr/local/bin/a10-health-manager  --config-dir=/etc/octavia/ --config-file=/etc/a10/a10-octavia.conf
+User = %user%
+
+[Install]
+WantedBy = multi-user.target

@@ -1,0 +1,1677 @@
+CHANGES
+=======
+
+v2.2.0
+------
+
+* a10-octavia v2.2 Release
+* [STACK-3648] Add use\_subnet\_ipv6\_addresses\_only option
+* [STACK-3648] Multiple Subnet Network Support
+* [STACK-3647] Batch Member Update Regression
+* [STACK-3646] NATv6 pool address reservation
+* Fixed rack flow LB creation issue
+* [STACK-3640] ACOS interface use port IPv6 address
+* [STACK-3640] ACOS interface use port IPv6 address
+* [STACK-3637][STACK-3639] vthunder IPv6 interface and address issues
+* [STACK-3637][STACK-3639] vthunder IPv6 interface and address issues
+* [STACK-3636] Failed with IPv6 network in amp\_boot\_network\_list
+* [STACK-3636] Failed with IPv6 network in amp\_boot\_network\_list
+* Fixed issue with IPV4 LB
+* [STACK-3636] Failed with IPv6 network in amp\_boot\_network\_list
+* [STACK-3635] Create ipv4 LB failed without ipv6\_subnet\_list option
+* Fixed UTs
+* Resolved the issue of static vrid\_floating\_ip configuration
+* Incorporated review comments
+* Resolved flake8 issues
+* Fixed VRID and Interface related issues
+* Raised exception if ipv6 address not found in config file
+* Fixed UTs of ListenerUpdateForPool task
+* Handled proxy protocol aflex deletion on pool deletion
+* Reversed flag values after checking acos-client default flag value
+* Resolved issue of aflex deletion on pool deletion
+* Added check for vthunder to fix the issue
+* Resolved Atoms with duplicate name issue
+* Removed unwanted import
+* Removed an unnecesary code block
+* Resolved merge conflicts
+* Resoled merge conflicts
+* Incorporated review comments and refactored get\_patched\_ip\_address()
+* Fixed unit tests and flake8 issues
+* Incorporated review comments
+* Fixed minor issues
+* Added support IPv6 static addressing
+* Added missing patch by adding required try-except blocks
+* Added support for IPv6 nat pool
+* Added support for creating IPV6 loadbalancer and fixed VRID issues
+* Modified GetSSLCertData() and ClientSSLTemplateUpdate() by adding acos-version check for using correct attributes for get calls
+* Incorporated a review comment
+* Added a check for vthunder.compute\_id is not None testcase
+* Removed pending resource cleanup logic for vThunder flows
+* Added a check for None vThunder entry
+* Prevent resources into pending state
+* Fix unit-test errors
+* Fixed a pep8 issue
+* delete LB failed when port is not exist
+* Incorporated review comments
+* Fixed an issue of pending-create l7policy's deletion from acos side
+* Implemented DB query to fetch pending LBs which need to be deleted
+* Added delete\_load\_balancer flow specific to kusekeeper
+* Added support for pending resource cleanup config options and created thread for that activity
+* Incorporated review comments
+* Incorporated review commnets
+* Fixed TERMINATED\_HTTPS listener update and delete issues
+* [STACK-3392] Fix listener update SSL failed
+* [STACK-3392] Fix listener update SSL failed
+* [STACK-3377] Fix listener update SSL failed
+
+v2.1.0
+------
+
+* Change a10-octavia as v2.1
+* [STACK-3375] Fix health monitor missing
+* [STACK-3375] Fix health monitor missing
+* [STACK-3375] Fix health monitor missing
+* [STACK-3375] Fix health monitor missing
+* [STACK-3372] Fix cascade delete failed with multiple listeners
+* [STACK-3372] Fix cascade delete failed with multiple listeners
+* [STACK-3365] add default valuss for post\_data option
+* [STACK-3363] Fix vthunder flow fully populated mulitple vport failed issue
+* [STACK-3363] Fix vthunder flow fully populated mulitple vport failed issue
+* [STACK-3247] Proxy Protocol Support[STACK-3247] Proxy Protocol Support
+* [STACK-3247] Proxy Protocol Support
+* [STACK-3247] Proxy Protocol Support
+* [STACK-3250] Fully Populated Loadbalancer Create
+* [STACK-3250] Fully Populated Loadbalancer Create
+* [STACK-3250] Fully Populated Loadbalancer Create
+* [STACK-3250] Fully Populated Loadbalancer Create
+* [STACK-3250] Fully Populated Loadbalancer Create
+* [STACK-3171] Health Monitor on target server ports
+* return 0 if no subnet\_id supplied to member
+* [STACK-3242] Fix a10-octavia failed with IPv6 subnet in network
+
+v2.0.0b1
+--------
+
+* Update README.md
+* Update README.md
+
+v2.0.0
+------
+
+* Update README.md
+* Fixed an issue of not deleting nat-pool ports on cascade deletion of LB
+* Turned new member ids into a set to avoid potential duplicate calls
+* Added status resetting for listener. Add batch delete of new members
+* Removed iterative pool and lb active update as each member has the same lb and pool
+* Corrected various syntax issues in the codebase
+* Corrected issue with list extension and refactored warning messages
+* Revised batch member duplicate error message
+* Refactored batch collision detection to limit database requests
+* Added logic to break loadbalancer, pool, and member out of pending state when duplicates are found
+* Added exception for duplicate entries in batch update
+* Update glm flavor logic to get use-network-dns option
+* Revised dns logic so that it does not log for network dns if it isn't actually being used
+* Removed config specific error message. Added test for burst being enabled
+* Added test harness for config dependent error message
+* Added a modified version of the provider vlan script that does not use dnsmasq. This allows vthunder Openstack instances to be leased IPs that line up with the Neutron port definitions
+* Improved error handling to better report encountered issues and resolve unintended reverts
+* Added support for handle\_vrid config option
+* Added a pep8 fix
+* Added required checks for subnet\_id
+* Incorporated the review comment
+* Modified unittests as per the code changes
+* Created and Raised exception when mgmt\_net is not configured
+* [STACK-3115] Enable Interface for spare vthunder
+* [STACK-3113] Fix interface lost when failover master vthunder
+* Fixed issue where subnet key was not used in lookup of neutron reply
+* Added MEMBER\_LIST to CalculateDelta task in delete\_pool\_flow
+* [STACK-3091] Enlarge default failover timeout
+* Revert "Merge branch 'feature/batch\_update\_members\_victoria' of https://github.com/a10networks/a10-octavia into feature/batch\_update\_members\_victoria"
+* Modified the code to fix issues related to interface attachment during member\_batch\_update
+* Added support for member\_batch\_update for vthunder flows
+* [STACK-3022] Set LBs to ERROR when failover failed
+* Modified member\_batch\_update() API to support victoria
+* Ported member\_batch\_update code for victoria for rack\_flows
+* Updated code for removing existing persistence template
+* Incorporated review comments
+* prevent conflict with PR#540
+* changed config option stats\_update\_thread to stats\_update\_threads
+* [STACK-2944] Remove the logic to prevent failover on paused vThunder
+* Fixed the doc strings for the delete HM task
+* Added unit tests for db and vthunder tasks
+* Integrated delete health monitor task in delete rack lb flow
+* [STACK-3007] Prevent failover on pending state vthunder
+* change type from bool to boolean in flavor\_schema
+* Added glm tasks directly to create amp flow to ensure tasks are ignored by decider
+* [STACK-2999] add task name with subflow name
+* updated the default time for stat\_cleanup\_interval
+* removed code as deletion of listener stats is handled by housekeeper service
+* Updated code for repo change
+* Updated code for periodically clean stats table
+* Used existing get\_all\_vthunder\_by\_address for fetching vthunders
+* Added tests for scenario where lb network id is added to compute
+* Stripped unused uuid gen import
+* Ensured that mgmt net is always first. Added test harness for compute create net id scenarios
+* Added new vthunder repo method to fetch vthunder data for listener statistics
+* [STACK-2941] Prevent create LB in booting spare vthunder
+* Updated name of glm proxy server flavor schema attribute to better identify it is a glm property
+* Updated hostname test to account for changes hostname setting
+* Revised logic to merge network ids for addition to compute. Fixed issue with choosing to use mgmt port
+* Put hostname configuration step into a seperate vthunder task
+* Modified Proxy build configuration to keep consistency
+* Not all exceptions have a message attribute though all do have a string magic method
+* Removed options top keep in sync with AXAPI. Updated tests to match changes
+* Removed defaults and fixed bug with flexpool token in config
+* updated flavor schema and added new build configuration method
+* Fixed issue where iteration was attempted on flavor when it eval'd to None
+* Added flavors for ActivateFlexpoolLicense to vthunder flow
+* Added logic for use\_network\_dns. Added helper function for building config with conf options and flavors
+* Added extra options to glm flavors and schema
+* Added unit tests for edge cases - proxy-server
+* Changed the proxy-server method access pattern
+* Added forward server configuration to flavor schema
+* Added forward proxy server configuration task
+* Wrapped AXAPI calls in try-except to add extra log message
+* Corrected flake8 issues
+* Added tests for RevokeFlexpoolLicense task and revert methods
+* Added dns revert unit tests
+* Added ActivateFLexpoolLicnese tests for base cases
+* Corrected mgmt network logic in ActivateFlexpoolLicense task
+* Added configuration precedence tests and secondary exists failure test
+* Added exception for case where secondary dns without primary
+* Updated flavor schema for dns to match json syntax
+* Added network specific unit tests for dns task
+* Corrected mgmt net conf type and mgmt net logic for dns task
+* Added unit tests for use of glm config for dns task
+* Cleaned up return of get\_dns\_namserver helper method
+* Improved log messages for no subnet on network
+* Added dns network tests
+* Added GLM task unit test skeleton
+* Added warning for when vThunder doesn't exist
+* Modified config option var
+* Added task to revoke flexpool license via the device
+* Moved GetVThunderByLoadbalancer because rebind requires constants to be in store
+* Removed connectivity wait logic of virtual server and replaced with vthunder task
+* Added database script to delete amphora out of DB
+* Moved GetVThunderByLoadbalancer up the flow to allow usage of vThunder model
+* Updated flows to wait for vThunder connectivity when backup is building
+* Added handling for backup device to get\_vthunder\_for\_lb task
+* Added further flexpool licensing and features
+* Added handling for when amp\_license and amp\_mgmt networks are not defined in the config
+* Added revert method to DNSConfiguration task
+* Added DNS flavor options
+* Added skeleton of DNS configuration task for GLM integration
+* Addede distinct license and mgmt network options
+* Added GLM dns and proxy options
+* Fixed missing dependency error
+* [STACK-2920] Prevent failover process hardware thunder
+* [STACK-2944] Fix failover for paused vthunder
+* updated the unit test case
+* Fomatted files according to pep8 conventions
+* Added health monitor configuration for rack flow
+* Updated the review comments
+* Added health manager configuration task for SINGLE topology
+* Updated the unit testcase names
+* Added unit test cases
+* Update a10-octavia-devstack-victoria.sh
+* Create a10-octavia-devstack-victoria.sh
+* [STACK-2938][STACK-2939] Fix create loadbalancer from spare vthunder failed issue
+* Update README.md
+* update for review comments
+* [STACK-2933] device-name flavor failed in default\_flavor\_id option
+* Update for review comments
+* update for review comments
+* Fixed an issue when flavor with name-expression is used without --name parameter to slb objects and added a unittest
+* Incorporated review comments
+* Support for deleting lb when one node is shutdown in active-standy
+* Added a unittest
+* Modified unittest as per new code changes
+* Modified the flow to support default\_flavor\_id option cases without any issue
+* Created and raised FlavorNotFound exception when configured flavor is not found
+* Added default\_flavor\_id config option and making its database entry when used
+* Add unit-test scripts
+* [STACK-2794] shutdown health manager executor threads
+* Fix issues after merge to master and running in victoria branch
+* Raised exception if connection limit is out of bound
+* Removed the 0.0.0.0/0 from AAP on the basis of l2dsr flavor, l2dsr\_support and slb\_no\_snat\_support parameters values
+* updating allowed address pair while updating loadbalancer/member
+* prevent failover on paused amphora
+* fix tox error
+* create LB by spare vthunder with network plug
+* Trim the description length to 61 characters
+* fix get network list fail when compute is deleted
+* Used update\_dict for updating the member object with current values
+* Failover for VCS partial failure
+* Removed the extra blank line
+* code updated for loadbalancer statistics support
+* Update README.md
+* Get or create amphora for VCS failover
+* Resolved conflicts on merging master branch to experimental/victoria\_ff branch
+* Added code for loadbalancer statistics support
+* reslove conflict with master
+* build new amphora for failover
+* Added code for loadbalancer statictics
+* Update README.md
+* Removed unnecessary task and its unittests
+* Failover VCS role change
+* Modified UTs for new code changes
+* Refined member flows to support dynamic interface detection enhancement
+* Resolved interface deletion issue on member deletion by modifying CalculateAmphoraeDelta() task
+* a10\_octavia/controller/worker/tasks/a10\_network\_tasks.py
+* Modified GetVRIDForLoadbalancerResource() task to fix issue of vrid FIP deletion in active\_standby mode
+* Refined LB delete flow to support dynamic interface detection enhancement
+* failover for spare vthunder
+* Added check for using template\_client\_ssl in case of HTTPS listener only
+* Added a UT for unseting session persistence
+* COnverted pool.session\_persistence object into dictionary to support both set and create operation
+* Updated the pool object with current values specified on Openstack CLI
+* create LB by spare vthunder
+* Added a unit test for loadbalancer unset
+* Added a unit test for listener unset
+* Added required fixes to support loadbalancer and listener unset operation
+* [STACK-2694] vThunder Failover Support
+* Modified EnableInterface and VCSSyncWait tasks to support dynamic interface detection enhancement
+* Refined loadbalancer creation flow for dynamic interface detection enhancement
+* [STACK-2647] Fix use\_parent\_partition issue after migration
+* updated last\_write\_mem column after write\_memory
+* updated last\_write\_mem after write\_memory
+* Removed thunder\_busy\_exceptions() and raised those required exceptions directly in except block
+* fixed build error
+* Added required options for tenacity.retry()
+* Removed definition of wait\_for\_db\_entry() api
+* Removed call of  wait\_for\_db\_entry() api and used tenacity.retry() instead
+* updated code for victoria
+* Fixed travis issue
+* Added required fixes for Vthunder flow
+* Added a wait\_for\_db\_entry() api to check database entry every second
+* Fixed Unit Tests
+* Removed image\_id parameter as Victoria doesn't support it
+* Fixed issues encountered in SLB nouns after merging Master branch into Victoria branch
+* Add mandatory key check for name-expressions
+* refine exception message
+* [STACK-2099] add a10 driver missing APIs
+* fix pep8 error
+* update for comments
+* [STACK-2099]
+* fix alembic upgrade issue
+* Fix tox pep and py38 errors
+* Fix tox pep and py38 errors
+* replaced occurances of \_taskflow\_load with taskflow\_load
+* Changes added to use amphora v1 of worker
+* Fixed octavia lib imports according to newer version of octavia
+* Changed the octavia lib flows an tasks imports according the version 7.1.0
+* Updated requirements and install-a10-octavia script for victoria support
+* fix merge issue
+* fix merge issue
+* [STACK-2641]
+* Updated code by removing non required axapi call
+* deleting l7policies first in cascade deletion
+* update README and requirements
+* Updated code to support backward compatibility with vrid table
+* Added extra test case for multi-port update
+* Updated test cases
+* Added multi-port compatability with migrated neutron-lbaas servers
+* Added return when server name is not found
+* use upper case for version string
+* [STACK-2471][STACK-2472] Add VCS negotiate state check logic
+* [STACK-2601] remove cannot have project\_id attribute in device-name flavor devie limitation
+* Modified unittests as per new code changes
+* Modified owner of vrid table as ip+partition and handled delete cases for same subnet LBs and members on different partitions
+* update code for missing dependency for delete pool
+* update the code for missing dependency
+* Code update for pool count by ip on thunder
+* update code for pool count by ip in case of device\_flavor
+* update code for deleting vip by cascading delete when device\_flavor is used
+* Added backward compatibility for server name
+* [STACK-2572] remove AAP for L2DSR via configuration
+* refine code
+* also apply to update flow
+* also handle member delete case
+* prevent device flavor device project\_id check in delete flow
+* [STACK-2552] check topology only on amphora vthunder
+* updated code for not deleting 0.0.0.0/0 from aap if l2dsr parameter present in config
+* Corrected issue with testing for 13char in non-hmt scenarios
+* Added test harness for HandleACOSPartition changes
+* Wrapped show port in try-except incase deleted due to error state
+* Returned truncated partition name for saving in db
+* Moved HMT partition handling to partition task. Added backwards compatibility
+* [STACK-2488] device flavor use device and partition as owner
+* [STACK-2488] fix device flavor can not use global floating-ip config
+* added retry decorator in health monitor and listener
+* [STACK-2530] parameter missing in some flow
+* Modified syntax highlight
+* Corrected guide spelling
+* Updated the guide
+* Added network diagram to l2dsr guide
+* code update for dependency issue
+* update code for l2dsr\_support via config file
+* [STACK-2526] fix \_is\_rack\_flow for device flavor
+* fixed build error
+* Updated code for deleting vip ports and security groups in case of fixed\_subnets
+* [STACK-2517] check rack/vthunder via config file only
+* Added code for removing VIP from AAP in deallocate\_vip
+* update for comments
+* Modified unittests as per the latest code changes
+* Remove vip from allowed address pair
+* [STACK-2513] NatPoolCreate revert flow only delete pools it created
+* Modified taskflows to support the code changes for vthunder flows
+* Updated project\_id column of vrid table as owner
+* Update requirements.txt
+* Modified rack member flows and vrid realated tasks to support device-name instead of project\_id if device-flavor is used
+* updated the comment regarding lb\_subnet\_count
+* refine code format
+* update code for not removing interface while deleting error state lb
+* Update requirements.txt
+* undo requirement change
+* Update requirements.txt
+* change requirement
+* refine code format
+* Modified code for loadbalancer flows to use vthunder's device\_name instead of project\_id for vrid creation and deletion when device-flavor is used
+* change requirement back
+* keystone > 16.0.0
+* fix tox error
+* [STACK-2413] device-flavor only allow devices without project\_id
+* fix object paramter overwrite issue
+* fix lock never free issue
+* catch exceptions after ctx counter increased
+* [STACK-2356] get\_create\_load\_balancer\_flow get lb failed in revert flow
+* added missing argument in revert function
+* updated code for L2DSR flavor support
+* fix pep9
+* fix pep8 error
+* fix for review comments
+* [STACK-2375] optimize LB creation/deletion time
+* fixed over indented build error
+* Updated messages for flavor profile
+* fix for review comments
+* Added l2dsr flavor support
+* fix vthunder flow issues
+* fix pep8 error
+* [STACK-2399] fix set LB error
+* Removed the code for adding blade-param priority in VRID 1
+* Added support for L2DSR
+* fix pep8 error
+* fix pep8 error
+* Make sure ctx will decrease for any cases
+* Fixed revert for update vrid db and handle vrid flow
+* Modified HandleVRIDFloatingIP task to update vrid fip on getting vrid fip for parent partition when it's already present on another thunder's same parent partition
+* Fixed an issue for creating LB on hardware thunder with HMT option
+* fix travis error
+* [STACK-2356] a10-octavia retry too long
+* Update README.md
+* updated the code for vthunder flows
+* update for review comments
+* fixed merge conflict and build error
+* Added a minor change
+* Added code for checking existing\_fips while deleting VRID FIP
+* Incorporated a review comment to add vthunder check before session close in decorators
+* overwrittten unplugvip and unplug\_aap\_port for revert flow of PlugVIP
+* added method for fetching nat\_pool ip addresses list
+* [STACK-2370] ve did not create in some case
+* fixed build error
+* Added check for vthunder in GetMasterVThunder and VCSSyncWait tasks to fix an issue during ERROR LB deletion
+* updated the revert flow for removing vip port, security group and removing VIP ip address from AAP
+* revert un-reviewed commit
+* Fixing interface configuration issue for LB rack flows
+* device-flavor vlan issue fix
+* Incorporated review comment to add exception handling at get call
+* Modified unittests
+* Modified HandleVRIDFloatingIP call made in a10\_member\_flows as per the latest code
+* Added code for not mixing shared and l3v partition vrid floating IPs
+* added code for adding nat\_pool ip\_addresses in AAP
+* Incorporated review comments
+* [STACK-2374] configuration sync overwrite a10-octavia config
+* Modified get\_lb\_count\_by\_subnet() to include lbs in PENDING\_UPDATE state as well
+* Mofdified the member flow to call DeleteMemberInDB task after get\_delete\_member\_vrid\_subflow()
+* Fixed unittests
+* Checked amp\_boot\_networks before deleting port and sec group associated with them
+* fixed a pep8 issue
+* Fixed and added unittests
+* Rebased code as per updated feature branch
+* Added device-name flavor support for vrid\_floating\_ip through HandleVRIDFloatingIP task
+* fix indent
+* [STACK-2361] vThunder SLB Allow no SNAT
+* [STACK-2365] LB cascade delete error
+* add allowed\_address\_pair to interface port instead
+* [STACK-2335] vThunder flow L2DSR support
+* Reverted a change for resolving one issue for member interface detach
+* Shifted task DeleteMemberInDB after get\_delete\_member\_vrid\_subflow() to avoid member state issues
+* Fixed an issue of ValueError in \_remove\_allowed\_address\_pair\_from\_port() method
+* Added a method get\_lb\_excluding\_deleted() to get LB based on loadbalancer ID except DELETED one
+* Modified a task ValidateComputeForProject for not calling a get\_amphora() method with wrong compute\_id
+* Added auto-increment add/drop during migration
+* Fixed unit tests
+* Moved subnet get from database task to network task
+* Added code to remove vrid aap address from NIC ports
+* Fixed filtering issue
+* Modified tasks to use vrid uuid instead of integer id
+* Added revision to have vrid use uuid as it's primary key
+* Reverted unnecessary changes
+* Fix create non-admin project create LB fail issue
+* Fix failed to create 2nd LB with different flavor problem
+* fix pep8
+* [STACK-2348]wait blade sync. in LB creation flow
+* [STACK-2348]wait blade sync. in LB creation flow
+* Added task to allocate vrid floating ip port
+* Refactored HandleVRIDFloatingIP class
+* Stored ifnum into a list for enabling more than 1 attached interfaces by interating over them
+* [STACK-2323][STACK-2342] do not delete amp\_boot\_network\_list ports when DeallocateVIP
+* [STACk-2342] add debug log
+* fix for review comments
+* Added backwards compatability for hm name. Added test harness
+* Formatted code accn to pep8 conventions
+* update unit-test code
+* Removed project criteria for fetching ports
+* added code for adding ips in allowed address pair
+* Finish RD Unit-Test cases
+* Removed unnecessary GetComputeForProject task
+* fix pep8 issues
+* [STACK-2313] backup plug interface failed because of reloading
+* Modified get\_all\_other\_lbs\_in\_project() to exclude LBs in DELETED state
+* [STACK-2330] device-name flaovr support
+* Added a task ValidateComputeForProject to validate compute\_id got from GetComputeForProject
+* [STACK-2328] rack flow degrades
+* fix vthunder not delete issue
+* fix travis error
+* [STACK-2319] instance deleted when all LB in pending state
+* Incorporated review comment
+* Added tests for security group removal from port
+* Added tests for get port functions
+* Fixed an existing Typo mistake found during code changes
+* Added attempts and waits for it in ConfigureVRRPSync as it's getting failed sometimes
+* update for comments
+* fix for comments
+* Added further deallocate vip tests
+* Added deallocate unit tests for lb scenarios
+* Fix BACKUP\_VTHUNDER issue
+* [STACK-2307][STACK-2241][STACK-2282] multiple network in amp\_boot\_network\_list
+* [STACK-2302] active-standby mode LB cascade delete failed after failover
+* Fixed failing pep8 issues
+* Added unit test skeleton
+* [STACK-2302] Get Master vThunder for SLB flows
+* updated code for adding interface while member create
+* updated code for interface addition while member create
+* Fixed instance port get function
+* Added security group removal. Fixed backward compatibility issue with neutron client
+* Renamed count constants. Refactored flows to get counts where required
+* Updated security group deletion logic inside DeallocateVIP tasks
+* Removed unwanted VCS reload before master reload as sometimes its causing issues
+* code update for adding interface on vblade while member creation
+* Changed vrrp port sec group to vip port
+* fix more cases
+* [STACK-2282][STACK-2301] active-standby stabilize
+* Added security group delete functions
+* fix more cases
+* fix Object already exists issue
+* fix syntax error
+* fix vBlade vcs device missing problem
+* fix more cases
+* Change security group name from being based on loadbalancer\_id to vip\_port\_id
+* fix indent issue
+* [STACK-2262][STACK-2283] active-standby stabilize
+* fix pep error
+* Fix delete LB at the same time issue
+* [STACK-2294] queue openstack commands when instance busy
+* fix pep8 issue
+* fix pep8 warnings
+* [STACK-2292] vrrp set\_id enhancement
+* [STACK-2298] vcs retry and timeout option type error
+* [STACK-2295] Make sure Thunder ready before operate on it
+* Added BACKUP role for fetching project list for a partition
+* fix travis issue
+* fix pep8 warnings
+* added comment using the task only with vthunder flows
+* Fixed build error: Ignored H216
+* Ignored H216 in tox.ini as per the travis build logs info to resolve the travis issues
+* code updated for deleting ve ip from dashboard
+* Added task GetMasterVThunder in create\_listener\_flow for active-standby topology
+* clean up code
+* [STACK-2241][STACK-2262][STACK-2264][STACK-2284] Provide vthunder flow thread-safe for works
+* removed extra line
+* added unit test case
+* Moved get\_delete\_lb\_vrid\_subflow after getting vMaster in delete\_LB\_flow
+* added code for error response when topology is changed
+* [STACK-2253] ACTIVE-STANDBY VRID FIP issue
+* Added changes to wait for Blade to come up properly to fetch ifnum\_backup
+* Add default axapi timeout option in config file
+* remove unnecessary changes
+* increase axapi timeout
+* updated code for lb write-memory
+* Added change to GetVRIDForLoadbalancerResource to return empty list instead of None
+* merge code with master
+* removed the non required code
+* added code for creating security group
+* [STACK-2238] remove ve interface after LB deletion
+* Added task DeallocateVIP to delete\_LB\_flow for releasing ports on LB deletion
+* [STACK-2220] acos-client timeout too short
+* Incorporated a review comment
+* changed network\_tasks to a10\_network\_tasks
+* Added separate lb delete flow for rack vthunder to fix issue for release of vip address from vip\_subnet in h/w thunders
+* [STACK-2219] failed to create 2nd loadbalancer for slow openstack server
+* Added different flows for rack and vthunder
+* Added interface deletion for pool delete
+* Fixed an issue with empty vrid list for a single project
+* Modified code to fix the KeyError getting for added\_ports
+* code update for security group/port creation/deletion
+* delete pool members vrid while lb cascade delete
+* code update for addding udp port in security group
+* update for review comments
+* fix travis errors
+* fix travis errors
+* fix travis errors
+* Reverted change of returning updated vthunder from UpdateAcosVersionInVthunderEntry to fix failures
+* Returned updated vthunder from UpdateAcosVersionInVthunderEntry task to use it further
+* Update README.md
+* Added specific version for decorator package for py27 to fix travis failure
+* Fixed unittests to resolve travis issues
+* changed logic for lb exist flag for fixing some edgecases
+* Travis build failing, added specific version for decorator package
+* Modified unittests as per latest code changes
+* Resolved conflicts for EnableInterface with NIC logic in it
+* Incorporated review comments specific to EnableInterface task
+* Implementation for enabling vBlade's interface in Active-Standby topology
+* Added vrid FIP to vthunder LB creation flow
+* Incorporated review comments
+* fix travis check error
+* fixed merge conflict issue
+* STACK-2165 Fix tox unit-test error
+* STACK-2165 ConnectionError exception in revert flow
+* Improved code level warning message about insanity of alembic
+* Added default to hierarchical\_multitenancy modle
+* delete natpool while lb deletion
+* Added checks before prforming any operations with those objects
+* Reverted as root cause fixed in another commit
+* Fixed the env.py script so that autogeneration is now possible. Ran autogeneration revision
+* Renamed unit test of AmphoraePostNetworkUnplug
+* Fixed unit test bleedthrough caused by modification of global variable. Mocked time method to prevent sleeping
+* Fixed build error failed due to unicode
+* fixed the build errors
+* code update for lb cascade delete
+* updated the for lb cascade delete
+* updated the APIs name
+* avoid overwritting of health\_mon.type
+* delete loadbalancer method call updated
+* updated the variable name
+* updated code for delete cascade feature
+* Fixed existing code issue which is causing failure in activate\_partition of decorators
+* Added unittests for newly added tasks
+* added code for cascade support on lb delete
+* Added support for dynamic interface attachment detection for members in active-standby topology
+* Added support for dynamic interface detachment detection for members in active-standby topology
+* Added support for dynamic interface detachment for loadbalancer
+* Resolved existing issues of active-standby topology lb creation and added support for dynamic interface attachment for active-standby topology
+* Modified the flow to call GetComputeForProject depending on role of vThunder
+* Added tasks GetVThunderInterface and EnableInterfaceForActiveStandbyVThunder for enabling interfaces on master and backup vThunders and made EnableInterface specific to STANDALONE topology
+* Modified GetComputeForProject to get compute for both master and backup vThunders
+* Added a method to get vthunder for a project\_id and specified role
+* Removed an unwanted task from delete\_member\_flows
+* Removed unused exception variable and made error message more dynamic
+* Fixed the deletion of load balancer when in error state
+* Modified a task name to resolve some issue
+* Resolved conflicts with master
+* Fixed an existing code issue
+* Added unittests for dynamic interface detachment detection
+* Added tasks in delete\_LB\_flow to support interface detachment for member
+* Added tasks in delete\_LB\_flow to support interface detachment for loadbalancer
+* Created a task GetLoadBalancerListByProjectID to get loadbalancer list particular to a project
+* Modified tasks CalculateAmphoraDelta, CalculateDelta and HandleNetworkDeltas for calculating correct nics to support interface detachment for all possible edgecases
+* Added a task AmphoraePostNetworkUnplug to perform reload/reboot for interface detachment detection on vthunder
+* update for review comments
+* Modified flow to support dynamic interface detachment and refactored HandleNetworkDeltas for it
+* Added task AmphoraePostMemberNetworkUnPlug for interface detachment detection
+* Modified reload\_reboot() API name to reload\_reboot\_for\_interface\_attachment()
+* Modified API name from reload\_reboot to reload\_reboot\_for\_interface\_attachment
+* Added unittests for dynamic interface attachment of member
+* Added support for dynamic interface attachment for Member
+* Modified constant name
+* Incorporated review comments to add reload\_reboot logic to acos-client side
+* Added support for VRID VRRP-A floating IP
+* Resolved issue of subscriptable mocking
+* Fixed unittests as per code changes
+* Incorporated review comments
+* Added unittests for dynamic interface attachment for loadbalancer
+* Added a method to check if a vthunder is present for specified subnet and project id of a loadbalancer
+* Modified vthunder\_flows to support interface detection 2nd LB onwards, modified load\_balancer\_flows to escape reload/reboot for 1st LB in a project
+* Added acos\_version column in vthunders table
+* Modified AmphoraePostVIPPlug to support dynamic interface attachment, added a task for saving acos\_version in db and modified EnableInterface to enable attached interfaces
+* mark DELETED status for backup vthunder in vthunder table
+* [STACK-2066] [Database Migration Enhancement] a10-octavis overwrite octavia database alembic version
+* Added the names in the flow
+* Resolved merge conflicts
+* Modified tox to fix travis issues
+* Modified ListenerUpdateForPool task to handle bounding of sess persistence templates to listners
+* Updated periodic write memory flow for deleting last lb
+* Updated tox to resolve travis build issues
+* Refactored the vthunder flows for flavor support
+* Fixed for build error
+* Added uhashring version specofic to py27
+* Fixed travis issues by modifying required package versions
+* Lowered unhashring version to fix travis issue
+* Modified the automated flows to support SNAT feature
+* updated the code for update and delete lb in vthunder flow
+* Fixed the error message for unsupported mealth monitor type
+* Added exception when usupported HM\_type passed for health monitor creation
+* update for review comnets
+* [Bug][STACK-2067] NAT pool deletion check for HMT
+* [Bug][STACK-2049] write memory not perform on exceptions
+* [Bug][STACK-1975] revert previous patch
+* [Bug][STACK-2027] fix degrade by previous patch
+* [Bug][STACK-2027] fix degrade by previous patch
+* [Bug][STACK-2060] nat-pool flavor overwrite virtual-port flavors
+* Update tutorial.md
+* update comments
+* [Bug][STACK-2027] handle newly create lb cases
+* update for review comment
+* also fix revision info in comment
+* [Bug][STACK-2059] rename db migration script
+* fix flow and task name issue
+* only disable a10-health-manager
+* Replaced listener.name with listener.id for L7rule task
+* update for comments
+* [Bug][STACK-2037] Fix health manger bugs
+* [Bug][STACK-2050] delete pool release NAT pool address reservation in member subnet
+* Fixed UT for WriteMemoryHK for shared partition
+* Changed condition to prevent calling shared partition write memory twice
+* Changed condition to consider use\_shared\_partition flag while activating partition
+* Changed seq of write memory call to shared then custom partition
+* issue/stack\_2027 2041 2048 reload detect and bugs fix
+* Added use\_shared\_partition flag in decorator for activate\_partition
+* Added name param for making Atom unique
+* Replaced listener.name with listener.id
+* Removed reinitialization of query in get\_expriry vthunder
+* update for review comments
+* STACK-2029 task periodical write memory refactor
+* Fixed travis issue by lowering alembic version
+* Reverted back changes made for travis fix
+* Alembic version used changed to lower version for travis build
+* Fixed travis issue
+* Reverted changes made in .travis.yml
+* tried to fix travis issue
+* Added a check for vthunder in NatPoolDelete task
+* Added ip-address to query for fetching projects for specific partition
+* fix pep8 error
+* Fixed issue of losing real port configurations after setting the member
+* [Bug] [STACK-2021] allow any addresses for NAT pool
+* Update octavia\_flavor\_support.md
+* Fixed L7rule creation for FILE\_TYPE type
+* Update tutorial.md
+* Catched ACOSException in the revert method
+* Incorporated review comments
+* Update tutorial.md
+* Update tutorial.md
+* Update tutorial.md
+* Create octavia\_flavor\_support.md
+* Modified revert of NatPoolCreate to fix an issue during listener creation
+* STACK-2009 Bug hm flavor issues
+* Incorporated review comments
+* fix review comments
+* move addr reserve/rlease to a10\_network\_task
+* fix review comments
+* Fixed a pep8 issue
+* Modified code to fix some unittests
+* Resolved conflicts with master
+* Resolved merge conflicts
+* Added unittests for setting conn\_limit with cli or config
+* build error fix
+* fix for review comments
+* pep8 formatted file
+* Seperated exceptions for WriteMemory task
+* Modified unittests to support added code change
+* Added support to update connection\_limit after using it in openstack cli to set
+* Fixed formatting issues
+* added unitcases for https listener
+* Fixed failing UTs
+* Fixed minor travis issue
+* Seperated Exceptions and set lbs active on exception in Write Memory
+* Corrected datetime import
+* Fixed flake8 issue
+* Modified create call's function prams as per changed payload on acos side
+* Incorporated review comments
+* Incorporated review comments related to nat-pool creation/deletion
+* Added http\_template support for TERMINATED\_HTTPS listerner
+* fix for review comments
+* Added min value for write\_mem\_interval config
+* Added corresponding UTs for new db tasks
+* Inserting new tasks in write\_memory controller flow
+* Fetching associated active lbs from vthunder
+* Added Task to fetch Active LBs, marking them PENDING\_UPDATE and then ACTIVE
+* Add axapi restrictions for virtual-server and virtual-port
+* Renamed disable\_write\_memory to use\_periodic\_write\_memory config option
+* Fixed flake8 issues
+* Fixed pep8 issue
+* Renamed flavor to flavor\_data in ListenerUpdate for consistency
+* Rsolved merge conflicts
+* Added unittests required for nat-pool deletion
+* STACK-1990 Rejct flavor with "name" axapi keys for slb objects
+* Removed unused variable and updated the flavor constant used
+* Added NatPoolCreate task to listener\_create flow
+* Added NatPoolDeletion and CountLoadbalancersWithFlavor tasks to lb deletion flow
+* Added a task for nat-pool deletion
+* Added a database task to get lb count by flavor\_id
+* Removed global variable and made it class variable
+* Renamed UpdateVThunderUpdatedAt class to SetThunderUpdatedAt
+* Adding strtimestamp for comparing between 2 dates
+* Fixed syntax issue in setup.cfg
+* Indicated that readme content type is markdown
+* Renamed installation section to project resources
+* Replaced readme with links to official docs
+* Moved parts of old ReadMe to docs for posterity
+* Changed the rule type from HTTP::uri to HTTP::path
+* Added new WriteMemoryHouseKeeper task and UTs
+* use new API try\_get in nat\_pool\_tasks.py
+* Added more logic for retry failed thunder
+* Incorporated review comment
+* Added logic for retry
+* Added unittests for nat-pool creation with nat-pool-list flavor
+* Added logic to create nat-pools in nat-pool-list flavor
+* Added UT for not calling WriteMemory
+* Removed Unused CONF
+* Fixed failing UTs for WriteMemory
+* Added logic to optimise write memory
+* Changed the length of name attribute for nat\_pool table
+* Added port ID and unique together constraint on name and subnet in nat\_pool table
+* Added UT for UpdateVThunderUpdatedAt task
+* Shifted disable\_write\_memory logic inside WriteMemory
+* Added port ID in NAT pool table
+* remove unused code
+* slb server reserve address with db
+* slb server reserve pool address to subnet
+* slb server reserve pool address to subnet
+* Added task for updating to active status in vthunder table
+* Fixed pep8 issues
+* Incorporated Review comments
+* Removed an unwanted import
+* Fixed a pep8 issue
+* Added unittests for nat-pool creation
+* Added review comment changes
+* Added more log
+* Modified the flow to create nat-pool during lb creation
+* Added a task for create nat-pool creation
+* Fixed travis issue F401
+* Fixed travis issues
+* Replace WriteMemory with UpdateVThunderUpdatedAt for pool flow
+* Replace WriteMemory with UpdateVThunderUpdatedAt for member flow
+* Replace WriteMemory with UpdateVThunderUpdatedAt for listener flow
+* Replace WriteMemory with UpdateVThunderUpdatedAt for l7 rule flow
+* Replace WriteMemory with UpdateVThunderUpdatedAt for l7 policy flow
+* Replace WriteMemory with UpdateVThunderUpdatedAt for hm flow
+* Fixed pep8 issues
+* Replace WriteMemory with UpdatedThunderUpdatedAt task
+* Added more logs in WriteMemory task
+* Added repo method to filter eligible thunders
+* Added UpdateThunderUpdatedAt db task
+* Added write memory flow in controller worker
+* Added method to fetch vthunders and perform write memory
+* Added write memory thread in housekeeping module
+* Added a10\_housekeeper configs for write memory thread
+* Reformatted data-model for resoving PEP\* convention issues
+* listener pool selection
+* Added nat\_pool table with its model and data-model
+* fix for review comments
+* flavor schema define and validate
+* fix help message error
+* provide better help info for a10 flavor
+* remove unrelated changes
+* fix health monitor delete fail issue
+* fix unit-test errors
+* update for review comments
+* fix pep8 check failed
+* refactor acos-cliet for flavor support
+* Fixed failing UT and indentation E128
+* Fixed hmt issue for default parent project
+* acos-client refactor for virtual-port
+* fix for arbitrary arguments for axapi to acos-client
+* add flavor support unit-test for hm
+* Add server flavor support unit-test cases
+* add unit-test cases for service-group
+* Add unit tests to parse name expressions
+* add flavor support unit-test for vport
+* flavor support for slb objects set command
+* virtual-server flavor support
+* vport flavor support
+* refactor service group
+* health monitor flavor support
+* refactor for slb server
+* Improved test for config override via flavor for virtual server. Refactored GetFlavorObject to GetFlavorData in member flow
+* Refactored GetFlavorObject to GetFlavorData and use the upstream flavor\_data constant
+* Fixed positive testcase for GetFlavorObject execute method
+* Added tests for GetFlavorObject execute method
+* Added skeleton for db tasks
+* Added test harness for flavor and name expr behaviors
+* Refactored parsed\_data method name to format\_keys to better match usage
+* Alterted vs task and tests to work with new flavor parsing
+* Added method to convert dashes to underscores in flavor for easy parsing
+* flavor and name-expr logic to health monitor
+* fix tox checks errors
+* flavor and name-expr logic to service-gourp and server
+* merge changes
+* flavor and name expression support for pool
+* Started refactor of virtual server and virtual port tasks to include flavor data
+* Added utility to parse name expressions
+* Refactored template schema to match api naming
+* Added method to handle flavor options to virtual server task
+* Removed handle flavors method as new logic has been devised
+* Renamed schema objects to better match their usage
+* Added recursive search for flavor id to general task
+* Added GetFlavorObject to call relevant create flows
+* name expression support for member
+* remove not related changes
+* Feature/flavor support for server option
+* Feature/flavor support for server option
+
+1.0.0
+-----
+
+* Obtained server ports before preforming replace to preserve them
+
+1.0.0.b5
+--------
+
+* Removed the UUID generation for VRID ID from unit tests
+* Removed the vrid id as UUID, since it expects integer value
+* Associated member to service group during replace
+* flavor support for server options
+
+1.0.0.b4
+--------
+
+* Temporarily removed description due to setuptools bug
+
+1.0.0.a1
+--------
+
+* Updated setup.cfg to use utf-8 encoding for readme
+
+1.0.0.b3
+--------
+
+* Removed type change revision as it seems to only take a superficial effect in MariaDB
+
+1.0.1.b2
+--------
+
+* POC code for flavor inclusion with regex
+* [STACK-1654] healthmonitor support POST method
+* [STACK-1654] healthmonitor support POST method
+* Removed sqlalchemy\_utils to support MariaDB
+* Added api driver code for flavor support
+* [STACK-1654] healthmonitor support POST method
+* [STACK-1654] healthmonitor support POST method
+* [STACK-1654] healthmonitor support POST method
+
+1.0.0.b1
+--------
+
+* Added handling for removal of object in error state
+* Handled vthunder as None case
+* Added revert function for removing vthunder object from DB for CreateRackVthunderEntry
+* Incorporated review comments and updated function to fetch project based on partition
+* Changed error message from being pased as a kwarg to a positional arg
+* Added reference objects to replace calls ie mem-list/port-list to prevent overwrite
+* Added new and fixed existing tests for DB tasks
+* Conflcts resoved for merging upstream/master
+* Creation a DB task for fetching projects for partition and used it at required flows
+* Modified kwargs used for health monitor name
+* Tested changes for deletion of LB and formatted the code
+* Added changes to fetch LB and member count on the basis of partition when multitenency is enabled
+* Improved get\_patched\_ip unit tests
+* Common tests weren't being discovered due to lack of init
+* Shifted VRID error raising to utility doing comparison
+* Modified patched ip to support partial IPs larger than first octet
+* Added hmt and use\_parent\_partition support for creation of LB component
+* Added activate\_partition logic for blade
+* Added partition support in DeleteMultipleVRIDPort
+* Added partition support in multi-vrid
+* Handled exception for update vrrpa statement in revert of HandleVRIDFloatingIP
+* Removed unwanted brackets from if statement
+* Changed upate over to replace for server and virt server tasks
+* Incorporated a review comment
+* Wrapped description into quotes to show leading and trailing spaces if any
+* Added and modified unit test for the code changes
+* Modified the flows to use vthunder\_config provided by CheckExistingProjectToThunderMappedEntries
+* Returned vthunder\_config at CheckExistingProjectToThunderMappedEntries and used it in further tasks
+* Formatted changes according PEP8
+* Incorporated review comments
+* Fixed unit tests of update VRID DB tasks, formatted code accon to pep8 conventions
+* Fixed the issue of VRID not getting saved in DB for a particular usecase
+* Fixed tests update VRID in DB task
+* Added reverts for VRID lists
+* Corrected VRID delete tasks
+* Corrected UTs and delete flows for multi-vrid
+* Added required Mock constants and used them in unit test
+* Added unittest for enabled hmt check
+* Fixed the LB and member flow for new HandleVRIDFloatingIP task
+* Set partition name to current project partition
+* Changed update calls to replace calls so template changes take effect
+* Fixed template issue on delete by changing ListenerUpdate in delete to ListenerUpdateForPool
+* Fixed farmatting after resolving merging conflicts
+* Added code for Multi update for existing VRID objects
+* Resolved merge conflicts with master
+* Fixed formatting issues
+* Added minor changes in unit tests
+* Updated pool update flow with ListenerUpdateForPool task
+* Added unit test for multi vrid port delete for LB resources
+* Added unittests for ListenerUpdateForPool task
+* Fixed the existing units test for network tasks
+* Added protocol mapping to ListenerUpdateForPool task. Moved sess pers access in persist task to not obscure errors
+* Fixed unit tests for network tasks
+* Fixed unit test for network task
+* Fixing handling VRID test cases for network tasks
+* Added and fixed units tests for a10 db tasks
+* Renamed the task from ListenerUpdateForPoolDelete to ListenerUpdateForPool
+* Removed unused variable
+* Removed GET call for listeners
+* Added ListenerUpdateForPoolDelete task for resolving shared template issue while deleteing and creating a pool
+* Fixed issues from delete load balancer flows and tasks
+* Added changes for handling VRID for create, update and delete LB
+* Fixed issue for VRID handling for pool deletion flow
+* Fixed E117 and H234 pep8 issues
+* Added changes for handling VRID for pool deletion
+* Modified template key for terminated https listener
+* Fixed failing UTs for hmt and use\_dhcp/ve\_ip logic
+* Condensed hmt logic, fixed failing UTs for use\_dhcp and ve\_ip
+* Removed unwanted use\_parent\_partition check for rack devices
+* Have CreateRackVthunder to return vthunder and modified UTs accordingly
+* Returned VRID object from deleteVRID task for DB task
+* Added fetching vrid list for project task for delete member flow
+* Resolved merging conflicts
+* Removed the strip logic added for loadbalancer's description
+* Updated feature branch with master and resolving conflicts
+* Added common variable to holding member and LB count
+* Added new task for fetching member count for specific subnet
+* Added unittests for shared-template check in service\_group\_tasks
+* Checked current partition before using shared\_template flag in service\_group\_tasks
+* Added unittests for shared template check in shared partition
+* Handling VRID deletion for member delete flow
+* Added vthunder param in set call in update()
+* Resolved conflictsand fixed indentation issues
+* Checked current partition before using use\_shared\_for\_template\_lookup flag
+* Fixed minor issues ralated to arguments for tasks
+* Added GetLBResourceSubnet tasks for figuring out subnet
+* Replaced references of GetVRIDForProjectMember with GetVRIDForLoadbalancerResource
+* Changes for getting VRIDs, handling VRID floating ips and updating VRID data
+* Shifted use\_parent logic from db get to db create
+* Added basic changes in VRIDFloatingIP
+* Updated description logic
+* Added assignment to status
+* Incorporated review comments
+* Handled case for none description while creating lb
+* Made corrections to reflect addition of member protocol count and pep8 needs
+* Incorporated review comments
+* Modified UTs for minor issues
+* Added minor changes to fix a error
+* Added test harness for service group templates
+* Modifed if statements to compress LOC
+* Add test harness for server template association
+* Modified if statments to compress LOC
+* Added test harness for shared partition modifier of utils module
+* Fixed issue causing l3v partiton template to not be checked for
+* Added unit tests for virtual port templates
+* Added generic method for UTs
+* Tried to add unittest for shared template in virtual\_port\_tasks
+* Added minor changes in README
+* Added a note for newly added flag in config
+* Added use\_shared\_for\_template\_lookup global flag to README
+* Added warnings for handling shared partition not supported templates
+* Added exceptions for the templates not supporting shared partition
+* Added logic to attach shared template\_policy to service\_group in private partition
+* Refactored the code to fix an issue with template\_tcp and template\_policy args
+* Added handling for when template list does not exist
+* Refactored virtual port task. Leveraged shared partition utility function
+* Added utility to redirect templates to shared partition
+* Added logic to allow templates from shared partition to be attached to virtual-port
+* Fixed pep8 errors that occured while travis was down
+* Added pyrsistent as a dependeny directly to tox as latest version doesn't work with py27
+* Update vrid test to reflect change from full vrid delete to disassociation of the floating ip
+* Altered hmt parent partition dne test to check for an error instead of assignment of child partition
+* Added vrid value to VRID constant object and related tests
+* Fixed error caused by hardware device section not being present during testing
+* Fixed error caused by missing keystone dependency
+* [BUG][STACK-1612]: Handled validations of loadbalancer description (#184)
+* Added update call if server already exists for related config updates
+* Enhanced write memory function with shared arg (#183)
+* Removed unused variable from database  test task
+* Changed the query to fetch member count for specific IP, port and protocol and updated tests
+* Improved health monitor port explanation
+* Updated tutorial.md based on PR feedback
+* Fetching member count on the basis of IP, PORT and protocol
+* Added arguments in error message
+* Added path for install script for dev and removed from setup.cfg
+* Removed list comprehension usage and expanded ifelse conditions
+* Added server name change for update member task
+* Fixed tests for server tasks
+* Changes server-name to member-id in logs for server task
+* Updated pool count query, added unit tests for DB tasks
+* Changed DB task for count distinct pool with IP and reformated files
+* Added pool member delete task and added DB task for count pool with IP
+* Database task integrated for member count for ip and port
+* Added ParentProjectNotFound exception and added revert methid for CreateRackVThunderEntry
+* Added ParentProjectNotFound exception
+* Added warning for None parent project if use\_parent\_partition and hmt is enabled
+* Updated db to support subnet\_id for VRID. Modifed tasks to support acos-client changes
+* Updated tasks to handle both loadbalancer and member resources
+* Added VRID Floating IP for frontend
+* Updated README with new install script for dev
+* Added a new install script for the developer installation
+* Modified if condition to check specifically for hmt as enable
+* Reformated changes accn pep8 conventions
+* Added unit test for member count accn IP, reformated code
+* Added unit tests for member create and delete tasks
+* Updated file path at user changing logic
+* Checked if user exists or not before setting it
+* Set user as octavia and added support for figuring out correct pip version
+* Changes added for service group deletion flow
+* Updated axapi call to remove only vrid\_floating\_ip and not vrid on delete member
+* Removed 'is' from Error Message of InvalidVCSDeviceCount
+* Used service group protocol mapping for deleting port from server
+* Removed unused code
+* Removed unnecessary variable
+* Added explicit port deletion for server when member count for IP is greater than 1
+* Added check to find whether project's parent are same if use\_parent\_partition flag id enalbed
+* Added method to get all config project's parent project lists
+* Integrated member count for IP task with delete and create member flows
+* Added symlink logic to install script
+* Changed user from stack to root in all services
+* Added member count DB task, Changed server name from member id to projectId + IP
+* Changed default value of conn\_resume to None since by default conn-resume should not be se for member
+* Updated flat net script to patch ml2 conf properly
+* Update tutorial.md
+* Added explicit condition for listener protocol as TCP in order to avoid UDP type listener to  use template-tcp
+* Added check for none string for template name and coverted to None object
+* Updated UpdateVRIDForProjectMember task to delete vrid entry from db and update vrid field acc to config
+* Reverted unwanted changes
+* Added support for loadbalancer description
+* Added new parameter health\_check with None value, to detach health monitor from service group
+* Added repo methods to fetch vthunders based on project\_id and ip\_address
+* Inserted CheckExistingThunderToProjectMappedEntries and CheckExistingProjectToThunderMappedEntries in LB flow
+* Added custom exception to handle ConfigValue Error for Ip:Partition <-> project mapping
+* Added db task for fetching vthunder and checking mapped projects
+* Changed floating IP  to VCS floating IP in description
+* Added test harness for HandleACOSPartitionChange task
+* Added handling for stack\_1526 not-active partition error
+* Improved handling of hierarchical multitenancy partition collisions
+* Updated unit tests and tox to handle sqlalchemy\_utils addition
+* Enforced enable/disable setting of hmt option at config level
+* Set hierarchical mulitenancy as a ChoiceType instead of boolean. Migrated db
+* Removed unused python modules
+* Corrected 3bca. sample configuration
+* Added condition to check for vthunder before vthunder.device\_network\_map
+* Added duplicates list back for error code
+* Added change to create L7rule with comparision REGEX and type filetype
+* Added check for none string for template name and coverted to None object
+* Updated readme to reflect hmt and use\_parent\_partition option changes
+* Reworked hmt and use\_parent\_partitoin options to be local only
+* Removed unnecessary task name
+* Added pool id in message
+* Removed store.update and moved the reloadlb task up
+* Fixed travis issue H403 related to docstring
+* Added None check for VThunder before axapi client call
+* Added Exception for sticky partitions and ip\_address
+* Conflicts resolved  in virtual port task
+* none str to none object
+* Raise ProviderUnsupportedOptionError for proxy pool
+* Raise ProviderUnsupportedOptionError for proxy pool
+* Added PortNotFoundClient neutron exception for delete\_port api
+* Added script to setup flat env based off previous vlan script
+* Added autosnat and no\_dest\_nat exception check
+* Added autosnat and no\_dest\_nat exception check
+* Modified default value for ha\_conn\_miror
+* Added tutorial
+
+0.2.0
+-----
+
+* Conflicts resolved
+* Import pattern changed for requests lib
+* Added ha\_conn\_mirror support for tcp,udp type listener
+* Removed extra conversion of protocol
+* PEP8 line length
+* Corrected multi-line docstring
+* Removed ununsed variable str(e)
+* Included Flake8 corrections
+* Resolved neutron port release issue
+* resolved conflict issues
+* rebased with curreent master
+* Added partition switch as a workaround for partitions not have interface lists
+* Removed check on vrid\_floating\_ip
+* Removed partition deletion on revert
+* Updated messages
+* Changed listeners protocol to vport protocol
+* PEP8 formatting added
+* protocol mapping used to fetch vport and update vport
+* Added connectionerror import
+* Updated exceptions and bug fixed
+* Fixed UT for UpdateVRIDForProjectMember
+* added missing raise CheckVRRPStatus
+* Removed unnecessory \_get\_post\_map\_lb\_subflow flow
+* Added exception to database task UpdateVRIDForProjectMember
+* Removed vlan part fro vthunder flow
+* Fixed travis issues
+* Fix UT
+* Added custom exceptions and formatted vthunder\_tasks.py
+* Added raise in vthunder tasks for member flows
+* Corrected exception imports
+* Corrected member flow seq, added logs, handled exception in NW tasks
+* Added raise Exceptions for member flow related tasks in db and network takss
+* Added Member flow good reverts and refactored code for CUD ops
+* Corrected flake8 changes, added proper raise variable
+* Incorporated Pep8 changes
+* Resolved merge issue, added condition to check listeners
+* Corrected HM message
+* Added review comments
+* Refactored basic LB flow
+* Rearranged imports
+* Changed unit tests as per cert flow refactor
+* SSL cert delete flow correction
+* Resolved conflicts
+* Incorporated review comments
+* PEP8 formatted file
+* Connection error added
+* Updated Hm task
+* Updated exceptions and removed revert from delete
+* Fixed ordering of imports
+* Reordered imports
+* Formatted code
+* Added revert for HM delete and checked the flow
+* Used generic exception in HM create task
+* PEP8 formatted file
+* Connection error added
+* Updated Hm task
+* Updated exceptions and removed revert from delete
+* Pep8 corrections
+* Refactored cert task as per decided architecture
+* Removed debugging raise ConnectionError line
+* Added warning for revert process
+* Rebase with latest master
+* Refactored code  as per decided approach
+* Added good reverts, proper logs, proper exceptions for Pool CUD
+* Used deep copy for variables used in UTs,removed usage of \_\_dict\_\_ for hm
+* Update README.md
+* Updated test cases to ensure compatability between py27 and py3x test envs
+* Moved selection of flow into graph flow
+* Removed slicing of hm.id for hm name and added UT
+* Modified help description of template related configurations
+* Added further test harness for ensuring log messages are raised when subnet\_id isn't specified during member ops
+* Removed unused method from pool flow
+* Added proper raise for pool create and update flow for good reverts
+* Updated readme
+* Add initial test for TagInterfaceMember logging
+* Corrected import sequnce
+* Template name correction in UTs, pep8 changes
+* Fixed ordering of imports
+* Reordered imports
+* Added certificate handler tasks, updated UTs, updated pool flow
+* Formatted code
+* Added revert for HM delete and checked the flow
+* Added warning log for subnet\_id not provided during member create
+* Implemented further deepcopying to remove alteration of VTHUNDER constant resulting in test leak
+* Changed the taskflow names for subflows and converted to proper constants
+* Removed SHARED\_PARTITION constant from decorator module
+* Added unit test harness for WriteMemory and SetupDeviceNetwork tasks for delete after error
+* Modified config validators to reflect 'shared' being the default partition name
+* Added logic to handle when vthunder arg is None brought on by error state
+* Merging SSL certicate logic
+* Added member\_delete\_subflow and hm\_delete\_subflow in pool\_delete flow
+* Used generic exception in HM create task
+* Refactored listener flow and task
+* Removed repetitive code
+* a10\_octavia/controller/worker/tasks/vthunder\_tasks.py
+* Modifed write memory task to target a single specific partition
+* Updated task name
+* Added write mem task to end of each flow
+* Added unit tests for write mem task
+* Added partition\_id check for write mem
+* Added write memory task
+* Resolved failing UTs for interface\_vlan\_map
+* Included delete\_member flow for all member of pool
+* Resolved merge conflicts
+* STACK-1375, STACK-1376, STACK-1377 PP changes while testing with Omkar and Afrin
+* Added README for vrrpa-ve
+* STACK-1347, STACK-1347 Commiting PR #116 changes for Afrin
+* Incorporated review comments
+* STACK-1375, STACK-1376, STACK-1377 Changes from PP sessions with team
+* Fixed failing UTs for utils
+* Fixed pep8 travis issues for auto\_ve\_vlan branch
+* Used type() instead of isinstance()
+* Added exceptions when invalid value is provided for interface\_vlan\_map
+* Updated virtual port to use listener's ID
+* Fixed issues while testing auto\_ve\_vlan branch
+* Fixing E127 pep8 issue
+* Manual merge of changes from STACK-1198 branch
+* STACK-1352, STACK-1383 review comments
+* STACK-1352, STACK-1383 Fix revert TagInterface tasks
+* STACK-1310 README update with interface\_vlan\_map information
+* Modified the config param
+* STACK-1303, STACK-1306 review comments
+* Added utils UTs for interface\_vlan\_map
+* STACK-1303, STACK-1306 handle review comments
+* STACK-1303, STACK-1306 changes to handle trunk\_interfaces
+* STACK-1237 For sharing code
+* Refactored code as per review comments
+* Refactored tag\_interaces method to use new device\_network\_map
+* Added config json struct and validations for device\_network\_map
+* Added Interface and DeviceNetworkMap datamodels
+* Modified test\_utils to take HardwareThunder
+* Created generic Thunder and its child VThunder, HardwareThunder data models
+* Corrected numerous post-rebase pep8 errors
+* Refactored and fixed issues caused by rebasing
+* Refactored numerous files post rebase
+* STACK-1259 Changes for review comments
+* STACK-1260 Add/Change vlans for only added vip/members
+* STACK-1285 Added 4 VLANs and fixed external access issues
+* Review Comment: value obtained using object.get(), Added return to get\_subnet\_and\_mask()
+* STACK-1221 Make VE IP configurable
+* Had missed this out in resolving merge conflicts
+* STACK-1220 STACK-1224 Get 3.5 unittests passing
+* STACK-1220 STACK-1224 Create neutron port changes
+* STACK-1158 STACK-1159 STACK-1161 STACK-1163 refactor get\_subnet\_and\_mask
+* STACK-1158 STACK-1159 STACK-1161 STACK-1163 Review comments changes
+* STACK-1158 STACK-1159 STACK-1161 STACK-1163 Fix pep8 failures
+* STACK-1158 STACK-1159 STACK-1161 STACK-1163 VE VLAN support for hardware devices
+* STACK-1110 script to create and teardown provider poc vlan networking
+* Switched default value of autosnat to false
+* Switched default value of autosnat to false
+* Added UTs for accepting global vrid in update() call
+* Removed hardcoding for vrid and added global vrid support
+* Added support for accepting vrid config globally
+* Fixed Travis pep8 long line exceed issue
+* Injected VRID floating ip for update hardware flows
+* Modified UTs method names as RC
+* Fixed bug for accepting .45 as valid partial IP octet
+* Updated README for VRID floating IP support
+* Removed the unnecessary listeners check and extra variable name
+* Fixed travis pep8 issue
+* Revert "Fixed F523 issue for flake8"
+* Added support to use listener port to create and update hm port
+* code credit @afrinchakure, Resolved flake8 issue with string format F528
+* Added UTs for utils get\_vrid\_floating\_ip\_for\_project method
+* Added condition to delete vrid in acos for given vrid but no floating\_ip
+* Fixed F523 issue for flake8
+* Added flake8 review comments
+* Some Review comments, and integrated partial ip logic check
+* Added UTs for db, network tasks and utils
+* Added updated version of code to handle member scenario
+* Removed get\_port\_by\_ip() method
+* Incorporated review comments
+* Update README.md
+* Update README.md
+* Update README.md
+* Update README.md
+* Update README.md
+* Removed unused deallocate\_security\_group()
+* Added changes from auto ve-vlan branch from @ssrinivasan-a10
+* Refactored network driver with port create/delete methods
+* STACK-1215 Few IPV4 utility functions
+* Trigger
+* Renamed rack\_vthunder to hardware\_thunder, accordingly changed references
+* Updated README with hardware\_thunder, corrected other configs
+* STACK-1233 changes for review comments
+* STACK-1233 Add utility func to patch partial IP octets
+* Changes utils import location
+* Moved constant's underscore at begining
+* Patched import rather than actual call
+* Incorporated review changes and mocked db session
+* Corrected database patching technique
+* Added unit tests for module and utils
+* Corrected pep8 and client partition\_name
+* Added use\_parent\_partition feature
+* Updated column and config to partition\_name, UTs test segregated, variable name change
+* Removed deprecated assertEquals and corrected import orders for pep8
+* Added UT for utils.py
+* Refactored utils.py validation while adding partition length check
+* Refactored utils.py validation while adding partition length check
+* Added logic for HMT in CreateRackVThunderEntry task
+* Added config support for hierarchical multitenancy
+* Added hierarchical\_multitenancy attribute to VThunder model
+* Added entry in db and alembic revision
+* Added pull request template
+* STACK-1091 STACK-1092 unittest only use-rcv-for-resp
+* STACK-1092 and STACK-1091 travis one import per line fix
+* STACK-1092 and STACK-1091 review changes
+* STACK-1092 and STACK-1091 fix travis CI fail try2
+* STACK-1092 and STACK-1091 fix travis CI fail
+* STACK-1092 and STACK-1091 changes to support use-rcv-for-resp
+* Changed constant name conflict
+* Imported from octavia constants and mocked any for non-important field for TC
+* Minor flake8 correction related to indentation
+* Converted options to constants
+* Added unit test for SOURCE\_IP\_HASH\_ONLY
+* Changed service group mapping
+* Made duplicate project\_id check as first one
+* Added ConfigFileValue error exceptions for rack
+* Incorporated Review comments
+* Refactored code for validation utils
+* Removed unused imports and line too long issue
+* Raised Exceptions for valid\_params
+* Incorporated review comments
+* Setting partition name limit in db
+* Added check partition collision for rack
+* Removed unused import
+* Added create parition task for Rack flow
+* Injected Partition create Task in normal flow
+* Added Partition create Task
+* Added support for partition in db
+* Updated README
+* Registered new group a10\_global with CONF
+* Registered A10\_DEFAULT\_OPTS with CONF
+
+0.1.2
+-----
+
+* Removed long desc from setup.cfg. Fixed table issue on ReadMe
+* Removed version tracking from setup.cfg. Added long description
+* Updated readme
+* STACK-1059 handled review comments
+* STACK-1059 add http templates for HTTPS virtual ports
+* Updated readme
+* Added vThunder and hardware sections. Added pypi install intructions
+* Updated requirements to use acos-client version to 2.1.0
+* Updated setup.cfg for pypi release
+* Removed redundant install file
+* Added warning log and corrected pep8 error
+* Added no-dest-nat filter
+* Corrected file path
+* Added new install script
+* Update README.md
+* Corrected rack device flow dependencies
+* Changed loadbalancer to kwargs for HK support
+* Removed excess reboot for VIP network
+* Update README.md
+* Added tempest comment for future reference
+* Removed neutron services and added q-service
+* Reverting task\_utils usage in revert of Pool
+* Added specific stein install for python-octaviaclient library dependency
+* STACK-915 rename test\_handler\_service\_group.py
+* STACK-915 pep8 fixes
+* STACK-915 get unit tests working
+* STACK-915 handle merge
+* STACK-915 resolve merge conflicts
+* Incorporated review comments
+* Added unit tests for SSL certificate, key and template
+* Added certificate data model
+* Added certificate Handler tasks
+* Corrected constants names and removed non-required reqruirements
+* Changed HM\_TYPE constant to HTTP\_TYPE
+* Corrected import sequence for H306
+* Corrected pep8 changes for whitespaces
+* Corrected http.client import error
+* Added python 2.7.17 in travis config and mock import compatibility
+* Added httplib module in requirements
+* Corrected  unit tests after rebase
+* Rebased with master
+* Removed non-constant taskflow names from lb flow
+* Added note about config import having side effect registration
+* Incorporated review changes
+* Added graph flow for VRRP\_STATUS
+* STACK-915 handle review comments
+* Fixed test module imports
+* Fixed loadbalacer flow test super call
+* Removed unused import from loadbalancer flow test
+* Moved TestCase import to loadbalancer test and out of base
+* Modified acos-client import position
+* Made numerous flake8 fixes
+* Added author to TODOs
+* Fixed a number of flake8 issues
+* Removed duplicate of \_get\_post\_map\_lb\_subflow
+* Changed imports to support stein and ealier only
+* Fixed multiple flake8 formatting and unused variable fixes
+* Fixed flake8 exclude section
+* Update README.md
+* STACK-915 add revert handler for create
+* converted taskflow to graph flow for VRRP\_STATUS
+* Update README.md
+* Update README.md
+* Update README.md
+* Update README.md
+* Update README.md
+* Added second part of constraint on octavia version
+* Added octavia stein version req and hacking plugin for flake8
+* Fixed injection issues in taskflow
+* Corrected syntax and symentics errors
+* Refactored unit tests to handle switch to decorator
+* Fixed session persistence type issue
+* Refactored decorators to handle vthunder is None
+* Removed common.py and occurences of BaseVThunderTask
+* Added decorators for task files and dependencies
+* corrected default value of conn\_limit
+* Removed excess pool parameter passed to member update task
+* Changed variable name to meta\_json
+* Incorporated required changes regarding class imports and Renamed decorators
+* Included decorator and removed factory code
+* Moved meta function to utils
+* Added decorator to create acos\_client
+* Renamed every tasks files to X\_tasks.py
+* Refactored unit tests to handle switch to decorator
+* Fixed session persistence type issue
+* Refactored decorators to handle vthunder is None
+* Removed common.py and occurences of BaseVThunderTask
+* Added decorators for task files and dependencies
+* corrected default value of conn\_limit
+* Modified httplib import for py3 compatability
+* Made fixes to address import errors
+* Removed excess pool parameter passed to member update task
+* Changed variable name to meta\_json
+* Incorporated required changes regarding class imports and Renamed decorators
+* Added devstack install
+* Update README.md
+* Update README.md
+* Included decorator and removed factory code
+* Moved meta function to utils
+* Added decorator to create acos\_client
+* Removed non-required perist.py
+* Added/corrected proper docstrings
+* Incorporated review changes
+* Corrected variable name in l7rule delete task
+* Corrected create/update persist so it loops for all template types
+* Corrected log warning for deletes and moved constanst to a10constants.py
+* Refactored logs and exceptions
+* Added unit tests for persist\_task
+* Created unit tests file
+* Removed if condition as not required after flow change
+* Updated session persistence flow
+* Reverted the compute\_task file
+* Added session persistence taskflow, changed its references with exceptions and logging
+* Created get\_sess\_pers in utils for grabbing c\_pers and s\_pers templates
+* Added travis
+* Inherited from Base class of Unittests, incorporated minor review changes
+* Added test base class for unit tests, corrected minor review changes
+* Removed the custom base A10ComputeBase class created
+* Incorporated review changes
+* Incorporated minor changes in review
+* Added constants for tests and corrected logs
+* Added revert tasks for handler\_server with unit tests
+* Corrected log line in a10\_database\_tasks
+* Added revert functions and unit tests
+* Updated README and corrected import in delete flows
+* Refactored compute tasks
+* Removed unwanted alias name
+* Update README.md
+* Removed non-required file
+* Update README.md
+* Made minor changes after review
+* Added changes for adding section for HA
+* Update README.md
+* Review Changes
+* Minor changes to README.md
+* Creating a WIKI file for a10-octavia
+* Reverting README.md to master
+* Updated README.md
+* Revert "Updated README"
+* Resolved ACOSException (System is busy) error
+* Modified constants name for taskflows
+* Updated README
+* Removed typo
+* Made timeout and retry variable configurable
+* Added taskflow constants for create lb
+* Updated ReadME, some more stein fixes
+* Corrected rebase issues with stein support
+* removed pdb statement
+* Added created\_at to vthunder table, changed datetime.now() to datetime.utcnow()
+* Modified config option and changed failover logic for hm
+* Fixed backup active issue for ha
+* constant change as per stein support
+* Added health monitor constants
+* Refactored LOG messages and re-added stein support
+* Fixed some comment's typos
+* Fixed some comment's typos
+* refactored hm service
+* Update README.md
+* pep8 for a10\_config
+* pep8 for db module
+* pep8 for api,common and cmd
+* pep8 for controller-worker
+* pep8 for tasks
+* pep8 for flows
+* remove extra import
+* minor fix
+* Incorporated review comments
+* update a10\_health\_manager
+* Removed excess constants from a10constants
+* Included review comment feedback with minor changes
+* minor fixes
+* adding missing dependency for member flow
+* Update corrections, review feedback, full session persistence support
+* Added stein support changes
+* stack-559 solution
+* Added Readme
+* removal of slb related templates
+* doc strings, help doc, some more reference for rack, more validations
+* Some more optimization
+* review comments, code optimization, some more validations
+* Added UDP support
+* Reverted delete of CreateHealthMonitor class
+* PR Reviews + added support for UDP HM
+* internal review comments for vthunder\_tasks
+* Added changes for stack-485 along with some modification
+* octavia config file changes
+* added delete persist template support
+* updated doc string formats
+* Correction in class name and generalization of docstrings
+* Code refactor
+* a10\_octavia/common/openstack\_mappings.py
+* added persist file dependency
+* Handler Persists inclusion with minor code repairs for update functions
+* Changes required for corrections of CRUD functionalities in Octavia
+* Added minor syntax fix
+* Made minor fixes based upon review feedback
+* Made a number of minor fixes
+* Made multiple small fixes
+* Added further QOL update for functional testing
+* QOL update for functional testing
+* Refactored install script
+* Added QOL scripts for testing
+* Removed another change from rebase
+* Removed further unintended changes from rebase
+* Removed more intendation issues leftover from rebase
+* Fixed intendation
+* Removed further duplication
+* Removed duplication and other issues from rebase
+* Review changes for Afrin
+* Added update functions
+* Rack device code review 3
+* Added update functions
+* Review comments update 2
+* Review comments inclusion
+* support for rack vThunder devices
+* updated comments on file
+* Added custom network drivers for resolving multi-load-balancer config to vthunder
+* Doc update
+* Refactored install script
+* import fixes
+* Changed variable names
+* Added changes for new service called a10-health-manager
+* house keeper for a10-ocatvia
+* removed unwanted changes
+* removed unwanted changes
+* Added hm-phase1 changes
+* removed pdb
+* Added changes related to db stability
+* Review changes for Afrin
+* update functions corrections for stein
+* Added update functions
+* correction in data structure
+* removed non-required comment line
+* Rack device code review 3
+* Added update functions
+* removed changes in attempts
+* Review comments update 2
+* Adding VRRP synch correctin part
+* Review comments inclusion
+* Removal of swo file
+* Implemented stein support
+* added example config file
+* added example config
+* tested the RACK devices
+* support for rack vThunder devices
+* Removal of plugin creation part
+* Update README.md
+* Fixed bolding per PM request
+* Added Nov 6th release date, in development blurb
+* updated readme.md for new service part
+* updated the install service file
+* reorganize the install script
+* partial code for daemon auto-install
+* conversion process of octavia plugin to provider agent
+* aVCS configuration automation
+* added VRRP flow and member network port configuration logic
+* adding support for vThunder 414
+* rebase for repositories.py
+* rebase
+* changes for HA flows
+* changes for HA flows
+* last commit with all required changes of config parameters
+* Final code review
+* Added appropriate headers
+* changes for default section
+* args phase1
+* added SLB config parameters
+* added few config parameters to SLB nouns
+* Moved tests to unit dir
+* Actual assertions in tests
+* Added mock to test requirements \* Brief sketch of flow/task testing I'm adding more to next commit
+* Added alembic.ini,include\_package\_data to python package setup
+* Added tox.ini/unit test execution
+* Updated setup.cfg to use our DB migration tool
+* Added environment info to readme
+* Removal of constant wait and issue resolution of error - computeid is missing
+* updated readme.md for installation steps
+* added support for vThunder CLI
+* Partial code review imersion
+* replaced Client call w/ factory
+* TLS termination feature
+* Added barbican/glance/novaclient/taskflow requirements
+* Added octavia, taskflow, tenacity reqs
+* Backwards compatibility for Stein
+* Moved client construction to factory method, called factory method in tasks
+* Added swo and .vscode to gitignore
+* added multi-subnet support in octavia plugin
+* code re-organization for incuding multi-component handlers
+* l7rule delete flows
+* delete l7policy code
+* L7Policy create code
+* Health Monitor base code
+* basic logic of scheduling algorithm
+* added dual flow
+* working A10 config file
+* added functionality to read vThunder details from DB
+* added demo DB repository
+* adding config and db files
+* demo1 code
+* completed one demo SLB flow
+* loadbalancer create flow
+* Plug VIP config
+* booting and configuring amphora succes
+* added flow for vthunder boot and delete(only boot)
+* added flow for delete LB
+*  part1 - updated flow to handle amphora details from DB
+* completed loadbalancer workflow with corrections
+* added taskflow for create loadbalancer
+* Removing stray .pyc files
+* Began adding loadbalancer\_update support, not complete
+* merged .gitignore
+* Removed controller, using hot\_plug\_plugin now.  Implmented create loadbalancer and delete loadbalancer using ACOS calls
+* removed amphorae test directory
+* test a10-octavia driver using oslo messaging pre-ACOS integration
+* Base test project to integrate drivers with Octavia
+* Initial Commit
+* Initial commit
