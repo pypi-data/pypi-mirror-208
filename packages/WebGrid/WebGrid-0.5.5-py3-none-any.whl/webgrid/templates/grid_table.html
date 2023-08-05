@@ -1,0 +1,15 @@
+<table{{ renderer.table_attrs()|wg_attributes }}>
+    <thead>
+        {%- if renderer.has_groups() %}
+        <tr>
+            {{ renderer.table_group_headings().lstrip() }}
+        </tr>
+        {%- endif %}
+        <tr>
+            {{ renderer.table_column_headings().lstrip() }}
+        </tr>
+    </thead>
+    <tbody>
+        {{ renderer.table_rows().lstrip() }}
+    </tbody>
+</table>

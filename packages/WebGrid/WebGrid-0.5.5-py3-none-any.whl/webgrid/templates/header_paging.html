@@ -1,0 +1,24 @@
+{%- if _ is not defined -%}
+    {% macro _(message) -%}
+        {{ message }}
+    {%- endmacro %}
+{%- endif -%}
+
+<dl>
+    <dt>{{ _('Records') }}: </dt>
+    <dd class="record-count">
+        {{ grid.record_count }}
+    </dd>
+
+    {% if grid.pager_on %}
+        <dt>{{ _('Page') }}: </dt>
+        <dd class="page">
+            {{ renderer.paging_select() }}
+        </dd>
+
+        <dt>{{ _('Per Page') }}: </dt>
+        <dd class="perpage">
+            {{ renderer.paging_input() }}
+        </dd>
+    {% endif %}
+</dl>
