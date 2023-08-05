@@ -1,0 +1,216 @@
+name: Tests
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.7, 3.8, 3.9, "3.10"]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+
+    - name: Reset caching
+      run: python -c "import time; days = time.time() / 60 / 60 / 24; print(f'TIME_PERIOD=d{int(days / 2) * 2}')" >> $GITHUB_ENV
+
+    - name: Cache tox environments
+      id: cache-windows
+      uses: actions/cache@v3
+      with:
+        path: .tox
+        key: tox-td${{ env.TIME_PERIOD }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+
+    - name: Test with tox
+      run: tox -e py
+
+  test-on-windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+
+    - name: Reset caching
+      run: python -c "import time; days = time.time() / 60 / 60 / 24; print(f'TIME_PERIOD=d{int(days / 2) * 2}')" >> $GITHUB_ENV
+
+    - name: Cache tox environments
+      id: cache-windows
+      uses: actions/cache@v3
+      with:
+        path: .tox
+        key: tox-windows-td${{ env.TIME_PERIOD }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('tests/conftest.py') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+
+    - name: Test with tox
+      run: tox -e py310
+
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox
+
+    - name: Reset caching
+      run: python -c "import time; days = time.time() / 60 / 60 / 24; print(f'TIME_PERIOD=d{int(days / 2) * 2}')" >> $GITHUB_ENV
+
+    - name: Cache tox environments
+      id: cache-tox
+      uses: actions/cache@v3
+      with:
+        path: .tox
+
+        key: tox-coverage-td${{ env.TIME_PERIOD }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+
+    - name: Measure coverage
+      run: tox -e coverage
+
+  run-experiments-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox
+
+    - name: Cache tox environments
+      id: cache-experiments
+      uses: actions/cache@v3
+      with:
+        path: .tox
+        # pyproject.toml and pyproject.toml have versioning info that would
+        # impact the tox environment.
+        key: tox-experiments-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('tests/conftest.py') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+
+    - name: Run experiments checks
+      run: tox -e experiments-checks
+
+  run-no-mushin:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox
+
+    - name: Cache tox environments
+      id: cache-no-mushin
+      uses: actions/cache@v3
+      with:
+        path: .tox
+        key: tox-no-mushin-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('tests/conftest.py') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+
+    - name: Run experiments checks
+      run: tox -e no-mushin
+
+  test-minimum-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+    - name: Cache tox environments
+      id: cache-min-deps
+      uses: actions/cache@v3
+      with:
+        path: .tox
+        key: tox-min-deps-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('tests/conftest.py') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+    - name: Test with tox
+      run: tox -e min-deps
+
+  check-repo-format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+    - name: Test with tox
+      run: tox -e enforce-format
+      
+  run-pyright:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+    - name: Cache tox environments
+      id: cache-pyright
+      uses: actions/cache@v3
+      with:
+        path: .tox
+        key: tox-pyright-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('tests/conftest.py') }}-${{ hashFiles('.github/workflows/tox.yml') }}
+    - name: Test with tox
+      run: tox -e pyright
