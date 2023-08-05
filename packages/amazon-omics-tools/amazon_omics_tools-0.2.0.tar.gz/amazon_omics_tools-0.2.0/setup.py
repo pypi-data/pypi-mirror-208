@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+from setuptools import setup
+
+packages = \
+['omics', 'omics.common', 'omics.transfer', 'omics.uriparse']
+
+package_data = \
+{'': ['*']}
+
+install_requires = \
+['boto3>=1.26.133,<2.0.0',
+ 'botocore-stubs>=1.29.130,<2.0.0',
+ 'mypy-boto3-omics>=1.26.133,<2.0.0',
+ 's3transfer>=0.6.0,<0.7.0']
+
+setup_kwargs = {
+    'name': 'amazon-omics-tools',
+    'version': '0.2.0',
+    'description': 'Tools for working with the Amazon Omics Service',
+    'long_description': '# Amazon Omics Tools\n\nTools for working with the Amazon Omics Service.\n\n## Using the Omics Transfer Manager\n\n### Basic Usage\nThe `TransferManager` class makes it easy to download files for an Omics reference or read set.  By default the files are saved to the current directory, or you can specify a custom location with the `directory` parameter.\n\n```python\nimport boto3\nfrom omics.common.omics_file_types import ReadSetFileName, ReferenceFileName, ReadSetFileType\nfrom omics.transfer.manager import TransferManager\nfrom omics.transfer.config import TransferConfig\n\nREFERENCE_STORE_ID = "<my-reference-store-id>"\nSEQUENCE_STORE_ID = "<my-sequence-store-id>"\n\nclient = boto3.client("omics")\nmanager = TransferManager(client)\n\n# Download all files for a reference.\nmanager.download_reference(REFERENCE_STORE_ID, "<my-reference-id>")\n\n# Download all files for a read set to a custom directory.\nmanager.download_read_set(SEQUENCE_STORE_ID, "<my-read-set-id>", "my-sequence-data")\n```\n\n### Download specific files\nSpecific files can be downloaded via the `download_reference_file` and `download_read_set_file` methods.\nThe `client_fileobj` parameter can be either the name of a local file to create for storing the data, or a `TextIO` or `BinaryIO` object that supports write methods.\n\n```python\n# Download a specific reference file.\nmanager.download_reference_file(\n    REFERENCE_STORE_ID,\n    "<my-reference-id>",\n    ReferenceFileName.INDEX\n)\n\n# Download a specific read set file with a custom filename.\nmanager.download_read_set_file(\n    SEQUENCE_STORE_ID,\n    "<my-read-set-id>",\n    ReadSetFileName.INDEX,\n    "my-sequence-data/read-set-index"\n)\n```\n\n### Upload specific files\nSpecific files can be uploaded via the `upload_read_set` method.\nThe `fileobjs` parameter can be either the name of a local file, or a `TextIO` or `BinaryIO` object that supports read methods.\nFor paired end reads, you can define `fileobjs` as a list of files.\n\n```python\n# Upload a specific read set file.\nread_set_id = manager.upload_read_set(\n    "my-sequence-data/read-set-file.bam",\n    SEQUENCE_STORE_ID,\n    ReadSetFileType.BAM,\n    "name",\n    "subject-id",\n    "sample-id",\n    "<my-reference-arn>",\n)\n\n# Upload paired end read set files.\nread_set_id = manager.upload_read_set(\n    ["my-sequence-data/read-set-file_1.fastq.gz", "my-sequence-data/read-set-file_2.fastq.gz"],\n    SEQUENCE_STORE_ID,\n    ReadSetFileType.FASTQ,\n    "name",\n    "subject-id",\n    "sample-id",\n    "<my-reference-arn>",\n)\n```\n\n### Subscribe to events\nTransfer events: `on_queued`, `on_progress`, and `on_done` can be observed by defining a subclass of `OmicsTransferSubscriber` and passing in an object which can receive events.\n\n```python\nclass ProgressReporter(OmicsTransferSubscriber):\n    def on_queued(self, **kwargs):\n        future: OmicsTransferFuture = kwargs["future"]\n        print(f"Download queued: {future.meta.call_args.fileobj}")\n\n    def on_done(self, **kwargs):\n        print("Download complete")\n\nmanager.download_read_set(SEQUENCE_STORE_ID, "<my-read-set-id>", subscribers=[ProgressReporter()])\n```\n\n### Threads\nTransfer operations use threads to implement concurrency. Thread use can be disabled by setting the `use_threads` attribute to False.\n\nIf thread use is disabled, transfer concurrency does not occur. Accordingly, the value of the `max_request_concurrency` attribute is ignored.\n\n```python\n# Disable thread use/transfer concurrency\nconfig = TransferConfig(use_threads=False)\nmanager = TransferManager(client, config)\nmanager.download_read_set(SEQUENCE_STORE_ID, "<my-read-set-id>")\n```\n\n## Using the Omics URI Parser\n### Basic Usage\nThe `OmicsUriParser` class makes it easy to parse omics readset and reference URIs to extract fields relevant for calling \nAWS omics APIs.\n\n\n#### Readset file URI: \nReadset file URIs come in the following format: \n```\nomics://<AWS_ACCOUNT_ID>.storage.<AWS_REGION>.amazonaws.com/<SEQUENCE_STORE_ID>/readSet/<READSET_ID>/<SOURCE1/SOURCE2>\n```\nFor example:\n```\nomics://123412341234.storage.us-east-1.amazonaws.com/5432154321/readSet/5346184667/source1\nomics://123412341234.storage.us-east-1.amazonaws.com/5432154321/readSet/5346184667/source2\n```\n\n#### Reference file URI:\nReference file URIs come in the following format: \n```\nomics://<AWS_ACCOUNT_ID>.storage.<AWS_REGION>.amazonaws.com/<REFERENCE_STORE_ID>/reference/<REFERENCE_ID>/source\n```\nFor example:\n```\nomics://123412341234.storage.us-east-1.amazonaws.com/5432154321/reference/5346184667/source\n```\n\n```python\nimport boto3\nfrom omics.uriparse.uri_parse import OmicsUriParser, OmicsUri\n\nREADSET_URI_STRING = "omics://123412341234.storage.us-east-1.amazonaws.com/5432154321/readSet/5346184667/source1"\nREFERENCE_URI_STRING = "omics://123412341234.storage.us-east-1.amazonaws.com/5432154321/reference/5346184667/source"\n\nclient = boto3.client("omics")\n\nreadset = OmicsUriParser(READSET_URI_STRING).parse()\nreference = OmicsUriParser(REFERENCE_URI_STRING).parse()\n\n# use the parsed fields from the URIs to call omics APIs:\n\nmanager = TransferManager(client)\n\n# Download all files for a reference.\nmanager.download_reference(reference.store_id, reference.resource_id)\n\n# Download all files for a read set to a custom directory.\nmanager.download_read_set(readset.store_id, readset.resource_id, readset.file_name)\n\n# Download a specific read set file with a custom filename.\nmanager.download_read_set_file(\n    readset.store_id,\n    readset.resource_id,\n    readset.file_name,\n    "my-sequence-data/read-set-index"\n)\n```\n\n## Security\n\nSee [CONTRIBUTING](https://github.com/awslabs/amazon-omics-tools/blob/main/CONTRIBUTING.md#security-issue-notifications) for more information.\n\n## License\n\nThis project is licensed under the Apache-2.0 License.\n',
+    'author': 'Amazon Web Services',
+    'author_email': 'None',
+    'maintainer': 'None',
+    'maintainer_email': 'None',
+    'url': 'https://github.com/awslabs/amazon-omics-tools',
+    'packages': packages,
+    'package_data': package_data,
+    'install_requires': install_requires,
+    'python_requires': '>=3.10,<4.0',
+}
+
+
+setup(**setup_kwargs)
