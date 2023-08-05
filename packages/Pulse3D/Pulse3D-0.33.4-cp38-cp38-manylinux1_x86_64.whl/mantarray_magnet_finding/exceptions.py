@@ -1,0 +1,2 @@
+class UnableToConvergeError(Exception):
+    pass
