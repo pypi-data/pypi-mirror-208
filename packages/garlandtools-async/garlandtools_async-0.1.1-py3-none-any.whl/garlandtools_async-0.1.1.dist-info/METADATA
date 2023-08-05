@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: garlandtools-async
+Version: 0.1.1
+Summary: A async python wrapper for the https://garlandtools.org/ API
+License: MIT
+Author: Abigail Howe
+Author-email: abby@abigailhowe.org
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: aiohttp (>=3.8.4,<4.0.0)
+Description-Content-Type: text/markdown
+
+# garlandtools-py
+
+Work in progress project to provide a async wrapper around the Garland Tools API as detailed here:
+https://www.cyanclay.xyz/info/garland-tools-api-doc-en/
+
+# Rough roadmap
+
+- Implement search and single get
+- Inteligent model system that will check the "partials" of an existing result before polling the API if the data requested is not present
+- Caching layer using `cachetools` to reduce the number of queries made to the API
+- Optional support for a redis cache to allow for more persistent caching
+
+# Contributions welcome
+PR's and issues welcome
+
