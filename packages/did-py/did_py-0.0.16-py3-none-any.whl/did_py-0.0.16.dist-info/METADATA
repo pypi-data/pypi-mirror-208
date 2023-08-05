@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: did-py
+Version: 0.0.16
+Summary: what did i do?
+Author-email: Casey Williams <caseyjw@mail.com>
+License: MIT
+Project-URL: github, https://github.com/shnupta/did
+Keywords: time-management,tasks,productivity
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# did
+a simple task manager
+
+[![Build](https://github.com/shnupta/did/actions/workflows/python-app.yml/badge.svg)](https://github.com/shnupta/did/actions/workflows/python-app.yml)
+[![PyPI version](https://badge.fury.io/py/did-py.svg?dummy=unused)](https://badge.fury.io/py/did-py)
+
+## install
+```
+pip install did-py
+```
+
+## usage
+```
+usage: did [-h] [-s SEARCH] [date]
+
+what did i do?
+
+positional arguments:
+  date                  open the did file for this date (try "monday", "thisweek", "lastweek" or "yesterday"!)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s SEARCH, --search SEARCH
+                        search for text in did files
+```
+
+when you open a new did file for the current day, any unfinished tasks from yesterday or last week will be copied into today's file.
+
+an example did file looks like this:
+```
+# Monday 30 January 2023 - Week 5
+- [ ] Some unfinished task
+  - A note on an unfinished task
+- [ ] Another finished task
+- [X] I managed to do this today!
+```
+
+[![asciicast](https://asciinema.org/a/2RLIPt0CKFNAdJjH8xmptqrTC.svg)](https://asciinema.org/a/2RLIPt0CKFNAdJjH8xmptqrTC)
+
+## build
+this project uses [vulcan](https://github.com/optiver/vulcan-py):
+```
+pip install vulcan-py[cli]
+vulcan develop
+```
