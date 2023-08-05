@@ -1,0 +1,121 @@
+Metadata-Version: 2.1
+Name: countess
+Version: 0.0.27
+Summary: CountESS
+Author: CountESS Developers
+Author-email: Nick Moore <nick@zoic.org>, Alan Rubin <alan@rubin.id.au>
+Maintainer: Nick Moore
+Maintainer-email: Nick Moore <nick@zoic.org>
+License: BSD-3-Clause
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: fqfa (~=1.2.3)
+Requires-Dist: more-itertools (~=9.1.0)
+Requires-Dist: numpy (~=1.24.2)
+Requires-Dist: pandas (~=2.0.0)
+Requires-Dist: rapidfuzz (~=2.15.1)
+Requires-Dist: ttkthemes (~=3.2.2)
+Provides-Extra: dev
+Requires-Dist: black (<24) ; extra == 'dev'
+Requires-Dist: build (==0.10.0) ; extra == 'dev'
+Requires-Dist: mypy (~=1.0.1) ; extra == 'dev'
+Requires-Dist: pylint (~=2.16) ; extra == 'dev'
+Requires-Dist: types-ttkthemes (~=3.2) ; extra == 'dev'
+Requires-Dist: twine (==4.0.2) ; extra == 'dev'
+Requires-Dist: pandas-stubs (~=2.0.0) ; extra == 'dev'
+Requires-Dist: pytest (~=7.2) ; extra == 'dev'
+Provides-Extra: hdf
+Requires-Dist: tables (~=3.8.0) ; extra == 'hdf'
+
+# CountESS 0.0.27
+
+This is CountESS, a modular, Python 3 reimplementation of Enrich2.
+
+## License
+
+BSD 3-clause.  See [LICENSE.txt](LICENSE.txt)
+
+Source code is available at [https://github.com/CountESS-Project/CountESS](https://github.com/CountESS-Project/CountESS) and contributions are welcomed.
+
+## Installing
+
+CountESS can be installed from pypi:
+```
+pip install CountESS
+```
+
+... or install the latest development version directly from github:
+```
+pip install git+https://github.com/CountESS-Project/CountESS.git
+```
+
+... or download and install for development:
+```
+git clone https://github.com/CountESS-Project/CountESS.git
+cd CountESS
+pip install -e .
+```
+
+... or run with nix:
+```
+nix run github:CountESS-Project/CountESS
+```
+
+## Counting with CountESS
+
+To run the CountESS GUI, use `countess_gui`.
+
+A CountESS pipeline consists of a bunch of components called 'nodes',
+connected in an acyclic graph.
+Some components read or write files, others perform basic data operations, 
+others perform more specialized operations relevant to specific fields.
+
+The graph is displayed on the left of the window (or at the top of the window,
+on portrait monitors).  To add a node, click on the graph window and a node
+called "NEW" will be added to the graph.  Pick a plugin for this node from
+the menu.
+
+To select a node for configuration, left-click it.  You can also move it
+around on the scren with left-click and drag.  To remove a node, select it
+and then press Delete.
+
+To link nodes, right-click and drag a new link between them.  Nodes cannot be
+linked to themselves, or in cycles.  To remove a link between nodes, right-click
+the link.
+
+Only the first few hundred rows of input files are read at configuration time.
+To perform a complete run using the entire input file, click 'Run'.
+
+Plugin configurations can be saved and loaded in .INI file format.
+CountESS can also be run in headless mode with `countess_cmd your_config.ini`.
+
+## Writing Plugins
+
+CountESS is really just a pipeline of plugins, which are run sequentially to 
+process your data.  Some of these are bundled as part of CountESS or 
+available as packages on PyPI, but it is easy to create your own plugin packages.
+
+To write a new plugin:
+
+* make a Python class which inherits from `countess.core.plugins.BasePlugin` or 
+  one of its subclasses.
+* Fill in `name`, `title`, `description` and `parameters` attributes.
+* Implement the appropriate methods (see the examples under core/plugins)
+* set you package's `entry_points` to include `countess_plugins` pointing to
+  your plugin class.
+* install your package locally with `pip install -e .` 
+
+... and your plugin will appear in CountESS.
+
+For more details, see [Writing CountESS Plugins](doc/writing_plugins.md)
+
+## Enquiries
+
+Please contact Alan Rubin `alan@rubin.id.au` for further information or
+Nick Moore `nick@zoic.org` for code-related matters.
