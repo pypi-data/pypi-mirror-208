@@ -1,0 +1,85 @@
+Metadata-Version: 2.1
+Name: lecture-automator
+Version: 1.0.0
+Summary: 
+Home-page: https://github.com/CapBlood/lecture-automator.git
+Author: CapBlood
+Author-email: stalker.anonim@mail.ru
+Requires-Python: >=3.8,<=3.9
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Provides-Extra: test
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: ffmpeg-python (>=0.2.0,<0.3.0)
+Requires-Dist: numpy (>=1.24.2,<2.0.0)
+Requires-Dist: streamlit (>=1.22.0,<2.0.0)
+Requires-Dist: sympy (>=1.11.1,<2.0.0)
+Requires-Dist: torch (>=2.0.0,<3.0.0)
+Description-Content-Type: text/markdown
+
+# Lecture Automator
+
+Lecture Automator позволяет автоматически генерировать презентации с озвучкой для каждого из слайдов. Всё, что вам нужно сделать - написать текстовый файл Markdown со специальной разметкой, а остальное за вас сделает Lecture Automator.
+
+## Установка
+
+С помощью pip (также необходимо установить ffmpeg и [Marp](https://github.com/marp-team/marp-cli)):
+```
+pip install lecture-automator
+```
+
+## Использование
+
+### Через CLI
+
+Для использование необходимо создать Markdown-файл с описаниями слайдов (см. [Marp](https://marp.app/#get-started)) и [управляющими конструкциями](#управляющие-конструкции):
+````md
+# Python
+
+```
+print('Привет, мир')
+```
+
+/speech{На этом слайде представлена простейшая программа, написанная на языке програмирования Пайтон. Эта программа просто выводит указанные слова в терминал.}
+
+---
+
+# Python
+
+```
+a = 2
+b = 4
+print(a * b)
+```
+
+/speech{А здесь представлена другая программа, которая умножается число два на число четыре.}
+
+````
+
+Затем для генерации необходимо использовать следующую CLI команду в терминале:
+```bash
+lecture-automator convert Example.md Example.mp4
+```
+
+Пример сгенерированного видео:
+
+[Example.webm](https://user-images.githubusercontent.com/33065236/231875817-1d3aae09-2a63-4bb1-8380-8b7f024bbe45.webm)
+
+### Через Web
+
+Lecture Automator может развернуть небольшой сервер с веб-интерфейсом, в котором можно
+описывать слайды и тут же генерировать видео с возможность его просмотра прямо в данном
+веб-интерфейсе.
+
+Для его запуска необходимо выполнить следующую команду:
+```bash
+lecture-automator web
+```
+
+
+### Управляющие конструкции 
+
+На данный момент реализованы следующие управляющие конструкции:
+- `/speech{...}` - текст для озвучивания слайда (каждый слайд должен содержать данную конструкцию). 
+
