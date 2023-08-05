@@ -1,0 +1,120 @@
+from pathlib import Path
+import urllib.request
+
+from atom.api import Atom, List, Typed
+from enaml.core.api import Looper
+from enaml.layout.api import align, hbox, spacer, vbox
+from enaml.stdlib.message_box import information, question
+from enaml.widgets.api import (
+    Container, Feature, FileDialogEx, Label, MainWindow, Menu, MenuBar, Action,
+    MultilineField, PushButton
+)
+from enaml.qt import QtCore
+STORE = QtCore.QSettings('NCRAR', 'srm-aggregate')
+
+from .list_table import ListTable
+from .util import aggregate
+
+
+class Settings(Atom):
+
+    files = List()
+    output_file = Typed(Path)
+
+    def _default_files(self):
+        return STORE.value('files', [])
+
+    def _default_output_file(self):
+        return STORE.value('output_file', None)
+
+    def add_files(self, files):
+        self.files = sorted(set(self.files + files))
+
+    def run_aggregate(self):
+        result, errors = aggregate(self.files)
+        result.to_excel(self.output_file)
+        return len(result), errors
+
+    def save(self):
+        STORE.setValue('files', self.files)
+        STORE.setValue('output_file', self.output_file)
+
+
+enamldef AggregationWindow(MainWindow):
+
+    title = 'SRM aggregation'
+    initial_size = (800, 400)
+    attr settings = Settings()
+
+    MenuBar:
+        Menu:
+            title = '&Settings'
+            Action:
+                text = 'Set default\tCtrl+D'
+                triggered ::
+                    settings.save()
+
+    Container:
+
+        constraints = [
+            vbox(
+                label_files,
+                files,
+                hbox(label_output_file, output_file, pb_output_file),
+                hbox(spacer(0), pb_agg),
+            ),
+            pb_output_file.width == 30,
+            align('v_center', label_output_file, output_file, pb_output_file),
+        ]
+
+        Label: label_files:
+            text = 'Files and folders to aggregate'
+
+        ListTable: files:
+            features = Feature.DropEnabled
+            data << settings.files
+            select_mode = 'extended'
+            updated ::
+                settings.files = data[:]
+
+            drag_enter => (event):
+                if event.mime_data().has_format('text/uri-list'):
+                    event.accept_proposed_action()
+
+            drop => (event):
+                text = event.mime_data().data('text/uri-list').decode('utf-8')
+                filenames = []
+                for t in text.strip().split('\n'):
+                    t = urllib.parse.unquote(t).strip()
+                    fragments = urllib.parse.urlsplit(t)
+                    path = Path(urllib.request.url2pathname(fragments.path))
+                    filenames.append(path)
+                settings.add_files(filenames)
+                self.updated = True
+
+        Label: label_output_file:
+            text = 'Output filename'
+
+        Label: output_file:
+            text << str(settings.output_file) if settings.output_file else ''
+
+        PushButton: pb_output_file:
+            text = '📂'
+            clicked ::
+                filename = FileDialogEx.get_save_file_name(
+                    current_path=str(settings.output_file),
+                    name_filters=['Excel file (*.xlsx)'],
+                )
+                if filename:
+                    filename = Path(filename)
+                    settings.output_file = Path(filename)
+
+        PushButton: pb_agg:
+            text = 'Aggregate'
+            enabled << bool(settings.output_file and settings.files)
+            clicked ::
+                n_agg, errors = settings.run_aggregate()
+                mesg = f'Aggregated {n_agg} files with {len(errors)} errors.'
+                if errors:
+                    mesg += '\n' + '\n'.join(errors)
+                information(self, 'Aggregation', mesg)

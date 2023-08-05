@@ -1,0 +1,27 @@
+[project]
+name = "srm-aggregate"
+description = "Custom code for facilitating SRM analyses"
+readme = "readme.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Buran Consulting, LLC", email="info@bradburan.com"}
+]
+maintainers = [
+    {name = "Buran Consulting, LLC", email="info@bradburan.com"}
+]
+dependencies = [
+    "enaml[qt6-pyside] >=0.16.1",
+    "pandas",
+	"xlsxwriter",
+]
+dynamic = ["version"]
+
+[project.scripts]
+srm-aggregate = "srm_aggregate.main:main_aggregate"
+
+[build-system]
+requires = ["setuptools>=61.2", "wheel", "setuptools_scm[toml]>=3.4.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "srm_aggregate/version.py"
