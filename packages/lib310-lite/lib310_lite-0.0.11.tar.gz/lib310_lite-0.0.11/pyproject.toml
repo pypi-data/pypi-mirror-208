@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "lib310_lite"
+version = "0.0.11"
+description = "lib310 Lite Python Package"
+authors = ["310 <info@310.ai>"]
+maintainers = ["Saman Fekri <saman@310.ai>"]
+keywords = ["biology", "AI", "genomics", "bioinforma", "machine learning", "GAN"]
+packages = [
+    { include = "lib310_lite" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+google-cloud = ">=0.34.0"
+google-cloud-bigquery = ">=3.2.0"
+db-dtypes = ">=1.0.0"
+numpy = "<1.23.0"
+bounded_pool_executor = ">=0.0.0"
+dask = ">=2022.11.0"
+distributed = ">=2022.11.0"
+dask-sql = ">=2022.11.0"
+gcsfs = ">=2022.11.0"
+SQLAlchemy = ">=2.0.0"
+psycopg2-binary= ">=2.9.0"
+
+
+[tool.poetry.dev-dependencies]
+pytest = ">7.1.2"
+python-dotenv = ">=0.19.0"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
