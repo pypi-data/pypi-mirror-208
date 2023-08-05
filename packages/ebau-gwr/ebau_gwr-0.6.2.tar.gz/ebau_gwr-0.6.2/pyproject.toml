@@ -1,0 +1,122 @@
+[tool.poetry]
+name = "ebau-gwr"
+version = "0.6.2"
+description = "GWR synchronisation for ebau projects"
+homepage = "https://github.com/inosca/ebau-gwr"
+repository = "https://github.com/inosca/ebau-gwr"
+authors = ["Adfinis AG"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django :: 3.2",
+    "Intended Audience :: Developers",
+    "Environment :: Web Environment",
+]
+include = ["CHANGELOG.md"]
+exclude = [
+    "ebau_gwr/conftest.py",
+    "ebau_gwr/**/tests",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+cryptography = ">=37.0.2,<41.0.0"
+Django = "^3.2.13"
+django-environ = "^0.10.0"
+django-filter = "^23.1"
+django-generic-api-permissions = "^0.2.0"
+djangorestframework = "^3.13.1"
+djangorestframework-jsonapi = "^5.0.0"
+mozilla-django-oidc = "^2.0.0"
+psycopg2-binary = "^2.9.3"
+requests = "^2.28.0"
+uWSGI = "^2.0.20"
+
+[tool.poetry.dev-dependencies]
+black = "23.3.0"
+django-extensions = "3.2.1"
+factory-boy = "3.2.1"
+flake8 = "6.0.0"
+flake8-blind-except = "0.2.1"
+flake8-debugger = "4.1.2"
+flake8-docstrings = "1.7.0"
+flake8-isort = "6.0.0"
+flake8-string-format = "0.3.0"
+flake8-tuple = "0.4.1"
+gitlint = "0.19.1"
+ipython = "8.12.2"
+isort = "5.12.0"
+lxml = "4.9.2"
+pdbpp = "0.10.3"
+pre-commit = "3.3.1"
+pytest = "7.3.1"
+pytest-cov = "4.0.0"
+pytest-django = "4.5.2"
+pytest-env = "0.8.1"
+pytest-factoryboy = "2.5.1"
+pytest-mock = "3.10.0"
+pytest-randomly = "3.12.0"
+python-semantic-release = "7.33.3"
+requests-mock = "1.10.0"
+snapshottest = "0.6.0"
+xmlschema = "2.2.3"
+
+[tool.isort]
+skip = [
+  "migrations",
+  "snapshots",
+]
+known_first_party = "ebau_gwr"
+known_third_party = "xmlschema"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+line_length = 88
+
+[tool.pytest.ini_options]
+addopts = "--reuse-db --randomly-seed=1521188766 --randomly-dont-reorganize"
+DJANGO_SETTINGS_MODULE = "ebau_gwr.settings"
+filterwarnings = [
+    "error::DeprecationWarning",
+    "error::PendingDeprecationWarning",
+]
+env = [
+    "ADMINS=Test Example <test@example.com>,Test2 <test2@example.com>",
+    "OIDC_OP_USER_ENDPOINT=mock://ebau-gwr.github.com/openid/userinfo",
+    "OIDC_OP_INTROSPECT_ENDPOINT=mock://ebau-gwr.github.com/openid/introspect",
+    "OIDC_BEARER_TOKEN_REVALIDATION_TIME=60",
+]
+
+[tool.coverage.run]
+source = ["."]
+
+[tool.coverage.report]
+fail_under = 100
+exclude_lines = [
+    "pragma: no cover",
+    "pragma: todo cover",
+    "def __str__",
+    "def __unicode__",
+    "def __repr__",
+]
+omit = [
+    "*/migrations/*",
+    "*/apps.py",
+    "manage.py",
+    "ebau_gwr/settings_*.py",
+    "ebau_gwr/wsgi.py",
+]
+show_missing = true
+
+[tool.semantic_release]
+version_source = "tag"
+major_on_zero = false
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
