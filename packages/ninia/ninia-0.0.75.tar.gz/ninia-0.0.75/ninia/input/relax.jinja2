@@ -1,0 +1,91 @@
+{# Required specifications for CONTROL:
+    - outdir
+    - pseudo_dir
+{# Defaults for CONTROL:
+    - calculation: relax
+    - prefix: untitled
+#}
+&CONTROL
+    calculation     = '{% if control.calculation %}{{control.calculation}}{% else %}relax{% endif %}',
+    prefix          = '{% if control.prefix %}{{control.prefix}}{% else %}untitled{% endif %}',
+    outdir          = '{{control.outdir}}',
+    pseudo_dir      = '{{control.pseudo_dir}}',{% if system.nstep %}
+    nstep           = {{control.nstep}},{% endif %}{%- if control.verbosity %}
+    verbosity       = '{{ control.verbosity }}',{% endif %}{%- if control.restart_mode %}
+    restart_mode    = '{{ control.restart_mode }}',{% endif %}{%- if control.dt %}
+    dt              = {{ control.dt }},{% endif %}{%- if control.max_seconds %}
+    max_seconds     = {{ control.max_seconds }},{% endif %}{%- if control.etot_conv_thr %}
+    etot_conv_thr   = {{ control.etot_conv_thr }},{% endif %}{%- if control.forc_conv_thr %}
+    forc_conv_thr   = {{ control.forc_conv_thr }},{% endif %}
+/
+{# Required specifications for SYSTEM:
+    - nat
+    - ntyp
+    - ecutwfc
+{# Defaults for SYSTEM:
+    - ibrav: 0
+    - occupations: smearing
+#}
+&SYSTEM
+    ibrav           = {% if system.ibrav %}{{ system.ibrav }}{% else %}0{% endif %},{% if system.celldm %}{% for  dm in system.celldm %}
+    celldm({{ loop.index }})       = {{ dm }},{% endfor %}{% endif %}{% if system.A %}
+    A               = {{ system.A }},{% endif %}{% if system.B %}
+    B               = {{ system.B }},{% endif %}{% if system.C %}
+    C               = {{ system.C }},{% endif %}{% if system.cosAB %}
+    cosAB           = {{ system.cosAB }},{% endif %}{% if system.cosAC %}
+    cosAC           = {{ system.cosAC }},{% endif %}{% if system.cosBC %}
+    cosBC           = {{ system.cosBC }},{% endif %}
+    nat             = {{ system.nat }},
+    ntyp            = {{ system.ntyp }},{% if system.tot_charge %}
+    tot_charge      = {{ system.tot_charge }},{% endif %}
+    ecutwfc         = {{ system.ecutwfc }},{% if system.ecutrho %}
+    ecutrho         = {{ system.ecutrho }},{% endif %}{% if system.nosym %}
+    nosym           = {{ system.nosym }},{% endif %}{% if system.nosym_env %}
+    nosym_evc       = {{ system.nosym_evc }},{% endif %}
+    occupations     = '{% if system.occupations %}{{ system.occupations }}{% else %}smearing{% endif %}',{% if system.degauss %}
+    degauss         = {{ system.degauss }},{% endif %}{% if system.smearing %}
+    smearing        = '{{ system.smearing }}',{% endif %}{% if system.nspin %}
+    nspin           = {{ system.nspin }},{% endif %}{% if system.input_dft %}
+    input_dft       = '{{ system.input_dft }}',{% endif %}{% if system.assume_isolated %}
+    assume_isolated = '{{ system.assume_isolated }}',{% endif %}{% if system.esm_bc %}
+    esm_bc          = '{{ system.esm_bc }}',{% endif %}{% if system.starting_magnetizations %}{% for start_mag in system.starting_magnetizations %}
+    starting_magnetization({{ loop.index }}) = {{ start_mag }},{% endfor %}{% if system.noncolin %}
+    noncolin        = {{ system.noncolin }},{% for start_mag in system.starting_magnetizations %}
+    angle1({{ loop.index }}) = 90.0,
+    angle2({{ loop.index }}) = 0.0,{% endfor %}{% endif %}{% endif %}
+/
+{# No required specifications for ELECTRONS #}
+&ELECTRONS{% if electrons.electron_maxstep %}
+    electron_maxstep    = {{ electrons.electron_maxstep }},{% endif %}{% if electrons.scf_must_converge %}
+    scf_must_converge   = {{ electrons.scf_must_converge }},{% endif %}{% if electrons.conv_thr %}
+    conv_thr            = {{ electrons.conv_thr }},{% endif %}{% if electrons.adaptive_thr %}
+    adaptive_thr        = {{ electrons.adaptive_thr }},{% endif %}{% if electrons.conv_thr_init %}
+    conv_thr_init       = {{ electrons.conv_thr_init }},{% endif %}{% if electrons.mixing_mode %}
+    mixing_mode         = {{ electrons.mixing_mode }},{% endif %}{% if electrons.mixing_beta %}
+    mixing_beta         = {{ electrons.mixing_beta }},{% endif %}{% if electrons.mixing_ndim %}
+    mixing_ndim         = {{ electrons.mixing_ndim }},{% endif %}{% if electrons.diagonalization %}
+    diagonalization     = {{ electrons.diagonalization }},{% endif %}
+/
+&IONS {# Not implemented yet #}
+/
+&CELL{% if cell.cell_dynamics %}
+    cell_dynamics    = '{{ cell.cell_dynamics }}',{% endif %}{% if cell.press %}
+    press            = {{ cell.press }},{% endif %}{% if cell.wmass %}
+    wmass            = {{ cell.wmass }},{% endif %}{% if cell.cell_factor %}
+    cell_factor      = {{ cell.cell_factor }},{% endif %}{% if cell.cell_dofree %}
+    cell_dofree      = '{{ cell.cell_dofree }}',{% endif %}
+/
+
+ATOMIC_SPECIES
+{% for species in atomic_species %}{{ species[0] }}     {{ species[1] }}     {{ species[2] }}
+{% endfor %}
+{% if system.ibrav == 0 %}
+CELL_PARAMETERS angstrom
+{{ cell_parameters }}
+{% endif %}
+ATOMIC_POSITIONS angstrom
+{{ atomic_positions }}
+
+K_POINTS automatic
+{% for kp in k_points %} {{ kp }}{% endfor %}
+

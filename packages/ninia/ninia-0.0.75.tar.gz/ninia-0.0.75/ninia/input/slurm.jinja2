@@ -1,0 +1,21 @@
+#!/bin/bash
+#SBATCH --job-name={{ control.prefix }}
+#SBATCH --nodes={{ job.nodes }}
+#SBATCH --ntasks={{ job.ntasks }}
+#SBATCH --partition={{ job.partition }}
+#SBATCH --time={{ job.time }}:00:00
+#SBATCH --output={{ control.prefix }}.o%j
+#SBATCH --error={{ control.prefix }}.e%j
+#SBATCH --mem={{ job.memory }}G{% if job.mail_type %}
+#SBATCH --mail-type={% for type in job.mail_type %}{{ type }},{% endfor %}{% endif %}{% if job.mail_user %}
+#SBATCH --mail-user={{ job.mail_user }}{% endif %}
+
+start=`date +%s`
+
+mpirun -np {{ job.ntasks }} {{ job.exec }} {% if job.nk %}-nk {{ job.nk }} {% endif %}< {{ job.input }} > {{ job.output }}
+
+end=`date +%s`
+
+runtime=$((end-start))
+echo $runtime
+echo "Finished"
