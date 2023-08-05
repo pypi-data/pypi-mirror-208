@@ -1,0 +1,18 @@
+{% load querykit_tags %}
+{% block prologue_section %}
+{% if self.block.meta.classname %}<div class="{{ self.block.meta.classname }}{% if form and form.panel_layout_classname %} {{ form.panel_layout_classname }}{% endif %}">{% endif %}
+{% endblock %}
+{% block main_section %}
+{% if form %}
+<form id="{{ form.identifier }}"{% if form.classname %} class="{{ form.classname }}"{% endif %} action="{{ action_url }}"
+      method="{{ form.method }}" novalidate>
+</form>
+{% endif %}
+{% endblock %}
+{# begin_custom_blocks #}
+{% block content_section %}
+{% endblock %}
+{# end_custom_blocks #}
+{% block epilogue_section %}
+{% if self.block.meta.classname %}</div>{% endif %}
+{% endblock %}

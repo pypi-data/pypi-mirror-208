@@ -1,0 +1,80 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags django_auxiliaries_tags %}
+{% load i18n %}
+
+{% block titletag %}{{ title }}{% endblock %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% tagged_static 'wagtail_content_admin/css/wagtail_content_admin.css' %}" type="text/css">
+{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        window.headerSearch = {
+            url: "{% url results_url %}",
+            termInput: "#id_q",
+            targetOutput: "#content-results"
+        }
+
+        $(function() {
+            $('#collection_chooser_collection_id').on('change', function() {
+                this.form.submit();
+            })
+        });
+    </script>
+    <script>
+        window.wagtailConfig.BULK_ACTION_ITEM_TYPE = '{{ bulk_action_type }}';
+        window.wagtailConfig.STRINGS.BULK_ACTIONS['{{ bulk_action_type }}'] = {SINGULAR: "1 {{ verbose_name|lower }} selected", PLURAL: "{0} {{ verbose_name_plural|lower }} selected", ALL: "All {0} {{ verbose_name_plural|lower }} on this screen selected", ALL_IN_LISTING: "All {{ verbose_name_plural }} in listing selected"};
+    </script>
+    <script defer src="{% tagged_static 'wagtailadmin/js/bulk-actions.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    {% url index_url as resolved_index_url %}
+
+    {% if user_can_add %}
+        {% url add_url as add_link %}
+        {% include "wagtailadmin/shared/header.html" with title=verbose_name_plural action_url=add_link icon="image" action_text=add_prompt search_url=index_url %}
+    {% else %}
+        {% include "wagtailadmin/shared/header.html" with title=verbose_name_plural icon="image" search_url=index_url %}
+    {% endif %}
+
+    <div class="nice-padding">
+        <form class="content-search search-bar" action="{{ resolved_index_url }}" method="GET" novalidate>
+            <ul class="fields">
+                {% if collections %}
+                    {% include "wagtailadmin/shared/collection_chooser.html" %}
+                    {% if current_tag %}
+                        <input type="hidden" name="tag" value="{{ current_tag }}" />
+                    {% endif %}
+                {% endif %}
+                {% if popular_tags %}
+                <li>
+                    <fieldset class="tagfilter">
+                    <legend>{% trans 'Popular Tags:' %}</legend>
+                      {% for tag in popular_tags %}
+                          {% if tag.name != current_tag %}
+                              <a class="button button-small button-secondary bicolor button--icon" href="{{ resolved_index_url }}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+                          {% else %}
+                              <a class="button button-small bicolor button--icon" href="{{ resolved_index_url }}{% querystring tag=tag.name %}">{% icon name="tag" wrapped=1 %}{{ tag.name }}</a>
+                          {% endif %}
+                      {% endfor %}
+                      {% if current_tag %}
+                          <a class="button button-small bicolor button-secondary button--icon" href="{{ resolved_index_url }}{% querystring tag='' %}">{% icon name="cross" wrapped=1 %}{% trans 'Clear choice' %}</a>
+                      {% endif %}
+                    </fieldset>
+                </li>
+                {% endif %}
+            </ul>
+        </form>
+
+        <div id="content-results">
+            {% include "wagtail_content_admin/browser_results.html" %}
+        </div>
+        {% trans "Select all media items in listing" as select_all_text %}
+        {% include 'wagtailadmin/bulk_actions/footer.html' with select_all_obj_text=select_all_text app_label=app_label model_name=model_name objects=instances parent=current_collection.id %}
+    </div>
+
+{% endblock %}
