@@ -1,0 +1,219 @@
+#!python
+# coding=utf-8
+
+#  PINTS: Peak Identifier for Nascent Transcripts Starts
+#  Copyright (c) 2019-2021 Li Yao at the Yu Lab.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+import argparse
+import datetime
+import logging
+import os
+import sys
+import warnings
+from pints.calling_engine import peak_calling, handle_exception
+from pints import __version__
+
+logging.basicConfig(format="%(name)s - %(asctime)s - %(levelname)s: %(message)s",
+                    datefmt="%d-%b-%y %H:%M:%S",
+                    level=logging.INFO,
+                    handlers=[
+                        logging.StreamHandler()
+                    ])
+logger = logging.getLogger("PINTS - Caller")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Peak Identifier for Nascent Transcripts Starts",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    group = parser.add_argument_group("Input/Output")
+    group.add_argument("--bam-file", action="store", dest="bam_file", nargs="*",
+                       type=str, required=False,
+                       help="input bam file, if you want to use bigwig files, please use --bw-pl and --bw-mn")
+    group.add_argument("--save-to", action="store", dest="save_to",
+                       type=str, required=False, default=".",
+                       help="save peaks to this path (a folder), by default, current folder")
+    group.add_argument("--file-prefix", action="store", dest="file_prefix",
+                       type=str, required=True, default=str(os.getpid()),
+                       help="prefix to all intermediate files")
+    group.add_argument("--bw-pl", action="store", dest="bw_pl", nargs="*",
+                       type=str, required=False,
+                       help="Bigwig for plus strand. If you want to use bigwig instead of BAM, "
+                            "please set bam_file to bigwig")
+    group.add_argument("--bw-mn", action="store", dest="bw_mn", nargs="*",
+                       type=str, required=False,
+                       help="Bigwig for minus strand. If you want to use bigwig instead of BAM, "
+                            "please set bam_file to bigwig")
+    group.add_argument("--ct-bw-pl", action="store", dest="ct_bw_pl", nargs="*",
+                       type=str, required=False,
+                       help="Bigwig for control/input (plus strand). If you want to use bigwig instead of BAM, "
+                            "please use --ct-bam")
+    group.add_argument("--ct-bw-mn", action="store", dest="ct_bw_mn", nargs="*",
+                       type=str, required=False,
+                       help="Bigwig for input/control (minus strand). If you want to use bigwig instead of BAM, "
+                            "please use --ct-bam")
+    group.add_argument("--ct-bam", action="store", dest="ct_bam", nargs="*",
+                       type=str, required=False,
+                       help="Bam file for input/control (minus strand). If you want to use bigwig instead of BAM, "
+                            "please use --input-bw-pl and --input-bw-mn")
+    group.add_argument("--exp-type", action="store", default="CoPRO", dest="bam_parser",
+                       choices=("CoPRO", "GROcap", "PROcap", "CAGE", "NETCAGE",
+                                "RAMPAGE", "csRNAseq", "STRIPEseq", "PROseq", "GROseq",
+                                "R_5", "R_3", "R1_5", "R1_3", "R2_5", "R2_3"),
+                       help="Type of experiment. If the experiment is not listed as a choice, "
+                            "or you know the position of RNA ends on the reads and you want to override the defaults, "
+                            "you can specify: "
+                            "R_5 (5' of the read for single-end lib), "
+                            "R_3 (3' of the read for single-end lib), "
+                            "R1_5 (5' of the read1 for paired-end lib), "
+                            "R1_3 (3' of the read1 for paired-end lib), "
+                            "R2_5 (5' of the read2 for paired-end lib), "
+                            "or R2_3 (3' of the read2 for paired-end lib)")
+    group.add_argument("--reverse-complement", action="store_true", dest="seq_rc",
+                       required=False, default=False,
+                       help="Set this switch if reads in this library represent the reverse complement of "
+                            "RNAs, like PROseq")
+    group.add_argument("-f", "--filters", action="store", type=str, nargs="*", default=[],
+                       help="reads from chromosomes whose names contain any matches in filters will be ignored")
+
+    group = parser.add_argument_group("Filtering")
+    group.add_argument("--adjust-method", action="store", dest="adjust_method",
+                       choices=("fdr_bh", "bonferroni", "fdr_tsbh", "fdr_tsbky"),
+                       type=str, required=False, default="fdr_bh", help="method for calculating adjusted p-vals")
+    group.add_argument("--fdr-target", action="store", dest="fdr_target",
+                       type=float, required=False, default=0.1, help="FDR target for multiple testing")
+    group.add_argument("--close-threshold", action="store", dest="close_threshold",
+                       type=int, required=False, default=300,
+                       help="Distance threshold for two peaks (on opposite strands) to be merged")
+    group.add_argument("--stringent-pairs-only", action="store_true", dest="stringent_pairs_only",
+                       required=False, default=False,
+                       help="Only consider elements as bidirectional when both of the two peaks are significant "
+                            "according to their p-values")
+    group.add_argument("--min-length-opposite-peaks", "--min-lengths-opposite-peaks", dest="min_len_opposite_peaks",
+                       required=False, default=0, type=int,
+                       help="Minimum length requirement for peaks on the opposite strand to be paired, set it to 0 to loose this requirement")
+    group.add_argument("--mapq-threshold", action="store", dest="mapq_threshold",
+                       type=int, required=False, default=30, help="Minimum mapping quality")
+    group.add_argument("--small-peak-threshold", action="store", dest="small_peak_threshold",
+                       type=int, required=False, default=5,
+                       help="Threshold for small peaks, peaks with width smaller than this value will be required "
+                            "to run extra test")
+    group.add_argument("--max-window-size", action="store", dest="window_size_threshold",
+                       type=int, required=False, default=2000, help="max size of divergent windows")
+                       
+    group.add_argument("--remove-sticks", action="store_false", dest="keep_sticks",
+                       required=False, default=True,
+                       help="Set this switch to remove stick-like peaks (signal on a single position)")
+
+    group = parser.add_argument_group("Edge trimming")
+    group.add_argument("--annotation-gtf", action="store", dest="annotation_gtf", type=str, required=False,
+                       help="Gene annotation file (gtf) format for learning the threshold for edge trimming. "
+                            "If this is specified, other related parameters like --donor-tolerance will be ignored.")
+    group.add_argument("--tss-extension", action="store", dest="tss_extension", type=int, required=False, default=200,
+                       help="BPs to be extended from annotated TSSs, these extended regions will be used to minimize "
+                            "overlaps between called peaks.")
+    group.add_argument("--focused-chrom", action="store", dest="focused_chrom", default="chr1", type=str,
+                       required=False,
+                       help="If --annotation-gtf is specified, you use this parameter to change which chromosome the "
+                            "tool should learn the values from.")
+    group.add_argument("--alpha", "--donor-tolerance", action="store", dest="donor_tolerance",
+                       type=float, required=False, default=0.3,
+                       help="The stringency for PINTS to cluster nearby TSSs into a peak. 0 is the least stringent; "
+                            "1 is the most stringent.")
+    group.add_argument("--ce-trigger", action="store", dest="ce_trigger",
+                       type=int, required=False, default=3, help="Trigger for receptor tolerance checking")
+
+    group = parser.add_argument_group("Peak properties")
+    group.add_argument("--top-peak-threshold", action="store", dest="top_peak_threshold",
+                       type=float, required=False, default=0.75,
+                       help="For very short peaks (smaller than --small-peak-threshold), "
+                            "we use the quantile threshold for peak densities as the background density")
+    group.add_argument("--min-mu-percent", action="store", dest="min_mu_percent",
+                       type=float, required=False, default=0.1,
+                       help="Local backgrounds smaller than this percentile among all peaks will be replaced.")
+    group.add_argument("--peak-distance", action="store", dest="peak_distance",
+                       type=int, required=False, default=1,
+                       help="Required minimal horizontal distance (>= 1) in samples between neighbouring peaks.")
+    group.add_argument("--peak-width", action="store", dest="peak_width",
+                       type=int, required=False, default=None,
+                       help="Required width of peaks in samples.")
+    group.add_argument("--div-size-min", action="store", dest="div_size_min",
+                       type=int, required=False, default=0,
+                       help="Min size for a divergent peak")
+    group.add_argument("--summit-dist-min", action="store", dest="summit_dist_min",
+                       type=int, required=False, default=0,
+                       help="Min dist between two summit")
+
+    group = parser.add_argument_group("Testing")
+    group.add_argument("--model", action="store", type=str, required=False, default="ZIP",
+                       choices=("ZIP", "Poisson",),
+                       help="Statistical model for testing the significance of peaks.")
+    group.add_argument("--IQR-strategy", action="store", type=str, required=False,
+                       dest="iqr_strategy", default="bgIQR", choices=("bgIQR", "pkIQR"),
+                       help="IQR strategy, can be bgIQR (more robust) or pkIQR (more efficient)")
+    group.add_argument("--disable-ler", action="store_true", required=False, default=False,
+                       help="Disable Local Environment Refinement")
+    group.add_argument("--disable-eler", dest="enable_eler", action="store_false", default=True,
+                       required=False, help="Disable Enhanced Local Environment Refinement")
+    group.add_argument("--eler-lower-bound", dest="eler_lower_bound", action="store", default=1., type=float,
+                       required=False, help="Lower bound of the empirical estimation for the density of "
+                                            "potential true peaks in the local background.")
+    group.add_argument("--disable-small", action="store_true", required=False, default=False,
+                       help="Set this switch to prevent PINTS from reporting very short peaks"
+                            "(shorter than --small-peak-threshold)")
+
+    group = parser.add_argument_group("Other")
+    group.add_argument("--epig-annotation", action="store", dest="epig_annotation", type=str, required=False,
+                       help="Refine peak calls with compiled epigenomic annotation from the PINTS web server."
+                            " Values should be the name of the biosample, for example, K562.")
+    group.add_argument("--relaxed-fdr-target", action="store", dest="relaxed_fdr_target", default=0.2,
+                       type=float, required=False, help="Relaxed FDR cutoff for TREs overlap with epigenomic annotations")
+    group.add_argument("--chromosome-start-with", action="store", dest="chromosome_startswith",
+                       type=str, required=False, default="chr",
+                       help="Only keep reads mapped to chromosomes with this prefix")
+    group.add_argument("--dont-output-chrom-size", action="store_false", dest="output_chrom_size",
+                       required=False, default=True,
+                       help="Don't write chromosome dict to local folder (not recommended)")
+    group.add_argument("--dont-check-updates", action="store_false", dest="check_updates",
+                       required=False, default=True,
+                       help="Set this switch to disable update check.")
+    group.add_argument("--disable-qc", action="store_true", dest="disable_qc",
+                       required=False, default=False,
+                       help="Disable on-the-fly quality control")
+    group.add_argument("--strict-qc", action="store_true", dest="strict_qc",
+                       required=False, default=False,
+                       help="Raise exceptions if PINTS detects abnormalities during on-the-fly quality control; "
+                            "otherwise, PINTS prints warning messages.")
+    group.add_argument("--debug", action="store_true", dest="output_diagnostics",
+                       required=False, default=False,
+                       help="Save diagnostics (independent filtering and pval dist) to local folder")
+    group.add_argument("--dont-borrow-info-reps", action="store_false", dest="borrow_info_reps",
+                       required=False, default=True,
+                       help="Don't borrow information from reps to refine calling of divergent elements")
+    group.add_argument("--thread", action="store", dest="thread_n",
+                       type=int, required=False, default=1,
+                       help="Max number of threads PINTS can create")
+    parser.add_argument("-v", "--version", action="version", version=__version__)
+
+    args = parser.parse_args()
+
+    warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+    warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+    DEFAULT_PREFIX = "peakcalling_" + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    handler = logging.FileHandler(os.path.join(args.save_to, "{0}_{1}.log".format(DEFAULT_PREFIX, os.getpid())))
+    formatter = logging.Formatter("%(name)s - %(asctime)s - %(levelname)s: %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    # redirect exception message to log
+    sys.excepthook = handle_exception
+
+    peak_calling(args.bam_file, args.save_to, args.file_prefix, **vars(args))

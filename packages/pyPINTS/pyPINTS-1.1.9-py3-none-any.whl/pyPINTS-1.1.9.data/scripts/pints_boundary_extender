@@ -1,0 +1,96 @@
+#!python
+# -*- coding: utf-8 -*-
+
+#  PINTS: Peak Identifier for Nascent Transcripts Starts
+#  Copyright (c) 2019-2021 Li Yao at the Yu Lab.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+
+# @Author: Li Yao
+# @Date: 5/7/21
+import os
+import sys
+import argparse
+import datetime
+import logging
+import warnings
+
+try:
+    from pints import __version__
+    from pints.extension_engine import extend
+except ImportError as e:
+    missing_package = str(e).replace("No module named '", "").replace("'", "")
+    sys.exit("Please install %s first!" % missing_package)
+warnings.filterwarnings("error")
+
+DEFAULT_PREFIX = str(os.getpid())
+logging.basicConfig(format="%(name)s - %(asctime)s - %(levelname)s: %(message)s",
+                    datefmt="%d-%b-%y %H:%M:%S",
+                    level=logging.INFO,
+                    handlers=[
+                        logging.StreamHandler()
+                    ])
+logger = logging.getLogger("PINTS - BoundaryExtender")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Element boundary refinement",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--bam-files", action="store", dest="bam_files", nargs="*",
+                       type=str, required=False,
+                       help="input bam file, if you want to use bigwig files, please use --bw-pl and --bw-mn")
+    group.add_argument("--bw-pl", action="store", dest="bw_pl", nargs="*",
+                       type=str, required=False,
+                       help="Bigwig for plus strand. If you want to use bigwig instead of BAM, "
+                            "please set bam_file to bigwig")
+    parser.add_argument("--bw-mn", action="store", dest="bw_mn", nargs="*",
+                        type=str, required=False,
+                        help="Bigwig for minus strand. If you want to use bigwig instead of BAM, "
+                             "please set bam_file to bigwig")
+    parser.add_argument("--exp-type", action="store", default=("CoPRO", ), dest="bam_parser",
+                        choices=("CoPRO", "GROcap", "PROcap", "CAGE", "NETCAGE", "csRNAseq", "PROseq", "GROseq",
+                                 "R_5", "R_3", "R1_5", "R1_3", "R2_5", "R2_3"),
+                        help="Type of experiment, acceptable values are: CoPRO/GROcap/GROseq/PROcap/PROseq, or if you "
+                             "know the position of RNA ends which you're interested on the reads, you can specify "
+                             "R_5, R_3, R1_5, R1_3, R2_5 or R2_3", nargs="+", required=False)
+    parser.add_argument("--divergent-files", help="Divergent peak call(s)", nargs="+")
+    parser.add_argument("--bidirectional-files", help="Divergent peak call(s)", nargs="+")
+    parser.add_argument("--unidirectional-files", help="Unidirectional peak call(s)", nargs="+")
+    parser.add_argument("--promoter-bed", default=None,
+                        help="Promoter bed, if specified, will create a separate bed file for distal elements")
+    parser.add_argument("--save-to", default=".", help="save elements to")
+    parser.add_argument("--div-ext-left", action="store", dest="div_ext_left", nargs="+",
+                        type=int, required=False, default=(60,), help="divergent extension left")
+    parser.add_argument("--div-ext-right", action="store", dest="div_ext_right", nargs="+",
+                        type=int, required=False, default=(60,), help="divergent extension right")
+    parser.add_argument("--unidirectional-ext-left", "--single-ext-left",
+                        action="store", dest="unidirectional_ext_left", nargs="+",
+                        type=int, required=False, default=(60, ), help="unidirectional extension left")
+    parser.add_argument("--unidirectional-ext-right", "--single-ext-right",
+                        action="store", dest="unidirectional_ext_right", nargs="+",
+                        type=int, required=False, default=(60, ), help="unidirectional extension right")
+    parser.add_argument("-v", "--version", action="version", version=__version__)
+
+    args = parser.parse_args()
+    
+    DEFAULT_PREFIX = "boundary_extension_" + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    handler = logging.FileHandler(os.path.join(args.save_to, "{0}_{1}.log".format(DEFAULT_PREFIX, os.getpid())))
+    formatter = logging.Formatter("%(name)s - %(asctime)s - %(levelname)s: %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    logger.info("PINTS version: {0}".format(__version__))
+    logger.info("Command")
+    logger.info(" ".join(sys.argv))
+
+    extend(args)
+    
