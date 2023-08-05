@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chanfig"
+description = "Easier Configuration"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["Machine Learning", "Config", "Dict"]
+maintainers = [
+    {name = "Zhiyuan Chen", email = "this@zyc.ai"},
+]
+authors = [
+    {name = "Zhiyuan Chen", email = "this@zyc.ai"},
+    {name = "Evian C. Liu", email = "evian.liu@outlook.com"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3"
+dependencies = [
+    "pyyaml",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://chanfig.danling.org"
+repository = "https://github.com/ZhiyuanChen/CHANfiG"
+documentation = "https://chanfig.danling.org"
+
+[tool.setuptools]
+packages = ["chanfig"]
+
+[tool.setuptools_scm]
+write_to = "chanfig/_version.py"
