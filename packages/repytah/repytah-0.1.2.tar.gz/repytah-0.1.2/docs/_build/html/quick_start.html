@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Quick Start to Use the Package repytah &mdash; repytah 0.1.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example of Creating Aligned Hierarchies for a Mazurka Score" href="example_vignette.html" />
+    <link rel="prev" title="Function Pipeline" href="function_pipeline.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recommended_installation.html">Installing from <cite>conda</cite> package-manager or from <cite>pip</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="general_installation.html">Install from <cite>pip</cite> or <cite>conda</cite></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utilities_import.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transform_import.html">Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assemble_import.html">Assemble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search_import.html">Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A Quick Start to Use the Package <code class="docutils literal notranslate"><span class="pre">repytah</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#To-skip-visualizing-the-middle-steps-and-get-the-output-directly,-try-the-following-code:">To skip visualizing the middle steps and get the output directly, try the following code:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#To-visualize-the-middle-steps,-try-the-following-code:">To visualize the middle steps, try the following code:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">repytah</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">A Quick Start to Use the Package <code class="docutils literal notranslate"><span class="pre">repytah</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quick_start.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="A-Quick-Start-to-Use-the-Package-repytah">
+<h1>A Quick Start to Use the Package <code class="docutils literal notranslate"><span class="pre">repytah</span></code><a class="headerlink" href="#A-Quick-Start-to-Use-the-Package-repytah" title="Permalink to this heading"></a></h1>
+<p>This notebook demonstrates how to use <code class="docutils literal notranslate"><span class="pre">repytah</span></code> to create aligned hierarchies for a music-based data stream. Before diving into the details, we’ll walk through a brief example program.</p>
+<p>The example input is a csv file containing Chroma feature vectors for each beat of Chopin’s Mazurka Op.30, No.1.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard imports</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Import the package repytah</span>
+<span class="kn">from</span> <span class="nn">repytah</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Make the images clear</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<br/></pre></div>
+</div>
+</div>
+<section id="To-skip-visualizing-the-middle-steps-and-get-the-output-directly,-try-the-following-code:">
+<h2>To skip visualizing the middle steps and get the output directly, try the following code:<a class="headerlink" href="#To-skip-visualizing-the-middle-steps-and-get-the-output-directly,-try-the-following-code:" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_in</span> <span class="o">=</span> <span class="n">load_ex_data</span><span class="p">(</span><span class="s1">&#39;../repytah/data/mazurka30-1.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">file_out</span> <span class="o">=</span> <span class="s2">&quot;hierarchical_out_file.mat&quot;</span>
+<span class="n">num_fv_per_shingle</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">csv_to_aligned_hierarchies</span><span class="p">(</span><span class="n">file_in</span><span class="p">,</span> <span class="n">file_out</span><span class="p">,</span> <span class="n">num_fv_per_shingle</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_5_0.png" class="no-scaled-link" src="_images/quick_start_5_0.png" style="width: 648px; height: 535px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_5_1.png" class="no-scaled-link" src="_images/quick_start_5_1.png" style="width: 592px; height: 481px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_5_2.png" class="no-scaled-link" src="_images/quick_start_5_2.png" style="width: 642px; height: 481px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_5_3.png" class="no-scaled-link" src="_images/quick_start_5_3.png" style="width: 656px; height: 698px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_5_4.png" class="no-scaled-link" src="_images/quick_start_5_4.png" style="width: 648px; height: 753px;" />
+</div>
+</div>
+</section>
+<section id="To-visualize-the-middle-steps,-try-the-following-code:">
+<h2>To visualize the middle steps, try the following code:<a class="headerlink" href="#To-visualize-the-middle-steps,-try-the-following-code:" title="Permalink to this heading"></a></h2>
+<p>Load the input file and modify the music based data to a matrix representation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the input file</span>
+<span class="n">file_in</span> <span class="o">=</span> <span class="n">load_ex_data</span><span class="p">(</span><span class="s1">&#39;../repytah/data/mazurka30-1.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">fv_mat</span> <span class="o">=</span> <span class="n">file_in</span>
+
+<span class="c1"># Number of feature vectors per shingle</span>
+<span class="n">num_fv_per_shingle</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="c1"># Create the self-dissimilarity matrix</span>
+<span class="n">self_dissim_mat</span> <span class="o">=</span> <span class="n">create_sdm</span><span class="p">(</span><span class="n">fv_mat</span><span class="p">,</span> <span class="n">num_fv_per_shingle</span><span class="p">)</span>
+
+<span class="c1"># Produce a visualization</span>
+<span class="n">SDM</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">self_dissim_mat</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Self-Dissimilarity Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_8_0.png" class="no-scaled-link" src="_images/quick_start_8_0.png" style="width: 257px; height: 263px;" />
+</div>
+</div>
+<p>Threshold the above matrix:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">song_length</span> <span class="o">=</span> <span class="n">self_dissim_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.02</span>
+
+<span class="c1"># Threshold the SDM to produce a binary matrix</span>
+<span class="n">thresh_dist_mat</span> <span class="o">=</span> <span class="p">(</span><span class="n">self_dissim_mat</span> <span class="o">&lt;=</span> <span class="n">thresh</span><span class="p">)</span>
+
+<span class="c1"># Produce a visualization</span>
+<span class="n">SDM</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thresh_dist_mat</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thresholded Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_10_0.png" class="no-scaled-link" src="_images/quick_start_10_0.png" style="width: 257px; height: 263px;" />
+</div>
+</div>
+<p>Find and group each pair of repeats:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_lst</span> <span class="o">=</span> <span class="n">find_initial_repeats</span><span class="p">(</span><span class="n">thresh_dist_mat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">song_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">complete_lst</span> <span class="o">=</span> <span class="n">find_complete_list</span><span class="p">(</span><span class="n">all_lst</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+<span class="n">mat_no_overlaps</span><span class="p">,</span> <span class="n">key_no_overlaps</span> <span class="o">=</span> <span class="n">remove_overlaps</span><span class="p">(</span><span class="n">complete_lst</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Find the essential structure components of the song and build the aligned hierarchies:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_tuple</span> <span class="o">=</span> <span class="n">hierarchical_structure</span><span class="p">(</span><span class="n">mat_no_overlaps</span><span class="p">,</span> <span class="n">key_no_overlaps</span><span class="p">,</span> <span class="n">song_length</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_14_0.png" class="no-scaled-link" src="_images/quick_start_14_0.png" style="width: 648px; height: 535px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_14_1.png" class="no-scaled-link" src="_images/quick_start_14_1.png" style="width: 592px; height: 481px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_14_2.png" class="no-scaled-link" src="_images/quick_start_14_2.png" style="width: 642px; height: 481px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_14_3.png" class="no-scaled-link" src="_images/quick_start_14_3.png" style="width: 656px; height: 698px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/quick_start_14_4.png" class="no-scaled-link" src="_images/quick_start_14_4.png" style="width: 648px; height: 753px;" />
+</div>
+</div>
+<p>To visualize the repeated structures in the actual music score, the examples in color yellow and purple are shown: <img alt="b7a6f4ce64b9469e857739365ba421b1" class="no-scaled-link" src="_images/score.jpg" style="width: 700px;" /> <img alt="44a377d29fcc4ed685ab691a4c90a379" class="no-scaled-link" src="_images/score1.jpg" style="width: 700px;" /> <img alt="8b41fbabc67642c3870a611c09fb4134" class="no-scaled-link" src="_images/score2.jpg" style="width: 700px;" /></p>
+<p>This notebook is just a quick walk-through that demonstrates how to use the package <code class="docutils literal notranslate"><span class="pre">repytah</span></code>, more technical details are in the <code class="docutils literal notranslate"><span class="pre">`example</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/example_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/example_vignette.ipynb</a>&gt;`__ notebook.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="function_pipeline.html" class="btn btn-neutral float-left" title="Function Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_vignette.html" class="btn btn-neutral float-right" title="Example of Creating Aligned Hierarchies for a Mazurka Score" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, repytah development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

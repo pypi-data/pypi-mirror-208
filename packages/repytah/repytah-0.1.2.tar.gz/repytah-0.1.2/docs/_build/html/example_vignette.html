@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example of Creating Aligned Hierarchies for a Mazurka Score &mdash; repytah 0.1.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="A Quick Start to Use the Package repytah" href="quick_start.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recommended_installation.html">Installing from <cite>conda</cite> package-manager or from <cite>pip</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="general_installation.html">Install from <cite>pip</cite> or <cite>conda</cite></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utilities_import.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transform_import.html">Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assemble_import.html">Assemble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search_import.html">Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">A Quick Start to Use the Package <code class="docutils literal notranslate"><span class="pre">repytah</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example of Creating Aligned Hierarchies for a Mazurka Score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Step-0:-Create-the-SDM">Step 0: Create the SDM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Importing-data-for-structure-analysis">Importing data for structure analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-the-SDM">Creating the SDM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-1:-Threshold-the-SDM">Step 1: Threshold the SDM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-2:-Find-the-diagonals-present-and-store-all-pairs-of-repeats-found-in-a-list">Step 2: Find the diagonals present and store all pairs of repeats found in a list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-3:-Find-any-diagonals-in-the-thresholded-matrix-T-that-are-contained-in-larger-diagonals-in-T-but-not-found-in-step-2,-then-group-pairs-of-repeats">Step 3: Find any diagonals in the thresholded matrix T that are contained in larger diagonals in T but not found in step 2, then group pairs of repeats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-4:-Remove-any-repeated-structure-that-has-at-least-two-repeats-that-overlap-in-time">Step 4: Remove any repeated structure that has at least two repeats that overlap in time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-5:-Find-the-essential-structure-components-of-the-song-and-build-the-aligned-hierarchies">Step 5: Find the essential structure components of the song and build the aligned hierarchies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Essential-Structure-Components">Essential Structure Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-the-aligned-hierarchies">Creating the aligned hierarchies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">repytah</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example of Creating Aligned Hierarchies for a Mazurka Score</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/example_vignette.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Example-of-Creating-Aligned-Hierarchies-for-a-Mazurka-Score">
+<h1>Example of Creating Aligned Hierarchies for a Mazurka Score<a class="headerlink" href="#Example-of-Creating-Aligned-Hierarchies-for-a-Mazurka-Score" title="Permalink to this heading"></a></h1>
+<p>In this example, we will walk through the elements of the <code class="docutils literal notranslate"><span class="pre">repytah</span></code> package that pertain to the creation of aligned hierarchies for a music-based data stream (eg. a song).</p>
+<p>Beginning with features (such as MFCCs and chroma features) for each timestep in your music-based data stream, there are several steps to this process:</p>
+<ol class="arabic simple" start="0">
+<li><p>Create the self-dissimilarity matrix (SDM).</p></li>
+<li><p>Highlight pairs of timesteps that are close enough to be considered as repetitions of each other. (In other words, threshold the SDM)</p></li>
+<li><p>Find pairs of structure repetitions (represented as diagonals within the thresholded SDM).</p></li>
+<li><p>Find any pairs of structure repetitions not found in step 2, and group the structure repetitions.</p></li>
+<li><p>Remove any repeated structures that have overlapped instances.</p></li>
+<li><p>Distill the collection of repeated structures into the <em>essential structure components</em> , i.e. the smallest meaningful repetitions on which all larger repeats are constructed. Each timestep will be contained in no more than one essential structure component</p></li>
+</ol>
+<p><em>Note</em>: The walk-through of this example is very similar to the code in <code class="docutils literal notranslate"><span class="pre">example.py</span></code> found in this package.</p>
+<p>We begin by importing the necessary packages:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NumPy and SciPy are required for mathematical operations</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Pandas is used to import the csv</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Import all modules from repytah</span>
+<span class="kn">from</span> <span class="nn">repytah</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Matplotlib is used to display outputs</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Make the images clear</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+
+<span class="c1"># Hide code (optional)</span>
+<span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="n">javascript_functions</span> <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span> <span class="s2">&quot;hide()&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span> <span class="s2">&quot;show()&quot;</span><span class="p">}</span>
+<span class="n">button_descriptions</span>  <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span> <span class="s2">&quot;Show code&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span> <span class="s2">&quot;Hide code&quot;</span><span class="p">}</span>
+<span class="k">def</span> <span class="nf">toggle_code</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="n">output_string</span> <span class="o">=</span> <span class="s2">&quot;&lt;script&gt;$(</span><span class="se">\&quot;</span><span class="s2">div.input</span><span class="se">\&quot;</span><span class="s2">).</span><span class="si">{}</span><span class="s2">&lt;/script&gt;&quot;</span>
+    <span class="n">output_args</span>   <span class="o">=</span> <span class="p">(</span><span class="n">javascript_functions</span><span class="p">[</span><span class="n">state</span><span class="p">],)</span>
+    <span class="n">output</span>        <span class="o">=</span> <span class="n">output_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">output_args</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">button_action</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">toggle_code</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">value</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">button_descriptions</span><span class="p">[</span><span class="n">state</span><span class="p">]</span>
+<span class="n">state</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">ToggleButton</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="n">button_descriptions</span><span class="p">[</span><span class="n">state</span><span class="p">])</span>
+<span class="n">button</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">button_action</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">button</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>$("div.input").show()</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ee5689babe5144589d2a6166578ba387", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<section id="Step-0:-Create-the-SDM">
+<h2>Step 0: Create the SDM<a class="headerlink" href="#Step-0:-Create-the-SDM" title="Permalink to this heading"></a></h2>
+<p>In this phase, there are a few crucial details, namely importing the data file that we would like to unearth hierarchical structural information for and determining the appropriate dissimilarity measure to use. If you already have (symmetrical) matrix representations for your data stream, then you may find it more appropriate to load your matrix and then skip ahead to Step 1 or Step 2.</p>
+<p>This step assumes that your music-based data stream (ie. a recording or score) has already had your preferred features extracted (like chroma or MFCCs) and is arranged into columns such that each column represents a time step (or beat). We refer to this as a <em>feature vector matrix</em> as each feature vector is laid out as column within one cohesive matrix.</p>
+<section id="Importing-data-for-structure-analysis">
+<h3>Importing data for structure analysis<a class="headerlink" href="#Importing-data-for-structure-analysis" title="Permalink to this heading"></a></h3>
+<p>Note: For this demonstration, we are using the <code class="docutils literal notranslate"><span class="pre">load_ex_data()</span></code> built-in function from the <code class="docutils literal notranslate"><span class="pre">example</span></code> module to load our data. To recreate our example, you could do the same. This is an optional task and the normal method of reading in a data file will work.</p>
+<p>We are using Chopin’s Mazurka Op.6, No.1 as input for this demonstration.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import csv</span>
+<span class="n">file_in</span> <span class="o">=</span> <span class="n">load_ex_data</span><span class="p">(</span><span class="s1">&#39;data/input.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="n">fv_mat</span> <span class="o">=</span> <span class="n">file_in</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Creating-the-SDM">
+<h3>Creating the SDM<a class="headerlink" href="#Creating-the-SDM" title="Permalink to this heading"></a></h3>
+<p>In just one line, we define the self-dissimilarity matrix. This function <code class="docutils literal notranslate"><span class="pre">create_sdm</span></code>, uses feature vectors to create an audio shingle for each time step and represents these shingles as vectors by stacking the relevant feature vectors on top of each other. Then, the cosine distance is found between these shingles.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of feature vectors per shingle</span>
+<span class="n">num_fv_per_shingle</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="c1"># Create the self-dissimilarity matrix</span>
+<span class="n">self_dissim_mat</span> <span class="o">=</span> <span class="n">create_sdm</span><span class="p">(</span><span class="n">fv_mat</span><span class="p">,</span> <span class="n">num_fv_per_shingle</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;self_dissim_mat:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">self_dissim_mat</span><span class="p">)</span>
+
+<span class="c1"># Produce a visualization</span>
+<span class="n">SDM</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">self_dissim_mat</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Self-Dissimilarity Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+self_dissim_mat:
+ [[0.         0.36468911 0.58429924 ... 0.57425539 0.77909953 0.82434591]
+ [0.36468911 0.         0.41660702 ... 0.68829818 0.64039838 0.80480641]
+ [0.58429924 0.41660702 0.         ... 0.72072778 0.59670143 0.57191158]
+ ...
+ [0.57425539 0.68829818 0.72072778 ... 0.         0.60941866 0.70720396]
+ [0.77909953 0.64039838 0.59670143 ... 0.60941866 0.         0.39416349]
+ [0.82434591 0.80480641 0.57191158 ... 0.70720396 0.39416349 0.        ]]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_6_1.png" class="no-scaled-link" src="_images/example_vignette_6_1.png" style="width: 257px; height: 263px;" />
+</div>
+</div>
+</section>
+</section>
+<section id="Step-1:-Threshold-the-SDM">
+<h2>Step 1: Threshold the SDM<a class="headerlink" href="#Step-1:-Threshold-the-SDM" title="Permalink to this heading"></a></h2>
+<p>In this step, the self-dissimilarity matrix is thresholded to produce a binary matrix of the same dimensions. This matrix is used to identify repeated structures, which are represented by diagonals of the same length.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">song_length</span> <span class="o">=</span> <span class="n">self_dissim_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.02</span>
+
+<span class="c1"># Threshold the SDM to produce a binary matrix</span>
+<span class="n">thresh_dist_mat</span> <span class="o">=</span> <span class="p">(</span><span class="n">self_dissim_mat</span> <span class="o">&lt;=</span> <span class="n">thresh</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;thresh_dist_mat:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">thresh_dist_mat</span><span class="p">)</span>
+
+<span class="c1"># Produce a visualization</span>
+<span class="n">SDM</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thresh_dist_mat</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thresholded Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+thresh_dist_mat:
+ [[ True False False ... False False False]
+ [False  True False ... False False False]
+ [False False  True ... False False False]
+ ...
+ [False False False ...  True False False]
+ [False False False ... False  True False]
+ [False False False ... False False  True]]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_8_1.png" class="no-scaled-link" src="_images/example_vignette_8_1.png" style="width: 257px; height: 263px;" />
+</div>
+</div>
+</section>
+<section id="Step-2:-Find-the-diagonals-present-and-store-all-pairs-of-repeats-found-in-a-list">
+<h2>Step 2: Find the diagonals present and store all pairs of repeats found in a list<a class="headerlink" href="#Step-2:-Find-the-diagonals-present-and-store-all-pairs-of-repeats-found-in-a-list" title="Permalink to this heading"></a></h2>
+<p>The diagonals in the thresholded matrix are found and recorded in an array of repeats. <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code> does this by looking for the largest repeated structures in <strong>thresh_dist_mat</strong>, which are illustrated in the above Thresholded Matrix diagram. Once all repeated structures are found, which are represented as diagonals present in <strong>thresh_dist_mat</strong>, they are stored with their start/end indices and lengths in a list. As each diagonal is found, it is removed to avoid identifying
+repeated sub-structures.</p>
+<p>Below is the listing of the pairs of repeats found by <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_lst</span> <span class="o">=</span> <span class="n">find_initial_repeats</span><span class="p">(</span><span class="n">thresh_dist_mat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">song_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;all_lst:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">all_lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+all_lst:
+ [[  2   2  26  26   1]
+ [  2   2  74  74   1]
+ [  2   2 146 146   1]
+ [  2   2 218 218   1]
+ [  2   2 314 314   1]
+ [ 26  26  50  50   1]
+ [ 50  50  74  74   1]
+ [ 50  50 146 146   1]
+ [ 50  50 218 218   1]
+ [ 50  50 314 314   1]
+ [247 250 271 274   4]
+ [124 156 292 324  33]
+ [196 228 292 324  33]
+ [  2  36 290 324  35]
+ [ 50  84 290 324  35]
+ [  3  38 123 158  36]
+ [ 51  86 195 230  36]
+ [  3  39 195 231  37]
+ [  1  38  49  86  38]
+ [ 51 122 123 194  72]
+ [ 87 158 159 230  72]
+ [  1 325   1 325 325]]
+</pre></div></div>
+</div>
+<p>Let’s take moment to examine what we have and time it back to the original thresholded SDM. The first ten pairs listed in <strong>all_lst</strong> are repeats of length 1. We also note that the last “pair” of repeats is the whole score being matched to itself. For now, we set this “repeat” and the ones that are of length 1 aside.</p>
+<p>In the image below, for each pair of repeats, we color one of the two diagonals associated to that pairing. The second one is the matching diagonal when flipped over the main diagonal.</p>
+<p>For example, the red diagonal represents the pair of repeats that start at beats 124 and 292 and are 33 beats long, and the blue diagonal represents the pair of repeats that start at beat 51 and 123 and are 72 beats long.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visualize_all_lst</span><span class="p">(</span><span class="n">thresh_dist_mat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_12_0.png" class="no-scaled-link" src="_images/example_vignette_12_0.png" style="width: 257px; height: 251px;" />
+</div>
+</div>
+</section>
+<section id="Step-3:-Find-any-diagonals-in-the-thresholded-matrix-T-that-are-contained-in-larger-diagonals-in-T-but-not-found-in-step-2,-then-group-pairs-of-repeats">
+<h2>Step 3: Find any diagonals in the thresholded matrix T that are contained in larger diagonals in T but not found in step 2, then group pairs of repeats<a class="headerlink" href="#Step-3:-Find-any-diagonals-in-the-thresholded-matrix-T-that-are-contained-in-larger-diagonals-in-T-but-not-found-in-step-2,-then-group-pairs-of-repeats" title="Permalink to this heading"></a></h2>
+<p>Any smaller diagonals that are contained in larger diagonals and are not found in step 2 are found and added to the array of repeats in this step. All possible repeat lengths are looped over in <strong>all_lst</strong>, and larger repeats containing smaller repeats are broken up into up to 3 sections each, the part before the overlap, the overlap, and the part after the overlap. With this, a more complete list of repeated structures is created.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">complete_lst</span> <span class="o">=</span> <span class="n">find_complete_list</span><span class="p">(</span><span class="n">all_lst</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;complete_lst:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">complete_lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+complete_lst:
+ [[  1   1  49  49   1   1]
+ [  2   2  26  26   1   2]
+ [  2   2  50  50   1   2]
+ [  2   2  74  74   1   2]
+ [  2   2 146 146   1   2]
+ [  2   2 218 218   1   2]
+ [  2   2 290 290   1   2]
+ [  2   2 314 314   1   2]
+ [ 26  26  50  50   1   2]
+ [ 26  26  74  74   1   2]
+ [ 26  26 146 146   1   2]
+ [ 26  26 218 218   1   2]
+ [ 26  26 314 314   1   2]
+ [ 50  50  74  74   1   2]
+ [ 50  50 146 146   1   2]
+ [ 50  50 218 218   1   2]
+ [ 50  50 290 290   1   2]
+ [ 50  50 314 314   1   2]
+ [ 74  74 146 146   1   2]
+ [ 74  74 218 218   1   2]
+ [ 74  74 314 314   1   2]
+ [146 146 218 218   1   2]
+ [146 146 314 314   1   2]
+ [218 218 314 314   1   2]
+ [  3   3 123 123   1   3]
+ [  3   3 195 195   1   3]
+ [ 51  51 123 123   1   3]
+ [ 51  51 195 195   1   3]
+ [ 39  39 231 231   1   4]
+ [  1   2  49  50   2   1]
+ [  2   3 290 291   2   2]
+ [ 50  51 290 291   2   2]
+ [ 37  38  85  86   2   3]
+ [ 37  38 157 158   2   3]
+ [ 85  86 229 230   2   3]
+ [157 158 229 230   2   3]
+ [ 37  39 229 231   3   1]
+ [247 250 271 274   4   1]
+ [ 27  36 315 324  10   1]
+ [ 75  84 315 324  10   1]
+ [147 156 315 324  10   1]
+ [219 228 315 324  10   1]
+ [ 27  38  75  86  12   1]
+ [ 27  38 147 158  12   1]
+ [ 75  86 219 230  12   1]
+ [147 158 219 230  12   1]
+ [ 27  39 219 231  13   1]
+ [124 145 292 313  22   1]
+ [196 217 292 313  22   1]
+ [  3  25 123 145  23   1]
+ [  3  25 195 217  23   1]
+ [ 51  73 123 145  23   1]
+ [ 51  73 195 217  23   1]
+ [  2  25 290 313  24   1]
+ [ 50  73 290 313  24   1]
+ [  1  25  49  73  25   1]
+ [  4  36 124 156  33   1]
+ [  4  36 196 228  33   1]
+ [  4  36 292 324  33   1]
+ [ 52  84 124 156  33   1]
+ [ 52  84 196 228  33   1]
+ [ 52  84 292 324  33   1]
+ [124 156 196 228  33   1]
+ [124 156 292 324  33   1]
+ [196 228 292 324  33   1]
+ [  3  36 291 324  34   1]
+ [ 51  84 291 324  34   1]
+ [  2  36  50  84  35   1]
+ [  2  36 290 324  35   1]
+ [ 50  84 290 324  35   1]
+ [  3  38  51  86  36   1]
+ [  3  38 123 158  36   1]
+ [  3  38 195 230  36   1]
+ [ 51  86 123 158  36   1]
+ [ 51  86 195 230  36   1]
+ [123 158 195 230  36   1]
+ [ 87 122 159 194  36   2]
+ [  3  39 195 231  37   1]
+ [ 87 123 159 195  37   2]
+ [  1  38  49  86  38   1]
+ [ 85 122 157 194  38   2]
+ [ 75 122 147 194  48   1]
+ [ 87 145 159 217  59   1]
+ [ 51 122 123 194  72   1]
+ [ 87 158 159 230  72   2]]
+</pre></div></div>
+</div>
+<p>It is clear that <strong>complete_list</strong> is much longer that <strong>all_lst</strong>, which makes sense because we are adding smaller pieces of the larger repeats, when an overlap in time has occurred between a smaller repeat and a larger one.</p>
+<p>For example, the repeat of length 72 starting at beat 51 overlaps with the smaller repeat of length 48 starting at beat 75 (the purple section).</p>
+<p>The image below visualizes the idea of distilling smaller parts from larger repeats in step 2 by showing some of the smaller repetitions found within the larger repeats.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visualize_complete_lst</span><span class="p">(</span><span class="n">thresh_dist_mat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_16_0.png" class="no-scaled-link" src="_images/example_vignette_16_0.png" style="width: 257px; height: 251px;" />
+</div>
+</div>
+</section>
+<section id="Step-4:-Remove-any-repeated-structure-that-has-at-least-two-repeats-that-overlap-in-time">
+<h2>Step 4: Remove any repeated structure that has at least two repeats that overlap in time<a class="headerlink" href="#Step-4:-Remove-any-repeated-structure-that-has-at-least-two-repeats-that-overlap-in-time" title="Permalink to this heading"></a></h2>
+<p>In this step, repeated structures with the same annotation and length are removed if they are overlapping.</p>
+<p>This is done by looping over all possible repeat lengths, finding all the groups of repeats of the same length. For each of those groups, <code class="docutils literal notranslate"><span class="pre">remove_overlaps</span></code> determines whether there exists any pair of repeats that overlaps in time. If a pair like that exists, all the overlapping repeats are removed.</p>
+<p>Along with a list of all the repeats with no overlaps, this step also forms a matrix, a list of the associated lengths of the repeats in the matrix, the annotations of the repeats in the matrix, and a list of the overlaps. The matrix is a binary matrix that visualizes the repeats, representing the start of a repeat with a 1. This matrix, in combination with the list of the lengths of the repeats, can be used to visualize the repeats.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_tuple</span> <span class="o">=</span> <span class="n">remove_overlaps</span><span class="p">(</span><span class="n">complete_lst</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;List with no overlaps:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">output_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix with no overlaps:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">output_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lengths of the repeats in the matrix:&#39;</span><span class="p">,</span> <span class="n">output_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Annotations of the repeats in the matrix:&#39;</span><span class="p">,</span> <span class="n">output_tuple</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;List of overlaps:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">output_tuple</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+List with no overlaps:
+ [[  1   1  49  49   1   1]
+ [  2   2  26  26   1   2]
+ [  2   2  50  50   1   2]
+ [  2   2  74  74   1   2]
+ [  2   2 146 146   1   2]
+ [  2   2 218 218   1   2]
+ [  2   2 290 290   1   2]
+ [  2   2 314 314   1   2]
+ [  3   3 123 123   1   3]
+ [  3   3 195 195   1   3]
+ [ 26  26  50  50   1   2]
+ [ 26  26  74  74   1   2]
+ [ 26  26 146 146   1   2]
+ [ 26  26 218 218   1   2]
+ [ 26  26 314 314   1   2]
+ [ 39  39 231 231   1   4]
+ [ 50  50  74  74   1   2]
+ [ 50  50 146 146   1   2]
+ [ 50  50 218 218   1   2]
+ [ 50  50 290 290   1   2]
+ [ 50  50 314 314   1   2]
+ [ 51  51 123 123   1   3]
+ [ 51  51 195 195   1   3]
+ [ 74  74 146 146   1   2]
+ [ 74  74 218 218   1   2]
+ [ 74  74 314 314   1   2]
+ [146 146 218 218   1   2]
+ [146 146 314 314   1   2]
+ [218 218 314 314   1   2]
+ [  1   2  49  50   2   1]
+ [  2   3 290 291   2   2]
+ [ 37  38  85  86   2   3]
+ [ 37  38 157 158   2   3]
+ [ 50  51 290 291   2   2]
+ [ 85  86 229 230   2   3]
+ [157 158 229 230   2   3]
+ [ 37  39 229 231   3   1]
+ [247 250 271 274   4   1]
+ [ 27  36 315 324  10   1]
+ [ 75  84 315 324  10   1]
+ [147 156 315 324  10   1]
+ [219 228 315 324  10   1]
+ [ 27  38  75  86  12   1]
+ [ 27  38 147 158  12   1]
+ [ 75  86 219 230  12   1]
+ [147 158 219 230  12   1]
+ [ 27  39 219 231  13   1]
+ [124 145 292 313  22   1]
+ [196 217 292 313  22   1]
+ [  3  25 123 145  23   1]
+ [  3  25 195 217  23   1]
+ [ 51  73 123 145  23   1]
+ [ 51  73 195 217  23   1]
+ [  2  25 290 313  24   1]
+ [ 50  73 290 313  24   1]
+ [  1  25  49  73  25   1]
+ [  4  36 124 156  33   1]
+ [  4  36 196 228  33   1]
+ [  4  36 292 324  33   1]
+ [ 52  84 124 156  33   1]
+ [ 52  84 196 228  33   1]
+ [ 52  84 292 324  33   1]
+ [124 156 196 228  33   1]
+ [124 156 292 324  33   1]
+ [196 228 292 324  33   1]
+ [  3  36 291 324  34   1]
+ [ 51  84 291 324  34   1]
+ [  2  36  50  84  35   1]
+ [  2  36 290 324  35   1]
+ [ 50  84 290 324  35   1]
+ [  3  38  51  86  36   1]
+ [  3  38 123 158  36   1]
+ [  3  38 195 230  36   1]
+ [ 51  86 123 158  36   1]
+ [ 51  86 195 230  36   1]
+ [ 87 122 159 194  36   2]
+ [123 158 195 230  36   1]
+ [  3  39 195 231  37   1]
+ [ 87 123 159 195  37   2]
+ [  1  38  49  86  38   1]
+ [ 85 122 157 194  38   2]
+ [ 75 122 147 194  48   1]
+ [ 87 145 159 217  59   1]
+ [ 51 122 123 194  72   1]
+ [ 87 158 159 230  72   2]]
+Matrix with no overlaps:
+ [[1 0 0 ... 0 0 0]
+ [0 1 0 ... 0 0 0]
+ [0 0 1 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+Lengths of the repeats in the matrix: [ 1  1  1  1  2  2  2  3  4 10 12 13 22 23 24 25 33 34 35 36 36 37 37 38
+ 38 48 59 72 72]
+Annotations of the repeats in the matrix: [1 2 3 4 1 2 3 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 2 1 2 1 1 1 2]
+List of overlaps:
+ []
+</pre></div></div>
+</div>
+</section>
+<section id="Step-5:-Find-the-essential-structure-components-of-the-song-and-build-the-aligned-hierarchies">
+<h2>Step 5: Find the essential structure components of the song and build the aligned hierarchies<a class="headerlink" href="#Step-5:-Find-the-essential-structure-components-of-the-song-and-build-the-aligned-hierarchies" title="Permalink to this heading"></a></h2>
+<p>Building the aligned hierarchies takes two final steps: finding the essential structure components and using them to create the full aligned hierarchies. <code class="docutils literal notranslate"><span class="pre">hierarchical_structure</span></code> first finds the essential structure components with <code class="docutils literal notranslate"><span class="pre">breakup_overlaps_by_intersect</span></code>. After this, modified versions of steps 2-4 take place to create the full hierarchical structure.</p>
+<section id="Essential-Structure-Components">
+<h3>Essential Structure Components<a class="headerlink" href="#Essential-Structure-Components" title="Permalink to this heading"></a></h3>
+<p>The essential structure components are the structure building blocks; that is they are the smallest meaningful repeated structures. All repeated structures within a piece are constructed with right and left unions of the essential structure components. Each timestep can be in at most <strong>one</strong> essential structure component. The first panel in the below image shows the essential structure components for our example piece. The visualization is organized such that there is one row per type of repeat.
+Notice that we have nine types of repeats in the below example.</p>
+</section>
+<section id="Creating-the-aligned-hierarchies">
+<h3>Creating the aligned hierarchies<a class="headerlink" href="#Creating-the-aligned-hierarchies" title="Permalink to this heading"></a></h3>
+<p>After finding the essential structure components for a song, we build the aligned hierarchies using a process whose result is akin to taking right and left unions of the essential structure components. The process begins by creating a list of the essential structure components in the order they appear. We assign each essential structure component the number of the row that it sits in. For consectutive timesteps where there is not essential structure component, we use 0 for that block. In the
+below example, this list would be: 1,2,3,4,2,5,6,7,0,1,2,3,4,2,5,6,8,3,4,2,5,6,8,3,4,2,5,6,7,0,9,0,9,0,2,3,4,2,5,0.</p>
+<p>Using this list, a thresholded dissimilarity matrix is created. Using steps similar to steps two through four above, we can extract information about the combinations of essential structures. From the thresholded dissimilarity matrix, all diagonals are extracted, starting with the longest one, but are not removed. This way, all possible combinations of essential structure components are found. Then, all these combinations are grouped and checked for overlapping repeated combinations. The final
+product is then restructured to show the widths and annotations for each type of repeated structure (represented by each row).</p>
+<p>The figures below represent the final result we get, including two of the most important images: the essential structure components (top most panel) and the complete hierarchical structure (bottom panel).</p>
+<p>The figure below with the name <em>Threshold Self-dissimilarity matrix of the ordering Essential Structure Components</em> shows the square thresholded self-dissimilarity matrix such that the (i,j) entry is 1 if the following three conditions are true:</p>
+<ul class="simple">
+<li><p>A repeat of an essential structure component is the i-th item in the ordering.</p></li>
+<li><p>A repeat of an essential structure component is the j-th item in the ordering.</p></li>
+<li><p>The repeat occurring in the i-th place of the ordering and the one occurring in the j-th place of the ordering are repeats of the same essential structure component.</p></li>
+</ul>
+<p>The figure below with the name <em>Repeated ordered sublists of the Essential Structure Components</em> is the result of extracting all the diagonals and getting pairs of repeated ordered sublists of the essential structure components. The repetitive copies of the same repeat and overlaps are also removed.</p>
+<p>The second to last figure labeled <em>Repeated ordered sublists of the Essential Structure Components with leading index highlighted</em> contains the same repeats as <em>Repeated ordered sublists of the Essential Structure Components</em> but only notes the starting item in black and shows the rest of the repeat in gray.</p>
+<p>The aligned hierarchies are shown in the last image. This is the result of stretching each essential structure component to its correct length (ie. the one noted in the first image below). This transformation results in a visualization that is the number of time steps of the original song.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">mat_no_overlaps</span><span class="p">,</span> <span class="n">key_no_overlaps</span><span class="p">)</span> <span class="o">=</span> <span class="n">output_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Distill non-overlapping repeats into essential structure components and</span>
+<span class="c1"># use them to build the hierarchical representation</span>
+<span class="n">output_tuple</span> <span class="o">=</span> <span class="n">hierarchical_structure</span><span class="p">(</span><span class="n">mat_no_overlaps</span><span class="p">,</span> <span class="n">key_no_overlaps</span><span class="p">,</span> <span class="n">song_length</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_20_0.png" class="no-scaled-link" src="_images/example_vignette_20_0.png" style="width: 648px; height: 535px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_20_1.png" class="no-scaled-link" src="_images/example_vignette_20_1.png" style="width: 592px; height: 481px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_20_2.png" class="no-scaled-link" src="_images/example_vignette_20_2.png" style="width: 642px; height: 481px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_20_3.png" class="no-scaled-link" src="_images/example_vignette_20_3.png" style="width: 656px; height: 698px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_vignette_20_4.png" class="no-scaled-link" src="_images/example_vignette_20_4.png" style="width: 648px; height: 753px;" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quick_start.html" class="btn btn-neutral float-left" title="A Quick Start to Use the Package repytah" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, repytah development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

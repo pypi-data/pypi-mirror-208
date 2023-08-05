@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Assemble Module &mdash; repytah 0.1.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recommended_installation.html">Installing from <cite>conda</cite> package-manager or from <cite>pip</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="general_installation.html">Install from <cite>pip</cite> or <cite>conda</cite></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utilities_import.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transform_import.html">Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assemble_import.html">Assemble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search_import.html">Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">A Quick Start to Use the Package <code class="docutils literal notranslate"><span class="pre">repytah</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">repytah</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The Assemble Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/assemble_vignette.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="The-Assemble-Module">
+<h1>The Assemble Module<a class="headerlink" href="#The-Assemble-Module" title="Permalink to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">assemble</span></code> module of the <code class="docutils literal notranslate"><span class="pre">repytah</span></code> package finds and forms essential structure components. These components are the smallest building blocks that form the basis for every repeat in the song. The functions in this module ensure that each time step of a song is contained in at most one of the song’s essential structure components by making none of the repeats overlap in time. When repeats overlap, these repeats undergo a process where they are divided until there are only non-overlapping
+pieces left.</p>
+<p>The following functions are exported from the <code class="docutils literal notranslate"><span class="pre">assemble</span></code> module:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">breakup_overlaps_by_intersect</span></code>: Extracts repeats in <strong>input_pattern_obj</strong> that has the starting indices of the repeats into the essential structure components using <strong>bw_vec</strong> that has the lengths of each repeat.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check_overlaps</span></code>: Compares every pair of groups, determining if there are any repeats in any pairs of the groups that overlap.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hierarchical_structure</span></code>: Distills the repeats encoded in <strong>matrix_no_overlaps</strong> (and <strong>key_no_overlaps</strong>) to the essential structure components and then builds the hierarchical representation. Also optionally outputs visualizations of the hierarchical representations.</p></li>
+</ul>
+<p>This module uses <code class="docutils literal notranslate"><span class="pre">find_all_repeats</span></code> from the <code class="docutils literal notranslate"><span class="pre">`search</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/search_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/search_vignette.ipynb</a>&gt;`__ module and <code class="docutils literal notranslate"><span class="pre">reconstruct_full_block</span></code> from the <code class="docutils literal notranslate"><span class="pre">`utilities</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/utilities_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/utilities_vignette.ipynb</a>&gt;`__ module.</p>
+<p>For more in-depth information on the function calls, an example function pipeline is shown below. Functions from the current module are shown in red.</p>
+<p><img alt="c04af7a55ecf4efea4ed0a341353c696" class="no-scaled-link" src="_images/function_pipeline.jpg" style="width: 380px;" /></p>
+<section id="Import-Modules">
+<h2>Import Modules<a class="headerlink" href="#Import-Modules" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NumPy is used for mathematical calculations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Import other modules</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">signature</span>
+
+<span class="c1"># Import assemble</span>
+<span class="kn">from</span> <span class="nn">repytah.assemble</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="breakup_overlaps_by_intersect">
+<h2>breakup_overlaps_by_intersect<a class="headerlink" href="#breakup_overlaps_by_intersect" title="Permalink to this heading"></a></h2>
+<p>The purpose of this function is to create the essential structure components matrix. Essential structure components contain the smallest building blocks that form every repeat in the song. This matrix is created using <strong>input_pattern_obj</strong> that has the starting indices of the repeats and a vector <strong>bw_vec</strong> that has the lengths of each repeat.</p>
+<p>The inputs for this function are: - <strong>input_pattern_obj</strong> (np.ndarray): A binary matrix with 1’s where repeats begin and 0’s otherwise - <strong>bw_vec</strong> (np.ndarray): Lengths of the repeats encoded in <strong>input_pattern_obj</strong> - <strong>thresh_bw</strong> (int): The smallest allowable repeat length</p>
+<p>The outputs for this function are: - <strong>pattern_no_overlaps</strong> (np.ndarray): A binary matrix with 1’s where repeats of essential structure components begin - <strong>pattern_no_overlaps_key</strong> (np.ndarray): A vector containing the lengths of the repeats of essential structure components in <strong>pattern_no_overlaps</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_pattern_obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">bw_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">8</span><span class="p">]])</span>
+<span class="n">thresh_bw</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The input array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">input_pattern_obj</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The lengths of the repeats in the input array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">bw_vec</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The smallest allowable repeat length is: &quot;</span><span class="p">,</span> <span class="n">thresh_bw</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The input array is:
+ [[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0]
+ [0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+The lengths of the repeats in the input array is:
+ [[3]
+ [5]
+ [8]
+ [8]]
+The smallest allowable repeat length is:  0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">breakup_overlaps_by_intersect</span><span class="p">(</span><span class="n">input_pattern_obj</span><span class="p">,</span> <span class="n">bw_vec</span><span class="p">,</span> <span class="n">thresh_bw</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The lengths of the repeats in the output array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The output array is:
+ [[1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0]
+ [0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]]
+The lengths of the repeats in the output array is:
+ [[3]
+ [5]]
+</pre></div></div>
+</div>
+</section>
+<section id="check_overlaps">
+<h2>check_overlaps<a class="headerlink" href="#check_overlaps" title="Permalink to this heading"></a></h2>
+<p>This function compares every pair of groups and checks for overlaps between those pairs. To check every pair of groups, the function creates <em>compare_left</em> and <em>compare_right</em>. <em>compare_left</em> repeats each row the number of rows times, and <em>compare_right</em> repeats the whole input the number of rows times. By comparing each corresponding time step in <em>compare_left</em> and <em>compare_right</em>, it determines if there are any overlaps between groups.</p>
+<p>The input for this function is:</p>
+<ul class="simple">
+<li><p><strong>input_mat</strong> (np.ndarray): An array waiting to be checked for overlaps</p></li>
+</ul>
+<p>The output for this function is: - <strong>overlaps_yn</strong> (np.ndarray): A logical array where (i,j) = 1 if row i of input matrix and row j of input matrix overlap and (i, j) = 0 elsewhere</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The input array waiting to be checked for overlaps is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">input_mat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The input array waiting to be checked for overlaps is:
+ [[0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+ [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0]
+ [0 0 0 1 1 1 1 1 0 0 0 1 1 1 1 1 0 0 0]
+ [1 1 1 0 0 0 0 0 1 1 1 0 0 0 0 0 1 1 1]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">check_overlaps</span><span class="p">(</span><span class="n">input_mat</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output logical array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The output logical array is:
+ [[False  True  True  True]
+ [False False  True  True]
+ [False False False False]
+ [False False False False]]
+</pre></div></div>
+</div>
+</section>
+<section id="hierarchical_structure">
+<h2>hierarchical_structure<a class="headerlink" href="#hierarchical_structure" title="Permalink to this heading"></a></h2>
+<p>This function distills the repeats encoded in <strong>matrix_no_overlaps</strong> (and <strong>key_no_overlaps</strong>), which are the outputs from the <code class="docutils literal notranslate"><span class="pre">`remove_overlaps</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/transform_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/transform_vignette.ipynb</a>&gt;`__ function from the transform module, to the essential structure components and then builds the hierarchical representation. It optionally shows visualizations of the hierarchical structure via the <strong>vis</strong> argument.</p>
+<p>The inputs for this function are:</p>
+<ul class="simple">
+<li><p><strong>matrix_no_overlaps</strong> (np.array[int]): A binary matrix with 1’s where repeats begin and 0’s otherwise</p></li>
+<li><p><strong>key_no_overlaps</strong> (np.array[int]): A vector containing the lengths of the repeats encoded in <strong>matrix_no_overlaps</strong></p></li>
+<li><p><strong>sn</strong> (int): The song length, which is the number of audio shingles</p></li>
+<li><p><strong>vis</strong> (bool): Shows visualizations if True (default = False)</p></li>
+</ul>
+<p>The outputs for this function are:</p>
+<ul class="simple">
+<li><p><strong>full_visualization</strong> (np.array[int]): A binary matrix representation for <strong>full_matrix_no_overlaps</strong> with blocks of 1’s equal to the length’s prescribed in <strong>full_key</strong></p></li>
+<li><p><strong>full_key</strong> (np.array[int]): A vector containing the lengths of the hierarchical structure encoded in <strong>full_matrix_no_overlaps</strong></p></li>
+<li><p><strong>full_matrix_no_overlaps</strong> (np.array[int]): A binary matrix with 1’s where hierarchical structure begins and 0’s otherwise</p></li>
+<li><p><strong>full_anno_lst</strong> (np.array[int]): A vector containing the annotation markers of the hierarchical structure encoded in each row of <strong>full_matrix_no_overlaps</strong></p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matrix_no_overlaps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">key_no_overlaps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">sn</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The matrix representation of the non-overlapping repeats is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">matrix_no_overlaps</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The lengths of the repeats in matrix_no_overlaps are: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">key_no_overlaps</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The song length is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sn</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The matrix representation of the non-overlapping repeats is:
+ [[0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0]]
+The lengths of the repeats in matrix_no_overlaps are:
+ [2]
+The song length is:
+ 20
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">hierarchical_structure</span><span class="p">(</span><span class="n">matrix_no_overlaps</span><span class="p">,</span> <span class="n">key_no_overlaps</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">full_visualization</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">full_key</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">full_matrix_no_overlaps</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">full_anno_lst</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The binary matrix representation for the full_matrix_no_overlaps is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">full_visualization</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The vector containing the lengths of the hierarchical structure encoded in full_matrix_no_overlaps is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">full_key</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The binary matrix with 1&#39;s where hierarchical structure begins and 0&#39;s otherwise is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">full_matrix_no_overlaps</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The vector containing the annotation markers of the hierarchical structure encoded in each row </span><span class="se">\n</span><span class="s2"> of full_matrix_no_overlaps is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">full_anno_lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/assemble_vignette_11_0.png" src="_images/assemble_vignette_11_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/assemble_vignette_11_1.png" src="_images/assemble_vignette_11_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/assemble_vignette_11_2.png" src="_images/assemble_vignette_11_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/assemble_vignette_11_3.png" src="_images/assemble_vignette_11_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/assemble_vignette_11_4.png" src="_images/assemble_vignette_11_4.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The binary matrix representation for the full_matrix_no_overlaps is:
+ [[0 1 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0]]
+The vector containing the lengths of the hierarchical structure encoded in full_matrix_no_overlaps is:
+ [[2]]
+The binary matrix with 1&#39;s where hierarchical structure begins and 0&#39;s otherwise is:
+ [[0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0]]
+The vector containing the annotation markers of the hierarchical structure encoded in each row
+ of full_matrix_no_overlaps is:
+ [1]
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, repytah development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Search Module &mdash; repytah 0.1.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/repytah_logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why repytah</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recommended_installation.html">Installing from <cite>conda</cite> package-manager or from <cite>pip</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="general_installation.html">Install from <cite>pip</cite> or <cite>conda</cite></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utilities_import.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transform_import.html">Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assemble_import.html">Assemble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search_import.html">Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_pipeline.html">Function Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">A Quick Start to Use the Package <code class="docutils literal notranslate"><span class="pre">repytah</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_vignette.html">Example of Creating Aligned Hierarchies for a Mazurka Score</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">repytah</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The Search Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/search_vignette.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="The-Search-Module">
+<h1>The Search Module<a class="headerlink" href="#The-Search-Module" title="Permalink to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">search</span></code> module of the <code class="docutils literal notranslate"><span class="pre">repytah</span></code> package holds functions used to find and record the diagonals in the thresholded matrix, T. These functions prepare the found diagonals for transformation and assembling later.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">find_complete_list</span></code>: Finds all smaller diagonals (and the associated pairs of repeats) that are contained in <strong>pair_list</strong>, which is composed of larger diagonals found in <code class="docutils literal notranslate"><span class="pre">`find_initial_repeats</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/utilities_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/utilities_vignette.ipynb</a>&gt;`__.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">find_all_repeats</span></code>: Finds all the diagonals present in <strong>thresh_mat</strong>. This function is nearly identical to <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code> except for two crucial differences. First, we do not remove diagonals after we find them. Second, there is no smallest bandwidth size as we are looking for all diagonals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">find_complete_list_anno_only</span></code>: Finds annotations for all pairs of repeats found in find_all_repeats. This list contains all the pairs of repeated structures with their starting/ending indices and lengths.</p></li>
+</ul>
+<p>The following functions are imported from the <code class="docutils literal notranslate"><span class="pre">`utilities</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/utilities_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/utilities_vignette.ipynb</a>&gt;`__ module to reformat outputs and assist with the operations of the <code class="docutils literal notranslate"><span class="pre">`search</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/search_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/search_vignette.ipynb</a>&gt;`__ functions.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">add_annotations</span></code></p></li>
+</ul>
+<p>For more in-depth information on the function calls, an example function pipeline is shown below. Functions from the current module are shown in purple.</p>
+<p><img alt="3a11a9f758aa4a578b6ebd093dd05da1" class="no-scaled-link" src="_images/function_pipeline.jpg" style="width: 380px;" /></p>
+<section id="Importing-necessary-modules">
+<h2>Importing necessary modules<a class="headerlink" href="#Importing-necessary-modules" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NumPy is used for mathematical calculations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Import search</span>
+<span class="kn">from</span> <span class="nn">repytah.search</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<section id="find_complete_list">
+<h3>find_complete_list<a class="headerlink" href="#find_complete_list" title="Permalink to this heading"></a></h3>
+<p>As seen in the flow chart, <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code> is called by <code class="docutils literal notranslate"><span class="pre">`example</span></code> &lt;<a class="reference external" href="https://github.com/smith-tinkerlab/repytah/blob/main/docs/example_vignette.ipynb">https://github.com/smith-tinkerlab/repytah/blob/main/docs/example_vignette.ipynb</a>&gt;`__ right before <code class="docutils literal notranslate"><span class="pre">find_complete_list</span></code>. In <code class="docutils literal notranslate"><span class="pre">find_complete_list</span></code>, smaller pairs of repeats are added to the original list of pairs of repeats made in <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code>. All of the pairs of repeats correspond to each repeated structure in another numpy array called <strong>thresh_mat</strong>. This array holds all the repeated structures in a
+sequential data stream and the repeated structures are represented as diagonals.</p>
+<p>The inputs for the function are:</p>
+<ul class="simple">
+<li><p><strong>pair_list</strong> (np.ndarray): List of pairs of repeats found in earlier steps (bandwidths MUST be in ascending order). If you have run <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code> before this script, then <strong>pair_list</strong> will be ordered correctly.</p></li>
+<li><p><strong>song_length</strong> (int): Song length, which is the number of audio shingles.</p></li>
+</ul>
+<p>The output for the function is:</p>
+<ul class="simple">
+<li><p><strong>lst_out</strong> (np.ndarray): List of pairs of repeats with smaller repeats added.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pair_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">31</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+                      <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">15</span><span class="p">]])</span>
+<span class="n">song_length</span> <span class="o">=</span> <span class="mi">55</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The input array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pair_list</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The number of audio shingles is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The input array is:
+ [[ 1 10 46 55 10]
+ [31 40 46 55 10]
+ [10 20 40 50 11]
+ [ 1 15 31 45 15]]
+The number of audio shingles is:
+ 55
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">find_complete_list</span><span class="p">(</span><span class="n">pair_list</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The output array is:
+ [[11 15 41 45  5  1]
+ [ 1 10 31 40 10  1]
+ [ 1 10 46 55 10  1]
+ [31 40 46 55 10  1]
+ [10 20 40 50 11  1]
+ [ 1 15 31 45 15  1]]
+</pre></div></div>
+</div>
+<p>In this example, there are two more rows added to the initial <strong>pair_list</strong> input, as <code class="docutils literal notranslate"><span class="pre">find_complete_list</span></code> can detect smaller diagonals contained in larger diagonals already found in <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code>. The repeats now look like this:</p>
+<img alt="alt text" src="_images/find_all_repeats1.png" />
+<p>Each row represents a pair of repeats, and each column represents a time step. The time steps with the color black are the starting indices for repeats of length k that we use to check <strong>lst_no_anno</strong> for more repeats of length k.</p>
+<img alt="alt text" src="_images/find_all_repeats2.png" />
+<p>With the same starting index and same length, we can find the same repeats in the color yellow.</p>
+<img alt="alt text" src="_images/find_all_repeats3.png" />
+<p>Then we find two more groups of repeats.</p>
+</section>
+<section id="find_all_repeats">
+<h3>find_all_repeats<a class="headerlink" href="#find_all_repeats" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">find_all_repeats</span></code> finds all the diagonals present in <strong>thresh_mat</strong>. This function is nearly identical to <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code>, with two crucial differences. First, we do not remove diagonals after we find them. Second, there is no smallest bandwidth size as we are looking for all diagonals.</p>
+<p>The inputs for the function are:</p>
+<ul class="simple">
+<li><p><strong>thresh_mat</strong> (np.ndarray): Thresholded matrix that we extract diagonals from</p></li>
+<li><p><strong>band_width_vec</strong> (np.ndarray): Vector of lengths of diagonals to be found. Should be 1, 2, 3, …, n where n is the number of timesteps.</p></li>
+</ul>
+<p>The output for the function is:</p>
+<ul class="simple">
+<li><p><strong>all_lst</strong> (np.ndarray): Pairs of repeats that correspond to diagonals in <strong>thresh_mat</strong></p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">thresh_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                       <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">bandwidth_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The threshold matrix is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">thresh_mat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The lengths of the diagonals to be found are: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">bandwidth_vec</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The threshold matrix is:
+ [[1 0 1 0 0]
+ [0 1 0 1 0]
+ [1 0 1 0 1]
+ [0 1 0 1 0]
+ [0 0 1 0 1]]
+The lengths of the diagonals to be found are:
+ [1 2 3 4 5]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">find_all_repeats</span><span class="p">(</span><span class="n">thresh_mat</span><span class="p">,</span> <span class="n">bandwidth_vec</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The output array is:
+ [[1 1 3 3 1]
+ [2 2 4 4 1]
+ [3 3 5 5 1]
+ [1 2 3 4 2]
+ [2 3 4 5 2]
+ [1 2 3 4 2]
+ [2 3 4 5 2]]
+</pre></div></div>
+</div>
+</section>
+<section id="find_complete_list_anno_only">
+<h3>find_complete_list_anno_only<a class="headerlink" href="#find_complete_list_anno_only" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">find_complete_list_anno_only</span></code> finds annotations for all pairs of repeats found in <code class="docutils literal notranslate"><span class="pre">find_initial_repeats</span></code>. This list contains all the pairs of repeated structures with their starting/ending indices and lengths.</p>
+<p>The inputs for the function are:</p>
+<ul class="simple">
+<li><p><strong>pair_list</strong> (np.ndarray): List of pairs of repeats.</p></li>
+<li><p><strong>song_length</strong> (int): Number of audio shingles in song.</p></li>
+</ul>
+<p>The output for the function is:</p>
+<ul class="simple">
+<li><p><strong>out_lst</strong> (np.ndarray): List of pairs of repeats with smaller repeats added and with annotation markers.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pair_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">8</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">4</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">8</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">7</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
+<span class="n">song_length</span> <span class="o">=</span> <span class="mi">19</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The pairs of repeats are: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pair_list</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The number of audio shingles in the song is:&quot;</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The pairs of repeats are:
+ [[ 3  3  5  5  1]
+ [ 2  2  8  8  1]
+ [ 3  3  9  9  1]
+ [ 2  2 15 15  1]
+ [ 8  8 15 15  1]
+ [ 4  4 17 17  1]
+ [ 2  3  8  9  2]
+ [ 3  4  9 10  2]
+ [ 2  3 15 16  2]
+ [ 8  9 15 16  2]
+ [ 3  4 16 17  2]
+ [ 2  4  8 10  3]
+ [ 3  5  9 11  3]
+ [ 7  9 14 16  3]
+ [ 2  4 15 17  3]
+ [ 3  5 16 18  3]
+ [ 9 11 16 18  3]
+ [ 7 10 14 17  4]
+ [ 7 11 14 18  5]
+ [ 8 12 15 19  5]
+ [ 7 12 14 19  6]]
+The number of audio shingles in the song are: 19
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">find_complete_list_anno_only</span><span class="p">(</span><span class="n">pair_list</span><span class="p">,</span> <span class="n">song_length</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output array is: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The output array is:
+ [[ 2  2  8  8  1  1]
+ [ 2  2 15 15  1  1]
+ [ 8  8 15 15  1  1]
+ [ 3  3  5  5  1  2]
+ [ 3  3  9  9  1  2]
+ [ 4  4 17 17  1  3]
+ [ 2  3  8  9  2  1]
+ [ 2  3 15 16  2  1]
+ [ 8  9 15 16  2  1]
+ [ 3  4  9 10  2  2]
+ [ 3  4 16 17  2  2]
+ [ 2  4  8 10  3  1]
+ [ 2  4 15 17  3  1]
+ [ 3  5  9 11  3  2]
+ [ 3  5 16 18  3  2]
+ [ 9 11 16 18  3  2]
+ [ 7  9 14 16  3  3]
+ [ 7 10 14 17  4  1]
+ [ 7 11 14 18  5  1]
+ [ 8 12 15 19  5  2]
+ [ 7 12 14 19  6  1]]
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, repytah development team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
