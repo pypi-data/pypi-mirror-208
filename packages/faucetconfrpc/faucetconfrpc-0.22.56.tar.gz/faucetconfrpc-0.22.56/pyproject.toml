@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "faucetconfrpc"
+version = "0.22.56"
+description = "utility to manage FAUCET config files via RPC"
+authors = ["Charlie Lewis <clewis@iqt.org>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = ">=3.8 <3.11"
+c65faucet = "1.0.53"
+grpcio = "1.54.0"
+grpcio-tools = "1.54.0"
+protobuf = "4.23.0"
+prometheus_client = "0.16.0"
+pybind11 = "2.10.4"
+os-ken = "2.6.0"
+# dnspython 2.3.0 is not compatible with eventlet
+# https://github.com/eventlet/eventlet/issues/781
+dnspython = "<2.3.1"
+pyopenssl = ">22.1.0"
+# TODO: workaround broken piwheels cryptography
+cryptography = "<40.0.2"
+
+[tool.poetry.dev-dependencies]
+attrs = "23.1.0"
+pylint = "2.17.4"
+pytype = "2023.5.8"
+pytest = "7.3.1"
+
+[tool.poetry.scripts]
+faucetconfrpc_server = "faucetconfrpc.faucetconfrpc_server:serve"
+faucetconfrpc_client = "faucetconfrpc.faucetconfrpc_client:main"
+
+[tool.poetry.urls]
+homepage = "https://github.com/IQTLabs/faucetconfrpc"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
