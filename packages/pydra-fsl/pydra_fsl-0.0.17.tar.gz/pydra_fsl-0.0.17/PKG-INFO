@@ -1,0 +1,122 @@
+Metadata-Version: 2.1
+Name: pydra-fsl
+Version: 0.0.17
+Summary: Pydra tasks for FSL
+Project-URL: Documentation, https://github.com/aramis-lab/pydra-fsl#readme
+Project-URL: Issues, https://github.com/aramis-lab/pydra-fsl/issues
+Project-URL: Source, https://github.com/aramis-lab/pydra-fsl
+Author-email: Ghislain Vaillant <ghislain.vaillant@icm-institute.org>
+License-Expression: Apache-2.0
+License-File: LICENSE
+Keywords: fsl,neuroimaging,pydra
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: >=3.7
+Requires-Dist: attrs>=22.1.0
+Requires-Dist: pydra>=0.22
+Description-Content-Type: text/markdown
+
+# pydra-fsl
+
+[![PyPI - Version][pypi-version]][pypi-project]
+[![PyPI - Python Version][pypi-pyversions]][pypi-project]
+[![PyPI - Downloads][pypi-downloads]][pypi-project]
+![][status-test]
+
+----
+
+Pydra tasks for FSL.
+
+[Pydra][pydra] is a dataflow engine which provides
+a set of lightweight abstractions for DAG
+construction, manipulation, and distributed execution.
+
+[FSL][fsl] is a comprehensive library of analysis tools
+for FMRI, MRI and DTI brain imaging data.
+
+**Table of contents**
+
+- [Available tasks](#available-tasks)
+- [Installation](#installation)
+- [Development](#development)
+- [License](#license)
+
+## Available tasks
+
+| Module   | Tasks                                                                                                                                                               |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| bet      | BET, RobustFOV                                                                                                                                                      |
+| eddy     | Eddy                                                                                                                                                                |
+| fast     | FAST                                                                                                                                                                |
+| flirt    | FLIRT, ApplyXFM, ConcatXFM, ConvertXFM, InvertXFM, FixScaleSkew, Img2ImgCoord, Img2StdCoord, Std2ImgCoord                                                           |
+| fnirt    | FNIRT, FNIRTFileUtils, ApplyWarp, ConvertWarp, InvWarp                                                                                                              |
+| fugue    | FUGUE, FSLPrepareFieldmap, Prelude, SigLoss                                                                                                                         |
+| fslmaths | (**experimental**) FSLMaths, Mul                                                                                                                                    |
+| susan    | SUSAN                                                                                                                                                               |
+| utils    | fslmaths, FSLFFT, FSLROI, FSLChFileType, FSLInfo, FSLInterleave, FSLMerge, FSLOrient, FSLReorient2Std, FSLSelectVols, FSLSlice, FSLSmoothFill, FSLSplit, FSLSwapDim |
+
+## Installation
+
+```console
+pip install pydra-fsl
+```
+
+A separate installation of FSL is required to use this package.
+Please review the FSL [installation instructions][fsl-install]
+and [licensing details][fsl-license].
+
+## Development
+
+This project is managed with [Hatch][hatch]:
+
+```console
+pipx install hatch
+```
+
+To run the test suite:
+
+```console
+hatch run test
+```
+
+To fix linting issues:
+
+```console
+hatch run lint:fix
+```
+
+## License
+
+This project is distributed under the terms of the [Apache License, Version 2.0][license].
+
+[pypi-project]: https://pypi.org/project/pydra-fsl
+
+[pypi-version]: https://img.shields.io/pypi/v/pydra-fsl.svg
+
+[pypi-pyversions]: https://img.shields.io/pypi/pyversions/pydra-fsl.svg
+
+[pypi-downloads]: https://static.pepy.tech/badge/pydra-fsl
+
+[status-test]: https://github.com/aramis-lab/pydra-fsl/actions/workflows/test.yaml/badge.svg
+
+[pydra]: https://pydra.readthedocs.io/
+
+[fsl]: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL
+
+[fsl-install]: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation
+
+[fsl-license]: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Licence
+
+[hatch]: https://hatch.pypa.io/
+
+[license]: https://spdx.org/licenses/Apache-2.0.html
