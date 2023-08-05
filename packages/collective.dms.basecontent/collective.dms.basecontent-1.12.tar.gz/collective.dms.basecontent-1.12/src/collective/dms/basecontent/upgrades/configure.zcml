@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.dms.basecontent">
+
+  <genericsetup:upgradeStep
+      title="Migration profile for collective.dms.basecontent to 2"
+      description="Upgrade from 1 to 2"
+      source="0001"
+      destination="2"
+      handler=".upgrades.v2"
+      profile="collective.dms.basecontent:default" />
+
+  <genericsetup:upgradeStep
+      title="Migration profile for collective.dms.basecontent to 3"
+      description="Upgrade from 2 to 3"
+      source="2"
+      destination="3"
+      handler=".upgrades.v3"
+      profile="collective.dms.basecontent:default" />
+
+</configure>
