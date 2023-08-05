@@ -1,0 +1,65 @@
+{
+  "id": "9c36af8a-09bc-4fdc-8246-11c502f30a2e",
+  "name": "Fallback - Logged In - no",
+  "auto": true,
+  "contexts": [
+    "loginID",
+    "social"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "Fallback-LoggedIn.Fallback-LoggedIn-no",
+      "affectedContexts": [
+        {
+          "name": "loginID",
+          "lifespan": 1
+        },
+        {
+          "name": "social",
+          "lifespan": 1
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": "0",
+          "platform": "telegram",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "en",
+          "speech": [
+            "🤔 Hmm... @jellyybunnyy what about you? do you know the answer?",
+            "🤔 Hmm... @hannnye what about you? do you know the answer?"
+          ],
+          "condition": ""
+        },
+        {
+          "type": "1",
+          "platform": "telegram",
+          "title": "Do you know the answer?",
+          "buttons": [
+            {
+              "text": "Yes"
+            },
+            {
+              "text": "No"
+            }
+          ],
+          "textToSpeech": "",
+          "lang": "en",
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

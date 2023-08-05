@@ -1,0 +1,85 @@
+{
+  "id": "ff6c8cb6-07b0-464e-9fa1-b4dac253cefb",
+  "name": "Menu - Main",
+  "auto": true,
+  "contexts": [
+    "loginID"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "",
+      "affectedContexts": [
+        {
+          "name": "loginID",
+          "lifespan": 5
+        }
+      ],
+      "parameters": [],
+      "messages": [
+        {
+          "type": "4",
+          "platform": "telegram",
+          "title": "",
+          "payload": {
+            "telegram": {
+              "reply_markup": {
+                "keyboard": [
+                  [
+                    {
+                      "callback_data": "Learn \u0026 Explore",
+                      "text": "Learn \u0026 Explore"
+                    }
+                  ],
+                  [
+                    {
+                      "callback_data": "Results \u0026 Recommendation",
+                      "text": "Results \u0026 Recommendation"
+                    }
+                  ]
+                ]
+              },
+              "text": "Pick a topic"
+            }
+          },
+          "textToSpeech": "",
+          "lang": "en",
+          "condition": ""
+        },
+        {
+          "type": "4",
+          "title": "",
+          "payload": {
+            "richContent": [
+              [
+                {
+                  "options": [
+                    {
+                      "text": "Learn \u0026 Explore"
+                    },
+                    {
+                      "text": "Results \u0026 Recommendation"
+                    }
+                  ],
+                  "type": "chips"
+                }
+              ]
+            ]
+          },
+          "textToSpeech": "",
+          "lang": "en",
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}
