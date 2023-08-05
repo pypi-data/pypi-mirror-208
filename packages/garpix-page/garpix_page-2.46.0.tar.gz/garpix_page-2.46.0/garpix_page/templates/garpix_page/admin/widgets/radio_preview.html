@@ -1,0 +1,53 @@
+{% load static %}
+
+{% with id=widget.attrs.id %}
+<ul{% if id %} id="{{ id }}"{% endif %} class="js-components-list {{ widget.attrs.class }}">
+    <label>
+        <img class="component-search" src="{% static 'garpix_page/images/admin/search.svg'%}" alt="Search">
+        <input class="js-search" placeholder="Поиск">
+    </label>
+
+    {% for group, options in widget.sorted_groups.items %}
+        <details class="js-component-group component-group" open>
+            <summary class="component-group__caption">{{ group|default:'Без группы' }}</summary>
+            <ul{% if widget.attrs.class %} class="{{ widget.attrs.class }}"{% endif %}>
+                {% for option in options %}
+                    <li class="js-component">
+                        <label>
+                            <span class="component-group__preview">
+                                {% if option.attrs.preview|length == 0 %}
+                                    <span class="component-group__preview--empty">Тут должно быть превью компонента. Если его нет, пожалуйста, обратитесь к разработчику.</span>
+                                {% else %}
+
+                                {% comment %}
+                                    Добавить класс js-slider только если картинок больше 1
+                                {% endcomment %}
+                                <div class="{% if option.attrs.preview|length > 1 %} js-slider {% endif %} slider">
+                                    <div class="slider__wrapper">
+                                      <div class="slider__items">
+                                            {% for image in option.attrs.preview %}
+                                                <div class="slider__item">
+                                                    <img
+                                                        class="swiper--img_circle slider__item--img"
+                                                        src="{% static image %}"
+                                                    />
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% if option.attrs.preview|length > 1 %}
+                                        <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+                                        <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </span>
+                            {% include option.template_name with widget=option %}
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </details>
+    {% endfor %}
+</ul>
+{% endwith %}
