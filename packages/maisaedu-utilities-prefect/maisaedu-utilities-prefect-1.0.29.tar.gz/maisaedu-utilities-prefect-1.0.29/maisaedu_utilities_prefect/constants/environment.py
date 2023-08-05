@@ -1,0 +1,2 @@
+PRODUCTION = 'production'
+LOCAL = 'local'
