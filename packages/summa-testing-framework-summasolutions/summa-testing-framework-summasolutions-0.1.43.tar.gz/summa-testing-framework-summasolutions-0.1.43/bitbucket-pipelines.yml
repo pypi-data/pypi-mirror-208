@@ -1,0 +1,44 @@
+# This is a sample build configuration for Python.
+# Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          name: Test
+          image: python:3
+          script:
+            - python -m unittest discover stf/test/
+#  branches:
+#    master:
+#      - step:
+#          name: Build and Publish
+#          image: python:3
+#          script:
+#            - pipe: atlassian/pypi-publish:0.3.0
+#              variables:
+#                PYPI_USERNAME: $PYPI_USERNAME
+#                PYPI_PASSWORD: $PYPI_PASSWORD
+
+  tags:
+    '*':
+      - step:
+          name: Build and Publish
+          image: python:3
+          script:
+            - pipe: atlassian/pypi-publish:0.3.0
+              variables:
+                PYPI_USERNAME: $PYPI_USERNAME
+                PYPI_PASSWORD: $PYPI_PASSWORD
+      - step:
+          name: Build and Publish Docker Image
+          script:
+            - cd docker
+            - docker build --no-cache -t summasolutions/stf:latest -t summasolutions/stf:$BITBUCKET_TAG ./
+            - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+            - docker push summasolutions/stf
+          services:
+            - docker

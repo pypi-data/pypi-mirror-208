@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <style>
+        .hiddenRow {
+            padding: 0 4px !important;
+            background-color: #eeeeee;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-10 col-md-10">
+            <h1 class="text-capitalize">Acceptance Test Report</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-sm-2">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-text">
+                        <span class="material-icons">list</span>
+                        Total: {{ header_info.status.total }}
+                    </h5>
+                    <h5 class="card-text">
+                        <span class="material-icons">timer</span>
+                        Duration: {{ header_info.status.duration }}
+                    </h5>
+                    <h5>
+                        <span class="material-icons">access_time</span>
+                        Start Time: {{ header_info.start_time.strftime("%Y-%m-%d %H:%M:%S") }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-sm-2">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-text">
+                        <span class="material-icons">done</span>
+                        Success: {{ header_info.status.success }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-text">
+                        <span class="material-icons">error</span>
+                        Error: {{ header_info.status.error }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-text">
+                        <span class="material-icons">warning</span>
+                        Failure: {{ header_info.status.failure }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-text">
+                        <span class="material-icons">skip_next</span>
+                        Skipped: {{ header_info.status.skip }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for test_case_name, tests_results in all_results.items() %}
+    {% if tests_results %}
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-10 col-md-10">
+            <div class="table-responsive">
+                <table class='table table-hover'>
+                    <thead>
+                    <tr>
+                        <th>{{ test_case_name }}</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for test_case in tests_results %}
+                    <tr class="table-{{ status_tags[test_case.outcome] }}">
+                        <td class="col-xs-9">{{ test_case.test_description }}</td>
+                        <td class="col-xs-3">
+                                <span class="label label-{{ status_tags[test_case.outcome] }}">
+                                    {% if test_case.outcome == test_case.SUCCESS %}
+                                        Pass
+                                    {% elif test_case.outcome == test_case.SKIP %}
+                                        Skip
+                                    {% elif test_case.outcome == test_case.FAILURE %}
+                                        Fail
+                                    {% else %}
+                                        Error
+                                    {% endif %}
+                                </span>
+                            {% if test_case.stdout or test_case.err %}
+                            &nbsp
+                            <button class="btn btn-primary accordion-toggle" type="button">View</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if test_case.stdout or test_case.err or test_case.err %}
+                    <tr class="table-{{ status_tags[test_case.outcome] }}">
+                        <td colspan="2" class="hiddenRow">
+                            <div class="collapse">
+                                {{ test_case.err }}
+                                {{ test_case.exception_instance }}
+
+                                {% if test_case.stdout %}
+                                <p>{{ test_case.stdout }}</p>
+                                {% endif %}
+                                {% if test_case.err %}
+                                <p style="color:maroon;">{{ test_case.err[0].__name__ }}: {{ test_case.err[1] }}</p>
+                                {% endif %}
+                                {% if test_case.err %}
+                                <p style="color:blue;">{{ test_case.test_exception_info }}</p>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script>
+    $('.accordion-toggle').click(function () {
+        $('.hiddenRow').hide();
+        $('.collapse').collapse('hide');
+        let details = $(this).closest('tr').next('tr');
+        details.find('.hiddenRow').show();
+        details.find('.collapse').collapse('show');
+    });
+</script>
+</body>
+</html>
