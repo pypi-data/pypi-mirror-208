@@ -1,0 +1,240 @@
+pedasos_teachers:
+  model: core.Person
+  verbose_name: "Pedasos: Teachers"
+  extra_args:
+    has_header_row: true
+    separator: "\t"
+  fields:
+    - ignore
+    - short_name
+    - last_name
+    - first_name
+    - date_of_birth
+    - sex
+    - departments
+    - ignore
+pedasos_classes:
+  model: core.Group
+  verbose_name: "Pedasos: Classes"
+  extra_args:
+    has_header_row: true
+    separator: "\t"
+  fields:
+    - ignore
+    - short_name
+    - group_owner_short_name
+    - group_owner_short_name
+pedasos_courses:
+  model: core.Group
+  verbose_name: "Pedasos: Courses"
+  extra_args:
+    has_header_row: true
+    separator: "\t"
+  fields:
+    - ignore
+    - short_name
+    - class_range
+    - group_subject_short_name
+    - group_owner_short_name
+pedasos_students:
+  model: core.Person
+  verbose_name: "Pedasos: Students"
+  extra_args:
+    has_header_row: true
+    separator: "\t"
+  fields:
+    - ignore
+    - unique_reference
+    - last_name
+    - first_name
+    - date_of_birth
+    - sex
+    - primary_group_short_name
+    - ignore # Mother
+    - ignore
+    - ignore
+    - ignore # Father
+    - ignore
+    - ignore
+    - group_membership_short_name # Course 1
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name # Course 5
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name # Course 10
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name # Course 15
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name # Course 20
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name
+    - group_membership_short_name # Course 25
+    - group_membership_short_name
+pedasos_guardians_1:
+  model: core.Person
+  verbose_name: "Pedasos: Guardians 1"
+  extra_args:
+    has_header_row: true
+    separator: "\t"
+  fields:
+    - ignore
+    - child_by_unique_reference
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - last_name # Mother
+    - first_name
+    - email
+    - ignore # Father
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+pedasos_guardians_2:
+  model: core.Person
+  verbose_name: "Pedasos: Guardians 2"
+  extra_args:
+    has_header_row: true
+    separator: "\t"
+  fields:
+    - ignore
+    - child_by_unique_reference
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore # Mother
+    - ignore
+    - ignore
+    - last_name # Father
+    - first_name
+    - email
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+schild_nrw_students:
+  model: core.Person
+  verbose_name: "Schild-NRW: Students"
+  extra_args:
+    has_header_row: true
+    separator: ;
+  fields:
+    - field_type: unique_reference
+      priority: 20
+    - ignore
+    - primary_group_short_name
+    - last_name
+    - first_name
+    - date_of_birth
+    - primary_group_owner_short_name
+    - ignore
+    - field_type: email
+      priority: 10
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - ignore
+    - street_housenumber
+    - postal_code
+    - place
+    - phone_number
+schild_nrw_teachers:
+  model: core.Person
+  verbose_name: "Schild-NRW: Teachers"
+  extra_args:
+    has_header_row: true
+    separator: ;
+  fields:
+    - field_type: unique_reference
+      priority: 20
+    - ignore
+    - last_name
+    - first_name
+    - date_of_birth
+    - short_name
+    - ignore
+    - ignore
+    - ignore
+    - field_type: ignore
+      column_name: email_work
+      priority: 10
+    - field_type: phone_number
+      db_field: mobile_number
+    - phone_number
+    - field_type: ignore
+      column_name: email_home
+    - street_housenumber
+    - postal_code
+    - place
+    - field_type: email
+      virtual: true
+      template: |
+        {{ email_work|default:email_home }}

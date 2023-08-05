@@ -1,0 +1,22 @@
+{# -*- engine:django -*- #}
+
+{% extends "core/base.html" %}
+
+{% load i18n rules %}
+{% load render_table from django_tables2 %}
+
+{% block browser_title %}{% blocktrans %}Import templates{% endblocktrans %}{% endblock %}
+{% block page_title %}{% blocktrans %}Import templates{% endblocktrans %}{% endblock %}
+
+{% block content %}
+  {% has_perm "csv_import.upload_importtemplate_rule" user as can_upload_import_template %}
+
+  {% if can_upload_import_template %}
+    <a class="btn green waves-effect waves-light" href="{% url 'upload_import_template' %}">
+      <i class="material-icons left">upload</i>
+      {% trans "Upload import template" %}
+    </a>
+  {% endif %}
+
+  {% render_table table %}
+{% endblock %}
