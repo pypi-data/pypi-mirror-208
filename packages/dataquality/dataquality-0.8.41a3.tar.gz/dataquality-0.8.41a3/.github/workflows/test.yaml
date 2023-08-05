@@ -1,0 +1,39 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize]
+
+env:
+  GALILEO_API_URL: "http://localhost:8000"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.8, 3.7]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install dependencies
+        run: |
+          if [[ ${{ matrix.python-version }} == "3.7" ]]; then
+            scripts/install.sh --extras=py37
+          else
+            scripts/install.sh
+          fi
+      - name: test
+        run: scripts/test.sh
+      - name: upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
