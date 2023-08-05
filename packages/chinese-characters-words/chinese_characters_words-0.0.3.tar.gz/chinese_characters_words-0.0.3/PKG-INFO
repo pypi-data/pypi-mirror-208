@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: chinese_characters_words
+Version: 0.0.3
+Summary: 中文字词
+Project-URL: Homepage, https://github.com/pypa/sampleproject
+Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
+Author-email: 吴烜 <nobodxbodon.github@gmail.com>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# 字
+
+字典数据是 [此库](https://github.com/pwxcoo/chinese-xinhua) 中的 `data/word.json`。
+
+## 接口
+
+### 查单字()
+
+参数为单字字符串，如：
+
+```
+from chinese_characters_words import 字典
+字典.查单字('好')
+```
+
+如果查不到，返回 None；否则信息如下：
+```
+{
+  '字'
+  '旧体'
+  '笔画数'
+  '拼音'
+  '部首'
+  '释义'
+  '其他'
+}
+```
