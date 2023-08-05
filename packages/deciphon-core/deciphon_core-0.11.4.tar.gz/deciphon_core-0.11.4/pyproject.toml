@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "deciphon-core"
+version = "0.11.4"
+description = "Python package for biding the C implementation"
+authors = ["Danilo Horta <danilo.horta@pm.me>"]
+license = "MIT"
+readme = "README.md"
+include = [
+  { path = "deciphon_core/*.so", format = "wheel" },
+  { path = "deciphon_core/*.pyd", format = "wheel" },
+  { path = "deciphon_core/lib/lib*", format = "wheel" },
+  { path = "build_ext.py", format = "sdist" },
+]
+
+[tool.poetry.dependencies]
+cffi = "*"
+h3daemon = ">=0.13.2"
+pydantic = ">=1.10.5"
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+blx = "*"
+pre-commit = "*"
+pyright = "*"
+pytest = "*"
+
+[tool.poetry.build]
+script = "build_ext.py"
+generate-setup-file = false
+
+[build-system]
+requires = ["poetry-core", "cffi", "cmake", "patchelf;sys_platform=='linux'"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.cibuildwheel]
+skip = ["*i686"]
