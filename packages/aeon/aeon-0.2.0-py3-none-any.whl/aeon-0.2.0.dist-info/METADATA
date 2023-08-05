@@ -1,0 +1,184 @@
+Metadata-Version: 2.1
+Name: aeon
+Version: 0.2.0
+Summary: A unified framework for machine learning with time series
+Author-email: aeon developers <contact@aeon-toolkit.org>
+Maintainer-email: aeon developers <contact@aeon-toolkit.org>
+License: BSD 3-Clause License
+        
+        Copyright (c) The aeon developers.
+        
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        * Redistributions of source code must retain the above copyright notice, this
+          list of conditions and the following disclaimer.
+        
+        * Redistributions in binary form must reproduce the above copyright notice,
+          this list of conditions and the following disclaimer in the documentation
+          and/or other materials provided with the distribution.
+        
+        * Neither the name of the copyright holder nor the names of its
+          contributors may be used to endorse or promote products derived from
+          this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://www.aeon-toolkit.org
+Project-URL: Repository, https://github.com/aeon-toolkit/aeon
+Project-URL: Documentation, https://www.aeon-toolkit.org
+Project-URL: Download, https://pypi.org/project/aeon/#files
+Project-URL: API Reference, https://www.aeon-toolkit.org/en/stable/api_reference.html
+Project-URL: Release Notes, https://www.aeon-toolkit.org/en/stable/changelog.html
+Keywords: data-science,machine-learning,data-mining,time-series,scikit-learn,forecasting,time-series-analysis,time-series-classification,time-series-clustering,time-series-regression
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: <3.12,>=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: attrs (>=19.2.0)
+Requires-Dist: deprecated (>=1.2.13)
+Requires-Dist: numba (>=0.55)
+Requires-Dist: numpy (<1.25,>=1.21.0)
+Requires-Dist: pandas (<2.1.0,>=1.5.3)
+Requires-Dist: scikit-learn (<1.3.0,>=1.0.0)
+Requires-Dist: scipy (<2.0.0,>=1.2.0)
+Requires-Dist: packaging (>=20.0)
+Provides-Extra: all_extras
+Requires-Dist: cloudpickle ; extra == 'all_extras'
+Requires-Dist: dask ; extra == 'all_extras'
+Requires-Dist: filterpy (>=1.4.5) ; extra == 'all_extras'
+Requires-Dist: h5py ; extra == 'all_extras'
+Requires-Dist: hmmlearn (>=0.2.7) ; extra == 'all_extras'
+Requires-Dist: gluonts (>=0.12.4) ; extra == 'all_extras'
+Requires-Dist: keras-self-attention ; extra == 'all_extras'
+Requires-Dist: matplotlib (>=3.3.2) ; extra == 'all_extras'
+Requires-Dist: mne ; extra == 'all_extras'
+Requires-Dist: pmdarima (!=1.8.1,<3.0.0,>=1.8.0) ; extra == 'all_extras'
+Requires-Dist: prophet (>=1.1) ; extra == 'all_extras'
+Requires-Dist: pyod (>=0.8.0) ; extra == 'all_extras'
+Requires-Dist: scikit-posthocs (>=0.6.5) ; extra == 'all_extras'
+Requires-Dist: seaborn (>=0.11.0) ; extra == 'all_extras'
+Requires-Dist: statsmodels (>=0.12.1) ; extra == 'all_extras'
+Requires-Dist: stumpy (>=1.5.1) ; extra == 'all_extras'
+Requires-Dist: tbats (>=1.1.0) ; extra == 'all_extras'
+Requires-Dist: tensorflow-probability ; extra == 'all_extras'
+Requires-Dist: tensorflow ; extra == 'all_extras'
+Requires-Dist: tsfresh (>=0.20.0) ; extra == 'all_extras'
+Requires-Dist: tslearn (>=0.5.2) ; extra == 'all_extras'
+Requires-Dist: xarray ; extra == 'all_extras'
+Requires-Dist: mlflow ; extra == 'all_extras'
+Requires-Dist: esig (==0.9.7) ; (python_version < "3.10") and extra == 'all_extras'
+Provides-Extra: binder
+Requires-Dist: notebook ; extra == 'binder'
+Requires-Dist: jupyterlab ; extra == 'binder'
+Provides-Extra: dev
+Requires-Dist: backoff ; extra == 'dev'
+Requires-Dist: httpx ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest-randomly ; extra == 'dev'
+Requires-Dist: pytest-timeout ; extra == 'dev'
+Requires-Dist: pytest-xdist ; extra == 'dev'
+Requires-Dist: dash (<=2.8.1) ; extra == 'dev'
+Requires-Dist: wheel ; extra == 'dev'
+Requires-Dist: boto3 ; extra == 'dev'
+Requires-Dist: botocore ; extra == 'dev'
+Requires-Dist: moto ; extra == 'dev'
+Provides-Extra: dl
+Requires-Dist: tensorflow ; extra == 'dl'
+Requires-Dist: tensorflow-probability ; extra == 'dl'
+Provides-Extra: docs
+Requires-Dist: jupyter ; extra == 'docs'
+Requires-Dist: myst-parser ; extra == 'docs'
+Requires-Dist: nbsphinx (>=0.8.12) ; extra == 'docs'
+Requires-Dist: numpydoc ; extra == 'docs'
+Requires-Dist: furo ; extra == 'docs'
+Requires-Dist: sphinx-issues (>=3.0.1) ; extra == 'docs'
+Requires-Dist: sphinx-design (>=0.3.0) ; extra == 'docs'
+Requires-Dist: sphinx-copybutton ; extra == 'docs'
+Requires-Dist: sphinx (<6,>=5.0.0) ; extra == 'docs'
+Requires-Dist: tabulate ; extra == 'docs'
+Provides-Extra: unstable_extras
+Requires-Dist: statsforecast (>=0.5.2) ; extra == 'unstable_extras'
+Requires-Dist: pycatch22 ; extra == 'unstable_extras'
+
+<p align="center">
+    <a href="https://aeon-toolkit.org"><img src="./docs/images/logo/aeon-logo-blue-compact.png" width="50%" alt="aeon logo" /></a>
+</p>
+
+# ⌛ Welcome to **aeon**
+
+``aeon`` is an open source toolkit for learning from time series compatible with
+[scikit-learn](https://scikit-learn.org). It provides access to the  very latest
+algorithms for time series  machine learning, in addition to a range of classical
+techniques for learning tasks such as forecasting and classification.
+
+We strive to provide a broad library of time series algorithms including the
+latest advances, offer efficient implementations using numba, and interfaces with other
+time series packages to provide a single framework for algorithm comparison.
+
+The latest ``aeon`` release is ``v0.2.0``. You can view the full changelog [here](https://www.aeon-toolkit.org/en/latest/changelog.html).
+
+Our webpage and documentation is available at https://aeon-toolkit.org.
+
+| Overview      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **CI/CD**     | [![github-actions-release](https://img.shields.io/github/actions/workflow/status/aeon-toolkit/aeon/release.yml?logo=github&label=build%20%28release%29)](https://github.com/aeon-toolkit/aeon/actions/workflows/release.yml) [![github-actions-main](https://img.shields.io/github/actions/workflow/status/aeon-toolkit/aeon/test.yml?logo=github&branch=main&label=build%20%28main%29)](https://github.com/aeon-toolkit/aeon/actions/workflows/test.yml) [![docs-main](https://img.shields.io/readthedocs/aeon-toolkit/stable?logo=readthedocs&label=docs%20%28stable%29)](https://www.aeon-toolkit.org/en/stable/) [![docs-main](https://img.shields.io/readthedocs/aeon-toolkit/latest?logo=readthedocs&label=docs%20%28latest%29)](https://www.aeon-toolkit.org/en/latest/) [![!codecov](https://img.shields.io/codecov/c/github/aeon-toolkit/aeon?label=codecov&logo=codecov)](https://codecov.io/gh/aeon-toolkit/aeon) |
+| **Code**      | [![!pypi](https://img.shields.io/pypi/v/aeon?logo=pypi&color=blue)](https://pypi.org/project/aeon/) [![!python-versions](https://img.shields.io/pypi/pyversions/aeon?logo=python)](https://www.python.org/) [![!black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![license](https://img.shields.io/badge/license-BSD%203--Clause-green?logo=style)](https://github.com/aeon-toolkit/aeon/blob/main/LICENSE) [![binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aeon-toolkit/aeon/main?filepath=examples)                                                                                                                                                                                                                                                                                                                                          |
+| **Community** | [![!slack](https://img.shields.io/static/v1?logo=slack&label=Slack&message=chat&color=lightgreen)](https://join.slack.com/t/aeon-toolkit/shared_invite/zt-1plkevy4x-vAg1dAUXcuoR38FjY9nxzg) [![!linkedin](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/aeon-toolkit/) [![!twitter](https://img.shields.io/static/v1?logo=twitter&label=Twitter&message=news&color=lightblue)](https://twitter.com/aeon_toolkit)                                                                                                                                                                                                                                                                                                                                                                                                                             |
+
+## ⚙️ Installation
+
+``aeon`` requires a Python version of 3.8 or greater. Our full installation guide is
+available in our [documentation](https://www.aeon-toolkit.org/en/latest/installation.html).
+
+The easiest way to install ``aeon`` is via pip:
+
+```bash
+pip install aeon
+```
+
+Some estimators require additional packages to be installed. If you want to install the full package with all optional dependencies, you can use:
+
+```bash
+pip install aeon[all_extras]
+```
+
+## 💬 Where to ask questions
+
+| Type                                | Platforms                        |
+|-------------------------------------|----------------------------------|
+| 🐛 **Bug Reports**                  | [GitHub Issue Tracker]           |
+| ✨ **Feature Requests & Ideas**      | [GitHub Issue Tracker] & [Slack] |
+| 💻 **Usage Questions**              | [GitHub Discussions] & [Slack]   |
+| 💬 **General Discussion**           | [GitHub Discussions] & [Slack]   |
+| 🏭 **Contribution & Development**   | [Slack]                          |
+
+[GitHub Issue Tracker]: https://github.com/aeon-toolkit/aeon/issues
+[GitHub Discussions]: https://github.com/aeon-toolkit/aeon/discussions
+[Slack]: https://join.slack.com/t/aeon-toolkit/shared_invite/zt-1plkevy4x-vAg1dAUXcuoR38FjY9nxzg
