@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: therapi
+Version: 0.0.4
+Summary: Therapy to ease the pain of writing boilerplate JSON API consumers.
+License: MIT
+Author: Helmut Irle
+Author-email: me@helmut.dev
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: requests (>=2.28.2,<3.0.0)
+Description-Content-Type: text/markdown
+
+# python-therapi
+Therapy to ease the pain of writing boilerplate JSON API consumers.
+
+---
+
+Tired of writing the same code to consume JSON APIs, over and over? Let's solve that!
+
+## Query a basic, public JSON API
+
+To query any basic, public JSON API, we create our consumer class and inherit from `BaseAPIConsumer`, as follows:
+
+```python
+from therapi import BaseAPIConsumer
+
+class MyAPIConsumer(BaseAPIConsumer):
+    base_url = "https://www.an-awesome-service.com/api"
+```
+
+Now we can use this class to make API calls to different endpoints, as follows:
+
+```python
+consumer = MyAPIConsumer()
+result = consumer.json_request(method="get", path="items", params={"id": 123})
+print(result)
+```
+
+We would see, for example, this response:
+
+```json
+{
+  "data": [
+    {"name": "Laptop", "price": 239},
+    {"name": "Printer", "price": 99}
+  ]
+}
+```
+
