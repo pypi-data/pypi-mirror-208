@@ -1,0 +1,17 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-rpc-config-no-rpc-api"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders RPC config-no-rpc-api crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+solders-macros = { path = "../solders-macros" }
+solders-traits-core = { path = "../solders-traits-core" }
+solders-pubkey = { path = "../solders-pubkey" }

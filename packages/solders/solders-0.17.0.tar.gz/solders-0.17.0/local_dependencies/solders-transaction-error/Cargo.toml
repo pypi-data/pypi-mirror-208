@@ -1,0 +1,18 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-transaction-error"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders transaction error crate."
+
+[dependencies]
+serde = "^1.0.136"
+solana-sdk = "1.14.17"
+solders-traits-core = { path = "../solders-traits-core" }
+solders-macros = { path = "../solders-macros" }
+derive_more = "0.99.17"
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }

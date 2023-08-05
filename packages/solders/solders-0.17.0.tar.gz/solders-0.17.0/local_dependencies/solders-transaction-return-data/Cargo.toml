@@ -1,0 +1,21 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-transaction-return-data"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders transaction return data crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+solana-sdk = "1.14.17"
+serde = "^1.0.136"
+derive_more = "0.99.17"
+solders-pubkey = { path = "../solders-pubkey" }
+solders-macros = { path = "../solders-macros" }
+base64 = "0.13.0"
+solders-traits-core = { path = "../solders-traits-core" }
+solana-transaction-status = "1.14.17"

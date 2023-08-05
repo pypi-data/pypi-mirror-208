@@ -1,0 +1,22 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-account"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders Account crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+derive_more = "0.99.17"
+solana-sdk = "1.14.17"
+solders-macros = { path = "../solders-macros" }
+solders-pubkey = { path = "../solders-pubkey" }
+solders-traits-core = { path = "../solders-traits-core" }
+solana-account-decoder = "1.14.17"
+solders-account-decoder = { path = "../solders-account-decoder" }
+base64 = "0.13.0"

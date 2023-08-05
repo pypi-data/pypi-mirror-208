@@ -1,0 +1,21 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-token"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders SPL Token crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+derive_more = "0.99.17"
+solana-program = "1.14.17"
+solders-macros = { path = "../solders-macros" }
+solders-pubkey = { path = "../solders-pubkey" }
+solders-traits-core = { path = "../solders-traits-core" }
+spl-associated-token-account = "1.1.2"
+spl-token = "3.5.0"

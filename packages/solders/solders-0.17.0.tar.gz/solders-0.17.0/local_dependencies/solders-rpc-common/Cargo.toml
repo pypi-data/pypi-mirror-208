@@ -1,0 +1,24 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-rpc-common"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders RPC common crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+derive_more = "0.99.17"
+solders-macros = { path = "../solders-macros" }
+solders-traits-core = { path = "../solders-traits-core" }
+solana-account-decoder = "1.14.17"
+solana-rpc-client-api = "1.14.17"
+solders-account = { path = "../solders-account" }
+solders-rpc-response-data-boilerplate = { path = "../solders-rpc-response-data-boilerplate" }
+solders-transaction-return-data = { path = "../solders-transaction-return-data" }
+solders-transaction-error = { path = "../solders-transaction-error" }
+serde_with = { version = "^1.14.0", features = ["base64"] }

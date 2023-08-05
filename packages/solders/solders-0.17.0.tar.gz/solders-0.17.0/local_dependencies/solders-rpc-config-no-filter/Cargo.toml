@@ -1,0 +1,24 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-rpc-config-no-filter"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders RPC config-no-filter crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+solders-macros = { path = "../solders-macros" }
+solders-traits-core = { path = "../solders-traits-core" }
+solana-account-decoder = "1.14.17"
+solders-pubkey = { path = "../solders-pubkey" }
+solders-transaction-status-enums = { path = "../solders-transaction-status-enums" }
+solana-rpc-client-api = "1.14.17"
+solders-rpc-config-macros = { path = "../solders-rpc-config-macros" }
+solders-rpc-config-no-rpc-api = { path = "../solders-rpc-config-no-rpc-api" }
+solders-commitment-config = { path = "../solders-commitment-config" }
+solana-sdk = "1.14.17"

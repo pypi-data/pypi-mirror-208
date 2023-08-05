@@ -1,0 +1,16 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-compute-budget"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders compute budget crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+solana-sdk = "1.14.17"
+solders-pubkey = { path = "../solders-pubkey" }
+solders-instruction = { path = "../solders-instruction" }

@@ -1,0 +1,20 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-rpc-program-accounts-config"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders RPC program accounts config crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+solders-macros = { path = "../solders-macros" }
+solders-traits-core = { path = "../solders-traits-core" }
+solders-rpc-filter = { path = "../solders-rpc-filter" }
+solders-rpc-config-macros = { path = "../solders-rpc-config-macros" }
+solders-rpc-account-info-config = { path = "../solders-rpc-account-info-config" }
+solana-rpc-client-api = "1.14.17"

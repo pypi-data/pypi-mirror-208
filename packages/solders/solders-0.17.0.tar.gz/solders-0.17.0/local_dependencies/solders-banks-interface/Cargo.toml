@@ -1,0 +1,23 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-banks-interface"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders banks interface crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+serde = "^1.0.136"
+derive_more = "0.99.17"
+solders-macros = { path = "../solders-macros" }
+solders-traits-core = { path = "../solders-traits-core" }
+solders-transaction-error = { path = "../solders-transaction-error" }
+solders-transaction-confirmation-status = { path = "../solders-transaction-confirmation-status" }
+solders-transaction-return-data = { path = "../solders-transaction-return-data" }
+solders-transaction-status-struct = { path = "../solders-transaction-status-struct" }
+solana-banks-client = "1.14.17"
+solana-banks-interface = { version = "1.14.17" }

@@ -1,0 +1,19 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-epoch-info"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders epoch info crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+solders-traits-core = { path = "../solders-traits-core" }
+solders-macros = { path = "../solders-macros" }
+solana-program = "1.14.17"
+solana-sdk = "1.14.17"
+serde = "^1.0.136"
+derive_more = "0.99.17"

@@ -1,0 +1,23 @@
+cargo-features = ["workspace-inheritance"]
+
+[package]
+name = "solders-rpc-config"
+version = "0.17.0"
+edition = "2021"
+include = ["/src"]
+license = "MIT"
+repository = "https://github.com/kevinheavey/solders"
+description = "Solders RPC config crate."
+
+[dependencies]
+pyo3 = { version = "0.18.0", default-features = false , features = ["macros"] }
+solders-rpc-config-no-filter = { path = "../solders-rpc-config-no-filter" }
+solders-rpc-program-accounts-config = { path = "../solders-rpc-program-accounts-config" }
+solders-rpc-account-info-config = { path = "../solders-rpc-account-info-config" }
+solders-rpc-request-airdrop-config = { path = "../solders-rpc-request-airdrop-config" }
+solders-rpc-send-transaction-config = { path = "../solders-rpc-send-transaction-config" }
+solders-rpc-sig-status-config = { path = "../solders-rpc-sig-status-config" }
+solders-rpc-sigs-for-address-config = { path = "../solders-rpc-sigs-for-address-config" }
+solders-rpc-sim-transaction-config = { path = "../solders-rpc-sim-transaction-config" }
+solders-rpc-simulate-tx-accounts-config = { path = "../solders-rpc-simulate-tx-accounts-config" }
+solders-rpc-config-no-rpc-api = { path = "../solders-rpc-config-no-rpc-api" }
