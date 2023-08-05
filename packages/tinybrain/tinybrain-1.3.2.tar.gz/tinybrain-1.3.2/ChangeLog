@@ -1,0 +1,145 @@
+CHANGES
+=======
+
+1.3.2
+-----
+
+* release(1.3.2): updates build system for py311
+* build: update for python311
+
+1.3.1
+-----
+
+* release(1.3.1): fixes downsampling factors > 2
+* ci: remove appveyor
+* ci: remove travis
+* ci: add GHA tests
+* fix: supporting floats in is\_pot (#19)
+
+1.3.0
+-----
+
+* release(1.3.0): performance improvements for mode pooling
+* install: bump requirement to py37
+* perf: faster 2x2 mode pooling (#18)
+* perf: enabled forgotten accelerated 2x2x2 sparse mode
+
+1.2.4
+-----
+
+* chore: update supported versions
+* release(1.2.4): increase performance of mode pooling 2x2x1
+* chore: update ChangeLog
+* build: update tox
+* chore: replace hyphens with underscores
+* docs: elaborate on why 2x2x2 is so much faster on real data
+* docs: update perf numbers with fix + use connectomics.npy for seg
+* perf: increase performance of mode pooling 2x2
+
+1.2.3
+-----
+
+* release(1.2.3): fix ds segmentation crash and perf for additional dtypes
+* docs: clarify mean of 10 runs
+* docs: add benchmark data to README
+* perf: accelerate 2x2 and 2x2x2 downsampling for num\_mips=1 for all types
+* docs: add results of a perf run
+* fix: loss of fourth index during recursive mode pooling
+* feat(perf.py): add benchmark script
+
+1.2.2
+-----
+
+* build: make sure sse3 is specified on x86\_64 platforms
+* fix: make tinybrain build on more platforms
+* build: skip py36 in CI build wheel
+* release(1.2.2): fixes off-by-one error in minimum average pooling size
+* build: add GHA
+* fix: off-by-one error in minimum size inequality (#17)
+* chore: add windows py39 to appveyor
+* chore: make sure BigSur can run build script
+
+1.2.1
+-----
+
+* release(1.2.1): accomodate numpy deprecations
+* fix: numpy deprecated np.int in favor of int
+* chore: updated build system
+
+1.2.0
+-----
+
+* chore: drop py27, py35
+* refactor(arm64): provide non-intrinsics for non x86 code
+* perf: reduce memory usage for single mip for 2x2 averaging (#12)
+* perf(avg2x2x2): faster and lower memory for single mips
+* chore: drop py27 and py35
+* fix: remove dependency on six
+* perf: reduce memory usage for single mip for 2x2 averaging
+* chore: update trove identifiers
+
+1.1.0
+-----
+
+* release(1.1.0): sparse modes for 2x2x2 downsampling
+* feat: 2x2x2 sparse average pooling for uint8, uint16 (#10)
+* feat+perf: 2x2x2 mode downsample sparse mode (#9)
+* docs: describe new 2x2x2 downsamples
+* docs: mention that 2x2x2 downsamples are fast now
+
+1.0.0
+-----
+
+* chore: add instrumentation for creating binaries
+* perf: accelerated 2x2x2 segmentation downsample (#8)
+* feat: fast 2x2x2 support for downsample\_with\_averaging (#7)
+* chore: add python3.8 to tinybrain docker build
+* docs: fix spelling error
+* install: add stdlib and min os version for compiling on mac
+
+0.1.1
+-----
+
+* release(0.1.1): manual SIMD on floating point 2x2x1 averaging
+* perf: manual SIMD for floating point operations (#2)
+* chore: update setup.py to comply with new PyPI rules
+* fix: incorrect cast in render\_image
+* docs: clarify that countless works best on AVX2
+* docs: discuss what downsample\_segmentation actually does
+* chore: add GPL v3+ classifier to setup.cfg
+
+0.1.0
+-----
+
+* chore: bump version to 0.1.0
+* fix: compiler integer comparison warning
+* docs: updated performance measures for averaging
+* perf: enhancements to uint16, float32, and float64 downsample\_with\_averaging
+* perf: ~25% faster downsample with averaging
+* docs: add link to article on sparse downsampling
+* docs: make sure PyPI License is GPL v3+ (currently None)
+* fix: downsample\_with\_striding should support num\_mips
+* docs: add installation instructions
+
+0.0.1
+-----
+
+* chore: add \_\_version\_\_ = 0.0.1
+* docs: add Travis testing badge
+* test: add travis CI integration
+* test: compare accelerated mode pooling and countless mode pooling
+* test: add simple test to compare averaging implementations
+* fix: if to elif
+* fix: accelerated mode pooling was preempting stippled
+* fix: slight discrepency between numpy countless2d and the Cython version
+* test: adding automated testing (and solving issues!)
+* docs: snarky comment
+* docs: developmental PyPI release
+* fix: slow path in downsample\_with\_averaging
+* feat: workable downsample\_with\_averaging function
+* feat: added float, double, uint16 support for accelerated avg pooling
+* refactor: made c++ accumulation code more data type flexible
+* feat: added 4d support for accelerated 2x2 avg pooling
+* refactor: remove unused variables
+* feat: accelerated 2x2x1 downsample with averaging working
+* Initial commit
