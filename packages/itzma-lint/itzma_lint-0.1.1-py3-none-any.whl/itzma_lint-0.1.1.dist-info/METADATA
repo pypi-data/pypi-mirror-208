@@ -1,0 +1,107 @@
+Metadata-Version: 2.1
+Name: itzma-lint
+Version: 0.1.1
+Summary: A customized linter for personal use
+Author-email: Tattie Chitrakorn <tc3117@columbia.edu>
+License: MIT License
+        
+        Copyright (c) 2023 Tattie Chitrakorn
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: repository, https://github.com/tchitrakorn/itzma-lint
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: flake8
+Requires-Dist: nltk
+Requires-Dist: inflection
+Provides-Extra: develop
+Requires-Dist: pylint ; extra == 'develop'
+Requires-Dist: coverage ; extra == 'develop'
+Requires-Dist: black ; extra == 'develop'
+Requires-Dist: bump2version (>=1.0.0) ; extra == 'develop'
+Requires-Dist: check-manifest ; extra == 'develop'
+Requires-Dist: mypy ; extra == 'develop'
+
+<h1 align="center"> ⭑･ﾟﾟ･*:༅｡.｡༅:*ﾟ:*:✼✿ &ensp; ITZMA Lint (It's my lint!) &ensp; ✿✼:*ﾟ:༅｡.｡༅:*･ﾟﾟ･⭑ </h1>
+
+<p align="center"> "Your Lint, Your Rules" </p>
+
+![GitHub](https://img.shields.io/github/license/tchitrakorn/itzma-lint)
+![GitHub issues](https://img.shields.io/github/issues/tchitrakorn/itzma-lint)
+[![Itzma workflow](https://github.com/tchitrakorn/itzma-lint/actions/workflows/test.yml/badge.svg)](https://github.com/tchitrakorn/itzma-lint/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/tchitrakorn/itzma-lint/branch/main/graph/badge.svg?token=46KL4N7H8P)](https://codecov.io/gh/tchitrakorn/itzma-lint)
+
+<h2>Overview</h1>
+
+Do you love using a linter but want even more personalized rules? Building off a traditional lint, ITZMA offers additional features such as:
+
+*  Enforcing all functions that change the state of the programs to begin with verbs
+*  Enforcing all functions that return values to be nouns
+*  Enforcing array names to be plural nouns
+*  ... and more!
+
+Of course, ITZMA also contains traditional features, such as:
+
+* Enforcing all booleans to begin with pre-allowed verbs
+* Enforcing consistent case types
+* ... and more!
+
+ITZMA is a linter that lets you decide how your code will look and helps you enforce those rules!
+
+<h2>Installation and Usage</h1>
+
+I'm excited to share Itzma with everyone!
+To use Itzma locally, please install the following dependencies:
+* flake8
+* ast
+* inflection
+* nltk
+
+Use the following command to install the dependencies:
+```
+pip install <library name>
+```
+
+To use Itzma to check your Python file, simply run the following in your terminal in the appropriate directory:
+
+```
+flake8  <filename>
+```
+
+A message will be printed for each Itzma check that was not passed!
+For more information about Itzma checks and error messages, check out checks.py.
+
+<br>
+<br>
+
+<div align="center">
+  
+![](https://media.tenor.com/8C22RnZpGo4AAAAM/cute-llama.gif)
+  
+</div>
+
+> *"I'm a llama, not an ITZMA (lint)!"*
