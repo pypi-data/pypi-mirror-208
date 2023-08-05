@@ -1,0 +1,203 @@
+#!/bin/bash -l
+# Very important to start with 'bash -l' - to escape SageMaker Studio notebook environment
+
+dir=$(dirname "$0")
+source "$dir"/sm-helper-functions
+
+_install_helper_scripts
+
+SM_STUDIO_PYTHON=$(/opt/.sagemakerinternal/conda/bin/python -c \
+    "from jupyter_client.kernelspec import KernelSpecManager; \
+    print(KernelSpecManager().get_all_specs()['python3']['spec']['argv'][0])")
+
+SM_STUDIO_PYTHON_PREFIX=$("$SM_STUDIO_PYTHON" -c "from __future__ import print_function;import sys; print(sys.prefix)")
+
+if [[ "$1" == "configure" ]]; then
+
+    set -e
+    
+    cat /etc/os-release
+    cat /etc/issue
+    
+    # TODO: Add support for Amazon Linux  
+    grep 'Debian GNU/Linux\|Ubuntu' /etc/issue >/dev/null \
+      || (echo "sm-ssh-ide: Unsupported OS type / version. Only Debian/Ubuntu systems are supported now." && exit 1)
+
+    cat >/etc/profile.d/sm-ssh-ide.sh <<EOF
+export XAUTHORITY="/tmp/.Xauthority"
+export ICEAUTHORITY="/tmp/.ICEauthority"
+touch "/tmp/.Xauthority"
+touch "/tmp/.ICEauthority"
+chmod 600 "/tmp/.Xauthority"
+chmod 600 "/tmp/.ICEauthority"
+EOF
+
+    source /etc/profile.d/sm-ssh-ide.sh
+
+    echo "sm-ssh-ide: Saving env variables for remote SSH interpreter"
+    sm-save-env
+    
+    export DEBIAN_FRONTEND=noninteractive
+
+    apt-get -qq update
+    apt-get -qq -y install apt-utils
+    
+    [ -d /usr/share/man/man1 ] || mkdir /usr/share/man/man1
+    
+    apt-mark hold light-locker
+
+    apt-get -qq -y install dbus-x11 xfce4 xfce4-goodies epiphany-browser
+    
+    if grep -q 'Ubuntu 16' /etc/issue; then
+        apt-get -qq -y install tightvncserver
+    else
+        apt-get -qq -y install tigervnc-standalone-server
+    fi
+
+    apt-get -qq -y install ssh curl net-tools procps less jq curl vim rsync
+    
+    _install_aws_cli
+    _install_ssm_agent_ubuntu
+    _install_session_manager_plugin_ubuntu
+
+    echo "startxfce4" > ~/.xsession
+    chmod +x ~/.xsession
+
+    sed -i -e 's~^ClientAliveInterval~#ClientAliveInterval~' /etc/ssh/sshd_config
+    echo "ClientAliveInterval 15" >> /etc/ssh/sshd_config
+
+    sed -i -e 's~^AuthorizedKeysFile~#AuthorizedKeysFile~' /etc/ssh/sshd_config
+    echo "AuthorizedKeysFile /etc/ssh/authorized_keys" >> /etc/ssh/sshd_config
+
+elif [[ "$1" == "set-jb-license-server" ]]; then
+
+    JB_LICENSE_SERVER_HOST="$2"
+    
+    if [ -f ~/.sm-jb-license-server ]; then
+        echo "sm-ssh-ide: PyCharm license server host is already configured in ~/.sm-jb-license-server, skipping override"
+    else
+        echo "sm-ssh-ide: Saving PyCharm License server host into ~/.sm-jb-license-server"
+        echo "$JB_LICENSE_SERVER_HOST" > ~/.sm-jb-license-server
+    fi
+
+    JB_LICENSE_SERVER_HOST="$(cat ~/.sm-jb-license-server)"
+
+    if grep -q "$JB_LICENSE_SERVER_HOST" /etc/hosts; then
+        echo "sm-ssh-ide: Skipping the update of /etc/hosts with PyCharm license server (already there)"
+    else
+        echo "sm-ssh-ide: Updating /etc/hosts with PyCharm license server from ~/.sm-jb-license-server"
+        echo "127.0.0.1  $JB_LICENSE_SERVER_HOST" >> /etc/hosts
+    fi
+
+elif [[ "$1" == "set-vnc-password" ]]; then
+
+    VNC_PASSWORD="$2"
+
+    if [ -f ~/.vnc/passwd ]; then
+        echo "sm-ssh-ide: VNC password is already set in ~/.vnc/passwd, skipping override"
+    else
+        echo "sm-ssh-ide: Encrypting and saving VNC password to ~/.vnc/passwd"
+        mkdir -p ~/.vnc
+        echo "$VNC_PASSWORD" | vncpasswd -f > ~/.vnc/passwd
+        chmod 600 ~/.vnc/passwd
+    fi
+
+elif [[ "$1" == "init-ssm" ]]; then
+    echo "sm-ssh-ide: Using SageMaker Studio Python: $SM_STUDIO_PYTHON"
+
+    LOCAL_USER_ID="$2"
+
+    if [ -f ~/.sm-ssh-owner ]; then
+        echo "sm-ssh-ide: SSH owner user ID is already set in ~/.sm-ssh-owner, skipping override"
+        LOCAL_USER_ID="$(cat ~/.sm-ssh-owner)"
+    else
+        echo "sm-ssh-ide: Saving SSH owner user ID into ~/.sm-ssh-owner"
+        echo "$LOCAL_USER_ID" > ~/.sm-ssh-owner
+    fi
+
+
+    SSH_SSM_ROLE=$($SM_STUDIO_PYTHON <<EOF
+import sagemaker; from sagemaker_ssh_helper.wrapper import SSHEnvironmentWrapper;
+print(SSHEnvironmentWrapper.ssm_role_from_iam_arn(sagemaker.get_execution_role()))
+EOF
+    )
+    echo "sm-ssh-ide: Will use SSM role: $SSH_SSM_ROLE"
+
+    export SSH_SSM_ROLE
+    export SSH_OWNER_TAG=$LOCAL_USER_ID
+
+    # Init SSM and pipe the output to CloudWatch (stdout of the pid 1).
+    sm-init-ssm | tee /proc/1/fd/1
+
+elif [[ "$1" == "start" ]]; then
+    echo "sm-ssh-ide: Using SageMaker Studio Python: $SM_STUDIO_PYTHON"
+
+    OPTIONS=$2
+
+    set -e
+
+    if [[ -f /tmp/.ssh-ide-local-lock ]]; then
+        echo "sm-ssh-ide: Already running on this instance? Call stop first." && exit 1
+    fi
+
+    touch /tmp/.ssh-ide-local-lock
+
+    service ssh start
+
+    if [[ "$OPTIONS" != "--ssh-only" ]]; then
+
+      export USER=root
+      vncserver :1
+
+      "$SM_STUDIO_PYTHON_PREFIX"/bin/pip install --root-user-action ignore -q notebook
+
+      "$SM_STUDIO_PYTHON" -m jupyter notebook --no-browser --port=8889 --ip=127.0.0.1 --allow-root \
+        >/tmp/jupyter-notebook.log 2>&1 &
+
+      sleep 2
+
+      tail /tmp/jupyter-notebook.log
+
+    fi
+
+elif [[ "$1" == "ssm-agent" ]]; then
+
+    /usr/bin/amazon-ssm-agent
+
+elif [[ "$1" == "status" ]]; then
+
+    netstat -nptl | grep '5901\|8889'
+
+elif [[ "$1" == "stop" ]]; then
+
+    pkill -ef amazon-ssm-agent || echo "sm-ssh-ide: SSM agent already stopped?"
+    
+    vncserver -kill :1
+    
+    # Wait dbus to shop
+    sleep 5
+    
+    pkill -e Xtigervnc
+    pkill -e Xtightvnc
+
+    pkill -e ssh-agent
+    pkill -e gpg-agent
+
+    pkill -fe jupyter-notebook
+
+    service ssh stop
+
+    # Wait all other services to shop
+    sleep 5
+    
+    if [[ -f /tmp/.ssh-ide-local-lock ]]; then
+        rm /tmp/.ssh-ide-local-lock
+    else
+        echo "sm-ssh-ide: Local lock is missing, was not not running on this instance?"
+    fi
+
+else
+
+    echo "sm-ssh-ide: Unknown command: $1"
+
+fi
