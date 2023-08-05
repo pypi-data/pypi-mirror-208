@@ -1,0 +1,135 @@
+Metadata-Version: 2.1
+Name: triglav
+Version: 1.0.0
+Summary: Triglav: Iterative Refinement and Selection of Stable Features Using Shapley Values
+Author: Peter Kruczkiewicz, G. Brian Golding, Oliver Lung
+Author-email: Josip Rudar <rudarj@uoguelph.ca>, Mehrdad Hajibabaei <mhajibab@uoguelph.ca>
+License: MIT License
+        
+        Copyright (c) 2023 Josip Rudar, Peter Kruczkiewicz, Oliver Lung, G.Brian Golding, Mehrdad Hajibabaei
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/jrudar/Triglav
+Project-URL: Repository, https://github.com/jrudar/Triglav.git
+Project-URL: Bug Tracker, https://github.com/jrudar/Triglav/issues
+Keywords: ecology,multivariate statistics,feature selection,stability selection
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: <=3.11,>=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Provides-Extra: test
+License-File: LICENSE
+
+# Triglav - Feature Selection Using Iterative Refinement
+
+[![CI](https://github.com/jrudar/Triglav/actions/workflows/ci.yml/badge.svg)](https://github.com/jrudar/Triglav/actions/workflows/ci.yml)
+[![Draft PDF](https://github.com/jrudar/Triglav/actions/workflows/draft-pdf.yml/badge.svg)](https://github.com/jrudar/Triglav/actions/workflows/draft-pdf.yml)
+
+## Overview
+
+Triglav (named after the Slavic god of divination) attempts to discover
+all relevant features using an iterative refinement approach. This
+approach is based after the method introduced in Boruta with several
+modifications:
+
+1) Features are clustered and the impact of each cluster is assessed as
+   the average of the Shapley scores of the features associated with
+   each cluster.
+
+2) Like Boruta, a set of shadow features is created. However, an ensemble
+   of classifiers is used to measure the Shapley scores of each real feature 
+   and its shadow counterpart, producing a distribution of scores. A Wilcoxon 
+   signed-rank test is used to determine the significance of each cluster
+   and p-values are adjusted to correct for multiple comparisons across each 
+   round. Clusters with adjusted p-values below 'alpha' are considered a hit.
+
+3) At each iteration at or over 'n_iter_fwer', two beta-binomial distributions 
+   are used to determine if a cluster should be retained or not. The first
+   distribution models the hit rate while the the second distribution models 
+   the rejection rate. For a cluster to be successfully selected the probability 
+   of a hit must be significant after correcting for multiple comparisons and
+   applying a Bonferroni correction for each iteration greater than or equal
+   to the 'n_iter_fwer' parameter. For a cluster to be rejected a similar round
+   of reasoning applies. Clusters that are not rejected remain tentative.
+
+4) After the iterative refinement stage SAGE scores could be used to select
+   the best feature from each cluster.
+
+While this method may not produce all features important for classification,
+it does have some nice properties. First of all, by using an Extremely 
+Randomized Trees model as the default, dependencies between features can be 
+accounted for. Further, decision tree models are better able to partition 
+the sample space. This can result in the selection of both globally optimal
+and locally optimal features. Finally, this approach identifies stable clusters of 
+features since only those which consistently pass the Wilcoxon signed-rank test 
+are selected. This makes this approach more robust to differences in training
+data.
+
+## Install
+
+With Conda from BioConda:
+
+```bash
+conda install -c bioconda triglav
+```
+
+From PyPI:
+
+```bash
+pip install triglav
+```
+
+From source:
+
+```bash
+git clone https://github.com/jrudar/Triglav.git
+cd Triglav
+pip install .
+# or create a virtual environment
+python -m venv venv
+source venv/bin/activate
+pip install .
+```
+
+## Interface
+
+An overview of the API can be found [here](docs/API.md).
+
+## Usage and Examples
+
+Examples of how to use `Triglav` can be found [here](notebooks/README.md).
+
+## Contributing
+
+To contribute to the development of `Triglav` please read our [contributing guide](docs/CONTRIBUTING.md)
+
+## References
+
+Coming Soon
+
