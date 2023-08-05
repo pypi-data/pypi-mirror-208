@@ -1,0 +1,105 @@
+Metadata-Version: 2.1
+Name: pyhyperbolic3d
+Version: 0.1.0
+Summary: Hyperbolic meshes for 'PyVista'
+Home-page: https://github.com/stla/PyHyperbolic3D
+License: GPL-3.0-only
+Keywords: hyperbolic geometry,3D meshes,PyVista
+Author: Stéphane Laurent
+Author-email: laurent_step@outook.fr
+Requires-Python: >=3.9,<3.11
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Provides-Extra: docs
+Requires-Dist: numpy (>=1.21.2,<2.0.0)
+Requires-Dist: pyvista (>=0.32.1,<0.33.0)
+Requires-Dist: sphinx (>=5.3.0,<6.0.0); extra == "docs"
+Requires-Dist: sphinx-rtd-theme (>=1.1.1,<2.0.0); extra == "docs"
+Requires-Dist: sphinxcontrib-napoleon (>=0.7,<0.8); extra == "docs"
+Requires-Dist: sphinxcontrib-restbuilder (>=0.3,<0.4); extra == "docs"
+Project-URL: Documentation, https://pyhyperbolic3d.readthedocs.io/en/latest/
+Description-Content-Type: text/markdown
+
+# PyHyperbolic3D
+
+<!-- badges: start -->
+[![Documentation status](https://readthedocs.org/projects/pyhyperbolic3d/badge/)](https://pyhyperbolic3d.readthedocs.io/en/latest/index.html)
+<!-- badges: end -->
+
+Python stuff for drawing 3D hyperbolic polyhedra with 'PyVista'.
+
+```
+pip install pyhyperbolic3d
+```
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/icosahedron.png)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/icosahedron_slider.gif)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/icosahedron_colored.gif)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/BarthHyperbolicpolyhedron.gif)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/PentagrammicPrism.gif)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/GreatDeltoidalIcositetrahedron.gif)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/gircope.gif)
+
+![](https://github.com/stla/PyHyperbolic3D/raw/main/examples/griddip.gif)
+
+#### `gyrotube(A, B, s, r, npoints=300):`
+
+Tubular hyperbolic segment.
+
+##### Parameters
+- **`A,B`** points (lists or arrays)
+
+  The two endpoints of the segment.
+
+- **`s`** positive float
+
+   Curvature parameter.
+   
+- **`r`** positive float
+
+   Radius of the tube.
+   
+- **`npoints`** integer
+
+   Number of points along the segment. The default is 300.
+
+##### Returns
+A PyVista mesh ready for inclusion in a plotting region.
+
+___
+
+#### `gyrotriangle(A, B, C, s, depth=5, tol=1e-6):`
+
+Hyperbolic triangle.
+
+##### Parameters
+- **`A,B,C`** points (lists or arrays)
+
+  The vertices of the triangle.
+
+- **`s`** positive float
+
+   Curvature parameter.
+   
+- **`depth`** integer
+
+   The number of recursive subdivions. The default is 5.
+
+- **`tol`** small positive float
+
+   The tolerance used to merge duplicated points in the mesh.
+The default is 1e-6.
+
+##### Returns
+A PyVista mesh ready for inclusion in a plotting region.
+
+
+
