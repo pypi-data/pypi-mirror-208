@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "garlandtools-async"
+version = "0.1.1"
+description = "A async python wrapper for the https://garlandtools.org/ API"
+authors = ["Abigail Howe <abby@abigailhowe.org>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "garlandtools"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = "^3.8.4"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+pytest = "^7.3.1"
+isort = "^5.12.0"
+mypy = "^1.2.0"
+pre-commit = "^3.3.1"
+flake8 = "^6.0.0"
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
