@@ -1,0 +1,1258 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "METAINDEX"  "" "" ""
+.SH NAME
+metaindex \- document search by metadata
+.SH SYNOPSIS
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex [\-h] [\-\-list] [\-l loglevel] [\-c configuration file] {find,index,fs}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH DESCRIPTION
+.sp
+With \fImetaindex\fP you can index and find files on your disk based on their
+metadata, like the title of a PDF, the keywords of an ebook, or the model
+of a camera that a photo was taken with.
+.sp
+The following types of files are supported by default:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+Images (anything that has EXIF, IPTC, or XMP information),
+.IP \(bu 2
+Audio (audio file formats that have ID3 header or similar),
+.IP \(bu 2
+Video (most video file formats have an ID3 header),
+.IP \(bu 2
+PDF,
+.IP \(bu 2
+ebooks (epub natively, calibre metadata files are understood, too),
+.IP \(bu 2
+ABC notation.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+More file types can be supported through the use of Addons.
+.sp
+User provided extra metadata is supported, if it’s provided in the same
+directory as the file and the metadata file is \fB\&.metadata.json\fP\&.
+.sp
+With metaindex you can find files on your disk based on their metadata, like
+the title of a PDF, the keywords of an ebook, or the model of a camera that
+a photo was taken with.
+.sp
+The following types of files are supported by default:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+Images (anything that has EXIF, IPTC, or XMP information),
+.IP \(bu 2
+Audio (audio file formats that have ID3 header or similar),
+.IP \(bu 2
+Video (most video file formats have an ID3 header),
+.IP \(bu 2
+PDF,
+.IP \(bu 2
+ebooks (epub natively, calibre metadata files are understood, too).
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+More file types can be supported through the use of addons.
+.sp
+User provided extra metadata is supported, if it’s provided in the same
+directory as the file and the metadata file is \fB\&.metadata.json\fP\&.
+.SH SERVER
+.sp
+Starting with version \fB0.2.0dev0\fP, requires that the \fBmetaindexserver\fP
+is running to perform any operations like searching or indexing.
+.sp
+In the default configuration the server will be started automatically as soon
+as metaindex needs to connect to the server, but none is running.
+.sp
+However, you may also launch the server process ahead in time like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindexserver \-\-detach
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+It supports a few parameters like \fB\-c\fP to change the configuration file
+and \fB\-l\fP to change the log level.
+.sp
+To stop a running server, run \fBmetaindexserver \-\-stop\fP or send it a \fBTERM\fP signal.
+.SH OPTIONS
+.sp
+General parameters for \fBmetaindex\fP are:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB\-c configuration file\fP
+Use this configuration file instead of the one from the default
+location.
+.TP
+.B \fB\-h\fP
+Show the help.
+.TP
+.B \fB\-l loglevel\fP
+Set the level of details shown in logging. Your options are \fBfatal\fP,
+\fBerror\fP, \fBwarning\fP, \fBinfo\fP, and \fBdebug\fP\&. Defaults to \fBwarning\fP\&.
+.TP
+.B \fB\-\-list\fP
+List all available indexers and exit.
+.TP
+.B \fB\-\-compact\fP
+Compact the backend database.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+metaindex operates in one of the modes \fBindex\fP or \fBfind\fP\&.
+.sp
+If you want to try the experimental filesystem mode, there is also \fBfs\fP\&.
+.SS Find
+.sp
+This is the main operation used to search for files:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex find [\-l directory] [\-f [\-k]] [\-t [tags]] [\-\-] [search queries]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The options to this command are
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB\-t [tags]\fP
+Metadata tags that you wish to see per found file.
+.TP
+.B \fB\-l directory\fP
+If this option is provided, metaindex will create this directory (or use
+the existing directory only if it is empty) and create a symbolic link
+to all files that matches this search.
+.TP
+.B \fB\-f\fP
+Enforce the use of \fB\-l\fP’s \fBdirectory\fP, even if it is not empty.
+Still, metaindex will only work with that directory if it contains only
+symbolic links (e.g. a previous search result)!
+If \fB\-f\fP is provided, all symbolic links in \fBdirectory\fP will be
+deleted and the links of this search will be put in place.
+.TP
+.B \fB\-k\fP
+When you use \fB\-l\fP and \fB\-f\fP, \fB\-k\fP will keep all existing links in
+the search directory. That means you can accumulate search results in
+one directory.
+.TP
+.B \fBsearch queries\fP
+The terms to search for. If left empty, all files will be found. See
+below in section search query syntax for the details on search
+queries.
+If the search query is only given as \fB\-\fP, metaindex will read the search
+query from stdin.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Index
+.sp
+This is the operation to index files and store that information in the
+cache:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex index [\-v[v[v[v]]]] [\-C] [\-r] paths
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The options to this command are
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB\-C\fP
+Clear the cache. If combined with other options, the flushing of the
+cache will happen first.
+.TP
+.B \fB\-m [paths]\fP
+Remove missing files. When a file, that\(aqs in the index and in the given
+paths, can not be found on disk anymore, it will be removed when this
+option is enabled.
+If \fB\-m\fP is provided, but no paths, all paths in cache will be checked
+for their existence and cleaned up if not found.
+If \fBpaths\fP is \fB\-\fP, the list of files will be read from stdin, one
+file per line.
+By default this option is disabled.
+.TP
+.B \fB\-r\fP
+Run the indexer recursively. That means to visit all files in all
+subdirectories of the paths in the \fB\-i\fP parameter.
+.TP
+.B \fB\-v\fP
+Make the output more verbose. This option can be provided up to four
+times (\fB\-vvvv\fP). The steps are:
+.INDENT 7.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+No \fB\-v\fP: no output other than errors or information from certain indexers
+.IP \(bu 2
+\fB\-v\fP: print a \fB\&.\fP per file indexed
+.IP \(bu 2
+\fB\-vv\fP: same as \fB\-v\fP and print how many files were indexed in the end
+.IP \(bu 2
+\fB\-vvv\fP: same as \fB\-vv\fP but also show how long it took
+.IP \(bu 2
+\fB\-vvvv\fP: same as \fB\-vvv\fP but print the path of each indexed file instead of just a \fB\&.\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.TP
+.B \fBpaths\fP
+Run the indexer on these paths.
+If \fBpaths\fP is \fB\-\fP, the list of files will be read from stdin, one
+file per line.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Filesystem (fs)
+.sp
+On Linux you can try the \fBexperimental\fP feature of mounting a FuseFS that
+will give you a structured access to your files through their metadata:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex fs [command] [mount point]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The only supported command so far is \fBmount\fP\&.
+.sp
+It is very experimental and not very useful, but at the same time will not
+break any of your files as it only provides a read\-only view on your tagged
+files.
+.SH FILES
+.sp
+metaindex is controlled through a configuration file and caches metadata in a
+cache file.
+.SS Cache file
+.sp
+The cache file is usually located in \fB~/.cache/metaindex/index.db\fP, but that
+location is configurable.
+.SS Configuration file
+.sp
+The configuration file is usually located in \fB~/.config/metaindex.conf\fP\&. An
+example of the configuration file is provided in the \fBdist\fP directory.
+The syntax of the file is:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[Category]
+option = value
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+There are several categories in the configuration file, the possible
+options are described after this list:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+\fB[General]\fP, general options
+.IP \(bu 2
+\fB[Synonyms]\fP, synonyms for tag names
+.IP \(bu 2
+\fB[Include]\fP, additional configuration files that have to be included
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS General
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBcache\fP
+The location of the cache file. Defaults to
+\fB~/.cache/metaindex/index.db\fP\&.
+.TP
+.B \fBrecursive\-extra\-metadata\fP
+When looking for sidecar metadata files (see Extra Metadata), also
+look in all parent directories for metadata. Defaults to \fByes\fP\&.
+.sp
+This is useful when the file is \fBcollection/part/file.jpg\fP but the
+metadata file is \fBcollection/.metadata.json\fP (and in this metadata
+file the reference is made to \fBpart/file.jpg\fP).
+.TP
+.B \fBcollection\-metadata\fP
+Some sidecar files can define metadata that applies to the entire
+collection of files in that directory. This options controls what
+files may define that type of metadata.
+Based on the available metadata storage modules (e.g. JSON, and OPF)
+these names are extended by the corresponding file extensions.
+Defaults to \fB\&.metadata, metadata\fP\&.
+.sp
+That means, with JSON and OPF enabled, that the metadata files
+\fB\&.metadata.json, .metadata.opf, metadata.json, metadata.opf\fP are
+considered.
+.sp
+See below in Extra Metadata for more details.
+.TP
+.B \fBignore\-dirs\fP
+What folders (and their subfolders) to ignore entirely. One folder per
+line. Defaults to \fB\&.git, .svn, .hg, .bzr, .stfolder, System Volume Information, __MACOSX\fP\&.
+.sp
+You can use unix\-style path patterns, like \fB_tmp*\fP\&.
+.TP
+.B \fBignore\-files\fP
+What files to ignore entirely. One file name pattern per line. The
+default is: \fB*.aux, *.toc, *.out, *.log, *.nav, *.exe, *.sys, *.bat, *.ps, *.sh, *.fish, *~, *.swp, *.bak, *.sav, *.backup, *.old, *.old, *.orig, *.rej, tags, *.log, *.a, *.out, *.o, *.obj, *.so\fP\&.
+.TP
+.B \fBaccept\-files\fP
+What files to consider. One file name pattern by line, like \fB*.doc\fP\&.
+.sp
+If you define this, no other files are indexed and \fBignore\-files\fP will
+not be used.
+.sp
+By default this is left empty and instead \fBignore\-files\fP is used.
+.TP
+.B \fBindex\-unknown\fP
+Whether or not to add files to the index for which no meaningful
+metadata could be extracted from the indexers or any sidecar files.
+.sp
+Defaults to \fByes\fP\&.
+.TP
+.B \fBignore\-indexers\fP
+A comma separated list of indexers by name that you do not want to use.
+By default this list is empty.
+.sp
+Run \fBmetaindex \-\-list\fP to see what indexers will be used by default.
+.TP
+.B \fBpreferred\-sidecar\-format\fP
+What file format you prefer for sidecar files. This is the file format
+that will be used by metaindex and other tools when you add/edit
+metadata sidecar files.
+Defaults to: \fB\&.json\fP
+.sp
+Other options are \fB\&.opf\fP and \fB\&.yaml\fP (if you installed the YAML
+dependencies).
+.TP
+.B \fBmimetypes\fP
+If you have additional mimetypes that you would like metaindex to know,
+this is the option you can use to point to additional mimetype files.
+To add multiple files, separate them by a newline. No matter what files
+you provide here, you system\(aqs mimetype file will always be used.
+.TP
+.B \fBimplicit\-tags\fP
+Some tags should be accessible during search, even when not searching
+explicitly for that tag (e.g. searching for \(dqthe two towers\(dq should
+find the book, even if you don\(aqt explicitly search for \fBtitle:\(dqthe
+two towers\(dq\fP). This option selects the tags that should always be
+included in the search.
+.sp
+Note that this option applies during indexing. Changing it after
+indexing will not change the behaviour of the search.
+.sp
+Defaults to: \fBauthor, title, tag, type, series, filename\fP\&.
+.TP
+.B \fBocr\fP
+Whether or not OCR (optical character recognition) should be enabled.
+For this to work you must have installed the \fBocr\fP requirements.
+.sp
+This option can be set to \fByes\fP to enable OCR for everything, but you
+can also fine\-tune it by setting the option to a list of mimetypes,
+file suffices, or names of indexers that are allowed to run OCR. For
+example \fBocr = .pdf, image/, epub\fP will enable OCR for all \fB\&.pdf\fP
+files, all mimetypes that are of the \fBimage/*\fP type, and for the
+indexer named \fBepub\fP\&.
+.sp
+Beware that the \fBocr\fP option alone will not extract the full text of
+images or scanned PDFs (but it will attempt to determine the language;
+however the result might be just plain wrong).
+.sp
+If you just want to disable OCR entirely, set the value to \fBno\fP
+(which is the default).
+.TP
+.B \fBfulltext\fP
+Whether or not to extract the fulltext of documents.
+.sp
+For images (and scanned PDFs), this requires OCR to be enabled, too.
+.sp
+This option can be set to \fByes\fP to enable fulltext extraction for
+every file type, but you can also fine\-tune the setting exactly the
+same way as the \fBocr\fP option. For example, if you wanted to only do
+fulltext extraction of PDFs and images, you would use \fBocr = .pdf,
+image/\fP\&.
+.sp
+The default is \fBno\fP, so no fulltext will be extracted.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Synonyms
+.sp
+Some metadata fields have less convenient names than others, but might
+semantically be the same. For example, \fBXmp.xmp.CreatorTool\fP and
+\fBpdf.Creator\fP both mean \(dqThe program that was used to create this file\(dq.
+.sp
+To simplify the search it is possible to define synonyms for these metadata fields.
+For example the tag \fBauthor\fP could point to the fields \fBid3.artist\fP,
+\fBpdf.Author\fP, and \fBExif.Image.Artist\fP\&.
+.sp
+Note that metaindex will only allow you to search metadata fields by their
+synonym. That means you can search for \fBauthor:tim\fP, but not for
+\fBpdf.Author:tim\fP\&.
+.sp
+The section \fB[Synonyms]\fP in the configuration file is the place to define
+the synonyms. Here are the defaults, that you don’t have to set up:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[Synonyms]
+author = extra.author, extra.artist, extra.creator, id3.artist, pdf.Author, rules.author, Exif.Image.Artist, comicbook.writer, xmp.dc.name
+type = extra.type, rules.type, xmp.dc.type
+date = extra.date, rules.date, comicbook.date
+title = extra.title, opf.title, id3.title, rules.title, pdf.Title, filetags.title, abs.title, comicbook.title, Xmp.dc.title
+tag = extra.tag, extra.tags, pdf.Keywords, pdf.Categories, Xmp.dc.subject, extra.subject, rules.tags, rules.tag, rules.subject, pdf.Subject, comicbook.tags, opf.subject
+language = opf.language, pdf.Language, Xmp.dc.language, extra.language, rules.language, comicbook.language, ocr.language
+series = extra.series, comicbook.series
+series_index = extra.series_index, comicbook.number
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+If you want to add tags to an existing synonym instead of redefining it
+entirly, include \fB*\fP in your configuration file, like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[Synonyms]
+type = extra.kind, *
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+In this example \fBtype\fP is a synonym for \fBextra.kind\fP, but also for all
+the existing \fBtype\fP synonyms (e.g. \fBextra.type\fP, \fBrules.type\fP, and
+\fBxmp.dc.type\fP).
+.SS Include
+.sp
+You can include additional configuration files (for example to split up
+your configuration into multiple files).
+.sp
+All the \fBname = path\fP entries in the \fB[Include]\fP section will be loaded
+in the alphabetical order of the names.
+.sp
+In this example \fB~/.metaindex.conf\fP will be loaded and then
+\fB/tmp/metaindex.conf\fP\&. Both of course only after the main configuration file:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[Include]
+xtra = /tmp/metaindex.conf
+extra = ~/.metaindex.conf
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Additional \fB[Includes]\fP in these included configuration files are ignored
+though.
+.SH SEARCH QUERY SYNTAX
+.sp
+If the search term only contains a simple word, like \fBalbatross\fP, all
+files will be found that contain this word in any metadata field.
+.sp
+To search for a phrase containing spaces, you have to enclose the phrase in
+blockquotes or single quotes, like \fB\(dqalbatross flavour\(dq\fP\&.
+.sp
+To search for \(dqalbatross\(dq in a specific metadata field, like in the title,
+you have to search for \fBtitle:albatross\fP\&. Again, the phrase search
+requires quotes: \fBtitle:\(dqalbatross flavour\(dq\fP\&.
+.sp
+You can search files by the existance of a metadata tag by adding a \fB?\fP
+after the name of the metadata tag. For example, to find all files that
+have the \fBresolution\fP metadata tag: \fBresolution?\fP\&.
+.sp
+When the search includes the tag name, you have to provide the full
+case\-sensitive name of the tag. \fBartist\fP and \fBArtist\fP are very
+different tag names and just searching for \fBartist:tim\fP when you mean to
+search for \fBalbumartist\fP will not result in the same search results.
+.sp
+Have a look at the Synonyms feature to find out how to search
+conveniently for more complex tag names.
+.sp
+When searching for multiple terms, you can choose to connect the terms with
+\fBand\fP or \fBor\fP\&. \fBand\fP is the default if none is provided, so these two
+search queries, to find all photos made with a Canon camera and with a
+width of 1024 pixels, are the same:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+resolution:1024x Exif.Image.Model:canon
+
+resolution:1024x and Exif.Image.Model:canon
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To search for all pictures that are made with a Canon camera or have that
+width, you have to use \fBor\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+resolution:1024x or Exif.Image.Model:canon
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Metadata tags
+.sp
+These metadata tags are always available:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBlast_accessed\fP
+A timestamp when the file was accessed the last time (if the OS
+supports it).
+.TP
+.B \fBfilename\fP
+The name of the file on disk including extensions.
+.TP
+.B \fBsize\fP
+The file size in bytes.
+.TP
+.B \fBmimetype\fP
+The mimetype of the file, if it could be detected.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH EXTRA METADATA
+.sp
+Not all filetypes support metadata (plain text files, for example) and
+using extra files on the side (but in the same directory as the file to be
+tagged) is used. These files on the side are called \(dqsidecar files\(dq.
+.sp
+Sidecar files are expected to have the same filename as the file that they
+are describing, but with a different extension, based on how the
+description is provided. So, if you want to add additional metadata to your
+\fBmoose.jpg\fP, you could create a \fBmoose.json\fP sidecar file or a
+\fBmoose.opf\fP file.
+.sp
+All metadata provided by extra sidecar files is cached with the \fBextra.\fP
+prefix. For example, if your metadata file tags a file with \fBtitle\fP, you
+can search for it by looking for \fBextra.title\fP\&.
+.sp
+metaindex supports sidecar files in JSON format like this when the file is
+used for several files:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+ \(dqfile.ext\(dq: {
+  \(dqtitle\(dq: \(dqAn example file\(dq,
+  \(dqauthors\(dq: [\(dqdr Gumby\(dq, \(dqThe Bishop\(dq],
+  \(dqXmp.dc.title\(dq: null
+ }
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+If you set the metadata for only one file, for example
+\fBa_long_story.pdf\fP, this could be the content of the corresponding sidecar file
+\fBa_long_story.json\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+  \(dqtitle\(dq: [
+    \(dqlong story, A\(dq,
+    \(dqA long story\(dq
+  ],
+  \(dqdate\(dq: 2012\-05\-01
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBBeware\fP, if you create a sidecar metadata file with the above content
+and name it \fBmetadata.json\fP (or any other filename that’s covered by the
+\fBcollection\-metadata\fP option), all files in the folder will be given
+these metadata tags, as if you had used the \fB*\fP notation! See \fI\%Collection
+Metadata\fP for details.
+.sp
+The special value of \fBnull\fP allows you to ignore a metadata tag from that
+file, i.e. if that file has the \fBXmp.dc.title\fP tag, it will be ignored.
+.sp
+Calibre style sidecar files, usually called \fBmetadata.opf\fP are also
+supported.
+.sp
+If you installed metaindex with the \fB[yaml]\fP option, YAML style metadata
+files are supported, too. An example of a YAML sidecar file for
+.SS Collection Metadata
+.sp
+Sometimes all files in a directory should receive the same set of metadata.
+This is called \(dqCollection metadata\(dq and can be accomplished in JSON
+sidecar files (like \fB\&.metadata.json\fP) by adding an entry \fB\(dq*\(dq\fP\&.
+.sp
+Suppose you have this \fB\&.metadata.json\fP in a directory with two files
+other \fBfile.tif\fP and \fBother.csv\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+  \(dq*\(dq: {
+    \(dqtags\(dq: [\(dqtag1\(dq, \(dqtag2\(dq]
+  },
+  \(dqfile.tif\(dq: {
+    \(dqtags\(dq: [\(dqtag3\(dq]
+  }
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+In this example all (both) files in the folder will receive the tags
+\fBtag1\fP and \fBtag2\fP, but only \fBfile.tif\fP will have all three tags.
+.sp
+\fBBeware\fP, if you leave the \fB*\fP out and do not specify any metadata
+specific to any file, metaindex will assume you meant that this metadata
+applies to all files in the directory. Like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+ \(dqtags\(dq: [\(dqtag1\(dq, \(dqtag2\(dq],
+ \(dqauthor\(dq: \(dqArthur Pewty\(dq
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The above example is equivalent to:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+ \(dq*\(dq: {
+  \(dqtags\(dq: [\(dqtag1\(dq, \(dqtag2\(dq],
+  \(dqauthor\(dq: \(dqArthur Pewty\(dq
+ }
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+For collection metadata to work properly, the general option
+\fBcollection\-metadata\fP must be set to the names of sidecar files that are
+allowed to define collection metadata.
+.sp
+By default files like \fB\&.metadata.json\fP, and \fBmetadata.opf\fP
+are expected to contain extra metadata.
+If your metadata files are called
+differently, for example \fBmeta.json\fP and \fB\&.extra.json\fP, you can
+configure that in the metaindex configuration file:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[General]
+collection\-metadata = meta, .extra
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The filenames listed in \fBcollection\-metadata\fP will be excluded from indexing,
+so they will not show up when you search for them (e.g. via \fBmetaindex find
+filename:metadata\fP)!
+.sp
+If metaindex has been installed with the \fByaml\fP option, metadata
+files in the yaml format are understood and used.
+.SS Recursive Collection Metadata
+.sp
+If you want to apply the collection metadata not only to the files of the
+sidecar’s directory, but also in all subdirectories, you can use the
+\(dqrecursive collection metadata\(dq \fB\(dq**\(dq\fP\&.
+.sp
+This is useful if you already have your data structured in directories, for
+example in this way: \fBpictures/nature/animals/duck.jpg\fP\&.
+.sp
+Here you could add a \fB\&.metadata.json\fP file in the \fBnature\fP directory
+with this recursive directive:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+  \(dq**\(dq: {
+    \(dqtags\(dq: [\(dqnature\(dq]
+  }
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Now not only the files in \fBnature\fP are tagged as \fBnature\fP, but also
+all files in \fBanimals\fP\&.
+.sp
+You can disable this functionality entirely by setting the general
+option \fBrecursive\-collection\-metadata\fP to an empty string:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[General]
+recursive\-collection\-metadata =
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBCaveat\fP: you can not defined both, a recursive and a non\-recursive set
+of collection metadata in the same directory:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{
+  \(dq*\(dq: {
+    \(dqdescription\(dq: \(dqBROKEN EXAMPLE: this does not work!\(dq
+  },
+  \(dq**\(dq: {
+    \(dqtitle\(dq: \(dqBROKEN EXAMPLE! \(aqtitle\(aq AND \(aqdescription\(aq will be applied to all
+    subdirectories!\(dq
+  }
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH INDEXERS
+.sp
+To see all available indexers, run \fBmetaindex \-\-list\fP\&. None of the
+built\-in indexers require or have any configuration options except for the
+\fBrule\-based\fP indexer.
+.SS Rule Based Indexer
+.sp
+The rule based indexer is used to determine metadata tags from the fulltext
+of an indexed document. For example a scanned bill might contain a date or
+transaction number. Or a PDF document might contain an account number.
+.sp
+To function at all the rule based indexer requires that the
+\fBocr.fulltext\fP metadata tag contains the fulltext of the document.
+That means you will have to enable the \fBfulltext\fP configuration option.
+The \fBocr\fP configuration option is also required if you wish to run this
+indexer on images (e.g. scanned documents).
+.SS Example
+.sp
+Suppose the full text of such a scanned document looks like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Invoice #12345
+
+2012\-04\-13
+
+Big Corp Inc.   Your Money Is Our Future
+
+
+Dear customer,
+Thank you for ordering at Big Corp. Please pay us now this ridiculous
+amount of money by 2012\-05\-30: $500.20.
+
+Thanks,
+ Big Corp CEO Whatstheirname
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You could write a rule file like below and save it as \fBbig\-corp.txt\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+match /Big Corp Inc/ and /Invoice/
+  set date /([0\-9]{4}\-[01][0\-9]\-[0\-3][0\-9])/
+  set invoicenr /Invoice #([0\-9]+)/
+  set issuer \(dqBig Corp Inc.\(dq
+  final
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+See below for the full syntax of a rule file.
+.sp
+Now you tell metaindex about the rule file by adding it to your
+configuration file:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# snippet of the metaindex configuration file
+[Indexer:rule\-based]
+some\-rules = ~/big\-corp.txt
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You will have to provide the full path to the rule file, otherwise
+metaindexer will likely not find it.
+.sp
+Now you are ready to go! Next time you run the metaindexer, it will add the
+\fBissuer\fP and \fBinvoicenr\fP to the meta data of the scanned document
+automatically.
+.SS Rule File Syntax
+.sp
+A rule file is a plain text file. Empty lines and lines starting with \fB#\fP or
+\fB;\fP are ignored:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# a comment in a rule file
+; another comment
+
+# the line above is also ignored, because it\(aqs empty
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Match Directives
+.sp
+Rules are guarded by match directives that define whether or not a set of
+rules should apply to a document. A match directive is started with the
+keyword \fBmatch\fP followed by one or more regular expressions, optionally
+separated by \fBand\fP for readability:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Examples of match directives
+
+# matches a document that has \(dqBig Corp\(dq in its fulltext
+match /Big Corp/
+
+# matches a document that has the words \(dqBig\(dq and \(dqCorp\(dq in it,
+# but not only \(dqBig Corp\(dq
+match /Big/ and /Corp/
+
+# the same as above, just without the \(dqand\(dq
+match /Big/ /Corp/
+
+# match case insensitive
+match /big corp/i
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The regular expressions for \fBmatch\fP directives must be surrounded by fencing
+characters. \fB/\fP is most commonly used, but any will do, really:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# other fencing characters are allowed
+match \(dqBig\(dq and ,Corp,
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Only when the regular expressions of a \fBmatch\fP directive are found in a
+document, the subsequent \fBset\fP and \fBfind\fP directives are applied.
+\fBset\fP and \fBfind\fP directives are usually indented, but that’s not a
+requirement, only a visual help.
+.SS Set Directives
+.sp
+A \fBset\fP directive is used to set a tag for a document. It’s following the
+syntax \fBset <tag name> <value>\fP\&.
+.sp
+If the tag name contains spaces, you must surround the tag name with \fB\(dq\fP\&.
+.sp
+The value can be either of two things:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP 1. 3
+A regular expression,
+.IP 2. 3
+A single line text.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+A regular expression must be surrounded by \fB/\fP characters. A single line of
+text can be surrounded by \fB\(dq\fP characters (for example to allow for a text with
+a leading \fB/\fP or with trailing whitespace characters):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# examples of valid set directives
+match /Big Corp/
+  set issuer \(dqBig Corp\(dq
+  set type Annoying invoice
+  set \(dqsilly amount\(dq /(\e$[0\-9]+)/
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Similar to the \fBmatch\fP directive you can set regular expressions to be case
+insensitive:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# example of a case insensitive set directive
+match /Big Corp/
+  set issuer /(big [a\-z]+)/i
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Inside single lines of text you may refer to local variables as defined by
+\fBfind\fP like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# example of referring to a local variable
+match /Big Corp/
+  find amount /\e$([0\-9]+)/
+  set money \(dq{amount} USD\(dq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You can have multiple \fBset\fP directives that assign a value to the same tag:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# example of several set directives
+match /Big Corp/ and /Invoice/
+  set tags invoice
+  set tags /your product: ([a\-z ]+)/i
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Find Directives
+.sp
+A \fBfind\fP directive can be used to extract parts of the fulltext into a variable
+that’s local to this match directive and can be reused in \fBset\fP\&.
+.sp
+\fBfind\fP directives have the syntax \fBfind <name> /<regular expression>/\fP\&.
+The regular expression must be surrounded by \fB/\fP\&.
+.sp
+Just like regular expressions in \fBmatch\fP and \fBset\fP directives, you can set the
+regular expression here to be case insensitive by appending \fIi\fP after the last
+\fB/\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# example of case insensitive find directive
+match /Big Corp/
+  find issuer /(big [a\-z]+)/i
+  set issuer \(dqFrom {issuer}\(dq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Final Directive
+.sp
+It is assumed that most rules are generic and extract snippets from the
+fulltext, like date, sender, receiver, or account numbers.
+.sp
+However, it might be that one rule is actually extracting all there is to
+extract and you don\(aqt want subsequent rules to run. In that case you can
+add the \fBfinal\fP directive to a match directive:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# example of the \(aqfinal\(aq directive
+match /Big Corp/
+  set publisher \(dqBig Corp Limited\(dq
+  final
+
+match /Corp/
+  set publisher \(dqSome corporation\(dq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+In this example, if the text \(dqBig Corp\(dq is encountered, the publisher will
+be set to \(dqBig Corp Limited\(dq and the following rule, checking for \(dqCorp\(dq
+will not be executed.
+.SH ADDONS
+.sp
+You can extend the capabilities of metaindex to index additional file types
+(indexers) and to format raw metadata values in a human readable form (humanizers)
+by writing addons.
+.sp
+These should be placed in \fB~/.local/share/metaindex/addons/\fP and will be
+loaded upon start of metaindex.
+.sp
+\fBBeware\fP that these addons can do whatever they want. They might encrypt
+all your files or even first upload them to the internet. \fBNever copy
+untrusted python files into the addons folder.\fP
+.SS Additional Indexers
+.sp
+Addons must be derived from \fBmetaindex.indexer.IndexerBase\fP\&. Here is a
+very stupid example of a working indexer that adds the subject \fBstupid\fP
+to every file:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+from metaindex.indexer import IndexerBase, Order
+
+
+class StupidIndexer(IndexerBase):
+    NAME = \(aqstupid\(aq
+    ACCEPT = \(aq*\(aq
+    ORDER = Order.FIRST
+    PREFIX = \(aqextra\(aq
+
+    def run(self, path, metadata, last_cached):
+        metadata.add(self.PREFIX + \(aq.subject\(aq, \(aqstupid\(aq)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBpath\fP is the \fBpathlib.Path\fP to the file that is to be indexed,
+\fBinfo\fP is a \fBCacheEntry\fP  of already obtained metadata from previously run
+indexers, and \fBlast_cached\fP is the metadata information of \fBpath\fP as it
+is currently in the cache (in case you need to compare to previous values).
+.sp
+If you want your indexer to only run if the file at \fBpath\fP has changed
+since the last run of the indexers (any indexers, really), you can use the
+\fB@only_if_changed\fP decorator.
+.sp
+If your indexer can extract the full (human readable) text from the file,
+be sure to query \fBself.should_fulltext(path)\fP if you should do it.
+.sp
+The same goes for OCR\(aqing images of the file being indexed. Please query
+\fBself.should_ocr(path)\fP if the user really wanted this to go through OCR.
+.sp
+Any extracted fulltext should by convention be stored in a metadata tag
+that ends with \fB\&.fulltext\fP, e.g. \fBmsdoc.fulltext\fP if your indexer uses
+the prefix \fBmsdoc\fP\&.
+.sp
+Please see \fBmetaindex.indexer.IndexerBase\fP for more details and
+\fBmetaindex.indexers\fP for existing indexers as examples.
+.SS Additional Humanizers
+.sp
+A humanizer is a simple function that turns a raw metadata value into a
+human\-readable form.
+.sp
+Here is an example of a humanizer that would render any \fB\&.round\fP tag as
+\fBπ\fP if the value is a \fBfloat\fP and close enough to \fB3.14\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+from metaindex.humanizer import register_humanizer, Priority
+
+@register_humanizer(\(aq*.round\(aq, Priority.HIGH)
+def format_pi(value):
+    if isinstance(value, float) and abs(3.14 \- value) < 0.001:
+        return \(aqπ\(aq
+    return None
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Have a look at the API of \fBregister_humanizer\fP for all details on what
+options you have to write your own humanizers.
+.SH USAGE EXAMPLES
+.SS Commandline Usage
+.SS Index some directories
+.sp
+To index you \fBDocuments\fP and \fBPictures\fP folder recursively:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex index \-r ~/Documents ~/Pictures
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Find all files
+.sp
+List all files that are in cache:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex find
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Find file by mimetype
+.sp
+Searching for all \fBimage/*\fP mimetypes can be accomplished by this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex find mimetype:image/
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Listing metadata
+.sp
+To list all metadata tags and values of all image files:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex find \-t \-\- \(dqext:odt$\(dq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+List the resolutions of all files that have the \fBresolution\fP metadata tag:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+metaindex find \-t resolution \-\- \(dqresolution?\(dq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH BUGS
+.sp
+Surely. Please report anything that you find at
+\fI\%https://github.com/vonshednob/metaindex\fP or via email to the authors.
+.\" Generated by docutils manpage writer.
+.
