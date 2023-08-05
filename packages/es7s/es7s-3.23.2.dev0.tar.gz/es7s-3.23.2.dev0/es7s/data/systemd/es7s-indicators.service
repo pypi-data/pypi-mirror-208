@@ -1,0 +1,17 @@
+[Unit]
+Description=es7s/indicators
+Wants=es7s.service
+After=es7s.service
+
+[Service]
+Type=simple
+Restart=always
+RuntimeDirectory=es7s-indicators
+ExecStart=/home/%USER/.local/bin/es7s-indicators
+User=%UID
+Environment="XDG_RUNTIME_DIR=/run/user/%UID"
+Environment="XDG_CURRENT_DESKTOP=ubuntu:GNOME"
+Environment="DISPLAY=:0"
+
+[Install]
+WantedBy=multi-user.target
