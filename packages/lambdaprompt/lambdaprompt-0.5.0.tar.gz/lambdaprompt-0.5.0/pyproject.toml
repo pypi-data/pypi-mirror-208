@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lambdaprompt"
+description = "A functional programming interface for building AI systems"
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["nlp", "ai", "functional", "composition", "prompt", "apply", "chain", "machine"]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "requests", "aiohttp", "python-dotenv", "jinja2", "nest_asyncio", "pyyaml", "tenacity"
+]
+urls = {homepage = "https://github.com/approximatelabs/lambdaprompt"}
+dynamic = ["version"]
+
+[project.optional-dependencies]
+server = ["fastapi", "uvicorn", "aiosqlite"]
+local = ["transformers"]
+all = ["lambdaprompt[server,local]"]
+
+[tool.setuptools_scm]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py37, py38, py39, py310, py311
+
+[gh-actions]
+python =
+    3.7: py37
+    3.8: py38
+    3.9: py39
+    3.10: py310
+    3.11: py311
+
+[testenv]
+deps= -rdev-requirements.txt
+extras = server
+allowlist_externals= sh
+commands = sh -c 'timeout 30s python -m pytest tests || [ $? -eq 124 ]'
+"""
