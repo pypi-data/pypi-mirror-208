@@ -1,0 +1,66 @@
+[tool.poetry]
+name = "dbt-scandal"
+version = "0.1.0"
+description = "DBT adapter for scandal"
+authors = ["Robert Kruszewski <github@robertk.io>"]
+readme = "README.md"
+packages = [{include = "dbt"}]
+
+[tool.poetry.dependencies]
+dbt-core = "~1.4.6"
+poetry = ">=1.2.0"
+python = "^3.10"
+scandal = "^0.1.1"
+pandas = "^2.0.1"
+pyarrow = "^12.0.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+dbt-tests-adapter = "^1.3.2"
+mypy = "^1.2.0"
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+ruff = "^0.0.260"
+dbt-bigquery = "^1.4.3"
+dbt-redshift = "^1.4.0"
+dbt-snowflake = "^1.4.2"
+sqlfluff = "^2.0.7"
+pandas-stubs = "^2.0.1.230501"
+types-pyyaml = "^6.0.12.9"
+types-colorama = "^0.4.15.11"
+types-jsonschema = "^4.17.0.8"
+types-protobuf = "^4.23.0.1"
+types-python-dateutil = "^2.8.19.13"
+types-pytz = "^2023.3.0.0"
+types-requests = "^2.30.0.0"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+select = ["F", "E", "W", "I001", "I002"]
+
+[tool.sqlfluff.core]
+templater = "jinja"
+dialect = "ansi"
+recurse = true
+output_line_length = 120
+max_line_length = 120
+
+[tool.sqlfluff.indentation]
+indented_joins = true
+indented_ctes = true
+indented_using_on = true
+template_blocks_indent = true
+allow_implicit_indents = true
+
+[tool.sqlfluff.templater]
+unwrap_wrapped_queries = true
+
+[tool.sqlfluff.templater.jinja]
+apply_dbt_builtins = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
