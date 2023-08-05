@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "hotspotty-payment-email"
+version = "0.2.5"
+description = "A command line tool that take as input a list of commission reports in csv format exported from the [Commission report](https://app.hotspotty.net/workspace/helium/commission-reports) section of Hotspotty platform and send a gmail e-mail to each user inside the input reports to inform them about the rewards they'll receive."
+authors = ["Andrea Del Corto <andrea.delcorto@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "hotspotty-payment-email" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^2.0.1"
+google-api-python-client = "^2.86.0"
+google-auth-oauthlib = "^1.0.0"
+jinja2 = "^3.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
