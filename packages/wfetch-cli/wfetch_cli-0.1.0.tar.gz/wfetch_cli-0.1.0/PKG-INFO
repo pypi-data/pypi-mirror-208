@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: wfetch-cli
+Version: 0.1.0
+Summary: A tool that can download files and verify their checksum on the fly.
+Author: Bohdan Vanieiev
+Author-email: bohdan.vanieiev@aptiv.com
+Requires-Python: >=3.7,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: requests (>=2.30.0,<3.0.0)
+Requires-Dist: tqdm (>=4.65.0,<5.0.0)
+Description-Content-Type: text/markdown
+
+# wfetch-cli
+
+To install:
+```
+pip install wfetch-cli
+```
+
+## Description
+
+`wfetch-cli` is a tool for reliable downloading of files from the internet.
+
+- Tool downloads files from the internet.
+- Uses .netrc for authentication.
+- Optionally expected file sha256 can be supplied. The tool will verify downloaded file hash, and will fail if it does not match.
+- If file exists, and hash matches, it won't be downloaded.
+
