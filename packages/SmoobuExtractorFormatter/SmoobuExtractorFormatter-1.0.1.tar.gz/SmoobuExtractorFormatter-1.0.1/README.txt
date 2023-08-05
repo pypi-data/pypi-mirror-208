@@ -1,0 +1,1 @@
+This is a library that change the format thanks to a table, of an excel file having Smoobu informations.
