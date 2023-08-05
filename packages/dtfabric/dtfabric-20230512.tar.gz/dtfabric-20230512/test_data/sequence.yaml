@@ -1,0 +1,24 @@
+# dtFabric format specification.
+---
+name: int32
+type: integer
+description: 32-bit signed integer type
+attributes:
+  byte_order: little-endian
+  format: signed
+  size: 4
+  units: bytes
+---
+name: vector4
+aliases: [VECTOR]
+type: sequence
+description: 4-dimensional vector
+element_data_type: int32
+number_of_elements: 4
+---
+name: triangle4
+aliases: [TRIANGLE]
+type: sequence
+description: 4-dimensional triangle
+element_data_type: vector4
+number_of_elements: 3
