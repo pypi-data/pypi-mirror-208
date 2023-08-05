@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "wagtail-modeltranslation"
+version = "0.14.0"
+license = "New BSD"
+authors = ["InfoPortugal S.A. <suporte24@infoportugal.pt>"]
+maintainers = ["InfoPortugal S.A. <suporte24@infoportugal.pt>"]
+readme = 'README.rst'
+description = "Translates Wagtail CMS models using a registration approach."
+repository = "https://github.com/infoportugal/wagtail-modeltranslation"
+keywords = ["django", "wagtail", "translation", "i18n"]
+include = [
+  "*.txt",
+  "*.rst",
+  "docs",
+  "*.rst",
+  "conf.py",
+  "wagtail_modeltranslation/static/**",
+  "wagtail_modeltranslation/management/**",
+  "wagtail_modeltranslation/templatetags/**",
+  "wagtail_modeltranslation/templates/**",
+]
+
+exclude = ["*.pyc", "*.DS_Store"]
+classifiers = [
+  'Programming Language :: Python :: 3',
+  'Programming Language :: Python :: 3.7',
+  'Programming Language :: Python :: 3.8',
+  'Programming Language :: Python :: 3.9',
+  'Programming Language :: Python :: 3.10',
+  'Operating System :: OS Independent',
+  'Environment :: Web Environment',
+  'Intended Audience :: Developers',
+  'Framework :: Django',
+  'License :: OSI Approved :: BSD License'
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = ">= 3.2"
+wagtail = ">=4.0,<=6.0"
+django-modeltranslation = ">=0.17"
+
+[tool.poetry.dev-dependencies]
+bump2version = "^1.0.1"
+bumpversion = "*"
+wheel = "*"
+twine = "<4.0"
+autopep8 = "^1.6.0"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^5.0.4"
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
