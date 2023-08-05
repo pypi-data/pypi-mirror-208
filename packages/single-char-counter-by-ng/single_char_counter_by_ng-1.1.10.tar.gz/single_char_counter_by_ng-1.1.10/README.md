@@ -1,0 +1,77 @@
+# Single char counter
+
+## Installation
+Clone this repository to your local machine:
+
+```bash
+pip install single-char-counter-by-ng
+```
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install requirements:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Summary
+Application that takes a string or file and returns the number of all characters in the string or file occurring only once.
+The function was tested using *pytest*. The function is in the **single_char_counter_by_ng** folder and the tests are in the **tests** folder. The **test_count_single_char** folder contains tests and parameterized data. For convenience, some **\_\_init\_\_** already have modules imported. <br/> 
+
+## Usage
+
+```python
+from single_char_counter_by_ng import (count_single_char, 
+                                       count_single_char_in_file)
+
+count_single_char('HelLo') # ---> 5
+
+count_single_char('HelLo', case_insensitive=True) # ---> 3
+
+# file.txt ---> 'HelLo'
+count_single_char_in_file('path_to_file/file.txt') # ---> 5
+
+count_single_char_in_file('path_to_file/file.txt', case_insensitive=True) # ---> 3
+```
+
+### Also implemented command-line interface(**CLI**):
+
+```bash
+python count_single_char.py --string “your string”
+```
+
+```bash
+python count_single_char.py -s “your string”
+```
+
+or
+
+```bash
+python count_single_char.py --file "path_to_text_file"
+```
+
+```bash
+python count_single_char.py -f "path_to_text_file"
+```
+
+There is also a "*-i*" parameter that can be specified so that the result is case insensitive:
+
+```bash
+python count_single_char.py -s “your string” -i
+```
+
+If you passed two parameters, the parameter '**--file**' have **higher** priority:
+
+```bash
+python collect_framework.py  --string “your string” --file path_to_text_file
+```
+
+## Used
+
+- **[Pytest](https://docs.pytest.org/en/latest/)**
+- **[Coverage](https://coverage.readthedocs.io/en/coverage-5.1/#quick-start)**
+- **[Argparse](https://docs.python.org/3.3/library/argparse.html)**
+- **[Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)**
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
