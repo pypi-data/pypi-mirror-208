@@ -1,0 +1,61 @@
+site_name: HyperParameter
+repo_url: https://github.com/reiase/hyperparameter
+
+theme:
+  name: "material"
+
+plugins:
+  - search
+  - i18n:
+      languages:
+        en: "English"
+        zh: "中文"
+      default_language: "en"
+      translate_nav:
+        zh:
+          home: 首页
+          quick: 快速开始
+        en:
+          home: Home
+          quick: Quick Start
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            docstring_options:
+              ignore_init_summary: yes
+            merge_init_into_class: yes
+            show_submodules: no
+
+nav:
+  - home: index.md
+  - home: index.zh.md
+  - quick: quick_start.md
+  - quick: quick_start.zh.md
+  - Best Practice: structured_parameter.md
+  - Examples:
+    - Hyperparameter Optimization: examples/optimization.md
+    - 参数优化: examples/optimization.zh.md
+  - Reference: reference.md
+
+watch:
+  - hyperparameter
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      use_pygments: true
+  - pymdownx.superfences 
+
+extra:
+  alternate:
+    - name: English
+      link: /en/
+      lang: en
+    - name: 中文
+      link: /zh/
+      lang: zh
+  analytics:
+    provider: google
+    property: G-BD9PNJHEKX
