@@ -1,0 +1,514 @@
+Metadata-Version: 2.1
+Name: bdrc-transfer
+Version: 0.1.19
+Summary: Transfer library
+Home-page: UNKNOWN
+Author: jimk
+Author-email: jimk@tbrc.org
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: paramiko
+Requires-Dist: urllib3
+Requires-Dist: bdrc-util
+Requires-Dist: sqlalchemy
+Requires-Dist: boto3
+Requires-Dist: botocore
+Requires-Dist: bdrc-db-lib
+Requires-Dist: mysqlclient
+Requires-Dist: oauth2client
+
+# BDRC Transfer Library
+
+`bdrc-transfer` is a Python library and console script package that
+provides SFTP and other services to implement the BDRC workflow to send
+BDRC works to a remote site for OCR production, and receive, unpack, and distribute
+the resulting works.
+
+## Copyrighted Works
+
+While fair use doctrine allows us to transmit our copies of images of copyrighted works,
+there may be an issue with Google Books making them available to their community.
+
+Google Books Library Partnership Staff Ben Bunnell described Google Books' copyrght validation process
+in an email to BDRC dated 13 Jan 2023:
+
+> Hi Jim,
+> We to use the metadata, but the main way is that everything that goes through the Google Books process includes a
+> copyright verification check as part of the analysis stage. The first few pages of the book are presented to operators
+> who verify publication dates and location of publication. This info goes through an automated flowchart that
+> determines
+> viewability in any given location.
+>
+> For cases where you think the copyright determination is incorrect, you or a general user can open the book on Google
+> Books, then go to the gear icon (or three-dot menu icon depending on whether you're looking at the new Google Books
+> interface) /Help/Report problems to request a second review.
+>
+> Best wishes,
+> Ben
+
+## Debian Installation
+
+1. On Debian systems, mysql library is needed:
+   ` sudo apt install default-libmysqlclient-dev`
+
+1. Install audit-tool version `Version 1.0Beta_2022_05_12` or later (`audit-tool --version` will show you the installed
+   version). Use the latest version from [Audit Tool Releases Page](https://github.com/buda-base/asset-manager/releases)
+
+2. `pip[3] install [--upgrade] [--no-cache-dir] bdrc-transfer`
+
+* some systems only have `pip3` not `pip`
+* `--upgrade and --no-cache-dir ` make sure that the latest release is installed. `no-cache-dir` is usually only
+  required when testing local disk wheels. `--upgrade` is for using the pyPi repository
+
+Then, once only, run:
+`gb-bdrc-init`
+This copies a google books config from the install directory into the user's `.config/gb` folder, making
+a backup copy if there is a copy before. The user is responsible for merging their site specific changes
+
+## Getting Started
+
+### Manual Workflow
+
+This is a provisional workflow until all the steps can be automated. Development of automation
+for "When the material is ready for conversion" and "Browse to the GB Converted Page" is underway.
+The **Automated Workflow** section of his document will be updated as each release gets this support.
+
+The Google Books manual workflow is:
+
+1. Identify works to send to Google Books
+2. Create and upload the metadata for that list  (`upload-metadata`)
+3. Create a list of paths to the works on that list, and upload that (`upload-content`) **Note that a specially
+   configured audit-tool validates the content before upload.**
+4. Wait for some time for Google to process the content. This can be a day to a week.
+5. When the material is ready for conversion,
+    1. [GB TBRC InProcess Page](https://books.google.com/libraries/TBRC/_in_process) - select and save the 'text only'
+       version
+    2. Select the checkbox for every work (remember there may be multiple pages)
+    3. click "request conversion" for them
+6. Wait for some time, and then use GRIN to get the list of files that GB has converted, and which are ready to
+   download,
+7. Browse to [GB TBRC Converted Page](https://books.google.com/libraries/TBRC/_converted). For each line you find:
+    1. In the browser, select the ....pgp.gz file  (they're links) in turn and download it.
+    2. On the command line:
+        1. run `unpack` on the downloaded archive
+        2. run `distribute_ocr` on the resulting work structure
+
+### Automated Workflow
+
+#### Preparation and configuration
+
+1. Install bdrc-transfer >= 0.0.4. v 0.0.4 implements the automated "conversion request step" (below)
+2. Choose a user to host a `crontab` entry. The user's environment must contain the environment variables listed in **
+   Runtime** below. The recommended way is to use the user's interactive **bash**  environment, as shown here. Be sure
+   that the file referenced in BASH_ENV passes control to some script which initializes all the variables. (Typically,
+   .bashrc, but probably some variant of it)
+
+```shell
+# m h  dom mon dow   command
+# * *   *   *   *     BASH_ENV=~/.profile request-conversion-service
+```
+
+3. Schedule the crontab entry shown above
+
+#### Workflow
+
+The Google Books automated workflow is:
+
+1. Identify works to send to Google Books
+2. Create and upload the metadata for that list  (`upload-metadata`)
+3. Create a list of paths to the works on that list, and upload that (`upload-content`) **Note that a specially
+   configured audit-tool validates the content before upload.**
+4. The crontab entry `request-conversion-service` (see above) will poll the Google Books server and look for volumes
+   available for conversion, and will request them.
+5. The crontab entry `process-converted` (in `bdrc-transfer 0.0.5`) will:
+    1. Poll the Google Books server for volumes which are ready to download.
+    2. Download, unpack, and distribute the OCR'd volume and support.
+
+### Backlog processing
+
+There are some utilities that can help in setting up the process
+For example, we have manually downloaded and unpacked items before.
+To trigger a re-distribution, we can signal again that they've been downloaded. The command line tool
+`mark-downloaded [-i [ paths | - ] path, .....` marks in the internal tracking system that those items have been
+downloaded. The items
+must have the file name format `{parent_path}/WorkRid-ImageGroupRid.tar.gz`
+
+## Runtime
+
+### Environment configuration
+
+`bdrc-transfer` requires these environment variables, unless overridden on the command line.
+(Overriding is not recommended in production)
+
+* `GRIN_CONFIG` - Path to the configuration file, which contains authorization and other essential data.
+  The name and contents of this file should be closely held in the development team. **Environment variables which
+  v<= 0.0.4 read are now in this file.**
+
+#### Logging
+
+One requirement of this package is that there be a single, authoritative log of activities. In development,
+there will be testing attempts. It should be easy to add the logs of these testing attempts to the single log.
+Each `gb_ocr` operation defines a tuple of _activity_ and _destination_.
+
+The _activity_ values are:
+
+- upload
+- request_conversion
+- unpack
+- distribute
+
+and the _destination_ values are:
+
+- metadata
+- content
+
+The resulting set of log files this package creates are:
+
+- upload_metadata-activity.log
+- upload_metadata-runtime.log
+- upload_content-activity.log
+- upload_content-runtime.log
+- request_conversion-activity.log
+- request_conversion-runtime.log
+- transfer-activity.log
+- transfer-runtime.log
+- unpack-activity.log
+- unpack-runtime.log
+
+##### Runtime log
+
+This is a free-form console log for diagnostic and informational purposes.
+
+##### Activity log
+
+This is the canonical log file for the activity. Each activity module in the `gb_ocr` Its structure is optimized for
+programmatic import, not human readability.
+
+** v 0.1.12 update ** The canonical log has been moved into a database. The database is accessed through the
+`AORunActivityLog.db_activity_logger` class.
+
+<s>
+##### Log file naming
+Log files are intended to be continuous, and are not concurrency safe. *Activity logs* are intended to be singular
+across the whole BDRC network, so there *must* be only one activity instance writing at a time.
+(As of 7 Jun 2022, this is not enforced)
+</s>
+
+### Available commands
+
+                   unpack
+                   relocate-downloads
+                   gb-convert
+                   move-downloads
+                   upload-metadata
+                   distribute-ocr
+                   upload-content
+                    request-conversion (request-conversion-service)
+                    request-download (request-download-service)
+
+#### Common Options
+
+All commands in this section share these common options:
+
+```shell
+optional arguments:
+  -h, --help            show this help message and exit
+  -l LOG_HOME, --log_home LOG_HOME
+                        Where logs are stored - see manual
+  -n, --dry_run         Connect only. Do not upload
+  -d {info,warning,error,debug,critical}, --debug_level {info,warning,error,debug,critical}
+                        choice values are from python logging module
+  -z, --log_after_fact  (ex post facto) log a successful activity after it was performed out of band
+  -i [FILE], --input_file [FILE]
+                        files to read. use - for stdin
+```
+
+---
+
+#### upload-metadata
+
+```shell
+usage: upload-metadata [-h] [-l LOG_HOME] [-n] [-d {info,warning,error,debug,critical}] [-z] [-i [FILE]] [work_rid]
+
+Creates and sends metadata to gb
+
+positional arguments:
+  work_rid              Work ID
+```
+
+---
+
+#### upload-content
+
+```shell
+❯ upload-content --help
+usage: upload-content [-h] [-l LOG_HOME] [-n] [-d {info,warning,error,debug,critical}] [-z] [-i [FILE]] [-g] [work_path]
+
+uploads the images in a work to GB. Can upload all or some image groups (see --image_group option)
+
+... common arguments
+
+  -g, --image_group     True if paths are to image group
+```
+
+---
+
+#### unpack
+
+```shell
+usage: unpack [-h] [-l LOG_HOME] [-n] [-d {info,warning,error,debug,critical}] [-z] [-i [FILE]] [src]
+
+Unpacks an artifact
+
+positional arguments:
+  src                   xxx.tar.gz.gpg file to unpack
+```
+
+Unpacks a downloaded GB processed artifact (Note that the download is not FTP,
+so there is no API to download. In 0.0.1, this is a manual operation)
+
+**See the section Distribution format for the output documentation**
+
+---
+
+#### gb-convert
+
+This is a stub function, which simulates requesting a conversion from the Google books
+web UI. It simply logs the fact that the user has checked a whole list of items to convert.
+Usually the user will have to download the list from gb, extract the image group rids, and feed them
+into this program.
+
+```shell
+usage: gb-convert [-h] [-l LOG_HOME] [-n] [-d {info,warning,error,debug,critical}] [-z] [-i [FILE]] [image_group]
+
+Requests conversion of an uploaded content image group
+
+positional arguments:
+  image_group           workRid-ImageGroupRid - no file suffixes
+```
+
+---
+
+#### ftp-transfer
+
+This is a low level utility function, which should not generally be used in the workflow.
+
+```shell
+usage: ftp-transfer [-h] [-l LOG_HOME] [-n] [-d {info,warning,error,debug,critical}] [-z] [-i [FILE]] [-m | -c] [-p | -g]
+                    src [dest]
+
+Uploads a file to a specific partner server, defined by a section in the config file
+
+positional arguments:
+  src                   source file for transfer
+  dest                  [Optional] destination file - defaults to basename of source
+
+optional arguments:
+                        files to read. use - for stdin
+  -m, --metadata        Act on metadata target
+  -c, --content         Act on the content target
+  -p, --put             send to
+  -g, --get             get from (NOT IMPLEMENTED)
+```
+
+### Launching
+
+Define the environment variable  `GB_CONFIG` to point to the configuration file for the project. The configuration file
+is the access point to GB's sftp host, and is tightly controlled.
+
+### Activity Tracking and Logging
+
+Activity tracing is the responsibility of the `log_ocr` package.
+The `log_ocr` has a public module `AORunLog.py` which contains the `AORunActivityLog` class. This class offers three
+interfaces to its clients. These are separated into two groups: `logging` implementations, and database implementations
+
+#### Logging
+
+These are Python `logging` instances, and offer the complete `logging` interface
+
+- `activity_logger`
+- `runtime_logger`
+
+#### Database implementation
+
+The database implementation is a replacement for the activity logger, which is a simple canonical journal of GB OCR
+processing.
+
+- `activity_db_logger` This is an instance of class `log_ocr.GbOcrTrack.GbOcrTracker`. This exposes the following
+  methods:
+    * add_content_request - Records a content process step:
+        * upload
+        * request_conversion
+        * download image groups which GB has processed
+        * distribute
+- get_ready_to_convert: Gets a list of image groups which GB has received, but we have not requested conversion
+- get_converted: Gets a list of image groups which GB has converted, but we have not downloaded.
+
+The property `log_ocr.AORunLog.activity_db_logger` is the replacement for the "activity" tracking log discussed below.
+It does not use the python `logging` API, but its own specific methods, which are found in `log_ocr.
+
+### Logging
+
+#### Log store
+
+The default directory for logging can be given in these directives:
+
+1. the current working directory is the default, in the absence of these next entries.
+2. Environment variable `RUN_ACTIVITY_LOG_HOME`.
+3. the `-l/--log_home` argument to `ftp-transfer`. Overrides the environment variable if given
+
+#### Log files
+
+`ftp_transfer` logs two kids of activity:
+
+- runtime logs, `transfer-runtime.log` describing details of an operation. The content of this log is affected by
+  the `-d` flag.
+- activity logs. `transfer-activity.log`. They provide limited, but auditable information on:
+    - the activity subject (metadata or content)
+    - the activity outcome (success or fail)
+      It is the caller's responsibility to aggregate activity logs into a coherent view of activity.
+
+#### Log format
+
+##### Runtime Format
+
+short date time:message:content descriptor
+
+Example:
+
+```
+06-03 15:29:INFO:upload success /Users/jimk/dev/tmp/aog1/META/marc-W2PD17457.xml:metadata
+```
+
+#### Activity Format
+
+Date mm-DD-YYYY HH-MM-SS:operation:status:message:content descriptor
+
+Example:
+
+```
+06-06-2022 20-28-06:get:error:/Users/jimk/dev/tmp/aog1/META/marc-W2PD17457.xml:metadata:
+```
+
+## Distribution Format
+
+This section defines the format of the OCR distribution on BDRC's OCR servers. It is the final result of the
+discussions in Github buda-base archive-ops-694 (no URL given, private repository)
+
+The distribution format for a typical work, and one image group in that work, is
+shown here:
+
+```
+❯ tree --filesfirst  Works
+Works/
+└── a9/
+    └── W1PD12345/
+        └── google_books/
+            └── batch_2022/
+                ├── info.json
+                ├── info/
+                │   ├── W1PD12345-I1PD12345/
+                │   │      ├── gb-bdrc-map.json
+                │   │      └── TBRC_W1PD12345-I1PD12345.xml
+                │   └── W1PD12345-I1PD12..../               
+                └── output/
+                    ├── W1PD12345-I1PD12345/
+                    │    ├── html.zip
+                    │    ├── images.zip
+                    │    └── txt.zip
+                    └── W1PD12345-I1PD12..../
+
+
+```
+
+### Folder structure
+
+### Work level folders
+
+```
+Works/{hash}/{wid}/{ocrmethod}/{batchid}/
+```
+
+Where:
+
+where:
+
+- `{hash}` is the well-known hash (2 first hexa digits of the md5 of the W id)
+- `{wid}` is also well-known (ex: `W22084`)
+- `{ocrmethod}` should be `vision/` for Google OCR
+- `{batchid}` should be a unique batch id, it doesn't need to be in alphabetical order, it just needs to be unique per
+  wid+ocrmethod (in the Google Books delivery, this is the literal 'batch_2022')
+
+`{batchid}` contains one file and two folders:
+
+- `info.json`
+- `info`
+- `output`
+
+In the following discussion, `{wid}-{iid}` refers to the WorkRID-ImageGroupRID tuple as a string
+(`W1PD12345-I1PD12345`, in this example)
+
+#### info.json
+
+`{wid}/info.json` contains:
+
+```
+{
+  "timestamp" : "X",
+  "html": "html.zip",
+  "txt": "txt.zip",
+  "images": "images.zip"
+}
+```
+
+It is uploaded with every image group, so timestamp will always be the latest upload, even if all the image groups are
+not present in OCR yet.
+However, because our image group processing is independent, there's no flag to say when all the image groups in a run
+are done (there's not even a notion of a run - buda-base/ao-google-books#23 requests that implementation.
+
+The keys `html` `txt` and `images` are finding aids - they reference the filenames
+under `output/{wid}-{iid}` (Note this forces every image group under the Work to be in this structure)
+
+#### info/
+
+This is a dictionary of metadata. It contains, for each `{wid}-{iid}` that has been processed,
+
+- `gb-bdrc-map.json`: mapping between BUDA image list and OCR derived image list. The BDRC Google Books process
+  creates this artifact.
+- `TBRC_{wid}-{iid}.xml`: The Google Books creation process delivers this file, which BDRC Google Books process
+  relocates from the original position here. This file contains PREMIS metadata for the image group.
+
+#### output/
+
+Output contains only folders for each `{wid}-{iid}/` in the work
+Each of these contains only three files, each of which is an archive of
+Google Books generated content.
+
+- `html.zip` - HOCR files (OCR content in HTML format)
+- `images.zip` - Generated images from which Google Books derived the OCR
+- `txt.zip` - Unicode text that Google Books generated
+
+# Changelog
+
+| Version | Changes                                                                                                                              |
+|---------|--------------------------------------------------------------------------------------------------------------------------------------|
+| 0.1.19  | [e0e4adc](https://github.com/buda-base/ao-google-books/commit/419daebd58bb254cf18ca5fec0de53c4a1b7bd8c) Add mising lib reference     |
+| 0.1.18  | [e0e4adc](https://github.com/buda-base/ao-google-books/commit/e0e4adc6d56379c21a599953547ced03df459cbe) Use better image detector    |
+| 0.1.17  | [6f9a5b88](https://github.com/buda-base/ao-google-books/commit/6f9a5b88af70e14daa5e07c6e00fdda6b9584124) console logging of header   |
+|         | [b110073](https://github.com/buda-base/ao-google-books/commit/b110073a66c747f6b758c81e28e82748e1cb1ef6) Staging for get custom query |
+|         | [603d0ca](https://github.com/buda-base/ao-google-books/commit/603d0ca1d4a7538b2a17aee3093b39678696e149) Move ORM to bdrc-db-lib      |
+| 0.1.16  | [d842f98](https://github.com/buda-base/ao-google-books/commit/d842f98149222a7673b69c87cc728e3d0bb9f542)                              |
+|         | Segment request conversion requests                                                                                                  |
+| 0.1.15  | Database object refactoring                                                                                                          |
+| 0.1.8   | [5a6b000](https://github.com/buda-base/ao-google-books/commit/5a6b000c354522550c38c7514bb0c4a448c86617) Upload                       |
+|         | standalone image groups                                                                                                              |
+
+
+
+

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#
+# Audits one work
+
+ME=$(realpath -m $0)
+ME_HOME=$(dirname $ME)
+ME=$(basename $0)
+
+usage="${ME}:synopsis: ${ME} workPath logDir"
+workPath=${1?"$usage"}
+logDir=${2?"$usage"}
+
+
+function die() {
+  snsFailsMessageString=$(printf "\nThe following work could not be prepared for Google Books \n%1s\n\n%2s\n Returned with an Exit Value of%3s\n" \
+    "$1" "$2" "$3")
+  snsMessage=$(printf "%s\n%s\n" "$(date --rfc-email)" "${snsFailsMessageString}")
+  if [[ -n $DEBUG_SYNC ]]; then
+    echo "----------  $DEBUG_SYNC ------------"
+    if [[ -n $AO_AWS_SNS_TOPIC_ARN ]]; then
+      echo "sending to topic  $AO_AWS_SNS_TOPIC_ARN"
+    else
+      echo "No send to SNS"
+    fi
+    echo "${snsMessage}"
+    echo "----------  $DEBUG_SYNC ------------"
+
+  fi
+  if [[ -n $AO_AWS_SNS_TOPIC_ARN ]]; then
+    snsSubject="Google Books Build Failed Report"
+    aws sns publish --topic-arn $AO_AWS_SNS_TOPIC_ARN \
+      --subject "${snsSubject}" \
+      --message "${snsMessage}"
+  else
+    echo "${snsMessage}"
+  fi
+  exit $3
+}
+
+
+# printf "$(date +%T) audit-tool -l \"${workDir}\" -D UserConfigPath=\"${ME_HOME}/gb-audit-tool.config\" -T WebImageAttributes:FileSequence:NoFoldersInImageGroups  $work_file \n"
+
+  # These are the range of possible tests
+  # EXIFArchiveThumbnail          	Image EXIF Thumbnail Test
+  # NoFoldersInImageGroups        	No folders allowed in Image Group folders
+  # EXIFArchiveTest               	Archive Valid EXIF Test
+  # EXIFArchiveThumbnail          	Archive EXIF Thumbnail Test
+  # FileSequence                  	File Sequence Test
+  # WebImageAttributes            	Web Image Attributes
+  # NoFilesInFolder               	No Files in Root Folder
+  # FileSizeTests                 	File Size Test
+  # EXIFImageTest                 	Image Valid EXIF Test
+  # ImageFileNameFormat           	Image file name format test
+  # Save for later
+
+  # TODO:
+ audit-tool -l "${logDir}" -D UserConfigPath="${ME_HOME}/gb-audit-tool.config" \
+  -T WebImageAttributes:FileSequence:NoFoldersInImageGroups:ImageFileNameFormat  "${workPath}"
+  atrc=$(($?))
+
+  if (( atrc != 0 ))
+  then
+    cur_work=$(basename ${workPath})
+
+    errMessage="${cur_work} failed audit. See ${logDir}/FAIL*${cur_work}*$(date +%T)*.csv for details."
+    echo "${errMessage}"
+    # changing email message here to not send local paths over email.
+    errMessage="${cur_work} failed audit. See ${logDir}/FAIL*${cur_work}*$(date +%T)*.csv for details."
+    evl=$atrc
+
+    die "${cur_work}" "$errMessage" $evl
+  fi
+
+
+
