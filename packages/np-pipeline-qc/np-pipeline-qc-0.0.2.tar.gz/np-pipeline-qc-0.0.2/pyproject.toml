@@ -1,0 +1,89 @@
+[project]
+name = "np_pipeline_qc"
+version = "0.0.2"
+description = "Analysis and visualization code for quality-control of Neuropixels pipeline data."
+authors = [
+    { name = "corbennett", email = "corbettb@alleninstitute.org" },
+]
+maintainers = [
+    { name = "bjhardcastle", email = "ben.hardcastle@alleninstitute.org" },
+]
+dependencies = [
+    "np-session>=0.4.26",
+    "np-vba>=0.13.1",
+]
+requires-python = ">=3.8, <3.11"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
+
+[project.optional-dependencies]
+dev = [
+    "isort",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "blue>=0.9.1",
+    "coverage[toml]>=7.2.2",
+    "pdm>=2.4.9",
+    "bump>=1.3.2",
+    "types-backports>=0.1.3",
+    "ruff>=0.0.260",
+]
+html = [
+    "beautifulsoup4",
+    "pywin32",
+]
+
+[tool.pdm.resolution.overrides]
+async-timeout = ">=4.0.0"
+
+[tool.pdm.scripts]
+ruff = "ruff --fix src"
+blue = "blue src"
+pytest = "pytest --cov"
+bump = "bump -p pyproject.toml"
+
+[tool.pdm.scripts.prebuild]
+composite = [
+    "blue",
+    "ruff",
+    "pytest",
+]
+
+[tool.pdm.scripts.build]
+composite = [
+    "prebuild",
+    "pdm build",
+]
+
+[tool.pdm.scripts.dry-run]
+composite = [
+    "prebuild",
+    "pdm build",
+    "pdm publish --no-build --repository https://test.pypi.org/simple",
+]
+
+[tool.pdm.scripts.publish]
+composite = [
+    "pdm build",
+    "pdm publish --no-build",
+]
+
+[tool.pdm.scripts.pub]
+composite = [
+    "bump",
+    "pdm publish",
+]
+
+[build-system]
+requires = [
+    "pdm-pep517>=1.0",
+]
+build-backend = "pdm.pep517.api"
