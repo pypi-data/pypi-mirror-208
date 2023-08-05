@@ -1,0 +1,12 @@
+{% load static wagtail_richer_text_tags tour_guide_tags %}
+{% if did_enter %}
+{% with node.depth|add:"2" as node_depth %}
+<h{% if node_depth < 6 %}{{ node_depth }}{% else %}6{% endif %} class="navigation-option">
+{% if node_url %}<a href="{{ node_url }}">{% endif %}
+<span class="navigation-label">
+<span class="navigation-label-text">{{ node.rich_text|richertext|strip_paragraphs }}</span><span class="navigation-label-indicator"></span>
+</span>
+{% if node_url %}</a>{% endif %}
+</h{% if node_depth < 6 %}{{ node_depth }}{% else %}6{% endif %}>
+{% endwith %}
+{% endif %}

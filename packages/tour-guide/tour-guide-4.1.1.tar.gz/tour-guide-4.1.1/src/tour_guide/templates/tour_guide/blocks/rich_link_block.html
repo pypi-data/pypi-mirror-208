@@ -1,0 +1,6 @@
+{% load wagtailcore_tags %}
+{% with value.as_rich_link as rich_link %}
+<a {% if rich_link.destination_url %} href="{{ rich_link.destination_url }}"{% endif %} {% if rich_link.display_context_as_html != "_self" %}target="{{ rich_link.display_context_as_html }}"{% endif %} {% if rich_link.relationships %} rel="{{ rich_link.relationships|join:' ' }}"{% endif %}>
+{{ rich_link.text }}
+</a>
+{% endwith %}

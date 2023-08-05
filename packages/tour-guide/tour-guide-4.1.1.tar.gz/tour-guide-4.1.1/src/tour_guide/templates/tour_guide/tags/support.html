@@ -1,0 +1,11 @@
+{% load static %}
+{% if container_element == 'head' %}
+{% for stylesheet in stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ stylesheet|urlencode }}">
+{% endfor %}
+{% endif %}
+{% if container_element == 'body' %}
+{% for script in scripts %}
+<script type="text/javascript" src="{{ script|urlencode }}"></script>
+{% endfor %}
+{% endif %}

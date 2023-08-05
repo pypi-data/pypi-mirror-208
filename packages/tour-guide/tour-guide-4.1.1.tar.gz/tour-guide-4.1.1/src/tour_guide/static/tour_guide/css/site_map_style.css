@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+
+.navigation.site_map {
+    font-family: identity, sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    line-height: 1.5;
+}
+
+.navigation.site_map .navigation-label-text {
+    color: hsl(204, 50%, 30%);
+}
+
+.navigation.site_map .navigation-container a {
+    text-decoration: none;
+    color: unset;
+}
+
+.navigation.site_map .navigation-choices {
+    list-style: none;
+}
+
+.navigation.site_map .navigation-container {
+    margin: 1rem 0 1rem 0;
+}
+
+.navigation.site_map .navigation-container[data-navigation-root] {
+    margin: 0;
+    padding: 1rem;
+}
+
+.navigation.site_map .navigation-container:not([data-navigation-root]) .navigation-container .navigation-container {
+    margin: 1rem 0 1rem 1rem;
+}
+
+.navigation.site_map .navigation-label {
+    margin-left: 1rem;
+    display: inline-block;
+}
+
+.navigation.site_map .navigation-container:not([data-navigation-root]) .navigation-container .navigation-container > .navigation-option .navigation-label-text {
+    font-weight: 400;
+}
+
+.navigation.site_map .navigation-container[data-navigation-root] > .navigation-option .navigation-label-text,
+.navigation.site_map .navigation-container[data-navigation-root] > .navigation-choices > .navigation-container > .navigation-option .navigation-label-text {
+    color: var(--menu-heading-text-color);
+}
+
+.navigation.site_map .navigation-container[data-navigation-root] > .navigation-choices > .navigation-container.has-choices > .navigation-option {
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--menu-heading-divider-color);
+}
+
+.navigation.site_map .navigation-container:not([data-navigation-root]) .navigation-container .navigation-container.has-choices > .navigation-option {
+    padding-bottom: 1px;
+    border-bottom: 1px solid hsl(204, 50%, 30%);
+}
+
+.navigation.site_map .navigation-container:not([data-navigation-root]) .navigation-container.has-choices > .navigation-option {
+    padding-bottom: 2px;
+    border-bottom: 2px solid hsl(204, 50%, 30%);
+}

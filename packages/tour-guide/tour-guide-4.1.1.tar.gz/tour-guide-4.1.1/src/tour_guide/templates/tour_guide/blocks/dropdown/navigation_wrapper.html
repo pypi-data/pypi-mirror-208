@@ -1,0 +1,16 @@
+{% load static %}
+{% if did_enter %}
+<div class="navigation{% if options.classname %} {{ options.classname }}{% endif %}{% if options.placement %} {{ options.placement }}{% endif %}"
+     {% if options.margin %}style="margin: {{ options.margin.as_common_value }}"{% endif %}
+>
+<input id="{{ navigation_id }}-switch" type="checkbox" class="navigation-toggle-state" style="display: none;">
+<div class="navigation-screen">
+{% else %}
+</div>
+<label class="navigation-toggle" for="{{ navigation_id }}-switch"
+       {% if options.js_touch_initiator %} data-initiator-create="{{ options.js_touch_initiator }}"
+       data-initiator-activation-condition="initiator.elements.conditions.NotPointerAndHoverCondition"{% endif %}
+       {% if options.autohide %}data-hud-scroll-element="window.document.body.firstElementChild"{% endif %}
+></label>
+</div>
+{% endif %}

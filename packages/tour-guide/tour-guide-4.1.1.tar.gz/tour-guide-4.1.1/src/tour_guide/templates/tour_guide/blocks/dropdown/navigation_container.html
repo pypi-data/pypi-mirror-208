@@ -1,0 +1,11 @@
+{% load static %}
+{% if did_enter %}
+<{% if is_root %}nav{% else %}li{% endif %} class="navigation-container{% if options.container_classname %} {{ options.container_classname }}{% endif %}{% if node.children %} has-choices{% endif %}"{% if is_root %} data-navigation-root{% endif %}
+    {% if is_root %}{% if options.js_pointer_initiator %} data-initiator-create="{{ options.js_pointer_initiator }}"
+    data-initiator-activation-condition="initiator.elements.conditions.PointerAndHoverCondition"{% endif %}
+    data-hud-capture-element="window.document.body"
+    {% if options.autohide %}data-hud-scroll-element="window.document.body.firstElementChild"{% endif %}
+{% endif %} data-navigation-depth="{{ node.depth }}">
+{% else %}
+</{% if is_root %}nav{% else %}li{% endif %}>
+{% endif %}

@@ -1,0 +1,168 @@
+@charset "UTF-8";
+
+
+.navigation.dropdown .navigation-container,
+.navigation.dropdown .navigation-container * {
+    font-family: identity, sans;
+    font-weight: 500;
+    font-size: var(--menu-font-size);
+}
+
+.navigation.dropdown .navigation-label-text {
+    color: hsl(204, 50%, 30%);
+}
+
+.navigation.dropdown .navigation-container a {
+    text-decoration: none;
+    color: unset;
+}
+
+.navigation.dropdown .navigation-choices {
+    list-style: none;
+}
+
+
+@media all and (any-pointer: fine) and (any-hover: hover) {
+    
+    .navigation.dropdown .navigation-option {
+        background-color: hsla(0, 0%, 100%, 0.9);
+    }
+    
+    
+    .navigation.dropdown .navigation-container[data-navigation-root] {
+        /* box-shadow: rgba(0, 0, 0, 0.4) 0px 0.25rem 1rem 0.05rem; */
+        box-shadow: 0px 10px 20px 5px rgba(176, 176, 176, 0.15);
+    }
+    
+    .navigation.dropdown .navigation-choices .navigation-choices::before {
+        
+        display: inline-block;
+        position: absolute;
+        
+        content: "\200B";
+     
+        /* box-shadow: rgba(0, 0, 0, 0.4) 0px 0.25rem 1rem 0.05rem; */
+        box-shadow: 0px 10px 20px 5px rgba(176, 176, 176, 0.15);
+        
+        width: calc(100% - 1px);
+        height: 100%;
+        
+        padding: var(--menu-item-padding);
+        
+        left: 0px;
+        top: 0px;
+    }
+    
+    .navigation.dropdown .navigation-choices .navigation-choices::before {
+        clip-path: inset(0px -1rem -2rem -1rem);
+    }
+    
+    .navigation.dropdown .navigation-option:hover,
+    .navigation.dropdown .navigation-container:not([data-navigation-root]):hover > .navigation-option {
+        background-color: hsl(146, 100%, 63%);
+    }
+    
+    .navigation.dropdown .navigation-label {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        padding: var(--menu-item-padding);
+    }
+    
+    .navigation.dropdown .navigation-label > * {
+         flex: 0 0 auto;
+    }
+    
+    .navigation.dropdown .navigation-container:not([data-navigation-root]) .navigation-container.has-choices > .navigation-option .navigation-label-indicator::before {
+        
+        content: "▶";
+        font-size: 0.8rem;
+        vertical-align: middle;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+
+@media not all and (any-pointer: fine) and (any-hover: hover) {
+    
+    
+    /*
+    .dropdown-navigation::after {
+        content: "▼";
+        padding: 1rem;
+        color: var(--ui-highlight-color);
+        position: sticky;
+        left: 0px;
+        bottom: -1px;
+    }
+    
+    .dropdown-navigation.reached-end::after {
+        content: "▲";
+    }
+    */
+    
+    .navigation.dropdown .navigation-toggle {
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+        margin: 1rem;
+    }
+    
+    .navigation.dropdown .navigation-toggle::after {
+        
+        display: block;
+        
+        width: 48px;
+        height: 48px;
+        
+        border-radius: 24px;
+        
+        background-color: hsla(58, 0%, 80%, 0.75);
+        
+        content: url("data:image/svg+xml;charset=utf8,%3Csvg%20width%3D%2248px%22%20height%3D%2248px%22%20viewBox%3D%220%200%2048%2048%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20xml%3Aspace%3D%22preserve%22%20xmlns%3Aserif%3D%22http%3A%2F%2Fwww.serif.com%2F%22%20style%3D%22fill-rule%3Aevenodd%3Bclip-rule%3Aevenodd%3Bstroke-linejoin%3Around%3Bstroke-miterlimit%3A1.41421%3B%22%3E%3Cpath%20d%3D%22M34%2C15.556l-5.334%2C-3.556l-3.555%2C5.333l-5.334%2C-3.555l-3.555%2C5.333l-5.333%2C-3.555l3.555%2C17.777l5.333%2C3.556l3.556%2C-5.333l5.333%2C3.555l3.556%2C-5.333l5.333%2C3.555l-3.555%2C-17.777Z%22%20style%3D%22fill%3A%2342ff94%3Bfill-rule%3Anonzero%3B%22%2F%3E%3Cpath%20d%3D%22M19.777%2C13.778l-3.555%2C5.333l3.555%2C17.778l3.556%2C-5.333l-3.556%2C-17.778Z%22%20style%3D%22fill%3A%23397f57%3Bfill-rule%3Anonzero%3B%22%2F%3E%3Cpath%20d%3D%22M28.666%2C12l-3.555%2C5.333l3.555%2C17.778l3.556%2C-5.333l-3.556%2C-17.778Z%22%20style%3D%22fill%3A%23397f57%3Bfill-rule%3Anonzero%3B%22%2F%3E%3C%2Fsvg%3E");
+    }
+    
+    .navigation.dropdown .navigation-container {
+        margin: 1rem 0px 1rem 0px;
+    }
+    
+    .navigation.dropdown .navigation-container[data-navigation-root] {
+        margin: 0px;
+        padding: 1rem;
+    }
+    
+    .navigation.dropdown .navigation-container:not([data-navigation-root]) .navigation-container .navigation-container {
+        margin: 1rem 0px 1rem 1rem;
+    }
+    
+    .navigation.dropdown .navigation-label {
+        margin-left: 1rem;
+    }
+    
+    .navigation.dropdown .navigation-container:not([data-navigation-root]) .navigation-container .navigation-container > .navigation-option .navigation-label-text {
+        font-weight: 400;
+    }
+    
+    .navigation.dropdown .navigation-container[data-navigation-root] > .navigation-option .navigation-label-text,
+    .navigation.dropdown .navigation-container[data-navigation-root] > .navigation-choices > .navigation-container > .navigation-option .navigation-label-text {
+        color: var(--menu-heading-text-color);
+    }
+    
+    .navigation.dropdown .navigation-container[data-navigation-root] > .navigation-option,
+    .navigation.dropdown .navigation-container[data-navigation-root] > .navigation-choices > .navigation-container > .navigation-option {
+        padding-bottom: 3px;
+        border-bottom: 3px solid var(--menu-heading-divider-color);
+    }
+    
+    .navigation.dropdown .navigation-container:not([data-navigation-root]) .navigation-container .navigation-container.has-choices > .navigation-option {
+        padding-bottom: 1px;
+        border-bottom: 1px solid hsl(204, 50%, 30%);
+    }
+    
+    .navigation.dropdown .navigation-container:not([data-navigation-root]) .navigation-container.has-choices > .navigation-option {
+        padding-bottom: 2px;
+        border-bottom: 2px solid hsl(204, 50%, 30%);
+    }
+}

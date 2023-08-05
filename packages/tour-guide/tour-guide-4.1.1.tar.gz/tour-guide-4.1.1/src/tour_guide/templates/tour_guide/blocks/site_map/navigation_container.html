@@ -1,0 +1,7 @@
+{% load static %}
+{% if did_enter %}
+<{% if is_root %}nav{% else %}li{% endif %} class="navigation-container{% if options.container_classname %} {{ options.container_classname }}{% endif %}{% if node.children %} has-choices{% endif %}"{% if is_root %} data-navigation-root{% endif %}
+ data-navigation-depth="{{ node.depth }}">
+{% else %}
+</{% if is_root %}nav{% else %}li{% endif %}>
+{% endif %}
