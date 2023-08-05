@@ -1,0 +1,31 @@
+"""
+Get started with our docs, https://docs.beam.cloud
+"""
+import beam
+
+app = beam.App(
+    name="{{ name }}",
+    cpu={{ cpu }},
+    memory="{{ memory }}",
+)
+
+{% if trigger -%}
+# Triggers determine how your app is deployed
+{%- endif %}
+{% if trigger == "webhook" -%}
+app.Trigger.Webhook(
+    inputs={"text": beam.Types.String()},
+    handler="run.py:hello_world"
+)
+{% elif trigger == "rest_api" -%}
+app.Trigger.RestAPI(
+    inputs={"text": beam.Types.String()},
+    outputs={"response": beam.Types.String()},
+    handler="run.py:hello_world"
+)
+{% elif trigger == "cron_job" -%}
+app.Trigger.Schedule(
+    when="every 1d",
+    handler="run.py:send_text",
+)
+{%- endif %}
