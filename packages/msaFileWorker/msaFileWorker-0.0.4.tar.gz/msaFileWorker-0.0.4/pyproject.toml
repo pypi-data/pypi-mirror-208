@@ -1,0 +1,44 @@
+[project]
+name = "msaFileWorker"
+version = "0.0.4"
+
+[tool.black]
+line-length = 119
+
+[tool.isort]
+profile = "black"
+line_length = 119
+src_paths = ["isort", "test"]
+
+[tool.flake8]
+ignore = ['E266','W503','E203','E722']
+exclude ="""
+    __pycache__,
+    venv,
+    .env,
+    docs,
+    tests,
+    dist_docs
+    """
+per-file-ignores = [
+    '__init__.py:F401',
+]
+max-line-length = 119
+count = true
+
+[tool.mypy]
+exclude = ["docs/", "venv/", "tests/"]
+mypy_path = "."
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_return_any = true
+strict_equality = true
+strict_optional = true
+no_implicit_reexport = true
+allow_untyped_globals = true
+allow_redefinition = false
+ignore_missing_imports = true
