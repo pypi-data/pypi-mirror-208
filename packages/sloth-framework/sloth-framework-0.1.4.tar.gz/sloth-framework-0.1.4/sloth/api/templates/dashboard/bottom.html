@@ -1,0 +1,94 @@
+{% load tags %}
+
+<style>
+    .floating-btn{
+        position:fixed;
+        right:27px;
+    }
+    {% if request|mobile and dashboard.data.navigation|length > 1 %}
+        .floating-0{ bottom:115px; }
+        .floating-1{ bottom:165px; }
+        .floating-2{ bottom:215px; }
+        .floating-3{ bottom:265px; }
+        .floating-4{ bottom:315px; }
+        .floating-5{ bottom:365px; }
+    {% else %}
+        .floating-0{ bottom:15px; }
+        .floating-1{ bottom:65px; }
+        .floating-2{ bottom:115px; }
+        .floating-3{ bottom:165px; }
+        .floating-4{ bottom:215px; }
+        .floating-5{ bottom:365px; }
+    {% endif %}
+</style>
+
+{% for item in dashboard.data.floating %}
+    <a href="{{ item.url }}" class="action-button btn btn-circle btn-primary floating-btn floating-{{ forloop.counter0 }}">
+     {{ item.icon|icontag }}
+    </a>
+{% endfor %}
+
+{% if referrer %}
+<a href="{{ referrer }}" class="action-button btn btn-circle btn-primary floating-btn floating-{{ dashboard.data.floating|length }}">
+ <i class="bi bi-arrow-90deg-left"></i>
+</a>
+{% endif %}
+
+{% if request|mobile and dashboard.data.navigation|length > 1 %}
+<style>
+body{
+  padding-bottom: 100;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.bottom-navbar {
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 101;
+}
+
+.bottom-navbar a {
+  float: left;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  width: {% widthratio 100 dashboard.data.navigation|length 1 %}%;
+  font-size: 12px;
+}
+
+.bottom-navbar a.active {
+  color: white;
+}
+
+.bottom-navbar a:hover {
+  color: white;
+}
+
+.bottom-navbar a i{
+  font-size: 2rem;
+}
+
+.bottom-navbar div{
+  padding: 10px;
+}
+
+</style>
+
+<div class="bottom-navbar bg-primary">
+  {% for item in dashboard.data.navigation %}
+  <a href="{{ item.url }}" class="active">
+    <div>
+      {{ item.icon|icontag }}
+      <p>{{ item.label }}</p>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% endif %}
