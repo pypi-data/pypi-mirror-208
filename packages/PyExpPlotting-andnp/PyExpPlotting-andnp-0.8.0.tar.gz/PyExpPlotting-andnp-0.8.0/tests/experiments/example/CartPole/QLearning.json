@@ -1,0 +1,22 @@
+{
+    "agent": "QLearning",
+    "problem": "CartPole",
+    "max_steps": 100000,
+    "metaParameters": {
+        "epsilon": 0.1,
+        "lambda": [0, 0.001, 0.01, 0.1],
+        "target_refresh": 1,
+        "buffer_size": 4000,
+        "batch": 32,
+        "optimizer": {
+            "name": "ADAM",
+            "alpha": [0.03125, 0.015625, 0.0078125, 0.00390625, 0.001953125, 0.0009765625, 0.00048828125, 0.000244140625],
+            "beta1": 0.9,
+            "beta2": 0.999
+        },
+        "layers": [
+            {"type": "fc", "act": "relu", "units": 64},
+            {"type": "fc", "act": "relu", "units": 64}
+        ]
+    }
+}
