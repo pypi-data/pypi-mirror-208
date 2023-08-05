@@ -1,0 +1,37 @@
+name: napari-tiledb-bioimg
+display_name: napari TileDB bioimaging
+contributions:
+  commands:
+    - id: napari-tiledb-bioimg.get_reader
+      python_name: napari_tiledb_bioimg._reader:napari_get_reader
+      title: TileDB Reader
+    - id: napari-tiledb-bioimg.write_image_lossless
+      python_name: napari_tiledb_bioimg._writer:napari_write_image_lossless
+      title: Save image data with TileDB BioImaging Napari Plugin (lossless)
+    - id: napari-tiledb-bioimg.write_image_lossy
+      python_name: napari_tiledb_bioimg._writer:napari_write_image_lossy
+      title: Save image data with TileDB BioImaging Napari Plugin (lossy)
+    - id: napari-tiledb-bioimg.make_qwidget
+      python_name: napari_tiledb_bioimg._widget:TileDBWidget
+      title: Make TileDBWidget
+  readers:
+    - command: napari-tiledb-bioimg.get_reader
+      accepts_directories: true
+      filename_patterns: ['tiledb://*', 's3://*', '*.tdb', '*.tiledb']
+  writers:
+    - command: napari-tiledb-bioimg.write_image_lossless
+      layer_types: ['image']
+      display_name: lossless
+    - command: napari-tiledb-bioimg.write_image_lossy
+      layer_types: ['image']
+      display_name:  lossy
+  # https://github.com/napari/napari/issues/5102
+#  sample_data:
+#    - display_name: TileDB CMU-1-Small-Region-RGB
+#      key: TileDB CMU-1-Small-Region
+#      uri: napari_tiledb_bioimg/samples/CMU-1-Small-Region-rgb.ome.tiff.tdb
+#      allow_directories: true
+#      reader_plugin: napari-tiledb-bioimg
+  widgets:
+    - command: napari-tiledb-bioimg.make_qwidget
+      display_name: TileDB
