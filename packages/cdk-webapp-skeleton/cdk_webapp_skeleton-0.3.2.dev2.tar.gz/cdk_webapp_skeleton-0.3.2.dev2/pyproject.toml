@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "cdk-webapp-skeleton"
+version = "0.3.2.dev2"
+description = ""
+authors = ["Ilya Nekhay <nekhayiv@gmail.com>"]
+readme = "README.md"
+packages = [{include = "cdk_webapp_skeleton"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+aws-cdk-lib = "^2.67.0"
+cloudcomponents-cdk-static-website = "^2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+pre-commit = "^3.2.0"
+commitizen = "^3.2.1"
+
+[build-system]
+requires = ["poetry-core", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.pytest.ini_options]
+addopts = "--cov=. --cov-report html --cov-report xml --cov-config=.coveragerc"
+markers = [
+    "branch_name",
+]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_type = "pep440"
+version_provider = "poetry"
+update_changelog_on_bump = true
+major_version_zero = true
+
+[tool.poetry-dynamic-versioning]
+enable = false
+format-jinja = """
+    {%- if distance == 0 -%}
+        {{ serialize_pep440(base, stage, revision) }}
+    {%- elif revision is not none -%}
+        {{ serialize_pep440(base, stage, revision + 1, dev=distance) }}
+    {%- else -%}
+        {{ serialize_pep440(bump_version(base), stage, revision, dev=distance) }}
+    {%- endif -%}
+"""
