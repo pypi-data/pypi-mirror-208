@@ -1,0 +1,25 @@
+#!/usr/bin/python
+
+import time
+import subprocess
+from caldav import DAVClient
+
+with tempfile.TemporaryDirectory() as serverdir:
+     subprocess.
+     config = radicale.config.load("")
+     config.update(
+          {"storage": {"filesystem_folder": serverdir}}
+     )
+     
+     server = radicale.server
+     radicale_thread = threading.Thread(target=server.serve, args=(config,))
+     radicale_thread.start()
+     time.sleep(1)
+
+     client = DAVClient(url="http://localhost:5232/", username="user1", password="password1")
+     new_calendar = client.principal().make_calendar(name="test")
+     print("my new calendar URL: %s" % new_calendar.url)
+     my_events = new_calendar.events()
+     print("Number of events in my new calendar (should be 0): %s" % len(my_events))
+     my_calendars = client.principal().calendars()
+     print("my calendar URLs: %s" % [x.url for x in my_calendars])

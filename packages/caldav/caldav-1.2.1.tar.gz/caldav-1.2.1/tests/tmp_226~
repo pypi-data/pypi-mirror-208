@@ -1,0 +1,25 @@
+import tempfile
+import radicale
+
+with tempfile.TemporaryDirectory() as serverdir:
+     config = radicale.config.load("")
+     config.update(
+          {"storage": {"filesystem_folder": self.serverdir.name}}
+     )
+     
+     server = radicale.server
+        self.server_params = {
+            "url": "http://%s:%i/" % (radicale_host, radicale_port),
+            "username": "user1",
+            "password": "password1",
+        }
+        self.server_params["backwards_compatibility_url"] = (
+            self.server_params["url"] + "user1"
+        )
+        self.server_params["incompatibilities"] = compatibility_issues.radicale
+        self.shutdown_socket, self.shutdown_socket_out = socket.socketpair()
+        self.radicale_thread = threading.Thread(
+            target=self.server.serve,
+            args=(self.configuration, self.shutdown_socket_out),
+        )
+        self.radicale_thread.start()

@@ -1,0 +1,12 @@
+--- tests/test_caldav.py
++++ tests/test_caldav.py
+@@ -1914,7 +1918,8 @@ class RepeatedFunctionalTestsBaseClass(object):
+         t8.complete(handle_rrule=True, rrule_mode="safe")
+         t8.complete(handle_rrule=True, rrule_mode="safe")
+         assert len(c.todos()) == 1
+-        [x.delete() for x in todos]
++        assert len(c.todos(include_completed=True)) == 5
++        [x.delete() for x in c.todos(include_completed=True)]
+ 
+     def testTodoRecurringCompleteThisandfuture(self):
+         self.skip_on_compatibility_flag("read_only")
