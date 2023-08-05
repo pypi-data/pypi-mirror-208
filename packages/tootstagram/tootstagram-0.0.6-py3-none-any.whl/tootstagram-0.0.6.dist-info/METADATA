@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: tootstagram
+Version: 0.0.6
+Summary: Duplicate posted images from Mastodon to Instagram
+Author-email: Koen Martens <kmartens@sonologic.se>
+Project-URL: Homepage, https://cvs.sonologic.net/gmc/nlgenerator
+Project-URL: Bug Tracker, https://cvs.sonologic.net/gmc/nlgenerator/-/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: instagrapi
+Requires-Dist: Pillow (>=8.1.1)
+Requires-Dist: toml
+Requires-Dist: feedparser
+Requires-Dist: Pillow
+
+# Tootstagram
+
+https://cvs.sonologic.net/gmc/tootstagram
+
+## Installation
+
+```
+pip install tootstagram
+```
+
+## Usage
+
+Create a configuration file name `tootstragram.toml` based on the
+example `tootstragram.toml.example` and place it in any of these
+locations:
+
+* In your home or user directory
+* In a subdirectory `.tootstagram` under your home or user directory
+* In the current working directory
+
+The tool will search each of these locations in that order.
+
+Then simply invoke the tool with:
+
+```
+tootstagram
+```
+
+This will fetch the feed from the Mastodon account and post any
+images that were not already posted to the Instagram account.
+
+## Security
+
+Make sure you keep the configuration file as well as the `.tootstagram`
+directory in your home or user dir private. The configuration file 
+contains your instagram username and password, and the `.tootstagram`
+directory contains a file `session.json` which should be treated as
+equivalent to your username and password.
+
+## Limitations
+
+* Only posts toots with images, not videos (I don't do videos myself)
+* Any html tags in the toot are crudely removed by a simple regexp
+* If a toot has multiple images, but not all have alt text, none of the
+  instagram posts will have alt text (because it is impossible to derive
+  from the feed which alt text belongs to which image)
+* Editing a toot will not alter on or repost to instagram
+* Only posts listed toots, as those are the only ones available from the
+  feed
+
+## Planned features
+
+* Hashtag translation
+
+## Releasing
+
+```
+python -m build
+python3 -m twine upload dist/*
+```
+
