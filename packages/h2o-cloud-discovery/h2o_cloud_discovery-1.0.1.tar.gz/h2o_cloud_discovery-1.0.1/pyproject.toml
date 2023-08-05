@@ -1,0 +1,96 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+authors = [
+  {name = "H2O.ai", email = "support@h2o.ai"},
+]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Topic :: Internet",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Security",
+  "Topic :: Utilities",
+]
+dependencies = ["httpx>=0.16"]
+description = 'H2O Cloud Discovery Python CLient'
+keywords = []
+license = "Apache-2.0"
+name = "h2o-cloud-discovery"
+readme = "README.md"
+requires-python = ">=3.7"
+version = "1.0.1"
+
+[project.urls]
+Documentation = "https://github.com/h2oai/cloud-discovery-py#readme"
+Issues = "https://github.com/h2oai/cloud-discovery-py/issues"
+Source = "https://github.com/h2oai/cloud-discovery-py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/h2o_discovery"]
+
+[[tool.hatch.envs.test.matrix]]
+httpx = ["httpx0.16", "httpx0.21", "httpx0.22", "httpx0.23"]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+[tool.hatch.envs.test.overrides]
+matrix.httpx.dependencies = [
+  {value = "httpx==0.16.*", if = ["httpx0.16"]},
+  {value = "httpx==0.21.*", if = ["httpx0.21"]},
+  {value = "httpx==0.22.*", if = ["httpx0.22"]},
+  {value = "httpx==0.23.*", if = ["httpx0.23"]},
+]
+
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest-asyncio==0.20.2",
+  "pytest==7.2",
+  "respx>=0.16",
+]
+dev-mode = false
+
+[tool.hatch.envs.test.scripts]
+pytest = "python -m pytest {args}"
+
+[tool.hatch.envs.lint]
+dependencies = [
+  "black==22.10.0",
+  "flake8-bugbear==22.10.27",
+  "flake8-builtins==1.5.3",
+  "flake8-deprecated==1.3",
+  "flake8-eradicate==1.4",
+  "flake8==5.0.4",
+  "isort==5.12",
+  "mypy~=1.1",
+]
+
+[tool.hatch.envs.lint.scripts]
+check = [
+  "black --check .",
+  "isort --check-only .",
+  "flake8 src tests",
+  "mypy src",
+]
+fix = [
+  "isort .",
+  "black .",
+  "check",
+]
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "pydoc-markdown==4.6.4",
+]
+
+[tool.hatch.envs.docs.scripts]
+generate = "pydoc-markdown"
+
+[tool.black]
+skip-magic-trailing-comma = true
+
+[tool.isort]
+force_single_line = true
+known_application = ["h2o_discovery"]
+profile = "appnexus"
