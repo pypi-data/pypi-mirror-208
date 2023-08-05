@@ -1,0 +1,30 @@
+[tool.pdm.build]
+includes = [
+    "tool",
+]
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[project]
+name = "Cipher_CLI"
+version = "0.1.0"
+description = ""
+authors = [
+    { name = "Duncan Conduit", email = "duncanconduit@gmail.com" },
+]
+dependencies = [
+    "typer[all]<1.0.0,>=0.1.0",
+    "rich<14.0.0,>=13.3.5",
+]
+requires-python = ">=3.10,<4.0"
+readme = "README.md"
+
+[project.license]
+text = "MIT"
+
+[project.scripts]
+Cipher-CLI = "tool.main:app"
