@@ -1,0 +1,42 @@
+[build-system]
+requires = [
+    "setuptools==65.6.3",
+    "setuptools_scm[toml]==7.1.0",
+    "wheel==0.38.4",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Hydro-Quebec-API-Wrapper"
+dynamic = ["version", "dependencies"]
+description = "A wrapper library to access hydro quebec API and more"
+readme = "README.md"
+authors = [
+    {name = "Hydroqc Team", email = "info@hydroqc.ca"}
+]
+license = {text = "LGPL-3.0-or-later"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+keywords = ["hydroquebec", "lib"]
+
+requires-python = ">=3.10.0"
+
+[project.urls]
+"Source Code" = "https://gitlab.com/hydroqc/hydroqc"
+"Bug Reports" = "https://gitlab.com/hydroqc/hydroqc/-/issues"
+"Home-page"   = "https://hydroqc.ca"
+
+[tool.setuptools]
+platforms = ["any"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["hydroqc*"]
+
+[tool.setuptools_scm]
+
+
+[project.scripts]
+hydroqc-diag = "hydroqc.diagnostic:main"
