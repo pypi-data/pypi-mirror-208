@@ -1,0 +1,94 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target-version = ['py37']
+include = '\.pyi?$'
+
+[tool.isort]
+line_length = 120
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_any_unimported = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+implicit_reexport = false
+no_implicit_optional = true
+show_column_numbers = true
+show_error_codes = true
+strict_equality = true
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pylint.MASTER]
+extension-pkg-allow-list = "mypy"
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = """
+    duplicate-code,
+    line-too-long,
+    missing-class-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+    no-name-in-module,
+    redefined-outer-name,
+    too-few-public-methods,
+    typevar-name-incorrect-variance,
+    """
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py{37,38,39,310,311}-mypy{,0920}
+isolated_build = true
+
+[testenv]
+deps =
+    {[testenv:mypy]deps}
+    bandit
+    black
+    docformatter
+    isort
+    py37: typing-extensions
+    pylint
+    pytest
+    pytest-cov
+    # pinned because of bandit https://github.com/PyCQA/bandit/issues/956
+    importlib-metadata<5
+commands_pre =
+    pip install --editable .
+commands =
+    mypy typing_protocol_intersection
+    bandit typing_protocol_intersection --recursive
+    black --check .
+    isort --check .
+    docformatter --check typing_protocol_intersection tests --recursive
+    pylint typing_protocol_intersection tests
+    pytest -vv --cov=typing_protocol_intersection
+
+[testenv:mypy{,0920}]
+deps =
+    mypy: mypy
+    mypy0920: mypy == 0.920  # lowest supported mypy version
+
+[gh-actions]
+python =
+    3.7: py37
+    3.8: py38
+    3.9: py39
+    3.10: py310
+    3.11: py311
+"""
