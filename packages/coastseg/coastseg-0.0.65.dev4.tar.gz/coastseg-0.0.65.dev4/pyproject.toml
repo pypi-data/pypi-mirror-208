@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coastseg"
+dynamic = ["readme"]
+version = "0.0.65dev4"
+authors = [
+  { name=" Sharon Fitzpatrick", email="sharon.fitzpatrick23@gmail.com" },
+]
+# find` directive with `include` or `exclude`
+description = "An interactive jupyter notebook for downloading satellite imagery"
+dependencies = [
+  "coastsat-package>=0.1.11",
+  "area",
+  "doodleverse-utils>=0.0.29",
+  "ipyfilechooser>=0.6.0",
+  "tqdm",
+  "leafmap>=0.14.0",
+  "geojson",
+  "aiohttp",
+  "nest-asyncio",
+  "tensorflow",
+  "dask"]
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+
+# tells setup tools to include the code in the coastseg directory within the src directory
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[project.urls]
+"Homepage" = "https://github.com/SatelliteShorelines/CoastSeg"
+"Bug Tracker" = "https://github.com/SatelliteShorelines/CoastSeg/issues"
