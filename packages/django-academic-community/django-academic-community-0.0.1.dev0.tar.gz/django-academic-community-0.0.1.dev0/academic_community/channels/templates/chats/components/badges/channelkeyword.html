@@ -1,0 +1,7 @@
+{% load community_utils %}
+{% load chats %}
+{% channel_list_url as "list_url" %}
+<a href="{{ url }}" class="badge rounded-pill bg-info text-decoration-none align-self-center {{ keyword_badge_class }}">
+  {% if close_icon %}{% close_icon %}{% endif %}
+  {{ object }}
+</a>

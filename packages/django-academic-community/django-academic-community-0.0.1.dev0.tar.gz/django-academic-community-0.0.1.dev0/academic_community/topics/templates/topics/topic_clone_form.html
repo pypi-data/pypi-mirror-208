@@ -1,0 +1,16 @@
+{% extends "topics/topic_form.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}Clone {{ base_topic.id_name }}{% endblock %}
+
+{% block headline %}Clone {{ base_topic }}{% endblock %}
+
+{% block form-buttons %}
+
+  <div class="row row-cols-auto m-3">
+    {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+    {% bootstrap_button "Reset" button_type="reset"  %}
+    {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=base_topic.get_absolute_url %}
+  </div>
+{% endblock %}

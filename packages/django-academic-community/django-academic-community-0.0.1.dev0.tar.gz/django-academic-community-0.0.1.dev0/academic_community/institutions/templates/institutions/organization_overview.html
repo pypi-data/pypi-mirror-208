@@ -1,0 +1,104 @@
+<div class="left col-sm-12 organization-content-item">
+    {% with members=organization.active_memberships %}
+        {% if members %}
+            <section class="collapsible-css">
+                <input type="checkbox" name="collapse" id="active_memberships">
+                <h2 class="collapsible-handle">
+                    <label for="active_memberships"><strong>Members</strong></label>
+                </h2>
+                <div class="collapsible-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Member name</th>
+                                <th>Email</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for membership in members %}
+                                <tr>
+                                    <td>{{ membership.member }}</td>
+                                    <td>{% if membership.member.email %} <a href="mailto:{{ membership.member.email }}"><i class="fas fa-envelope"></i></a> {% else %} -- {% endif %}</td>
+                                    <td>
+                                        {% if membership.start_date %} {{ membership.start_date | date:"d-m-Y" }} {% else %} -- {% endif %}
+                                    </td>
+                                    <td>{% if membership.end_date %} {{ membership.end_date | date:"d-m-Y" }} {% else %} -- {% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% endif %}
+    {% endwith %}
+
+    {% with members=organization.former_memberships %}
+
+        {% if members %}
+            <section class="collapsible-css">
+                <input type="checkbox" name="collapse" id="former_memberships">
+                <h2 class="collapsible-handle">
+                    <label for="former_memberships"><strong>Former Members</strong></label>
+                </h2>
+                <div class="collapsible-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Member name</th>
+                                <th>Email</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for membership in members %}
+                                <tr>
+                                    <td>{{ membership.member }}</td>
+                                    <td>{% if membership.member.email %} <a href="mailto:{{ membership.member.email }}"><i class="fas fa-envelope"></i></a> {% else %} -- {% endif %}</td>
+                                    <td>
+                                        {% if membership.start_date %} {{ membership.start_date | date:"d-m-Y" }}
+                                        {% elif topic.start_date %} {{ topic.start_date | date:"d-m-Y" }}
+                                        {% else %}
+                                            {{ organization.start_date|date:"d-m-Y" }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{% if membership.end_date %} {{ membership.end_date | date:"d-m-Y" }} {% else %} -- {% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% endif %}
+    {% endwith %}
+
+    {% with topic_list=organization.active_lead_topics %}
+    {% if topic_list %}
+        <section class="collapsible-css">
+            <input type="checkbox" name="collapse" id="active_topic">
+            <h2 class="collapsible-handle">
+                <label for="active_topic"><strong>Active topics</strong></label>
+            </h2>
+            <div class="collapsible-content">
+                {% include "topics/topic_list_content.html" %}
+            </div>
+        </section>
+    {% endif %}
+    {% endwith %}
+
+    {% with topic_list=organization.finished_lead_topics %}
+    {% if topic_list %}
+        <section class="collapsible-css">
+            <input type="checkbox" name="collapse" id="finished_topic">
+            <h2 class="collapsible-handle">
+                <label for="finished_topic"><strong>Finished topics</strong></label>
+            </h2>
+            <div class="collapsible-content">
+                {% include "topics/topic_list_content.html" %}
+            </div>
+        </section>
+    {% endif %}
+    {% endwith %}
+</div>

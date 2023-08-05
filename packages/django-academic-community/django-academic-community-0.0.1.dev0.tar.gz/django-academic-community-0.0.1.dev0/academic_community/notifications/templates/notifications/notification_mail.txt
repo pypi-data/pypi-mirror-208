@@ -1,0 +1,14 @@
+{% load cms_tags %}
+{% block body %}
+{% include "notifications/components/notification_mail_body.txt" %}
+{% endblock %}
+
+{% block footer %}
+-------------------
+{% page_url "home" as home %}
+This message has been sent automatically through the CLM-Community Website,
+{{ index_url }}
+
+Configure your notification settings at
+{{ root_url }}{{ settings.settings_url }}
+{% endblock %}

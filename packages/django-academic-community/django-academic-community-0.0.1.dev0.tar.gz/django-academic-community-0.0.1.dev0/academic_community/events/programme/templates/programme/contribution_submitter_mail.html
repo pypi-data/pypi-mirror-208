@@ -1,0 +1,35 @@
+
+{% spaceless %}
+{% load events_registrations %}
+<p>
+    Hello {{ contribution.submitter }}!
+</p>
+<p>
+    This is to confirm your submission for the {{ contribution.event }}:
+    <b>{{ contribution }}</b>
+</p>
+{% if contribution.event.registration_possible and not contribution.submitter.communitymember|is_registered:contribution.event %}
+<p>
+    {% url "events:registrations:registration-create" contribution.event.slug as registration_url %}
+    If you plan to attend the {{ contribution.event }}, please do register at
+    <a href="{{ root_url }}{{ registration_url }}">{{ root_url }}{{ registration_url }}</a>
+</p>
+{% endif %}
+<p>
+    Please view/update your submission at the following url:
+    <a href="{{ root_url }}{{ contribution.get_absolute_url }}">{{ root_url }}{{ contribution.get_absolute_url }}</a>.
+    {% if contribution.submitter.communitymember %}
+    You can view/update all your submissions to the {{ contribution.event }} at
+    {% url 'events:programme:contribution-list' contribution.event.slug as contribution_list %}
+    <a href="{{ root_url }}{{ contribution_list }}?user={{ contribution.submitter.communitymember.pk }}">{{ root_url }}{{ contribution_list }}?user={{ contribution.submitter.communitymember.pk }}</a>.
+    {% endif %}
+</p>
+<p>
+    If you wish to withdraw this submission, please
+    <a href="{{ root_url }}{% url "contact:contact" %}">contact the website administrators</a>.
+</p>
+<p>
+    Best,<br>
+    Your organizers of the {{ contribution.event }}
+</p>
+{% endspaceless %}

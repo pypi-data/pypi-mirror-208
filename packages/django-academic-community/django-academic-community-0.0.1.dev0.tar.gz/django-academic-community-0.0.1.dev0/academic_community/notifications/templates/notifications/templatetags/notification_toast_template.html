@@ -1,0 +1,43 @@
+{% load sekizai_tags %}
+{% load community_utils %}
+
+<div class="toast-header">
+  <strong class="me-auto">SUBJECT</strong>
+  <small class="time-since" data-time-created="NOW">11 mins ago</small>
+  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body">
+  <div>
+    BODY
+  </div>
+  <div class="mt-2 pt-2 border-top">
+    <button type="button" class="btn btn-link btn-sm" onclick="decreaseNotificationCounter(NOTIFICATIONID, false)" data-bs-dismiss="toast">Mark as read</button>
+    <a href="NOTIFICATIONURL?next={% url_for_next %}" class="btn btn-sm btn-link btn-details text-decoration-none">
+      More
+    </a>
+    <button onclick="decreaseNotificationCounter(NOTIFICATIONID, true)" class="btn btn-link" data-bs-dismiss="toast">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+</div>
+
+{% addtoblock "js" %}
+  <script>
+    function decreaseNotificationCounter(id, remove) {
+      $.ajax({
+        url: `{% url 'rest:notification-list' %}${id}/`,
+        type: remove ? 'DELETE' : 'PATCH',
+        data: {unread: false},
+        headers:{'X-CSRFTOKEN': '{{ csrf_token }}'},
+        success: function (data) {
+          document.querySelectorAll(".notification-count").forEach(
+            function(notificationCount) {
+              let count = parseInt(notificationCount.innerHTML);
+              notificationCount.innerHTML = count - 1;
+            }
+          )
+        }
+      });
+    }
+  </script>
+{% endaddtoblock %}

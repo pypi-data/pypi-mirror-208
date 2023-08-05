@@ -1,0 +1,15 @@
+{% extends "base_list.html" %}
+{% load static %}
+
+{% block title %}History{% endblock %}
+
+{% block headline %}
+    History
+    {% if base_object %}
+        of {{ base_object }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% include "reversion/revision_list_content.html" %}
+{% endblock %}

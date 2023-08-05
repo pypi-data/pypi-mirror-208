@@ -1,0 +1,23 @@
+
+{% spaceless %}
+<p>
+    Hello {{ registration.member }}!
+</p>
+<p>
+    This is to confirm that your registration for the
+    <a href="{{ root_url }}{{ registration.event.get_absolute_url }}">{{ registration.event }}</a>
+    has been successfully withdrawn.
+</p>
+{% if registration.event.registration_possible %}
+<p>
+    {% url "events:registrations:registration-create" registration.event.slug as registration_url %}
+    You can register again until {{ registration.event.registration_end|date }}
+    at the following url:
+    <a href="{{ root_url }}{{ registration_url }}">{{ root_url }}{{ registration_url }}</a>.
+</p>
+{% endif %}
+<p>
+    Best,<br>
+    The organizers of the {{ registration.event }}.
+</p>
+{% endspaceless %}

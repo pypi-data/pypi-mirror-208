@@ -1,0 +1,32 @@
+{% load humanize %}
+{% load chats %}
+{% load community_utils %}
+{% load community_badges %}
+
+<a href="{{ thread.get_absolute_url }}" class="{{ thread_item_class|default:'list-group-item list-group-item-action' }} {% if highlight.pk == thread.pk %}border border-3 border-primary{% endif %}" aria-current="true">
+  <div class="d-flex w-100 justify-content-between">
+    {% with subscription=channel|subscription_for:user %}
+      <h5 class="mb-1 thread-item text-start {% if subscription|thread_unread:thread %}unread{% endif %}">{{ thread }}</h5>
+    {% endwith %}
+    <div>
+      <small><i class="fas fa-comment"></i> last comment {{ thread.last_comment_modification_date|naturaltime }}</small>
+    </div>
+  </div>
+  <div class="d-flex flex-row-reverse">
+    <div>
+      {% if not hide_replies %}
+        <div class="badge rounded-pill text-decoration-none bg-light align-self-center text-black">
+          {% with num_comments=thread.threadcomment_set.count %}
+            <i class="fas fa-comments"></i> {{ num_comments }} Comment{{ num_comments|pluralize }}
+          {% endwith %}
+        </div>
+      {% endif %}
+      {% if thread.user.communitymember %}
+        <div class="badge rounded-pill text-decoration-none bg-light text-black m-2">
+          <i class="fas fa-user"></i> {{ thread.user.communitymember }}
+        </div>
+      {% endif %}
+    </div>
+    <small class="align-self-center"><i class="far fa-clock"></i> created {{ thread.date_created|naturaltime }}</small>
+  </div>
+</a>

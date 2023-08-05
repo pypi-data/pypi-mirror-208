@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load members %}
+
+{% block title %}Grant member status to {{ communitymember }}{% endblock %}
+
+{% block headline %}Grant member status to {{ communitymember }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url communitymember|combine:communitymember.get_absolute_url "Grant member status"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  {% if communitymember.is_member %}
+    {% bootstrap_alert content="This user is already a member of the community!" alert_type="warning" dismissible=False %}
+  {% elif communitymember.approved_by and not user.is_manager %}
+    <div class="alert alert-warning" role="alert">
+      {% if communitymember.approved_by.pk == user.pk %}
+        You
+      {% elif communitymember.approved_by.communitymember %}
+        <a href="{{ communitymember.approved_by.communitymember.get_absolute_url }}">
+          {{ communitymember.approved_by }}
+        </a>
+      {% else %}
+        {{ communitymember.approved_by }}
+      {% endif %}
+      already approved that
+      <a href="{{ communitymember.get_absolute_url }}">
+        {{ communitymember }}
+      </a> should be a member of the {{ community_name }}.
+      If you did not hear anything from the community managers, please
+      <a href="{% url 'contact:contact' %}">contact them here</a>.
+    </div>
+  {% else %}
+
+    <p>
+        Do you want to approve that
+        <a href="{{ communitymember.get_absolute_url }}">
+          {{ communitymember }}
+        </a> should be a member of the {{ community_name }}?
+    </p>
+
+    {% member_row communitymember %}
+
+
+
+    {% if not user.is_manager %}
+      <p>
+        If yes, please click the button below and we'll forward the case to the
+        community managers.
+      </p>
+    {% endif %}
+
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% bootstrap_button "Approve" button_type="submit"  %}
+    </form>
+  {% endif %}
+{% endblock %}

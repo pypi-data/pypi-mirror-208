@@ -1,0 +1,20 @@
+{% extends "notifications/notification_mail.txt" %}
+
+{% block body %}
+{% spaceless %}
+{% with comment=notification.comment %}
+{% if comment.comment_type == "channel" %}
+  {{ comment.user }} started a new channel
+{% else %}
+  {{ comment.user }} wrote in {{ comment.parent_channel }}
+{% endif %}
+on {{ comment.date_created|date:"SHORT_DATETIME_FORMAT" }}:
+{% endwith %}
+{% endspaceless %}
+{{ block.super }}
+{% endblock body %}
+
+{% block footer %}
+View this comment in the chat at {{ index_url }}{{ notification.get_absolute_url }}
+{{ block.super }}
+{% endblock footer %}

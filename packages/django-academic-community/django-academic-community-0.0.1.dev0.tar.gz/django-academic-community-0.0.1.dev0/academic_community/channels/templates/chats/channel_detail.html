@@ -1,0 +1,102 @@
+{% extends "chats/base_detail.html" %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load chats %}
+{% load members %}
+
+{% block headline %}{{ channel|name_for:user }}{% endblock %}
+{% block subtitle %}#{{ channel.channel_id }}{% endblock %}
+
+{% block head_meta %}
+  {% with meta_title=channel meta_description=channel.body %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.relation.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.relation.get_list_url channel.channel_id_name|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block action_buttons %}
+  {% if user|can_change_channel:channel %}
+    <div class="dropdown">
+      <a class="btn btn-round btn-light btn-menu" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      </a>
+
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item btn btn-users" role="button"
+           href='{% url "chats:channel-subscriptions" channel.channel_id %}?next={% url_for_next %}'>
+            Manage subscribers
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item btn" role="button" title="Generate the encryption keys for missing subscribers."
+           href='{% url "chats:generate-channel-keys" channel.channel_id %}?next={% url_for_next %}'>
+            Generate keys
+          </a>
+        </li>
+      </ul>
+    </div>
+  {% endif %}
+  {% if channel.e2e_encrypted %}
+    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Comments that you post in this channel are end-to-end encrypted">
+      <button class="btn btn-success btn-round btn-locked" type="button" disabled></button>
+    </span>
+  {% endif %}
+  {% if not user.is_anonymous %}
+    {% subscribe_button channel subscription %}
+    {% url "chats:channel-list" as channels_url %}
+    {% edit_button channel %}
+    {% delete_button channel None url_for_next=channels_url %}
+  {% endif %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  {% block channel_card %}
+
+    {% channel_card channel channel_card_class="my-4" %}
+
+    {% if channel.encryption_key %}
+      {{ channel.serializer.data|json_script:"channel-data" }}
+    {% endif %}
+  {% endblock channel_card %}
+
+  {% block tabs %}
+
+    {% with subscription=channel|subscription_for:user active_tab=request.GET.tab|default:"conversationTab" %}
+      {% tab_list conversationTab="Conversation" subscriberTab="Subscribers" disabled_tabs=subscription|ifnotthen:"subscriberTab" %}
+
+        {% tab_content "conversationTab" %}
+          {% include "chats/components/channel_conversation.html" %}
+        {% endtab_content %}
+
+        {% tab_content "subscriberTab" %}
+          {% if subscription %}
+            {% member_rows channel.subscribers.all %}
+          {% endif %}
+        {% endtab_content %}
+
+      {% endtab_list %}
+    {% endwith %}
+
+  {% endblock %}
+
+
+
+{% endblock %}
+
+{% block sticky %}
+
+{% if thread_form and user|can_start_thread:channel %}
+<div id="start-thread-button-wrapper" class="container position-sticky bottom-25 bottom-md-10 d-flex flex-row-reverse" style="z-index: 2000;">
+  <button class="btn btn-dark btn-lg d-block d-lg-none" id="show-thread-offcanvas" type="button" data-bs-toggle="offcanvas" data-bs-target="#start-thread-offcanvas" aria-controls="start-thread-offcanvas"><i class="fas fa-comment"></i></button>
+  <button class="btn btn-dark btn-lg d-none d-lg-block" type="button" onclick="startThread()"><i class="fas fa-comment"></i></button>
+</div>
+{% endif %}
+{% endblock %}

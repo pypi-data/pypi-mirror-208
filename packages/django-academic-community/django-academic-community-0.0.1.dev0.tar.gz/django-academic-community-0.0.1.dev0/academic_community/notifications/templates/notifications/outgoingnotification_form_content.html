@@ -1,0 +1,160 @@
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load sekizai_tags %}
+
+
+<form role="form" method="post">
+  {% csrf_token %}
+
+  {% bootstrap_form_errors form %}
+
+  {% bootstrap_field form.subject %}
+
+  <div class="accordion" id="recipientsAccordion">
+    {% collapsible_card "Recipients" "recipients" "recipientsAccordion" show=True %}
+      {% bootstrap_field form.recipients %}
+    {% endcollapsible_card %}
+  </div>
+
+  {% bootstrap_field form.reply_to %}
+  {% bootstrap_field form.sender %}
+
+  {% bootstrap_field form.one_mail_per_user %}
+
+  <div class="form-group">
+
+    {% with active_tab=preview|ifthenelse:",previewTab,bodyTab" %}
+      {% tab_listcard bodyTab="Edit" previewTab="Preview" %}
+        {% tab_content "bodyTab" %}
+          {% bootstrap_field form.body %}
+        {% endtab_content %}
+        {% tab_content "previewTab" %}
+          <div class="d-flex">
+            <div class="p-2 flex-grow-1">
+              <div class="alert alert-warning alert-dismissible" role="alert" id="subjectAlert">
+                Please specify a subject for the mail for preview
+              </div>
+              <div class="alert alert-warning alert-dismissible" role="alert" id="recipientsAlert">
+                Please select recipients for the notification
+              </div>
+            </div>
+
+            <div class="p-2">
+              <button class="btn btn-primary btn-round btn-refresh" type="button" onclick="refreshPreview()" title="Refresh the preview">
+              </button>
+            </div>
+          </div>
+          <div class="form-group accordion" id="notificationPreview">
+        {% endtab_content %}
+      {% endtab_listcard %}
+    {% endwith %}
+  </div>
+  <div class="form-group accordion" id="contentInfo">
+    {% collapsible_card "Mail specific content" "memberContent" "contentInfo" show=True %}
+      The following items will be replaced by a mail specific content:
+      <ul class="list-group">
+        {% for key, desc in member_elements.items %}
+          <li class="list-group-item">
+            <code>
+              {{ key|braced }}
+            </code> {% clipboard_button key|braced %}:
+            will be replaced by {{ desc }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endcollapsible_card %}
+    {% if general_elements %}
+      {% collapsible_card "General content" "generalContent" "contentInfo" %}
+        In general, you can use the following items in the mail body:
+        <ul class="list-group">
+          {% for key, desc in general_elements.items %}
+            <li class="list-group-item">
+              <code>
+                {{ key|braced }}
+              </code> {% clipboard_button key|braced %}:
+              will be replaced by {{ desc }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endcollapsible_card %}
+    {% endif %}
+  </div>
+
+  {% bootstrap_button "Send" button_type="submit"  %}
+</form>
+
+{% addtoblock "js" %}
+  {{ filter.form.cleaned_data|replace_with_pk|json_script:"filter_data" }}
+  <script>
+
+    function displayNotification(data, i) {
+      // display a notification preview
+      var card_id = `notification-${i}`;
+      $("#notificationPreview").append(`
+        <div class="card" id="${card_id}">
+          <div class="card-header" id="${card_id}-header">
+            <div class="row">
+              <h2 class="col-12">
+                <button class="btn btn-block text-start"
+                type="button" data-bs-toggle="collapse" id="${card_id}-control"
+                aria-expanded="${i == 0 ? 'true' : 'false'}"
+                data-bs-target="#${card_id}-content"
+                aria-controls="${card_id}-content">
+                    ${data.user}: ${data.subject}
+                </button>
+              </h2>
+            </div>
+          </div>
+
+          <div id="${card_id}-content" class="collapse ${i == 0 ? 'show' : ''}"
+           aria-labelledby="${card_id}-header" data-bs-parent="#notificationPreview">
+            <div class="card-body">
+              ${data.body}
+            </div>
+          </div>
+        </div>
+        `
+      )
+    }
+
+    function refreshPreview() {
+      $("#notificationPreview").html("");
+      var recipients = $.map(
+        $.makeArray($("#id_recipients_to").children()),
+        c => parseInt(c.value)
+      );
+      var subject = $("#id_subject").val();
+      var body = CKEDITOR.instances.id_body.getData();
+      var filters = document.getElementById('filter_data').textContent;
+      var one_mail_per_user = $("#id_one_mail_per_user")[0].checked ? "true" : "";
+      if (subject == "") {
+        $("#subjectAlert").show();
+      } else {
+        $("#subjectAlert").hide();
+      }
+      if (recipients.length == 0) {
+        $("#recipientsAlert").show();
+      } else {
+        $("#recipientsAlert").hide();
+      }
+      if ((subject != "") && (recipients.length > 0)) {
+        $.ajax({
+          url: "{% url 'rest:preview-notifications' %}",
+          type: 'POST',
+          data: {subject: subject, body: body, recipients: recipients, filters: filters, one_mail_per_user: one_mail_per_user},
+          headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+          success: function (data) {
+            data.forEach(displayNotification)
+          }
+        })
+      }
+
+    }
+
+    $(document).ready(function () {
+      $("#previewTab").on("shown.bs.tab", refreshPreview);
+    });
+  </script>
+{% endaddtoblock %}

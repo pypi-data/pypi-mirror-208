@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      {% bootstrap_alert "Your account does not have access to this page. To proceed, please login with an account that has access." alert_type="warning" %}
+    {% else %}
+      {% bootstrap_alert "Please login to see this page." alert_type="warning" %}
+    {% endif %}
+  {% endif %}
+
+
+  {% block login_form %}
+
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      {% bootstrap_form form %}
+
+      {% bootstrap_button "Login" button_type="submit" value="login" extra_classes="m-2"%}
+
+      {% url 'clm_registration:signup' as signup %}
+      {% if signup %}
+        {% bootstrap_button "Become a member" button_type="link" button_class="btn-secondary" extra_classes="float-md-right m-2" href=signup %}
+      {% endif %}
+
+      {% url 'password_reset' as password_reset %}
+      {% bootstrap_button "Lost password?" button_type="link" button_class="btn-secondary" extra_classes="float-md-right m-2" href=password_reset %}
+      <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+
+  {% endblock %}
+
+
+{% endblock %}

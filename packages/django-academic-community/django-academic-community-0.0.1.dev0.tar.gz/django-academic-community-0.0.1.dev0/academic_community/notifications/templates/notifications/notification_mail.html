@@ -1,0 +1,15 @@
+{% load cms_tags %}
+{% block body %}
+{% include "notifications/components/notification_mail_body.html" %}
+{% endblock %}
+
+{% block footer %}
+<hr>
+<small>
+  {% page_url "home" as home %}
+  This message has been sent automatically through the Community Website,
+  <a href="{{ index_url }}">{{ index_url }}</a>.
+  Click <a href="{{ root_url }}{{ settings.settings_url }}">here</a>
+  to configure the sending of notifications via mail.
+</small>
+{% endblock %}

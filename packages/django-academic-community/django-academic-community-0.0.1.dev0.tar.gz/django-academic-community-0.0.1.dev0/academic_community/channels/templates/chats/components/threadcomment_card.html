@@ -1,0 +1,61 @@
+{% spaceless %}
+  {% load bootstrap_helpers %}
+  {% load community_buttons %}
+  {% load community_utils %}
+  {% load sekizai_tags %}
+  {% load community_badges %}
+  {% load guardian_tags %}
+  {% load chats %}
+
+
+  {% addtoblock "css" %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  {% endaddtoblock %}
+
+  <div class="card {% if not subscription|has_read_comment:threadcomment %}unread{% endif %} comment-card" id="comment-{{threadcomment.id }}-card" data-comment-hash="{{ threadcomment.md5 }}" data-comment-id="{{ threadcomment.id }}">
+    <div class="comment-top"></div>
+    <a id="comment-{{ threadcomment.md5 }}" class="anchor"></a>
+    {% include "chats/components/comment_popover.html" with comment=threadcomment %}
+    <div class="card-body">
+
+      <div class="d-flex">
+
+        {{ threadcomment.user_profile }}
+
+        <a href="{{ channel.get_absolute_url }}/{{ threadcomment.parent_thread.md5 }}/{{ threadcomment.md5 }}" class="mx-4 text-muted">
+          replied
+          <span class="time-since" data-time-created="{% if threadcomment.pk %}{% widthratio threadcomment.last_modification_date|date:"U" 1 1000 %}{% else %}{{ threadcomment.last_modification_date }}{% endif %}"></span>
+        </a>
+      </div>
+
+      <div id="comment-{{threadcomment.id }}-body">
+
+        {% if threadcomment.pk and threadcomment.encryption_key %}
+          {% comment_body '<p class="placeholder-glow"><span class="placeholder w-100"></span><span class="placeholder w-25"></span></p>' %}
+        {% else %}
+          {% comment_body threadcomment.body %}
+        {% endif %}
+      </div>
+
+    </div>
+
+    <div class="my-2 text-end d-flex flex-row-reverse">
+      {% if not channel.get_absolute_url|same_url:request.path %}
+        <a href="{{ threadcomment.parent_channel.get_absolute_url }}?comment={{ threadcomment.md5 }}">
+          View in channel
+        </a>
+      {% endif %}
+      {% comment_reactions threadcomment %}
+      {% if threadcomment_form %}
+        <button type="button" class="btn text-muted" onclick="focusEditor({{ threadcomment.parent_thread.id }})">
+          <i class="bi bi-reply-fill"></i>
+        </button>
+      {% elif user|can_post_comment:channel %}
+      <a rol="button" class="btn text-decoration-none text-muted" href="{{ threadcomment.parent_thread.get_absolute_url }}?reply=true">
+        <i class="bi bi-reply-fill"></i>
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+{% endspaceless %}

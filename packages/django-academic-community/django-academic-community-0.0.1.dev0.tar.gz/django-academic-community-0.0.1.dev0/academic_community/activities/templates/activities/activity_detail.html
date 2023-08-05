@@ -1,0 +1,174 @@
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load members %}
+{% load topics %}
+{% load uploaded_material %}
+{% load events %}
+
+{% block action_buttons %}
+  {% get_obj_perms user for activity as "member_perms" %}
+    {% if perms.activities.change_activity or "change_activity" in member_perms %}
+      <a class="button btn btn-primary btn-round btn-edit" title="Edit the activity"
+       href="{% url 'activities:edit-activity' activity.abbreviation %}" role="button">
+      </a>
+  {% endif %}
+  {% if user.communitymember %}
+    {% if user.communitymember in activity.members.all or user.communitymember in activity.former_members.all %}
+      {% url 'activities:leave-activity' activity.abbreviation as leave_url %}
+      {% with attrs='title="Leave this '|add:activity.category.name|add:'"'|safe %}
+        {% leave_button leave_url attrs=attrs button_text="Leave" button_class="btn-primary" %}
+      {% endwith %}
+    {% elif not activity.invitation_only and not activity.is_finished %}
+      {% url 'activities:join-activity' activity.abbreviation as join_url %}
+      {% with attrs='title="Join this '|add:activity.category.name|add:'"'|safe %}
+        {% join_button join_url attrs=attrs button_text="Join" button_class="btn-primary" %}
+      {% endwith %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+
+{% block head_meta %}
+  {% with meta_title=activity.category.abbreviation|add:" "|add:activity.name meta_description=activity.abstract %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}{{ activity.name }}{% endblock %}
+{% block subtitle %}{{ activity.category.abbreviation }} {{ activity.abbreviation }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'activities:activities' as activities_url %}
+  {% with activities_url=activities_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Working groups"|combine:activities_url activity.abbreviation|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "activities/components/activity_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {% if activity.abstract and activity.show_abstract %}
+    <div class="mb-4">{{ activity.abstract }}</div>
+  {% endif %}
+
+  {% if activity.description %}
+    <div class="mb-4">{{ activity.description }}</div>
+  {% endif %}
+
+  {% with card_class="mb-4" %}
+
+    {% if activity.featured_topics.all %}
+      {% collapsible_card "Featured topics" "featured-topics" "" body_class="p-0" show=True %}
+        {% topic_rows activity.featured_topics.all %}
+      {% endcollapsible_card %}
+    {% endif %}
+
+    {% with event_list=activity.event_set %}
+      {% if event_list.exists %}
+        {% collapsible_card "Events" "activity-events" "" show=event_list.current_or_upcoming_events.exists %}
+          {% if event_list.current_events %}
+            {% section "Current" %}
+              {% event_cards event_list.current_events %}
+            {% endsection %}
+          {% endif %}
+          {% if event_list.upcoming_events %}
+            {% section "Upcoming" %}
+              {% event_cards event_list.upcoming_events %}
+            {% endsection %}
+          {% endif %}
+          {% if event_list.past_events %}
+            {% section "Past" %}
+              {% event_cards event_list.past_events %}
+            {% endsection %}
+          {% endif %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% with members=activity.members.all|take:25 %}
+      {% if members %}
+        {% collapsible_card "Members" "activity-members" "" body_class="p-0" %}
+          {% member_rows members %}
+          {% with member_count=activity.members.count %}
+            {% if member_count > 25 %}
+              <p class="text-end">
+                <a href="{% url 'members:members' %}?activities={{ activity.pk }}">
+                  View all {{ member_count }} members.
+                </a>
+              </p>
+            {% endif %}
+          {% endwith %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% with topics=activity.active_topics|take:25 %}
+      {% if topics %}
+        {% collapsible_card "Active topics" "active-activity-topics" "" body_class="p-0" %}
+          {% topic_rows topics %}
+          {% with topic_count=activity.active_topics.count %}
+            {% if topic_count > 25 %}
+              <p class="text-end">
+                <a href="{% url 'topics:topics' %}?activities={{ activity.pk }}&end_date__isnull=True">
+                  View all {{ topic_count }} active topics.
+                </a>
+              </p>
+            {% endif %}
+          {% endwith %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+
+
+    {% with topics=finished_topics.active_topics|take:25 %}
+      {% if topics %}
+        {% collapsible_card "Finished topics" "finished-activity-topics" "" body_class="p-0" %}
+          {% topic_rows topics %}
+          {% with topic_count=activity.finished_topics.count %}
+            {% if topic_count > 25 %}
+              <p class="text-end">
+                <a href="{% url 'topics:topics' %}?activities={{ activity.pk }}&end_date__isnull=False">
+                  View all {{ topic_count }} finished topics.
+                </a>
+              </p>
+            {% endif %}
+          {% endwith %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% activity_organizations activity as organizations %}
+    {% with organizations=organizations|take:5 %}
+      {% if organizations %}
+        {% collapsible_card "Organizations" "activity-institutions" "" body_class="p-0" %}
+          {% institution_rows organizations %}
+
+          {% with orga_count=organizations|length %}
+            {% if orga_count > 5 %}
+              <p class="text-end">
+                <a href="{% url 'institutions:institutions' %}?activities={{ activity.pk }}">
+                  View all {{ orga_count }} organizations.
+                </a>
+              </p>
+            {% endif %}
+          {% endwith %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+  {% endwith %}
+
+{% endblock %}

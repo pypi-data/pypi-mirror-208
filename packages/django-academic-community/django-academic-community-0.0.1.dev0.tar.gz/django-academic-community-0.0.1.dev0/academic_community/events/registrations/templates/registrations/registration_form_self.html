@@ -1,0 +1,38 @@
+{% extends "registrations/registration_form.html" %}
+
+{% load django_bootstrap5 %}
+{% load events_registrations %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block headline %}Register for {{ event }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Register"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  {% if user.communitymember and user.communitymember|is_registered:event %}
+    {% with registration=user.communitymember|is_registered:event %}
+      <div class="alert alert-warning" role="alert">
+        Your are already registered. Click
+        <a href="{{ registration.get_absolute_url }}" class="alert-link">
+          here
+        </a>
+        to withdraw.
+      </div>
+    {% endwith %}
+  {% elif not user.communitymember %}
+    {% bootstrap_alert content="Your user account does not have an associated community profile!" alert_type="warning" dismissible=False %}
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}

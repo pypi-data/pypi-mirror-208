@@ -1,0 +1,82 @@
+{% extends "chats/base_list.html" %}
+
+{% load community_utils %}
+{% load community_buttons %}
+{% load bootstrap_helpers %}
+{% load sekizai_tags %}
+{% load chats %}
+{% load guardian_tags %}
+
+{% block breadcrumbs %}
+  {% url "chats:channelgroup-settings" as groups_url %}
+  {% if channel_type %}
+    {% get_all_channels_url as all_channels_url %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel_type|verbose_channel_type_name_plural|combine:request.path%}
+  {% else %}
+    {% breadcrumbs "Channels"|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block headline %}
+  {% if not user.is_authenticated %}Public{% else %}Your available{% endif %}
+  {% if channel_type %}{{ channel_type|verbose_channel_type_name_plural }}{% else %}Channels{% endif %}
+{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% if user|combine:channel_relation_model|can_add_channel:view.kwargs %}
+    {% if channel_type %}
+      {% with channel_relation_model=channel_relation_model|default:view.model %}
+        <a href="{% channel_add_url %}" type="button" class="btn btn-primary btn-create btn-round">
+        </a>
+      {% endwith %}
+    {% else %}
+      <div class="dropdown">
+        <a class="btn btn-primary btn-create dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        </a>
+        <ul class="dropdown-menu">
+          {% get_channel_type_slugs as slugs %}
+          <li><h6 class="dropdown-header">Create a new</h6></li>
+          {% with channel_relation_model=channel_relation_model|default:view.model %}
+            {% for model, slug in slugs.items %}
+              {% has_model_perm user model "add" as has_perm %}
+              {% if has_perm %}
+                <li><a class="dropdown-item" href="{% channel_add_url channel_relation_model channel_type=slug %}">{{ model|verbose_model_name}}</a></li>
+              {% endif %}
+            {% endfor %}
+          {% endwith %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block head_meta %}
+  {% with meta_title="Channels in the "|add:community_name meta_description="Discuss and chat with members of the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block content %}
+
+  {% block channel_nav %}
+    {% get_all_channels_url as all_channels_url %}
+
+    <nav class="nav nav-pills mb-4 flex-column flex-sm-row">
+      <a class="flex-sm-fill text-sm-center nav-link {{ all_channels_url|same_url:request.path|ifthen:'active' }}" {{ all_channels_url|same_url:request.path|ifthen:'aria-current="page"' }} href="{% remove_param 'page' all_channels_url|add:"?"|add:request.GET.urlencode %}">All Channels</a>
+      <a class="flex-sm-fill text-sm-center nav-link {{ all_channels_url|add:"issues"|same_url:request.path|ifthen:'active' }}" {{ all_channels_url|add:"issues"|same_url:request.path|ifthen:'aria-current="page"' }} href="{% add_to_filters 'open' True True all_channels_url|add:"issues/?"|add:request.GET.urlencode %}">Issues</a>
+      <a class="flex-sm-fill text-sm-center nav-link {{ all_channels_url|add:"forums"|same_url:request.path|ifthen:'active' }}" {{ all_channels_url|add:"forums"|same_url:request.path|ifthen:'aria-current="page"' }} href="{% remove_param 'page' all_channels_url|add:"forums/?"|add:request.GET.urlencode %}">Forums</a>
+      <a class="flex-sm-fill text-sm-center nav-link {{ all_channels_url|add:"private-conversations"|same_url:request.path|ifthen:'active' }}" {{ all_channels_url|add:"private-conversations"|same_url:request.path|ifthen:'aria-current="page"' }} href="{% remove_param 'page' all_channels_url|add:"private-conversations/?"|add:request.GET.urlencode %}">Private Conversations</a>
+      <a class="flex-sm-fill text-sm-center nav-link {{ all_channels_url|add:"group-conversations"|same_url:request.path|ifthen:'active' }}" {{ all_channels_url|add:"group-conversations"|same_url:request.path|ifthen:'aria-current="page"' }} href="{% remove_param 'page' all_channels_url|add:"group-conversations/?"|add:request.GET.urlencode %}">Group Conversations</a>
+    </nav>
+  {% endblock %}
+
+  {% block channel_list %}
+    <div class="list-group mb-4">
+      {% for channel in channel_list %}
+        {% channel_item channel %}
+      {% endfor %}
+    </div>
+  {% endblock %}
+{% endblock %}

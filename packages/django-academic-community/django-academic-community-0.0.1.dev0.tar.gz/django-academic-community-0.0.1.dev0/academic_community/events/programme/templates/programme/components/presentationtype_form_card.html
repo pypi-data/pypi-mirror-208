@@ -1,0 +1,24 @@
+{% load events_programme %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+
+{% card body_class="p-2" card_class="input-group mb-3" %}
+  {% bootstrap_field form.name size="lg" %}
+  {% card header="Colors in calendar" card_class="m-1" body_class="row" %}
+    <div class="col">
+      {% bootstrap_field form.color show_help=False %}
+    </div>
+    <div class="col">
+      {% bootstrap_field form.font_color show_help=False %}
+    </div>
+  {% endcard %}
+  {% card header="What can this presentation type be used for?" card_class="m-1" body_class="row" %}
+    <div class="col-auto">
+      {% bootstrap_field form.for_contributions layout="horizontal" horizontal_label_class="col-md-6" horizontal_field_class="col-md-6" show_help=False %}
+    </div>
+    <div class="col-auto">
+      {% bootstrap_field form.for_sessions layout="horizontal" horizontal_label_class="col-md-6" horizontal_field_class="col-md-6" show_help=False %}
+    </div>
+  {% endcard %}
+  {% bootstrap_form form exclude="name,color,font_color,for_contributions,for_sessions" %}
+{% endcard %}

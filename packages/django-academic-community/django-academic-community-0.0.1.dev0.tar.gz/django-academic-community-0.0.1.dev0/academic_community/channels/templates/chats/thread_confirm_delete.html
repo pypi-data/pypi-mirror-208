@@ -1,0 +1,39 @@
+{% extends "chats/base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load chats %}
+
+{% block title %}Delete {{ thread }}{% endblock %}
+
+{% block headline %}Delete {{ thread }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.get_list_url channel|name_for:user|combine:channel.get_absolute_url thread|combine:thread.get_absolute_url "Delete thread"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="alert alert-danger" role="alert">
+    <p>
+      Are you sure, you want to delete this thread?
+      {% with comments=thread.threadcomment_set.all %}
+        {% if comments %}
+          Note that this will also remove the {{ comments.count }} comment{{ comments|pluralize }} in
+          this thread.
+        {% endif %}
+      {% endwith %}
+    </p>
+  </div>
+
+  {% thread_card thread None hide_reply=True %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_button "Delete thread" button_type="submit"  %}
+  </form>
+
+{% endblock %}

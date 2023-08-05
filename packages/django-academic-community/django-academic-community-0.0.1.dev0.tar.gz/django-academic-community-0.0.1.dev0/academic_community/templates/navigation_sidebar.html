@@ -1,0 +1,30 @@
+{% extends "base_detail.html" %}
+{% load cms_tags %}
+{% load menu_tags %}
+{% load community_utils %}
+
+{% block head_meta %}
+  {% page_attribute "page_title" as meta_title %}
+  {% page_attribute "meta_description" as meta_description %}
+  {% with meta_logo_alt=meta_title %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block content %}
+  {% placeholder "content" %}
+{% endblock content %}
+
+{% block breadcrumbs %}
+  {% show_breadcrumb %}
+{% endblock %}
+
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+  <h3>Navigation</h3>
+  <ul class="list-group ps-0">
+      {% show_user_menu 0 100 100 100 %}
+  </ul>
+  {% endblock %}
+{% endblock %}

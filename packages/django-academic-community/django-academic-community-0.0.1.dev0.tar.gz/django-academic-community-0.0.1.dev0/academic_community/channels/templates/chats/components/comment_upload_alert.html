@@ -1,0 +1,21 @@
+<div class="alert alert-info d-none d-lg-block" role="alert">
+  Drag and drop images into the text area to upload and embed them,
+  or use the <i class="bi bi-image"></i> button in the toolbar.
+
+  Other material can be uploaded with the Link-Button
+  (<i class="bi bi-link"></i>).
+
+  {% if public_license.url %}
+    Uploaded material is by default licensed under
+    <a href="{{ public_license.url }}" class="footer-link" rel="nofollow noopener noreferrer">
+      {{ public_license.identifier }}
+    </a>.
+  {% else %}
+    Uploaded material is by default licensed as
+    <i>{{ public_license }}</i>.
+  {% endif %}
+  You can change this, edit or remove uploaded material
+  <a href="{% url 'chats:channelmaterialrelation-list' channel.channel_id %}" target="_blank">
+    here
+  </a>.
+</div>

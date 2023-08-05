@@ -1,0 +1,60 @@
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load community_utils %}
+
+{% card card_id="contributingauthor-card_id{{ pos }}" card_class="ca-form-card" %}
+
+  {% with pos=ca_form.get_authorlist_position|add:-1 %}
+
+    {% card header="Author" card_class="mb-4 mt-4" %}
+      {% bootstrap_field ca_form.author show_label=False %}
+
+      <div>
+        <span>Can't find the author?</span>
+        <button
+         class="btn btn-primary" type="button"
+         data-bs-toggle="collapse" data-bs-target="#author-form_id{{ pos }}"
+         aria-expanded="{% if author_form.errors %}true{% else %}false{% endif %}"
+         aria-controls="author-form_id{{ pos }}">
+          Register a new one
+        </button>
+        {% bootstrap_alert "<b>Please first try to find the author in the database before registering a new one.</b> Each person that has logged in to this site is already registered and can be selected as a co-author."|safe extra_classes="mt-2" dismissible=False %}
+      </div>
+
+      <div id="author-form_id{{ pos }}" class="author-form collapse {% if author_form.errors %}show{% endif %}">
+        {% bootstrap_form author_form %}
+      </div>
+    {% endcard %}
+
+    {% card header="Affiliation" card_class="mb-4 mt-4" %}
+      {% bootstrap_field ca_form.affiliation show_label=False %}
+
+      <div>
+        <span>Can't find the affiliation?</span>
+        <button
+         class="btn btn-primary" type="button"
+         data-bs-toggle="collapse" data-bs-target="#affil-form-container_id{{ pos }}"
+         aria-expanded="{% if affiliation_forms|list_getattr:'errors'|any %}true{% else %}false{% endif %}"
+         aria-controls="affil-form-container_id{{ pos }}">
+          Register a new one
+        </button>
+      </div>
+
+      <div id="affil-form-container_id{{ pos }}" class="collapse {% if affiliation_forms|list_getattr:'errors'|any %}show{% endif %}">
+        {% for affil_form in affiliation_forms %}
+          <div class="affil-form affil-form_id{{ pos }}">
+            {% bootstrap_form affil_form %}
+          </div>
+        {% endfor %}
+
+        <button id="add-affil-form_id{{ pos }}" type="button" class="btn btn-primary" onclick="addAffilForm('_id{{ pos }}')">
+          <i class="fas fa-plus-circle"></i> Add another new affiliation
+        </button>
+      </div>
+    {% endcard %}
+
+  {% endwith %}
+
+  {% bootstrap_switch ca_form.is_presenter %}
+  {% bootstrap_form ca_form exclude="is_presenter,author,affiliation" %}
+{% endcard %}

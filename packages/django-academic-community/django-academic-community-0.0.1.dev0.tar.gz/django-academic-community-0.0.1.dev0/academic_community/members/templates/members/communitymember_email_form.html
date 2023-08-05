@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Edit the emails of {{ communitymember }}{% endblock %}
+
+{% block headline %}Edit the emails of {{ communitymember }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url communitymember|combine:communitymember.get_absolute_url "Edit"|combine:communitymember.get_edit_url "Emails"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <p>
+    You can add or delete emails here. One of the email addresses is the
+    primary email that is used for notifications and password reset.
+  </p>
+  <p>
+    You cannot change an email once it has been added to this list. But you can
+    add new emails and remove old ones (unless they are your primary email).
+  </p>
+  <p>
+    The primary email can be set on the
+    <a href="{% url 'members:edit-communitymember' communitymember.pk %}">
+      profile settings page
+    </a>.
+  </p>
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {{ form.management_form }}
+    {{ form.non_form_errors }}
+    {% for form in form.forms %}
+      <div class="card">
+        <div class="card-body">
+        {% if not form.instance.email %}
+          <h6 class="card-title">Add a new email</h6>
+        {% endif %}
+        {% bootstrap_form form %}
+        {% if form.instance.primary_email %}
+          <p>
+            This is the primary email. Click
+            <a href="{% url 'members:edit-communitymember' communitymember.pk %}">
+              here
+            </a>
+            to change it to a different one from this list.
+          </p>
+        {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-auto" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=communitymember.get_absolute_url %}
+    </div>
+
+  </form>
+{% endblock %}

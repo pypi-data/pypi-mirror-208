@@ -1,0 +1,22 @@
+{% load static %}
+{% load community_utils %}
+
+{% if revision_list %}
+    <div class="list-group">
+        {% for revision in revision_list %}
+        <a href="{% url "history:revision-detail" revision.pk %}?next={% url_for_next %}" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Revision {{ revision.id }}</h5>
+            <small><i class="far fa-clock"></i> {{ revision.date_created }}</small>
+          </div>
+          <p class="mb-1">{{ revision|truncatechars:80 }}</p>
+          <span class="badge rounded-pill text-decoration-none bg-light text-black"><i class="fas fa-user"></i> {{ revision.user }}</span>
+          {% if revision.revisionreview.reviewed %}
+            <span class="badge rounded-pill text-decoration-none bg-success"><i class="fas fa-check"></i> Reviewed</span>
+          {% endif %}
+        </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>There are no revisions in the database.</p>
+{% endif %}

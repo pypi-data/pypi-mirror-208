@@ -1,0 +1,129 @@
+{% load notification_helpers %}
+{% load community_utils %}
+{% load sekizai_tags %}
+
+{% with accordion_id=accordion_id|default:'notifications' %}
+  {% csrf_token %}
+
+  {% url "notifications:inbox" as inbox %}
+  {% url "notifications:inbox-system" as inbox_system %}
+  {% url "notifications:inbox-user" as inbox_user %}
+  {% url "notifications:inbox-chat" as inbox_chats %}
+  {% url "notifications:inbox-archived" as inbox_archived %}
+
+  <nav class="nav nav-pills nav-justified mb-4 flex-column flex-sm-row">
+    <a href="{{ inbox }}" role="button"
+     class="flex-sm-fill text-sm-center nav-link {{ inbox|same_url:request.path|ifthen:'active' }}"
+     title="Display all notifications">
+      All
+    </a>
+    <a href="{{ inbox_system }}" role="button"
+     class="flex-sm-fill text-sm-center nav-link {{ inbox_system|same_url:request.path|ifthen:'active' }}"
+     title="Display notifications automatically sent by the system only">
+      System
+    </a>
+    <a href="{{ inbox_chats }}" role="button"
+     class="flex-sm-fill text-sm-center nav-link {{ inbox_chats|same_url:request.path|ifthen:'active' }}"
+     title="Display notifications that have been sent from a chat channel.">
+      Chats
+    </a>
+    <a href="{{ inbox_user }}" role="button"
+     class="flex-sm-fill text-sm-center nav-link {{ inbox_user|same_url:request.path|ifthen:'active' }}"
+     title="Display other notifications.">
+      Other
+    </a>
+    <a href="{{ inbox_archived }}" role="button"
+     class="flex-sm-fill text-sm-center nav-link {{ inbox_archived|same_url:request.path|ifthen:'active' }}"
+     title="Display archived notifications">
+      Archived
+    </a>
+  </nav>
+
+  <nav class="navbar border p-4 mb-4">
+    <div class="container-fluid">
+      <div class="input-group">
+        <div class="input-group-prepend" id="selectButtons">
+          <button
+          onclick='$("input[id^=checkNotification-]:checkbox").prop("checked", true)'
+          class="btn btn-dark">
+            Select all
+          </button>
+          <button
+          onclick='$("input[id^=checkNotification-]:checkbox").prop("checked", false)'
+          class="btn btn-outline-dark">
+            Unselect all
+          </button>
+        </div>
+        <select class="form-select" id="bulkActionSelect" aria-describedby="selectButtons">
+          <option selected>Choose...</option>
+          <option value="read">Mark as read</option>
+          <option value="unread">Mark as unread</option>
+          {% if request.path != inbox_archived %}
+            <option value="archive">Archive</option>
+          {% endif %}
+          <option value="delete">Remove</option>
+        </select>
+        <div class="input-group-append">
+          <button
+          onclick='bulkNotificationAction()'
+          class="btn btn-dark">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="accordion" id="{{ accordion_id }}">
+    {% for notification in notification_list %}
+      {% notification_card notification add_select_button=True %}
+    {% endfor %}
+  </div>
+{% endwith %}
+
+
+
+{% addtoblock "js" %}
+  <script>
+
+    function bulkNotificationAction() {
+      var requestType = "PATCH";
+      var body = {};
+      var action = $("#bulkActionSelect").val();
+      var actionValues = {
+        "unread": ["unread", true],
+        "read": ["unread", false],
+        "archive": ["archived", true],
+        "delete": ["delete", true]
+      };
+      var [actionKey, actionValue] = actionValues[action];
+
+      if (actionKey == "delete") {
+        body["ids"] = [];
+        $("input[id^=checkNotification-]:checkbox:checked").each(
+          function(idx, cb) {
+            body[`ids`].push(cb.value);
+          });
+        requestType = "DELETE";
+      } else {
+        $("input[id^=checkNotification-]:checkbox:checked")
+          .each(function(idx, cb) {
+            body[`[${idx}]id`] = cb.value;
+            body[`[${idx}]${actionKey}`] = actionValue;
+          });
+      }
+
+      if (Object.keys(body).length) {
+        $.ajax({
+          url: "{% url 'rest:notification-list' %}",
+          type: requestType,
+          data: body,
+          headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+          success: function (data) { document.location.reload(actionKey == "delete"); }
+        });
+      }
+    }
+
+  </script>
+
+{% endaddtoblock %}

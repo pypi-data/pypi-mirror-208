@@ -1,0 +1,40 @@
+{% spaceless %}
+<p>Hello leader of {{ activity }}!</p>
+
+{% if communitymember_list|length > 1 %}
+  <p>
+    we just want to inform you that the following people have been
+    {% if added %}added to{% else %}removed from{% endif %} {{ activity }}:
+  </p>
+
+  <ul>
+    {% for member in communitymember_list %}
+      <li><a href="{{root_url }}{{ member.get_absolute_url }}">{{ member }}</a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  {% with member=communitymember_list|first %}
+    <p>
+      we just want to inform you that the following community member has been
+      {% if added %}added to{% else %}removed from{% endif %} {{ activity }}:
+      <a href="{{root_url }}{{ member.get_absolute_url }}">{{ member }}</a>
+    </p>
+  {% endwith %}
+{% endif %}
+
+{% with mailinglists=activity.sympamailinglist_set.all %}
+  {% if mailinglists %}
+    <p>
+      The {{ mailinglists|safeseq|join:", " }}
+      mailinglist{{ mailinglists|pluralize }}
+      {{ mailinglists|pluralize:"has,have" }} been updated accordingly.
+    </p>
+  {% endif %}
+{% endwith %}
+
+You can review the list of members at
+<a href="{{ root_url }}{{ activity.get_absolute_url }}">
+  {{ root_url }}{{ activity.get_absolute_url }}
+</a>
+
+{% endspaceless %}

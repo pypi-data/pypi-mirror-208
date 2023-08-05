@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}End or assign outstanding topics{% endblock %}
+
+{% block headline %}End or assign outstanding topics{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url communitymember|combine:communitymember.get_absolute_url "Edit"|combine:communitymember.get_edit_url "End affiliation"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <p class="lead">
+    Choose what to do with your open topics. You can
+    <ol>
+      <li>assign a new leader within the lead organization</li>
+      <li>finish the topic</li>
+      <li>clone the topic under a new affiliation, and mark the old one as finished</li>
+    </ol>
+  </p>
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {{ form.non_form_errors }}
+    {{ form.management_form }}
+
+    {% for form in form.forms %}
+      <div class="jumbotron">
+        <h3>{{ form.instance }}</h3>
+        <hr class="my-4">
+        <p class="lead">
+          {% bootstrap_form form %}
+          {% url "topics:clone-topic" form.instance.id_name as clone_url %}
+          {% bootstrap_button "Clone this topic" href=clone_url button_type="link" %}
+        </p>
+      </div>
+    {% endfor %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% url "members:edit-profile" as edit_profile_url %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=edit_profile_url %}
+    </div>
+  </form>
+{% endblock %}

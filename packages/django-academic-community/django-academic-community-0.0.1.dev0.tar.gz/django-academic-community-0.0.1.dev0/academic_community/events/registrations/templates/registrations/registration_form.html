@@ -1,0 +1,50 @@
+{% extends "base_detail.html" %}
+{% load django_bootstrap5 %}
+{% load events_registrations %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block head_meta %}
+  {% with meta_title="Registration for the "|add:event.name meta_description=event.abstract meta_logo_alt=event.name %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}Register for {{ event }}{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:registrations:registration-list" event.slug as registration_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Registrations"|combine:registration_list_url "New"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <div class="alert alert-info" role="alert">
+      Registration remains open until {{ event.registration_end|date }}.
+      Registrations can be withdrawn again until this date.
+    </div>
+
+    <p>
+      Click here to register.
+    </p>
+
+    {% bootstrap_button "Register" button_type="submit"  name="_save" %}
+  </form>
+
+{% endblock %}

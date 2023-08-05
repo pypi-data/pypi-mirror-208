@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+
+{% block head_meta %}
+  {% page_attribute "page_title" as meta_title %}
+  {% page_attribute "meta_description" as meta_description %}
+  {% with meta_logo_alt=meta_title %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block topnav %}
+  {% include "cms_components/empty_cms_top_nav.html" %}
+{% endblock %}
+
+{% block content %}
+  {% placeholder "content" %}
+{% endblock content %}

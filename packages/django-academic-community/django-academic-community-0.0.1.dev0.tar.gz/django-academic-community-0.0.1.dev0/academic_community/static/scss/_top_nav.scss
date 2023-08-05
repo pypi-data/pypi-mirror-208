@@ -1,0 +1,124 @@
+@use "scss/buttons";
+
+.navbar-main {
+  height: 130px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0;
+  box-shadow: 0 3px 6px 0 #c2c2c2;
+  background-color: #fff;
+
+  @include media-breakpoint-down(md) {
+    height: 80px;
+  }
+}
+
+a.anchor {
+  display: block;
+  position: relative;
+  top: -150px;
+  visibility: hidden;
+
+  @include media-breakpoint-down(md) {
+    height: -100px;
+  }
+}
+
+#content-container {
+  padding-top: 150px;
+  @include media-breakpoint-down(md) {
+    padding-top: 100px;
+  }
+}
+
+
+.nav-logo {
+  height: 100px;
+  @include media-breakpoint-down(md) {
+    height: 60px;
+  }
+}
+
+.nav-icon-button {
+  font-size: 2em !important;
+  padding: 0 !important;
+  width: 2em;
+  @include media-breakpoint-down(md) {
+    font-size: 1.5em !important;
+  }
+}
+
+.btn-profile {
+  width: 2.5em;
+  height: 2.5em;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.a2hs-badge {
+  top: 25% !important;
+  left: 75% !important;
+  @include media-breakpoint-down(md) {
+    top: 0% !important;
+    left: 75% !important;
+  }
+}
+
+#menu-toggle {
+  @include btn-icon;
+  &::before {
+    content: "\f0c9";
+  }
+  &.toggled::before {
+    content: "\f00d";
+  }
+}
+
+
+#search-toggle {
+  @include btn-icon;
+  padding: 0;
+  display: inline-block;
+  &.toggled {
+    display: none;
+  }
+}
+
+#search-wrapper {
+  overflow-x: hidden;
+  &.toggled {
+    overflow-x: visible;
+    // span the entire area on mobile devices
+    @include media-breakpoint-down(md) {
+      position: absolute;
+      left: 0;
+      width: 100vw;
+      padding-left: 1em;
+      z-index: 5000;
+      background-color: white;
+      height: 80px;
+    }
+
+    & #search-form {
+        margin-right: 0;
+    }
+  }
+}
+
+#search-form {
+  margin-right: -50rem;
+  @include media-breakpoint-up(lg) {
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+  }
+}
+
+#search-text {
+  width: auto;
+  @include media-breakpoint-up(lg) {
+    width: 14rem;
+  }
+}

@@ -1,0 +1,18 @@
+<div class="card shadow {{ card_class }} activity-card {{ activity.category.card_class|default:"" }}">
+  <div class="card-header">
+    {{ activity.short_name }}
+  </div>
+  <div class="card-body p-1" id="activity-{{ activity.pk }}-header">
+    <button data-bs-toggle="collapse" type="button" class="btn btn-sm" data-bs-target="#activity-{{ activity.pk }}-collapse" aria-expanded="false" aria-controls="activity-{{ activity.pk }}-collapse">
+      <h5 class="card-title {% if activity.end_date %}fw-lighter{% endif %}">{{ activity.name }}</h5>
+      {% if activity.abstract %}
+        <div class="text-start">
+          {{ activity.abstract|truncatechars_html:200 }}
+        </div>
+      {% endif %}
+    </button>
+  </div>
+  <div id="activity-{{ activity.pk }}-collapse" class="collapse" aria-labelledby="activity-{{ activity.pk }}-header">
+    {% include "activities/components/activity_card_body.html" %}
+  </div>
+</div>

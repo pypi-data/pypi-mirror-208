@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% load community_utils %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load e2ee %}
+{% load sekizai_tags %}
+
+
+{% block head_meta %}
+  {% with meta_title="E2EE Status" meta_description="Status of your end-to-end encryption" %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "E2EE Status"|combine:request.path %}
+{% endblock %}
+
+{% block headline %}
+End-to-end-encryption
+{% endblock %}
+
+{% block subtitle %}
+Status
+{% endblock %}
+
+{% block content %}
+
+  <p>
+    End-to-end encryption (E2EE) is a method to store content encrypted on the
+    server. Website administrators only see the encrypted messages and do not
+    have the possibility to decrypt and read the content.
+
+  </p>
+  <p>
+    The content is encrypted in your browser <b>before</b> it is sent to the
+    server.
+  </p>
+
+  <p>
+    Find out more about the framework at
+    <a href='https://gitlab.hzdr.de/hcdc/django/django-e2ee-framework'>
+      https://gitlab.hzdr.de/hcdc/django/django-e2ee-framework
+    </a>.
+  </p>
+
+  <h2>Status of your encryption</h2>
+
+  {% if not user.master_key %}
+    {% if not perms.e2ee.add_masterkey %}
+      <p>
+        End-to-end encryption is disabled for your account. Please
+        <a href="{% url 'contact:contact' %}">
+          contact the community managers
+        </a>
+        if you need support.
+      </p>
+    {% else %}
+      <p>
+        You do not have setup a password for end-to-end encryption. Please do so
+      </p>
+
+      <form action="{{ e2ee_login_url }}" method="POST">
+        {% bootstrap_form e2ee_login_form %}
+        <input type="submit" name="submit_json_" value="I wrote down my passphrase" class="btn btn-primary wait-for-serviceworker" disabled>
+      </form>
+
+      {% addtoblock "js" %}
+        {{ e2ee_login_form.media.js }}
+      {% endaddtoblock %}
+    {% endif %}
+  {% elif not request.session|has_session_key %}
+    <p>
+      You do have setup a password for end-to-end encryption but did not yet
+      enable it in this session. If you want to enable E2EE for this session,
+      please
+    </p>
+
+    <ul>
+      <li>
+        Enter your E2EE password to read end-to-end-encrypted messages
+
+        <form action="{{ e2ee_login_url }}" method="POST">
+          {% bootstrap_form e2ee_login_form %}
+          <input type="submit" name="submit_json_" class="btn btn-primary wait-for-serviceworker" disabled value="Enable end-to-end encryption">
+        </form>
+
+        {% addtoblock "js" %}
+          {{ e2ee_login_form.media.js }}
+        {% endaddtoblock %}
+      </li>
+
+      <li>
+        or identify through a different session
+
+        <form action="{% url 'e2ee:sessionkey-list' %}" method="POST" onsubmit="submitFormAsJSON(event).then(displayVerificationNumber)">
+          <input type="submit" value="Login through a different device" class="btn btn-primary wait-for-serviceworker" disabled>
+        </form>
+      </li>
+    </ul>
+
+  {% elif request.session|e2ee_ignored %}
+
+    <p>You decided to ignore end to end encrypted messages in this session.</p>
+    <p>
+      Please
+      <a href="{% url 'logout' %}?next={% url_for_next %}">
+        logout and login again
+      </a>
+      if you want to read encrypted messages.
+    </p>
+
+  {% elif not request.session|e2ee_enabled %}
+    <p>End-to-end encryption is awaiting approval through other session.</p>
+    <p>
+      Please login at another device and enter the verification number that you
+      received previously. If you forgot your verification number, please
+      <a href="{% url 'logout' %}?next={% url_for_next %}">
+        logout and login again
+      </a>.
+    </p>
+  {% else %}
+  <div class="card-group mb-4">
+    {% card %}
+      <p>
+        You have end-to-end encryption enabled and can use it to encrypt and
+        decrypt messages.
+      </p>
+
+      <p>
+        {% with secrets=user.master_key.masterkeysecret_set.all %}
+          We have {{ secrets.count }} password{{ secrets|pluralize }} stored
+          encrypted in our database with the following
+          identifier{{ secrets|pluralize }}:
+          <ul class="list-group">
+            {% for secret in secrets %}
+              <li class="list-group-item list-group-item-action">
+                {{ secret }}
+                {% if secrets.count == 1 %}
+                  <span class="d-inline-block mx-2" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="This password cannot be deleted as it is your only one.">
+                    <button class="btn btn-primary btn-sm btn-round btn-delete" type="button" disabled></button>
+                  </span>
+                {% else %}
+                  <a role="button"
+                  href="{% url 'masterkeysecret-delete' secret.uuid %}"
+                  class="btn btn-primary mx-2 btn-sm btn-round btn-delete"
+                  title="Delete this password."></a>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endwith %}
+      </p>
+
+      <p>
+        If you like, you can add another E2EE password, e.g. for backup
+      </p>
+    {% endcard %}
+    {% card header="Add another password for end-to-end encryption" %}
+      <form action="{% url 'e2ee:masterkeysecret-list' %}" method="POST">
+        {% get_password_create_form as password_create_form %}
+        {% bootstrap_form password_create_form %}
+
+        <input type="submit" name="submit_json_" value="I wrote down my passphrase" class="btn btn-primary wait-for-serviceworker" disabled>
+      </form>
+
+      {% addtoblock "js" %}
+        {{ password_create_form.media.js }}
+      {% endaddtoblock %}
+    {% endcard %}
+  </div>
+
+  {% endif %}
+
+  <h2 class="mt-4">Your active sessions</h2>
+
+  {% get_session_keys as session_keys %}
+
+  {% if not session_keys %}
+    <p class="mb-4">
+      We do not have any records for session with end-to-end encryption.
+    </p>
+  {% else %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
+      {% for session_key in session_keys %}
+        <div class="col">
+          {% card card_class="h-100" header=session_key %}
+            {% if session_key.ignore %}
+            <span class="badge bg-warning">E2EE ignored</span>
+            {% elif not session_key.secret %}
+              <p>
+                End-to-end encryption is not enabled for this session and
+                you will not be able to receive or send encrypted messages.
+                Enter the verification number to enable it.
+              </p>
+              <form action="{{ session_key.get_absolute_url }}">
+                {% get_session_key_form session_key as session_key_form %}
+                {% bootstrap_form session_key_form %}
+                <input type="submit" name="submit_json_" value="Enable E2EE"  class="btn btn-primary wait-for-serviceworker" disabled>
+              </form>
+
+              {% addtoblock "js" %}
+                {{ session_key_form.media.js }}
+              {% endaddtoblock %}
+
+            {% else %}
+              <span class="badge bg-success text-dark">E2EE enabled!</span>
+            {% endif %}
+          {% endcard %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% addtoblock "js" %}
+    <script>
+      $(function () {
+        $('[data-bs-toggle="popover"]').popover()
+      })
+    </script>
+  {% endaddtoblock %}
+
+{% endblock %}

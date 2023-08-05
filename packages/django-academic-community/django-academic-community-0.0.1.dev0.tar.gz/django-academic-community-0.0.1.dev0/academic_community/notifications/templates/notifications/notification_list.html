@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block headline %}Inbox{% endblock %}
+
+{% block action_buttons %}
+  {% if perms.notifications.add_outgoingnotification %}
+    <a class="button btn btn-primary btn-round btn-send" title="Send a notification to other members"
+       href='{% url "notifications:create-notification" %}'></a>
+  {% endif %}
+  <a class="button btn btn-primary btn-round btn-settings" title="Edit notification settings"
+      href='{% url "notifications:settings" %}'></a>
+
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "Notifications"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+
+  {% include "notifications/notification_list_content.html" %}
+
+{% endblock %}

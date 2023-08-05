@@ -1,0 +1,6 @@
+{% load community_utils %}
+{% load sekizai_tags %}
+
+<a href="{{ badge_url }}" class="badge rounded-pill text-decoration-none bg-light text-black m-2 align-self-center {{ badge_class }}" {% if description %}data-bs-toggle="tooltip" data-bs-title="{{ description }}"{% endif %}>
+  {% if badge_icon %}<i class="{{ badge_icon }}"></i>{% endif %} {{ member }}
+</a>

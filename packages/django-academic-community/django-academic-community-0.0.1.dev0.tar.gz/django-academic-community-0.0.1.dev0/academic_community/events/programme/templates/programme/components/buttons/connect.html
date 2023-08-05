@@ -1,0 +1,11 @@
+{% load community_utils %}
+{% load guardian_tags %}
+
+{% if url %}
+  {% get_obj_perms user for meetingroom as "meetingroom_perms" %}
+  {% if perms.programme.view_meetingroom or "view_meetingroom" in meetingroom_perms %}
+    <a href="{{ url }}" class="btn btn-sm btn-link text-decoration-none {{ connect_button_class }}" target="_blank">
+      Connect
+    </a>
+  {% endif %}
+{% endif %}

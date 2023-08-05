@@ -1,0 +1,45 @@
+{% extends "chats/components/channel_conversation.html" %}
+
+{% load community_utils %}
+{% load sekizai_tags %}
+{% load chats %}
+
+{% block threads %}
+  <div id="threads" class="mt-4">
+    {% thread_card thread threadcomment_form expand=True %}
+  </div>
+
+  {% addtoblock "js" %}
+    {% if request.GET.reply %}
+      <script>
+        window.addEventListener("load", function() {
+          function whenAvailable() {
+            var interval = 10; // ms
+            window.setTimeout(function() {
+                if (window.CKEditor) {
+                  document.getElementById("id_thread-{{ thread.id }}-body").focus()
+                } else {
+                    whenAvailable();
+                }
+            }, interval);
+          }
+          whenAvailable();
+        })
+      </script>
+    {% endif %}
+  {% endaddtoblock %}
+
+{% endblock %}
+
+{% block initial_decryption %}
+  {% if thread.encryption_key %}
+    decryptElem("thread-data", {{ thread.pk }});
+  {% endif %}
+  {% for threadcomment in thread.threadcomment_set.all %}
+    {% if threadcomment.encryption_key %}
+      {% with elem_id=threadcomment|object_id|str_add:"-js" %}
+        decryptElem("{{ elem_id }}", {{ threadcomment.pk }});
+      {% endwith %}
+    {% endif %}
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,19 @@
+<p>Hello {{ topic.leader.first_name }} {{ topic.leader.last_name }}!</p>
+
+<p>
+    {{ communitymember }} asks to become a member of the following topic:
+</p>
+<p><a href="{{ root_url }}{{ topic.get_absolute_url }}">{{ topic }}</a></p>
+
+{% url 'topics:topicmembership-approve' topic.id_name topicmembership.pk as membership_uri %}
+
+<p>
+    Please approve it at
+    <a href="{{ root_url }}{{ membership_uri }}">
+        {{ root_url }}{{ membership_uri }}
+    </a>
+</p>
+<p>
+    Best,<br>
+    Your Community Managers.
+</p>

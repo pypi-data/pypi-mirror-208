@@ -1,0 +1,870 @@
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load django_bootstrap5 %}
+{% load community_buttons %}
+{% load sekizai_tags %}
+{% load static %}
+{% load chats %}
+{% load e2ee %}
+
+
+{% if channel.e2e_encrypted and not request.session|e2ee_enabled %}
+  <div class="alert alert-danger" role="alert">
+    Messages in this channel are end-to-end encrypted but your session
+    is not. To read or post comments in this channel,
+    {% if request.session|e2ee_ignored %}
+      please enable end-to-end encryption by
+      <a href="{% url 'logout' %}?next={% url_for_next %}" class="alert-link">
+        logging out and logging in again
+      </a>
+      and entering your end to end encryption password.
+    {% else %}
+      <a role="button" data-bs-toggle="modal" href="#e2e-sessionkey-modal">
+        click here
+      </a>
+      and enter your end-to-end encryption password.
+    {% endif %}
+  </div>
+{% endif %}
+
+{% block threads %}
+  <div id="threads" class="overflow-auto mt-4 max-vh-100 mb-6">
+  </div>
+{% endblock %}
+
+{% addtoblock "js" %}
+  {% if thread_form and user|can_start_thread:channel %}
+    <script>
+      function startThread() {
+        let tab = document.getElementById("conversationTab")
+        if (tab) {
+          let bsTab = bootstrap.Tab.getOrCreateInstance(tab);
+          bsTab.show();
+        }
+        let wrapper = document.getElementById('start-thread-wrapper');
+        wrapper.scrollIntoView();
+        wrapper.querySelector("div[name=body]").focus();
+      }
+      window.addEventListener("load", function() {
+        let offcanvas = document.getElementById("start-thread-offcanvas");
+        offcanvas.addEventListener("shown.bs.offcanvas", (event) => {
+          event.target.querySelector("div[name=body]").focus();
+          document.getElementById("show-thread-offcanvas").classList.add("d-none");
+        })
+        offcanvas.addEventListener("hidden.bs.offcanvas", (event) => {
+          event.target.querySelector("div[name=body]").focus();
+          document.getElementById("show-thread-offcanvas").classList.remove("d-none");
+        })
+      })
+    </script>
+  {% endif %}
+{% endaddtoblock %}
+
+
+{% block thread_form %}
+  {% if thread_form and user|can_start_thread:channel %}
+    {% if not channel.e2e_encrypted or request.session|e2ee_enabled %}
+      <div id="start-thread-wrapper">
+        <div class="offcanvas-lg offcanvas-bottom" style="--bs-offcanvas-height: auto;" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="start-thread-offcanvas">
+          <div class="offcanvas-body small">
+            <div class="d-flex align-items-end flex-column">
+              <button type="button" class="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#start-thread-offcanvas" aria-label="Close"></button>
+            </div>
+            <form role="form" onsubmit="publishComment(event)">
+              {% if thread_form.topic %}
+                {% bootstrap_field thread_form.topic %}
+              {% endif %}
+              {% bootstrap_form thread_form exclude="topic,body" %}
+              <div class="d-flex align-items-center">
+                <div class="w-100 m-2">
+                  {% bootstrap_field thread_form.body show_help=False show_label=False %}
+                </div>
+                <div class="flex-shrink-1">
+                  {% bootstrap_button '<i class="fas fa-paper-plane"></i>' button_type="submit" extra_classes="me-2 px-4" %}
+                </div>
+              </div>
+              {% include "chats/components/comment_upload_alert.html" %}
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% addtoblock "css" %}
+  {% if thread_form %}{{ thread_form.media.css }}{% elif threadcomment_form %}{{ threadcomment_form.media.css }}{% endif %}
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  {% if thread_form %}{{ thread_form.media.js }}{% elif threadcomment_form %}{{ threadcomment_form.media.js }}{% endif %}
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>
+    function preventNotification(event) {
+      if (event.detail.notification_type == "chatnotification") {
+        if (event.detail.channel_id == {{ channel.channel_id }}) {
+          event.preventDefault();
+          if (!event.detail.unread) {
+            var commentElem = document.getElementById(`comment-${event.detail.comment}-card`);
+            if (commentElem) {
+              setTimeout(markCommentAsRead, 5000, commentElem);
+            }
+          }
+        }
+      }
+    }
+
+    document.addEventListener("notification", preventNotification)
+  </script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src='{% static "js/e2ee/utils.js" %}'></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src="https://cdn.jsdelivr.net/npm/xss@v1.0.14/dist/xss.min.js"></script>
+  <script src='{% static "js/channels/filterxss.js" %}'></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+
+  <script>
+
+    var editors = {};
+
+    function createPopovers() {
+      const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+      const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    }
+
+    function sendChannelMessage(data) {
+      let event = new CustomEvent(
+        "send-channel-message",
+        {bubbles: true, cancelable: true, detail: data}
+      );
+      document.dispatchEvent(event);
+    }
+
+    function publishComment(event) {
+      event.preventDefault();
+
+      let form = event.srcElement;
+      let formData = new FormData(form);
+
+      let arrayData = Array.from(formData.entries(), ([x, y]) => ({ [x]: y }));
+
+      let data = arrayData.length ? Object.assign(...arrayData) : {};
+
+      let editorID = event.srcElement.querySelector("[name=body]").id;
+
+      let editor = window.CKEditor.editors[editorID];
+
+      data.body = editor.getData();
+
+      sendChannelMessage(data);
+
+      editor.setData("");
+    }
+
+    var channelWebsocketConnectionAttemps = 0;
+    var channelWebsocketConnectionEstablished = false;
+    var messageCache = [];
+    var initialMessagesReceived = {{ load_threads|ifthenelse:',false,true' }};
+    var oldestCommentLoaded = {{ load_threads|ifthenelse:',false,true' }};
+    var newestCommentLoaded = {{ load_threads|ifthenelse:',false,true' }};
+
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      let ret = (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+      let parentEl = document.getElementById("threads");
+      if (parentEl) {
+        let parentRect = parentEl.getBoundingClientRect();
+        ret = (
+          ret &&
+          (rect.top <= (parentRect.bottom - 2)) &&
+          (rect.bottom >= (parentRect.top + 2))
+        )
+      }
+      return ret
+    }
+
+    function markCommentAsRead(elem) {
+      elem.classList.remove("unread");
+    }
+
+    function markAndPostCommentAsRead(elem) {
+      if (elem.classList.contains("unread")) {
+        setTimeout(markCommentAsRead, 5000, elem);
+        {% if subscription %}
+          let reportUri = "{% url 'rest:edit-commentreadreport' 'COMMENTID' %}";
+          reportUri = reportUri.replace("COMMENTID", elem.dataset.commentId);
+          $.ajax({
+            url: reportUri,
+            type: 'PATCH',
+            data: {unread: false},
+            headers:{'X-CSRFTOKEN': '{{ csrf_token }}'},
+            success: function (data) {}
+          });
+        {% endif %}
+        updateNotificationCount();
+      }
+    }
+
+    function maybeToggleUnread(comment) {
+      var commentElem = document.getElementById(`comment-${comment.id}-card`);
+      if (!comment.unread) {
+        markCommentAsRead(commentElem);
+      } else if (!isInViewport(commentElem)) {
+        if (!document.querySelector(".view-comment-toast.show")) {
+          displayMessageInToast(
+            `<button type="button" class="btn btn-link" data-bs-dismiss="toast" onclick="document.getElementById('comment-${comment.md5}').scrollIntoView()">Jump to latest comments</button>`,
+            "false",
+            "view-comment-toast"
+          )
+        }
+      }
+    }
+
+    function observeThreadFormCallback(entries, observer) {
+      if (entries.filter(entry => entry.isIntersecting).length) {
+        document.getElementById("start-thread-button-wrapper").classList.add("d-none");
+      } else {
+        document.getElementById("start-thread-button-wrapper").classList.remove("d-none");
+      }
+    }
+
+    function observeCommentCallback(entries, observer) {
+      if (document.hasFocus() && document.visibilityState === 'visible') {
+        entries.filter(entry => entry.isIntersecting).forEach(
+          entry => {
+            markAndPostCommentAsRead(entry.target.parentElement);
+            if (entry.target.parentElement.classList.contains("thread-card")) {
+              {% spaceless %}
+                {% if load_threads %}
+                  if (initialMessagesReceived) {
+                    let toast = new bootstrap.Toast(
+                      document.getElementById("loading-messages")
+                    );
+                    if (!toast.isShown()) {
+                      let cardElem = entry.target.parentElement;
+                      if ((!oldestCommentLoaded) && (!cardElem.previousElementSibling)) {
+                        toast.show();
+                        sendChannelMessage({
+                          comment: cardElem.dataset.commentHash,
+                          before: true
+                        })
+                      } else if (!newestCommentLoaded && !cardElem.nextElementSibling) {
+                        toast.show();
+                        sendChannelMessage({
+                          comment: cardElem.dataset.commentHash,
+                          after: true
+                        })
+                      } else if (
+                        cardElem.dataset.threadBefore
+                        && !document.querySelector(`div[data-comment-hash='${cardElem.dataset.threadBefore}']`)
+                      ) {
+                        toast.show();
+                        sendChannelMessage({
+                          comment: cardElem.dataset.commentHash,
+                          before: true
+                        })
+                      } else if (
+                        cardElem.dataset.threadAfter
+                        && !document.querySelector(`div[data-comment-hash='${cardElem.dataset.threadAfter}']`)
+                      ) {
+                        toast.show();
+                        sendChannelMessage({
+                          comment: cardElem.dataset.commentHash,
+                          after: true
+                        })
+                      }
+                    }
+                  }
+                {% endif %}
+              {% endspaceless %}
+            }
+          }
+        )
+      }
+    }
+
+    window.addEventListener("focus", function() {
+      document.querySelectorAll(".comment-card.unread")
+      .forEach(elem => isInViewport(elem) ? markAndPostCommentAsRead(elem) : null);
+    })
+
+    function openChannelSocket() {
+
+      async function decryptComment(comment) {
+        if (comment.encryption_key) {
+          return encryptionKeyStore.getKey(
+            comment.encryption_key
+          ).then(key => key.decryptAndVerfiyString(
+            comment.body, comment.signature, comment.user.id
+          )).then(
+            filterHTML
+          ).catch(
+            err => `
+              <p><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-title="Could not decrypt comment" data-bs-content="Reason: ${err}"><i class="fas fa-info-circle"></i> Encrypted Message</span></p>
+            `
+          )
+        } else {
+          return Promise.resolve(comment.body)
+        }
+      }
+
+      async function createThreadComment(comment, expand=false) {
+        let parentThread = document.getElementById(
+          `comment-${comment.parent_thread.id}-card`
+        );
+        if (!parentThread) {
+          // we need to get the thread first
+          sendChannelMessage({comment: comment.parent_thread.md5});
+          return
+        }
+
+        let threadsWrapper = document.getElementById("threads");
+        let currentScrollTop = threadsWrapper.scrollTop;
+
+        if (!comment.user.communitymember) {
+          comment.user.communitymember = {
+            id: ""
+          }
+        }
+        comment.body = await decryptComment(comment)
+
+        let threadCommentCard = `
+          {% filter escapejs %}
+            {% threadcomment_card %}
+          {% endfilter %}
+        `;
+        parentThread.querySelector(".thread-comments").innerHTML += threadCommentCard;
+
+        if (!comment.can_edit) {
+          let button = document.getElementById(
+            `edit-button-chats-threadcomment-${comment.id}`
+          );
+          button.remove();
+        }
+
+        let expanded;
+
+        let commentController = parentThread.querySelector(".thread-comments-controller");
+        if (commentController.classList.contains("d-none")) {
+          commentController.classList.remove("d-none");
+        }
+        if (expand) {
+          expanded = commentController.getAttribute("aria-expanded") == "false"
+
+          if (expanded) {
+            let collapse = new bootstrap.Collapse(
+              parentThread.querySelector(".thread-comments-collapse")
+            );
+            collapse.show();
+          }
+        }
+        changeThreadButtonText(commentController, parentThread);
+
+        maybeToggleUnread(comment);
+
+        if (expand && initialMessagesReceived) {
+          let referenceElem = expanded ? parentThread.querySelector(".thread-comments-collapse") : document.getElementById(`comment-${comment.id}-card`);
+          threadsWrapper.scrollTop = currentScrollTop + referenceElem.offsetHeight;
+        }
+      }
+
+      {% spaceless %}
+        {% if load_threads %}
+          async function createThread(comment) {
+            if (!comment.user.communitymember) {
+              comment.user.communitymember = {
+                id: ""
+              }
+            }
+            let threadsWrapper = document.getElementById("threads");
+            let threadWrapper = document.createElement("div");
+            comment.body = await decryptComment(comment);
+
+            threadWrapper.innerHTML = `
+            {% filter escapejs %}
+            {% thread_card None %}
+            {% endfilter %}
+            `;
+
+            let thread = threadWrapper.children[0];
+
+            if (comment.expand_for_all) {
+              thread.querySelector("input[name=expand_for_user]").parentElement.classList.add("d-none");
+            }
+
+            if (!comment.topic) {
+              thread.querySelector(".thread-topic").remove();
+            }
+
+            let currentScrollTop = threadsWrapper.scrollTop;
+
+            let append = false;
+
+            let elemAfter, elemBefore;
+            if (comment.next_thread) {
+              elemAfter = document.querySelector(
+                `div[data-comment-hash='${comment.next_thread}']`
+              );
+            } else if (comment.previous_thread) {
+              elemBefore = document.querySelector(
+                `div[data-comment-hash='${comment.previous_thread}']`
+              )
+              if (elemBefore) {
+                elemAfter = elemBefore.nextElementSibling;
+              }
+            }
+            if (!elemAfter) {
+              elemAfter = document.querySelector(
+                `div[data-thread-before='${comment.md5}']`
+              )
+            }
+            if (!elemAfter) {
+              elemBefore = document.querySelector(
+                `div[data-thread-after='${comment.md5}']`
+              )
+              if (elemBefore) {
+                elemAfter = elemBefore.nextElementSibling;
+              }
+            }
+
+            // collapse replies
+            let commentController = thread.querySelector(".thread-comments-controller");
+            let commentCollapse = thread.querySelector(".thread-comments-collapse");
+            if (comment.threadcomment_set.length > 0) {
+              commentController.classList.remove("d-none");
+            }
+            if (comment.expanded) {
+              commentController.setAttribute("aria-expanded", "true")
+              commentCollapse.classList.add("show")
+              changeThreadButtonText(commentController, commentCollapse);
+            }
+
+            commentCollapse.addEventListener("shown.bs.collapse", changeThreadButtonTextHandler)
+            commentCollapse.addEventListener("hidden.bs.collapse", changeThreadButtonTextHandler)
+
+            if (elemAfter) {
+              threadsWrapper.insertBefore(thread, elemAfter);
+            } else if (!comment.previous_thread) {
+              if (threadsWrapper.children.length > 0) {
+                threadsWrapper.insertBefore(
+                  thread, threadsWrapper.children[0]
+                )
+              } else {
+                threadsWrapper.append(thread);
+              }
+            } else if (elemBefore || !comment.next_thread || (threadsWrapper.children.length == 0)) {
+              threadsWrapper.append(thread);
+              append = true;
+            } else {
+              // check the time
+              let timeCreated = new Date(parseInt(comment.date_created));
+              let olderComments = Array.from(threadsWrapper.children).filter(
+                elem => (new Date(parseInt(elem.dataset.timeCreated)) > timeCreated)
+              )
+              if (olderComments.length) {
+                threadsWrapper.insertBefore(
+                  thread, olderComments[0]
+                )
+              } else {
+                threadsWrapper.append(thread);
+              }
+            }
+
+            if (!comment.can_edit) {
+              let button = document.getElementById(
+                `edit-button-chats-thread-${comment.id}`
+              );
+              button.remove();
+            }
+
+            maybeToggleUnread(comment);
+
+            for (let i = 0; i < comment.threadcomment_set.length; i++) {
+              await createThreadComment(comment.threadcomment_set[i]);
+            }
+
+            comment.threadcomment_set.forEach(
+              (threadcomment) => {
+
+                let commentEl = document.getElementById(`comment-${threadcomment.id}-card`);
+                let reactions = commentEl.querySelector(".comment-reactions");
+
+                threadcomment.commentreaction_set.forEach(
+                  (commentreaction) => {
+                    if (commentreaction.user_count > 0) {
+                      reactions.innerHTML += `
+                      {% filter escapejs %}
+                      {% include 'chats/components/buttons/commentreaction_template.html' %}
+                      {% endfilter %}
+                      `;
+                    }
+                  }
+                )
+              }
+            )
+
+            {% if user|can_post_comment:channel %}
+              if (window.CKEditor) {
+                window.CKEditor.init(
+                  document.getElementById(`id_thread-${comment.id}-body`)
+                );
+              }
+            {% endif %}
+
+            if (initialMessagesReceived) {
+              threadsWrapper.scrollTop = currentScrollTop + thread.offsetHeight;
+            }
+          }
+        {% endif %}
+      {% endspaceless %}
+
+      let encryptionKeyStore = new EncryptionKeyStore(
+        {
+          'X-CSRFTOKEN': "{{ csrf_token }}",
+          'Content-Type': 'application/json'
+        },
+        "{% url 'e2ee:home' %}"
+      );
+
+      async function decryptElem(elemId, commentId) {
+        let elemData = JSON.parse(
+            document.getElementById(elemId).textContent
+          );
+          return decryptComment(elemData).then(
+            message => {
+              $(`#comment-${commentId}-body`).html(message);
+              createPopovers();
+              createTooltips();
+            }
+          )
+      }
+
+      {% block initial_decryption %}
+        {% if channel.encryption_key %}
+          decryptElem("channel-data", {{ channel.id }});
+        {% endif %}
+      {% endblock %}
+
+      const channelSocket = new WebSocket(
+        '{{ websocket_root_url }}/ws/channels/'
+        + '{{ channel.channel_id }}'
+        + '/'
+      );
+
+      async function updateOrCreateComment(comment) {
+        let commentBody = document.getElementById(
+          `comment-${comment.id}-body`
+        );
+
+        let created = false;
+        if (commentBody) {
+          if (commentBody.innerHTML.replace(/\n/g, "") != comment.body.replace(/\n/g, "")) {
+            decryptComment(comment).then(
+              body => {
+                if (body.trim() != commentBody.innerHTML.trim()) {
+                  commentBody.innerHTML = body;
+                  let cardElem = document.getElementById(`comment-${comment.id}-card`);
+                  cardElem.classList.add("unread");
+                }
+              })
+            if (comment.type == "channel") {
+              let title = document.getElementById("page-title");
+              title.innerHTML = comment.name;
+            }
+          }
+        } else {
+          if (comment.type == "threadcomment") {
+            await createThreadComment(comment, true);
+            created=true;
+          } else if (comment.type == "thread") {
+            {% if load_threads %}
+              await createThread(comment);
+              created=true;
+            {% else %}
+              return
+            {% endif %}
+          }
+
+          let threadsWrapper = document.getElementById("threads");
+          if (threadsWrapper.children.length) {
+            if (!threadsWrapper.firstElementChild.dataset.threadBefore) {
+              oldestCommentLoaded = true;
+            }
+            if (!threadsWrapper.lastElementChild.dataset.threadAfter) {
+              newestCommentLoaded = true;
+            }
+          }
+        }
+
+        let commentEl = document.getElementById(`comment-${comment.id}-card`);
+
+        let reactions = commentEl.querySelector(".comment-reactions");
+        comment.commentreaction_set.forEach(
+          (commentreaction) => {
+            if (commentreaction.user_count > 0) {
+              reactions.innerHTML += `
+              {% filter escapejs %}
+              {% include 'chats/components/buttons/commentreaction_template.html' %}
+              {% endfilter %}
+              `;
+            }
+          }
+        )
+
+        {% if user|can_post_comment:channel %}
+          document.querySelectorAll(".btn-commentreaction").forEach(
+            (elem) => {
+              elem.addEventListener("click", submitCommentReaction)
+            }
+          )
+        {% endif %}
+
+        document.querySelectorAll(".comment-top").forEach(card => commentObserver.observe(card));
+
+        if (created) {
+          refreshAllTimeSince();
+          if (commentEl) {
+            let previousEl = commentEl.previousElementSibling;
+            if (previousEl && (isInViewport(previousEl))) {
+              if (!isInViewport(commentEl)) {
+                commentEl.scrollIntoView();
+              }
+            }
+          }
+        }
+      }
+
+      document.addEventListener("send-channel-message", function (event) {
+
+        function sendEvent(event) {
+          if (!channelWebsocketConnectionEstablished) {
+            messageCache.push(JSON.stringify(event.detail));
+          } else {
+            channelSocket.send(JSON.stringify(event.detail));
+          }
+        }
+
+        {% if channel.e2e_encrypted %}
+          if (event.detail.body) {
+            encryptionKeyStore.getKey(
+              "{{ channel.encryption_key }}"
+            ).then(
+              key => key.encryptAndSignString(event.detail.body)
+            ).then(
+              ({message, signature}) => {
+                event.detail.body = filterHTML(message);
+                event.detail.signature = signature;
+                event.detail.encryption_key = "{{ channel.encryption_key }}";
+                sendEvent(event);
+              }
+            )
+          } else {
+            sendEvent(event);
+          }
+        {% else %}
+          sendEvent(event);
+        {% endif %}
+      })
+
+      channelSocket.addEventListener("open", function(e) {
+        console.log("Websocket connection established.");
+        if (!channelWebsocketConnectionEstablished && !initialMessagesReceived) {
+          {% if request.GET.comment %}
+            channelSocket.send(JSON.stringify(
+              {
+                comment: "{{ request.GET.comment }}",
+                scrollTo: "{{ request.GET.comment }}"
+              }
+            ));
+          {% elif load_threads %}
+            channelSocket.send("{}");
+          {% else %}
+            initialMessagesReceived = true;
+          {% endif %}
+        }
+        channelWebsocketConnectionEstablished = true;
+        websocketConnectionAttemps = 0;
+        let messageCacheSaved = messageCache;
+        messageCache = [];
+        for (let i=0; i<messageCacheSaved.length; i++) {
+          channelSocket.send(messageCacheSaved[i]);
+        }
+      })
+
+      channelSocket.addEventListener("message", async function(e) {
+        const data = JSON.parse(e.data);
+
+        if (data.type == "threads") {
+          {% if request.session|e2ee_enabled %}
+            // first extract the encryption keys
+            let newKeys = [];
+            data.threads.forEach(
+              thread => {
+                newKeys.push({encryption_key: thread.encryption_key});
+                thread.threadcomment_set.forEach(
+                  comment => newKeys.push({encryption_key: comment.encryption_key})
+                )
+              }
+            )
+            await encryptionKeyStore.extractKeys(newKeys);
+          {% endif %}
+          for (let i = 0; i < data.threads.length; i++) {
+            await updateOrCreateComment(data.threads[i])
+          }
+          if (data.comment) {
+            var toastElem;
+            if (data.before) {
+              toastElem = document.getElementById(`load-messages-before-${data.comment}`);
+            } else {
+              toastElem = document.getElementById(`load-messages-after-${data.comment}`);
+            }
+            if (toastElem) {
+              let toast = new bootstrap.Toast(toastElem);
+              toast.dispose();
+            }
+          }
+        } else if (data.type == "commentreaction") {
+          let commentEl = document.getElementById(`comment-${data.comment}-card`);
+          if (commentEl) {
+            let reactions = commentEl.querySelector(".comment-reactions");
+            let reactionEl = reactions.querySelector(`button[data-emoji-value='${data.emoji_name}']`);
+            if (reactionEl){
+              if (data.user_count == 0) {
+                reactionEl.remove();
+              } else {
+                reactionEl.querySelector(".reaction-count").innerHTML = data.user_count
+              }
+            } else {
+              let commentreaction = data;
+              reactions.innerHTML += `
+                {% filter escapejs %}
+                {% include 'chats/components/buttons/commentreaction_template.html' %}
+                {% endfilter %}
+                `;
+              {% if user|can_post_comment:channel %}
+                document.querySelectorAll(".btn-commentreaction").forEach(
+                  (elem) => {
+                    elem.addEventListener("click", submitCommentReaction)
+                  }
+                )
+              {% endif %}
+            }
+          }
+
+        } else {
+          await updateOrCreateComment(data);
+        }
+
+        if (data.scrollTo && (!initialMessagesReceived)) {
+          let elem = document.getElementById(`comment-${data.scrollTo}`);
+          if (elem) {
+            elem.scrollIntoView();
+          }
+        }
+
+        setTimeout(() => {
+          initialMessagesReceived = true;
+        }, 500);
+
+        setTimeout(() => {
+          let elem = document.getElementById("loading-messages");
+          if (elem) {
+            let toast = new bootstrap.Toast(
+              document.getElementById("loading-messages")
+            );
+            toast.dispose();
+          }
+        }, 1000);
+
+        createPopovers();
+        createTooltips();
+        if (typeof(createCommentPopovers) !== "undefined") { createCommentPopovers(); }
+        {% if user.is_authenticated %}
+          queryUserStatus();
+        {% endif %}
+        document.querySelectorAll(".thread-comments-collapse").forEach(
+          (elem) => {
+            elem.addEventListener("shown.bs.collapse", changeThreadButtonTextHandler)
+            elem.addEventListener("hidden.bs.collapse", changeThreadButtonTextHandler)
+          }
+        )
+      })
+
+      channelSocket.addEventListener("close", function(event) {
+        channelWebsocketConnectionEstablished = false;
+        if (!event.wasClean) {
+          channelWebsocketConnectionAttemps++;
+          if (channelWebsocketConnectionAttemps < 5) {
+            console.error(`Websocket connection died. Reconnecting in 5 seconds... Attempt ${channelWebsocketConnectionAttemps} of 5.`);
+            setTimeout(openChannelSocket, 5000);
+          } else {
+            console.error("Stop connecting after 5 attempts...");
+            displayMessageInToast(
+              "Lost connection to the websocket. Please <button type='button' onclick='window.location.reload()' class='btn btn-link'>reload the page</a>."
+            );
+          }
+        }
+      })
+
+      channelSocket.addEventListener("error", function(error) {
+        console.error(`Chat socket closed unexpectedly. Reason: ${error.message}.`);
+      })
+    }
+
+    var commentObserver = new IntersectionObserver(
+      observeCommentCallback,
+      {
+        root: document.querySelector("#page-content"),
+        threshold: 0.9
+      }
+    );
+    document.querySelectorAll(".comment-top").forEach(card => commentObserver.observe(card));
+
+    {% if thread_form and user|can_start_thread:channel %}
+      var threadFormObserver = new IntersectionObserver(
+        observeThreadFormCallback,
+        {
+          root: document.querySelector("#page-content"),
+          threshold: 0.9
+        }
+      );
+
+      threadFormObserver.observe(document.getElementById("start-thread-offcanvas"))
+    {% endif %}
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // open the channel socket as soon as the CMS and CKEditor scripts are
+      // loaded
+      {% if load_threads %}
+        displayMessageInToast(
+          `<div>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading messages
+          </div>`,
+          "false",
+          "",
+          "loading-messages"
+        );
+      {% endif %}
+      openChannelSocket();
+    }, {passive: true})
+  </script>
+
+{% endaddtoblock %}

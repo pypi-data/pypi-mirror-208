@@ -1,0 +1,66 @@
+{% load static %}
+{% load community_utils %}
+{% load django_bootstrap5 %}
+{% load history %}
+
+<p>
+    <div class="card w-100">
+        <div class="card-header">
+            {{ revision }}
+        </div>
+        <ul class="list-group list-group-horizontal-md">
+            <li class="list-group-item col-12 col-md-6">
+                <i class="far fa-clock"></i> {{ revision.date_created }}
+            </li>
+            <li class="list-group-item col-12 col-md-6">
+                <i class="fas fa-user"></i> {{ revision.user }}
+            </li>
+        </ul>
+    </div>
+</p>
+
+{% if revision.revisionreview and revision.revisionreview.reviewed %}
+    <div class="alert alert-success" role="alert">
+        <i class="fas fa-check"></i> Changes have been reviewed by {{ revision.revisionreview.reviewer }}
+     </div>
+{% else %}
+    <form role="form" method="post">
+        {% csrf_token %}
+        {{ form }}
+        {% bootstrap_button "Mark as reviewed" button_type="submit"  %}
+    </form>
+{% endif %}
+
+<h2>Changes:</h2>
+
+<ul class="list-group">
+    {% for version in revision.version_set.all %}
+        {% if version.content_type.model != "academicorganization" %}
+            <li class="list-group-item col-12">
+                <b>{{ version.content_type.name|capfirst }}:</b> {{ version }}
+                <br>
+                {% get_previous_version version as previous_version %}
+                {% get_admin_url_name version.content_type "revision" as version_uriname %}
+                {% if previous_version %}
+                    <a href="{% get_compare_url version previous_version %}">Compare</a> |
+                    <a href="{% url version_uriname previous_version.object_id previous_version.id %}">Restore previous version</a> |
+                {% endif %}
+                {% get_admin_url_name version.content_type "change" as model_uriname %}
+                {% url model_uriname version.object_id  as admin_url %}
+                {% if admin_url %}
+                  <a href="{{ admin_url }}">
+                    <i class="fas fa-arrow-alt-circle-right"></i> View on admin site
+                  </a>
+                {% endif %}
+                {% with absolute_url=version|get_object_absolute_url %}
+                  {% if absolute_url %}
+                    |
+                    <a href="{{ absolute_url }}">
+                      <i class="fas fa-arrow-alt-circle-right"></i> View on site
+                    </a>
+                  {% endif %}
+                {% endwith %}
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

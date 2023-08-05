@@ -1,0 +1,45 @@
+{% extends "chats/components/channel_item.html" %}
+{% load community_badges %}
+{% load community_utils %}
+{% load chats %}
+
+{% block channel_name %}
+  <div class="d-inline-flex">
+    {% if channel.issue.status.is_closed %}
+      <a href="{% add_to_filters 'open' False path=channel.get_list_url remove=True %}" class="text-info align-self-start mt-2 text-decoration-none">
+        <i class="far fa-check-circle" data-bs-toggle="tooltip" data-bs-title="Status: {{ channel.issue.status }}"></i>
+      </a>
+    {% else %}
+      <a href="{% add_to_filters 'open' True path=channel.get_list_url remove=True %}" class="text-secondary align-self-start mt-2 text-decoration-none">
+        <i class="far fa-times-circle" data-bs-toggle="tooltip" data-bs-title="Status: {{ channel.issue.status }}"></i>
+      </a>
+    {% endif %}
+    {{ block.super }}
+  </div>
+{% endblock %}
+
+{% block top_badges %}
+  {% if channel.user.communitymember %}
+    {% add_to_filters "user" channel.user.pk path=channel.get_list_url as filter_url %}
+    {% member_badge channel.user.communitymember description="created by "|str_add:channel.user.communitymember badge_url=filter_url %}
+  {% endif %}
+  {{ block.super }}
+{% endblock %}
+
+{% block bottom_row_badges %}
+  {% for member in channel.issue.assignees.all %}
+    {% add_to_filters "assignees" member.pk path=channel.get_list_url as filter_url %}
+    {% member_badge member description="assigned to "|str_add:member badge_icon='fas fa-user-tag' badge_url=filter_url badge_class="d-none d-md-block" %}
+  {% endfor %}
+  {{ block.super }}
+  <a href="{% add_to_filters 'tracker' channel.issue.tracker.pk path=channel.get_list_url %}" class="badge mx-1 me-auto bg-secondary rounded-pill text-decoration-none align-self-center text-black" data-bs-toggle="tooltip" data-bs-title="Tracker: {{ channel.issue.tracker }}">
+    {{ channel.issue.tracker }}
+  </a>
+{% endblock %}
+
+{% block channel_id %}
+  <a href="{% add_to_filters 'priority' channel.issue.priority.pk path=channel.get_list_url %}" class="badge mx-1 rounded-pill {% priority_badge_class channel.issue.priority %} me-2 text-decoration-none align-self-center text-black" data-bs-toggle="tooltip" data-bs-title="Priority: {{ channel.issue.priority }}">
+    {{ channel.issue.priority }}
+  </a>
+  {{ block.super }}
+{% endblock %}

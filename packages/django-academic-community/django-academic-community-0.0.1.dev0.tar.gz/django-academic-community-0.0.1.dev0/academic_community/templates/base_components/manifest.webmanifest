@@ -1,0 +1,23 @@
+{% spaceless %}
+{% load static %}
+{% load community_utils %}
+{% with default_description='Website to manage the '|add:community_name|add:'.' %}
+{
+    "name": {% block name %}{{ community_name|js }}{% endblock %},
+    "short_name": {% block short_name %}{{ community_abbreviation|default:community_name|js }}{% endblock %},
+    "description": {% block description %}{{ meta_description|default:default_description|striptags|truncatewords:20|js }}{% endblock %},
+    "start_url": "{{ next_url|default:index_url }}",
+    "display": "minimal-ui",
+    "scope": "{{ index_url|trailing_slash }}",
+    "orientation": "any",
+    "background_color": "#ffffff",
+    "theme_color": "#0A0302",
+    "status_bar": "default",
+    "icons": [
+        {% block icons %}{"src": "{{ root_url }}{% static 'images/logo_160x160.png' %}", "sizes": "160x160"}{% endblock %}
+    ],
+    "dir": "ltr",
+    "lang": "en-US"
+}
+{% endwith %}
+{% endspaceless %}

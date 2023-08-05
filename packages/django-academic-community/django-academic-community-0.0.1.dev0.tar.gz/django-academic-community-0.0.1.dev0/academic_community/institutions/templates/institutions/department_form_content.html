@@ -1,0 +1,43 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% bootstrap_form_errors form %}
+{% bootstrap_form form %}
+
+<h2>Units</h2>
+<p>
+  <div id="unit-accordion">
+
+    {{ form.units.management_form }}
+    {{ form.units.non_form_errors }}
+
+    {% for unit in form.units.forms %}
+      {% with unitid=unit.instance.id|stringformat:"s"|default:'new' %}
+        {% with unit_collapse_id="collapse-unit-"|add:unitid %}
+          <div class="card">
+            <div class="card-header" id="heading-{{ unit_collapse_id }}">
+              <h3 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ unit_collapse_id }}" aria-expanded="true" aria-controls="{{ unit_collapse_id }}">
+                  {% if unit.instance.id %}
+                    {{ unit.instance }}
+                  {% else %}
+                  <i class="fas fa-plus-circle"></i> Add a new unit
+                  {% endif %}
+                </button>
+              </h3>
+            </div>
+            <div id="{{ unit_collapse_id }}" class="collapse" aria-labelledby="heading-{{ unit_collapse_id }}" data-bs-parent="#unit-accordion">
+              <div class="card-body">
+
+                {{ unit.management_form }}
+                {{ unit.non_form_errors }}
+
+                {% bootstrap_form unit %}
+              </div>
+            </div>
+          </div>
+        {% endwith %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+</p>

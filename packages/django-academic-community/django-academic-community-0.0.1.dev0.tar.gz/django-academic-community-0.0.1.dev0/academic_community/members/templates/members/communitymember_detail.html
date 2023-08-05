@@ -1,0 +1,182 @@
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load activities %}
+{% load bootstrap_helpers %}
+
+{% load community_utils %}
+{% load members %}
+{% load topics %}
+
+{% block title %}Member Profile{% endblock %}
+
+{% block headline %}{% if communitymember.title %}{{ communitymember.get_title_display }} {% endif %}{{ communitymember.first_name }} {{ communitymember.last_name }}{% endblock %}
+{% block subtitle %}
+  {% member_roles communitymember as roles %}
+  {{ roles|capfirst }}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url communitymember|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block action_buttons %}
+    {% get_obj_perms user for communitymember as "member_perms" %}
+    {% url "members:profile" as profile_url %}
+    {% if perms.members.change_communitymember or "change_communitymember" in member_perms %}
+      {% if request.path == profile_url %}
+        <a class="button btn btn-primary btn-round btn-edit" title="Edit your profile"
+          href="{% url 'members:edit-profile' %}" role="button">
+        </a>
+      {% else %}
+        {% edit_button communitymember %}
+      {% endif %}
+    {% endif %}
+
+    {% if not communitymember.is_member %}
+      {% if request.path == profile_url or user.communitymember.pk == communitymember.pk %}
+        {% url 'members:self-become-member' as become_member_url %}
+        {% if become_member_url %}
+          <a class="button btn btn-primary btn-round btn-join" title="Become a community member"
+            href="{{ become_member_url }}" role="button">
+          </a>
+        {% endif  %}
+      {% elif user.communitymember.is_member %}
+        {% url 'members:approve-member' communitymember.pk as become_member_url %}
+        {% if become_member_url %}
+          <a class="button btn btn-primary btn-round btn-join" title="Approve as community member"
+            href="{{ become_member_url }}" role="button">
+          </a>
+        {% endif  %}
+      {% endif %}
+    {% endif %}
+
+
+    {% if perms.reversion.view_revision %}
+        <a class="button btn btn-primary btn-round btn-history" title="View the history"
+           href='{% url "members:communitymember-history" communitymember.pk %}'></a>
+    {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% for membership in communitymember.active_memberships %}
+      {% organization_card membership.organization.organization.parent_institution base_id="member-institution-" %}
+    {% endfor %}
+    {% with body_class="p-0" %}
+      {% card header="Contact" %}
+        <ul class="list-group">
+          <li class="list-group-item">
+            <strong>
+              {% if communitymember.title %}{{ communitymember.get_title_display }} {% endif %}{{ communitymember.first_name }} {{ communitymember.last_name }}
+            </strong>
+          </li>
+          {% if communitymember.user %}
+            {% get_obj_perms user for communitymember as "member_perms" %}
+            {% if perms.auth.view_availability or "view_availability" in member_perms %}
+              <li class="list-group-item availability-text" data-availability-id="{{ communitymember.user.id }}">
+              </li>
+            {% endif %}
+          {% endif %}
+          {% if communitymember.website %}
+            <li class="list-group-item">
+              {% website_button communitymember %}
+            </li>
+          {% endif %}
+          {% if communitymember.orcid %}
+            <li class="list-group-item">
+              {% orcid_button communitymember True %}
+            </li>
+          {% endif %}
+          {% if communitymember.email %}
+            <li class="list-group-item">
+              {% email_button communitymember True %}
+            </li>
+          {% endif %}
+          {% if communitymember.phone_number %}
+            <li class="list-group-item">
+              {% phone_number_button communitymember True %}
+            </li>
+          {% endif %}
+        </ul>
+      {% endcard %}
+      {% card header="Stats" %}
+        {% start_date_badge communitymember %}
+        {% end_date_badge communitymember %}
+        {% active_topics_badge communitymember communitymember.open_topicmemberships %}
+      {% endcard %}
+      {% with activities=communitymember.activities.all %}
+        {% if activities %}
+          {% card header="Working/Project Groups" %}
+            {% for activity in activities %}
+              {% activity_badge activity %}
+            {% endfor %}
+          {% endcard %}
+        {% endif %}
+      {% endwith %}
+    {% endwith %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  {% if communitymember.description %}
+    <div class="mb-4">{{ communitymember.description }}</div>
+  {% endif %}
+
+  {% with card_class="mb-4" %}
+    {% with memberships=communitymember.active_memberships %}
+      {% if memberships %}
+        {% collapsible_card "Affiliations" "affiliations" "" body_class="p-0" show=True %}
+          {% affiliation_rows memberships True %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% with topics=communitymember.open_topics %}
+      {% if topics %}
+        {% collapsible_card "Active topics" "active-topics-" "" body_class="p-0" show=True %}
+          {% topic_rows topics %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% with lead=communitymember.activity_leader.all_active contact=communitymember.organization_contact.all %}
+      {% if lead or contact %}
+        {% collapsible_card "Roles in the community" "roles" "" body_class="p-0" %}
+          {% if lead %}
+            {% card header=communitymember|stringformat:"s"|add:" is the leader of the following activities" %}
+              {% activity_cards lead %}
+            {% endcard %}
+          {% endif %}
+          {% if contact %}
+            {% card header=communitymember|stringformat:"s"|add:" is the contact person of the following organizations" %}
+              {% institution_rows contact True False "all" base_id="contact-organization-" %}
+            {% endcard %}
+          {% endif %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% with memberships=communitymember.former_memberships %}
+      {% if memberships %}
+        {% collapsible_card "Former affiliations" "former-affiliations" "" body_class="p-0" %}
+          {% affiliation_rows memberships True %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% with topics=communitymember.finished_topics %}
+      {% if topics %}
+        {% collapsible_card "Finished topics" "inactive-topics-" "" body_class="p-0" %}
+          {% topic_rows topics %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+  {% endwith %}
+{% endblock %}

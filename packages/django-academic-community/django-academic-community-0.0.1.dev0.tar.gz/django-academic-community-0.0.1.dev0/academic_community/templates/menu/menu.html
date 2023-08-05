@@ -1,0 +1,24 @@
+{% load community_utils %}
+
+
+{% for child in children %}
+  {% with url_params=request.user|can_change_page:child|ifthen:request.toolbar.show_toolbar|ifthen:"?edit" %}
+    <li class="list-group-item list-group-item-action border-0 {% if child.selected %}active{% endif %} pb-0">
+      <div class="btn-group">
+        <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}{{ url_params }}" class="btn ps-0 border-0 {% if child.selected %}text-white{% else %}text-black{% endif %} text-decoration-none">{{ child.get_menu_title }}</a>
+        {% if child.children %}
+          <button class="btn align-self-center btn-caret mb-0 btn-round {% if not child.ancestor and not child.selected %}collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#sidebar-collapse-{{child.id}}" aria-expanded="{% if child.ancestor or child.selected %}true{% else %}false{% endif %}">
+          </button>
+        {% endif %}
+      </div>
+    </li>
+    {% if child.children %}
+      <li class="list-group-item border-0 pb-0">
+        <div class="collapse {% if child.ancestor or child.selected %}show{% endif %}" id="sidebar-collapse-{{child.id}}">
+          <ul class="list-group fw-normal pb-1">
+          {% show_user_menu from_level to_level extra_inactive extra_active template "" "" child %}
+        </ul>
+      </li>
+    {% endif %}
+  {% endwith %}
+{% endfor %}

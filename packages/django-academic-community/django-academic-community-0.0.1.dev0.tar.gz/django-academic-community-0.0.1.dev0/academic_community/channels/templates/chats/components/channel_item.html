@@ -1,0 +1,72 @@
+{% load humanize %}
+{% load chats %}
+{% load community_utils %}
+{% load activities %}
+{% load sekizai_tags %}
+
+<div class="{{ channel_item_class|default:'list-group-item list-group-item-action' }} p-2 {% if highlight.pk == channel.pk %}border border-3 border-primary{% endif %}" aria-current="true">
+  <div class="d-flex w-100 justify-content-between">
+    {% block top_row %}
+      {% block channel_name %}
+        {% with subscription=channel|subscription_for:user %}
+          <h5 class="mb-1 channel-item {% if subscription.unread %}unread{% endif %}" data-channel-id="{{ channel.channel_id }}">
+            <a href="{{ channel.get_absolute_url }}" role="button" class="btn text-start fw-bold">
+              {{ channel|name_for:user }}
+            </a>
+          </h5>
+        {% endwith %}
+      {% endblock %}
+      <div>
+        {% block top_badges %}
+          {% if not hide_followers %}
+            {% with followers=channel.followers.count %}
+              <div class="badge rounded-pill text-decoration-none align-self-center text-black d-none d-md-inline-block" data-bs-toggle="tooltip" data-bs-title="{{ followers }} follower{{ followers|pluralize }}">
+                <i class="fas fa-users"></i> {{ followers }}
+              </div>
+            {% endwith %}
+          {% endif %}
+          {% if not hide_comments %}
+            {% with comments=channel|comment_count %}
+              <div class="badge rounded-pill text-decoration-none align-self-center text-black d-none d-md-inline-block" data-bs-toggle="tooltip" data-bs-title="{{ comments }} comment{{ comments|pluralize }}">
+                <i class="far fa-comments"></i> {{ comments }}
+              </div>
+            {% endwith %}
+          {% endif %}
+          <div class="badge rounded-pill text-decoration-none fw-normal align-self-center text-black" data-bs-toggle="tooltip" data-bs-title="last comment {{ channel.last_comment_modification_date|naturaltime }}">
+            <i class="fas fa-comment"></i> {{ channel.last_comment_modification_date|naturaltime }}
+          </div>
+        {% endblock %}
+      </div>
+    {% endblock %}
+  </div>
+  {% block bottom_row %}
+    <div class="d-flex flex-wrap flex-row-reverse">
+      {% block bottom_row_badges %}
+        {% if not hide_keywords %}
+          {% for keyword in channel.keywords.all %}
+            {% channelkeyword_badge keyword channel %}
+          {% endfor %}
+        {% endif %}
+        {% if not channel.get_list_url|same_url:request.path %}
+          <a href="{% remove_param "page" channel.get_list_url %}" class="badge rounded-pill text-decoration-none bg-primary align-self-center m-2">
+            {{ channel.channel_type|verbose_model_name }}
+          </a>
+        {% endif %}
+        {% if not hide_activities %}
+          {% for channel_relation in channel.activitychannelrelation_set.all %}
+            {% add_to_filters "activity" channel_relation.activity.pk path=channel_relation.get_list_url remove=True as filter_url %}
+            {% activity_badge channel_relation.activity badge_url=filter_url %}
+          {% endfor %}
+        {% endif %}
+        <small class="align-self-center d-none d-md-block"><i class="far fa-clock"></i> created {{ channel.date_created|naturaltime }}</small>
+        {% block channel_id %}
+          <div class="mx-3 align-self-center">
+            <span class="text-muted">
+              #{{ channel.channel_id }}
+            </span>
+          </div>
+        {% endblock %}
+      {% endblock %}
+    </div>
+  {% endblock %}
+</div>

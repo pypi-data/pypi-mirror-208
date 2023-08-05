@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Leave {{ activity.category.abbreviation }} {{ activity.abbreviation }}{% endblock %}
+
+{% block headline %}Leave {{ activity.name }}{% endblock %}
+{% block subtitle %}{{ activity.category.abbreviation }} {{ activity.abbreviation }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'activities:activities' as activities_url %}
+  {% with activities_url=activities_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Working groups"|combine:activities_url activity.abbreviation|combine:activity.get_absolute_url "Join"|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  {% if not user.communitymember %}
+    {% bootstrap_alert content="You user does not have an associated community member profile." alert_type="warning" dismissible=False %}
+  {% else %}
+    {% bootstrap_alert content="Are you sure you want to leave "|add:activity.name|add:"?" alert_type="warning" dismissible=False %}
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% bootstrap_button "Yes I want to leave" button_type="submit"  %}
+
+    </form>
+  {% endif %}
+{% endblock %}

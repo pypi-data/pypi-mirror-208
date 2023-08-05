@@ -1,0 +1,8 @@
+{% if start_date and user.is_staff %}
+  <a href="{{ object.get_absolute_url }}" class="badge rounded-pill text-decoration-none bg-light text-black m-2">
+    <i class="fas fa-rocket"></i>
+    <abbr title="{{ object }} started on {{ start_date }}">
+      {{ start_date }}
+    </abbr>
+  </a>
+{% endif %}

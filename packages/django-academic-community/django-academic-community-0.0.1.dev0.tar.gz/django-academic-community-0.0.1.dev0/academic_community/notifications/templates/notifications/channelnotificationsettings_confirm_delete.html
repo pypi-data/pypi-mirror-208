@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block headline %}Reset Channel Notification{% endblock %}
+
+{% block subtitle %}{{ channelnotificationsettings.channel }}{% endblock %}
+
+{% block content %}
+  <p>
+    Are you sure, you want to reset the notifications for
+    <a href="{{ channelnotificationsettings.channel.get_absolute_url }}">
+      {{ channelnotificationsettings.channel }}
+    </a> to your global defaults?
+  </p>
+  <form role="form" method="post">
+    {% csrf_token %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "Yes" button_type="submit" %}
+      {% bootstrap_button "No" button_type="link" extra_classes="ms-auto"  href=channelnotificationsettings.get_absolute_url %}
+    </div>
+  </form>
+{% endblock %}

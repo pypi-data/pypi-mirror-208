@@ -1,0 +1,32 @@
+<!-- Add impressum -->
+
+{% block footer %}
+  <div class="row page-footer-nav text-center">
+    {% block page-footer-nav %}
+      <div class="col-md-2 col-12">
+        <a href="{% url 'contact:contact' %}" class="footer-link">Contact</a>
+      </div>
+      <div class="col-md-2 col-12">
+        <a href="{% url 'faqs:questioncategory-list' %}" class="footer-link">FAQs</a>
+      </div>
+      <div class="col-md-2 col-12">
+        <a href="https://www.hereon.de/innovation_transfer/communication_media/imprint/index.php.en" class="footer-link" rel="nofollow noopener noreferrer">Imprint</a>
+      </div>
+      <div class="col-md-2 col-12">
+        <a href="https://www.hereon.de/innovation_transfer/communication_media/imprint/privacy_policy/index.php.en" class="footer-link" rel="nofollow noopener noreferrer">Data Protection</a>
+      </div>
+      <div class="col-md-2 col-12">
+        <a href="https://www.hereon.de/innovation_transfer/communication_media/imprint/barrierefreiheit/index.php.en" class="footer-link" rel="nofollow noopener noreferrer">Accessibility</a>
+      </div>
+      {% if license %}
+        <div class="col-md-2 col-12">
+          {% if license.url %}
+            © Published under <a href="{{ license.url }}" class="footer-link" rel="nofollow noopener noreferrer">{{ license.identifier }}</a>
+          {% else %}
+            © {{ license }}
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endblock %}
+  </div>
+{% endblock %}

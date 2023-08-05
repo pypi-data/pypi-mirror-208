@@ -1,0 +1,146 @@
+{% load humanize %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load notification_helpers %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load sekizai_tags %}
+
+{% with notification_id=notification.id|stringformat:"s" %}
+  {% with elem_id="notification-"|add:notification_id %}
+    {% delete_notification_button notification as delete_button %}
+    {% select_notification_button notification as select_button %}
+    {% details_button notification no_lock=True as notification_details_button %}
+    {% buttonize notification.date_created|naturaltime "text-muted" as date %}
+    {% collapsible_card notification.subject elem_id accordion_id delete_button add_select_button|ifthen:select_button notification_details_button date button_class=notification.unread|ifthen:"fw-bold" buttons_class="col-md-auto text-secondary px-1 px-md-3" button_row_class="row-cols-2 row-cols-md-4" %}
+      <div class="card-text">
+        {% if notification.usernotification or notification.chatnotification %}
+          {% with sender=notification.usernotification.outgoing_notification.sender|default:notification.chatnotification.comment.user %}
+            <p>
+              <b>From:</b>
+              {% if sender.communitymember %}
+                <a href="{{ sender.communitymember.get_absolute_url }}">{{ sender }}</a>
+              {% else %}
+                {{ sender }}
+              {% endif %}
+            </p>
+          {% endwith %}
+        {% endif %}
+
+        {% if notification.encryption_key %}<i>Encrypted message</i>{% else %}{{ notification.body }}{% endif %}
+      </div>
+
+      <button onclick="markNotificationAsRead({{ notification.id }}, true)" class="btn btn-primary">
+        Mark as unread
+      </button>
+
+      {% if notification.chatnotification %}
+        <a href="{{ notification.chatnotification.get_absolute_url }}" role="button" class="btn btn-primary">
+          View in channel
+        </a>
+      {% endif %}
+
+      {% if not notification.archived %}
+        <button onclick="archiveNotification({{ notification.id }}, true)" class="btn btn-primary">
+          Archive
+        </button>
+      {% endif %}
+
+      {% if not user.communitymember or user.communitymember.email.is_verified %}
+        <form class="d-inline-block" action="{% url 'notifications:send-notification' notification.id %}" method="post" id="sendNotification{{ notification.id }}">
+          {% csrf_token %}
+          {% bootstrap_button "Send as mail" button_type="submit" %}
+        </form>
+      {% endif %}
+
+      <footer id="sendNotification{{ notification.id }}-footer" class="text-muted mt-2">
+        {% if notification.date_sent %}
+          Sent via mail: {{ notification.date_sent|naturaltime }}
+        {% endif %}
+      </footer>
+    {% endcollapsible_card %}
+  {% endwith %}
+{% endwith %}
+
+{% addtoblock "js" %}
+<script>
+
+  function deleteNotification(id) {
+    $.ajax({
+      url: `{% url 'rest:notification-list' %}${id}/`,
+      type: 'DELETE',
+      data: {},
+      headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+      success: function (data) {
+        {% if notification.get_absolute_url|same_url:request.path %}
+          {% url 'notifications:inbox' as inbox_url %}
+          document.location = "{{ next_url|default:inbox_url }}"
+        {% else %}
+          document.location.reload();
+        {% endif %}
+      }
+    });
+  }
+
+  function markNotificationAsRead(id, unread) {
+    $.ajax({
+      url: `{% url 'rest:notification-list' %}${id}/`,
+      type: 'PATCH',
+      data: {unread: unread},
+      headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+      success: function (data) {
+        if (unread) {
+          $(`#notification-${id}-content`).collapse("hide");
+          $(`#notification-${id}-control`).addClass("fw-bold");
+        }
+      }
+    });
+  }
+
+function archiveNotification(id) {
+  $.ajax({
+    url: `{% url 'rest:notification-list' %}${id}/`,
+    type: 'PATCH',
+    data: {archived: true},
+    headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+    success: function (data) {
+      document.location.reload();
+    }
+  });
+}
+
+  $(document).ready(function () {
+    $("div[id^='notification-']")
+      .filter(function() {
+        return this.id.match(/notification-\d+$/)
+      })
+      .on('show.bs.collapse', function () {
+        markNotificationAsRead(this.id.match(/\d+/)[0], false, false);
+        $(`#${this.id}-control`).removeClass("fw-bold");
+    })
+
+    $("form[id^='sendNotification']").submit(function(e) {
+      e.preventDefault();
+      var elemId = this.id;
+      $.ajax({
+          url: this.action,
+          type: this.method,
+          data: $(this).serialize(),
+          success:function(){
+              // Whatever you want to do after the form is successfully submitted
+              $(`#${elemId}-footer`).html("Sent via mail: now");
+              $("#systemMessages").append(`
+                <div class="alert alert-success alert-dismissible" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                  Message successfully sent.
+                </div>
+              `);
+          }
+      });
+    })
+  })
+
+</script>
+{% endaddtoblock %}

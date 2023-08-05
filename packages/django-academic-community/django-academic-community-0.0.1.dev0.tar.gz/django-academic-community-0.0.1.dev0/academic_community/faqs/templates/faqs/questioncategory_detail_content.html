@@ -1,0 +1,5 @@
+{% load faqs %}
+
+{{ questioncategory.description|default_if_none:"" }}
+
+{% faq_list questioncategory.faq_set.all accordion_id=questioncategory.slug|add:"-accordion" display_options="accordion" related_questions=True %}

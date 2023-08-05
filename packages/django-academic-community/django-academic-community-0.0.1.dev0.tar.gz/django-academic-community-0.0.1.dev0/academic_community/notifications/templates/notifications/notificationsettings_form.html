@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+
+{% block title %}Notification Settings{% endblock %}
+
+{% block headline %}Notification Settings{% endblock %}
+
+{% block content %}
+
+  {% block navbar %}
+  <nav class="nav nav-pills mb-4 flex-column flex-sm-row">
+    {% url "notifications:settings-system" as settings_system %}
+    {% url "notifications:settings-user" as settings_user %}
+    {% url "notifications:settings-channels" as settings_chat %}
+    <a href="{% url 'notifications:settings-system' %}" role="button"
+    class="flex-sm-fill text-sm-center nav-link {{ settings_system|same_url:request.path|ifthen:'active' }}"
+    title="Settings for notifications automatically sent by the system.">
+      System notifications
+    </a>
+    <a href="{% url 'notifications:settings-channels' %}" role="button"
+    class="flex-sm-fill text-sm-center nav-link {{ settings_chat|same_url:request.path|ifthen:'active' }}"
+    title="Settings for notifications sent via chats.">
+      Channel notifications
+    </a>
+    <a href="{% url 'notifications:settings-user' %}" role="button"
+    class="flex-sm-fill text-sm-center nav-link {{ settings_user|same_url:request.path|ifthen:'active' }}"
+    title="Settings for notifications not sent by the system or chats.">
+      Other notifications
+    </a>
+  </nav>
+  {% endblock navbar %}
+
+  <form role="form" class="m-4" method="post">
+    {% block form %}
+      {% csrf_token %}
+
+      {% bootstrap_switch form.receive_mails %}
+
+      {% bootstrap_switch form.mark_as_read_when_sent %}
+
+      {% bootstrap_switch form.push_notifications %}
+
+      {% bootstrap_switch form.display_notification_popups %}
+
+      <fieldset class="card" id="settingsFieldset">
+        <div class="card-body">
+          {% bootstrap_switch form.collate_mails %}
+        </div>
+
+        <fieldset class="card-body" id="collateMailsFieldset">
+          {% bootstrap_form form exclude="receive_mails,collate_mails,mark_as_read_when_sent,push_notifications,display_notification_popups" %}
+        </fieldset>
+      </fieldset>
+    {% endblock form %}
+
+    {% block form_buttons %}
+      {% bootstrap_button "Update settings" button_type="submit" %}
+    {% endblock form_buttons %}
+  </form>
+
+{% endblock %}

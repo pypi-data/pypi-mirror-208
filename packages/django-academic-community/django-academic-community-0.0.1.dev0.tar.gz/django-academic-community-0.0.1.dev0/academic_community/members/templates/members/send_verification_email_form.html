@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+
+{% block title %}Send a verification email{% endblock %}
+
+{% block headline %}Send a verification email{% endblock %}
+
+{% block content %}
+
+  {% if email.is_verified %}
+    {% bootstrap_alert content="The email has been verified" alert_type="success" dismissible=False %}
+  {% else %}
+    By clicking submit, we will send a verifcation email to {{ email }}.
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% bootstrap_button "OK" button_type="submit"  %}
+
+    </form>
+  {% endif %}
+{% endblock %}

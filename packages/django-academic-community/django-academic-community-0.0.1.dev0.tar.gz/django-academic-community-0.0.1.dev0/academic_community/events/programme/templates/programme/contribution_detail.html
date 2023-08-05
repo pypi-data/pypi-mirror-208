@@ -1,0 +1,62 @@
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load members %}
+{% load topics %}
+{% load cms_tags %}
+{% load events_programme %}
+{% load uploaded_material %}
+
+{% block action_buttons %}
+  {% edit_button contribution %}
+{% endblock %}
+
+{% block headline %}{{ contribution }}{% endblock %}
+
+{% block subtitle %}{{ contribution.track }}{% endblock %}
+
+
+{% block head_meta %}
+  {% with meta_title=contribution.title meta_description=contribution.abstract meta_logo_alt=contribution.event.name event=contribution.event %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:programme:contribution-list" contribution.event.slug as contributions_url %}
+  {% if contribution.activity %}
+    {% url "events:programme:contribution-track-list" contribution.event.slug contribution.activity.abbreviation as activity_url %}
+    {% breadcrumbs "Events"|combine:event_list_url contribution.event.name|combine:contribution.event.get_absolute_url "Submissions"|combine:contributions_url contribution.activity.abbreviation|combine:activity_url ""|combine:request.path %}
+  {% else %}
+    {% breadcrumbs "Events"|combine:event_list_url contribution.event.name|combine:contribution.event.get_absolute_url "Submissions"|combine:contributions_url ""|combine:request.path %}
+{% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "programme/components/contribution_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+
+  {% format_authors contribution.contributingauthor_set.all True %}
+
+  {{ contribution.abstract }}
+
+{% endblock %}

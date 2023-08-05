@@ -1,0 +1,11 @@
+{% load community_utils %}
+<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group me-2 flex-wrap" role="group" aria-label="First group">
+      <a href="{% add_to_filters filter_name '' True %}" title="Display all" class="btn btn-light">All</a>
+        {% for o in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+          <a href="{% add_to_filters filter_name o True %}" class="btn btn-light" title="Filter with {{ field_name|capfirst }} starts with {{ o }}">
+            {{ o }}
+          </a>
+        {% endfor %}
+    </div>
+  </div>

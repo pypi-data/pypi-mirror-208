@@ -1,0 +1,52 @@
+{% comment %} a button for a comment reaction {% endcomment %}
+{% load sekizai_tags %}
+{% load chats %}
+
+{% block button %}
+  {% with reactions=commentreaction.users.count %}
+    {% if reactions %}
+      <button type="button" class="btn btn-outline-dark btn-commentreaction mx-2 {% if not user|can_post_comment:channel %}disabled{% endif %}" data-comment-id="{{ commentreaction.comment.id }}" data-emoji-value="{{ commentreaction.emoji }}">
+        {{ commentreaction.get_emoji_display }} <span class="reaction-count">{{ commentreaction.users.count }}</span>
+      </button>
+    {% endif %}
+  {% endwith %}
+{% endblock button%}
+
+{% block jscode %}
+  {% addtoblock "js" %}
+    {% if user|can_post_comment:channel %}
+      <script>
+        function submitCommentReaction(event) {
+          let elem = event.target;
+          return fetch(
+            "{% url 'chats:add-comment-reaction' channel.channel_id %}",
+            {
+              headers: {
+                'X-CSRFTOKEN': "{{ csrf_token }}",
+                'Content-Type': 'application/json'
+              },
+              method: "POST",
+              body: JSON.stringify({
+                emoji: elem.dataset.emojiValue,
+                comment: elem.dataset.commentId
+              }),
+            }
+          )
+        }
+      </script>
+    {% endif %}
+  {% endaddtoblock %}
+  {% addtoblock "js" %}
+    {% if user|can_post_comment:channel %}
+      <script>
+        window.addEventListener("load", function () {
+          document.querySelectorAll(".btn-commentreaction").forEach(
+            (elem) => {
+              elem.addEventListener("click", submitCommentReaction)
+            }
+          )
+        })
+      </script>
+    {% endif %}
+  {% endaddtoblock %}
+{% endblock jscode %}

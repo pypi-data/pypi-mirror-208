@@ -1,0 +1,25 @@
+{% load community_badges %}
+{% load community_buttons %}
+
+<div class="card-body">
+  <div class="row row-cols-auto">
+    {% details_button activity %}
+  </div>
+  <div class="row row-cols-auto">
+    {% for leader in activity.leaders.all %}
+      {% leader_badge activity leader %}
+    {% endfor %}
+    {% if activity.start_date %}
+      {% start_date_badge activity %}
+    {% endif %}
+    {% if activity.end_date %}
+      {% end_date_badge activity %}
+    {% endif %}
+    {% active_topics_badge activity %}
+    {% if activity.end_date %}
+      {% members_badge activity activity.former_members %}
+    {% else %}
+      {% members_badge activity %}
+    {% endif %}
+  </div>
+</div>

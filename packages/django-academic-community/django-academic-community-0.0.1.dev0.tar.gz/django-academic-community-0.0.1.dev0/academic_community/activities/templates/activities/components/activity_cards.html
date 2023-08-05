@@ -1,0 +1,11 @@
+{% load activities %}
+
+<div class="row row-cols-1 row-cols-md-3 activity-card-deck">
+  {% with card_class="h-100" %}
+    {% for activity in activity_list %}
+      <div class="col mb-4">
+        {% activity_card activity %}
+      </div>
+    {% endfor %}
+  {% endwith %}
+</div>

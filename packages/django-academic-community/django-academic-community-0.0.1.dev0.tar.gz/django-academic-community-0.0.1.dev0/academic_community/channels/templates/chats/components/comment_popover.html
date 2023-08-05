@@ -1,0 +1,94 @@
+{% load sekizai_tags %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load static %}
+{% load chats %}
+
+
+<div class="comment-popover card p-0 d-flex flex-row flex-wrap mw-90 align-content-stretch d-none" id="popover-for-comment-{{comment.id }}-card" data-target-comment="#comment-{{comment.id }}-body">
+
+  {% if user|can_post_comment:channel %}
+    <form action="{% url 'chats:add-comment-reaction' channel.channel_id %}" method="POST">
+      <input type="hidden" name="comment" value="{{ comment.id }}" id="comment-reaction-{{comment.id}}-id_comment">
+      <select name="emoji" class="form-select select2-emojies-reaction" id="comment-reaction-{{comment.id}}-id_emoji" style="width: 4em;" data-placeholder='😃' data-selection-css-class="select2-emojies-selection" data-dropdown-auto-width="true">
+        <option></option>
+      </select>
+    </form>
+  {% endif %}
+
+  {% clipboard_button root_url|str_add:comment.parent_channel.get_absolute_url|str_add:'?comment='|str_add:comment.md5 button_icon="permalink" button_class="ms-2 text-decoration-none text-muted" %}
+
+  {% clipboard_html_button  clipboard_wrapper_id="copy-comment-"|add:comment.md5|add:"-wrapper" button_class="ms-2 text-muted" button_title="Copy the this comment into clipboard" %}
+    {{ comment.body }}
+  {% endclipboard_html_button %}
+
+  {% clipboard_html_button clipboard_button_text=comment.md5_short clipboard_wrapper_id="copy-md5-"|add:comment.md5|add:"-wrapper" button_class="ms-2 text-muted" button_title="Copy a reference to this comment into clipboard that you can use in a reply" %}
+    {% mention_badge comment.commentmentionlink %}
+  {% endclipboard_html_button %}
+
+  {% clipboard_html_button button_icon="quote" clipboard_wrapper_id="copy-quote-"|add:comment.md5|add:"-wrapper" button_class="text-muted" button_title="Quote this comment" %}
+    {% comment_quote comment %}
+  {% endclipboard_html_button %}
+
+  {% url_for_next as url_for_next %}
+
+  {% if comment.comment_type != "channel" %}
+    <a href="{{ comment.get_absolute_url }}"
+     class="btn btn-expand btn-link text-decoration-none text-muted btn-round ms-2"
+     title="View this {% if comment.comment_type == 'thread'%}thread{% else %}comment{% endif %} on a separate page">
+    </a>
+    {% if threadcomment_form %}
+      <button type="button"
+      class="btn text-muted"
+      onclick="focusEditor({% if comment.comment_type == 'thread' %}{{ comment.id }}{% else %}{{ comment.parent_thread.id }}{% endif %})">
+        <i class="bi bi-reply-fill"></i>
+      </button>
+    {% elif comment.comment_type == "threadcomment" and user|can_post_comment:channel %}
+      <a rol="button" class="btn text-decoration-none text-muted" href="{{ comment.parent_thread.get_absolute_url }}?reply=true">
+        <i class="bi bi-reply-fill"></i>
+      </a>
+    {% endif %}
+  {% endif %}
+
+  {% if comment.pk %}
+    {% edit_button comment None button_class="btn-link text-decoration-none text-muted btn-round ms-2" %}
+  {% else %}
+    {% with button_id=comment|object_id %}
+      {% include "academic_community/components/buttons/edit.html" with show_button=True object_name="Comment" edit_url=comment.get_edit_url|str_add:"?next="|str_add:url_for_next button_class="btn-link text-decoration-none text-muted btn-round ms-2" button_id="edit-button-"|add:button_id %}
+    {% endwith %}
+  {% endif %}
+
+  {% if comment.pk %}
+    {% delete_button comment None button_class="btn-link text-decoration-none text-muted btn-round ms-2" %}
+  {% else %}
+    {% with button_id=comment|object_id %}
+      {% include "academic_community/components/buttons/delete.html" with show_button=True object_name="Comment" delete_url=comment.get_delete_url|str_add:"?next="|str_add:url_for_next button_class="btn-link text-decoration-none text-muted btn-round ms-2" button_id="delete-button-"|add:button_id %}
+    {% endwith %}
+  {% endif %}
+
+</div>
+
+{% addtoblock "js" %}
+  <script src="{% static 'commentpopover/dist/bundle.js' %}" defer></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>
+    function focusEditor(threadId) {
+      let commentCollapse = document.getElementById(`thread-${threadId}-comments-wrapper`);
+      let collapse = bootstrap.Collapse.getOrCreateInstance(commentCollapse);
+      collapse.show();
+      let editorElem = document.getElementById(`id_thread-${threadId}-body`);
+      editorElem.focus();
+      setTimeout(
+        function() {
+          let editorElem = document.getElementById(`id_thread-${threadId}-body`);
+          if (!isInViewport(editorElem)) {
+            editorElem.scrollIntoView(true);
+          }
+        },
+        500
+      )
+    }
+  </script>
+{% endaddtoblock %}

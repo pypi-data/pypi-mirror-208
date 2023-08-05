@@ -1,0 +1,71 @@
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load members %}
+{% load topics %}
+{% load cms_tags %}
+{% load events_programme %}
+{% load uploaded_material %}
+  {% include "events/components/event_sidebar.html" with event=contribution.event hide_event_card=True %}
+
+
+  {% with contributionmaterial_list=contribution.contributionmaterialrelation_set.all %}
+  {% get_obj_perms user for contribution as "user_perms" %}
+  {% if contributionmaterial_list or perms.programme.upload_material or "upload_material" in user_perms %}
+    {% collapsible_card "Uploaded Material" "contributionmaterial" "" body_class="p-0" show=True header_class="p-0" %}
+      {% material_links contributionmaterial_list.model contribution_pk=contribution.pk event_slug=contribution.event.slug %}
+      {% material_cards contributionmaterial_list limit=3 truncate_name=True %}
+    {% endcollapsible_card %}
+  {% endif %}
+
+  {% if contribution.session %}
+    {% slot_card contribution.session show_date=True body_class="p-0" %}
+
+    {% if contribution.presentation_type or contribution.activity %}
+      {% card %}
+        {% if contribution.presentation_type %}
+          <b>{{ contribution.presentation_type }}</b>
+        {% endif %}
+        {% if contribution.activity %}
+          {% activity_badge contribution.activity %}
+        {% endif %}
+      {% endcard %}
+    {% endif %}
+
+    {% card %}
+      <b>License:</b>
+      {% if contribution.license.url %}
+        <a href="{{ contribution.license.url }}">{{ contribution.license }}</a>
+      {% else %}
+        {{ contribution.license }}
+      {% endif %}
+    {% endcard %}
+
+    {% collapsible_card "Connection details" "connection-details" "" body_class="p-0" show=True header_class="p-0" %}
+      <ul class="list-group">
+        <li class="list-group-item p-2">
+          {% slot_time contribution %}
+        </li>
+        {% for room in contribution.session.meeting_rooms.all %}
+          <li class="list-group-item p-0">
+            {% meetingroom_card room %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endcollapsible_card %}
+  {% elif contribution.activity %}
+    {% card %}
+      {% activity_badge contribution.activity %}
+    {% endcard %}
+  {% endif %}
+  {% card header="Community members" body_class="p-0" %}
+    {% for author in contribution.member_authors %}
+      {% member_card author.member %}
+    {% endfor %}
+  {% endcard %}
+{% endwith %}

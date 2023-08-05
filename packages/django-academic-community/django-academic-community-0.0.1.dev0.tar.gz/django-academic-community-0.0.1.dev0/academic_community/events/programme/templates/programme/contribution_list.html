@@ -1,0 +1,63 @@
+{% extends "base_list_sidebar.html" %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load events_programme %}
+{% load guardian_tags %}
+{% load cms_tags %}
+
+{% block title %}Contributions{% endblock %}
+
+{% block headline %}
+  Submitted Contributions
+{% endblock %}
+
+{% block subtitle %}
+  {% if activity %}{{ activity }}{% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block head_meta %}
+  {% with meta_title="Submissions to the "|add:event.name meta_description="Submissions to the "|add:event.name meta_logo_alt=event.name %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% get_obj_perms user for event as "event_perms" %}
+  {% if perms.events.change_event or "change_event" in event_perms %}
+    <a class="button btn btn-primary btn-round btn-send" title="Send a notification to all coauthors"
+      href='{% url "events:event-notify" event.slug %}?event={{ event.pk }}&coauthor=true'></a>
+  {% endif %}
+{% endblock %}
+
+
+{% block content %}
+  {% contribution_rows contribution_list show_date=True %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% if activity %}
+    {% url "events:programme:contribution-list" event.slug as contributions_url %}
+    {% breadcrumbs event.name|combine:event.get_absolute_url "Submissions"|combine:contributions_url activity.abbreviation|combine:request.path %}
+  {% else %}
+    {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Submissions"|combine:request.path %}
+  {% endif %}
+{% endblock %}

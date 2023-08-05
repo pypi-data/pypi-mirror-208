@@ -1,0 +1,62 @@
+{% extends "base_detail.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load events_programme %}
+{% load cms_tags %}
+
+{% block headline %}{{ meetingroom }}{% endblock %}
+{% block subtitle %}Meeting Room{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:programme:session-list" meetingroom.event.slug as programme_url %}
+  {% url "events:programme:meetingroom-list" meetingroom.event.slug as meetingroom_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url meetingroom.event.name|combine:meetingroom.event.get_absolute_url "Programme"|combine:programme_url "Meeting rooms"|combine:meetingroom_list_url meetingroom.name|combine:request.path %}
+{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% edit_button meetingroom %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" with event=meetingroom.event %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {% card card_class="mb-4" %}
+    {{ meetingroom.description }}
+
+    <p>
+      <b>Link:</b> <a href="{{ meetingroom.url }}">{{ meetingroom.url|truncatechars:20 }}</a> {% clipboard_button meetingroom.url %}
+    </p>
+  {% endcard %}
+
+  {% with session_list=meetingroom.session_set.all %}
+
+    <h3 class="mb-4 mt-4">Bookings</h3>
+
+    {% if session_list %}
+      {% with active_tab="calendarTab" %}
+        {% tab_list calendarTab="Calendar" programmeListTab="List" %}
+          {% tab_content "calendarTab" %}
+            {% show_calendar session_list slot_duration="00:15" %}
+          {% endtab_content %}
+          {% tab_content "programmeListTab" %}
+            {% show_programme_list session_list %}
+          {% endtab_content %}
+        {% endtab_list %}
+      {% endwith %}
+    {% else %}
+        <p>No sessions have been assigned to this room so far</p>
+    {% endif %}
+
+  {% endwith %}
+
+{% endblock %}

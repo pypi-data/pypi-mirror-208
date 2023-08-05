@@ -1,0 +1,105 @@
+{% extends "base_detail.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load events_programme %}
+{% load cms_tags %}
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+
+{% block headline %}Edit the presentation types for {{ event }}{% endblock %}
+
+{% block title %}Presentation types for {{ event }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Edit"|combine:event.get_edit_url "Presentation types"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+
+{% block content %}
+
+  {% card card_class="mb-3" %}
+    <p>
+      Here you can create presentation types that control the appearance of
+      sessions, slots and submissions in the calendar overview.
+    </p>
+  {% endcard %}
+
+  <form role="form" method="post" class="mt-4">
+    {% csrf_token %}
+    {{ form.management_form }}
+    {{ form.non_form_errors }}
+    <div class="row row-cols-1 row-cols-lg-2 g-4 mb-3" id="presentationTypeForms">
+      {% for form in form.forms %}
+        <div class="col presentationtype-form">
+          {% include "programme/components/presentationtype_form_card.html" with form=form %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <p class="d-flex justify-content-between">
+      <button class="btn btn-primary btn-create" type="button" id="addPresentationType" onclick="addPresentationTypeForm()">
+        Add more
+      </button>
+      <a href='{% url "events:programme:event-import-presentationtypes" event.slug %}' class="btn btn-primary" role="button">
+        <i class="fas fa-file-import"></i> Import from another event
+      </a>
+    </p>
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:event.get_absolute_url %}
+    </div>
+  </form>
+
+  {% addtoblock "js" %}
+    <script>
+      let container = document.querySelector("#presentationTypeForms")
+      let addButton = document.querySelector("#addPresentationType")
+
+      let totalForms = document.querySelector("#id_presentationtype_set-TOTAL_FORMS")
+
+      let totalFormNum = document.querySelectorAll(".presentationtype-form").length-1
+
+      function addPresentationTypeForm(){
+          let newForm = document.createElement("div")
+          newForm.innerHTML = `
+            {% filter escapejs %}
+              <div class="col presentationtype-form">
+                {% include "programme/components/presentationtype_form_card.html" with form=form.empty_form %}
+              </div>
+            {% endfilter %}
+          `
+          // let newForm = rootElem.children[0].cloneNode(true)
+          // djangos Formset.empty_form uses a __prefix__ that should be replaced
+          // with the correct number
+          let presentationTypeFormRegex = RegExp(`presentationtype_set-__prefix__-`,'g')
+          let idFormRegex = RegExp(`_id(\\d){1}`,'g')
+
+          totalFormNum++
+
+          newForm.innerHTML = newForm.innerHTML.replace(
+            presentationTypeFormRegex, `presentationtype_set-${totalFormNum}-`
+          )
+          newForm.innerHTML = newForm.innerHTML.replace(idFormRegex, `_id${totalFormNum}`)
+          container.appendChild(newForm)
+
+          jscolor.install();
+
+          totalForms.setAttribute('value', `${totalFormNum+1}`)
+      }
+
+    </script>
+  {% endaddtoblock %}
+
+{% endblock %}

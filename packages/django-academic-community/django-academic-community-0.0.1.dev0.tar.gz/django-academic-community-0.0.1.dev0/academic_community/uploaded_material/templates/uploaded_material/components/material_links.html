@@ -1,0 +1,17 @@
+{% load uploaded_material %}
+{% load community_utils %}
+
+{% if not hide_list_button|default:False %}
+  <a href="{% material_list_url model %}" type="button" class="btn btn-link">
+    All material
+  </a>
+{% endif %}
+{% if not hide_add_button|default:False and user|combine:model|can_add_material:material_url_kwargs %}
+  <a href="{% material_add_url model %}" type="button" class="btn btn-primary btn-create">
+    Add material
+  </a>
+{% endif %}
+
+{% if limit and total_material %}
+  <div class="text-muted">{{ limit }} of {{ total_material }}</div>
+{% endif %}

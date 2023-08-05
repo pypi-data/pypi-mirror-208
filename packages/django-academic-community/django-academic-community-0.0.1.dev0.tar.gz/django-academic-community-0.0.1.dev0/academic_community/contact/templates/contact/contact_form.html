@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+
+{% block head_meta %}
+  {% with meta_title="Contact" meta_description="Contact the managers of the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block headline %}Contact the community managers{% endblock %}
+
+{% block content %}
+
+<p>Contact the Community and/or Website managers.</p>
+
+<form role="form" method="post">
+  {% block contact_form %}
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+  {% endblock %}
+
+  {% bootstrap_button "Send" button_type="submit"  %}
+</form>
+
+{% endblock %}

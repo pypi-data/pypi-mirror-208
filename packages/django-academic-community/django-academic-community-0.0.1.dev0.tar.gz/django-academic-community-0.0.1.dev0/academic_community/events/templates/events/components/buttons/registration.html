@@ -1,0 +1,23 @@
+{% load guardian_tags %}
+{% load community_utils %}
+
+{% get_obj_perms user for event as "member_perms" %}
+
+{% url 'events:registrations:registration-create' event.slug as registration_url %}
+
+{% if display_button or perms.events.register_for_event or "register_for_event" in member_perms %}
+<a href="{{ registration_url }}" class="{{ button_class|default:'btn btn-primary' }} {% if user.is_authenticated and not perms.events.register_for_event and not 'register_for_event' in member_perms %}disabled{% endif %}">
+  <div>{% if not user.is_authenticated %}Login to {% endif %}Register</div>
+  {% if event.registration_range %}
+    <small class="text-muted">
+      {% if event.registration_range.lower|in_the_future %}
+        Registration opens in {{ event.registration_range.lower|timeuntil }}
+      {% elif event.registration_range.upper|in_the_past %}
+        Registration closed on {{ event.registration_range.upper|date }}
+      {% else %}
+        Registration closes on {{ event.registration_range.upper|date }} ({{ event.registration_range.upper|timeuntil }} left)
+      {% endif %}
+    </small>
+  {% endif %}
+</a>
+{% endif %}

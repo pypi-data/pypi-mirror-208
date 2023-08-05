@@ -1,0 +1,29 @@
+{% extends "notifications/notification_mail.html" %}
+
+{% block body %}
+{% spaceless %}
+{% with comment=notification.comment sender=notification.comment.user %}
+  <p>
+    {% if sender.communitymember %}
+      <a href="{{ sender.communitymember.get_absolute_url }}">{{ sender }}</a>
+    {% else %}
+      {{ sender }}
+    {% endif %}
+    {% if comment.comment_type == "channel" %}
+      started a new channel
+    {% else %}
+      wrote in <a href="{{ comment.get_absolute_url }}">{{ comment.parent_channel }}</a>
+    {% endif %}
+    on {{ comment.date_created|date:"SHORT_DATETIME_FORMAT" }}:
+  </p>
+{% endwith %}
+{% endspaceless %}
+<div style="margin-left: 40px;">{{ block.super }}</div>
+{% endblock body %}
+
+{% block footer %}
+<p>
+  <b><a href="{{ root_url }}{{ notification.get_absolute_url }}">View this comment in the chat.</a></b>
+</p>
+{{ block.super }}
+{% endblock footer %}

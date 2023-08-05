@@ -1,0 +1,65 @@
+{% load sekizai_tags %}
+{% load django_bootstrap5 %}
+
+<button
+ type="button"
+ class="btn btn-link btn-{{ button_icon|default:"clipboard" }} {{ button_class }}"
+ data-bs-toggle="popover" data-bs-content="Copied to clipboard!" data-bs-trigger="focus"
+ onclick="copyTextToClipboard('{{ clipboard_text|escape }}')">
+</button>
+
+{% addtoblock "js" %}
+  <script>
+    // copy to clipboard functions taken from
+    // https://stackoverflow.com/a/30810322
+    function fallbackCopyTextToClipboard(text) {
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
+
+      // Avoid scrolling to bottom
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+      } catch (err) {
+        window.prompt("Click Ctrl+C and Enter to copy", text);
+      }
+
+      document.body.removeChild(textArea);
+    }
+    function copyTextToClipboard(text) {
+      // copy a given text to clipboard.
+      // we first try the navigator, but if this is not accessible, we create a
+      // dedicated element and copy its content
+      if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(
+        function() {},
+        function(err) {
+          window.prompt("Click Ctrl+C and Enter to copy", text);
+        }
+      );
+    }
+    $(function () {
+      $('[data-bs-toggle="popover"]').popover()
+    })
+  </script>
+{% endaddtoblock %}
+
+
+{% addtoblock "js" %}
+  <script>
+    $(function () {
+      $('[data-bs-toggle="popover"]').popover()
+    })
+  </script>
+{% endaddtoblock %}

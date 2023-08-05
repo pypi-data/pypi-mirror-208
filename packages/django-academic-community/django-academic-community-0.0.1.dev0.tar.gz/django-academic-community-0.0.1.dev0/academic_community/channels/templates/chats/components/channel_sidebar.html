@@ -1,0 +1,92 @@
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load chats %}
+{% load cache %}
+{% load guardian_tags %}
+{% load uploaded_material %}
+
+<div class="list-group">
+  {% url 'chats:channelgroups' as channelgroup_list_url %}
+  {% url 'chats:channel-list' as channel_list_url %}
+  {% url 'chats:channelgroup-settings' as channelgroup_settings %}
+  {% if not user.is_anonymous %}
+    <a href="{{ channelgroup_list_url }}" class="list-group-item list-group-item-action {% if channelgroup_list_url|same_url:request.path %}active{% endif %}">
+      View all groups
+    </a>
+  {% endif %}
+  <a href="{{ channel_list_url }}" class="list-group-item list-group-item-action {% if channel_list_url|same_url:request.path %}active{% endif %}">
+    Explore channels
+  </a>
+  {% if channel_type and perms.chats.add_channel %}
+    <a href="{% channel_add_url %}" class="list-group-item list-group-item-action btn-create list-group-item-primary {% if channel_create_url|same_url:request.path %}active{% endif %}">
+      Create a new {{ channel_type|verbose_channel_type_name }}
+    </a>
+  {% elif perms.chats.add_channel %}
+    <div class="dropdown list-group-item list-group-item-action list-group-item-primary p-0">
+      <a class="btn btn-create text-start dropdown-toggle w-100" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Create a new channel
+      </a>
+      <ul class="dropdown-menu">
+        {% get_channel_type_slugs as slugs %}
+        <li><h6 class="dropdown-header">Create a new</h6></li>
+        {% for model, slug in slugs.items %}
+          {% has_model_perm user model "add" as has_perm %}
+          {% if has_perm %}
+            <li><a class="dropdown-item" href="{% channel_add_url channel_relation_model|default:"chats.Channel" channel_type=slug %}">{{ model|verbose_model_name}}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  {% if not user.is_anonymous %}
+    <a href="{{ channelgroup_settings }}" class="list-group-item list-group-item-action btn-edit list-group-item-primary {% if channelgroup_settings|same_url:request.path %}active{% endif %}">
+      Manage groups
+    </a>
+  {% endif %}
+  {% if channel %}
+    {% with is_active=channel.get_edit_url|same_url:request.path|ifthen:"active" %}
+      {% edit_button channel None button_class='list-group-item list-group-item-primary list-group-item-action '|add:is_active button_text="Edit this channel" %}
+    {% endwith %}
+  {% endif %}
+</div>
+{% if channel %}
+  {% with channelmaterial_list=channel.channelmaterialrelation_set.pinned %}
+    {% get_obj_perms user for channel as "user_perms" %}
+    {% if channelmaterial_list or perms.chats.post_comment or "post_comment" in user_perms %}
+    {% card header="Channel Material" %}
+      {% material_links channelmaterial_list.model %}
+      {% material_cards channelmaterial_list %}
+    {% endcard %}
+    {% endif %}
+  {% endwith %}
+{% endif %}
+{% with unread=user|unread_channels %}
+  {% collapsible_card "Unread" "unread-channels-sidebar-item" "" card_class=unread|ifnotthen:'d-none' body_class="p-0" show=True %}
+    <div class="list-group" id="unread-channels">
+      {% for channel in unread %}
+        {% channel_sidebar_item channel unread=True display=True active=channel.get_absolute_url|same_url:request.path %}
+      {% endfor %}
+    </div>
+  {% endcollapsible_card %}
+{% endwith %}
+
+{% for group in user.channelgroup_set.all %}
+  {% with channels=group.channels.all %}
+    {% if display_all or group.display_in_sidebar|default_if_none:channels %}
+      {% edit_button group True button_class="btn-round btn-link text-muted text-decoration-none" as edit_button_item %}
+      {% details_button group details_button_class="btn-round btn-link text-muted text-decoration-none" button_text=" " as details_button_item %}
+      {% collapsible_card group.name group|object_id|add:"-sidebar-item" "" details_button_item edit_button_item body_class="p-0" show=group.expand_in_sidebar buttons_class='align-self-center' %}
+        <div class="list-group max-vh-75 overflow-auto">
+          {% cache 600 channelgroup group.id %}
+            {% for channel in channels %}
+              {% with subscription=channel|subscription_for:user %}
+                {% channel_sidebar_item channel active=channel.get_absolute_url|same_url:request.path unread=subscription|display_in_sidebar_unread:group display=subscription|display_always_in_sidebar:group %}
+              {% endwith %}
+            {% endfor %}
+          {% endcache %}
+        </div>
+      {% endcollapsible_card %}
+    {% endif %}
+  {% endwith %}
+{% endfor %}

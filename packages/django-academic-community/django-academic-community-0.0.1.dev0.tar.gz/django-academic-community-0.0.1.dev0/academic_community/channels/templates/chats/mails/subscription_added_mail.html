@@ -1,0 +1,38 @@
+
+{% spaceless %}
+<p>
+  Hello {{ subscription.user.communitymember|default:subscription.user }}!
+</p>
+<p>
+  You have just been subscribed to<br><br>
+  <a href="{{ root_url }}{{ subscription.channel.get_absolute_url }}">{{ subscription.channel }}</a>{% if reason %}, because {{ reason }}{% endif %}
+</p>
+
+{% if not subscription.channel.encryption_key %}
+  <div>
+    <b>Channel header:</b>
+    <hr>
+    {{ subscription.channel.body }}
+    <hr>
+  </div>
+{% endif %}
+
+<p>
+  You will receive notifications for any comments in this channel. <br>
+  <a href="{{ root_url }}{{ subscription.get_edit_url }}">
+    Click here to unsubscribe or modify your notifications for this channel.
+  </a>
+</p>
+{% if subscription.user.pk != subscription.channel.user.pk %}
+<p>
+  If you think this was a mistake, please get in touch with the creator of the
+  channel, {{ subscription.channel.user }},
+  or contact your community managers.
+</p>
+{% endif %}
+
+<p>
+  Have a nice day,<br>
+  Your Community Managers
+</p>
+{% endspaceless %}

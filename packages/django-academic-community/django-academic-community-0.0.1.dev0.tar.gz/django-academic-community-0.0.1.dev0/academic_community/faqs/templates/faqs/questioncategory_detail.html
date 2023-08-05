@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}FAQs: {{ questioncategory }} {% endblock %}
+
+{% block headline %}{{ questioncategory }} FAQs{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'faqs:questioncategory-list' as faq_list_url %}
+  {% breadcrumbs "FAQs"|combine:faq_list_url questioncategory|combine:request.path %}
+{% endblock %}
+
+{% block action_buttons %}
+    {% if perms.faqs.change_questioncategory %}
+        <a class="button btn btn-primary btn-round btn-edit" title="Edit the questions of this category"
+         href='{% url "faqs:edit-questioncategory" questioncategory.slug %}'>
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% include "faqs/questioncategory_detail_content.html" %}
+{% endblock %}

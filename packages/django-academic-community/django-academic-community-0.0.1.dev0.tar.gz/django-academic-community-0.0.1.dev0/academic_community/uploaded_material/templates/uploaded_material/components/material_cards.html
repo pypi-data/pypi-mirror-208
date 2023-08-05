@@ -1,0 +1,12 @@
+{% load uploaded_material %}
+
+
+{% if limit and total_material %}
+  <span class="text-muted">viewing {{ limit }} of {{ total_material }}</span>
+{% endif %}
+
+<ul class="list-group">
+  {% for material in material_list %}
+    {% material_card material|get_material_relation:material_relation_model %}
+  {% endfor %}
+</ul>

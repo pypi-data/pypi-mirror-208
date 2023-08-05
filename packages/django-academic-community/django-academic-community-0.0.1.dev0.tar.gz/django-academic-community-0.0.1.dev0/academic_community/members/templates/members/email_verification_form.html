@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Verify your Email{% endblock %}
+
+{% block headline %}Verify your Email{% endblock %}
+
+{% block breadcrumbs %}
+  {% url 'members:members' as members_url %}
+  {% with members_url=members_url|add:'?end_date__isnull=True&is_member=True' %}
+    {% breadcrumbs "Members"|combine:members_url email.member|combine:email.member.get_absolute_url "Edit"|combine:email.member.get_edit_url "Emails"|combine:email.get_edit_url "Verify "|add:email.email|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  {% if email.is_verified %}
+    {% if not email.member.user %}
+      {% bootstrap_alert content="The email has been verified and you'll get notified when the community managers dealt with your request" alert_type="success" dismissible=False %}
+    {% else %}
+      {% bootstrap_alert content="The email has been verified, thanks!" alert_type="success" dismissible=False %}
+      {% if not email.primary_member %}
+        <p>
+          You can make it the primary email that is used for notifications and password reset
+          <a href="{% url 'members:edit-communitymember' email.member.pk %}">here</a>.
+        </p>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <form role="form" method="post">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% bootstrap_button "OK" button_type="submit"  %}
+
+    </form>
+  {% endif %}
+{% endblock %}

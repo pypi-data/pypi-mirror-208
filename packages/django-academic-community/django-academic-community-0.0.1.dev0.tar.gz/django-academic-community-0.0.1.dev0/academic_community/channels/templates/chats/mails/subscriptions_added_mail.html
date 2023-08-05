@@ -1,0 +1,35 @@
+
+{% spaceless %}
+<p>
+  Hello {{ user }}!
+</p>
+<p>
+  You have just been subscribed to the following channels{% if reason %}, because {{ reason }}{% endif %}<br><br>
+</p>
+<ul>
+  {% for subscription in subscription_list %}
+    <li>
+      <a href="{{ root_url }}{{ subscription.channel.get_absolute_url }}">
+        {{ subscription.channel }}
+      </a><br>
+      <a href="{{ root_url }}{{ subscription.get_edit_url }}">
+        <i>Click here to unsubscribe or modify your notifications.</i>
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<p>
+  You will receive notifications for any comments in these channel. <br>
+</p>
+
+<p>
+  If you think this was a mistake, please get in touch with the creators of the
+  individual channels or contact your community managers.
+</p>
+
+<p>
+  Have a nice day,<br>
+  Your Community Managers
+</p>
+{% endspaceless %}

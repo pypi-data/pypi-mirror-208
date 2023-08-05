@@ -1,0 +1,82 @@
+{% extends "base_list.html" %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+
+{% block head_meta %}
+  {% with meta_title="Institutions" meta_description="Institutions in the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}Institutions{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% if user.is_staff %}
+    <a class="button btn btn-primary btn-round" href='{% url "institutions:institution-create" %}'>
+      <i class="fas fa-plus-circle"></i>
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "Institutions"|combine:request.path %}
+{% endblock %}
+
+{% block display %}
+  {% alphabet_buttons "abbreviation" %}
+  {{ block.super }}
+{% endblock %}
+
+
+{% block filter_modal %}
+  {% login_alert %}
+  <h2>Filter by</h2>
+  {% with form=filter.form %}
+    {% collapsible_card "General fields" "filter-general" "" show=True %}
+      {% bootstrap_field form.name %}
+      {% bootstrap_field form.abbreviation__istartswith %}
+      {% bootstrap_field form.city__name__search %}
+      {% bootstrap_field form.city__country %}
+      {% if user.is_staff %}
+        {% bootstrap_field form.end_date__isnull %}
+      {% endif %}
+    {% endcollapsible_card %}
+
+    {% if user.is_staff %}
+      {% collapsible_card "Members and activities" "filter-members" "" %}
+        {% bootstrap_field form.members %}
+        {% bootstrap_field form.activities %}
+      {% endcollapsible_card %}
+    {% endif %}
+
+    {% if user.is_staff %}
+      {% collapsible_card "Start or end date" "filter-start_date" %}
+        {% bootstrap_field form.start_date %}
+        {% bootstrap_field form.start_date__lte %}
+        {% bootstrap_field form.start_date__range %}
+        {% bootstrap_field form.start_date__gte %}
+        {% bootstrap_field form.end_date %}
+        {% bootstrap_field form.end_date__lte %}
+        {% bootstrap_field form.end_date__range %}
+        {% bootstrap_field form.end_date__gte %}
+      {% endcollapsible_card %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+
+{% block content %}
+  {% with institution_row_class="mb-3 mb-lg-0 institution-list-row" %}
+    {% if not user.is_staff or filter.form.cleaned_data.end_date__isnull %}
+      {% institution_rows institution_list True True "active" %}
+    {% elif filter.form.cleaned_data.end_date__isnull is None %}
+      {% institution_rows institution_list True True "all" %}
+    {% else %}
+      {% institution_rows institution_list True True "inactive" %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}

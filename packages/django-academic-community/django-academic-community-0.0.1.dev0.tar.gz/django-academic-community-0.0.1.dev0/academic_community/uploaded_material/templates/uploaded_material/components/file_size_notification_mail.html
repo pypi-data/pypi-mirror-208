@@ -1,0 +1,22 @@
+{% load community_utils %}
+<p>Hello Community Manager!</p>
+
+<p>
+    There has been a new upload by
+    <a href="{{ root_url }}{{ material.user.communitymember.get_absolute_url }}">
+        {{ material.user }}
+    </a>
+    to the community website that exceeds the
+    threshold of {{ file_threshold|as_mb }}. It has {{ material.file_size|as_mb }}.
+</p>
+
+<p>
+    Please review the material at
+    <a href="{{ root_url }}{{ material.get_absolute_url }}">
+        {{ root_url }}{{ material.get_absolute_url }}
+    </a>
+</p>
+<p>
+    Best,<br>
+    Your Community Website
+</p>

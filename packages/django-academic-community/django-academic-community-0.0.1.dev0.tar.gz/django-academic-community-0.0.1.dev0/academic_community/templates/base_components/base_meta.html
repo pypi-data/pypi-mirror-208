@@ -1,0 +1,24 @@
+{% load static %}
+{% static 'images/logo.png' as logo_path %}
+{% with default_description='Website to manage the '|add:community_name|add:'.' default_logo=root_url|add:logo_path %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:type" content="{{ meta_type|default:'website' }}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="{{ meta_title|default:community_name }}">
+  <meta property="og:site_name" content="{{ community_name }}">
+  <meta property="og:url" content="{{ root_url }}{{ request.path }}">
+  <meta property="og:description" name="description" content="{{ meta_description|default:default_description|striptags|truncatewords:20 }}">
+  <meta property="og:image" content="{{ meta_logo|default:default_logo }}">
+  <meta property="og:image:alt" content="{{ meta_logo_alt|default:community_name }}">
+
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+  <link rel="canonical" href="{{ root_url }}">
+
+  <meta name="twitter:card" value="summary_large_image">
+  <meta name="twitter:title" content="{{ meta_title|default:community_name }}">
+  <meta name="twitter:image:alt" content="{{ meta_logo_alt|default:community_name }}">
+  <meta name="twitter:description" content="{{ meta_description|default:default_description|striptags|truncatewords:20 }}">
+  <meta name="twitter:image" content="{{ meta_logo|default:default_logo }}">
+{% endwith %}

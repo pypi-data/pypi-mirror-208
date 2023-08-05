@@ -1,0 +1,14 @@
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load sekizai_tags %}
+{% load community_utils %}
+
+{% bootstrap_form form %}
+
+<div id="accordion">
+  {% for label, inline in form.inlines.items %}
+    {% collapsible_card label label|slugify "accordion" %}
+      {% render_formset inline form_layout="horizontal" %}
+    {% endcollapsible_card %}
+  {% endfor %}
+</div>

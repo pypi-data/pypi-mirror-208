@@ -1,0 +1,111 @@
+{% extends "base_detail.html" %}
+{% load institutions %}
+{% load members %}
+{% load bootstrap_helpers %}
+{% load community_badges %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load topics %}
+
+{% block action_buttons %}
+  <a class="button btn btn-primary btn-round btn-edit" href='{% url "institutions:edit-institution" institution.abbreviation %}'></a>
+
+  {% if user.is_staff %}
+    <a class="button btn btn-primary btn-round btn-history" title="View the history"
+     href='{% url "institutions:institution-history" institution.abbreviation %}'>
+    </a>
+  {% endif %}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+  {% url 'institutions:institutions' as institutions_url %}
+  {% with institutions_url=institutions_url|add:'?end_date__isnull=True' %}
+    {% breadcrumbs "Institutions"|combine:institutions_url ""|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+
+{% block head_meta %}
+  {% with meta_title=institution.abbreviation meta_description="Contributions of the "|add:institution.name|add:" in the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}{{ institution.name }}{% endblock %}
+
+{% block subtitle %}{{ institution.abbreviation }}{% endblock %}
+
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+  {% organization_card institution base_id="sidebar-" %}
+    {% with body_class="p-0" %}
+      {% if institution.contact or institution.city or institution.website %}
+        {% card header="Contact" body_class="p-0" %}
+          {% if institution.contact %}{% member_card institution.contact %}{% endif %}
+          {% card body_class="p-0" %}
+            <ul class="list-group">
+            {% if institution.website %}
+                <li class="list-group-item">
+                {% website_button institution %}
+                </li>
+            {% endif %}
+            {% if institution.city %}
+              <li class="list-group-item">
+                <p>
+                  {% if institution.street %}{{ institution.street }}<br>{% endif %}
+                  {{ institution.zip_code }} {{ institution.city.name }}<br>
+                  {{ institution.city.country }}
+                </p>
+              </li>
+            {% endif %}
+            </ul>
+          {% endcard %}
+        {% endcard %}
+      {% endif %}
+      {% card header="Stats" %}
+        {% start_date_badge institution %}
+        {% end_date_badge institution %}
+        {% active_topics_badge institution institution.active_lead_topics %}
+        {% members_badge institution institution.active_memberships %}
+      {% endcard %}
+    {% endwith %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {% with card_class="mb-4" %}
+
+    {% with departments=institution.department_set.all %}
+      {% if departments %}
+        {% collapsible_card "Departments" "institution-departments" "" body_class="p-0" show=True %}
+          {% department_rows departments True True "all" department_row_class="border-bottom border-dark" department_card_class="" %}
+        {% endcollapsible_card %}
+      {% endif %}
+    {% endwith %}
+
+    {% collapsible_card "Members" "active-institution-members" "" body_class="p-0" show=True %}
+      {% for membership in institution.active_memberships %}
+        {% member_row membership.member membership_organization=membership.organization show_institution=False %}
+      {% endfor %}
+    {% endcollapsible_card %}
+
+    {% collapsible_card "Former members" "finished-institution-members" "" body_class="p-0" %}
+      {% for membership in institution.finished_memberships %}
+        {% member_row membership.member membership_organization=membership.organization show_institution=False %}
+      {% endfor %}
+    {% endcollapsible_card %}
+
+    {% collapsible_card "Active topics" "active-participating-topics" "" body_class="p-0" show=True %}
+      {% topic_rows institution.active_participating_topics %}
+    {% endcollapsible_card %}
+
+    {% collapsible_card "Finished topics" "finished-participating-topics" "" body_class="p-0" %}
+      {% topic_rows institution.finished_participating_topics %}
+    {% endcollapsible_card %}
+
+  {% endwith %}
+
+{% endblock %}

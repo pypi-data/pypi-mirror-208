@@ -1,0 +1,10 @@
+{% load humanize %}
+{% load events_programme %}
+{% if not object.start or not object.duration %}
+  <span class="slot-time text-muted">Not yet scheduled</span>
+{% else %}
+  <span class="slot-date fw-bold">
+    {{ object.start|naturalday }},
+  </span>
+  {% slot_time object %}
+{% endif %}

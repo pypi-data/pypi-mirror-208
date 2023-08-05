@@ -1,0 +1,12 @@
+{% load community_utils %}
+<a href="{{ url }}" class="badge rounded-pill text-decoration-none bg-primary m-2" title="Remove this filter">
+  {% close_icon %}
+  {{ label }}:
+  {% if object.start %}
+    {{ object.start }} to {{ object.stop }}
+  {% elif choice %}
+    {{ choice }}
+  {% else %}
+    {{ object }}
+  {% endif %}
+</a>

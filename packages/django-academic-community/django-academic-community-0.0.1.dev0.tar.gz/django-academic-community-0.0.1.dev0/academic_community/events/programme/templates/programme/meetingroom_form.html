@@ -1,0 +1,39 @@
+{% extends "base_detail.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load events_programme %}
+{% load cms_tags %}
+{% load django_bootstrap5 %}
+
+{% block headline %}Edit the {{ meetingroom }} Meeting Room{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% url "events:programme:session-list" meetingroom.event.slug as programme_url %}
+  {% url "events:programme:meetingroom-list" meetingroom.event.slug as meetingroom_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url meetingroom.event.name|combine:meetingroom.event.get_absolute_url "Programme"|combine:programme_url "Meeting rooms"|combine:meetingroom_list_url meetingroom.name|combine:meetingroom.get_absolute_url "Edit"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "programme/components/meetingroom_form_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=meetingroom.get_absolute_url %}
+    </div>
+  </form>
+
+{% endblock %}

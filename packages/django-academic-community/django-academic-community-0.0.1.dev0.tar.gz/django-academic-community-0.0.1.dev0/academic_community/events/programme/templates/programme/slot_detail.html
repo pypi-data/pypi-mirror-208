@@ -1,0 +1,79 @@
+{% extends "base_detail.html" %}
+
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load members %}
+{% load topics %}
+{% load cms_tags %}
+{% load events_programme %}
+
+{% block action_buttons %}
+  {% edit_button slot %}
+{% endblock %}
+
+{% block headline %}{{ slot }}{% endblock %}
+
+{% block head_meta %}
+  {% with meta_title=slot.title meta_description=slot.abstract|default:slot.session.abstract|default:slot.session.event.abstract meta_logo_alt=slot.session.event.name event=slot.session.event %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block breadcrumbs %}
+  {% if not session.event.single_session_mode %}
+    {% url "events:programme:session-list" slot.event.slug as programme_url %}
+    {% breadcrumbs slot.event.name|combine:slot.event.get_absolute_url "Programme"|combine:programme_url slot.session.title|combine:slot.session.get_absolute_url slot.title|combine:request.path %}
+  {% else %}
+    {% breadcrumbs slot.event.name|combine:slot.event.get_absolute_url slot.title|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" with event=slot.session.event hide_event_card=True %}
+    {% slot_card slot.session show_date=True body_class="p-0" %}
+    {% if slot.presentation_type %}
+      {% card %}
+        <b>{{ slot.presentation_type }}</b>
+      {% endcard %}
+    {% endif %}
+    {% collapsible_card "Connection details" "connection-details" "" body_class="p-0" show=True header_class="p-0" %}
+      <ul class="list-group">
+        <li class="list-group-item p-2">
+          {% slot_time slot %}
+        </li>
+        {% for room in slot.session.meeting_rooms.all %}
+          <li class="list-group-item p-0">
+            {% meetingroom_card room %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endcollapsible_card %}
+    {% with members=slot.organizing_members.all %}
+      {% if members %}
+        {% card header="Organizers" body_class="p-0" %}
+          {% for member in members %}
+            {% member_card member %}
+          {% endfor %}
+        {% endcard %}
+      {% endif %}
+    {% endwith %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  {{ slot.description }}
+
+{% endblock %}

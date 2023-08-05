@@ -1,0 +1,32 @@
+{% load events_programme %}
+{% load community_utils %}
+{% load community_buttons %}
+
+<div class="card {{ card_class }} {{ object_name }}-card mb-0">
+  <div class="card-body p-1" id="{{ base_id|default:'' }}-{{ object|object_id }}-header">
+    <div class="d-flex justify-content-between">
+      <button data-bs-toggle="collapse" type="button" class="btn btn-sm w-100" data-bs-target="#{{ base_id|default:'' }}-{{ object|object_id }}-collapse" aria-expanded="false" aria-controls="{{ base_id|default:'' }}-{{ object|object_id }}-collapse">
+        {% if object.start and object.duration %}
+          {% if show_date or show_time %}
+            <div class="card-title text-start">
+              {% if show_date %}{% slot_date_time object %}{% else %}{% slot_time object %}{% endif %}
+            </div>
+          {% endif %}
+        {% endif %}
+        <h6 class="card-title text-start fw-bold">
+          {{ object }}
+        </h6>
+      </button>
+    </div>
+  </div>
+  <div id="{{ base_id|default:'' }}-{{ object|object_id }}-collapse" class="collapse" aria-labelledby="{{ base_id|default:'' }}-{{ object|object_id }}-header">
+    <div class="card-body {{ body_class }}">
+      {% calendar_modal_content object %}
+    </div>
+
+    <div class="card-footer d-flex justify-content-end">
+      {% details_button object %}
+      {% edit_button object None button_class="btn-sm btn-primary" button_text="Edit" %}
+    </div>
+  </div>
+</div>

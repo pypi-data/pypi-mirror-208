@@ -1,0 +1,17 @@
+<div class="card {{ card_class|default:'' }}" {% if card_id %}id="{{ card_id }}"{% endif %}>
+  {% if header %}
+    <div class="card-header {{ header_class|default:'' }}" id="{{ card_id }}-header">
+      {{ header }}
+    </div>
+  {% endif %}
+
+  <div class="card-body {{ body_class|default:'' }}" {% if body_id %}id="{{ body_id }}"{% endif %}>
+    {{ content }}
+  </div>
+
+  {% if footer %}
+    <div class="card-footer {{ footer_class|default:'text-muted' }}" id="{{ card_id }}-footer">
+      {{ footer }}
+    </div>
+  {% endif %}
+</div>

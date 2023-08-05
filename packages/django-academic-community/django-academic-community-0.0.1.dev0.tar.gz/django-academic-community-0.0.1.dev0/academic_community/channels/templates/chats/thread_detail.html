@@ -1,0 +1,31 @@
+{% extends "chats/channel_detail.html" %}
+
+{% load community_utils %}
+{% load chats %}
+{% load bootstrap_helpers %}
+
+{% block title %}{% block headline %}{{ thread }}{% endblock %}{% endblock %}
+{% block subtitle %}in {{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% with all_channels_url=channel.get_list_url|str_add:"/.." %}
+    {% breadcrumbs "Channels"|combine:all_channels_url channel.channel_type|verbose_model_name_plural|combine:channel.get_list_url channel|name_for:user|combine:channel.get_absolute_url thread|combine:request.path %}
+  {% endwith %}
+{% endblock %}
+
+{% block channel_card %}
+  {% if thread.encryption_key %}
+    {{ thread.serializer.data|json_script:"thread-data" }}
+  {% endif %}
+  {% for threadcomment in thread.threadcomment_set.all %}
+    {% if threadcomment.encryption_key %}
+      {% with elem_id=threadcomment|object_id|str_add:"-js" %}
+        {{ threadcomment.serializer.data|json_script:elem_id }}
+      {% endwith %}
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+
+{% block content %}
+  {% include "chats/components/thread_conversation.html" %}
+{% endblock %}

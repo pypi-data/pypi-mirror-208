@@ -1,0 +1,23 @@
+Hello {{ subscription.user }}!
+
+You have just been subscribed to
+
+{{ subscription.channel }}{% if reason %}, because {{ reason }}{% endif %}
+
+You can view the channel at
+
+{{ root_url }}{{ subscription.channel.get_absolute_url }}
+
+{% if not subscription.channel.encryption_key %}
+Channel header:
+
+{{ subscription.channel.body }}
+{% endif %}
+
+You will receive notifications for any comments in this channel.
+Please visit {{ root_url }}{{ subscription.get_edit_url }}
+to unsubscribe or modify your notifications for this channel.
+
+
+Have a nice day,
+Your Community Managers

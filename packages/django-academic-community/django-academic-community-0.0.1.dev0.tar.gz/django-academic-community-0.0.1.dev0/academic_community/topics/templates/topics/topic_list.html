@@ -1,0 +1,44 @@
+{% extends "base_list.html" %}
+{% load django_bootstrap5 %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load topics %}
+
+{% block head_meta %}
+  {% with meta_title="Topics" meta_description="Topics in the "|add:community_name %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block headline %}Topic Browser{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  <a class="button btn btn-primary btn-round" href='{% url "topics:topic-create" %}'>
+    <i class="fas fa-plus-circle"></i>
+  </a>
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs "Topics"|combine:request.path %}
+{% endblock %}
+
+{% block filter_modal %}
+  <h2>Filter by</h2>
+  {% with form=filter.form %}
+    {% for card_id, form_card in filter.form_cards.items %}
+      {% collapsible_card form_card.label card_id "" show=form_card.show %}
+        {% for form_field in form_card.fields %}
+          {% bootstrap_field form|get_item:form_field %}
+        {% endfor %}
+      {% endcollapsible_card %}
+    {% endfor %}
+
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% topic_rows topic_list %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load community_utils %}
+{% spaceless %}
+<a class="btn btn-sm btn-round {% if subscription.following %}btn-primary btn-follow{% else %}btn-outline-primary btn-unfollow{% endif %}"
+ {% if subscription %}
+   {% if subscription.following %}
+     title="You are currently following this channel. Click here to edit this subscription."
+   {% else %}
+     title="You are currently not following this channel. Click here to follow or completely unsubscribe."
+   {% endif %}
+ {% else %}
+   title="Subscribe to this channel"
+ {% endif %}
+ href="{% url 'chats:edit-channelsubscription' channel.channel_id %}?next={% url_for_next %}">
+</a>
+{% endspaceless %}

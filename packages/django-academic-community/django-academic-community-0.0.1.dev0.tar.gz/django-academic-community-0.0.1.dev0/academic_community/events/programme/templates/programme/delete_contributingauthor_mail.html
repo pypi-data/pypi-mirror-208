@@ -1,0 +1,23 @@
+<p>
+    Hello {{ contributingauthor.author }}!
+</p>
+<p>
+    This is to inform you that you have been removed as co-author from the
+    following submission in the {{ contributingauthor.contribution.event }}:
+    <b>{{ contributingauthor.contribution }}</b>
+</p>
+<p>
+    If you think that this has been a mistake, please contact the submitter of
+    this contribution:
+    {% if contributingauthor.contribution.submitter.communitymember %}
+        <a href="{{ root_url }}{{ contributingauthor.contribution.submitter.communitymember.get_absolute_url }}">
+            {{ contributingauthor.contribution.submitter }}
+        </a>
+    {% else %}
+        {{ contributingauthor.contribution.submitter }}
+    {% endif %}
+</p>
+<p>
+    Best,<br>
+    Your Community Managers
+</p>

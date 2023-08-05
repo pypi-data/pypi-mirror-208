@@ -1,0 +1,101 @@
+{% extends "chats/channel_detail.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_badges %}
+{% load community_utils %}
+{% load chats %}
+{% load members %}
+
+{% block subtitle %}
+  {{ block.super }} {{ channel.channel_type.tracker }}: {{ channel.channel_type.status }}
+{% endblock %}
+
+{% block tabs %}
+
+  {% with subscription=channel|subscription_for:user active_tab=request.GET.tab|default:"conversationTab" %}
+    {% tab_list conversationTab="Conversation" subscriberTab="Subscribers" issuePropertiesTab="Properties" relationsTab="Related tasks" disabled_tabs=subscription|ifnotthen:"subscriberTab" %}
+
+      {% tab_content "conversationTab" %}
+        {% include "chats/components/channel_conversation.html" %}
+      {% endtab_content %}
+
+      {% tab_content "subscriberTab" %}
+        {% if subscription %}
+          {% member_rows channel.subscribers.all %}
+        {% endif %}
+      {% endtab_content %}
+
+      {% tab_content "issuePropertiesTab" %}
+        <table class="table table-responsive">
+          <tr>
+            <th class="table-active">Property</th>
+            <th class="table-active">Value</th>
+          </tr>
+          {% block properties %}
+            <tr>
+              <th class="table-active">Status</th>
+              <td>
+                {{ channel.channel_type.status }}
+              </td>
+            </tr>
+            {% if channel.channel_type.closed_on %}
+            <tr>
+              <th class="table-active">Closed on</th>
+              <td>
+                {{ channel.channel_type.closed_on }}
+              </td>
+            </tr>
+            {% endif %}
+            <tr>
+              <th class="table-active">Tracker</th>
+              <td>
+                {{ channel.channel_type.tracker }}
+              </td>
+            </tr>
+            <tr>
+              <th class="table-active">Priority</th>
+              <td>
+                {{ channel.channel_type.priority }}
+              </td>
+            </tr>
+            <tr>
+              <th class="table-active">Start date</th>
+              <td>
+                {{ channel.channel_type.start_date }}
+              </td>
+            </tr>
+            <tr>
+              <th class="table-active">Due date</th>
+              <td>
+                {{ channel.channel_type.due_date }}
+              </td>
+            </tr>
+            <tr>
+              <th class="table-active">Assignees</th>
+              <td>
+                {% for member in channel.channel_type.assignees.all %}
+                  {% member_badge member %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <th class="table-active">Progress</th>
+              <td>{{ channel.channel_type.done_ratio }} %</td>
+            </tr>
+            <tr>
+              <th class="table-active">Estimated hours</th>
+              <td>{{ channel.channel_type.estimated_hours }}</td>
+            </tr>
+          {% endblock %}
+        </table>
+      {% endtab_content %}
+
+      {% tab_content "relationsTab" %}
+        {% issue_tree channel.issue.issuenode.get_root highlight=channel%}
+      {% endtab_content %}
+
+    {% endtab_list %}
+
+  {% endwith %}
+
+{% endblock tabs %}

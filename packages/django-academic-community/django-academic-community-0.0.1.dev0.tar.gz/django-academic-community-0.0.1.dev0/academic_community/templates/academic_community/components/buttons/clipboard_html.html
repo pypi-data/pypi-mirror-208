@@ -1,0 +1,85 @@
+{% load sekizai_tags %}
+{% load django_bootstrap5 %}
+{% load community_utils %}
+
+
+<div class="d-none" id="{% if clipboard_wrapper_id %}{{ clipboard_wrapper_id }}{% else %}{{ content|md5 }}-wrapper{% endif %}">
+  {{ content }}
+</div>
+
+<button
+ type="button"
+ class="btn btn-link btn-{{ button_icon|default:"clipboard" }} {{ button_class }}"
+ title="{{ button_title|default:'Copy to clipboard.' }}"
+ onclick="copyHTMLToClipboard('{% if clipboard_wrapper_id %}{{ clipboard_wrapper_id }}{% else %}{{ content|md5 }}-wrapper{% endif %}')">
+  {{ clipboard_button_text }}
+</button>
+
+{% addtoblock "js" %}
+  <script>
+    function fallbackCopyHTMLToClipboard(elemID){
+      var wrapper = document.getElementById(elemID);
+      var elemToCopy = wrapper.children[0];
+      // show the wrapper (necessary for copying the contents)
+      wrapper.classList.remove("d-none");
+
+      var currentRange;
+      if(document.getSelection().rangeCount > 0) {
+           // store the current selection and remove it
+           currentRange = document.getSelection().getRangeAt(0);
+           window.getSelection().removeRange(currentRange);
+      } else {
+           currentRange = false;
+      }
+
+      // create a selection range and copy the element to clipboard
+      var range = document.createRange();
+      range.selectNode(elemToCopy);
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
+
+      // remove the range
+      window.getSelection().removeRange(range);
+
+      // select the old range again
+      if(currentRange) {
+           window.getSelection().addRange(currentRange);
+      }
+      // hide the wrapper
+      wrapper.classList.add("d-none");
+      displayMessageInToast("Copied to clipboard!")
+    }
+
+    function copyHTMLToClipboard(elemID){
+      // copy a given html element to clipboard.
+      // we first try the navigator, but if this is not accessible, we create a
+      // dedicated element and copy its content
+      if (!navigator.clipboard || (typeof(ClipboardItem) === "undefined")) {
+        fallbackCopyHTMLToClipboard(elemID);
+        return;
+      }
+
+      var wrapper = document.getElementById(elemID);
+      var elemToCopy = wrapper.children[0];
+
+      const blobInput = new Blob([elemToCopy.outerHTML], {type: 'text/html'});
+      const clipboardItemInput = new ClipboardItem({'text/html' : blobInput});
+
+      navigator.clipboard.write([clipboardItemInput]).then(
+        function() {displayMessageInToast("Copied to clipboard!")},
+        function(err) {
+          window.prompt("Could not copy the text to clipboard", err);
+        }
+      );
+
+    }
+  </script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>
+    $(function () {
+      $('[data-bs-toggle="popover"]').popover()
+    })
+  </script>
+{% endaddtoblock %}

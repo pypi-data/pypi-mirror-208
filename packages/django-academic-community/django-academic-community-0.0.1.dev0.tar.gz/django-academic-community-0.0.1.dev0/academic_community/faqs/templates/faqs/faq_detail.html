@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap_helpers %}
+{% load guardian_tags %}
+{% load community_utils %}
+
+{% block head_meta %}
+  {% with meta_title=faq.question meta_description=faq.plain_text_answer %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock head_meta %}
+
+
+{% block headline %}{{ faq }}{% endblock %}
+
+
+{% block breadcrumbs %}
+  {% url 'faqs:questioncategory-list' as faq_list_url %}
+  {% with category=faq.categories.first %}
+    {% if category %}
+      {% breadcrumbs "FAQs"|combine:faq_list_url category|combine:category.get_absolute_url faq|combine:request.path %}
+    {% else %}
+    {% breadcrumbs "FAQs"|combine:faq_list_url faq|combine:request.path %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block action_buttons %}
+  {% get_obj_perms user for faq as "user_perms" %}
+  {% if perms.faqs.change_faq or "change_faq" in user_perms %}
+    <a class="button btn btn-primary btn-round btn-edit" title="Edit the question"
+     href='{% url "faqs:edit-faq" faq.pk %}'>
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% include "faqs/faq_detail_content.html" %}
+{% endblock %}

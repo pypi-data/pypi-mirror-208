@@ -1,0 +1,118 @@
+{% load sekizai_tags %}
+{% load events_programme %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load guardian_tags %}
+
+<div class="card {{ card_class }} {{ object_name }}-card mb-0">
+  <div class="card-body p-1" id="{{ base_id|default:'' }}-{{ object|object_id }}-header">
+    <div class="d-flex justify-content-between">
+      <button data-bs-toggle="collapse" type="button" class="btn btn-sm w-100" data-bs-target="#{{ base_id|default:'' }}-{{ object|object_id }}-collapse" aria-expanded="false" aria-controls="{{ base_id|default:'' }}-{{ object|object_id }}-collapse">
+        {% if object.start and object.duration %}
+          {% if show_date or show_time %}
+            <div class="card-title text-start">
+              {% if show_date %}{% slot_date_time object %}{% else %}{% slot_time object %}{% endif %}
+            </div>
+          {% endif %}
+        {% endif %}
+        <h6 class="card-title text-start fw-bold">
+          {{ object }}
+        </h6>
+      </button>
+      {% if select_for_room %}
+        {% csrf_token %}
+        {% with bg_color=session.presentation_type.color|default:'#3788D8FF' font_color=session.presentation_type.font_color|default:'#fff' default_duration=default_duration|default_if_none:"01:00" %}
+          <div class="form-check form-switch">
+            <input
+             type="checkbox" {% if select_for_room in session.meeting_rooms.all %}checked{% endif %}
+             class="form-check-input"
+             role="switch"
+             id="switch-session-{{ session.pk }}"
+             data-current-rooms='[{% for room in session.meeting_rooms.all %}{{ room.id }}{% if not forloop.last %},{% endif %} {% endfor %}]'
+             data-title='{{ session.title }}'
+             data-start='{{ session.start|date:'c' }}'
+             data-duration='{{ session.duration }}'
+             data-object-id="{{ session|object_id }}"
+             data-background-color="{{ bg_color }}"
+             data-font-color="{{ font_color }}"
+             data-presentation-type="{{ session.presentation_type.id|default:'' }}"
+             data-rest-uri='{{ session.rest_uri }}' onclick="selectRoom(this)">
+            <label class="form-check-label" for="switch-session-{{ session.pk }}"></label>
+          </div>
+        {% endwith %}
+      {% endif %}
+    </div>
+  </div>
+  <div id="{{ base_id|default:'' }}-{{ object|object_id }}-collapse" class="collapse" aria-labelledby="{{ base_id|default:'' }}-{{ object|object_id }}-header">
+    <div class="card-body {{ body_class }}">
+      <div>
+        {% for convener in session.conveners.all %}
+          {% member_badge convener %}
+        {% endfor %}
+      </div>
+      <div class="mt-4 mb-4">
+        {{ session.abstract|truncatewords_html:200 }}
+      </div>
+    </div>
+
+    <div class="card-footer d-flex justify-content-end">
+      {% details_button object button_text="View session agenda" %}
+      {% edit_button object None button_class="btn-sm btn-primary" button_text="Edit" %}
+      {% get_obj_perms user for object as "session_perms" %}
+      {% if perms.programme.change_session or "change_session" in session_perms %}
+        <a class="button btn btn-sm btn-primary ms-2 btn-round btn-send" title="Send a notification to coauthors"
+          href='{% url "events:programme:session-notify" object.event.slug object.pk %}?session={{ object.pk }}'></a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% addtoblock "js" %}
+  {% if select_for_room %}
+    <script>
+      function selectRoom(cb) {
+        var sessionId = {{ select_for_room.id }};
+        var currentRooms = JSON.parse(cb.dataset.currentRooms);
+        var addToCalendar = false;
+        if (currentRooms.includes({{ select_for_room.pk }})) {
+          let roomIndex = currentRooms.indexOf({{ select_for_room.pk }});
+          currentRooms.splice(roomIndex, 1);
+        } else {
+          currentRooms.push({{ select_for_room.pk }});
+          addToCalendar = true;
+        }
+        var data = {
+          meeting_rooms: currentRooms,
+        };
+        cb.dataset.currentRooms = JSON.stringify(currentRooms);
+        $.ajax({
+          url: cb.dataset.restUri,
+          type: 'PATCH',
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          headers:{'X-CSRFTOKEN':$('input[name="csrfmiddlewaretoken"]').val()},
+          success: function (data) {}
+        });
+        if (typeof(calendar) !== "undefined") {
+          if (addToCalendar) {
+            var eventData = {
+              id: cb.dataset.objectId,
+              title: cb.dataset.title,
+              start: cb.dataset.start,
+              duration: cb.dataset.duration,
+              backgroundColor: cb.dataset.backgroundColor,
+              borderColor: cb.dataset.backgroundColor,
+              textColor: cb.dataset.fontColor
+            };
+            calendar.addEvent(eventData);
+          } else {
+            var event = calendar.getEventById(cb.dataset.objectId);
+            event.remove();
+          }
+        }
+      }
+    </script>
+  {% endif %}
+{% endaddtoblock %}

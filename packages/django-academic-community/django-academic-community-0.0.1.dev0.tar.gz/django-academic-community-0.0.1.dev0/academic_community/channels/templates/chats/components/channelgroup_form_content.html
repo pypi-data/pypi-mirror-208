@@ -1,0 +1,43 @@
+{% load django_bootstrap5 %}
+{% load sekizai_tags %}
+
+{% bootstrap_form form %}
+
+{% addtoblock "js" %}
+  <script>
+    function slugify(str) {
+      return str.toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-');
+    }
+
+    var slugModified = {% if form.instance.slug %}true{% else %}false{% endif %};
+
+    function setSlug(e) {
+      // propose a slug for the event
+      var text = e.target.value;
+      if (!slugModified) {
+        var slugified = slugify(text);
+        var slugInput = document.querySelector("#id_slug");
+        slugInput.value = slugified;
+      }
+
+    }
+
+    function onSlugModification(e) {
+      slugModified = true;
+    }
+
+    $(document).ready(
+      function() {
+        // connect form button to generate the slug
+        const nameInput = document.getElementById('id_name');
+        const slugInput = document.getElementById('id_slug');
+
+        nameInput.addEventListener('input', setSlug);
+        slugInput.addEventListener('input', onSlugModification);
+      }
+    )
+
+  </script>
+{% endaddtoblock %}

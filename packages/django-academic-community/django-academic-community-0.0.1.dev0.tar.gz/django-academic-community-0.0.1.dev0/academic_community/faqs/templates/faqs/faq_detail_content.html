@@ -1,0 +1,31 @@
+{% load django_bootstrap5 %}
+{% load community_utils %}
+{% load faqs %}
+{{ faq.answer }}
+
+{% if request.path != faq.get_absolute_url %}
+  {% bootstrap_button "Permalink to this question <i class='fas fa-link'></i>" href=faq.get_absolute_url button_class="btn-link" %}
+{% endif %}
+
+{% if related_questions %}
+  {% filter_for_user "view_faq" faq.related_questions as faq_list %}
+  {% if faq_list.count %}
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Related questions</h5>
+        {% faq_list faq.related_questions.all related_questions=False %}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% if categories and faq.categories.count %}
+  <div class="card mt-3">
+    <div class="card-body">
+      <h5 class="card-title">Categories</h5>
+      {% for category in faq.categories.all %}
+        <a href="{{ category.get_absolute_url }}" class="badge bg-primary">{{ category }}</a>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

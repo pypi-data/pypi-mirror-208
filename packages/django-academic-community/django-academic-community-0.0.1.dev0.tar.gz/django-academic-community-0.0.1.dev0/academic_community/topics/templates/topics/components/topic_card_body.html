@@ -1,0 +1,37 @@
+{% load activities %}
+{% load topics %}
+{% load humanize %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+
+<div class="card-body {{ body_class }}">
+  <div class="row row-cols-auto">
+    {% for activity in topic.activities.all %}
+      {% activity_badge activity %}
+    {% endfor %}
+    {% details_button topic %}
+    {% edit_button topic None button_class="btn-primary btn-md-sm btn-round ms-auto ms-auto"%}
+  </div>
+  <div class="row row-cols-auto mb-2">
+    {% start_date_badge topic %}
+    {% end_date_badge topic %}
+    {% last_modification_date_badge topic %}
+    {% for membership in topic.approved_memberships %}
+      {% membership_description membership topic.id_name membership.member|equals:topic.leader|ifthen:"Leader of" as description %}
+      {% if membership.end_date %}
+        {% member_badge membership.member description "fw-light" %}
+      {% else %}
+        {% member_badge membership.member description %}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {{ topic.description }}
+
+  <div class="row row-cols-auto">
+    {% for keyword in topic.keywords.all %}
+      {% keyword_badge keyword %}
+    {% endfor %}
+  </div>
+</div>

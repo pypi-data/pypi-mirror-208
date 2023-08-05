@@ -1,0 +1,39 @@
+{% load community_utils %}
+{% load cms_tags %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-transparent">
+    {% page_url "home" as home %}
+    <li class="breadcrumb-item">
+      <a href="{{ home|default:'/' }}"><i class="fas fa-home"></i></a>
+    </li>
+    {% with nbreadcrumbs=breadcrumbs|length %}
+      {% for name, path in breadcrumbs %}
+        {% spaceless %}
+          {% if path|same_url:request.path %}
+            {% if nbreadcrumbs > 1 %}
+              <li class="breadcrumb-item d-lg-none">
+                <a class="dropdown-toggle text-decoration-none" href="#" id="breadcrumpDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  ...
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="breadcrumpDropdown">
+                  {% for name, path in breadcrumbs %}
+                     {% if not forloop.last %}
+                       <a class="dropdown-item text-decoration-none" href="{{ path }}">{{ name }}</a>
+                     {% endif %}
+                  {% endfor %}
+                </div>
+              </li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ name }}
+            </li>
+          {% else %}
+            <li class="breadcrumb-item d-none d-lg-block">
+             <a href="{{ path }}" class="text-decoration-none">{{ name }}</a>
+           </li>
+          {% endif %}
+        {% endspaceless %}
+      {% endfor %}
+    {% endwith %}
+  </ol>
+</nav>

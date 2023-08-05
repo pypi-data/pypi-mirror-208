@@ -1,0 +1,25 @@
+<div class="card {{ card_class|default:'' }}" id="{{ card_id }}">
+  <div class="card-header d-flex {{ header_class|default:'' }}" id="{{ card_id }}-header">
+    <h2 class="flex-grow-1">
+      <button class="btn btn-block text-start {{ button_class|default_if_none:'btn-link' }}"
+      type="button" data-bs-toggle="collapse" id="{{ card_id }}-control"
+      aria-expanded="{%if show %}true{% else %}false{% endif %}"
+      data-bs-target="#{{ card_id }}-content"
+      aria-controls="{{ card_id }}-content">
+          {{ title }}
+      </button>
+    </h2>
+    {% if buttons %}
+      {% for elem in buttons %}
+        <span class="{{ buttons_class|default:'align-self-center px-1 px-md-3' }}">{{ elem }}
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div id="{{ card_id }}-content" class="collapse {% if show %}show{% endif %}"
+   aria-labelledby="{{ card_id }}-header" {% if parent_id %}data-bs-parent="#{{ parent_id }}"{% endif %}>
+    <div class="card-body {{ body_class|default:'' }}">
+      {{ content }}
+    </div>
+  </div>
+</div>

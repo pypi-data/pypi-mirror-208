@@ -1,0 +1,46 @@
+
+{% spaceless %}
+{% load events_registrations %}
+<p>
+    Hello {{ contributingauthor.author }}!
+</p>
+<p>
+    This is to inform you that you have been added as
+    {% if contributingauthor.is_presenter %}presenting {% else %}co-{%endif%}author
+    for the following submission in the {{ contributingauthor.contribution.event }}:
+    <b>{{ contributingauthor.contribution }}</b>
+</p>
+<p>
+    If you think that this has been a mistake, please contact the submitter of
+    this contribution:
+    {% if contributingauthor.contribution.submitter.communitymember %}
+        <a href="{{ root_url }}{{ contributingauthor.contribution.submitter.communitymember.get_absolute_url }}">
+            {{ contributingauthor.contribution.submitter }}
+        </a>
+    {% else %}
+        {{ contributingauthor.contribution.submitter }}
+    {% endif %}
+</p>
+{% if contributingauthor.contribution.event.registration_possible and not contributingauthor.author.member|is_registered:contributingauthor.contribution.event %}
+<p>
+    {% url "events:registrations:registration-create" contributingauthor.contribution.event.slug as registration_url %}
+    If you plan to attend the {{ contributingauthor.contribution.event }}, please do register at
+    <a href="{{ root_url }}{{ registration_url }}">{{ root_url }}{{ registration_url }}</a>
+</p>
+{% endif %}
+<p>
+    Please view/update your submission at the following url:
+    <a href="{{ root_url }}{{ contributingauthor.contribution.get_absolute_url }}">{{ root_url }}{{ contributingauthor.contribution.get_absolute_url }}</a>.
+    You can view/update all your submissions to the {{ contributingauthor.contribution.event }} at
+    {% url 'events:programme:contribution-list' contributingauthor.contribution.event.slug as contribution_list %}
+    <a href="{{ root_url }}{{ contribution_list }}?user={{ contributingauthor.author.member.pk }}">{{ root_url }}{{ contribution_list }}?user={{ contributingauthor.author.member.pk }}</a>.
+</p>
+<p>
+    If you wish to withdraw this submission, please
+    <a href="{{ root_url }}{% url "contact:contact" %}">contact the website administrators</a>.
+</p>
+<p>
+    Best,<br>
+    Your organizers of the {{ contributingauthor.contribution.event }}
+</p>
+{% endspaceless %}

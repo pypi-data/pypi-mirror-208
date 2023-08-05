@@ -1,0 +1,18 @@
+{% extends "uploaded_material/material_list.html" %}
+
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load guardian_tags %}
+
+{% block subtitle %}{{ channel }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url channel|name_for:user|combine:channel.get_absolute_url "Material"|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "chats/components/channel_sidebar.html" %}
+  {% endblock %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load static %}
+{% load sekizai_tags %}
+
+{{ body }}
+
+{% addtoblock "css" %}
+  <link href="{% static 'djangocms_text_ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css' %}" rel="stylesheet">
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script src="{% static 'djangocms_text_ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js' %}"></script>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+  <script>hljs.initHighlightingOnLoad();</script>
+{% endaddtoblock %}

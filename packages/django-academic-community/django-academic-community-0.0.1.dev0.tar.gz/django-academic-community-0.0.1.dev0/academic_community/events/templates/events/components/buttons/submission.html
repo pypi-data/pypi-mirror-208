@@ -1,0 +1,23 @@
+{% load guardian_tags %}
+{% load community_utils %}
+
+{% get_obj_perms user for event as "member_perms" %}
+
+{% url 'events:programme:contribution-create' event.slug as submission_url %}
+
+{% if display_button or perms.events.submit_contribution or "submit_contribution" in member_perms %}
+  <a href="{{ submission_url }}" class="{{ button_class|default:'btn btn-primary' }} {% if user.is_authenticated and not perms.events.submit_contribution and not 'submit_contribution' in member_perms %}disabled{% endif %}">
+    <div>Submit an Abstract</div>
+    {% if event.submission_range %}
+      <small class="text-muted">
+        {% if event.submission_range.lower|in_the_future %}
+          Submission opens in {{ event.submission_range.lower|timeuntil }}
+        {% elif event.submission_range.upper|in_the_past %}
+          Submission ended on {{ event.submission_range.upper|date }}
+        {% else %}
+          Submission closes on {{ event.submission_range.upper|date }} ({{ event.submission_range.upper|timeuntil }} left)
+        {% endif %}
+      </small>
+    {% endif %}
+  </a>
+{% endif %}

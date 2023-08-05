@@ -1,0 +1,51 @@
+{% load community_buttons %}
+{% load community_badges %}
+{% load activities %}
+{% load events_programme %}
+{% load uploaded_material %}
+
+<div class="card-body {{ contribution_body_class }}">
+  {% if contribution.activity %}
+    <div class="row row-cols-auto">
+      {% activity_badge contribution.activity %}
+    </div>
+  {% endif %}
+  <div class="row row-cols-auto">
+    {{ contribution.abstract|truncatewords_html:200 }}
+  </div>
+  {% with meetingroom_list=contribution.session.meeting_rooms.all %}
+    {% if meetingroom_list %}
+      <h4>Meeting room{{ meetingroom_list|pluralize }}</h4>
+      {% meetingroom_cards meetingroom_list row_class='row-cols-1 row-cols-lg-2' %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+
+<div class="card-footer d-flex justify-content-end">
+  <div class="flex-grow-1">
+    <b>License:</b>
+    {% if contribution.license.url %}
+      <a href="{{ contribution.license.url }}">{{ contribution.license.identifier }}</a>
+    {% else %}
+      {{ contribution.license }}
+    {% endif %}
+  </div>
+  {% if contribution.session %}
+    {% material_add_perm user "programme.ContributionMaterialRelation" event_slug=contribution.event.slug contribution_pk=contribution.pk as has_material_add_perm %}
+    {% if has_material_add_perm %}
+      <a class="button btn btn-primary btn-round" title="Upload material for the contribution"
+       href='{% material_add_url "programme.ContributionMaterialRelation" event_slug=contribution.event.slug contribution_pk=contribution.pk %}'>
+        <i class="fas fa-upload"></i>
+      </a>
+    {% endif %}
+    {% if contribution.contributionmaterialrelation_set.exists %}
+      <a class="button btn btn-primary btn-round ms-2" title="Download contribution material"
+      href='{% material_list_url "programme.ContributionMaterialRelation" event_slug=contribution.event.slug contribution_pk=contribution.pk %}'>
+        <i class="fas fa-download"></i>
+      </a>
+    {% endif %}
+  {% endif %}
+  {% details_button contribution %}
+  {% edit_button contribution None button_class="btn-sm btn-primary" button_text="Edit" %}
+</div>

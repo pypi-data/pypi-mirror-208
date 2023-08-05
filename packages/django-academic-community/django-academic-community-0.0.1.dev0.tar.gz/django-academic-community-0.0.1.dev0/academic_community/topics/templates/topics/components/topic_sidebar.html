@@ -1,0 +1,110 @@
+{% load guardian_tags %}
+{% load static %}
+{% load institutions %}
+{% load members %}
+{% load community_badges %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load activities %}
+{% load topics %}
+{% load uploaded_material %}
+{% load chats %}
+
+{% for institution in topic.institutions %}
+  {% organization_card institution base_id="lead-institution-" %}
+{% endfor %}
+{% with body_class="p-0" %}
+  {% card header="Leader" %}
+      {% member_card topic.leader %}
+    {% endcard %}
+  {% card header="Stats" %}
+    {% start_date_badge topic %}
+    {% end_date_badge topic %}
+    {% last_modification_date_badge topic %}
+    {% members_badge topic topic.approved_memberships %}
+  {% endcard %}
+  {% card header="Collaborations" %}
+    <ul class="list-group">
+      <li class="list-group-item p-2">
+        {% for activity in topic.activities.all %}
+          {% activity_badge activity %}
+        {% endfor %}
+      </li>
+      {% if topic.program %}
+        <li class="list-group-item p-2">
+          <b>Superior program:</b> {{ topic.program}}
+        </li>
+      {% endif %}
+    </ul>
+  {% endcard %}
+
+  {% if not hide_channels|default:False %}
+    {% card header="Topic channels" %}
+      <a href="{% url 'topics:topicchannelrelation-list' topic.id_name %}" type="button" class="btn btn-link">
+        View all channels
+      </a>
+      <div class="list-group max-vh-25 overflow-auto">
+        {% for channel_relation in topic.topicchannelrelation_set.all|filter_relations:user|order_by:"-channel__last_comment_modification_date" %}
+          {% with channel=channel_relation.channel %}
+            {% with subscription=channel|subscription_for:user %}
+              {% set_channel_relation channel channel_relation as channel_relation %}
+              <a href="{{ channel.get_absolute_url }}" data-channel-id="{{ channel.channel_id }}" class="list-group-item list-group-item-action channel-item channel-sidebar-item d-flex justify-content-between{% if channel.get_absolute_url|same_url:request.path %}active{% endif %} {% if channel|display_in_sidebar:group and subscription.unread %}unread{% endif %} {% if not channel|display_always_in_sidebar:group %}d-none{% endif %}">
+                <div class="d-flex w-100">
+                  <span class="w-100">{{ channel|name_for:user }}</span>
+                  <span class="flex-shrink-1 text-muted">#{{ channel.channel_id }}</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    {% endcard %}
+  {% endif %}
+
+  {% if not hide_material %}
+    {% with topicmaterial_list=topic.topicmaterialrelation_set.all %}
+      {% get_obj_perms user for topic as "topic_perms" %}
+      {% if topicmaterial_list or perms.topics.change_topic or "change_topic" in topic_perms %}
+      {% card header="Topic Material" %}
+        {% material_links topicmaterial_list.model %}
+        {% material_cards topicmaterial_list limit=5 truncate_name=True %}
+      {% endcard %}
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+
+  {% if topic.keywords %}
+    {% card header="Keywords" %}
+      {% for keyword in topic.keywords.all %}
+        {% keyword_badge keyword %}
+      {% endfor %}
+    {% endcard %}
+  {% endif %}
+
+  {% with left_related=topic.relation_left.all right_related=topic.relation_right.all %}
+    {% if left_related.exists or right_related.exists %}
+      {% card header="Related topics" %}
+        <h5 class="card-title p-2">{{ topic.id_name }}</h5>
+        <ul>
+          {% for relation in left_related %}
+            <li>
+              {{ relation.relation_type_obj.label }}
+              <a href="{{ relation.right.get_absolute_url }}">
+                {{ relation.right }}
+              </a>
+            </li>
+          {% endfor %}
+          {% for relation in right_related %}
+            <li>
+              {{ relation.relation_type_obj.reverse_relation.label }}
+              <a href="{{ relation.left.get_absolute_url }}">
+                {{ relation.left }}
+              </a>
+            </li>
+          {% endfor %}
+          </ul>
+      {% endcard %}
+    {% endif %}
+  {% endwith %}
+{% endwith %}

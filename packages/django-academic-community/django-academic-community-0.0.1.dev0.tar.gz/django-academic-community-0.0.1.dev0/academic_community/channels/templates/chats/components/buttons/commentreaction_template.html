@@ -1,0 +1,8 @@
+{% extends "chats/components/buttons/commentreaction.html" %}
+{% load chats %}
+
+{% block button %}
+  <button type="button" class="btn btn-outline-dark btn-commentreaction mx-2 {% if not user|can_post_comment:channel %}disabled{% endif %}" data-comment-id="${commentreaction.comment}" data-emoji-value="${commentreaction.emoji_name}">
+    ${commentreaction.emoji} <span class="reaction-count">${commentreaction.user_count}</span>
+  </button>
+{% endblock button %}

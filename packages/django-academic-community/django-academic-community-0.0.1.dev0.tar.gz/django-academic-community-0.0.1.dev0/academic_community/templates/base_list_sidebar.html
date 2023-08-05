@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load bootstrap_helpers %}
+{% load sekizai_tags %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+  {% addtoblock "css" %}
+    {{ filter.form.media.css }}
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+    {{ filter.form.media.js }}
+  {% endaddtoblock %}
+{% endblock %}
+
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% if filter.form %}
+    {% filter_modal_button %}
+      {% block filter_modal %}
+        {% bootstrap_form filter.form %}
+      {% endblock %}
+    {% endfilter_modal_button %}
+  {% endif %}
+{% endblock %}
+
+{% block display %}
+  <button class="btn left d-lg-none my-2 mx-2 border-1 border-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-sidebar" aria-controls="offcanvas-sidebar">
+    <i class="fas fa-angle-double-right"></i>
+  </button>
+
+  {% if filter.form %}
+    {% card header="Filters" card_class="col border-0 col-12 mb-4 p-0 border-light text-muted" header_class="bg-transparent fw-bolder" %}
+      {% active_filters filter as filters %}
+      {% bootstrap_form_errors filter.form %}
+      {% if filters %}{{ filters }}{% else %}No filters applied.{% endif %}
+      {% block count %}
+        <p class="text-end">
+          {% if is_paginated %}
+            Displaying results {{ page_obj.start_index }}..{{ page_obj.end_index }} of {{ paginator.count }}.
+          {% else %}
+            Displaying {{ object_list.count }} results.
+          {% endif %}
+        </p>
+      {% endblock %}
+    {% endcard %}
+  {% endif %}
+
+  {{ block.super }}
+
+{% endblock %}
+
+{% block container %}
+  <div class="row">
+    <div class="col col-12 col-lg-3">
+      <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvas-sidebar">
+        <div class="offcanvas-header">
+          {% comment %} <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Responsive offcanvas</h5> {% endcomment %}
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-sidebar" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-block">
+          {% block sidebar_left %}{% endblock %}
+        </div>
+      </div>
+    </div>
+
+    <div class="right col col-12 col-lg-9" id="details-content">
+      {{ block.super }}
+    </div>
+  </div>
+{% endblock %}

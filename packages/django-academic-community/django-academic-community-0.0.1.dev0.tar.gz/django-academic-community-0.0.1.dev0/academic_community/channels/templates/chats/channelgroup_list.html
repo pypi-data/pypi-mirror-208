@@ -1,0 +1,32 @@
+{% extends "chats/base_list.html" %}
+
+{% load community_utils %}
+{% load community_buttons %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load chats %}
+
+{% block breadcrumbs %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url "Groups"|combine:request.path %}
+{% endblock %}
+
+{% block headline %}Your subscribed chats{% endblock %}
+{% block title %}Your chats{% endblock %}
+
+
+{% block content %}
+
+  {% for group in user.channelgroup_set.all %}
+    {% edit_button group True button_class="btn-round btn-link text-muted text-decoration-none" as edit_button_item %}
+    {% details_button group details_button_class="btn-round btn-link text-muted text-decoration-none" button_text=" " as details_button_item %}
+    {% collapsible_card group.name group|object_id|add:"-channelgroup-list-item" "" details_button_item edit_button_item body_class="p-0" show=forloop.first card_class="mb-2" buttons_class='align-self-center' %}
+      <div class="list-group">
+        {% for channel in group.channels.all|slice:":50" %}
+          {% channel_item channel %}
+        {% endfor %}
+      </div>
+    {% endcollapsible_card %}
+  {% endfor %}
+
+{% endblock %}

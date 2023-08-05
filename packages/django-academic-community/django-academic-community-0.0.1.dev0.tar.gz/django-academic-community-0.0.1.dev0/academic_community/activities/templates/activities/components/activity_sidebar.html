@@ -1,0 +1,77 @@
+{% load guardian_tags %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_badges %}
+{% load activities %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load members %}
+{% load topics %}
+{% load uploaded_material %}
+{% load chats %}
+
+{% with body_class="p-0" %}
+  {% card header="Leader" %}
+    {% for leader in activity.leaders.all %}
+      {% member_card leader %}
+    {% endfor %}
+  {% endcard %}
+  {% card header="Stats" %}
+    {% start_date_badge activity %}
+    {% end_date_badge activity %}
+    {% active_topics_badge activity %}
+    {% if activity.end_date %}
+      {% members_badge activity activity.former_members.all %}
+    {% else %}
+      {% members_badge activity activity.members.all %}
+    {% endif %}
+  {% endcard %}
+
+  {% if not hide_channels|default:False %}
+    {% card header="Working group channels" %}
+      <a href="{% url 'activities:activitychannelrelation-list' activity.abbreviation %}" type="button" class="btn btn-link">
+        View all channels
+      </a>
+      <div class="list-group max-vh-25 overflow-auto">
+        {% for channel_relation in activity.activitychannelrelation_set.all|filter_relations:user|order_by:"-channel__last_comment_modification_date" %}
+          {% with channel=channel_relation.channel %}
+            {% with subscription=channel|subscription_for:user %}
+              {% set_channel_relation channel channel_relation as channel_relation %}
+              <a href="{{ channel.get_absolute_url }}" data-channel-id="{{ channel.channel_id }}" class="list-group-item list-group-item-action channel-item channel-sidebar-item d-flex justify-content-between{% if channel.get_absolute_url|same_url:request.path %}active{% endif %} {% if channel|display_in_sidebar:group and subscription.unread %}unread{% endif %} {% if not channel|display_always_in_sidebar:group %}d-none{% endif %}">
+                <div class="d-flex w-100">
+                  <span class="w-100">{{ channel|name_for:user }}</span>
+                  <span class="flex-shrink-1 text-muted">#{{ channel.channel_id }}</span>
+                </div>
+              </a>
+            {% endwith %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    {% endcard %}
+  {% endif %}
+
+  {% if not hide_material|default:False %}
+    {% with activitymaterial_list=activity.activitymaterialrelation_set.all %}
+      {% get_obj_perms user for activity as "activity_perms" %}
+      {% if activitymaterial_list or perms.activities.change_activity or "change_activity" in activity_perms %}
+      {% card header="Working group material" %}
+        {% material_links "activities.ActivityMaterialRelation" abbreviation=activity.abbreviation %}
+        {% material_cards activitymaterial_list limit=5 truncate_name=True %}
+      {% endcard %}
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+  {% with mailinglists=activity.sympamailinglist_set.all %}
+    {% if mailinglists %}
+      {% card header="Contact members" %}
+        <div class="list-group">
+          {% for mailinglist in mailinglists %}
+            <a href="mailto:{{ mailinglist.list_email }}" class="align-top list-group-item list-group-item-action">
+              <i class="fas fa-envelope"></i> {{ mailinglist.list_email }}
+            </a>
+          {% endfor %}
+        </div>
+      {% endcard %}
+    {% endif %}
+  {% endwith %}
+{% endwith %}

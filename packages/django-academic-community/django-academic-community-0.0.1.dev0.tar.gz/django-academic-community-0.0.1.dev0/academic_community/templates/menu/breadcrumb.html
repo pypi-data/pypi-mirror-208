@@ -1,0 +1,40 @@
+{% load community_utils %}
+{%load cms_tags %}
+
+{% page_url "home" as home %}
+
+{% if not home|same_url:request.path %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent">
+      {% with nbreadcrumbs=ancestors|length %}
+        {% for ance in ancestors %}
+          {% spaceless %}
+            {% if ance.get_absolute_url|same_url:request.path %}
+              {% if nbreadcrumbs > 1 %}
+                <li class="breadcrumb-item d-lg-none">
+                  <a class="dropdown-toggle text-decoration-none" href="#" id="breadcrumpDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ...
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="breadcrumpDropdown">
+                    {% for ance in ancestors %}
+                      {% if not forloop.last %}
+                        <a class="dropdown-item text-decoration-none" href="{{ ance.get_absolute_url }}">{{ ance.get_menu_title }}</a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </li>
+              {% endif %}
+              <li class="breadcrumb-item active" aria-current="page">
+                {{ ance.get_menu_title }}
+              </li>
+            {% else %}
+              <li class="breadcrumb-item d-none d-lg-block">
+              <a href="{{ ance.get_absolute_url }}" class="text-decoration-none">{{ ance.get_menu_title }}</a>
+            </li>
+            {% endif %}
+          {% endspaceless %}
+        {% endfor %}
+      {% endwith %}
+    </ol>
+  </nav>
+{% endif %}

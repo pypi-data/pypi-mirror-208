@@ -1,0 +1,180 @@
+{% extends "base_detail.html" %}
+
+{% load community_buttons %}
+{% load community_badges %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load uploaded_material %}
+
+{% block title %}{{ material }}{% endblock %}
+{% block headline %}{{ material }}{% endblock %}
+{% block subtitle %}{{ material_relation.related_permission_object }}{% endblock %}
+
+{% block action_buttons %}
+  {% edit_button material %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% breadcrumbs material|verbose_model_name|combine:material.get_list_url material.name|combine:request.path %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% render_material_sidebar material_relation_model|default:material %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+
+  <h2>Description</h2>
+  {{ material.description|default:"<p class='text-muted'>No description provided</p>" }}
+
+
+  {% if material.external_url %}
+    <a href="{{ material.external_url }}" role="button" class="btn btn-external my-4">
+      Access on external site
+    </a>
+  {% endif %}
+  {% if material.upload_material %}
+    <a href="{{ material.upload_material.url }}" role="button" class="btn btn-download my-4">
+      Download
+    </a>
+  {% endif %}
+
+  {% with active_tab=request.GET.tab|default:"contentTab"%}
+    {% tab_list contentTab="Content" availabilityTab="Availability" propertiesTab="Properties" %}
+
+      {% tab_content "contentTab" %}
+
+        <h2>Content</h2>
+        {{ material.content|default:"<p class='text-muted'>No content provided</p>" }}
+      {% endtab_content %}
+
+      {% tab_content "availabilityTab" %}
+        {% block implementations %}
+          <h2>Availability of this material</h2>
+          <p>
+            This material is available as
+          </p>
+          <ul>
+            <li>
+              <a href="{% url 'material-detail' material.uuid %}">
+                {% with ngroups=material.group_view_permission.count nusers=material.user_view_permission.count%}
+                  Regular material
+                  {% if ngroups %}
+                    accessible to {{ ngroups }} group{{ ngroups|pluralize }}{% if nusers %} and{% else %}.{% endif %}
+                  {% endif %}
+                  {% if nusers %}
+                    accessible to {{ nusers }} user{{ nusers|pluralize }}.
+                  {% endif %}
+                {% endwith %}
+              </a>
+            </li>
+            {% for relation in material.relations %}
+              <li>
+                <a href="{{ relation.get_absolute_url }}">
+                  {{ relation|verbose_material_name }}
+                  {% if relation.related_permission_object %} of {{ relation.related_permission_object }}{% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endblock implementations %}
+      {% endtab_content %}
+
+      {% tab_content "propertiesTab" %}
+        {% block properties_section %}
+          <h2>Properties</h2>
+
+          <table class="table table-responsive">
+            <tr>
+              <th class="table-active">Property</th>
+              <th class="table-active">Value</th>
+            </tr>
+            {% block properties %}
+              <tr>
+                <th class="table-active">Access material</th>
+                <td>
+                  {% if material.external_url %}
+                    <a href="{{ material.external_url }}" role="button" class="btn btn-external">
+                      Access on external site
+                    </a>
+                  {% endif %}
+                  {% if material.upload_material %}
+                    <a href="{{ material.upload_material.url }}" role="button" class="btn btn-download">
+                      Download
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="table-active">Date Created</th>
+                <td>{{ material.date_created|date }}</td>
+              </tr>
+              <tr>
+                <th class="table-active">Last modification date</th>
+                <td>{{ material.last_modification_date|date }}</td>
+              </tr>
+              {% if material.upload_material %}
+                <tr>
+                  <th class="table-active">Uploaded file</th>
+                  <td><a href="{{ material.upload_material.url }}">{{ material|basename }}</a></td>
+                </tr>
+              {% else %}
+                <tr>
+                  <th class="table-active">Date Created</th>
+                  <td>{{ material.date_created|date }}</td>
+                </tr>
+              {% endif %}
+              <tr>
+                <th class="table-active">License</th>
+                <td>
+                  {% with license=material.license %}
+                    {% if license.url %}
+                      <a href="{{ license.url }}" class="footer-link" rel="nofollow noopener noreferrer">{{ license.identifier }}</a>
+                    {% else %}
+                      {{ license }}
+                    {% endif %}
+                  {% endwith %}
+                </td>
+              </tr>
+              <tr>
+                <th class="table-active">Created by</th>
+                <td>{% if material.user.communitymember %}{% member_badge material.user.communitymember %}{% else %}{{ material.user }}{% endif %}</td>
+              </tr>
+              <tr>
+                <th class="table-active">Category</th>
+                <td>{% materialcategory_badge material_relation|default:material %}</td>
+              </tr>
+              <tr>
+                <th class="table-active">Keywords</th>
+                <td>
+                  {% for keyword in material.keywords.all %}
+                    {% materialkeyword_badge keyword material_relation|default:material %}
+                  {% endfor %}
+                </td>
+              </tr>
+              <tr>
+                <th class="table-active">Content type</th>
+                <td>{{ material.content_type }}</td>
+              </tr>
+              <tr>
+                <th class="table-active">MD5 checksum</th>
+                <td>{{ material.md5sum }} {% clipboard_button material.md5sum %}</td>
+              </tr>
+              <tr>
+                <th class="table-active">SHA256 checksum</th>
+                <td>{{ material.sha256sum }} {% clipboard_button material.sha256sum %}</td>
+              </tr>
+              <tr>
+                <th class="table-active">File size</th>
+                <td>{{ material.file_size|as_mb }}</td>
+              </tr>
+            {% endblock %}
+          </table>
+        {% endblock %}
+      {% endtab_content %}
+    {% endtab_list %}
+  {% endwith %}
+
+{% endblock %}

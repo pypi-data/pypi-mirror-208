@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Edit {{ topic.id_name }}{% endblock %}
+
+{% block headline %}Edit {{ topic }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "topics:topics" as topic_list_url %}
+  {% with topic_list_url=topic_list_url|add:'?end_date__isnull=True' %}
+    {% if topic.id_name %}
+      {% breadcrumbs "Topics"|combine:topic_list_url topic.id_name|combine:topic.get_absolute_url "Edit"|combine:request.path %}
+    {% else %}
+    {% breadcrumbs "Topics"|combine:topic_list_url "New Topic"|combine:request.path %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+
+  <form role="form" method="post">
+    {% csrf_token %}
+    {% block topic-form %}
+      {% include "topics/topic_form_content.html" %}
+    {% endblock %}
+
+    {% block form-buttons %}
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset"  %}
+        {% if form.instance.pk %}
+          {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=topic.get_absolute_url %}
+        {% else %}
+          {% url "topics:topics" as topic_list %}
+          {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=topic_list %}
+        {% endif %}
+    </div>
+    {% endblock %}
+  </form>
+{% endblock %}

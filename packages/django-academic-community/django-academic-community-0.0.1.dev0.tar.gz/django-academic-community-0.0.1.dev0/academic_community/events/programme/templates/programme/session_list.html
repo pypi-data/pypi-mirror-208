@@ -1,0 +1,72 @@
+{% extends "base_list_sidebar.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+{% load community_buttons %}
+{% load guardian_tags %}
+{% load events_programme %}
+{% load cms_tags %}
+
+{% block head_meta %}
+  {% with meta_title="Programme of the "|add:event.name meta_description=event.abstract meta_logo_alt=event.name %}
+    {% if event.logo %}
+      {% with meta_logo=root_url|add:event.logo.url %}
+        {{ block.super }}
+      {% endwith %}
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  {% endwith %}
+{% endblock head_meta %}
+
+{% block headline %}{{ event }} programme{% endblock %}
+
+{% block action_buttons %}
+  {{ block.super }}
+  {% get_obj_perms user for event as "event_perms" %}
+  {% if perms.events.schedule_session or "schedule_session" in event_perms %}
+    <a class="button btn btn-primary btn-round btn-edit" title="Edit the programme"
+     href="{% url 'events:programme:edit-programme' event.slug %}" role="button">
+    </a>
+  {% endif %}
+
+  {% if perms.events.change_event or "change_event" in event_perms %}
+    <a class="button btn btn-primary btn-round btn-send" title="Send a notification to event participants"
+      href='{% url "events:event-notify" event.slug %}?event={{ event.pk }}'></a>
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% breadcrumbs "Events"|combine:event_list_url event.name|combine:event.get_absolute_url "Programme"|combine:request.path %}
+{% endblock %}
+
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "events/components/event_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block filter_modal %}
+  {% login_alert %}
+  <h2>Filter by</h2>
+  {% with form=filter.form %}
+    {% bootstrap_form form %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  {% with active_tab="calendarTab" %}
+    {% tab_list calendarTab="Calendar" programmeListTab="List" %}
+      {% tab_content "calendarTab" %}
+        {% bootstrap_alert "Click a session to view the detailed agenda." extra_classes="mt-3" %}
+        {% show_calendar object_list editable=False vmin=event.start_time|date:"c" vmax=event.end_time|date:"c" slot_duration="00:15" %}
+      {% endtab_content %}
+      {% tab_content "programmeListTab" %}
+        {% show_programme_list object_list %}
+      {% endtab_content %}
+    {% endtab_list %}
+  {% endwith %}
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "chats/base_detail.html" %}
+
+{% load django_bootstrap5 %}
+{% load bootstrap_helpers %}
+{% load community_utils %}
+
+{% block title %}Chat Settings{% endblock %}
+
+{% block headline %}Chat Settings{% endblock %}
+
+{% block subtitle %}Edit your preferences for chat subscriptions{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "chats:channel-list" as channels_url %}
+  {% breadcrumbs "Channels"|combine:channels_url "Chat settings"|combine:request.path %}
+{% endblock %}
+
+{% block content %}
+  <p>
+    This form helps you to specify who can add you to channels you do not yet
+    participate in and <i>when</i> you want to receive notifications for messages in a
+    channel that you subscribed.
+  </p>
+  <p>
+    You can further modify <i>how</i> you want to get notified in your
+    <a href="{% url 'notifications:settings-channels' %}">
+      global channel notification settings.
+    </a>.
+  </p>
+  <form role="form" method="post">
+    {% block form %}
+      {% csrf_token %}
+
+      {% with active_tab=request.GET.tab|default:"notificationTab" %}
+
+        {% tab_list notificationTab="Notification Settings" generalTab="General Settings" availabilityTab="Availability Settings" subscriptionTab="Subscription Settings" %}
+
+          {% tab_content "notificationTab" %}
+
+            {% bootstrap_form form exclude="notify_on_all,notify_on_subscription,notify_on_subscription_removal,follow_automatically,group_add_subscription_permission,user_add_subscription_permission,availability,availability_reset_date,availability_reset_value,user_view_availability_permission,group_view_availability_permission,profile_button_class" %}
+
+            {% bootstrap_switch form.notify_on_all %}
+
+          {% endtab_content %}
+
+          {% tab_content "generalTab" %}
+
+            {% bootstrap_field form.profile_button_class %}
+
+            {% card card_clas="d-flex" header="Available buttons" footer="Select a button for your profile" %}
+              {% for buttonclass in profilebuttonclass_list %}
+                {% with select_id=form.profile_button_class.id_for_label %}
+                  <button
+                   onclick="document.getElementById('{{ select_id }}').value = '{{ buttonclass.id }}'"
+                   title="{{ buttonclass.name }}"
+                   type="button" class='btn btn-profile p-0 btn-round {{ buttonclass.classes }}'>
+                    {% get_initials user  %}
+                  </button>
+                {% endwith %}
+              {% endfor %}
+            {% endcard %}
+
+          {% endtab_content %}
+
+          {% tab_content "availabilityTab" %}
+
+            {% card card_class="mb-4" %}
+              <p>
+                It is our legitimate interest to implement features
+                facilitating communication on the platform thus promoting the
+                purposes of the community and fostering scientific discussions.
+              </p>
+              <p>
+                Your availability tells other users whether they can contact
+                you. If you leave this empty, this website updates your
+                availability automatically based on your usage of the website.
+                If you do not want to have your availability updated
+                automatically, you can set a value manually. Use the
+                <i>Availability reset date</i> and
+                <i>Availability reset value</i> to
+                automatically switch to an availability mode at a certain time.
+              </p>
+              <p>
+                You may also customize who can view your availability.
+              </p>
+              <p>
+                If you do not want anyone to view your availability, you should
+                set it to <i>Disabled</i>.
+              </p>
+              <p>
+                We do not store the history of your availability such as the
+                timestamp of your last activity nor do we display it to other
+                users. The information of the date and time of your website
+                usage is automatically deleted once the current usage session
+                is terminated, e.g. via logout.
+              </p>
+            {% endcard %}
+
+            {% bootstrap_field form.availability %}
+            {% bootstrap_field form.availability_reset_date %}
+            {% bootstrap_field form.availability_reset_value %}
+            {% bootstrap_field form.user_view_availability_permission %}
+            {% bootstrap_field form.group_view_availability_permission %}
+          {% endtab_content %}
+
+          {% tab_content "subscriptionTab" %}
+            {% bootstrap_field form.user_add_subscription_permission %}
+            {% bootstrap_field form.group_add_subscription_permission %}
+            {% bootstrap_switch form.notify_on_subscription %}
+            {% bootstrap_switch form.notify_on_subscription_removal %}
+            {% bootstrap_switch form.follow_automatically %}
+          {% endtab_content %}
+        {% endtab_list %}
+
+      {% endwith %}
+
+    {% endblock form %}
+
+    <div class="row row-cols-auto m-3">
+      {% bootstrap_button "OK" button_type="submit" extra_classes="me-2" %}
+      {% bootstrap_button "Reset" button_type="reset" %}
+      {% url "chats:channel-list" as channels_url %}
+      {% bootstrap_button content="Cancel" extra_classes="ms-auto" button_type="link" href=next_url|default:channels_url %}
+      </div>
+  </form>
+
+{% endblock %}

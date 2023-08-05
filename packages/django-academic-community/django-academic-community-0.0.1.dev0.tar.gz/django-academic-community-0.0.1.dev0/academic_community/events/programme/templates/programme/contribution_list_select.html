@@ -1,0 +1,32 @@
+{% extends "base_list_sidebar.html" %}
+{% load institutions %}
+{% load community_buttons %}
+{% load community_utils %}
+{% load bootstrap_helpers %}
+{% load django_bootstrap5 %}
+{% load events_programme %}
+{% load cms_tags %}
+
+{% block title %}Select contributions{% endblock %}
+
+{% block headline %}Select contributions for {{ session }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% url "events:event-list" as event_list_url %}
+  {% if not session.event.single_session_mode %}
+    {% url "events:programme:session-list" session.event.slug as programme_url %}
+    {% breadcrumbs "Events"|combine:event_list_url event.name|combine:session.event.get_absolute_url "Programme"|combine:programme_url session.title|combine:session.get_absolute_url "Edit"|combine:session.get_edit_url "Contributions"|combine:request.path %}
+  {% else %}
+    {% breadcrumbs "Events"|combine:event_list_url event.name|combine:session.event.get_absolute_url "Edit"|combine:session.get_edit_url "Contributions"|combine:request.path %}
+  {% endif %}
+{% endblock %}
+
+{% block sidebar_below %}
+  {% block sidebar_left %}
+    {% include "programme/components/session_form_sidebar.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  {% contribution_rows contribution_list select_for_session=session %}
+{% endblock %}
