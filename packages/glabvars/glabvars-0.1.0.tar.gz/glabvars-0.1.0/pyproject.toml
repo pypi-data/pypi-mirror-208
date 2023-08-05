@@ -1,0 +1,56 @@
+[tool.pdm.dev-dependencies]
+dev = [
+    "pre-commit>=3.3.1",
+    "pytest>=7.3.1",
+]
+
+[project]
+name = "glabvars"
+version = "0.1.0"
+description = "A Python wrapper for retrieving Gitlab CI/CD variables"
+authors = [
+    { name = "Wouter Donders", email = "wouter@42analytics.eu" },
+]
+dependencies = [
+    "pydantic>=1.10.7",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: BSD License",
+]
+
+[project.urls]
+Homepage = "https://42analytics.eu"
+Documentations = "https://gitlab.com/42analytics1/public/glabvars"
+Source = "https://gitlab.com/42analytics1/public/glabvars"
+Download = "https://gitlab.com/42analytics1/public/glabvars/-/packages"
+Tracker = "https://gitlab.com/42analytics1/public/glabvars/-/issues"
+
+[project.scripts]
+glabvars = "app:cli"
+
+[build-system]
+requires = [
+    "setuptools>=61",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py39, py310, py311, py312
+isolated_build = True
+[testenv]
+commands = pytest
+"""
