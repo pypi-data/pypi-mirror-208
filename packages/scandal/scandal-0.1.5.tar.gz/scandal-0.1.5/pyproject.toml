@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "scandal"
+version = "0.1.0"
+description = ""
+authors = ["Nicholas Gates <nick@nickgates.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+adbc-driver-flightsql = "^0.3.0"
+pyarrow = "^12.0.0"
+keyring = "^23.13.1"
+requests = "^2.29.0"
+PyJWT = "^2.6.0"
+tqdm = "^4.65.0"
+
+[tool.poetry.group.dev.dependencies]
+pandas = ">=1,<2"
+google-cloud-bigquery = "^3.9.0"
+pandas-gbq = "^0.19.1"
+black = "^23.3.0"
+mypy = "^1.2.0"
+types-requests = "^2.29.0.0"
+ruff = "^0.0.264"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+select = ["F", "E", "W", "I001", "I002"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
