@@ -1,0 +1,146 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mimeograph"
+version = "0.5.0"
+description = "Generate data based on a simple template"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "T.A. Programming Svcs.", email = "tomasz.maciej.aniolowski@gmail.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Database",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Utilities",
+]
+keywords = ["mimeograph", "mimeo", "generate", "generator", "data", "xml"]
+dependencies = [
+    "aiohttp",
+    "aiofiles",
+    "pandas",
+    "pyyaml",
+    "haggis"
+]
+
+[project.urls]
+GitHub = "https://github.com/TomaszAniolowski/mimeo"
+
+[project.optional-dependencies]
+dev = [
+    "bumpver",
+    "build",
+    "twine",
+    "ruff",
+    "isort",
+    "requests",
+    "pytest",
+    "pytest-cov",
+    "aioresponses",
+    "pytest-aioresponses",
+    "pytest-asyncio"
+]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-aioresponses",
+    "pytest-asyncio"
+]
+
+[project.scripts]
+mimeo = "mimeo.__main__:main"
+
+[tool.bumpver]
+current_version = "0.5.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message  = "Bump version {old_version} to {new_version}"
+commit          = true
+tag             = true
+push            = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"src/mimeo/__init__.py" = ["{version}"]
+"src/mimeo/cli/parsers.py" = ["{version}"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+    # Don't complain if non-runnable code isn't run:
+    "if __name__ == .__main__.:",
+    # Don't complain about abstract methods, they aren't run:
+    "raise NotImplementedError$"
+]
+
+[tool.isort]
+skip_glob=[
+    # Disable imports' sorting when the import order is important
+    "src/mimeo/cli/__init__.py",
+    "src/mimeo/consumers/__init__.py",
+    "src/mimeo/context/__init__.py",
+    "src/mimeo/generators/__init__.py"
+]
+
+[tool.ruff]
+select = ["F", "E", "W", "C90", "N", "D", "UP", "B", "A", "COM", "C4", "EM", "EXE", "ISC", "G", "PIE", "T20", "PT", "Q", "RSE", "RET", "SLF", "SIM", "ARG", "PTH", "ERA", "PD", "PGH", "PL", "TRY", "RUF"]
+ignore = []
+exclude = [
+    ".git",
+    ".github",
+    ".idea",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pycache__",
+    "dist",
+    "venv",
+    "examples",
+    "meta",
+    "tmp"
+]
+ignore-init-module-imports = true
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.per-file-ignores]
+"scripts/*" = [
+    "T20" # allow for print in scripts
+]
+"tests/*" = [
+    "D", # disable pydocstyle for tests
+    "PLC1901", # allow comparison to blank string in tests
+    "PLR2004" # allow magic values in tests
+]
+"src/mimeo/consumers/raw_consumer.py" = [
+    "T20" # allow for print in raw consumer
+]
+"src/mimeo/logging/filters.py" = [
+    "A003" # an external superclass
+]
+"src/mimeo/utils/mimeo_utils.py" = [
+    "ARG002" # ignore unexpected keyword arguments
+]
+"tests/utils/test_mimeo_util.py" = [
+    "N802" # the test scenario requires uppercased function name
+]
