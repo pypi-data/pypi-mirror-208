@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load material_form i18n %}
+
+{% block browser_title %}
+  {% blocktrans %}Create poster group{% endblocktrans %}
+{% endblock %}
+{% block page_title %}
+  {% blocktrans %}Create poster group{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% form form=form %}{% endform %}
+    {% include "core/partials/save_button.html" %}
+  </form>
+{% endblock %}

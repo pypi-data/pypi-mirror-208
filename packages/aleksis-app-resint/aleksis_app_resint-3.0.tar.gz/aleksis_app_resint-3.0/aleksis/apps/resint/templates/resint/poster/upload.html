@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% load material_form i18n %}
+
+{% block page_title %}
+  {% trans "Upload poster" %}
+{% endblock %}
+{% block browser_title %}
+  {% trans "Upload poster" %}
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% form form=form %}{% endform %}
+    <button type="submit" class="waves-effect waves-light btn green">
+      <i class="material-icons left">save</i>{% blocktrans %}Upload poster{% endblocktrans %}
+    </button>
+  </form>
+{% endblock %}
