@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: lockss-soap
+Version: 0.8.0.dev3
+Summary: Library and command line tools to interact with legacy LOCKSS SOAP interfaces
+Home-page: https://www.lockss.org/
+License: BSD-3-Clause
+Author: Thib Guicherd-Callin
+Author-email: thib@cs.stanford.edu
+Requires-Python: >=3.7,<4.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Utilities
+Requires-Dist: requests (>=2.29.0,<3.0.0)
+Requires-Dist: rich-argparse (>=1.1.0,<2.0.0)
+Requires-Dist: tabulate (>=0.9.0,<0.10.0)
+Requires-Dist: zeep (>=4.2.1,<5.0.0)
+Project-URL: Repository, https://github.com/lockss/lockss-soap
+Description-Content-Type: text/x-rst
+
+::
+
+    Usage: daemonstatusservice [-h] [--debug-cli] [--verbose] COMMAND ...
+
+    Usage: daemonstatusservice copyright [-h]
+
+    Usage: daemonstatusservice get-au-status [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                             [--username USER] [--auid AUID] [--auids FILE] [--select CSFIELDS] [--pool-size SIZE]
+                                             [--process-pool | --thread-pool]
+                                             [HOST:PORT ...]
+
+    Usage: daemonstatusservice get-au-urls [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                           [--username USER] [--auid AUID] [--auids FILE] [--pool-size SIZE]
+                                           [--process-pool | --thread-pool]
+                                           [HOST:PORT ...]
+
+    Usage: daemonstatusservice get-auids [-h] [--names] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                         [--username USER] [--pool-size SIZE] [--process-pool | --thread-pool]
+                                         [HOST:PORT ...]
+
+    Usage: daemonstatusservice get-platform-configuration [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE]
+                                                          [--password PASS] [--username USER] [--select CSFIELDS] [--pool-size SIZE]
+                                                          [--process-pool | --thread-pool]
+                                                          [HOST:PORT ...]
+
+    Usage: daemonstatusservice is-daemon-ready [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                               [--username USER] [--pool-size SIZE] [--process-pool | --thread-pool]
+                                               [HOST:PORT ...]
+
+    Usage: daemonstatusservice license [-h]
+
+    Usage: daemonstatusservice query-aus [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                         [--username USER] [--select CSFIELDS] [--where CLAUSE] [--pool-size SIZE]
+                                         [--process-pool | --thread-pool]
+                                         [HOST:PORT ...]
+
+    Usage: daemonstatusservice query-crawls [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                            [--username USER] [--select CSFIELDS] [--where CLAUSE] [--pool-size SIZE]
+                                            [--process-pool | --thread-pool]
+                                            [HOST:PORT ...]
+
+    Usage: daemonstatusservice query-polls [-h] [--output-format FMT] [--node HOST:PORT] [--nodes FILE] [--password PASS]
+                                           [--username USER] [--select CSFIELDS] [--where CLAUSE] [--pool-size SIZE]
+                                           [--process-pool | --thread-pool]
+                                           [HOST:PORT ...]
+
+    Usage: daemonstatusservice usage [-h]
+
+    Usage: daemonstatusservice version [-h]
+
