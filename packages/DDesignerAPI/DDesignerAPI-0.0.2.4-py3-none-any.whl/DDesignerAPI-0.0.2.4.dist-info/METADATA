@@ -1,0 +1,195 @@
+Metadata-Version: 2.1
+Name: DDesignerAPI
+Version: 0.0.2.4
+Summary: Deep-learning Designer: Deep-Learning Training Optimization & Layers API(like Keras)
+Home-page: https://github.com/DPI/TrainingAPI
+Author: Deeper-I
+Author-email: dean@deeper-i.com
+License: Apache-2.0
+Keywords: deeper-i,xwn,tensorflow,keras
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+[DDesigner API] Deep-learning Designer API
+==========================================
+
+# 1. About
+## 1.1. DDesignerAPI?
+It is a API for deep-learning learning and inference, and an API for application development using multi-platform
+
+## 1.2. Functions
+### 1.2.1. Layers and Blocks
+* The ability to define special layers that are not defined in Keras and others
+* A function that defines a combination of layers as a block and easily composes a block (ex. CONV + BN + ACT + DROPOUT + SE = ConvBlock)
+
+### 1.2.2. Optimization for Accelerator Usage (XWN)
+* Optimized function to use accelerator
+<br/><br/><br/>
+
+# 2. Support
+## 2.1. Platforms
+* Tensorflow 2.6.0
+* PyTorch 1.13.1
+
+## 2.2. Components of Network 
+### 2.2.1. Layers
+#### 2.2.1.1. Summary
+|Platform|SqeezeAndExcitation1D|SqeezeAndExcitation2D|
+|:---:|:---:|:---:|
+|**TF-Keras**|O|O|
+#### 2.2.1.1. Detail
+* SqeezeAndExcitation1D
+* SqeezeAndExcitation2D
+<br/><br/>
+### 2.2.2. Blocks
+#### 2.2.2.1. Summary
+|Platform|Conv1D|Conv2D|FullyConneted|Conv2DTranspose|
+|:---:|:---:|:---:|:---:|:---:|
+|**TF-Keras**|O|O|O|O|
+#### 2.2.2.1. Detail
+* Conv1DBlock
+* Conv2DBlock
+* FCBlock
+* TConv2DBlock
+<br/><br/>
+## 2.3. XWN (**Applies only to convolution operations**)
+### 2.3.1. Transform Configuration (data type / default value / description) 
+* transform     : bool  / False / Choose whether to use
+* bit           : int   / 4     / Quantization range (bit-1 ** 2)
+* max_scale     : float / 4.0   / Max value
+### 2.3.2. Pruning Configuration
+* pruning       : bool  / False / Choose whether to use
+* prun_weight   : float / 0.5   / Weights for puning edge generation
+### 2.3.3. Summary
+|Platform|Conv1D|Conv2D|FullyConneted|Conv2DTranspose|
+|:---:|:---:|:---:|:---:|:---:|
+|**TF**|O|O|X|O|
+|**TF-Keras**|O|O|X|O|
+|**PyTorch**|X|O|X|X|
+
+<br/><br/>
+
+# 3. Command Usage
+## 3.1. Blocks  
+### 3.1.1. Keras
+#### 3.1.1.1. Conv1DBlock
+        >>> from ddesigner_api.tensorflow import dpi_blocks as db
+        >>> dtype='mixed_float16'
+        >>> db.Conv1DBlock(
+                64, 3, strides=1, padding='SAME', use_bias=False,
+                activation=tf.keras.layers.ReLU(dtype=dtype), 
+                batchnormalization=tf.keras.layers.BatchNormalization(dtype=dtype), 
+                dtype=dtype,
+                transform=4, max_scale=4.0,
+                pruning=0.5
+            )
+#### 3.1.1.2. Conv2DBlock
+        >>> from ddesigner_api.tensorflow import dpi_blocks as db
+        >>> dtype='mixed_float16'
+        >>> db.Conv2DBlock(
+                64, (3,3), strides=(1,1), padding='SAME', use_bias=False,
+                activation=tf.keras.layers.ReLU(dtype=dtype), 
+                batchnormalization=tf.keras.layers.BatchNormalization(dtype=dtype), 
+                dtype=dtype,
+                transform=4, max_scale=4.0,
+                pruning=0.5
+            )
+#### 3.1.1.3. FCBlock
+        >>> from ddesigner_api.tensorflow import dpi_blocks as db
+        >>> dtype='mixed_float16'
+        >>> db.FCBlock(
+                64, use_bias=False,
+                activation=tf.keras.layers.ReLU(dtype=dtype), 
+                dtype=dtype,
+            )
+#### 3.1.1.4. TConv2DBlock
+        >>> from ddesigner_api.tensorflow import dpi_blocks as db
+        >>> dtype='mixed_float16'
+        >>> db.TConv2DBlock(
+                64, (3,3), strides=(2,2), padding='SAME', use_bias=False,
+                activation=tf.keras.layers.ReLU(dtype=dtype), 
+                batchnormalization=tf.keras.layers.BatchNormalization(dtype=dtype), 
+                dtype=dtype,
+                transform=4, max_scale=4.0,
+                pruning=0.5
+            )
+<br/>
+
+## 3.2. XWN 
+### 3.2.1. Tensorflow
+        >>> from ddesigner_api.tensorflow.xwn import tf_nn as nn
+        >>> nn.conv2d(
+                x,
+                kernel,
+                ...
+                use_transform=True,
+                bit=4,
+                max_scale=4.0,
+                use_pruning=False
+            )
+### 3.2.2. Keras
+        >>> from ddesigner_api.tensorflow.xwn import keras_layers as klayers
+        >>> klayers.Conv2D(
+                2, 3, 
+                ...
+                use_transform=True,
+                bit=4,
+                max_scale=4.0
+                use_pruning=True,
+                prun_weight=0.5
+            )
+
+### 3.2.3. PyTorch
+        >>> from ddesigner_api.pytorch.xwn import torch_nn as nn
+        >>> nn.Conv2d(
+                in_channels=1,
+                out_channels=2,
+                ...
+                use_transform=True,
+                bit=4,
+                max_scale=4.0,
+                use_pruning=False
+            )
+<br/>
+
+## 3.3. Examples
+### 3.3.1. Tensorflow
+        >>> import ddesigner_api.tensorflow.examples.examples_tensorflow as ex
+        >>> ex.main()
+        >>> ====== TENSORFLOW Examples======
+        >>> 1: Fixed  Float32 Input Conv2D
+        >>> q: Quit
+        >>> Select Case: ...
+
+### 3.3.2. Keras
+        >>> import ddesigner_api.tensorflow.examples.examples_keras as ex
+        >>> ex.main()
+        >>> ====== KERAS Examples======
+        >>> 1: Fixed  Float32 Input Conv2D
+        >>> 2: Random Float32 Input Conv2D
+        >>> 3: Random Float32 Input Conv2DTranspose
+        >>> 4: Random Float16 Input Conv2D
+        >>> q: Quit
+        >>> Select Case: ...
+
+### 3.3.3. PyTorch
+        >>> import ddesigner_api.pytorch.examples.examples_pytorch as ex
+        >>> ex.main()
+        >>> ====== PYTORCH Examples======
+        >>> 1: Fixed  Float32 Input Conv2D
+        >>> 2: Random Float32 Input Conv2D
+        >>> q: Quit
+        >>> Select Case: ...
+
+### 3.3.4. Numpy
+        >>> import ddesigner_api.numpy.examples.examples_numpy as ex
+        >>> ex.main()
+        >>> ====== NUMPY Examples======
+        >>> 1: XWN Transform
+        >>> 2: XWN Transform and Pruning
+        >>> q: Quit
+        >>> Select Case: ...
+
+
