@@ -1,0 +1,38 @@
+{% load wagtailimages_tags %}
+
+{% if item_a != item_b %}
+    {% if item_a and item_b %}
+        {# Image has changed #}
+
+        <div class="preview-image deletion">
+            {% image item_a.preview_image max-165x165 class="show-transparency" %}
+        </div>
+
+        <div class="preview-image addition">
+            {% image item_b.preview_image max-165x165 class="show-transparency" %}
+        </div>
+
+    {% elif item_b %}
+        {# Image has been added #}
+
+        <div class="preview-image addition">
+            {% image item_b.preview_image max-165x165 class="show-transparency" %}
+        </div>
+
+    {% elif item_a %}
+        {# Image has been removed #}
+
+        <div class="preview-image deletion">
+            {% image item_a.preview_image max-165x165 class="show-transparency" %}
+        </div>
+
+    {% endif %}
+{% else %}
+    <div class="preview-image">
+        {% if item_a %}
+            {% image item_a.preview_image max-165x165 class="show-transparency" %}
+        {% else %}
+            <div class="no-media-item"></div>
+        {% endif %}
+    </div>
+{% endif %}
