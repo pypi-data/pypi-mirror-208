@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "inmanta-dev-dependencies"
+version = "2.70.0"
+description = "Package collecting all common dev dependencies of inmanta modules and extensions to synchronize dependency versions."
+authors = ["Inmanta <code@inmanta.com>"]
+license = "Apache-2.0"
+packages = [
+    { include = "inmanta_dev_dependencies", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+black = "23.3.0"
+flake8 = "6.0.0"
+flake8-copyright = "0.2.4"
+flake8-black = "0.3.6"
+flake8-isort = "6.0.0"
+isort = "5.12.0"
+lxml = "4.9.2"
+mypy = "1.3.0"
+pytest = "7.3.1"
+pep8-naming = "0.13.3"
+pyadr = "0.19.0"
+
+# Optional dependencies
+pytest-inmanta-extensions = {version = "*", optional=true}
+pytest-env = {version = "0.8.1", optional=true}
+pytest-postgresql = {version = "4.1.1", optional=true}
+psycopg = {version = "3.1.9", optional=true}
+pytest-inmanta = {version = "*", optional=true}
+pytest-asyncio = {version = "0.21.0", optional=true}
+pytest-timeout = {version = "2.1.0", optional=true}
+pytest-cover = {version = "3.0.0", optional=true}
+pytest-randomly = {version = "3.12.0", optional=true}
+pytest-xdist = {version = "3.2.1", optional=true}
+pytest-sugar = {version = "0.9.7", optional=true}
+pytest-instafail = {version = "0.5.0", optional=true}
+inmanta-sphinx = {version = "1.7.0", optional = true}
+sphinx-argparse = {version = "0.4.0", optional = true}
+sphinx-autodoc-annotation = {version = "1.0-1", optional = true}
+Sphinx = {version = "5.3.0", optional = true}
+sphinxcontrib-serializinghtml = {version = "1.1.5", optional = true}
+sphinxcontrib-redoc = {version = "1.6.0", optional = true}
+sphinx-click = {version = "4.4.0", optional = true}
+myst_parser = {version = "1.0.0", optional = true}
+
+# These are test and direct dependencies of certain extensions. We use carret version
+# constraints so that updates are possible.
+asyncpg = {version = ">=0.21.0,<1.0.0", optional=true}
+tornado = {version = "^6.1", optional=true}
+
+[tool.poetry.extras]
+module = ["pytest-inmanta"]
+core = ["asyncpg", "pytest-env", "pytest-postgresql", "psycopg2", "tornado"]
+extension = ["pytest-inmanta-extensions", "asyncpg", "pytest-env", "pytest-postgresql", "psycopg2", "tornado"]
+async = ["pytest-asyncio", "pytest-timeout"]
+pytest = ["pytest-env", "pytest-cover", "pytest-randomly", "pytest-xdist", "pytest-sugar", "pytest-instafail", "pytest-sugar", "pytest-instafail"]
+sphinx = [
+    "inmanta-sphinx", "sphinx-argparse", "sphinx-autodoc-annotation", "sphinx-tabs", "sphinx", "sphinxcontrib-serializinghtml",
+    "sphinxcontrib-redoc", "sphinx-click", "recommonmark", "myst_parser"
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
