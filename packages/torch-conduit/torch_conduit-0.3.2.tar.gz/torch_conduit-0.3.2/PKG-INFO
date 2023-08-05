@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: torch-conduit
+Version: 0.3.2
+Summary: Lightweight framework for dataloading with PyTorch and channeling the power of PyTorch Lightning
+Home-page: https://github.com/wearepal/conduit
+License: Apache-2.0
+Keywords: typing,python,pytorch,datasets,pytorch-lightning,lightning-bolts
+Author: PAL
+Author-email: info@predictive-analytics-lab.com
+Requires-Python: >=3.8.0,<3.12
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Typing :: Typed
+Provides-Extra: all
+Provides-Extra: audio
+Provides-Extra: download
+Provides-Extra: fair
+Provides-Extra: hydra
+Provides-Extra: image
+Provides-Extra: logging
+Requires-Dist: albumentations (>=1.0.0,<2.0.0) ; extra == "image" or extra == "all"
+Requires-Dist: attrs (>=21.2.0)
+Requires-Dist: ethicml[data] (>=1.0.2) ; extra == "fair" or extra == "all"
+Requires-Dist: gdown (>=3.13.0,<4.0.0) ; extra == "download" or extra == "all"
+Requires-Dist: hydra-core (>=1.1.1,<2.0.0) ; extra == "hydra" or extra == "all"
+Requires-Dist: kaggle (>=1.5.12,<2.0.0) ; extra == "download" or extra == "all"
+Requires-Dist: numpy (>=1.22.3,<2.0.0)
+Requires-Dist: opencv-python (>=4.5.3,<5.0.0) ; extra == "image" or extra == "all"
+Requires-Dist: pandas (>=1.3.3,<2.0.0)
+Requires-Dist: ranzen (>=2.0.0)
+Requires-Dist: rich (>=12.5.1,<13.0.0) ; extra == "logging" or extra == "all"
+Requires-Dist: scikit-learn (>=1.2.0,<2.0.0)
+Requires-Dist: soundfile ; (platform_system == "Windows") and (extra == "audio" or extra == "all")
+Requires-Dist: sox ; (platform_system == "Linux" or platform_system == "macOS") and (extra == "audio" or extra == "all")
+Requires-Dist: typing-extensions (>=4.4.0)
+Project-URL: Repository, https://github.com/wearepal/conduit
+Description-Content-Type: text/markdown
+
+# conduit :electron:
+
+Al lightweight framework for channeling the power of PyTorch Lightning.
+
+## Installation
+Conduit requires Python 3.8 or higher. To install the latest version from PyPI:
+
+```
+pip install -U 'torch-conduit[all]'
+```
+
+Unfortunately, you have to install the dependency `pytorch-lightning` manually:
+```
+pip install pytorch-lightning
+```
+This is because of dependency problems with pytorch.
+
