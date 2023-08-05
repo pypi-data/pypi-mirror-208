@@ -1,0 +1,60 @@
+#!/usr/bin/env python3.11
+"""
+       Name:
+DESCRIPTION:
+     AUTHOR:
+    LICENSE: GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+"""
+from importlib.metadata import version as get_version
+from xdg_base_dirs import xdg_config_home
+from os import getenv, path, uname
+from pathlib import Path
+import wget
+import yaml
+
+
+# version of onboardme
+VERSION = get_version('onboardme')
+
+# pathing
+XDG_CONFIG_DIR = xdg_config_home()
+PWD = path.dirname(__file__)
+HOME_DIR = getenv("HOME")
+
+# env
+SYSINFO = uname()
+# this will be something like ('Darwin', 'x86_64')
+OS = (SYSINFO.sysname, SYSINFO.machine)
+
+# step config is different per OS
+STEPS = ['dot_files','packages','font_setup','neovim_setup','group_setup']
+if OS[0] == 'Darwin':
+    STEPS.append('sudo_setup')
+
+# package manager config is different per OS
+PKG_MNGRS = ['brew','pip3.11']
+if OS[0] == 'Linux':
+    PKG_MNGRS.extend(['apt','snap','flatpak'])
+
+
+default_dotfiles = ("https://raw.githubusercontent.com/jessebot/dot_files/"
+                    "main/.config/onboardme/")
+
+
+def load_cfg(config_file='config.yml') -> dict:
+    """
+    load yaml config files for onboardme
+    """
+    config_dir = path.join(xdg_config_home(), 'onboardme')
+    config_full_path = path.join(config_dir, config_file)
+
+    # defaults
+    if not path.exists(config_full_path):
+        Path(config_dir).mkdir(exist_ok=True)
+        wget.download(default_dotfiles + config_file, config_full_path)
+
+    with open(config_full_path, 'r') as yaml_file:
+        return yaml.safe_load(yaml_file)
+
+
+USR_CONFIG_FILE = load_cfg()
