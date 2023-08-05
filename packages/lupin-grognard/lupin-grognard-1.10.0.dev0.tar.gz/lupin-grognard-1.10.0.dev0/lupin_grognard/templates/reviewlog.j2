@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Report about reviewers for {{ project_name }}</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        width: auto;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #7CB9E8;
+      }
+      p {
+         margin-left: 20px;
+      }
+      ul {
+        margin: 5px;
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
+      li {
+         margin-left: 0;
+      }
+      .date_li {
+        list-style-type: none;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <h1>Report about reviewers for {{ project_name }}</h1>
+        <p><a href="{{ project_url }}">Project location</a>: {{ project_url }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 100px;">Commit</th>
+              <th>Description</th>
+              <th>Author(s)</th>
+              <th>Approver(s)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in approvers_report %}
+            <tr>
+              <td>
+                {{ report.commit_hash }}<br>
+                Issue <a href="{{ project_url }}/-/issues/{{ report.gitlab_issue_id }}">#{{ report.gitlab_issue_id }}</a>
+              </td>
+              <td>
+                {{ report.title }}
+                {% if report.description %}
+                <p>
+                  {% for line in report.description %}
+                  {{ line }}<br>
+                  {% endfor %}
+                </p>
+                {% endif %}
+              </td>
+              <td>
+                <ul>
+                  <li>{{ report.autor }}</li>
+                  <li class="date_li">{{ report.date }}</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  {% if report.approvers %}
+                  {% for approver in report.approvers %}
+                  <li>{{ approver }}</li>
+                  {% endfor %}
+                  <li class="date_li">{{ report.approver_date }}</li>
+                </ul>
+                  {% else %}
+                  Not found
+                  {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 30px;">
+        <h2 style="text-align: center;">List of participants</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align: center;">Name</th>
+              <th style="text-align: center;">Role</th>
+              <th style="text-align: center;">Date and signature</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for participant in participants %}
+            <tr>
+              <td style="width: 200px;">{{ participant }}</td>
+              <td style="width: 200px;"></td>
+              <td style="width: 250px;"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
