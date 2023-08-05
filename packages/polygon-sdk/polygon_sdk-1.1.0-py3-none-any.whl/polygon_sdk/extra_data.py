@@ -1,0 +1,44 @@
+from dataclasses import dataclass
+
+@dataclass
+class ExtraData:
+    tick_id: int
+    ticker: str
+    stock_data: object
+    vol_anal: object
+    snapshot: object
+    exchange: str
+    last_trade_condition: object
+    underlying_avg_price: float
+    underlying_buy_volume: int
+    underlying_n_volume: int
+    underlying_sell_volume: int
+    underlying_total_volume: int
+    buyPct: float
+    sellPct: float
+    neutralPct: float
+    rsi: float
+    er_date: object
+    avg_10d_vol: float
+    avg_3m_vol: float
+    next_er: str
+    fifty_high: float
+    fifty_low: float
+    outstanding_shares: float
+    total_shares: float
+    name: str
+    underlying_vol: object
+    underlying_changep: float
+    underlying_price: float
+    underlying_high: float
+    underlying_low: float
+    underlying_open: float
+    underlying_vibration_ratio: object
+    short_int_data: object
+    buy: int
+    hold: int
+    strongbuy: int
+    underperform: int
+    sell: int
+    rating_totals: int
+    rating_suggestion: str
