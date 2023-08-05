@@ -1,0 +1,34 @@
+{% load django_auxiliaries_tags wagtailcore_tags aldine_tags bibster_tags media_catalogue_tags wagtail_richer_text_tags wagtail_content_admin_tags querykit_tags %}
+
+{% extend_with_custom_blocks self.block.meta.extends_template form.ordered_panel_block_definitions '_section' %}
+
+{% block content_section %}
+<div{% if self.block.meta.content_wrapper_classname %} class="{{ self.block.meta.content_wrapper_classname }}"{% endif %}>
+{% with result_label=self.block.child_blocks.content.child_blocks.bibster_publications.meta.verbose_item_name result_label_plural=self.block.child_blocks.content.child_blocks.bibster_publications.meta.verbose_item_name_plural %}
+{{ block.super }}
+{% endwith %}
+{% for item, annotations in content %}
+<div{% if self.block.meta.publication_container_classname %} class="{{ self.block.meta.publication_container_classname }}"{% endif %}>
+<div>
+{% format_reference item.reference markup_format_name="html" markup_cache=item.markup_cache %}
+<span {% if self.block.meta.publication_tags_classname %}class="{{ self.block.meta.publication_tags_classname }}"{% endif %}>
+{% for tag in item.tags.all %}
+<span {% if self.block.meta.publication_tag_classname %}class="{{ self.block.meta.publication_tag_classname }}"{% endif %}>{{ tag.name }}</span>
+{% endfor %}
+</span>
+<span {% if self.block.meta.publication_summary_classname %}class="{{ self.block.meta.publication_summary_classname }}"{% endif %}>
+{{ item.summary|richertext }}
+</span>
+</div>
+{% with figures=item.media.value|match_content_annotation:'category.identifier=figure' %}
+{% if figures %}
+{% include_block self.figures.value with content=figures scale_factor=0.33 %}
+{% else %}
+<div></div>
+{% endif %}
+{% endwith %}
+</div>
+{% endfor %}
+{% query_result_navigation result_slice form=form %}
+</div>
+{% endblock %}

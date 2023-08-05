@@ -1,0 +1,11 @@
+{% extends "modeladmin/index.html" %}
+{% block header %}
+    {{ block.super }}
+    <div style="padding-top: .5em; padding-bottom: 1.2em;">
+    <button id="publication_index-update_markup_cache-button" class="button" type="button">Update Markup Cache</button>
+        <a id="publication_index-result_download" href="#" download="result">Download Action Result</a>
+    <script type="text/javascript">
+        new window.bibster.PublicationActionEndpoint("publication_index", "{% url 'bibster:action' %}");
+    </script>
+    </div>
+{% endblock %}
