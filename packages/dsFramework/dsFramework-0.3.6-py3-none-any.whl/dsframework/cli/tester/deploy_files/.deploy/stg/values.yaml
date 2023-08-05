@@ -1,0 +1,241 @@
+team: apps
+cloud: gcp
+infrastructure: gke
+region: us-east-1
+
+resources:
+ requests:
+   cpu: 1
+   memory: 3G
+
+ limits:
+   cpu: 2
+   memory: 4G
+
+environmentVariables:
+ REDISHOST: ""
+ REDISPORT: ""
+ AVAILABLE_CORES: "1"
+ SERVICE_NAME: "{name-your-service}"
+ RESOURCE: "gke"
+ RUN_ENV: "stg"
+
+livenessProbe:
+  path: /livenessprobe
+
+readinessProbe:
+  path: /readinessprobe
+  initialDelaySeconds: 60
+
+# -- HPA Configuration
+scaling:
+  behavior:
+    scaleDown:
+      selectPolicy: Min
+      stabilizationWindowSeconds: 100
+    scaleUp:
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0
+
+  # -- Minimum replicas number
+  minReplicas: 1
+  # -- Maximum replicas number
+  maxReplicas: 5
+  # -- Autoscale thresholds
+  metrics:
+#    memory:
+#      targetAverageValue: 80
+    cpu:
+      targetAverageValue: 60
+#    external:
+#    - metricName: avg-request-count-millisecond-prs
+#      type: datadogQuery
+#      targetAverageValue: 100
+#      metricQuery: avg:istio.mesh.request.count.total{project:yazi-stg-presumed-correctly}.as_count()
+
+## Optional:
+##startupProbe:
+##  path: /api/health/liveness
+
+###########################
+## Service Configuration ##
+###########################
+service:
+  active:
+    enabled: true
+    ingress: true
+## Optional ##
+##    port: 8080
+##    auth: {}
+##    internalVirtualService: false
+#     # Retries and Timeouts
+##    timeout: 10s
+##    retries:
+##      attempts: 5
+##      perTryTimeout: 5s
+##      retryOn: connect-failure,refused-stream,503
+#    ## Note: ilb and backendConfig is only relevant for GCP (GKE) deployments
+##    ilb: false
+##    backendConfig:
+##      timeoutSec: 40
+##      drainingTimeoutSec: 60
+#  ## Note: Preview service is only needed when using blueGreen / canary deployments
+##  preview:
+##    enabled: false
+##    ingress: false
+
+# serviceAddress: {name-your-service}
+serviceAddress: '{{ name }}'
+
+# ####################################################
+# ## Istio traffic shift with header route strategy ##
+# ####################################################
+#istioTrafficShift:
+#  enabled: true
+#  services:
+#    - name: service-name
+#      gateways:
+#        - ingress/int-gateway
+#      workloadHost: service-name.zios-apps-primary.stg.zi-int.com
+#      route:
+#        strategy: header
+#        external:
+#          - host: service-name-dot-dozi-stg-internal-1.appspot.com
+#            name: service-name-gae
+#            port: 443
+#            response_header:
+#              key: gae
+#        internal_header:
+#          - name: active
+#            port: 8080
+#            response_header:
+#              key: gke
+#        headerValues:
+#          - "10000000"
+
+ ####################################################
+ ## Istio traffic shift with weight route strategy ##
+ ####################################################
+
+
+## -- Ingress Traffic Shift Configuration
+#istioTrafficShift:
+#  # -- Enable traffic shift configuration
+#  enabled: true
+#  # -- Route strategy, weight or header
+#  strategy: weight
+#  gateways:
+#    - ingress/int-gateway
+#  external:
+#    - host: {name-your-service}-dot-dozi-stg-ds-apps-1.ue.r.appspot.com
+#      # -- The name for Destination Rule and Service Entry of this host, will be concatenated to workload name.
+#      name: {name-your-service}-gae
+#      port: 443
+#      # -- Header manipulation rules to apply before returning a response to the caller
+#      response_header:
+#        service: gae
+#      # -- The relative proportion of traffic to be forwarded to the destination
+#      weight: 50
+#  # -- Defines internal service to which the request/connection should be forwarded to. Destination host will be concatenated [workload]-[name]
+#  internal:
+#    - port: 8080
+#      response_header:
+#        service: gke
+#      weight: 50
+
+# ###########################
+# ## Ingress Configuration ##
+# ###########################
+ingress:
+  enabled: true
+  gateways:
+    - name: int
+      fullName: ingress/int-gateway
+      overrideHost: {name-your-service}.data-apps-primary.stg.zi-int.com
+  auth:
+    required: false
+    users: [ ]
+    groups: [ ]
+
+# ###########################
+# ## Environment Variables ##
+# ###########################
+#environmentVariables: {}
+
+
+
+# ## General ##
+# #############
+#legacy: false # Set this true if you're not using istio
+
+# #########################
+# ## Side car containers ##
+# #########################
+# # Optional Debug Container
+#debugContainer:
+#  enabled: false
+#  image: nicolaka/netshoot
+
+#cloudSqlProxies: {}
+
+#additionalContainers: {}
+
+# -- Deployment Strategy - RollingUpdate / Canary / blueGreen
+deploymentStrategy:
+  type: rollingUpdate
+  # -- specify how many old ReplicaSets for this Deployment you want to retain.
+  # revisionHistoryLimit: 0
+  # -- denotes the number of seconds the Deployment controller waits before indicating (in the Deployment status) that the Deployment progress has stalled
+  # progressDeadlineSeconds: 600
+  # -- RollingUpdate - Default strategy
+  rollingUpdate:
+    # -- defines the maximum number of replicas the rollout can create to move to the correct ratio set by the last setWeight
+    maxSurge: "100%"
+    # -- The maximum number of pods that can be unavailable during the update.
+    maxUnavailable: 0
+
+#rollout:
+#  enabled: false
+
+#rollBackAnalysis:
+#  enabled: false
+#  responseCode: 5
+#  successCondition: 99
+#  failureLimit: 3
+
+#podSecurityGroupName: ''
+
+#podDisruptionBudget:
+#  enabled: false
+#  minAvailable: 50%
+
+
+# #############
+# ## Secrets ##
+# #############
+#secrets: {} # AWS
+#secretEnvironmentVariables: {} # GCP
+
+# ################
+# ## ConfigMaps ##
+# ################
+#configMaps: {}
+
+# ####################################
+# ## DestinationRule traffic policy ##
+# ####################################
+#trafficPolicy:
+#  enabled: false
+#  connectionPool:
+#    enabled: true
+#    tcp:
+#      maxConnections: "100"
+#    http:
+#      http1MaxPendingRequests: 100
+#      maxRequestsPerConnection: 100
+#  outlierDetection:
+#    enabled: false
+#    consecutive5xxErrors: 10
+#    interval: 5s
+#    baseEjectionTime: 3m
+#    maxEjectionPercent: 30

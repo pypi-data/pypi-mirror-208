@@ -1,0 +1,42 @@
+runtime: custom
+env: flex
+service: {name-your-service}
+
+resources:
+  cpu: 2
+  memory_gb: 6
+  disk_size_gb: 50
+  volumes:
+    - name: mem
+      volume_type: tmpfs
+      size_gb: 2
+
+automatic_scaling:
+  min_num_instances: 2
+  max_num_instances: 10
+  cool_down_period_sec: 60
+  cpu_utilization:
+    target_utilization: 0.6
+
+network:
+  name: default
+  subnetwork_name: default
+  instance_tag: allow-ssh
+
+readiness_check:
+  path: "/readinessprobe"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 5
+  success_threshold: 1
+
+liveness_check:
+  path: "/livenessprobe"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 5
+  success_threshold: 2
+
+handlers:
+- url: /.*
+  script: this field is required, but ignored

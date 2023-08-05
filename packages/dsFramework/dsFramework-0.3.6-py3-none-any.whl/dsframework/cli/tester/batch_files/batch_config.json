@@ -1,0 +1,68 @@
+{
+    "deployed_workflows": ["primary"],
+    "environment": "ds-airflow-2-dev",
+    "log_level": "warning",
+    "bucket_name": "us-east1-ds-airflow-2-dev-2d0649fd-bucket",
+    "cluster_bucket": "ds-il-dataproc-data",
+    "project_id": "dozi-data-science-research-1",
+    "region": "us-east1",
+    "project_name": "{name-your-service}",
+    "template_labels": ["{name-your-service}"],
+    "target": "wf_dev",
+    "unique_iteration_id": "",
+    "unique_template_id": "",
+    "specific_jobs_to_run": [],
+    "force_remove_all_prerequisites": false,
+    "cluster_duration_sec": 3600,
+    "jupyter_support": true,
+    "cluster_conf": {
+        "managed_cluster": {
+            "cluster_name": "{name-your-service}-cluster",
+            "config": {
+                "gce_cluster_config": {
+                    "subnetwork_uri": "default",
+                    "zone_uri": "us-east1-b",
+                    "service_account": "",
+                    "metadata": {
+                        "PIP_PACKAGES": ""
+                    },
+                    "tags": [
+                        "{name-your-service}-cluster"
+                    ],
+                    "service_account_scopes":[
+                        "https://www.googleapis.com/auth/cloud-platform"
+                    ]
+                },
+                "initialization_actions": [
+                    {"executable_file": "gs://dataproc-initialization-actions/python/pip-install.sh"}
+                ],
+                "master_config": {
+                    "machine_type_uri": "n2d-standard-2",
+                    "disk_config": {
+                        "boot_disk_type": "pd-ssd",
+                        "boot_disk_size_gb": 40
+                    }
+                },
+                "worker_config": {
+                    "machine_type_uri": "n2d-standard-2",
+                    "num_instances": 2,
+                    "disk_config": {
+                        "boot_disk_type": "pd-ssd",
+                        "boot_disk_size_gb": 40
+                    }
+                },
+                "autoscaling_config": {
+                    "policy_uri": ""
+                },
+                "software_config": {
+                    "image_version": "",
+                    "optional_components": []
+                }
+            }
+        }
+    },
+
+    "extra_job_params": {
+        "MODE": "MANUAL"
+    }
+}

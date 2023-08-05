@@ -1,0 +1,10 @@
+@Library('jenkins-shared-libraries')
+import com.zoominfo.ci.*
+
+properties([
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '7',daysToKeepStr: '14')),
+    disableConcurrentBuilds()
+])
+
+def build = new PythonPipeline(this)
+build.run()
