@@ -1,0 +1,34 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "higlass-widget"
+description = "A Jupyter Widget for HiGlass"
+authors = [
+    { name = "Trevor Manz", email = "trevor.j.manz@gmail.com" },
+]
+license = { text = "MIT" }
+dynamic = ["version"]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "anywidget",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black[jupyter]",
+    "ruff",
+    "jupyterlab",
+    "watchfiles",
+]
+
+[project.urls]
+homepage = "https://github.com/higlass/higlass-widget"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.envs.default]
+features = ["dev"]
