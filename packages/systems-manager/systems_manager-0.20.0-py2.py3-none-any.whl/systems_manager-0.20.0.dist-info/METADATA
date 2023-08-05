@@ -1,0 +1,65 @@
+Metadata-Version: 2.1
+Name: systems-manager
+Version: 0.20.0
+Summary: Systems-Manager will update your system and install/upgrade applications.
+Home-page: https://github.com/Knuckles-Team/systems-manager
+Author: Audel Rouhi
+Author-email: knucklessg1@gmail.com
+License: Unlicense
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: Public Domain
+Classifier: Environment :: Console
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests (>=2.28.1)
+
+# Systems-Manager
+*Version: 0.20.0*
+
+Systems-Manager will update your system and install/upgrade applications.
+
+### Usage:
+| Short Flag | Long Flag         | Description                                   |
+|------------|-------------------|-----------------------------------------------|
+| -h         | --help            | See usage for script                          | 
+| -c         | --clean           | Clean Recycle/Trash bin                       | 
+| -e         | --enable-features | Enable Window Features                        | 
+| -f         | --font            | Install Hack NF Font                          | 
+| -i         | --install         | Install applications                          | 
+| -p         | --python          | Install Python Modules                        | 
+| -s         | --silent          | Don't print to stdout                         | 
+| -u         | --update          | Update your applications and Operating System | 
+| -t         | --theme           | Apply Takuyuma Terminal Theme                 | 
+
+### Example:
+```bash
+systems-manager --font --update --clean --theme --python 'geniusbot' --install 'python3'
+```
+
+#### Install Instructions
+Install Python Package
+
+```bash
+python -m pip install systems-manager
+```
+
+#### Build Instructions
+Build Python Package
+
+```bash
+sudo chmod +x ./*.py
+sudo pip install .
+python3 setup.py bdist_wheel --universal
+# Test Pypi
+twine upload --repository-url https://test.pypi.org/legacy/ dist/* --verbose -u "Username" -p "Password"
+# Prod Pypi
+twine upload dist/* --verbose -u "Username" -p "Password"
+```
+
+
