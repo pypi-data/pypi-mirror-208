@@ -1,0 +1,71 @@
+Metadata-Version: 2.1
+Name: st-storage-handler
+Version: 0.0.1
+Summary: Streamlit Component for handling local storage
+Author: 
+Author-email: 
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: streamlit (>=0.63)
+
+# Streamlit Local Storage Handler
+
+Streamlit Local Storage Handler is a Streamlit component that allows you to interact with the local storage of the user's browser. You can set, get, remove, and clear items in the local storage using this component.
+
+## Installation
+
+To install the component, you need to have npm and Node.js installed. Then, follow these steps:
+
+1. Install the Python package:
+
+   ``` bash
+   pip install st-storage-handler
+    ```
+
+## Usage
+
+   ``` python
+   from st_storage_handler import st_storage_handler
+   ```
+
+### Methods
+
+* Creation of Key, Value pairs in the local storage
+
+  ``` python
+  st_storage_handler.set_item(set_keys: dict, widket_key: str)
+  ```
+
+    * `set_keys`: A dictionary of key, value pairs to be set in the local storage.
+    * `widget_key`: A unique key for the widget. -> needs to be unique for each widget (if you have multiple widgets using the same key, they will all be updated when one of them is updated)
+
+* Retrieving the value of a key from the local storage
+  ``` python
+  st_storage_handler.get_item(key: str, widket_key: str)
+  ```
+
+    * `key`: The key of the value to be retrieved from the local storage.
+    * `widget_key`: A unique key for the widget. -> needs to be unique for each widget (if you have multiple widgets using the same key, they will all be updated when one of them is updated)
+
+* Removing a key from the local storage
+    ``` python
+    st_storage_handler.remove_item(key: str, widket_key: str)
+    ```
+    
+    * `key`: The key of the value to be removed from the local storage.
+    * `widget_key`: A unique key for the widget. -> needs to be unique for each widget (if you have multiple widgets using the same key, they will all be updated when one of them is updated)
+
+* Clearing the local storage
+
+    ``` python
+    st_storage_handler.clear(widket_key: str)
+    ```
+
+    * `widget_key`: A unique key for the widget. -> needs to be unique for each widget (if you have multiple widgets using the same key, they will all be updated when one of them is updated)
+
+
+
+
+
+
