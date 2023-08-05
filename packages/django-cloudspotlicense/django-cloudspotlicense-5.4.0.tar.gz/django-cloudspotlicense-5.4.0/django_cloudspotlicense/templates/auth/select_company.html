@@ -1,0 +1,21 @@
+<!-- auth/select_company.html -->
+<!-- The user can select a company in this view -->
+<!-- You can overwrite this with your own template -->
+
+<html>
+<head>
+    <title>Select a company</title>
+</head>
+<body>
+
+    <h1>Select a company</h1>
+    <h4>Basic view</h4>
+
+    <ul>
+    {% for company_perm in company_permissions %}
+        <li><a href="{% url 'set_company' company_perm.company_id %}">{{ company_perm.company_name }}</a></li>
+    {% endfor %}
+    </ul>
+
+</body>
+</html>

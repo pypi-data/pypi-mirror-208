@@ -1,0 +1,33 @@
+<!-- auth/login.html -->
+<!-- This is the first view that the user will see and use to log in to the application -->
+<!-- You can overwrite this with your own template -->
+
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+    <h1>Login</h1>
+    <h4>Basic view</h4>
+
+    <form method="POST">
+    {% csrf_token %}
+
+    <p>
+        <label>Username</label>
+        <input type="text" name="username" />
+    </p>
+
+    <p>
+        <label>Password</label>
+        <input type="password" name="password" />
+    </p>
+
+    <p>
+        <input type="submit" value="Login" />
+    </p>
+
+</form>
+</body>
+</html>
