@@ -1,0 +1,30 @@
+###############################################################################
+# Sentinel-3 Product
+###############################################################################
+id: b3e005b8-7f47-4ab4-b92d-69d0adf54095
+label: Sentinel-3 Product
+category: CONTAINER
+signatures:
+  - name: (?i)S3.*\.SEN3
+---
+###############################################################################
+# Sentinel-3 MWR/OLCI/SLSTR/SRAL/GNSS/DORIS/NAVATT/HKTMs Level-0 Product
+###############################################################################
+id: 6ee38ad7-14b9-4d94-a412-2bf8cc7d79c1
+subClassOf: b3e005b8-7f47-4ab4-b92d-69d0adf54095
+label: Sentinel-3 Level-0 Product
+category: CONTAINER
+signatures:
+  - name: (?i)S3._(MW|OL|SL|SR|GN|DO|TM)_0_.*\.SEN3
+---
+###############################################################################
+# Sentinel-3 WR/OLCI/SLSTR/SRAL/Synergie Level-1-2 Product
+###############################################################################
+id: 825d9f1f-d91f-4683-b670-db286f1ec4a8
+subClassOf: b3e005b8-7f47-4ab4-b92d-69d0adf54095
+label: Sentinel-3 Level-1-2 Product
+category: CONTAINER
+signatures:
+  - name: (?i)S3._(MW|OL|SL|SR|SY|GN|DO|TM)_(1|2)_.......[0-9]{8}T[0-9]{6}_[0-9]{8}T[0-9]{6}_[0-9]{8}T[0-9]{6}(?!___________________).*\.SEN3
+
+
