@@ -1,0 +1,170 @@
+.graph-widget button.loading-animation::before, .graph-widget button.loading-animation::after,
+.graph-widget button.loading-animation span::before,
+.graph-widget button.loading-animation span::after {
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  background: #52587a;
+  content: "";
+  opacity: 0;
+  position: absolute;
+  transition: opacity 1s ease;
+}
+.graph-widget button.loading-animation::before, .graph-widget button.loading-animation::after {
+  height: 2px;
+  width: 0;
+}
+.graph-widget button.loading-animation::before {
+  right: 0;
+  top: 0;
+}
+.graph-widget button.loading-animation::after {
+  bottom: 0;
+  left: 0;
+}
+.graph-widget button.loading-animation span::before,
+.graph-widget button.loading-animation span::after {
+  height: 0;
+  width: 2px;
+}
+.graph-widget button.loading-animation span::before {
+  left: 0;
+  top: 0;
+}
+.graph-widget button.loading-animation span::after {
+  bottom: 0;
+  right: 0;
+}
+.graph-widget button.loading-animation::before, .graph-widget button.loading-animation::after,
+.graph-widget button.loading-animation span::before,
+.graph-widget button.loading-animation span::after {
+  opacity: 1;
+}
+.graph-widget button.loading-animation::before {
+  animation-name: btn-border-top;
+  animation-duration: 2.8s;
+}
+.graph-widget button.loading-animation::after {
+  animation-name: btn-border-bottom;
+  animation-delay: 0.7s;
+  animation-duration: 2.8s;
+}
+.graph-widget button.loading-animation span::before {
+  animation-name: btn-border-span-left;
+  animation-delay: 0.35s;
+  animation-duration: 2.8s;
+}
+.graph-widget button.loading-animation span::after {
+  animation-name: btn-border-span-right;
+  animation-delay: 1.05s;
+  animation-duration: 2.8s;
+}
+
+@keyframes btn-border-top {
+  0% {
+    left: auto;
+    right: 0;
+    width: 0;
+  }
+  12.5% {
+    left: auto;
+    right: 0;
+    width: 100%;
+  }
+  12.6% {
+    left: 0;
+    right: auto;
+  }
+  50% {
+    width: 100%;
+  }
+  62.5% {
+    width: 0;
+  }
+  100% {
+    left: 0;
+    right: auto;
+    width: 0;
+  }
+}
+@keyframes btn-border-bottom {
+  0% {
+    right: auto;
+    left: 0;
+    width: 0;
+  }
+  12.5% {
+    right: auto;
+    left: 0;
+    width: 100%;
+  }
+  12.6% {
+    right: 0;
+    left: auto;
+  }
+  50% {
+    width: 100%;
+  }
+  62.5% {
+    width: 0;
+  }
+  100% {
+    right: 0;
+    left: auto;
+    width: 0;
+  }
+}
+@keyframes btn-border-span-left {
+  0% {
+    bottom: auto;
+    top: 0;
+    height: 0;
+  }
+  12.5% {
+    bottom: auto;
+    top: 0;
+    height: 100%;
+  }
+  12.6% {
+    bottom: 0;
+    top: auto;
+  }
+  50% {
+    height: 100%;
+  }
+  62.5% {
+    height: 0;
+  }
+  100% {
+    bottom: 0;
+    top: auto;
+    height: 0;
+  }
+}
+@keyframes btn-border-span-right {
+  0% {
+    top: auto;
+    bottom: 0;
+    height: 0;
+  }
+  12.5% {
+    top: auto;
+    bottom: 0;
+    height: 100%;
+  }
+  12.6% {
+    top: 0;
+    bottom: auto;
+  }
+  50% {
+    height: 100%;
+  }
+  62.5% {
+    height: 0;
+  }
+  100% {
+    top: 0;
+    bottom: auto;
+    height: 0;
+  }
+}

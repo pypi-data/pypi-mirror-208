@@ -1,0 +1,37 @@
+include LICENSE.md
+include README.md
+
+include pyproject.toml
+include .coverage.rc
+
+include tsconfig.json
+include package.json
+graft yfiles_jupyter_graphs/labextension
+
+graft screenshots
+
+# Documentation
+graft docs
+exclude docs/\#*
+prune docs/build
+prune docs/gh-pages
+prune docs/dist
+
+# Javascript files
+graft yfiles_jupyter_graphs/nbextension
+prune src
+graft css
+prune **/node_modules
+prune coverage
+prune lib
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .git
+global-exclude .ipynb_checkpoints
+
+# Exclude certain stuff not needed for wheel installation
+prune yfiles_jupyter_graphs/tests
+exclude pytest.ini

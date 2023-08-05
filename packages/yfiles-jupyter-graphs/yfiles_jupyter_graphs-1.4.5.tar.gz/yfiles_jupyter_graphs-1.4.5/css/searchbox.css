@@ -1,0 +1,108 @@
+.graph-widget .search {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.graph-widget .search .results {
+  list-style: none;
+  padding-inline-start: 0;
+  flex: 1 1 auto;
+  overflow: auto;
+  margin: 10px 0 0 0;
+}
+
+.graph-widget .search input {
+  flex: 0 0 36px;
+  margin: 0 auto;
+  border: 1px solid var(--yfiles-secondary-color);
+  width: 95%;
+  height: 100%;
+  padding: 10px 20px;
+  background: white;
+  border-radius: 3px;
+  outline: none;
+  font-size: 100%;
+  line-height: 1.15;
+  transition: box-shadow 0.2s ease;
+}
+
+.graph-widget .search input:focus, .graph-widget .search input:hover {
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.graph-widget .search .results div {
+  display: block;
+  position: relative;
+  margin: 0 -1px;
+  padding: 6px 10px 6px 10px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.graph-widget .search .results .item {
+  background-color: #FFFFFF;
+  border: 1px solid transparent;
+  margin: 1px;
+  display: flex;
+  max-height: 80px;
+  overflow: hidden;
+}
+
+.graph-widget .search .results div .highlighted {
+  font-weight: bold;
+  color: var(--yfiles-secondary-color);
+}
+
+.graph-widget .search .results div.item:hover {
+  border-color: var(--yfiles-secondary-color);
+  background-color: rgb(248,248,248);
+}
+
+.graph-widget .search .results .selected div.item {
+  border-color: var(--yfiles-secondary-color);
+  background-color: rgb(255,255,255);
+}
+
+.graph-widget .search .results .item .button {
+  align-self: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  opacity: 0;
+  border: 1px solid #666;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.graph-widget .search .results .item .button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.graph-widget .search .results .item .button:hover {
+  background-color: #E0E0E0;
+}
+
+.graph-widget .search .results .item:hover .button {
+  opacity: 1;
+}
+
+.graph-widget .search .results .item .button.focus {
+  margin-left: auto;
+}
+
+.graph-widget .search .results .item .mdi-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  align-self: center;
+}
+
+.graph-widget .search .results .item .key {
+  color: #808394;
+  font-family: monospace;
+}

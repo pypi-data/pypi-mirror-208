@@ -1,0 +1,72 @@
+.graph-widget .overview {
+  --header-height: 36px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: var(--overview-width);
+  height: 200px;
+  z-index: 10;
+  background: #f7f7f7;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+  transition: height 1s var(--cubic-timing-function) 0s, width 1s var(--cubic-timing-function) 0s;
+}
+
+.graph-widget .overview.collapsed {
+  height: var(--header-height);
+  width: var(--header-height);
+}
+
+.graph-widget .overview .header span {
+  opacity: 1;
+  transition: opacity 0.5s var(--cubic-timing-function) 0s;
+}
+
+.graph-widget .overview.collapsed .header span {
+  opacity: 0;
+}
+
+.graph-widget .overview .header {
+  height: var(--header-height);
+  width: 100%;
+  font-family: var(--default-font-family);
+  color: #242265;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--toolbar-button-color);
+  cursor: pointer;
+}
+
+.graph-widget .overview .header:hover {
+  background-color: var(--toolbar-button-color-dark);
+}
+
+.graph-widget .overview .header:after {
+  content: '';
+  background: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22100%22%20height%3D%22100%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%2352587a%22%20stroke-width%3D%2210%22%20d%3D%22m20%2020%2030%2030-30%2030%22%2F%3E%3C%2Fsvg%3E') no-repeat 80%;
+  background-size: 20px 20px;
+  width: 30px;
+  height: 36px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(90deg);
+  transition: transform 0.3s var(--cubic-timing-function) 0s;
+}
+
+.graph-widget .overview.collapsed .header:after {
+  background: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220.5%2016.5%2016%2016%22%20xml%3Aspace%3D%22preserve%22%3E%3Cg%20fill%3D%22%2352587a%22%3E%3Cpath%20d%3D%22M10%2016.5a6%206%200%201%200%200%2012%206%206%200%200%200%200-12zm0%2010a4%204%200%201%201%200-8%204%204%200%200%201%200%208z%22%2F%3E%3Cpath%20d%3D%22M2.388%2032.501%200%2030.116l5.655-5.658%202.387%202.385z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E') no-repeat 80%;
+}
+
+.graph-widget .overview.collapsed .header:after {
+  transform: rotate(0deg);
+}
+
+.graph-widget .overview .graph-overview-container {
+  width: 200px;
+  height: calc(200px - var(--header-height));
+}

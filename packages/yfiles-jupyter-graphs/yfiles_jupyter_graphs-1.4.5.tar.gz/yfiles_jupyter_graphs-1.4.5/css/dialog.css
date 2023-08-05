@@ -1,0 +1,249 @@
+.graph-widget .dialog {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(33,33,33,0.46);
+    z-index: 99;
+}
+
+.graph-widget .dialog > .dialog-content {
+    position: absolute;
+    display: block;
+    width: 820px;
+    max-width: 95%;
+    min-height: 20px;
+    max-height: 90%;
+    background-color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12);
+    border-radius: 4px;
+    padding: 10px;
+    color: var(--yfiles-primary-color);
+    font-family: var(--default-font-family);
+    animation: display .3s cubic-bezier(.25,.8,.25,1) forwards;
+}
+
+@keyframes display {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.graph-widget .dialog > .dialog-content .dialog-headline {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.graph-widget .dialog .flex-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.graph-widget .dialog .flex-element {
+    flex: 1;
+    text-align: center;
+    padding: 0 15px;
+}
+
+.graph-widget .dialog .flex-element:first-of-type {
+    border-right: 2px solid #ECEFF1;
+}
+
+.graph-widget .dialog .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    height: 36px;
+    border-radius: 4px;
+    margin: 30px auto 20px auto;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    padding: 0 12px;
+    background-color: transparent;
+    text-decoration: none;
+    color: var(--yfiles-primary-color)
+}
+
+.graph-widget .dialog .button.secondary {
+    border: thin solid var(--yfiles-primary-color);
+}
+
+.graph-widget .dialog .button.secondary.inline {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 0 5px;
+}
+
+.graph-widget .dialog .button.secondary.inline .mdi-icon {
+    margin-right: 3px;
+}
+
+.graph-widget .dialog .button .mdi-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.graph-widget .dialog .button[disabled] {
+    cursor: default !important;
+    opacity: 0.5;
+}
+
+.graph-widget .dialog .button:not([disabled]):hover {
+    background-color: var(--toolbar-button-color);
+}
+
+.graph-widget .dialog code {
+    color: var( --yfiles-primary-color) !important;
+}
+
+
+/**
+Export Dialog
+ */
+
+.graph-widget .export-dialog .step-number {
+    font-weight: bold;
+    font-size: 27px;
+    margin-top: 0;
+}
+
+.graph-widget .export-dialog .drag-button {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+    cursor: move;
+    z-index: 4;
+    border: 2px dashed #bbb;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+}
+
+.graph-widget .export-dialog .drag-button:hover .drag-button-icon {
+    filter: drop-shadow(0px 4px 3px rgba(33,33,33,.4));
+    transform: translateY(-3px);
+}
+.graph-widget .export-dialog .drag-button:hover + .drag-arrow:after {
+    left: 120%;
+    transition: left .8s linear;
+}
+
+.graph-widget .export-dialog .drag-button-icon {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    filter: drop-shadow(0px 2px 2px rgba(33,33,33,.4));
+    transition: filter .3s ease, transform .3s ease;
+}
+
+.graph-widget .export-dialog .pointer-icon {
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    pointer-events: none;
+    width: 40px;
+    stroke: #383838;
+    stroke-width: 0.4;
+    background: radial-gradient(white 25%, rgba(255, 255, 255, 0) 60%);
+}
+
+.graph-widget .export-dialog .drag-arrow {
+    position: absolute;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    animation: arrow-anim 1.5s linear infinite forwards;
+}
+
+.graph-widget .export-dialog .drag-arrow svg {
+    width: 100%;
+    height: 100%;
+    stroke: #bbb;
+    stroke-width: .1;
+    stroke-linejoin: bevel;
+    transform: scale(2);
+}
+
+.graph-widget .export-dialog .drag-arrow:before {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: -30px;
+    height: 100%;
+    width: 120px;
+    background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
+    z-index: 1;
+}
+
+.graph-widget .export-dialog .drag-arrow:after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: -75%;
+    height: 100%;
+    width: 70px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
+    z-index: 2;
+    transition: none;
+}
+
+.graph-widget .export-dialog .download-note {
+    text-align: center;
+}
+
+.graph-widget .dialog .button.yed-live-button {
+    background-color: var(--yed-color);
+    margin-top: 30px;
+}
+
+.graph-widget .dialog .button.yed-live-button:not([disabled]):hover {
+    background-color: #b9f319;
+}
+
+.graph-widget .dialog .button.data-explorer-button {
+    background-color: var(--data-explorer-color);
+    margin-top: 30px;
+}
+
+.graph-widget .dialog .button.data-explorer-button:not([disabled]):hover {
+    background-color: #f8fa20;
+}
+
+@keyframes arrow-anim {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    25% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+}
