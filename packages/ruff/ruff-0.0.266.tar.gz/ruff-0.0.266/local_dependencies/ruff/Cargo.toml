@@ -1,0 +1,85 @@
+[package]
+name = "ruff"
+version = "0.0.266"
+authors= ["Charlie Marsh <charlie.r.marsh@gmail.com>"]
+edition= "2021"
+rust-version= "1.69"
+documentation= "https://beta.ruff.rs/docs/"
+homepage= "https://beta.ruff.rs/docs/"
+repository= "https://github.com/charliermarsh/ruff"
+readme = "README.md"
+license = "MIT"
+
+[lib]
+name = "ruff"
+
+[dependencies]
+ruff_cache = { path = "../ruff_cache" }
+ruff_diagnostics = { path = "../ruff_diagnostics", features = ["serde"] }
+ruff_macros = { path = "../ruff_macros" }
+ruff_python_ast = { path = "../ruff_python_ast", features = ["serde"] }
+ruff_python_semantic = { path = "../ruff_python_semantic" }
+ruff_python_stdlib = { path = "../ruff_python_stdlib" }
+ruff_rustpython = { path = "../ruff_rustpython" }
+ruff_text_size = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" }
+
+annotate-snippets = { version = "0.9.1", features = ["color"] }
+anyhow = { version = "1.0.69" }
+bitflags = { version = "2.2.1" }
+chrono = { version = "0.4.23", default-features = false, features = ["clock"] }
+clap = { version = "4.1.8", features = ["derive","derive", "string"] , optional = true }
+colored = { version = "2.0.0" }
+dirs = { version = "5.0.0" }
+fern = { version = "0.6.1" }
+glob = { version = "0.3.1" }
+globset = { version = "0.4.10" }
+ignore = { version = "0.4.20" }
+imperative = { version = "1.0.4" }
+is-macro = { version = "0.2.2" }
+itertools = { version = "0.10.5" }
+libcst = { git = "https://github.com/charliermarsh/LibCST", rev = "80e4c1399f95e5beb532fdd1e209ad2dbb470438" }
+log = { version = "0.4.17" }
+natord = { version = "1.0.9" }
+nohash-hasher = { version = "0.2.0" }
+num-bigint = { version = "0.4.3" }
+num-traits = { version = "0.2.15" }
+once_cell = { version = "1.17.1" }
+path-absolutize = { version = "3.0.14" , features = [
+  "once_cell_cache",
+  "use_unix_paths_on_wasm"] }
+pathdiff = { version = "0.2.1" }
+pep440_rs = { version = "0.3.1", features = ["serde"] }
+quick-junit = { version = "0.3.2" }
+regex = { version = "1.7.1" }
+result-like = { version = "0.4.6" }
+rustc-hash = { version = "1.1.0" }
+rustpython-common = { git = "https://github.com/RustPython/RustPython.git", rev = "f3e4d3409253660bd4fa7f3d24d3db747e7dca61" }
+rustpython-parser = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" , default-features = false}
+schemars = { version = "0.8.12" , optional = true }
+semver = { version = "1.0.16" }
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = { version = "1.0.93", features = ["preserve_order"] }
+similar = { version = "2.2.1" , features = ["inline"] }
+shellexpand = { version = "3.0.0" }
+smallvec = { version = "1.10.0" }
+strum = { version = "0.24.1", features = ["strum_macros"] }
+strum_macros = { version = "0.24.3" }
+textwrap = { version = "0.16.0" }
+thiserror = { version = "1.0.38" }
+toml = { version = "0.7.2" }
+typed-arena = { version = "2.0.2" }
+unicode-width = { version = "0.1.10" }
+
+[dev-dependencies]
+insta = { workspace = true }
+pretty_assertions = "1.3.0"
+test-case = { workspace = true }
+# Disable colored output in tests
+colored = { workspace = true, features = ["no-color"] }
+
+[features]
+default = []
+schemars = ["dep:schemars"]
+logical_lines = []
+jupyter_notebook = []
+ecosystem_ci = []

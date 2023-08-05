@@ -1,0 +1,215 @@
+use rustpython_parser::ast::{self, Constant, Expr, ExprKind};
+
+use ruff_diagnostics::{AlwaysAutofixableViolation, AutofixKind, Diagnostic, Edit, Fix, Violation};
+use ruff_macros::{derive_message_formats, violation};
+use ruff_python_ast::helpers::{create_expr, unparse_expr};
+
+use crate::checkers::ast::Checker;
+use crate::registry::AsRule;
+
+#[violation]
+pub struct UncapitalizedEnvironmentVariables {
+    expected: String,
+    original: String,
+}
+
+impl Violation for UncapitalizedEnvironmentVariables {
+    const AUTOFIX: AutofixKind = AutofixKind::Sometimes;
+
+    #[derive_message_formats]
+    fn message(&self) -> String {
+        let UncapitalizedEnvironmentVariables { expected, original } = self;
+        format!("Use capitalized environment variable `{expected}` instead of `{original}`")
+    }
+
+    fn autofix_title(&self) -> Option<String> {
+        let UncapitalizedEnvironmentVariables { expected, original } = self;
+        Some(format!("Replace `{original}` with `{expected}`"))
+    }
+}
+
+/// ## What it does
+/// Check for `dict.get()` calls that pass `None` as the default value.
+///
+/// ## Why is this bad?
+/// `None` is the default value for `dict.get()`, so it is redundant to pass it
+/// explicitly.
+///
+/// ## Example
+/// ```python
+/// ages = {"Tom": 23, "Maria": 23, "Dog": 11}
+/// age = ages.get("Cat", None)  # None
+/// ```
+///
+/// Use instead:
+/// ```python
+/// ages = {"Tom": 23, "Maria": 23, "Dog": 11}
+/// age = ages.get("Cat")  # None
+/// ```
+///
+/// ## References
+/// - [Python documentation](https://docs.python.org/3/library/stdtypes.html#dict.get)
+#[violation]
+pub struct DictGetWithNoneDefault {
+    expected: String,
+    original: String,
+}
+
+impl AlwaysAutofixableViolation for DictGetWithNoneDefault {
+    #[derive_message_formats]
+    fn message(&self) -> String {
+        let DictGetWithNoneDefault { expected, original } = self;
+        format!("Use `{expected}` instead of `{original}`")
+    }
+
+    fn autofix_title(&self) -> String {
+        let DictGetWithNoneDefault { expected, original } = self;
+        format!("Replace `{original}` with `{expected}`")
+    }
+}
+
+/// SIM112
+pub(crate) fn use_capital_environment_variables(checker: &mut Checker, expr: &Expr) {
+    // Ex) `os.environ['foo']`
+    if let ExprKind::Subscript(_) = &expr.node {
+        check_os_environ_subscript(checker, expr);
+        return;
+    }
+
+    // Ex) `os.environ.get('foo')`, `os.getenv('foo')`
+    let ExprKind::Call(ast::ExprCall { func, args, .. }) = &expr.node else {
+        return;
+    };
+    let Some(arg) = args.get(0) else {
+        return;
+    };
+    let ExprKind::Constant(ast::ExprConstant { value: Constant::Str(env_var), .. }) = &arg.node else {
+        return;
+    };
+    if !checker
+        .ctx
+        .resolve_call_path(func)
+        .map_or(false, |call_path| {
+            call_path.as_slice() == ["os", "environ", "get"]
+                || call_path.as_slice() == ["os", "getenv"]
+        })
+    {
+        return;
+    }
+
+    let capital_env_var = env_var.to_ascii_uppercase();
+    if &capital_env_var == env_var {
+        return;
+    }
+
+    checker.diagnostics.push(Diagnostic::new(
+        UncapitalizedEnvironmentVariables {
+            expected: capital_env_var,
+            original: env_var.clone(),
+        },
+        arg.range(),
+    ));
+}
+
+fn check_os_environ_subscript(checker: &mut Checker, expr: &Expr) {
+    let ExprKind::Subscript(ast::ExprSubscript { value, slice, .. }) = &expr.node else {
+        return;
+    };
+    let ExprKind::Attribute(ast::ExprAttribute { value: attr_value, attr, .. }) = &value.node else {
+        return;
+    };
+    let ExprKind::Name(ast::ExprName { id, .. }) = &attr_value.node else {
+        return;
+    };
+    if id != "os" || attr != "environ" {
+        return;
+    }
+    let ExprKind::Constant(ast::ExprConstant { value: Constant::Str(env_var), kind }) = &slice.node else {
+        return;
+    };
+    let capital_env_var = env_var.to_ascii_uppercase();
+    if &capital_env_var == env_var {
+        return;
+    }
+
+    let mut diagnostic = Diagnostic::new(
+        UncapitalizedEnvironmentVariables {
+            expected: capital_env_var.clone(),
+            original: env_var.clone(),
+        },
+        slice.range(),
+    );
+    if checker.patch(diagnostic.kind.rule()) {
+        let new_env_var = create_expr(ast::ExprConstant {
+            value: capital_env_var.into(),
+            kind: kind.clone(),
+        });
+        #[allow(deprecated)]
+        diagnostic.set_fix(Fix::unspecified(Edit::range_replacement(
+            unparse_expr(&new_env_var, checker.stylist),
+            slice.range(),
+        )));
+    }
+    checker.diagnostics.push(diagnostic);
+}
+
+/// SIM910
+pub(crate) fn dict_get_with_none_default(checker: &mut Checker, expr: &Expr) {
+    let ExprKind::Call(ast::ExprCall { func, args, keywords }) = &expr.node else {
+        return;
+    };
+    if !keywords.is_empty() {
+        return;
+    }
+    let ExprKind::Attribute(ast::ExprAttribute { value, attr, .. } )= &func.node else {
+        return;
+    };
+    if !matches!(value.node, ExprKind::Dict(_)) {
+        return;
+    }
+    if attr != "get" {
+        return;
+    }
+    let Some(key) = args.get(0) else {
+        return;
+    };
+    if !matches!(key.node, ExprKind::Constant(_) | ExprKind::Name(_)) {
+        return;
+    }
+    let Some(default) = args.get(1) else {
+        return;
+    };
+    if !matches!(
+        default.node,
+        ExprKind::Constant(ast::ExprConstant {
+            value: Constant::None,
+            ..
+        })
+    ) {
+        return;
+    };
+
+    let expected = format!(
+        "{}({})",
+        checker.locator.slice(func.range()),
+        checker.locator.slice(key.range())
+    );
+    let original = checker.locator.slice(expr.range()).to_string();
+
+    let mut diagnostic = Diagnostic::new(
+        DictGetWithNoneDefault {
+            expected: expected.clone(),
+            original,
+        },
+        expr.range(),
+    );
+
+    if checker.patch(diagnostic.kind.rule()) {
+        #[allow(deprecated)]
+        diagnostic.set_fix(Fix::unspecified(Edit::range_replacement(
+            expected,
+            expr.range(),
+        )));
+    }
+    checker.diagnostics.push(diagnostic);
+}

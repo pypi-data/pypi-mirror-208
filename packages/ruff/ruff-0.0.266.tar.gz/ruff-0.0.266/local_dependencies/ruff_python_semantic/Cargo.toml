@@ -1,0 +1,20 @@
+[package]
+name = "ruff_python_semantic"
+version = "0.0.0"
+publish = false
+edition = "2021"
+rust-version = "1.69"
+
+[lib]
+
+[dependencies]
+ruff_python_ast = { path = "../ruff_python_ast" }
+ruff_python_stdlib = { path = "../ruff_python_stdlib" }
+ruff_text_size = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" }
+
+bitflags = { version = "2.2.1" }
+is-macro = { version = "0.2.2" }
+nohash-hasher = { version = "0.2.0" }
+rustc-hash = { version = "1.1.0" }
+rustpython-parser = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" , default-features = false}
+smallvec = { version = "1.10.0" }
