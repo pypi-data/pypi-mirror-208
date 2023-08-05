@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "es-translator"
+version = "1.4.2"
+description = "A lazy yet bulletproof machine translation tool for Elastichsearch."
+authors = ["ICIJ <engineering@icij.org>"]
+readme = "README.md"
+license = "GNU AFFERO GENERAL PUBLIC LICENSE"
+packages = [{include = "es_translator"}]
+
+[tool.poetry.dependencies]
+python = "^3.8,<3.11"
+click = "^8"
+elasticsearch = ">=7.10,<7.11"
+elasticsearch-dsl = ">=7.4.0,<8.0.0"
+sh = "^1"
+pycountry = "^22.3"
+deb-pkg-tools = "^8.4"
+coloredlogs = "*"
+urllib3 = "^1.26"
+argostranslate = "^1.7"
+rich = "^12"
+torch = "^1.13"
+
+[tool.poetry.group.dev.dependencies]
+pyyaml = "*"
+argh = "*"
+pytest = "^7.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+es-translator = "es_translator.cli:translate"
+es-translator-pairs = "es_translator.cli:pairs"
