@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt", "hatch-fancy-pypi-readme>=22.5.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gradio_tools"
+version = "0.0.9"
+description = "Use Gradio Apps as tools for LLM Agents"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "Freddy Boulton", email = "alfonsoboulton@gmail.com" },
+]
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dynamic = ["readme"]
+dependencies = [
+    "gradio_client>=0.1.2",
+]
+[project.optional-dependencies]
+minichain = ["gradio", "minichain>=0.3.3"]
+langchain = ["langchain", "openai"]
+all = ["gradio_tools[langchain]", "gradio_tools[minichain]"]
+test = ["ruff==0.0.260", "pyright==1.1.298", "isort >=5.0.6,<6.0.0", "black==22.6.0", "pytest"]
+dev = ["gradio_tools[all]", "gradio_tools[test]"]
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [
+  { path = "README.md"},
+]
