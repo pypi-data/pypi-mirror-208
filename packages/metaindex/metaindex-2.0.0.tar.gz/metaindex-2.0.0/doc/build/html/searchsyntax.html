@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Search Query Syntax &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Extra Metadata" href="extrametadata.html" />
+    <link rel="prev" title="Configuration file" href="configuration.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="extrametadata.html" title="Extra Metadata"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration file"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Search Query Syntax</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="search-query-syntax">
+<h1>Search Query Syntax<a class="headerlink" href="#search-query-syntax" title="Permalink to this headline">¶</a></h1>
+<p>If the search term only contains a simple word, like <code class="docutils literal notranslate"><span class="pre">albatross</span></code>, all
+files will be found that contain this word in any metadata field.</p>
+<p>To search for a phrase containing spaces, you have to enclose the phrase in
+blockquotes or single quotes, like <code class="docutils literal notranslate"><span class="pre">&quot;albatross</span> <span class="pre">flavour&quot;</span></code>.</p>
+<p>To search for “albatross” in a specific metadata field, like in the title,
+you have to search for <code class="docutils literal notranslate"><span class="pre">title:albatross</span></code>. Again, the phrase search
+requires quotes: <code class="docutils literal notranslate"><span class="pre">title:&quot;albatross</span> <span class="pre">flavour&quot;</span></code>.</p>
+<p>You can search files by the existance of a metadata tag by adding a <code class="docutils literal notranslate"><span class="pre">?</span></code>
+after the name of the metadata tag. For example, to find all files that
+have the <code class="docutils literal notranslate"><span class="pre">resolution</span></code> metadata tag: <code class="docutils literal notranslate"><span class="pre">resolution?</span></code>.</p>
+<p>When the search includes the tag name, you have to provide the full
+case-sensitive name of the tag. <code class="docutils literal notranslate"><span class="pre">artist</span></code> and <code class="docutils literal notranslate"><span class="pre">Artist</span></code> are very
+different tag names and just searching for <code class="docutils literal notranslate"><span class="pre">artist:tim</span></code> when you mean to
+search for <code class="docutils literal notranslate"><span class="pre">albumartist</span></code> will not result in the same search results.</p>
+<p>Have a look at the Synonyms feature to find out how to search
+conveniently for more complex tag names.</p>
+<p>When searching for multiple terms, you can choose to connect the terms with
+<code class="docutils literal notranslate"><span class="pre">and</span></code> or <code class="docutils literal notranslate"><span class="pre">or</span></code>. <code class="docutils literal notranslate"><span class="pre">and</span></code> is the default if none is provided, so these two
+search queries, to find all photos made with a Canon camera and with a
+width of 1024 pixels, are the same:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">resolution</span><span class="p">:</span><span class="mi">1024</span><span class="n">x</span> <span class="n">Exif</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span><span class="n">canon</span>
+
+<span class="n">resolution</span><span class="p">:</span><span class="mi">1024</span><span class="n">x</span> <span class="ow">and</span> <span class="n">Exif</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span><span class="n">canon</span>
+</pre></div>
+</div>
+<p>To search for all pictures that are made with a Canon camera or have that
+width, you have to use <code class="docutils literal notranslate"><span class="pre">or</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">resolution</span><span class="p">:</span><span class="mi">1024</span><span class="n">x</span> <span class="ow">or</span> <span class="n">Exif</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span><span class="n">canon</span>
+</pre></div>
+</div>
+<section id="metadata-tags">
+<h2>Metadata tags<a class="headerlink" href="#metadata-tags" title="Permalink to this headline">¶</a></h2>
+<p>These metadata tags are always available:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">last_accessed</span></code></dt><dd><p>A timestamp when the file was accessed the last time (if the OS
+supports it).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">filename</span></code></dt><dd><p>The name of the file on disk including extensions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">size</span></code></dt><dd><p>The file size in bytes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mimetype</span></code></dt><dd><p>The mimetype of the file, if it could be detected.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Search Query Syntax</a><ul>
+<li><a class="reference internal" href="#metadata-tags">Metadata tags</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="configuration.html"
+                          title="previous chapter">Configuration file</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="extrametadata.html"
+                          title="next chapter">Extra Metadata</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/searchsyntax.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="extrametadata.html" title="Extra Metadata"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration file"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Search Query Syntax</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

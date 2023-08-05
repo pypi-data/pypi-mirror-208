@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>API Reference &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="License" href="license.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API Reference</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<section id="cacheentry">
+<h2>CacheEntry<a class="headerlink" href="#cacheentry" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.CacheEntry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.</span></span><span class="sig-name descname"><span class="pre">CacheEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_modified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>A cached metadata entry for an item in the filesystem</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add metadata <code class="docutils literal notranslate"><span class="pre">key:value</span></code> to this entry</p>
+<p>This does not update the underlying persistence layer.</p>
+<p>You can set the <code class="docutils literal notranslate"><span class="pre">last_modified</span></code> property through this, too. But there
+will always only be one value and it can only be changed forward in time.
+If you need to set the value of <code class="docutils literal notranslate"><span class="pre">last_modified</span></code> to something that’s
+earlier than the current value, just set the property directly instead
+of calling <code class="docutils literal notranslate"><span class="pre">.add</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyvalue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the metadata key/value or key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>keyvalue</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> (the key) or a tuple/list of <code class="docutils literal notranslate"><span class="pre">(key,</span> <span class="pre">value)</span></code>) – key of the metadata values to delete or key/value
+pair to delete</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.ensure_last_modified">
+<span class="sig-name descname"><span class="pre">ensure_last_modified</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.ensure_last_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the <code class="docutils literal notranslate"><span class="pre">last_modified</span></code> value is set.</p>
+<p>If it is not set, the last modified datetime will be
+obtained by querying the filesystem, which may be slow and
+fail.</p>
+<p>This function call will not fail though: in case of exceptions
+on the filesystem level the <code class="docutils literal notranslate"><span class="pre">last_modified</span></code> date will simply be
+set to <code class="docutils literal notranslate"><span class="pre">datetime.datetime.min</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force</strong> – Whether or not to enforce an update even if the
+entry has a valid value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Updated <code class="docutils literal notranslate"><span class="pre">last_modified</span></code> value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of <code class="docutils literal notranslate"><span class="pre">MetadataValue</span></code> of <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – The key to look for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of <code class="docutils literal notranslate"><span class="pre">MetadataValue</span></code>, may be empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all metadata keys</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.last_modified">
+<span class="sig-name descname"><span class="pre">last_modified</span></span><a class="headerlink" href="#metaindex.CacheEntry.last_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time stamp of when the file was modified most recently</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#metaindex.CacheEntry.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dictionary of lower-case keys,
+mapping to a list of <code class="docutils literal notranslate"><span class="pre">MetadataValue</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.path">
+<span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#metaindex.CacheEntry.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path to the file object in the filesystem.
+Does not need to exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all entries of <code class="docutils literal notranslate"><span class="pre">key</span></code> from the metadata and return them</p>
+<p>After the operation <code class="docutils literal notranslate"><span class="pre">self[key]</span></code> will return only an empty list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.CacheEntry.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accept_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.CacheEntry.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add metadata from <code class="docutils literal notranslate"><span class="pre">other</span></code> into this entry</p>
+<p>Will not add duplicate <code class="docutils literal notranslate"><span class="pre">key:value</span></code> pairs unless <code class="docutils literal notranslate"><span class="pre">accept_duplicates</span></code>
+is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>This call will also update the <code class="docutils literal notranslate"><span class="pre">last_modified</span></code> property to be the
+most recent of both <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.shared.MetadataValue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.shared.</span></span><span class="sig-name descname"><span class="pre">MetadataValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">humanized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.shared.MetadataValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>A metadata value</p>
+<p>This value consists of the <code class="docutils literal notranslate"><span class="pre">raw_value</span></code>, as it was found by the
+indexer in the source or sidecar file, and the <code class="docutils literal notranslate"><span class="pre">humanized_value</span></code> as
+generated by the user’s humanizers.</p>
+<p>You should only have to access the <code class="docutils literal notranslate"><span class="pre">str()</span></code> version of the value, as it
+automatically dispatches to either the humanized value or, if there is
+none, to the raw value.</p>
+<p>Similarly the <code class="docutils literal notranslate"><span class="pre">__eq__</span></code> check will compare <code class="docutils literal notranslate"><span class="pre">MetadataValue</span></code> instances
+against other <code class="docutils literal notranslate"><span class="pre">MetadataValue</span></code> instances. It will also happily compare
+equality of its humanized value against any string or it’s raw value
+against a value of the same type. This example might help:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">value</span> <span class="o">=</span> <span class="n">MetadataValue</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;raw value&quot;</span><span class="p">,</span> <span class="s2">&quot;humanized value&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">value</span> <span class="o">==</span> <span class="n">MetadataValue</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;raw value&quot;</span><span class="p">,</span> <span class="s2">&quot;humanized value&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;humanized value&quot;</span>
+<span class="k">assert</span> <span class="n">value</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;raw value&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.shared.MetadataValue.humanized">
+<span class="sig-name descname"><span class="pre">humanized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.shared.MetadataValue.humanized" title="Permalink to this definition">¶</a></dt>
+<dd><p>The humanized version of the value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.shared.MetadataValue.raw_value">
+<span class="sig-name descname"><span class="pre">raw_value</span></span><a class="headerlink" href="#metaindex.shared.MetadataValue.raw_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The raw, not humanized value</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.Configuration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseconfig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for BaseConfiguration (aka configparser) with additional convenience accessors</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">baseconfig</span></code> is provided, the defaults will be loaded.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.accept_file_patterns">
+<span class="sig-name descname"><span class="pre">accept_file_patterns</span></span><a class="headerlink" href="#metaindex.Configuration.accept_file_patterns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Patterns of files to index.
+If this option is set, <strong>only</strong> these files must be indexed and
+<code class="docutils literal notranslate"><span class="pre">ignore_file_patterns</span></code> can safely be ignored.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metaindex.Configuration.collection_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collection_metadata</span></span><a class="headerlink" href="#metaindex.Configuration.collection_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all valid filenames for collection metadata.</p>
+<p>The list is ordered by user’s preference for sidecar file format and
+name of collection metadata file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.extract_fulltext">
+<span class="sig-name descname"><span class="pre">extract_fulltext</span></span><a class="headerlink" href="#metaindex.Configuration.extract_fulltext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not or for what files to run fulltext extraction</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.find_all_sidecar_files">
+<span class="sig-name descname"><span class="pre">find_all_sidecar_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.find_all_sidecar_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all sidecar files for this file</p>
+<p>Generates a sequence of (pathlib.Path, bool) with the location of the
+existing sidecar file and whether or not it is a collection metadata file.</p>
+<p>The files are returned in order of preference and direct sidecar files
+before collection sidecar files.</p>
+<p>May return an empty list, if no sidecar files exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.find_indexable_files">
+<span class="sig-name descname"><span class="pre">find_indexable_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.find_indexable_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all files that can be indexed in the given paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> – A list of paths to search through</p></li>
+<li><p><strong>recursive</strong> – Whether or not any given directories should be indexed
+recursively</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.get_preferred_sidecar_stores">
+<span class="sig-name descname"><span class="pre">get_preferred_sidecar_stores</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.get_preferred_sidecar_stores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all available metadata stores, sorted by preference of the user</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.ignore_dirs">
+<span class="sig-name descname"><span class="pre">ignore_dirs</span></span><a class="headerlink" href="#metaindex.Configuration.ignore_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of directories to ignore during indexing</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.ignore_file_patterns">
+<span class="sig-name descname"><span class="pre">ignore_file_patterns</span></span><a class="headerlink" href="#metaindex.Configuration.ignore_file_patterns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Patterns of files to ignore</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.ignore_indexers">
+<span class="sig-name descname"><span class="pre">ignore_indexers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.ignore_indexers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all indexers that the user configured to be ignored</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.index_unknown">
+<span class="sig-name descname"><span class="pre">index_unknown</span></span><a class="headerlink" href="#metaindex.Configuration.index_unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to index files when no indexers return successful</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.is_sidecar_file">
+<span class="sig-name descname"><span class="pre">is_sidecar_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.is_sidecar_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the file at path is a sidecar file (either collection metadata or not)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.load_addons">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_addons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.load_addons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the indexer addons</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.load_mimetypes">
+<span class="sig-name descname"><span class="pre">load_mimetypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.load_mimetypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the user-configured extra mimetypes</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.ocr">
+<span class="sig-name descname"><span class="pre">ocr</span></span><a class="headerlink" href="#metaindex.Configuration.ocr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OCR facility, as configured by the user</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.Configuration.recursive_extra_metadata">
+<span class="sig-name descname"><span class="pre">recursive_extra_metadata</span></span><a class="headerlink" href="#metaindex.Configuration.recursive_extra_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not extra metadata is considered recursive</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Configuration.resolve_sidecar_for">
+<span class="sig-name descname"><span class="pre">resolve_sidecar_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Configuration.resolve_sidecar_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a sidecar file path for this file</p>
+<p>Returns a tuple (path, is_collection, store) with the pathlib.Path to the sidecar file
+(which may or may not exist), a boolean whether or not the sidecar file is a collection
+file, and the store module that can be used to read/write the metadata to this sidecar.</p>
+<p>May return (None, False, None) in case there is no usable storage.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="metaindex.Configuration.synonyms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">synonyms</span></span><a class="headerlink" href="#metaindex.Configuration.synonyms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict of all synonyms and the attributes that they stand for</p>
+<p>E.g. might contain the entry ‘title’, mapping to [‘opf.title’, ‘id3.title’]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="query">
+<h2>Query<a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.Query">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.</span></span><span class="sig-name descname"><span class="pre">Query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a search query to obtain entries from the cache</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Query.as_sql">
+<span class="sig-name descname"><span class="pre">as_sql</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Query.as_sql" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build an SQLite query</p>
+<p>Returns a tuple (query, args) to be passed to execute of an sqlite database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.Query.parse">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synonyms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.Query.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accepts a human-written search term and builds a Query from it</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="cache">
+<h2>Cache<a class="headerlink" href="#cache" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.MemoryCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.</span></span><span class="sig-name descname"><span class="pre">MemoryCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version of the threaded cache that uses in-memory caching of the database</p>
+<p>Upon initialisation this cache will obtain all entries from the database
+and try to keep the data in memory up to date.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.BACKEND_TYPE">
+<span class="sig-name descname"><span class="pre">BACKEND_TYPE</span></span><a class="headerlink" href="#metaindex.MemoryCache.BACKEND_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">metaindex.cache.ThreadedCache</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.bulk_insert">
+<span class="sig-name descname"><span class="pre">bulk_insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inserts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.bulk_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a whole set of files and their metadata</p>
+<p>inserts is a list of (path, metadata, last_modified) tuples, just
+like the parameters that you would use for ‘insert’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.bulk_rename">
+<span class="sig-name descname"><span class="pre">bulk_rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.bulk_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the rename operation for all renames</p>
+<p>See also below, <cite>rename</cite>.</p>
+<p><cite>renames</cite> must be a tuple <cite>(old_path, new_path)</cite>.
+<cite>old_path</cite> can be a directory, moving all cached subentries
+accordingly, too.</p>
+<p>You may add a <cite>is_dir</cite> boolean value to prevent the lookup of whether
+or not <cite>old_path</cite> is a directory, i.e. <cite>(old_path, new_path, is_dir)</cite>.
+Use it if you <em>first</em> rename the path and then update the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.check_dirty">
+<span class="sig-name descname"><span class="pre">check_dirty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.check_dirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether or not the database is more recent than this cache</p>
+<p>This call will return immediately.</p>
+<p>This call may return False even if it doesn’t know for sure that the cache is dirty.</p>
+<p>However, if it returns True, you can be sure that the cache is dirty (i.e. no longer valid).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.cleanup">
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find and remove all entries in the cache that refer to no longer existing files</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove everything from the cache</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.do_reload">
+<span class="sig-name descname"><span class="pre">do_reload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.do_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>A blocking reload function.</p>
+<p>Do not call this directly, but call ‘invalidate’ or ‘reload’ instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.do_rename">
+<span class="sig-name descname"><span class="pre">do_rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.do_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>A blocking rename function.</p>
+<p>Do not call this directly, but call ‘rename’ instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.expire_metadata">
+<span class="sig-name descname"><span class="pre">expire_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.expire_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all metadata associated to these paths</p>
+<p>But keep the paths in the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.find">
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all entries that match this query</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.forget">
+<span class="sig-name descname"><span class="pre">forget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.forget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all <code class="docutils literal notranslate"><span class="pre">paths</span></code> from the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>paths</strong> – The list of paths to remove from cache.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all entries for these paths (recursively)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert the CacheEntry <code class="docutils literal notranslate"><span class="pre">entry</span></code> into the cache.</p>
+<p>This operation will not modify the item in the filesystem nor update
+any other form of metadata persistency for the item.
+This function really only affects the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.invalidate">
+<span class="sig-name descname"><span class="pre">invalidate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.invalidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate the cached entries and reload</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.is_busy">
+<span class="sig-name descname"><span class="pre">is_busy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.is_busy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not the cache is busy reading from the database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a set of all known metadata keys.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.last_modified">
+<span class="sig-name descname"><span class="pre">last_modified</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.last_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the date and time of the entry that most recently updated in the database.
+:rtype: <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>End the cache thread</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Re-)index these paths (recursively by default)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.reload">
+<span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload the data from the cache</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move all metadata entries for ‘path’ to ‘new_path’.</p>
+<p>Convenience wrapper for bulk_rename.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call this before attempting any queries.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.wait_for_reload">
+<span class="sig-name descname"><span class="pre">wait_for_reload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.wait_for_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until any currently pending reload operation is completed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.MemoryCache.wait_for_write">
+<span class="sig-name descname"><span class="pre">wait_for_write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.MemoryCache.wait_for_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until any currently pending write operation is completed</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="indexers">
+<h2>Indexers<a class="headerlink" href="#indexers" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.indexer.</span></span><span class="sig-name descname"><span class="pre">IndexerBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.indexer.IndexerBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all file indexers</p>
+<p>When adding an indexer to metaindex, you should sublass from this.</p>
+<p>Make sure to define the class propertes <code class="docutils literal notranslate"><span class="pre">NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCEPT</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">PREFIX</span></code>.</p>
+<p>You can control when the indexer should be run (compared to others for
+the same file type), by defining the <code class="docutils literal notranslate"><span class="pre">ORDER</span></code> class property.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.ACCEPT">
+<span class="sig-name descname"><span class="pre">ACCEPT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#metaindex.indexer.IndexerBase.ACCEPT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify what suffices or mimetypes are handled by this indexer, e.g.
+<code class="docutils literal notranslate"><span class="pre">ACCEPT</span> <span class="pre">=</span> <span class="pre">['.rst',</span> <span class="pre">'.md',</span> <span class="pre">'text/html',</span> <span class="pre">'image/']</span></code>
+anything starting with a <code class="docutils literal notranslate"><span class="pre">.</span></code> is assumed to be a suffix,
+everything else is assumed to be a mimetype.</p>
+<p>If the mimetype ends with <code class="docutils literal notranslate"><span class="pre">/</span></code>, it is matched against the first part
+of the file’s mimetype.</p>
+<p>If your indexer should run for all files, use <code class="docutils literal notranslate"><span class="pre">ACCEPT</span> <span class="pre">=</span> <span class="pre">'*'</span></code>
+You must declare the prefix that is used for tag names of this indexer
+This may also be a tuple (or otherwise iterable) of prefixes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metaindex.indexer.IndexerBase.NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name by which this indexer is registered</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.ORDER">
+<span class="sig-name descname"><span class="pre">ORDER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#metaindex.indexer.IndexerBase.ORDER" title="Permalink to this definition">¶</a></dt>
+<dd><p>When to execute this indexer in the order of indexers</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.PREFIX">
+<span class="sig-name descname"><span class="pre">PREFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#metaindex.indexer.IndexerBase.PREFIX" title="Permalink to this definition">¶</a></dt>
+<dd><p>What prefix a tag created by this indexer should receive.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.cached_dt">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cached_dt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_cached</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.indexer.IndexerBase.cached_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the datetime when this cache entry was created</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.changed_since_cached">
+<span class="sig-name descname"><span class="pre">changed_since_cached</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_cached</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.indexer.IndexerBase.changed_since_cached" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the file at path has changed since it was cached
+last (according to last_cached)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.reuse_cached">
+<span class="sig-name descname"><span class="pre">reuse_cached</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_cached</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.indexer.IndexerBase.reuse_cached" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates metadata with the entries from last_cached for entries of this indexer</p>
+<p>The idea is that you can call <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">self.reuse_cached(metadata,</span> <span class="pre">last_cached)</span></code>
+from <code class="docutils literal notranslate"><span class="pre">run(...)</span></code> if you are skipping the execution of the indexer because nothing
+changed since the last time it was run.</p>
+<p>This function is used, for example, from <code class="docutils literal notranslate"><span class="pre">&#64;only_if_changed</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.indexer.IndexerBase.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_cached</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.indexer.IndexerBase.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute this Indexer to run on the file at path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – will be of type pathlib.Path.</p></li>
+<li><p><strong>metadata</strong> – is the accumulated metadata already collected by other
+indexers that ran before this one. You are expected to add your
+metadata keys and values in here.</p></li>
+<li><p><strong>last_cached</strong> (<code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code>) – is the metadata from when this file was entered into
+the cache the last time. You could use this
+information to skip indexing, e.g. when the
+<code class="docutils literal notranslate"><span class="pre">last_modified</span></code> of the file is older than the
+cached entry.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Consider using the <code class="docutils literal notranslate"><span class="pre">&#64;only_if_changed</span></code> decorator if you want this
+indexer to only be run if the file has changed since the last run of
+any indexer.</p>
+<p>Be aware that each subprocess will create their own instance of your
+Indexer; if you have a cache, it will be different between the processes.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="humanizers">
+<h2>Humanizers<a class="headerlink" href="#humanizers" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="metaindex.humanizer.register_humanizer">
+<span class="sig-prename descclassname"><span class="pre">metaindex.humanizer.</span></span><span class="sig-name descname"><span class="pre">register_humanizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Priority.NORMAL</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.humanizer.register_humanizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to register a function as a humanizer</p>
+<p><code class="docutils literal notranslate"><span class="pre">tags</span></code> can be a single tags, or a set of tags to which
+this humanizer should be applied.</p>
+<p>A tag may be the exact tag, like ‘general.size’, or ignoring
+the prefix with ‘<em>.size’.
+You may also set the tag to be ‘</em>’, in case you want to translate
+rather by type; consider setting the priority to LOW in that case
+though.</p>
+<p><code class="docutils literal notranslate"><span class="pre">priority</span></code> specifies how early in the process this humanizer
+should be called.</p>
+<p>The humanize function must accept a value and return either the
+human-readable version in form of a string or None, if the value
+can not be translated.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.humanizer.Priority">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.humanizer.</span></span><span class="sig-name descname"><span class="pre">Priority</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.humanizer.Priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Priority of humanizers</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.humanizer.Priority.HIGH">
+<span class="sig-name descname"><span class="pre">HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#metaindex.humanizer.Priority.HIGH" title="Permalink to this definition">¶</a></dt>
+<dd><p>High priority</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.humanizer.Priority.HIGHEST">
+<span class="sig-name descname"><span class="pre">HIGHEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#metaindex.humanizer.Priority.HIGHEST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Highest priority, humanizers with this priority will be run first</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.humanizer.Priority.LOW">
+<span class="sig-name descname"><span class="pre">LOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">80</span></em><a class="headerlink" href="#metaindex.humanizer.Priority.LOW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low priority</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.humanizer.Priority.LOWEST">
+<span class="sig-name descname"><span class="pre">LOWEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">90</span></em><a class="headerlink" href="#metaindex.humanizer.Priority.LOWEST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lowest priority, humanizers with this priority will be run last</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="metaindex.humanizer.Priority.NORMAL">
+<span class="sig-name descname"><span class="pre">NORMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#metaindex.humanizer.Priority.NORMAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normal priority. This is the default for custom humanizers</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="sqlaccess">
+<h2>SqlAccess<a class="headerlink" href="#sqlaccess" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">metaindex.sql.</span></span><span class="sig-name descname"><span class="pre">SqlAccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic SQLite wrapper</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.expire_metadata">
+<span class="sig-name descname"><span class="pre">expire_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.expire_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark the metadata of these paths as expired</p>
+<p>Expiring does not remove the data from the database, only marks it as
+very, very old.</p>
+<p>If a paths is pointing to a directory instead of a file, all metadata
+of all items in all the subdirectories will be expired, too.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">paths</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, all metadata will be expired.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>paths</strong> – the paths to expire, <code class="docutils literal notranslate"><span class="pre">None</span></code> will expire all metadata</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.files">
+<span class="sig-name descname"><span class="pre">files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all paths of files in the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of all file paths cached in the database</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list[pathlib.Path]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.find">
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find and return all entries that match the query</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<code class="docutils literal notranslate"><span class="pre">metaindex.query.Query</span></code>) – the search query to run</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list[shared.CacheEntry]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flush the entire database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the metadata of these paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>paths</strong> – list of paths to query</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list[shared.CacheEntry]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert <code class="docutils literal notranslate"><span class="pre">items</span></code> in the database</p>
+<p>This will overwrite all existing entries (by path) in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>items</strong> – A list of <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> to insert</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of inserted entries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a set of all known metadata keys.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.last_modified">
+<span class="sig-name descname"><span class="pre">last_modified</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.last_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the timestamp of the most recently modified file in the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.purge">
+<span class="sig-name descname"><span class="pre">purge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.purge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all entries with these paths from the database</p>
+<p>If a path points to a directory instead of a file, all
+files in all subdirectories will be removed, too.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>files</strong> – List of paths</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.rename_dir">
+<span class="sig-name descname"><span class="pre">rename_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.rename_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename a directory from <code class="docutils literal notranslate"><span class="pre">old_path</span></code> to <code class="docutils literal notranslate"><span class="pre">new_path</span></code></p>
+<p>Only affects the database, no directories on the filesystem are renamed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="metaindex.sql.SqlAccess.rename_file">
+<span class="sig-name descname"><span class="pre">rename_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#metaindex.sql.SqlAccess.rename_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename a file from <code class="docutils literal notranslate"><span class="pre">old_path</span></code> to <code class="docutils literal notranslate"><span class="pre">new_path</span></code></p>
+<p>Only affects the database, no files on the filesystem are renamed</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#cacheentry">CacheEntry</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#query">Query</a></li>
+<li><a class="reference internal" href="#cache">Cache</a></li>
+<li><a class="reference internal" href="#indexers">Indexers</a></li>
+<li><a class="reference internal" href="#humanizers">Humanizers</a></li>
+<li><a class="reference internal" href="#sqlaccess">SqlAccess</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="license.html"
+                          title="previous chapter">License</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reference.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API Reference</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

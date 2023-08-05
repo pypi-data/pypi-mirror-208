@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Index some directories &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Index some directories</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="index-some-directories">
+<h1>Index some directories<a class="headerlink" href="#index-some-directories" title="Permalink to this headline">¶</a></h1>
+<p>To index you <code class="docutils literal notranslate"><span class="pre">Documents</span></code> and <code class="docutils literal notranslate"><span class="pre">Pictures</span></code> folder recursively:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">index</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">i</span> <span class="o">~/</span><span class="n">Documents</span> <span class="o">~/</span><span class="n">Pictures</span>
+</pre></div>
+</div>
+</section>
+<section id="reindex-all-files">
+<h1>Reindex all files<a class="headerlink" href="#reindex-all-files" title="Permalink to this headline">¶</a></h1>
+<p>To only update the metadata from all known files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">index</span> <span class="o">-</span><span class="n">i</span>
+</pre></div>
+</div>
+</section>
+<section id="find-all-files">
+<h1>Find all files<a class="headerlink" href="#find-all-files" title="Permalink to this headline">¶</a></h1>
+<p>List all files that are in cache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span>
+</pre></div>
+</div>
+</section>
+<section id="find-file-by-mimetype">
+<h1>Find file by mimetype<a class="headerlink" href="#find-file-by-mimetype" title="Permalink to this headline">¶</a></h1>
+<p>Searching for all <code class="docutils literal notranslate"><span class="pre">image/*</span></code> mimetypes can be accomplished by this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="n">mimetype</span><span class="p">:</span><span class="o">^</span><span class="n">image</span><span class="o">/</span>
+</pre></div>
+</div>
+</section>
+<section id="listing-metadata">
+<h1>Listing metadata<a class="headerlink" href="#listing-metadata" title="Permalink to this headline">¶</a></h1>
+<p>To list all metadata tags and values of all odt files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="o">-</span><span class="n">t</span> <span class="o">--</span> <span class="s2">&quot;filename:odt$&quot;</span>
+</pre></div>
+</div>
+<p>List the resolutions of all files that have the <code class="docutils literal notranslate"><span class="pre">resolution</span></code> metadata tag:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="o">-</span><span class="n">t</span> <span class="n">resolution</span> <span class="o">--</span> <span class="s2">&quot;resolution?&quot;</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Index some directories</a></li>
+<li><a class="reference internal" href="#reindex-all-files">Reindex all files</a></li>
+<li><a class="reference internal" href="#find-all-files">Find all files</a></li>
+<li><a class="reference internal" href="#find-file-by-mimetype">Find file by mimetype</a></li>
+<li><a class="reference internal" href="#listing-metadata">Listing metadata</a></li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cmdusage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Index some directories</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

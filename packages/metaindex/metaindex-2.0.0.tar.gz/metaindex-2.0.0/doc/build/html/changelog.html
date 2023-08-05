@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Changelog &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Synopsis" href="usage.html" />
+    <link rel="prev" title="Installing" href="install.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="usage.html" title="Synopsis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Changelog</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="changelog">
+<span id="changelog"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<p>This file contains the changes made between released versions.</p>
+<p>The format is based on <a class="reference external" href="https://keepachangelog.com/">Keep a changelog</a> and the versioning tries to follow
+<a class="reference external" href="https://semver.org">Semantic Versioning</a>.</p>
+<section id="id1">
+<h2>1.1.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Creating a <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> instance will start with the configuration defaults</p></li>
+<li><p>Some properties moved from <code class="docutils literal notranslate"><span class="pre">CacheBase</span></code> to <code class="docutils literal notranslate"><span class="pre">Configuration</span></code></p></li>
+<li><p>The exiv/image indexer expands values that are lists or dictionaries</p></li>
+</ul>
+</section>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">final</span></code> directive for rule based indexer</p></li>
+</ul>
+</section>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Rule based indexer was a bit broken</p></li>
+<li><p>Epub indexer follows the standard to determine the root OPF file(s)</p></li>
+<li><p>Addons were not able to use user-installed system packages</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>1.0.1<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<section id="id3">
+<h3>Fixed<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The SQL backend stored the humanized value instead of the raw value</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2>1.0.0<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Dropped <code class="docutils literal notranslate"><span class="pre">multidict</span></code> dependency</p></li>
+<li><p>Introduction of <code class="docutils literal notranslate"><span class="pre">shared.CacheEntry</span></code> (instead of a named tuple)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IndexerBase</span></code> API changed</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>Added<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Support for humanizers</p></li>
+<li><p>ABC notation metadata indexing</p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2>0.8.0<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<section id="id8">
+<h3>Added<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk_rename</span></code> operation in <code class="docutils literal notranslate"><span class="pre">MemoryCache</span></code>.</p></li>
+<li><p>Implemented <code class="docutils literal notranslate"><span class="pre">forget</span></code> in all caches</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Fixed<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>When querying all sidecar files for a file, metaindex would return the file itself, when asking this for a sidecar file (odd scenario, still bad)</p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h2>0.7.1<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<section id="id11">
+<h3>Fixed<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">find_all_sidecar_files</span></code> would not return <em>all</em> sidecar files (ignoring those that are not writable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">General.ignore-dirs</span></code>, as documented, is now actually considered</p></li>
+</ul>
+</section>
+<section id="id12">
+<h3>Changed<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added a few more files and directories to <code class="docutils literal notranslate"><span class="pre">ignore-dirs</span></code> and <code class="docutils literal notranslate"><span class="pre">ignore-files</span></code></p></li>
+<li><p>Fixed the unit tests on file collection</p></li>
+</ul>
+</section>
+</section>
+<section id="id13">
+<h2>0.7.0<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<section id="id14">
+<h3>Added<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Function to insert a whole set of new files in the MemoryCache</p></li>
+</ul>
+</section>
+</section>
+<section id="id15">
+<h2>0.6.0<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<section id="id16">
+<h3>Added<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Function to iterate through all sidecar files of a file</p></li>
+<li><p>Function to rename entries in the database</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stores.as_collection</span></code> to ease the pain when writing collection metadata sidecars</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>Changed<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The filename is no longer stored as a separate metadata tag in the database</p></li>
+</ul>
+</section>
+</section>
+<section id="id18">
+<h2>0.5.1<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<section id="id19">
+<h3>Fixed<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Collection metadata files could be missed in some cases</p></li>
+</ul>
+</section>
+</section>
+<section id="id20">
+<h2>0.5.0<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h2>
+<section id="id21">
+<h3>Added<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ThreadedCache</span></code> and <code class="docutils literal notranslate"><span class="pre">MemoryCache</span></code> both support the <code class="docutils literal notranslate"><span class="pre">keys</span></code> function, too</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>Fixed<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MemoryCache</span></code>’s refresh function would forget the refreshed files</p></li>
+<li><p>Various issues where MemoryCache’s API would not be quite the same as
+Cache’s API.</p></li>
+</ul>
+</section>
+</section>
+<section id="id23">
+<h2>0.4.0<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h2>
+<section id="id24">
+<h3>Added<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>MemoryCache for fast queries in multi-threaded applications</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Query.matches</span></code> to run a query against metadata and see if the query
+matches</p></li>
+</ul>
+</section>
+</section>
+<section id="id25">
+<h2>0.3.0<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h2>
+<section id="id26">
+<h3>Added<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>ThreadedCache for use of the cache in multi-threaded applications</p></li>
+</ul>
+</section>
+<section id="id27">
+<h3>Changed<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Major refactoring of the cache.refresh routine</p></li>
+<li><p>Sidecar files are now handled via indexers (running last in order)</p></li>
+<li><p>Logging is no longer done through the default logger</p></li>
+</ul>
+</section>
+</section>
+<section id="id28">
+<h2>0.2.0<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
+<section id="id29">
+<h3>Added<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Indexer that applies rules to the fulltext of a document to extract meta data</p></li>
+<li><p>OCR support</p></li>
+<li><p>YAML style metadata files are supported</p></li>
+<li><p>Indexer addons</p></li>
+</ul>
+</section>
+<section id="id30">
+<h3>Changed<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>API for <code class="docutils literal notranslate"><span class="pre">Indexer</span></code> changed slightly</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stores.get</span></code>, <code class="docutils literal notranslate"><span class="pre">stores.get_for_collection</span></code> accept byte streams, too</p></li>
+</ul>
+</section>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">remove</span></code>, and <code class="docutils literal notranslate"><span class="pre">edit</span></code> commandline parameters are gone. Use
+metaindexmanager for these functions instead</p></li>
+</ul>
+</section>
+</section>
+<section id="id31">
+<h2>0.1.0<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Initial release</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#id1">1.1.0</a><ul>
+<li><a class="reference internal" href="#changed">Changed</a></li>
+<li><a class="reference internal" href="#added">Added</a></li>
+<li><a class="reference internal" href="#fixed">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">1.0.1</a><ul>
+<li><a class="reference internal" href="#id3">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">1.0.0</a><ul>
+<li><a class="reference internal" href="#id5">Changed</a></li>
+<li><a class="reference internal" href="#id6">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">0.8.0</a><ul>
+<li><a class="reference internal" href="#id8">Added</a></li>
+<li><a class="reference internal" href="#id9">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">0.7.1</a><ul>
+<li><a class="reference internal" href="#id11">Fixed</a></li>
+<li><a class="reference internal" href="#id12">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id13">0.7.0</a><ul>
+<li><a class="reference internal" href="#id14">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id15">0.6.0</a><ul>
+<li><a class="reference internal" href="#id16">Added</a></li>
+<li><a class="reference internal" href="#id17">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id18">0.5.1</a><ul>
+<li><a class="reference internal" href="#id19">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id20">0.5.0</a><ul>
+<li><a class="reference internal" href="#id21">Added</a></li>
+<li><a class="reference internal" href="#id22">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id23">0.4.0</a><ul>
+<li><a class="reference internal" href="#id24">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id25">0.3.0</a><ul>
+<li><a class="reference internal" href="#id26">Added</a></li>
+<li><a class="reference internal" href="#id27">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id28">0.2.0</a><ul>
+<li><a class="reference internal" href="#id29">Added</a></li>
+<li><a class="reference internal" href="#id30">Changed</a></li>
+<li><a class="reference internal" href="#removed">Removed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id31">0.1.0</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="install.html"
+                          title="previous chapter">Installing</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="usage.html"
+                          title="next chapter">Synopsis</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/changelog.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="usage.html" title="Synopsis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Changelog</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

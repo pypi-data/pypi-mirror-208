@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Synopsis &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration file" href="configuration.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration file"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Synopsis</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="synopsis">
+<h1>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">list</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">loglevel</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">configuration</span> <span class="n">file</span><span class="p">]</span> <span class="p">{</span><span class="n">find</span><span class="p">,</span><span class="n">index</span><span class="p">,</span><span class="n">fs</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>With metaindex you can find files on your disk based on their metadata, like
+the title of a PDF, the keywords of an ebook, or the model of a camera that
+a photo was taken with.</p>
+<p>The following types of files are supported by default:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Images (anything that has EXIF, IPTC, or XMP information),</p></li>
+<li><p>Audio (audio file formats that have ID3 header or similar),</p></li>
+<li><p>Video (most video file formats have an ID3 header),</p></li>
+<li><p>PDF,</p></li>
+<li><p>ebooks (epub natively, calibre metadata files are understood, too).</p></li>
+</ul>
+</div></blockquote>
+<p>More file types can be supported through the use of addons.</p>
+<p>User provided extra metadata is supported, if it’s provided in the same
+directory as the file and the metadata file is <code class="docutils literal notranslate"><span class="pre">.metadata.json</span></code>.</p>
+</section>
+<section id="options">
+<h1>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h1>
+<p>General parameters are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">configuration</span> <span class="pre">file</span></code></dt><dd><p>Use this configuration file instead of the one from the default
+location.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-h</span></code></dt><dd><p>Show the help.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">loglevel</span></code></dt><dd><p>Set the level of details shown in logging. Your options are <code class="docutils literal notranslate"><span class="pre">fatal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">error</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>, <code class="docutils literal notranslate"><span class="pre">info</span></code>, and <code class="docutils literal notranslate"><span class="pre">debug</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--list</span></code></dt><dd><p>List all available indexers and exit.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>metaindex operates in one of the modes <code class="docutils literal notranslate"><span class="pre">index</span></code> or <code class="docutils literal notranslate"><span class="pre">find</span></code>.</p>
+<p>If you want to try the experimental filesystem mode, there is also <code class="docutils literal notranslate"><span class="pre">fs</span></code>.</p>
+<section id="find">
+<h2>Find<a class="headerlink" href="#find" title="Permalink to this headline">¶</a></h2>
+<p>This is the main operation used to search for files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">directory</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span> <span class="p">[</span><span class="o">-</span><span class="n">k</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="p">[</span><span class="n">tags</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="p">]</span> <span class="p">[</span><span class="n">search</span> <span class="n">queries</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The options to this command are</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">[tags]</span></code></dt><dd><p>Metadata tags that you wish to see per found file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">directory</span></code></dt><dd><p>If this option is provided, metaindex will create this directory (or use
+the existing directory only if it is empty) and create a symbolic link
+to all files that matches this search.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-f</span></code></dt><dd><p>Enforce the use of <code class="docutils literal notranslate"><span class="pre">-l</span></code>’s <code class="docutils literal notranslate"><span class="pre">directory</span></code>, even if it is not empty.
+Still, metaindex will only work with that directory if it contains only
+symbolic links (e.g. a previous search result)!
+If <code class="docutils literal notranslate"><span class="pre">-f</span></code> is provided, all symbolic links in <code class="docutils literal notranslate"><span class="pre">directory</span></code> will be
+deleted and the links of this search will be put in place.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-k</span></code></dt><dd><p>When you use <code class="docutils literal notranslate"><span class="pre">-l</span></code> and <code class="docutils literal notranslate"><span class="pre">-f</span></code>, <code class="docutils literal notranslate"><span class="pre">-k</span></code> will keep all existing links in
+the search directory. That means you can accumulate search results in
+one directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">search</span> <span class="pre">queries</span></code></dt><dd><p>The terms to search for. If left empty, all files will be found. See
+below in section search query syntax for the details on search
+queries.
+If the search query is only given as <code class="docutils literal notranslate"><span class="pre">-</span></code>, metaindex will read the search
+query from stdin.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<p>This is the operation to index files and store that information in the
+cache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">index</span> <span class="p">[</span><span class="o">-</span><span class="n">C</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">processes</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="p">[</span><span class="n">paths</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>The options to this command are</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-C</span></code></dt><dd><p>Clear the cache. If combined with other options, the flushing of the
+cache will happen first.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-m</span></code></dt><dd><p>Remove missing files. When a file, that’s in the index, can not be
+found on disk anymore, it will be removed when this option is enabled.
+By default this option is disabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">[paths]</span></code></dt><dd><p>Run the indexer on these paths. If no paths are provided, all paths in
+the cache are revisited and checked for changes.
+If <code class="docutils literal notranslate"><span class="pre">paths</span></code> is <code class="docutils literal notranslate"><span class="pre">-</span></code>, the list of files will be read from stdin, one
+file per line.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">processes</span></code></dt><dd><p>By default metaindex will run as many indexer processes in parallel as
+CPUs are available on the computer. This parameter allows you to define
+how many indexers may be run at the same time.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-r</span></code></dt><dd><p>Run the indexer recursively. That means to visit all files in all
+subdirectories of the paths in the <code class="docutils literal notranslate"><span class="pre">-i</span></code> parameter.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="filesystem-fs">
+<h2>Filesystem (fs)<a class="headerlink" href="#filesystem-fs" title="Permalink to this headline">¶</a></h2>
+<p>On Linux you can try the experimental feature of mounting a FuseFS that
+will give you a structured access to your files through their metadata:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">fs</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span> <span class="p">[</span><span class="n">mount</span> <span class="n">point</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The only supported command so far is <code class="docutils literal notranslate"><span class="pre">mount</span></code>.</p>
+<p>It is very experimental and not very useful, but at the same time will not
+break any of your files as it only provides a read-only view on your tagged
+files.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Synopsis</a></li>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#find">Find</a></li>
+<li><a class="reference internal" href="#index">Index</a></li>
+<li><a class="reference internal" href="#filesystem-fs">Filesystem (fs)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="changelog.html"
+                          title="previous chapter">Changelog</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="configuration.html"
+                          title="next chapter">Configuration file</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration file"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Synopsis</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Extra Metadata &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Indexers" href="indexers.html" />
+    <link rel="prev" title="Search Query Syntax" href="searchsyntax.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="indexers.html" title="Indexers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="searchsyntax.html" title="Search Query Syntax"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Extra Metadata</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="extra-metadata">
+<h1>Extra Metadata<a class="headerlink" href="#extra-metadata" title="Permalink to this headline">¶</a></h1>
+<p>Not all filetypes support metadata (plain text files, for example) and
+using extra files on the side (but in the same directory as the file to be
+tagged) is used. These files on the side are called “sidecar files”.</p>
+<p>Sidecar files are expected to have the same filename as the file that they
+are describing, but with a different extension, based on how the
+description is provided. So, if you want to add additional metadata to your
+<code class="docutils literal notranslate"><span class="pre">moose.jpg</span></code>, you could create a <code class="docutils literal notranslate"><span class="pre">moose.json</span></code> sidecar file or a
+<code class="docutils literal notranslate"><span class="pre">moose.opf</span></code> file.</p>
+<p>All metadata provided by extra sidecar files is cached with the <code class="docutils literal notranslate"><span class="pre">extra.</span></code>
+prefix. For example, if your metadata file tags a file with <code class="docutils literal notranslate"><span class="pre">title</span></code>, you
+can search for it by looking for <code class="docutils literal notranslate"><span class="pre">extra.title</span></code>.</p>
+<p>metaindex supports sidecar files in JSON format like this when the file is
+used for several files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s2">&quot;file.ext&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;An example file&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;dr Gumby&quot;</span><span class="p">,</span> <span class="s2">&quot;The Bishop&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;Xmp.dc.title&quot;</span><span class="p">:</span> <span class="n">null</span>
+ <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you set the metadata for only one file, for example
+<code class="docutils literal notranslate"><span class="pre">a_long_story.pdf</span></code>, this could be the content of the corresponding sidecar file
+<code class="docutils literal notranslate"><span class="pre">a_long_story.json</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;long story, A&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;A long story&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="mi">2012</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">01</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Beware</strong>, if you create a sidecar metadata file with the above content
+and name it <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> (or any other filename that’s covered by the
+<code class="docutils literal notranslate"><span class="pre">collection-metadata</span></code> option), all files in the folder will be given
+these metadata tags, as if you had used the <code class="docutils literal notranslate"><span class="pre">*</span></code> notation! See <a class="reference internal" href="#collection-metadata">Collection
+Metadata</a> for details.</p>
+<p>The special value of <code class="docutils literal notranslate"><span class="pre">null</span></code> allows you to ignore a metadata tag from that
+file, i.e. if that file has the <code class="docutils literal notranslate"><span class="pre">Xmp.dc.title</span></code> tag, it will be ignored.</p>
+<p>Calibre style sidecar files, usually called <code class="docutils literal notranslate"><span class="pre">metadata.opf</span></code> are also
+supported.</p>
+<p>If you installed metaindex with the <code class="docutils literal notranslate"><span class="pre">[yaml]</span></code> option, YAML style metadata
+files are supported, too. An example of a YAML sidecar file for</p>
+<section id="collection-metadata">
+<h2>Collection Metadata<a class="headerlink" href="#collection-metadata" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes all files in a directory should receive the same set of metadata.
+This is called “Collection metadata” and can be accomplished in JSON
+sidecar files (like <code class="docutils literal notranslate"><span class="pre">.metadata.json</span></code>) by adding an entry <code class="docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code>.</p>
+<p>Suppose you have this <code class="docutils literal notranslate"><span class="pre">.metadata.json</span></code> in a directory with two files
+other <code class="docutils literal notranslate"><span class="pre">file.tif</span></code> and <code class="docutils literal notranslate"><span class="pre">other.csv</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tag1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;file.tif&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tag3&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In this example all (both) files in the folder will receive the tags
+<code class="docutils literal notranslate"><span class="pre">tag1</span></code> and <code class="docutils literal notranslate"><span class="pre">tag2</span></code>, but only <code class="docutils literal notranslate"><span class="pre">file.tif</span></code> will have all three tags.</p>
+<p><strong>Beware</strong>, if you leave the <code class="docutils literal notranslate"><span class="pre">*</span></code> out and do not specify any metadata
+specific to any file, metaindex will assume you meant that this metadata
+applies to all files in the directory. Like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tag1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="p">],</span>
+ <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Arthur Pewty&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The above example is equivalent to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tag1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Arthur Pewty&quot;</span>
+ <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For collection metadata to work properly, the general option
+<code class="docutils literal notranslate"><span class="pre">collection-metadata</span></code> must be set to the names of sidecar files that are
+allowed to define collection metadata.</p>
+<p>By default files like <code class="docutils literal notranslate"><span class="pre">.metadata.json</span></code>, and <code class="docutils literal notranslate"><span class="pre">metadata.opf</span></code>
+are expected to contain extra metadata.
+If your metadata files are called
+differently, for example <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> and <code class="docutils literal notranslate"><span class="pre">.extra.json</span></code>, you can
+configure that in the metaindex configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">General</span><span class="p">]</span>
+<span class="n">collection</span><span class="o">-</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">meta</span><span class="p">,</span> <span class="o">.</span><span class="n">extra</span>
+</pre></div>
+</div>
+<p>The filenames listed in <code class="docutils literal notranslate"><span class="pre">collection-metadata</span></code> will be excluded from indexing,
+so they will not show up when you search for them (e.g. via <code class="docutils literal notranslate"><span class="pre">metaindex</span> <span class="pre">find</span>
+<span class="pre">filename:metadata</span></code>)!</p>
+<p>If metaindex has been installed with the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> option, metadata
+files in the yaml format are understood and used.</p>
+</section>
+<section id="recursive-collection-metadata">
+<h2>Recursive Collection Metadata<a class="headerlink" href="#recursive-collection-metadata" title="Permalink to this headline">¶</a></h2>
+<p>If you want to apply the collection metadata not only to the files of the
+sidecar’s directory, but also in all subdirectories, you can use the
+“recursive collection metadata” <code class="docutils literal notranslate"><span class="pre">&quot;**&quot;</span></code>.</p>
+<p>This is useful if you already have your data structured in directories, for
+example in this way: <code class="docutils literal notranslate"><span class="pre">pictures/nature/animals/duck.jpg</span></code>.</p>
+<p>Here you could add a <code class="docutils literal notranslate"><span class="pre">.metadata.json</span></code> file in the <code class="docutils literal notranslate"><span class="pre">nature</span></code> directory
+with this recursive directive:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;**&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;nature&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now not only the files in <code class="docutils literal notranslate"><span class="pre">nature</span></code> are tagged as <code class="docutils literal notranslate"><span class="pre">nature</span></code>, but also
+all files in <code class="docutils literal notranslate"><span class="pre">animals</span></code>.</p>
+<p>You can disable this functionality entirely by setting the general
+option <code class="docutils literal notranslate"><span class="pre">recursive-collection-metadata</span></code> to an empty string:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">General</span><span class="p">]</span>
+<span class="n">recursive</span><span class="o">-</span><span class="n">collection</span><span class="o">-</span><span class="n">metadata</span> <span class="o">=</span>
+</pre></div>
+</div>
+<p><strong>Caveat</strong>: you can not defined both, a recursive and a non-recursive set
+of collection metadata in the same directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+  &quot;*&quot;: {
+    &quot;description&quot;: &quot;BROKEN EXAMPLE: this does not work!&quot;
+  },
+  &quot;**&quot;: {
+    &quot;title&quot;: &quot;BROKEN EXAMPLE! &#39;title&#39; AND &#39;description&#39; will be applied to all
+    subdirectories!&quot;
+  }
+}
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Extra Metadata</a><ul>
+<li><a class="reference internal" href="#collection-metadata">Collection Metadata</a></li>
+<li><a class="reference internal" href="#recursive-collection-metadata">Recursive Collection Metadata</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="searchsyntax.html"
+                          title="previous chapter">Search Query Syntax</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="indexers.html"
+                          title="next chapter">Indexers</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/extrametadata.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="indexers.html" title="Indexers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="searchsyntax.html" title="Search Query Syntax"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Extra Metadata</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<title>Options</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: grey; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="options">
+<h1 class="title">Options</h1>
+
+<p>General parameters are:</p>
+<blockquote>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">-c</span> configuration file</tt></dt>
+<dd>Use this configuration file instead of the one from the default
+location.</dd>
+<dt><tt class="docutils literal"><span class="pre">-h</span></tt></dt>
+<dd>Show the help.</dd>
+<dt><tt class="docutils literal"><span class="pre">-l</span> loglevel</tt></dt>
+<dd>Set the level of details shown in logging. Your options are <tt class="docutils literal">fatal</tt>,
+<tt class="docutils literal">error</tt>, <tt class="docutils literal">warning</tt>, <tt class="docutils literal">info</tt>, and <tt class="docutils literal">debug</tt>. Defaults to <tt class="docutils literal">warning</tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">--list</span></tt></dt>
+<dd>List all available indexers and exit.</dd>
+</dl>
+</blockquote>
+<p>metaindex operates in one of the modes <tt class="docutils literal">index</tt> or <tt class="docutils literal">find</tt>.</p>
+<p>If you want to try the experimental filesystem mode, there is also <tt class="docutils literal">fs</tt>.</p>
+<div class="section" id="find">
+<h1>Find</h1>
+<p>This is the main operation used to search for files:</p>
+<pre class="literal-block">
+metaindex find [-l directory] [-f [-k]] [-t [tags]] [--] [search queries]
+</pre>
+<p>The options to this command are</p>
+<blockquote>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">-t</span> [tags]</tt></dt>
+<dd>Metadata tags that you wish to see per found file.</dd>
+<dt><tt class="docutils literal"><span class="pre">-l</span> directory</tt></dt>
+<dd>If this option is provided, metaindex will create this directory (or use
+the existing directory only if it is empty) and create a symbolic link
+to all files that matches this search.</dd>
+<dt><tt class="docutils literal"><span class="pre">-f</span></tt></dt>
+<dd>Enforce the use of <tt class="docutils literal"><span class="pre">-l</span></tt>’s <tt class="docutils literal">directory</tt>, even if it is not empty.
+Still, metaindex will only work with that directory if it contains only
+symbolic links (e.g. a previous search result)!
+If <tt class="docutils literal"><span class="pre">-f</span></tt> is provided, all symbolic links in <tt class="docutils literal">directory</tt> will be
+deleted and the links of this search will be put in place.</dd>
+<dt><tt class="docutils literal"><span class="pre">-k</span></tt></dt>
+<dd>When you use <tt class="docutils literal"><span class="pre">-l</span></tt> and <tt class="docutils literal"><span class="pre">-f</span></tt>, <tt class="docutils literal"><span class="pre">-k</span></tt> will keep all existing links in
+the search directory. That means you can accumulate search results in
+one directory.</dd>
+<dt><tt class="docutils literal">search queries</tt></dt>
+<dd>The terms to search for. If left empty, all files will be found. See
+below in section <a href="#system-message-1"><span class="problematic" id="problematic-1">`Search Query Syntax`_</span></a> for the details on search
+queries.
+If the search query is only given as <tt class="docutils literal">-</tt>, metaindex will read the search
+query from stdin.</dd>
+</dl>
+</blockquote>
+</div>
+<div class="section" id="index">
+<h1>Index</h1>
+<p>This is the operation to index files and store that information in the
+cache:</p>
+<pre class="literal-block">
+metaindex index [-C] [-r] [-p processes] [-i [paths]]
+</pre>
+<p>The options to this command are</p>
+<blockquote>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">-C</span></tt></dt>
+<dd>Clear the cache. If combined with other options, the flushing of the
+cache will happen first.</dd>
+<dt><tt class="docutils literal"><span class="pre">-m</span></tt></dt>
+<dd>Remove missing files. When a file, that's in the index, can not be
+found on disk anymore, it will be removed when this option is enabled.
+By default this option is disabled.</dd>
+<dt><tt class="docutils literal"><span class="pre">-i</span> [paths]</tt></dt>
+<dd>Run the indexer on these paths. If no paths are provided, all paths in
+the cache are revisited and checked for changes.
+If <tt class="docutils literal">paths</tt> is <tt class="docutils literal">-</tt>, the list of files will be read from stdin, one
+file per line.</dd>
+<dt><tt class="docutils literal"><span class="pre">-p</span> processes</tt></dt>
+<dd>By default metaindex will run as many indexer processes in parallel as
+CPUs are available on the computer. This parameter allows you to define
+how many indexers may be run at the same time.</dd>
+<dt><tt class="docutils literal"><span class="pre">-r</span></tt></dt>
+<dd>Run the indexer recursively. That means to visit all files in all
+subdirectories of the paths in the <tt class="docutils literal"><span class="pre">-i</span></tt> parameter.</dd>
+</dl>
+</blockquote>
+</div>
+<div class="section" id="filesystem-fs">
+<h1>Filesystem (fs)</h1>
+<p>On Linux you can try the experimental feature of mounting a FuseFS that
+will give you a structured access to your files through their metadata:</p>
+<pre class="literal-block">
+metaindex fs [command] [mount point]
+</pre>
+<p>The only supported command so far is <tt class="docutils literal">mount</tt>.</p>
+<p>It is very experimental and not very useful, but at the same time will not
+break any of your files as it only provides a read-only view on your tagged
+files.</p>
+</div>
+<div class="system-messages section">
+<h1>Docutils System Messages</h1>
+<div class="system-message" id="system-message-1">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">doc/cmdoptions.rst</tt>, line 55); <em><a href="#problematic-1">backlink</a></em></p>
+Unknown target name: &quot;search query syntax&quot;.</div>
+</div>
+</div>
+</body>
+</html>

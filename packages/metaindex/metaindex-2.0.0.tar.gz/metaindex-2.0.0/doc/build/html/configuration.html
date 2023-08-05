@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Configuration file &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Search Query Syntax" href="searchsyntax.html" />
+    <link rel="prev" title="Synopsis" href="usage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="searchsyntax.html" title="Search Query Syntax"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Synopsis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Configuration file</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="configuration-file">
+<h1>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h1>
+<p>The configuration file is usually located in <code class="docutils literal notranslate"><span class="pre">~/.config/metaindex.conf</span></code>. An
+example of the configuration file is provided in the <code class="docutils literal notranslate"><span class="pre">dist</span></code> directory.
+The syntax of the file is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Category</span><span class="p">]</span>
+<span class="n">option</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>There are several categories in the configuration file, the possible
+options are described after this list:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[General]</span></code>, general options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[Synonyms]</span></code>, synonyms for tag names</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[Include]</span></code>, additional configuration files that have to be included</p></li>
+</ul>
+</div></blockquote>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">cache</span></code></dt><dd><p>The location of the cache file. Defaults to
+<code class="docutils literal notranslate"><span class="pre">~/.cache/metaindex/index.db</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">recursive-extra-metadata</span></code></dt><dd><p>When looking for sidecar metadata files (see Extra Metadata), also
+look in all parent directories for metadata. Defaults to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+<p>This is useful when the file is <code class="docutils literal notranslate"><span class="pre">collection/part/file.jpg</span></code> but the
+metadata file is <code class="docutils literal notranslate"><span class="pre">collection/.metadata.json</span></code> (and in this metadata
+file the reference is made to <code class="docutils literal notranslate"><span class="pre">part/file.jpg</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">collection-metadata</span></code></dt><dd><p>Some sidecar files can define metadata that applies to the entire
+collection of files in that directory. This options controls what
+files may define that type of metadata.
+Based on the available metadata storage modules (e.g. JSON, and OPF)
+these names are extended by the corresponding file extensions.
+Defaults to <code class="docutils literal notranslate"><span class="pre">.metadata,</span> <span class="pre">metadata</span></code>.</p>
+<p>That means, with JSON and OPF enabled, that the metadata files
+<code class="docutils literal notranslate"><span class="pre">.metadata.json,</span> <span class="pre">.metadata.opf,</span> <span class="pre">metadata.json,</span> <span class="pre">metadata.opf</span></code> are
+considered.</p>
+<p>See below in Extra Metadata for more details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ignore-dirs</span></code></dt><dd><p>What folders (and their subfolders) to ignore entirely. One folder per
+line. Defaults to <code class="docutils literal notranslate"><span class="pre">.git,</span> <span class="pre">.svn,</span> <span class="pre">.hg,</span> <span class="pre">.bzr,</span> <span class="pre">.stfolder,</span> <span class="pre">System</span> <span class="pre">Volume</span> <span class="pre">Information,</span> <span class="pre">__MACOSX</span></code>.</p>
+<p>You can use unix-style path patterns, like <code class="docutils literal notranslate"><span class="pre">_tmp*</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ignore-files</span></code></dt><dd><p>What files to ignore entirely. One file name pattern per line. The
+default is: <code class="docutils literal notranslate"><span class="pre">*.aux,</span> <span class="pre">*.toc,</span> <span class="pre">*.out,</span> <span class="pre">*.log,</span> <span class="pre">*.nav,</span> <span class="pre">*.exe,</span> <span class="pre">*.sys,</span> <span class="pre">*.bat,</span> <span class="pre">*.ps,</span> <span class="pre">*.sh,</span> <span class="pre">*.fish,</span> <span class="pre">*~,</span> <span class="pre">*.swp,</span> <span class="pre">*.bak,</span> <span class="pre">*.sav,</span> <span class="pre">*.backup,</span> <span class="pre">*.old,</span> <span class="pre">*.old,</span> <span class="pre">*.orig,</span> <span class="pre">*.rej,</span> <span class="pre">tags,</span> <span class="pre">*.log,</span> <span class="pre">*.a,</span> <span class="pre">*.out,</span> <span class="pre">*.o,</span> <span class="pre">*.obj,</span> <span class="pre">*.so</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">accept-files</span></code></dt><dd><p>What files to consider. One file name pattern by line, like <code class="docutils literal notranslate"><span class="pre">*.doc</span></code>.</p>
+<p>If you define this, no other files are indexed and <code class="docutils literal notranslate"><span class="pre">ignore-files</span></code> will
+not be used.</p>
+<p>By default this is left empty and instead <code class="docutils literal notranslate"><span class="pre">ignore-files</span></code> is used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">index-unknown</span></code></dt><dd><p>Whether or not to add files to the index for which no meaningful
+metadata could be extracted from the indexers or any sidecar files.</p>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ignore-tags</span></code></dt><dd><p>What (automatically extracted) tags to not add to the cache and thus
+prevent them being searchable. Comma-separated list of the tags.
+Defaults to: <code class="docutils literal notranslate"><span class="pre">Exif.Image.StripByteCounts,</span> <span class="pre">Exif.Image.StripOffsets</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ignore-indexers</span></code></dt><dd><p>A comma separated list of indexers by name that you do not want to use.
+By default this list is empty.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">metaindex</span> <span class="pre">--list</span></code> to see what indexers will be used by default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">preferred-sidecar-format</span></code></dt><dd><p>What file format you prefer for sidecar files. This is the file format
+that will be used by metaindex and other tools when you add/edit
+metadata sidecar files.
+Defaults to: <code class="docutils literal notranslate"><span class="pre">.json</span></code></p>
+<p>Other options are <code class="docutils literal notranslate"><span class="pre">.opf</span></code> and <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> (if you installed the YAML
+dependencies).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mimetypes</span></code></dt><dd><p>If you have additional mimetypes that you would like metaindex to know,
+this is the option you can use to point to additional mimetype files.
+To add multiple files, separate them by a newline. No matter what files
+you provide here, you system’s mimetype file will always be used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ocr</span></code></dt><dd><p>Whether or not OCR (optical character recognition) should be enabled.
+For this to work you must have installed the <code class="docutils literal notranslate"><span class="pre">ocr</span></code> requirements.</p>
+<p>This option can be set to <code class="docutils literal notranslate"><span class="pre">yes</span></code> to enable OCR for everything, but you
+can also fine-tune it by setting the option to a list of mimetypes,
+file suffices, or names of indexers that are allowed to run OCR. For
+example <code class="docutils literal notranslate"><span class="pre">ocr</span> <span class="pre">=</span> <span class="pre">.pdf,</span> <span class="pre">image/,</span> <span class="pre">epub</span></code> will enable OCR for all <code class="docutils literal notranslate"><span class="pre">.pdf</span></code>
+files, all mimetypes that are of the <code class="docutils literal notranslate"><span class="pre">image/*</span></code> type, and for the
+indexer named <code class="docutils literal notranslate"><span class="pre">epub</span></code>.</p>
+<p>Beware that the <code class="docutils literal notranslate"><span class="pre">ocr</span></code> option alone will not extract the full text of
+images or scanned PDFs (but it will attempt to determine the language;
+however the result might be just plain wrong).</p>
+<p>If you just want to disable OCR entirely, set the value to <code class="docutils literal notranslate"><span class="pre">no</span></code>
+(which is the default).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">fulltext</span></code></dt><dd><p>Whether or not to extract the fulltext of documents.</p>
+<p>For images (and scanned PDFs), this requires OCR to be enabled, too.</p>
+<p>This option can be set to <code class="docutils literal notranslate"><span class="pre">yes</span></code> to enable fulltext extraction for
+every file type, but you can also fine-tune the setting exactly the
+same way as the <code class="docutils literal notranslate"><span class="pre">ocr</span></code> option. For example, if you wanted to only do
+fulltext extraction of PDFs and images, you would use <code class="docutils literal notranslate"><span class="pre">ocr</span> <span class="pre">=</span> <span class="pre">.pdf,</span>
+<span class="pre">image/</span></code>.</p>
+<p>The default is <code class="docutils literal notranslate"><span class="pre">no</span></code>, so no fulltext will be extracted.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="synonyms">
+<h2>Synonyms<a class="headerlink" href="#synonyms" title="Permalink to this headline">¶</a></h2>
+<p>Some metadata fields have less convenient names than others, but might
+semantically be the same. For example, <code class="docutils literal notranslate"><span class="pre">Xmp.xmp.CreatorTool</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pdf.Creator</span></code> both mean “The program that was used to create this file”.</p>
+<p>For convenience it is possible to define synonyms, so you only have to
+search for <code class="docutils literal notranslate"><span class="pre">author</span></code> when you mean to search for <code class="docutils literal notranslate"><span class="pre">id3.artist</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pdf.Author</span></code>, or <code class="docutils literal notranslate"><span class="pre">Exif.Image.Artist</span></code>.</p>
+<p>The section <code class="docutils literal notranslate"><span class="pre">[Synonyms]</span></code> in the configuration file is the place to define
+these synonyms. Here are the defaults, that you don’t have to set up:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Synonyms</span><span class="p">]</span>
+<span class="n">author</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">author</span><span class="p">,</span> <span class="n">extra</span><span class="o">.</span><span class="n">artist</span><span class="p">,</span> <span class="n">id3</span><span class="o">.</span><span class="n">artist</span><span class="p">,</span> <span class="n">pdf</span><span class="o">.</span><span class="n">Author</span><span class="p">,</span> <span class="n">Exif</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Artist</span>
+<span class="n">title</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">id3</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">pdf</span><span class="o">.</span><span class="n">Title</span><span class="p">,</span> <span class="n">Xmp</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">extra</span><span class="o">.</span><span class="n">opf</span><span class="o">.</span><span class="n">title</span>
+<span class="n">tags</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="n">pdf</span><span class="o">.</span><span class="n">Keywords</span><span class="p">,</span> <span class="n">pdf</span><span class="o">.</span><span class="n">Categories</span><span class="p">,</span> <span class="n">Xmp</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">extra</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">pdf</span><span class="o">.</span><span class="n">Subject</span><span class="p">,</span> <span class="n">opf</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">extra</span><span class="o">.</span><span class="n">opf</span><span class="o">.</span><span class="n">subject</span>
+<span class="n">language</span> <span class="o">=</span> <span class="n">opf</span><span class="o">.</span><span class="n">language</span><span class="p">,</span> <span class="n">pdf</span><span class="o">.</span><span class="n">Language</span><span class="p">,</span> <span class="n">Xmp</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">language</span><span class="p">,</span> <span class="n">extra</span><span class="o">.</span><span class="n">language</span><span class="p">,</span> <span class="n">extra</span><span class="o">.</span><span class="n">opf</span><span class="o">.</span><span class="n">language</span>
+<span class="n">series</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">series</span>
+<span class="n">series_index</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">series_index</span>
+</pre></div>
+</div>
+</section>
+<section id="include">
+<h2>Include<a class="headerlink" href="#include" title="Permalink to this headline">¶</a></h2>
+<p>You can include additional configuration files (for example to split up
+your configuration into multiple files).</p>
+<p>All the <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">path</span></code> entries in the <code class="docutils literal notranslate"><span class="pre">[Include]</span></code> section will be loaded
+in the alphabetical order of the names.</p>
+<p>In this example <code class="docutils literal notranslate"><span class="pre">~/.metaindex.conf</span></code> will be loaded and then
+<code class="docutils literal notranslate"><span class="pre">/tmp/metaindex.conf</span></code>. Both of course only after the main configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Include</span><span class="p">]</span>
+<span class="n">xtra</span> <span class="o">=</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">metaindex</span><span class="o">.</span><span class="n">conf</span>
+<span class="n">extra</span> <span class="o">=</span> <span class="o">~/.</span><span class="n">metaindex</span><span class="o">.</span><span class="n">conf</span>
+</pre></div>
+</div>
+<p>Additional <code class="docutils literal notranslate"><span class="pre">[Includes]</span></code> in these included configuration files are ignored
+though.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Configuration file</a><ul>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#synonyms">Synonyms</a></li>
+<li><a class="reference internal" href="#include">Include</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="usage.html"
+                          title="previous chapter">Synopsis</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="searchsyntax.html"
+                          title="next chapter">Search Query Syntax</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/configuration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="searchsyntax.html" title="Search Query Syntax"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Synopsis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Configuration file</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

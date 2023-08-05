@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Usage Examples &#8212; metaindex  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Addons" href="addons.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="addons.html" title="Addons"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Usage Examples</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="usage-examples">
+<h1>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this headline">¶</a></h1>
+<section id="command-line-usage">
+<h2>Command line usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline">¶</a></h2>
+<section id="index-some-directories">
+<h3>Index some directories<a class="headerlink" href="#index-some-directories" title="Permalink to this headline">¶</a></h3>
+<p>To index you <code class="docutils literal notranslate"><span class="pre">Documents</span></code> and <code class="docutils literal notranslate"><span class="pre">Pictures</span></code> folder recursively:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">index</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">i</span> <span class="o">~/</span><span class="n">Documents</span> <span class="o">~/</span><span class="n">Pictures</span>
+</pre></div>
+</div>
+</section>
+<section id="reindex-all-files">
+<h3>Reindex all files<a class="headerlink" href="#reindex-all-files" title="Permalink to this headline">¶</a></h3>
+<p>To only update the metadata from all known files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">index</span> <span class="o">-</span><span class="n">i</span>
+</pre></div>
+</div>
+</section>
+<section id="find-all-files">
+<h3>Find all files<a class="headerlink" href="#find-all-files" title="Permalink to this headline">¶</a></h3>
+<p>List all files that are in cache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span>
+</pre></div>
+</div>
+</section>
+<section id="find-file-by-mimetype">
+<h3>Find file by mimetype<a class="headerlink" href="#find-file-by-mimetype" title="Permalink to this headline">¶</a></h3>
+<p>Searching for all <code class="docutils literal notranslate"><span class="pre">image/*</span></code> mimetypes can be accomplished by this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="n">mimetype</span><span class="p">:</span><span class="o">^</span><span class="n">image</span><span class="o">/</span>
+</pre></div>
+</div>
+</section>
+<section id="listing-metadata">
+<h3>Listing metadata<a class="headerlink" href="#listing-metadata" title="Permalink to this headline">¶</a></h3>
+<p>To list all metadata tags and values of all odt files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="o">-</span><span class="n">t</span> <span class="o">--</span> <span class="s2">&quot;filename:odt$&quot;</span>
+</pre></div>
+</div>
+<p>List the resolutions of all files that have the <code class="docutils literal notranslate"><span class="pre">resolution</span></code> metadata tag:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metaindex</span> <span class="n">find</span> <span class="o">-</span><span class="n">t</span> <span class="n">resolution</span> <span class="o">--</span> <span class="s2">&quot;resolution?&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="developer-examples">
+<h2>Developer examples<a class="headerlink" href="#developer-examples" title="Permalink to this headline">¶</a></h2>
+<section id="index-some-files">
+<h3>Index some files<a class="headerlink" href="#index-some-files" title="Permalink to this headline">¶</a></h3>
+<p>You can use metaindexer’s index facility without using the cache:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="sd">&quot;&quot;&quot;How to index some files using metaindex&quot;&quot;&quot;</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="kn">import</span> <span class="nn">metaindex</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="k">def</span> <span class="nf">index_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+<span class="linenos"> 9</span>    <span class="sd">&quot;&quot;&quot;Just run the indexer on these files&quot;&quot;&quot;</span>
+<span class="linenos">10</span>    <span class="c1"># we need at least the basic configuration</span>
+<span class="linenos">11</span>    <span class="n">config</span> <span class="o">=</span> <span class="n">metaindex</span><span class="o">.</span><span class="n">Configuration</span><span class="p">()</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="c1"># if you actually want to also load the user&#39;s config file/preferences,</span>
+<span class="linenos">14</span>    <span class="c1"># do this instead:</span>
+<span class="linenos">15</span>    <span class="c1">#   import metaindex.configuration</span>
+<span class="linenos">16</span>    <span class="c1">#   config = metaindex.configuration.load()</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>    <span class="c1"># find and load all additional humanizers and indexers</span>
+<span class="linenos">19</span>    <span class="n">config</span><span class="o">.</span><span class="n">load_addons</span><span class="p">()</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>    <span class="c1"># loads the extra mimetypes from the configuration, if there are any</span>
+<span class="linenos">22</span>    <span class="n">config</span><span class="o">.</span><span class="n">load_mimetypes</span><span class="p">()</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span>    <span class="n">results</span> <span class="o">=</span> <span class="n">metaindex</span><span class="o">.</span><span class="n">index_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<span class="linenos">25</span>    <span class="c1"># index_files returns a list of each one IndexerResult per file</span>
+<span class="linenos">26</span>    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">metaindex</span><span class="o">.</span><span class="n">IndexerResult</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">)</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>    <span class="c1"># return the CacheEntry per IndexerResult (i.e. per file), but only if</span>
+<span class="linenos">29</span>    <span class="c1"># that file&#39;s index run was successful</span>
+<span class="linenos">30</span>    <span class="k">return</span> <span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">info</span>
+<span class="linenos">31</span>            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span>
+<span class="linenos">32</span>            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">]</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">36</span>    <span class="c1"># run the indexer on all files that were provided as commandline parameters</span>
+<span class="linenos">37</span>    <span class="n">userfiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+<span class="linenos">38</span>    <span class="nb">print</span><span class="p">(</span><span class="n">index_files</span><span class="p">(</span><span class="n">userfiles</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Usage Examples</a><ul>
+<li><a class="reference internal" href="#command-line-usage">Command line usage</a><ul>
+<li><a class="reference internal" href="#index-some-directories">Index some directories</a></li>
+<li><a class="reference internal" href="#reindex-all-files">Reindex all files</a></li>
+<li><a class="reference internal" href="#find-all-files">Find all files</a></li>
+<li><a class="reference internal" href="#find-file-by-mimetype">Find file by mimetype</a></li>
+<li><a class="reference internal" href="#listing-metadata">Listing metadata</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-examples">Developer examples</a><ul>
+<li><a class="reference internal" href="#index-some-files">Index some files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="addons.html"
+                          title="previous chapter">Addons</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="license.html"
+                          title="next chapter">License</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/examples.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="addons.html" title="Addons"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">metaindex  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Usage Examples</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Robert Labudda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
