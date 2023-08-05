@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[522,976],{9522:(e,t,n)=>{n.r(t);var r=n(7976),o=n.n(r);function a(){return React.createElement("div",null,"UI")}n(4478).s(document.getElementById("root")).render(o().createElement(a,null))},4478:(e,t,n)=>{var r=n(482);t.s=r.createRoot,r.hydrateRoot}}]);
