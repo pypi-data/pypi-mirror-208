@@ -1,0 +1,44 @@
+[project]
+name = "filter-vcf"
+version = "0.1.7"
+description = "LifeOmic VCF filtering"
+authors = [
+    { name = "LifeOmic Development", email = "development@lifeomic.com" },
+]
+dependencies = [
+    "lifeomic-logging==0.3.2",
+    "vcfpy>=0.13.4",
+    "pysam==0.19.1",
+    "pytest>=7.1.2",
+    "fuc>=0.36.0",
+    "setuptools>=67.6.1",
+    "fastnumbers>=5.0.1",
+    "natsort>=8.3.1",
+]
+requires-python = ">=3.9,<3.11"
+readme = "PYPI.md"
+
+[project.license]
+text = "MIT"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black==22.3.0",
+    "pytest==7.1.2",
+    "pytest-cov==2.10.1",
+    "coverage==6.4.1",
+]
+
+[tool.pdm.scripts]
+test = "python3 -m pytest -v --cov-report term-missing --cov=filter_vcf --log-level=INFO tests/"
+lint = "black --check tests/ filter_vcf/"
+lint-fix = "black tests/ filter_vcf/"
+
+[tool.black]
+line-length = 100
+
+[build-system]
+requires = [
+    "pdm-pep517>=0.12.0",
+]
+build-backend = "pdm.pep517.api"
