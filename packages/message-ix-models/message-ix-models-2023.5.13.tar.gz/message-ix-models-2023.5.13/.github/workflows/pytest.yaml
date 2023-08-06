@@ -1,0 +1,80 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main , "migrate-*"]
+  schedule:
+  # 05:00 UTC = 06:00 CET = 07:00 CEST
+  - cron: "0 5 * * *"
+
+# Cancel previous runs that have not completed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    strategy:
+      matrix:
+        # One job per OS; latest python version testable on GitHub actions.
+        # These should match the versions used in the "pytest" workflows of both
+        # ixmp and message_ix.
+        version:
+        - { os: macos-latest, python: "3.10" }
+        - { os: ubuntu-latest, python: "3.10" }
+        - { os: windows-latest, python: "3.10" }
+        # Versions of both ixmp and message_ix to use
+        upstream-version:
+        # Temporarily disabled (iiasa/ixmp#477)
+        # - v3.4.0  # Minimum version given in setup.cfg
+        # - v3.5.0
+        # - v3.6.0  # Latest released version
+        - main    # Development version
+
+      fail-fast: false
+
+    runs-on: ${{ matrix.version.os }}
+    name: ${{ matrix.version.os }}-py${{ matrix.version.python }}-upstream-${{ matrix.upstream-version }}
+
+    steps:
+    - name: Check out message-ix-models
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+        fetch-depth: ${{ env.depth }}
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.version.python }}
+        cache: pip
+        cache-dependency-path: "**/pyproject.toml"
+
+    - uses: iiasa/actions/setup-gams@main
+      with:
+        version: 25.1.1
+        license: ${{ secrets.GAMS_LICENSE }}
+
+    - name: Install packages and dependencies
+      run: |
+        pip install --upgrade "ixmp @ git+https://github.com/iiasa/ixmp.git@${{ matrix.upstream-version }}"
+        pip install --upgrade "message-ix @ git+https://github.com/iiasa/message_ix.git@${{ matrix.upstream-version }}"
+        pip install .[tests]
+
+    - name: Run test suite using pytest
+      run: |
+        pytest message_ix_models \
+          -rA --verbose --color=yes --durations=20 \
+          --cov-report=term-missing --cov-report=xml \
+          --numprocesses=auto
+      shell: bash
+
+    - name: Test documentation build using Sphinx
+      if: startsWith(matrix.os, 'ubuntu')
+      env:
+        RTD_TOKEN_MESSAGE_DATA: ${{ secrets.RTD_TOKEN_MESSAGE_DATA }}
+      run: make --directory=doc html
+
+    - name: Upload test coverage to Codecov.io
+      uses: codecov/codecov-action@v3
