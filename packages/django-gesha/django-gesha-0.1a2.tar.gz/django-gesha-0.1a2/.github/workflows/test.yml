@@ -1,0 +1,52 @@
+name: Test
+
+on: [push]
+
+jobs:
+  test_python:
+    name: Python tests
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: ['3.8', '3.9', '3.10', '3.11']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install "tox>=4.0"
+      - name: Run tox
+        run: tox -m py${{ matrix.python }}
+      - name: Upload pytest coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-coverage-results-${{ matrix.python }}
+          path: coverage.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+
+  test_js:
+    name: JavaScript tests
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test

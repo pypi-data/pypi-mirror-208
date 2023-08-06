@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>django-gesha test page</title>
+  </head>
+  <body>
+    <script id="js_context_data" type="application/json">
+      {
+        "_gesha": {
+          "paths": {
+            "fake:test": {
+              "name": "fake:test",
+              "route": "/",
+              "args": {}
+            },
+            "fake:page": {
+              "name": "fake:page",
+              "route": "/page/\u003Cint:num\u003E",
+              "args": {
+                "num": "int"
+              }
+            },
+            "fake:named_page": {
+              "name": "fake:named_page",
+              "route": "/\u003Cslug:slug\u003E/\u003Cint:num\u003E",
+              "args": {
+                "slug": "slug",
+                "num": "int"
+              }
+            },
+            "fake:custom_converter": {
+              "name": "fake:custom_converter",
+              "route": "/articles/\u003Cyyyy:year\u003E",
+              "args": {
+                "year": "yyyy"
+              }
+            }
+          }
+        },
+        "myNumber": 5,
+        "myString": "this is a string"
+      }
+    </script>
+    <script src="/static/gesha/dist/js/django-gesha.bundle.min.js">
+    </script>
+  </body>
+</html>
