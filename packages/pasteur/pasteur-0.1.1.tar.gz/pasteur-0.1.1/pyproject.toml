@@ -1,0 +1,107 @@
+[project]
+name = "pasteur"
+version = "0.1.1"
+authors = [
+  { name="Kapenekakis Antheas", email="antheas@cs.aau.dk" },
+]
+description = "A system for reproducible and scalable data synthesis."
+readme = "README_PYPI.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  # Core
+  "kedro>=0.18.3",
+  "mlflow",
+  "pyarrow",
+  "tqdm",
+  # Comp. Libs
+  "numpy",
+  "pandas",
+  "scipy",
+  "scikit-learn",
+]
+
+[project.optional-dependencies]
+opt = [
+  "ipython>=7.31.1",
+  "jupyter~=1.0",
+  "jupyterlab~=3.0",
+  "kedro-viz",
+  "black~=22.0",
+  "flake8>=3.7.9, <4.0",
+  "isort~=5.0",
+  "parquet-tools",
+  "pip-tools",
+]
+test = [
+  "pytest-cov~=3.0",
+  "pytest-mock>=1.7.1, <2.0",
+  "pytest~=6.2",
+]
+cls = [
+  "xgboost"
+]
+docs = [
+  "docutils",
+  "sphinx",
+  "sphinx-book-theme",
+  "nbsphinx",
+  "recommonmark",
+  "sphinx-autodoc-typehints",
+  "sphinx_copybutton",
+  "Jinja2",
+  "sphinx-autobuild",
+]
+
+[project.urls]
+"Homepage" = "https://pasteur.dev"
+"Bug Tracker" = "https://github.com/pasteur-dev/pasteur/issues"
+
+[project.entry-points."console_scripts"]
+pasteur = "pasteur.__main__:main"
+
+[project.entry-points."kedro.hooks"]
+pasteur = "pasteur.kedro.hooks:pasteur"
+pasteur_mlflow = "pasteur.kedro.hooks:mlflow"
+
+[project.entry-points."kedro.project_commands"]
+pasteur = "pasteur.cli:cli"
+
+[project.entry-points."kedro.starters"]
+pasteur = "pasteur.kedro.starters:starters"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "numpy>=1.15"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]  # list of folders that contain the packages (["."] by default)
+include = ["pasteur*"]  # package names should match these glob patterns (["*"] by default)
+
+[tool.kedro]
+package_name = "project"
+project_name = "Pasteur Testing Project"
+kedro_init_version = "0.18.5"
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+known_third_party = "kedro"
+
+[tool.pytest.ini_options]
+addopts = """
+--cov-report term-missing \
+--cov src/pasteur -ra"""
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]

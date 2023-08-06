@@ -1,0 +1,50 @@
+adult.raw@train: &adult_csv
+  type: pasteur.kedro.dataset.FragmentedCSVDataset
+  layer: raw
+  filepath: ${location}/adult.data
+
+  load_args: &adult_load_args
+    names:
+      - age
+      - workclass
+      - fnlwgt
+      - education
+      - education-num
+      - marital-status
+      - occupation
+      - relationship
+      - race
+      - sex
+      - capital-gain
+      - capital-loss
+      - hours-per-week
+      - native-country
+      - income
+
+    index_col: false
+    dtype:
+      age: int32
+      workclass: category
+      fnlwgt: int32
+      education: category
+      education-num: int32
+      marital-status: category
+      occupation: category
+      relationship: category
+      race: category
+      sex: category
+      capital-gain: int32
+      capital-loss: int32
+      hours-per-week: int32
+      native-country: category
+      income: category
+
+    skipinitialspace: True
+
+adult.raw@test:
+  <<: *adult_csv
+  filepath: ${location}/adult.test
+
+  load_args:
+    <<: *adult_load_args
+    skiprows: 1

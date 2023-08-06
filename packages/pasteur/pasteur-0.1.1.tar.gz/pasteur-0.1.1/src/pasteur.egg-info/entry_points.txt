@@ -1,0 +1,12 @@
+[console_scripts]
+pasteur = pasteur.__main__:main
+
+[kedro.hooks]
+pasteur = pasteur.kedro.hooks:pasteur
+pasteur_mlflow = pasteur.kedro.hooks:mlflow
+
+[kedro.project_commands]
+pasteur = pasteur.cli:cli
+
+[kedro.starters]
+pasteur = pasteur.kedro.starters:starters
