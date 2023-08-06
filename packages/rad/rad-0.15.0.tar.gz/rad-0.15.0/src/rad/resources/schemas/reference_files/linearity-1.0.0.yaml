@@ -1,0 +1,46 @@
+%YAML 1.1
+---
+$schema: asdf://stsci.edu/datamodels/roman/schemas/rad_schema-1.0.0
+id: asdf://stsci.edu/datamodels/roman/schemas/reference_files/linearity-1.0.0
+
+title: Linearity correction  reference schema
+
+type: object
+properties:
+  meta:
+    allOf:
+      - $ref: ref_common-1.0.0
+      - type: object
+        properties:
+          reftype:
+            type: string
+            enum: [LINEARITY]
+          input_units:
+            title: Units of the input to the linearity polynomial.
+            tag: tag:astropy.org:astropy/units/unit-1.0.0
+            enum: ["DN"]
+          output_units:
+            title: Units of the output of the linearity polynomial.
+            tag: tag:astropy.org:astropy/units/unit-1.0.0
+            enum: ["DN"]
+        required: [output_units, input_units]
+  coeffs:
+    title: Linearity coefficients
+    description: |
+      Contains the coefficients of a polynomial to correct pixel
+      values for classic non-linearity. Both the input to and
+      output from the polynomial are in units of DN. The coefficients
+      have units that contain various powers of DN.
+    tag: tag:stsci.edu:asdf/core/ndarray-1.0.0
+    datatype: float32
+    # Dimensions: numcoeffs, ysize, xsize
+    ndim: 3
+  dq:
+    title: 2-D data quality array for all planes
+    tag: tag:stsci.edu:asdf/core/ndarray-1.0.0
+    datatype: uint32
+    ndim: 2
+required: [meta, coeffs, dq]
+flowStyle: block
+propertyOrder: [meta, coeffs, dq]
+...
