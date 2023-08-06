@@ -1,0 +1,101 @@
+Metadata-Version: 2.1
+Name: lazi
+Version: 1.6.62
+Summary: A lightweight and extensible way to implement lazy imports globally.
+Home-page: https://github.com/sitbon/lazi
+License: AGPLv3
+Author: Phillip Sitbon
+Author-email: phillip.sitbon@gmail.com
+Requires-Python: >=3.11,<4.0
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: License :: Other/Proprietary License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries
+Project-URL: Repository, https://github.com/sitbon/lazi
+Description-Content-Type: text/markdown
+
+# Lazi: Lazy Imports Everywhere
+
+An easy way to implement and track lazy imports globally.
+
+No external dependencies.
+
+**Requres Python 3.11.**
+
+## Usage:
+
+```shell
+poetry add lazi
+```
+
+```python
+"""Automatic lazy loading example.
+
+Install django to run, or change the imports.
+"""
+import lazi.auto as lazi         # Install import tracking.
+import django.test               # Import stuff.
+# print(lazi.used_count())         # Count loaded modules. <Not yet re-implemented>
+TestCase = django.test.TestCase  # Trigger lazy loading.
+# print(lazi.used_count())         # More modules were lazy loaded. <TBD>
+```
+
+```shell
+python example.py
+```
+
+```python
+0
+262
+```
+
+```python
+"""Manual lazy loading example.
+"""
+import lazi.core as lazi                # Import Lazi.
+django = lazi.lazy("django")            # Import stuff.
+django_test = lazi.lazy("django.test")  # Import more stuff.
+# print(lazi.used_count())              # Count loaded modules. <TBD>
+TestCase = django_test.TestCase         # Trigger lazy loading.
+# print(lazi.used_count())              # Module was lazy loaded. <TBD>
+```
+
+```python
+0
+2
+```
+
+## Configuration
+
+The `lazi.conf` namespace package contains configuration modules
+that get autoloaded (in import order) by `lazi.conf.conf`.
+It is fully decoupled from the rest of the codebase.
+
+As a result, it's possible configure Lazi by creating `lazi.conf`
+modules in your project (within the `lazi.conf` namespace package),
+and use conf modules provided by other packages.
+
+Configuration is not yet controllable via environment variables,
+but this is planned for the future. Update: Supported for DEBUG_TRACING.
+
+It's also possible to manually change the configuration at runtime,
+with the caveat that some variables may have already been used by
+`lazi.core`. To avoid this, configure Lazi before importing it:
+
+```python
+from lazi.conf import conf
+conf.DEBUG_TRACING = 1
+import lazi.auto
+# ...
+```
+
