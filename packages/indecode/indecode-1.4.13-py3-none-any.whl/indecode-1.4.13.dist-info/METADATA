@@ -1,0 +1,127 @@
+Metadata-Version: 2.1
+Name: indecode
+Version: 1.4.13
+Summary: Code and decode string
+Author: lolo859
+License: UNKNOWN
+Keywords: code,incode,indecode,decode,incode,indc
+Platform: UNKNOWN
+Classifier: Natural Language :: French
+Classifier: Topic :: Security :: Cryptography
+Classifier: Topic :: Software Development :: Code Generators
+Requires-Dist: docutils (>=0.3)
+
+========
+Indecode
+========
+*Code and Decode string*
+
+Install and import
+------------------
+
+For install indecode :
+
+.. code:: bash
+
+    pip install indecode
+
+For import indecode :
+
+.. code:: python
+
+    import indecode
+
+Functions
+---------
+
+This module contain three functions :
+
+- generate_key() - return string
+
+.. code:: python
+
+    import indecode
+    key=indecode.generate_key()
+
+- code(text to code in str, key return by the "generate_key()" function) - return string
+
+.. code:: python
+
+    import indecode
+    key=indecode.generate_key()
+    text="hello world"
+    incode=indecode.code(text,key)
+    print(incode)
+
+- decode(text return by the "code()" function, key return by the "generate_key()" function) - return string
+
+.. code:: python
+
+    import indecode
+    key=indecode.generate_key()
+    text="hello world"
+    incode=indecode.code(text,key)
+    print(incode)
+    uncode=indecode.decode(incode,key)
+    print(uncode)
+
+Errors
+------
+
+The indecode module can trigger the following errors :
+
+- TypeError : one of the arguments is not a string
+
+.. code:: python
+
+    >>> indecode.code(1,key)
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "/home/pi/Documents/indecode/indecode.py", line 24, in code
+        raise TypeError("text argument must be a string")
+    TypeError: text argument must be a string
+
+- CodeError : one of the caracters in the text argument is not encodable
+
+.. code:: python
+
+    >>> indecode.code("<",key)
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "/home/pi/Documents/indecode/indecode.py", line 38, in code
+        raise CodeError("'"+text[i]+"' is not encodable.")
+    indecode.CodeError: '<' is not encodable.
+
+- DecodeError : one of the caracters in the text argument is not decodable
+
+.. code:: python
+
+    >>> indecode.decode(">",key)
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "/home/pi/Documents/indecode/indecode.py", line 59, in decode
+        raise DecodeError("'"+text[i]+"' is not decodable.")
+    indecode.DecodeError: '>' is not decodable.
+
+- KeyElementError : one of the caracters in the key argument must not be in the key
+
+.. code:: python
+
+    >>> indecode.code("hello world",key)
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "/home/pi/Documents/indecode/indecode.py", line 32, in code
+        raise KeyElementError("'"+keylist[i]+"' must not be in the key.")
+    indecode.KeyElementError: '<' must not be in the key.
+
+- KeyLengthError : the key is not of the expected length.
+
+.. code:: python
+
+    >>> indecode.code("hello world",key="a")
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "/home/pi/Documents/indecode/indecode.py", line 29, in code
+        raise KeyLengthError("the key is not of the expected length.")
+    indecode.KeyLengthError: the key is not of the expected length.
+
