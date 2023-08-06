@@ -1,0 +1,51 @@
+# See https://docs.python.org/3/distutils/commandref.html#sdist-cmd
+# For definitions of keys
+
+include README.md
+include dist/LICENSES.md
+
+include setupbase.py
+include pytest.ini
+include .coverage.rc
+
+include tsconfig.json
+include package.json
+include webpack.config.js
+include unfolded/map_sdk/labextension/*.tgz
+
+# Documentation
+graft docs
+exclude docs/\#*
+prune docs/build
+prune docs/gh-pages
+prune docs/dist
+
+# Examples
+prune examples
+
+# Tests
+graft tests
+prune tests/build
+
+# Virtualenv
+prune env
+
+# Javascript files
+graft unfolded/map_sdk/nbextension
+prune src
+prune css
+prune **/node_modules
+prune coverage
+prune lib
+
+# Non-interactive HTML map template
+graft unfolded/map_sdk/templates
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude **.js.map
+global-exclude .git
+# Note, this doesn't seem to work. Without changing `graft examples` to `prune examples`, `examples/.ipynb_checkpoints/*` was being included.
+global-exclude .ipynb_checkpoints
