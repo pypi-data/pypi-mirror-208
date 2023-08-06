@@ -1,0 +1,92 @@
+Metadata-Version: 2.1
+Name: scranking
+Version: 0.1.2
+Summary: scranking is a python library that display ranking of the college swimmer
+Author-email: Joon Ahn <sa3883@columbia.edu>
+License: MIT License
+        
+        Copyright (c) 2023 Joon Ahn
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: repository, https://github.com/joon0110/scranking
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: develop
+License-File: LICENSE
+
+# scranking
+
+scranking is a python library that display ranking of the college swimmer
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![GitHub issues](https://img.shields.io/github/issues/joon0110/scranking)
+[![Build Status](https://github.com/joon0110/scranking/workflows/Build%20Status/badge.svg?branch=main)](https://github.com/joon0110/scranking/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/joon0110/scranking/branch/main/graph/badge.svg)](https://codecov.io/gh/joon0110/scranking)
+[![PyPI](https://img.shields.io/pypi/v/scranking)](https://pypi.org/project/scranking/)
+[![Docs](https://readthedocs.org/projects/scranking/badge/?version=latest)](https://scranking.readthedocs.io/en/latest/)
+
+## Overview
+
+Scranking is a library designed specifically for extracting data from [swimcloud](https://www.swimcloud.com/swimmer/549377/), a comprehensive website that showcases the times and rankings of high school and college swimmers.
+
+The library will allow users to simpily type the URL and get all the neccessary information of that swimmer.
+
+## Install
+
+Install using 'pip install scranking' in the command line and import it to your python file like all the others.
+
+## Quickstart of scranking
+
+```python
+from scranking import Swimmer
+
+    # Initialize the swimmer object with your swimcloud url
+    swimmer = Swimmer("url")
+
+    # Check if the browser is working
+    swimmer.get_http_status()
+
+    # Create a bf4 for that swimmer objecft
+    swimmer.get_soup()
+
+    # Save the html of the website into text file
+    swimmer.save_soup_to_file("soup", "filename.txt")
+
+    # Get the full name of that swimmer with the soup you created
+    swimmer.get_name("soup")
+
+    # Find a line html that contains swimmer's social network information and hometown
+    swimmer.get_info("infohtml")
+
+    # Get all the events for that swimmer with the best time
+    swimmer.get_event("soup")
+
+    # A search method for get_event method
+    swimmer.lookup_event("40 L Free")
+```
