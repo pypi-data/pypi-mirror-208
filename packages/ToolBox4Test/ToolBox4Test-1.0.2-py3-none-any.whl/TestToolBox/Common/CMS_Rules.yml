@@ -1,0 +1,183 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*- 
+# @Author    : Gavin
+# @DateTime  : 2022/6/13 20:23
+# @Contact   : guowenwhy@foxmail.com
+# 
+# @Project   : TestToolBox
+# @File      : CMS_Rules.yml
+# @Describe  : 业务规则
+# ————————————————————
+# @Version   : 0.1 
+#
+# update   : 2022/6/13
+# 1. 课程计划新建接口参数规则
+# 2. # not 逆否逻辑 True-1 False-2
+# 3.
+# ————————————————————
+# update   : 
+# 1. 
+# 2. 
+# ————————————————————
+
+CMS_Content_Rule:
+    debugRule:
+        -   conditions:
+                any:
+                    -   name: broadcastType
+                        operator: equal_to
+                        value: LIVE
+            actions:
+                -   name: change_produceType
+                    params:
+#                        produceType: MODELESS
+                        produceType: [MODELESS]
+#                        produceType:    # 嵌套字典值
+#                            test: MODELESS
+
+    # common: 公共规则校验（全局公用字段规则？）
+    common:
+
+# 不区分服务场景
+#producePlan_rule:
+    /api/produce-plan/create:
+        # 直播 - 白板 // 依据类目更新录播类型 -- 优先级处理
+    #    -   conditions:
+    #            any:
+    #                -   name: broadcastType
+    #                    operator: equal_to
+    #                    value: LIVE
+    #        actions:
+    #            -   name: change_produceType
+    #                params:
+    #                    produceType: MODELESS
+        -   conditions:
+    #            not:
+                    any:
+                    -   name: produceType
+                        operator: equal_to
+                        value: ACTION
+                    -   name: produceType
+                        operator: equal_to
+                        value: KEYFRAME
+                    -   name: produceType
+                        operator: equal_to
+                        value: MULTIPLE_MOVEMENT
+            actions:
+                -   name: change_broadcastType
+                    params:
+                        broadcastType: ORCHESTRATION
+        # 录播 - 关键帧/多动作 - 类目限制
+        -   conditions:
+                any:
+    #                -   all:
+                    -   name: produceType
+                        operator: equal_to
+                        value: MODELESS
+                    -   name: produceType
+                        operator: equal_to
+                        value: ACTION
+                    -   name: produceType
+                        operator: equal_to
+                        value: KEYFRAME
+                    -   name: produceType
+                        operator: equal_to
+                        value: MULTIPLE_MOVEMENT
+            actions:
+                -   name: limit_category
+    #                params:
+    #                    category: [1, 2, 3]
+        # 录播 - 双人舞 - 辅助教练
+        -   conditions:
+                all:
+    #                all:
+                    -   name: specificCategory
+                        operator: is_contained_by
+                        value: [131]
+            actions:
+                -   name: add_assistantCoachIds
+                    params:
+                        assistantCoachIds: [4]
+        # not 逆否逻辑 True-1 False-2
+        -   conditions:
+                not:
+                    any:
+                    -   name: produceType
+                        operator: equal_to
+                        value: ACTION
+                    -   name: produceType
+                        operator: equal_to
+                        value: KEYFRAME
+                    -   name: produceType
+                        operator: equal_to
+                        value: MULTIPLE_MOVEMENT
+            actions:
+                -   name: change_intensity
+                    params:
+                        intensity: 0
+
+
+Template:
+    -   conditions:
+            all:
+                -   name:
+                    label:
+                    operator:
+                    value:
+        actions:
+            -   name:
+                label:
+                params:
+                    # key: value
+    # not 逆否逻辑 True-1 False-2
+    # not all - True -2
+    # not all - True & False -1
+    # not all - False -1
+    # 黑名单 not any
+    # not any - True -2
+    # not any - True & False -2
+    # not any - False -1
+    #
+
+#    -   conditions:
+#            all:
+#                -   name: expiration_days
+#                    operator: less_than
+#                    value: 5
+#                -   name: current_inventory
+#                    operator: greater_than
+#                    value: 20
+#        actions:
+#            -   name: put_on_sale
+#                params:
+#                    sale_percentage: 0.25
+#    -   conditions:
+#            not:
+#                all:
+#                    -   name: expiration_days
+#                        operator: less_than
+#                        value: 5
+#                    -   name: current_inventory
+#                        operator: greater_than
+#                        value: 20
+#        actions:
+#            -   name: put_on_sale
+#                params:
+#                    sale_percentage: 0.25
+#    -   actions:
+#            -   name: order_more
+#                params:
+#                    number_to_order: 40
+#        conditions:
+#            any:
+#                -   name: current_inventory
+#                    operator: less_than
+#                    value: 5
+#                -   all:
+#                        -   name: current_month
+#                            operator: equal_to
+#                            value: December
+#                        -   name: current_inventory
+#                            operator: less_than
+#                            value: 20
+
