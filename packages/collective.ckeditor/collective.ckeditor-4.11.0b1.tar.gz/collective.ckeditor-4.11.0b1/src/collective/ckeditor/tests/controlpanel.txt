@@ -1,0 +1,62 @@
+CKEditor control panel
+======================
+
+Log in as manager
+
+    >>> from plone.testing.z2 import Browser
+    >>> from plone.app.testing import SITE_OWNER_NAME
+    >>> from plone.app.testing import SITE_OWNER_PASSWORD
+    >>> app = layer['app']
+    >>> portal = layer['portal']
+    >>> browser = Browser(app)
+    >>> browser.open('http://nohost/plone/login_form')
+    >>> browser.getControl('Login Name').value = SITE_OWNER_NAME
+    >>> browser.getControl('Password').value = SITE_OWNER_PASSWORD
+    >>> browser.getControl('Log in').click()
+
+First just try to get some property from registry:
+
+    >>> from plone import api
+    >>> api.portal.get_registry_record(
+    ... "collective.ckeditor.browser.ckeditorsettings.ICKEditorSchema.allow_link_byuid",
+    ... )
+    True
+    >>> api.portal.get_registry_record(
+    ... "collective.ckeditor.browser.ckeditorsettings.ICKEditorSchema.allow_file_upload",
+    ... )
+    True
+
+Viewing the ckeditor control panel
+----------------------------------
+
+    >>> browser.open('http://nohost/plone/@@ckeditor-controlpanel')
+    >>> browser.url
+    'http://nohost/plone/@@ckeditor-controlpanel'
+
+Click the cancel button:
+
+    >>> browser.getControl(name="form.buttons.cancel").click()
+    >>> browser.url.endswith('plone_control_panel')
+    True
+
+There should be still no changes:
+
+    >>> 'Changes canceled.' in browser.contents
+    True
+
+Test the fieldsets
+------------------
+    >>> browser.open('http://nohost/plone/@@ckeditor-controlpanel')
+    >>> 'fieldsetlegend-ckeditorbaseschemaform' in browser.contents
+    True
+
+    >>> 'fieldsetlegend-ckeditorskinschemaform' in browser.contents
+    True
+
+    >>> 'fieldsetlegend-ckeditorbrowserschemaform' in browser.contents
+    True
+
+    >>> 'fieldsetlegend-ckeditoradvancedschemaform' in browser.contents
+    True
+
+

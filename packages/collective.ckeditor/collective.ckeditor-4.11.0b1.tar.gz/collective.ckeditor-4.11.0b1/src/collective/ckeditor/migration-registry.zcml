@@ -1,0 +1,31 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    i18n_domain="collective.ckeditor">
+
+    <meta:provides feature="migration-registry" />
+
+    <include file="configure.zcml" />
+
+    <genericsetup:upgradeSteps
+        source="4355"
+        destination="4360"
+        profile="collective.ckeditor:default"
+        >
+
+        <genericsetup:upgradeDepends
+            title="Upgrade to registry"
+            description=""
+            import_steps="plone.app.registry"
+        />
+
+        <genericsetup:upgradeStep
+             title="Migrate to plone.app.registry"
+             description="Copy portal_properties to registry"
+             handler=".upgrades.to_registry"
+        />
+
+    </genericsetup:upgradeSteps>
+
+</configure>

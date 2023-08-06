@@ -1,0 +1,185 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.ckeditor">
+
+    <browser:resourceDirectory
+        name="ckeditor"
+        directory="ckeditor"
+      />
+
+    <browser:resourceDirectory
+        name="cke_ajaxsave"
+        directory="ajaxsave"
+        />
+
+    <browser:resourceDirectory
+        name="cke_nonbreaking"
+        directory="nonbreaking"
+        />
+
+    <browser:resourceDirectory
+        name="ckeditor_for_plone"
+        directory="statics"
+        />
+
+    <browser:page
+      name="convert_uid_to_url"
+      for="*"
+      class=".convertuid.ConvertUIDView"
+      permission="zope.Public"
+      />
+
+    <browser:page
+        name="ckeditor_wysiwyg_support"
+        for="*"
+        class=".ckeditorview.ckeditor_wysiwyg_support"
+        permission="zope.Public"
+        />
+
+    <browser:page
+        name="ckeditor_view"
+        for="*"
+        class=".ckeditorview.CKeditorView"
+        permission="zope.Public"
+        />
+
+    <browser:page
+        name="cke-save"
+        for="Products.Archetypes.interfaces.IBaseObject"
+        class=".ckeditorview.AjaxSave"
+        attribute="AT_save"
+        permission="cmf.ModifyPortalContent"
+        />
+
+    <browser:page zcml:condition="installed plone.dexterity"
+        name="cke-save"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        class=".ckeditorview.AjaxSave"
+        attribute="dexterity_save"
+        permission="cmf.ModifyPortalContent"
+        />
+
+    <browser:page
+        name="cke-save"
+        for="plone.portlets.interfaces.IPortletAssignment"
+        class=".ckeditorview.AjaxSave"
+        attribute="portlet_save"
+        permission="plone.app.portlets.ManageOwnPortlets"
+        />
+
+    <adapter
+        for="Products.Archetypes.generator.widget.iwidget"
+        factory=".ckeditorview.ATWidgetSettings"
+        />
+
+    <adapter
+        for="zope.formlib.interfaces.IWidget"
+        factory=".ckeditorview.FormlibWidgetSettings"
+        />
+
+    <adapter
+        for="z3c.form.interfaces.IWidget"
+        factory=".ckeditorview.Z3CFormWidgetSettings"
+        />
+
+    <browser:page
+        name="cke-upload-image"
+        for="Products.CMFCore.interfaces.IFolderish"
+        class=".ckeditorview.CKeditorView"
+        attribute="upload_image"
+        permission="cmf.ModifyPortalContent"
+        />
+
+    <browser:page
+        name="cke-upload-image"
+        for="Products.CMFCore.interfaces.IContentish"
+        class=".ckeditorview.CKeditorView"
+        attribute="upload_image"
+        permission="cmf.ModifyPortalContent"
+        />
+
+    <browser:page
+        name="ckeditor_plone_config.js"
+        for="*"
+        class=".ckeditorview.CKeditorView"
+        attribute="getCK_plone_config"
+        permission="zope.Public"
+        />
+
+    <browser:page
+        name="ckeditor_plone_menu_styles.js"
+        for="*"
+        class=".ckeditorview.CKeditorView"
+        attribute="getCK_plone_menu_styles"
+        permission="zope.Public"
+        />
+
+    <!-- old skins/plone_ckeditor/ckeditor_vars.js.dtml -->
+    <browser:page
+        name="ckeditor_vars.js"
+        for="*"
+        class=".ckeditorview.CKeditorView"
+        attribute="getCK_vars"
+        permission="zope.Public"
+        />
+
+    <browser:page
+        name="ckeditor-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".ckeditorsettings.CKEditorControlPanel"
+        permission="cmf.ManagePortal"
+        />
+
+    <!-- ckeditor browser -->
+    <browser:page
+        name="plone_ckfinder"
+        for="*"
+        class=".ckeditorfinder.CKFinder"
+        permission="zope2.View"
+        />
+
+    <!-- vocabularies -->
+    <utility
+        name="collective.ckeditor.vocabularies.skin"
+        component=".vocabularies.CKEditorSkinVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.toolbar"
+        component=".vocabularies.CKEditorToolBarVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.filtering"
+        component=".vocabularies.CKEditorFilteringVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.ImageTypes"
+        component=".vocabularies.CKEditorImageTypesVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.ImageTypeUpload"
+        component=".vocabularies.CKEditorUploadImageTypeVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.FileTypes"
+        component=".vocabularies.CKEditorFileTypesVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.FileTypeUpload"
+        component=".vocabularies.CKEditorUploadFileTypeVocabularyFactory"
+        />
+
+    <utility
+        name="collective.ckeditor.vocabularies.FolderTypes"
+        component=".vocabularies.CKEditorFolderTypesVocabularyFactory"
+        />
+
+</configure>
