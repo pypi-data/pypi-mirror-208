@@ -1,0 +1,50 @@
+{% import "type_name.html" as common %}
+
+<h5 class="title is-5 type-heading" id="message-{{ message.full_name }}">
+  <span>
+    <a href="#message-{{ message.full_name }}" title="{{ message.full_name }}">message {{ message.name }}</a>
+  {% if message.parent_message %}
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in {{ common.type_name(message.parent_message) }})</span>
+  {% endif %}
+  </span>
+  {% if message.repository_url %}
+    <a class="type-source-link" href="{{ message.repository_url }}">{{ message.source_file_path }}</a>
+  {% endif %}
+</h5>
+
+<div class="block content">
+  {{ message.description_html | safe }}
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field in message.fields %}
+    <tr>
+      <td>{{ field.number }}</td>
+      <td>
+        {{ field.name }}
+      </td>
+      <td>
+        <code title="{{ field.full_type }}">
+          {% if field.label != "" and field.label != "optional" %}
+            {{ field.label }}
+          {% endif %}
+          {{ common.type_name(field) }}
+        </code>
+      </td>
+      <td class="content">{{ field.description_html | safe }}</td>
+      <td>{{ field.default_value }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
