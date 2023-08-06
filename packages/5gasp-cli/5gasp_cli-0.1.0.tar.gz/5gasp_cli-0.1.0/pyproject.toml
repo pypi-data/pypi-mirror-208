@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "5gasp-cli"
+version = "0.1.0"
+description = "5GASP CLI to generate testing descriptors."
+authors = [
+    "Eduardo Santos <eduardosantoshf@av.it.pt>",
+    "Rafael Direito <rdireito@av.it.pt>"
+]
+license = "GNU General Public License v3.0"
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.scripts]
+5gasp-cli = "src.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+typer = {extras = ["all"], version = "^0.7.0"}
+PyYAML = "6.0"
+pytest = "7.2.1"
+poetry = "1.4.2"
+requests = "2.30.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
