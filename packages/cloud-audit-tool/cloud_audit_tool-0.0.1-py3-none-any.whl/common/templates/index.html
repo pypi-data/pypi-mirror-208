@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Audit Report</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+			font-family: Arial, sans-serif;
+		}
+
+		h1 {
+			color: #333;
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		.container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			margin-top: 50px;
+		}
+
+		.card {
+			background-color: white;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+			margin: 20px;
+			padding: 20px;
+			border-radius: 5px;
+			text-align: center;
+			min-width: 300px;
+			max-width: 900px;
+			text-decoration: none;
+			color: black;
+			cursor: pointer; /* optional: add a pointer cursor */
+		}
+
+		.card:hover {
+			transform: translateY(-5px);
+			transition: transform 0.3s ease-in-out;
+			box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+		}
+
+		.card a {
+			color: black;
+			font-size: 1.2em;
+			text-decoration: none;
+		}
+
+
+		@property --p{
+			syntax: '<number>';
+			inherits: true;
+			initial-value: 0;
+		}
+
+		.pie {
+			--p:20;
+			--b:22px;
+			--c:darkred;
+			--w:150px;
+
+			width:var(--w);
+			aspect-ratio:1;
+			position:relative;
+			display:inline-grid;
+			margin:5px;
+			place-content:center;
+			font-size:12px;
+			font-weight:bold;
+			font-family:sans-serif;
+		}
+
+		.pie:before,
+		.pie:after {
+			content:"";
+			position:absolute;
+			border-radius:50%;
+		}
+
+		.pie:before {
+			inset:0;
+			background:
+				radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat,
+				conic-gradient(var(--c) calc(var(--p)*1%),#0000 0);
+			-webkit-mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+					mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+		}
+		.pie:after {
+			inset:calc(50% - var(--b)/2);
+			background:var(--c);
+			transform:rotate(calc(var(--p)*3.6deg)) translateY(calc(50% - var(--w)/2));
+		}
+		.animate {
+			animation:p 1s .5s both;
+		}
+		.no-round:before {
+			background-size:0 0,auto;
+		}
+		.no-round:after {
+			content:none;
+		}
+		@keyframes p {
+			from{--p:0}
+		}
+
+	</style>
+</head>
+<body>
+	<h1>Audit Report</h1>
+	<div class="container">
+		{% for service_name, result in service_title.items() %}
+		<a href="aws_services/{{ service_name | lower }}.html" class="card">
+			<span><h2> {{ service_name | replace("_", " ") | title }} Report </h2> </span>
+			<div class="pie" style="--p:{{result['Passed']}};--c:lightgreen;--b:10px;--w:150px"> Passed {{result.Passed}}%</div>
+			<div class="pie" style="--p:{{result['Failed']}};--c:Red;--b:10px;--w:150px"> Failed {{result.Failed}}% </div>
+			<div class="pie" style="--p:{{result['Disabled']}};--c:grey;--b:10px;--w:150px"> Disabled {{result.Disabled}}% </div>
+			<div class="pie" style="--p:{{result['Unknown']}};--c:yellow;--b:10px;--w:150px"> Unknown {{result.Unknown}}% </div>
+		</a>
+		{% endfor %}
+	</div>
+	</div>
+</body>
+</html>

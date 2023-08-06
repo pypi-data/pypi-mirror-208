@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Audit Report</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            text-align: center;
+            color: #007bff;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 48px;
+        }
+
+        h2 {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            color: #343a40;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+        }
+
+        table {
+            margin-bottom: 50px;
+            background-color: #fff;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 18px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        p {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            text-align: center;
+            color: #6c757d;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 24px;
+        }
+
+        /* Add padding to container */
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        /* Refer to ResultStatus Class in commmon/constants/applications.py */
+        .Passed {
+            background-color: lightgreen;
+        }
+
+        .Failed {
+            background-color: red;
+        }
+
+        .Unknown {
+            background-color: yellow;
+        }
+
+        .Disabled {
+            background-color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Audit Report</h1>
+        {% if check_results %}
+        <h2>Service: {{ service }}</h2>
+        {% for service_name, results in check_results.items() %}
+        <p>Service Name: {{ service_name }}</p>
+        {% if results|selectattr('type', 'equalto', 'SecurityCheck')|list %}
+        <h3>Security Checks</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Check</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results if result.type == "SecurityCheck" %}
+                <tr>
+                    <td>{{ result.check_name }}</td>
+                    <td class='{{ result.status }}'>{{ result.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        {% if results|selectattr('type', 'equalto', 'BestPractices')|list %}
+        <h3>Best Practices</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Check</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results if result.type == "BestPractices" %}
+                <tr>
+                    <td>{{ result.check_name }}</td>
+                    <td class='{{ result.status }}'>{{ result.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+            {% endfor %}
+        {% else %}
+        <p>No Resources Found.</p>
+        {% endif %}
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
