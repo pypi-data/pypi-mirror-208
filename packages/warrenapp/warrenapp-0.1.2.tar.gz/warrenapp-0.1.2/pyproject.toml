@@ -1,0 +1,34 @@
+
+# This file establishes the info needed for installing your project via pip. This
+# then let's you import your code. For example, you can do...
+#   from example_app.apps import ExampleAppConfig
+
+# As your project grows, you may want to update the requirements for it or even
+# upload it to PyPI, which let's other people download and install your code. 
+# To see how this file can grow, you can take a look at other example files:
+#     Simmate's pyproject.toml is at... 
+#       https://github.com/jacksund/simmate/blob/main/pyproject.toml
+#     Another example one is at...
+#       https://github.com/pypa/sampleproject
+#     Full documentation on setuptools:
+#       https://setuptools.pypa.io/en/latest/userguide/index.html
+
+[build-system]
+requires = ["setuptools>=64.0.0", "wheel"]
+build-backend= "setuptools.build_meta"
+
+[project]
+name = "warrenapp"
+version = "0.1.2"
+dependencies = ["simmate"]
+description = "The Warrenapp is an extension of the Simulated Materials Ecosystem (Simmate), a package designed to ease computational materials research. The WarrenApp adds several custom workflows and settings."
+readme = "README.md"
+requires-python=">=3.10"
+authors = [{ name = "Sam Weaver", email = "sweav@unc.edu" }]
+license = { file = "LICENSE" }
+
+[project.urls]
+Homepage = "https://github.com/SWeav02/warrenapp"
+
+[tool.isort]
+profile = "black"
