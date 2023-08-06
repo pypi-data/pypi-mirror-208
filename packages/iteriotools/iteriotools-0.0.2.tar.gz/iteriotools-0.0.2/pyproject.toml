@@ -1,0 +1,61 @@
+[project]
+name = "iteriotools"
+description = "Python3.10+ utilities to translate iterators of bytes into file-like objects"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Quentin Bouget", email = "ypsah@devyard.org" },
+]
+keywords = [
+    "io",
+    "iterators",
+    "generators",
+    "itertools",
+    "utility",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+readme = "README.md"
+dynamic = ["dependencies", "version"]
+
+[project.urls]
+homepage = "https://gitlab.com/ypsah/iteriotools"
+repository = "https://gitlab.com/ypsah/iteriotools"
+
+[build-system]
+requires = ["setuptools>=63", "setuptools_scm[toml]>=6.2", "setuptools-pipfile"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[tool.setuptools-pipfile]
+
+[tool.black]
+line-length = 120
+target-version = ['py310', 'py311']
+# enrole in feature-preview
+preview = true
+
+[tool.isort]
+profile = "black"
+src_paths = ["iteriotools", "tests"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --cov=iteriotools --cov-branch --cov-fail-under=90"
+testpaths = ["iteriotools", "tests"]
+
+[tool.ruff]
+ignore = [
+    "E501",  # line-length: black already covers this
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
