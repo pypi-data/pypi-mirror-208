@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: mavlink-tools
+Version: 0.0.8
+Summary: PX4/ArduPilot MAVLink usefull tools
+Author-email: Dmitry Ponomarev <PonomarevDA96@gmail.com>
+Project-URL: Homepage, https://github.com/pypa/sampleproject
+Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: matplotlib
+Requires-Dist: pytest
+Requires-Dist: pyyaml
+Requires-Dist: pyserial
+Requires-Dist: pymavlink
+
+# PX4/ArduPilot MAVLink tools
+
+This repository is a collection of scripts created to facilitate automatic work with PX4/ArduPilot such as:
+1. [autopilot configurator](src/mavlink_tools/configurator) (for HITL and other applications),
+2. `loading and running a mission`,
+3. `loading a last flight log`,
+3. [analyzing a flight log](src/mavlink_tools/log_analyzer),
+4. [analyzing an overall flight statistic](src/mavlink_tools/log_analyzer) based on thousands of flights logs (total number of vehicle flight hours, flight distance and so on).
+
+Please refer to a particular section for details.
+
+## User guide
+
+### Installation
+
+The package is distrubuted via [test.pypi.org/project/mavlink-tools/](https://test.pypi.org/project/mavlink-tools/).
+
+```bash
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps mavlink_tools
+```
+
+## Developer guide
+
+### Installation from sources
+
+```bash
+git clone https://github.com/PonomarevDA/mavlink_tools.git --recursive
+git submodule update --init --recursive
+pip install -r requirements.txt
+```
+
+### Deploy on test.pypi.org
+
+```bash
+./deploy.sh
+```
