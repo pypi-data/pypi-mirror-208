@@ -1,0 +1,91 @@
+experiment = "test"
+
+[directories]
+inputs_dir = "permamodel/data/test_directory/inputs/"
+outputs_dir = "permamodel/data/test_directory/outputs/"
+
+[domain]
+number_of_years = 100 # time
+grid_shape = [100, 100] # [y, x]
+
+[variables.air_temperature]
+nc_file = 'air_temperature.nc'
+scalar = -999
+
+[variables.temperature_amplitude]
+nc_file = 'temperature_amplitude.nc'
+scalar = -999
+
+[variables.snow_thickness]
+nc_file = 'snow_thickness.nc'
+scalar = -999
+
+[variables.snow_density]
+nc_file = 'snow_density.nc'
+scalar = 240.0
+
+[variables.soil_water_content]
+nc_file = 'soil_water_content.nc'
+scalar = -999
+
+[variables.frozen_vegetation_height]
+nc_file = ''
+scalar = 0.1
+
+[variables.thawed_vegetation_height]
+nc_file = ''
+scalar = 0.1
+
+[variables.frozen_vegetation_diffusivity]
+nc_file = ''
+scalar = 2.39e-6
+
+[variables.thawed_vegetation_diffusivity]
+nc_file = ''
+scalar = 1.0556e-6
+
+[soils.sand]
+scalar_fraction = 0.25
+nc_file = '' 
+bulk_density = 1300
+heat_capacity = 1500
+conductivity_thawed_dry = 1.05
+conductivity_thawed_wet = 2.15
+conductivity_frozen_dry = 1.25
+conductivity_frozen_wet = 2.65
+
+[soils.silt]
+scalar_fraction = 0.25
+nc_file = ''
+bulk_density = 1400
+heat_capacity = 1300
+conductivity_thawed_dry = 1.05
+conductivity_thawed_wet = 1.9
+conductivity_frozen_dry = 1.25
+conductivity_frozen_wet = 2.4
+
+[soils.clay]
+scalar_fraction = 0.25
+nc_file = ''
+bulk_density = 1500
+heat_capacity = 2200
+conductivity_thawed_dry = 0.9
+conductivity_thawed_wet = 1.7
+conductivity_frozen_dry = 1.15
+conductivity_frozen_wet = 2.0
+
+[soils.peat]
+scalar_fraction = 0.25
+nc_file = ''
+bulk_density = 150
+heat_capacity = 200
+conductivity_thawed_dry = 0.14
+conductivity_thawed_wet = 0.24
+conductivity_frozen_dry = 0.32
+conductivity_frozen_wet = 0.8
+
+[constants]
+uwc = 0.05
+snow_heat_capacity = 2090
+sec_per_a = 31556926
+latent_heat = 3.34e5
