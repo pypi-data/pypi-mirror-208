@@ -1,0 +1,1 @@
+"""Displays sequences of symbols and requires a viewer to validate them"""
