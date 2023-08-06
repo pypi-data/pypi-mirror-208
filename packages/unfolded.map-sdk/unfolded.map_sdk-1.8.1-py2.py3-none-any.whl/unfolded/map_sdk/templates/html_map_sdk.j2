@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unfolded-map-{{div_id}}"></div>
+    <script type="module">
+      import { createMap } from 'https://unpkg.com/@unfolded/map-sdk@{{version}}/dist/index.js';
+      const element = document.getElementById('unfolded-map-{{div_id}}');
+
+      function htmlDecode(input) {
+        const doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+      }
+
+      const map = await createMap({
+        container: element,
+        style: JSON.parse(htmlDecode("{{ style }}")),
+        basemaps: JSON.parse(htmlDecode("{{ basemaps }}")),
+        urls: JSON.parse(htmlDecode("{{ urls }}"))
+      });
+
+      const actions = JSON.parse(htmlDecode("{{ actions }}"));
+      actions.forEach((action) => {
+        const funcName = action["funcName"];
+        const args = action["args"];
+        const options = action["options"];
+        map[funcName](...args, options);
+      })
+    </script>
+  </body>
+</html>
