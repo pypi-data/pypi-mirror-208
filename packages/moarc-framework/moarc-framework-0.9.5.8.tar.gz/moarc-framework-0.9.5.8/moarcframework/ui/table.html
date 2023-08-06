@@ -1,0 +1,43 @@
+{% extends "base/templates/layout.html" %}
+
+{% block page_name %}{{ model.verbose_name_plural }}{% endblock %}
+{% block title %}{{ model.verbose_name_plural }}{% endblock %}
+
+{% block content %}
+
+        <a class="btn btn-primary btn-action-create" href="{% url 'core.model.route' model_id=model.internal_name func_name='create' %}"
+           data-toggle="tooltip"
+           title="Nuevo">
+            <span class="fas fa-plus"></span> Nuevo
+        </a>
+        <a href="{% url 'core.model.route' model_id=model.internal_name func_name='list' %}"
+           class="btn icon-btn btn-outline-primary btn-action-list"
+           data-toggle="tooltip" title="Actualizar">
+            <span class="fa fa-sync-alt"></span>
+        </a>
+    <div class="card mt-3">
+        <div class="card-header with-elements">
+            <div class="card-header-elements">
+            </div>
+            <div class="card-header-elements ml-md-auto">
+                {% include 'web/components/list-options.html' with table=table %}
+            </div>
+
+        </div>
+        {% include 'web/components/table-searcher.html' with searchable_fields=model.searchable_fields table_id='current_table' %}
+        <div class="table-responsive">
+            <table class="table card-table table-sm tabulator"
+                   id="current_table"
+                   data-url-onclick="{% url 'core.model.route' model_id=model.internal_name func_name='edit' %}"
+                   data-url="{% url 'core.model.route' model_id=model.internal_name func_name='search' %}">
+                <thead>
+                <tr>
+                    {% for field in table.fields.field %}
+                        <th tabulator-field="{{ field.name }}">{{ field.verbose_name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+{% endblock %}
