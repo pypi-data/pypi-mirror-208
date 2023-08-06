@@ -1,0 +1,532 @@
+CHANGES
+=======
+
+0.9.0
+-----
+
+* Adding a missing newline
+* Preparing for 0.9.0 release
+* Rewrite hackish section
+* Adding a missing testing dependency
+* parse and canonicalize pyproject.toml data
+* Fix default generated spec filename
+* Update python version in tox.yml
+* Remove python\_module definition macro
+* Use %autosetup instead of %setup
+* Do not use 'releases' data from API
+* Add status badge icon
+* openSUSE teample: add package name to sitelib path
+* Fixes from review. Thank you
+* Switch from Travis-CI to Github Actions
+* Added tags file in gitignore
+* Added venv dir in gitignore file
+* Do not crash when setup.py could not be run, fixes #150
+* Use package name from PyPI for tarball name, fixes #148
+
+0.8.7
+-----
+
+* Adding version string
+* license is UNKNOWN if nothing determined
+* Fix issue #139 and issue #140 with pypi\_search module that it simply use the same searching facility available on pypi.org website
+* Ignoring python virtual env directory
+* Adding two dependencies for tests
+* Resolved conflict in README
+* templates: collect generator output to list before adding to another list
+* Update README.rst to be python3 compatible
+* Update README.rst
+* remove outdated install instructions
+
+0.8.6
+-----
+
+* Fix test/exampes/py2pack-opensuse.dsc
+* enhance test\_template with augmented opensuse and update examples to 0.8.5
+* cleanup script basename filter
+* update test reference
+* Fix flake8 errors
+* remove python2 from travis and tox
+* change test suite block
+* Replace python3\_only scripts with python\_alternatives
+* migrate metadate fetch to JSON API
+* remove python2 shims
+* update copyright header
+
+0.8.5
+-----
+
+* Use 3.8 python in the travis by default
+* Use python 3.8 and 3.9 in tox
+* Execute flake8 on latest py3 instead of old py2 version
+* Add missing comment to opensuse template header
+* Switch to pytest
+* Just say we support py2 and py3 do not bother with minor versions
+* gitignore coverage datafile
+* Do not bother with creating group tag as it is optional these days in openSUSE
+* Run tests under python 3.7 and fix tests
+* tests: replace year in tests by placeholder
+* bug: show help if no command given
+* Fix date in test examples
+* fix fedora tests
+* fix opensuse tests
+* Update py2pack-opensuse-legacy.spec
+* Update py2pack-opensuse.spec
+* Make template compatible with spec-cleaner
+* Add default empty for scripts
+* Just get rid of whole line in opensuse-legacy.spec, this breaks things
+* Don't add BR on python-devel without thinking
+* Add test for non-existent file
+* Add documentation to py2pack/utils.py
+* Add test with invalid archive
+* Raise a ValueError from \_get\_archive\_filelist instead of Exception
+* Add type hints to py2pack.utils
+* Ignore flake8 unused import warning for typing imports
+* Require typing module for python < 3.5
+* Bump python version in test case
+* Shorten overlong line
+* Add docstrings & type hints to functions in requires.py
+* Replace filter() with list/generator expressions
+* Fix indentation of \_requirement\_find\_lowest\_possible
+* Fix DeprecationWarnings for invalid escape sequences with python3
+
+0.8.4
+-----
+
+* Ignore some more pep8 warnings
+* Support %license macro
+
+0.8.3
+-----
+
+* Remove Sphinx cap
+* Fix copyright year in tests
+* Use release\_urls() XMLRPC method for the time being
+* Test python 3.6 and remove 3.5
+
+0.8.2
+-----
+
+* pep8 fixes
+* opensuse template updates
+* Add source\_url to Args in tests and use None as default value
+* Removed unneeded nargs parameter to add\_argument
+* Add a --source-url parameter to 'fetch' and 'generate' commands
+* tests: templates: fix version
+
+0.8.1
+-----
+
+* Test templates with saved output
+* Enable tests with python setup.py test
+* Also support for python 3.6
+* Fix opensuse's multipython template
+* unify trailing whitespaces in templates
+* Handle no upstream source download URL gracefully
+* Allow packaging custom pypi names via obs-from-pypi.py
+
+0.8.0
+-----
+
+* Ignore the required python version for now
+* Add build condition for tests in opensuse template
+* Install setup\_requires as BuildRequires during build
+* Update opensuse template for singlespec approach
+* Remove useless '(' and ')' replacements from opensuse template
+* travis: Update credential to deploy on pypi
+
+0.7.0
+-----
+
+* Switch to pbr
+
+0.6.7
+-----
+
+* Include doc/\* in sdist tarball
+* Add Shinx config to setup.cfg
+* Post release version bump to 0.6.7
+
+0.6.6
+-----
+
+* Bump version to 0.6.6
+
+0.6.5
+-----
+
+* Set files.pythonhosted.org as Source url
+* Also search for tarballs with underscores
+* Set pypi.io url for Source
+* Remove deprecated metadata subcommand
+* doc: Move CLI help to extra document
+* Support multiple template directories
+* Fix pep8 error
+* Use Sphinx for documentation
+* Remove hardcoded markers
+* Add license wit FIXME if available
+* Fix extensions for openSUSE template
+* Add script to create packages for OBS
+* Switch to metaextract
+* Improve openSUSE template checks
+* Update repository name after move to openSUSE
+
+0.6.4
+-----
+
+* Bump version to 0.6.4
+* Add "metadata" subcommand
+* Update travis.yml
+* Remove obsolete workaround for old suse in template
+* Fix urlretrieve for py3
+
+0.6.3
+-----
+
+* Bump version to 0.6.3
+* Set setup.py encoding and retry parsing in error case
+* Move Jinja2 env creation to own function
+* Don't call nosetests when a testsuite was found
+* Fix get\_metadata for distutils setup()
+* Also try to get license from classifiers
+* Fix --run deprecation
+* Move requirements related code to requires.py
+* Remove setup.py parsing code
+* Always run setup.py to get metadata
+* Fix README.rst style
+
+0.6.2
+-----
+
+* Bump version to 0.6.2
+* Also list tests\_require as BuildRequires for openSUSE
+* Reorder Requires/BuildRequires for openSUSE
+* Requirement markers are only available in newer setuptools versions
+
+0.6.1
+-----
+
+* Bump version to 0.6.1
+* Improve \_canonicalize\_setup\_data() tests
+* Rerun \_canonicalize\_setup\_data()
+* Remove py33 and py34 from travis and tox
+* travis: Fix python 3 test env variables
+* Don't list "./" in names for extracted zip/tar file
+* Fix minimal version detection for requirements
+* Support requirement markers
+* Fix tests\_require handling
+* Adjust some comments
+* Use xmlrpc\_client from six
+* Adjust docs for testing
+* Remove whitespaces from README
+
+0.6.0
+-----
+
+* Bump version to 0.6.0
+* Add myself as co-maintainer
+* Mention the "--run" as note in README
+* protect against failed eval of setup.py code fragments
+* Also collect tests\_require metadata
+* Remove distutils cleanup command
+* Remove pypip.in images from README
+* Use distutils command when running setup.py
+* Add contextmanager to extract a zip/tar into a tempdir
+* Remove bitdeli image from README
+* Relicense under Apache-2.0
+* Move setup.py sandbox run to extra file
+* Also parse entry\_points when given as dict
+* Use a "fake" unicode literal from six for decoding
+* Move setup.py parsing to extra file
+* tox: Add possibility to run single test cases
+* Ignore .eggs/ dir in git
+* Update the SPDX mapping file
+* travis: Use matrix to execute tox envs
+* tox: Ignore E402
+* Don't require argparse
+* Remove python 2.6 support
+* travis: remove --use-mirrors pip flag usage
+* tests: ignore console\_scripts order during tests
+* Add python 3.4 and 3.5 support
+* Fix company name in spec template
+
+0.5.0
+-----
+
+* Bump version to 0.5.0
+* Fix flake8 issues
+* Fix console\_script handling
+* Sanitize collected requirements
+* Remove unused 'requires' from opensuse template
+* Quote %doc filenames if they contain shell metacharacters
+* Add support for "entry\_points" and "console\_scripts" parameters
+* Support syntactic variations as per the setuptools spec
+* Make "parse" and "run" two separate modes
+* Support same set of setup() parameters in parse and run modes
+* Use setuptools instead of distutils in \_run\_setup\_py()
+* Run setup.py (instead of just parsing it) to gather more data
+* Adjust Travis CI build
+* Remove commented code and make pep8 happy
+* Remove package create function
+* Fix license detection when license is None
+* Added BuildRequires: python-setuptools opensuse -- maybe also needed for others?
+* Don't include comma in \_parse\_setup\_py regexp
+* fix indentation in README
+* Fix KeyError for license and summary
+
+0.4.10
+------
+
+* Release version 0.4.10
+* list doesn't need arguments
+* Fix PyPI URL to avoid 301 moved permanently
+
+0.4.9
+-----
+
+* Release version 0.4.9
+* Fix coverage report source
+* Add py26 trove classifier
+* Add cssselect setup\_requires
+* Rename SPDX license map
+* Update SPDX license map
+* Change 'flake8' to 'pep8' target
+* Fix recursive-include for doc
+* No py24 yet
+* Use assertTrue rather than assertIn
+* Drop .bumbversion.cfg, isn't worth it
+* pip install test-requires for py26
+
+0.4.8
+-----
+
+* Release version 0.4.8
+* Enable coverage report generation
+* Use flake8 rather than pep8
+* Add tox.ini, (test-)requirements.txt and manpage
+* Drop pep257 command, never used
+* Add a Bitdeli badge to README
+* Add .bumpversion.cfg
+
+0.4.7
+-----
+
+* Bump version: 0.4.6 → 0.4.7
+* Add setup.cfg to build wheels
+* Allow attributes to span multiple lines when parsing setup.py. (re.MULTILINE is the wrong option here, it only changes the meaning of '^' and '$' pattern characters. Replace with re.DOTALL and turn on non-greedy matching.)
+* Fix glob and \_augment\_data\_from\_tarball():
+* Enable py3k compatibility for "generate" command
+* Fix lambda expression of "parenthesize\_version" filter
+* Fix typo "matchdules" -> "modules"
+* Parenthesize version of required packages in opensuse.dsc
+* Add support for "install\_requires" and "extras\_require" parameters. (Support for "install\_requires" already existed in fedora.spec and opensuse.spec, but was missing in \_parse\_setup\_py().)
+* Fix openSUSE template in case of C extension
+* It's PyPI, not PyPy :-)
+* Fix flake8 issues
+* Port fabfile.py to setuptools commands
+
+0.4.6
+-----
+
+* Bump version to 0.4.6
+* Simplify tagline
+* Fix PEP-8 issues
+* Align flake8 env with pep8
+* Enhance tox.ini
+* Ignore coverage and nosetests.xml
+* Increase test coverage
+* Move tests dir to test (standard location)
+* Add classifier for Python-3.3
+* Python-3 compat for file\_template\_list()
+* Reorganize modules
+* Enhance README.rst and fix rST
+* Use context manager to read README.rst
+
+0.4.5
+-----
+
+* Bump version to 0.4.5
+* Python-3.3 compatibility (while retaining 2.7 compatibility)
+* Ignore .venv\* and .tox
+* Add tox.ini to run tox with various envs (py27,py33,pep8,pep257)
+* Update SPDX license map
+* Add .travis.yml
+* Move to pip-style requirements / setup.py
+* Add a %check section if a testsuite is found
+
+0.4.4
+-----
+
+* Bumb version to 0.4.4
+* Package scripts (setup.py) as binaries
+
+0.4.3.4
+-------
+
+* Release 0.4.3.4
+* Catch more doc files
+
+0.4.3.3
+-------
+
+* Version 0.4.3.3
+* Fix SPDX license file path when installed system-wide
+* Release 0.4.3.2
+* Release 0.4.3.1
+
+0.4.3
+-----
+
+* Release 0.4.3
+* Transform upstream license into SDPX style
+
+0.4.2
+-----
+
+* Release 0.4.2
+* Fetch doc files from tarball (if available)
+* Detect C extensions from local tarball (if available)
+* Bump version
+* Path changed
+* It's 'docs' now
+* executable flag can't hurt
+* bump version
+* Some spec template adjustments to match spec cleaner
+* Set useful default templates (again)
+* Also BuildRequire: unzip if the source URL ends with '.zip' in opensuse.spec template
+* Add a Fabric task to dump SUSE's current SPDX license mapping, to be used later on
+* Try more hard to download a tarball
+* Rename dir 'doc' to 'docs'
+* Rename dir 'test' to 'tests'
+* Modernize opensuse.spec template
+* Initial proxy support
+* Adjust opensuse.spec template to spec-cleaner
+* Added \*.egg-info to .gitignore
+* Fix circular import (was the real issue)
+* Revert "Rename 'list' function to 'list\_all' to avoid clash with Python keyword"
+* Rename 'list' function to 'list\_all' to avoid clash with Python keyword
+* Bump version to 0.3.21
+* Removed %clean section, there is a sane default for ages
+* - deleted License because it breaks building - just use name in source, because source\_url breaks also building
+* Display correct module version number
+* Bump version to 0.3.20
+* Filter argparse import UserWarning from Jinja2
+* Small fixes, use :copyright: and :license:
+* Added \_\_docformat\_\_ hint to py2pack/\_\_init\_\_py
+* Move doc/py2pack.xml.in to doc/src and update docs
+* Add a license header to the py2pack script and PEP-8'ify it
+* Add license headers to setup.py and py2pack/\_\_init\_\_.py
+* Be able to use either setuptools or distribute
+* Little optimization, put exports on same line as setup.py build call
+* Apply PEP-8 rules
+* PEP-8'tify imports
+* Remove '-O1 --skip-build' parameters from setup.py build call
+* Bump version
+* Use complete source tarball url for RPM tag 'Source' instead of filename
+* Simplied openSUSE template further, check for specific Python version requirements
+* Bump version
+* Properly encode unicode, fixes issue #2
+* Add spec template for Mageia distribution
+* Bump version to 0.3.16
+* Directly use the upstream filename (if present) instead of generating it from the name and version of the upstream release
+* Added doctest test runner
+* Bump version to 0.3.15
+* Don't lowercase module names anymore, install everything in py-sitelib by default
+* Bump version number
+* Remove #norootforbuild and explicit listing of \*.egg-info in %files section
+* Generate manpage and HTML documentation and add to source and binary distribution
+* Simpler noarch check for openSUSE
+* Bump version number
+* Don't use newer Python features to allow running on RHEL5 and other old distros
+* Removed SUSE-specific --record-rpm stuff
+* Bumped version to 0.3.9
+* Add README.rst to installed files
+* Fixed link to README.rst
+* Spec template for openSUSE now installs \*.egg-info stuff automatically
+* Renamed README to README.rst
+* openSUSE doesn't recommend to show authors in description anymore
+* Remove double check and added some more hints for the %files section
+* Added Docbook file to generate Manpages, HTML, etc. [Thomas Schraitle]
+* Strip '(' and ')' from version requirements
+* Bumped version number to 0.3.5
+* Be able to generate a SPEC file even if there is no upstream source release
+* Load README file traditionally, with-statement is not supported by older Python releases
+* Removed optional template type parameter to simplify example
+* Added '-q' (quiet) flag to %setup
+* Moved 'export CFLAGS..' from %prep to %build
+* Use simple command versions instead of macros
+* Added definitions of %python\_sitelib and %python\_sitearch for really old distros
+* Fedora template also produces correct filenames in all situations
+* Much more robust code and openSUSE template
+* SUSE Linux GmbH seems to be the better copyright default
+* Fix check for non-suse distros in the %files section
+* Forgot to put templates into sdist (trough MANIFEST.in)
+* Corrected a typo in the 'Requires:' line
+* Added links to topics in the README file
+* Only use generated %files list if not on SUSE distros
+* The README file now should generate correct preformatted text. Setup.py README parsing should be more robust too
+* Bump the version number to '0.2.5'
+* Re-add 'argparse' dep
+* Simpler template. Use more RPM macros
+* Use some more macros
+* Changed copyright line to incorporate the user's name instead of SUSE
+* Removed openSUSE-specific parts
+* Import statement simplified
+* Import interesting functions from submodule (simplifies API)
+* Corrected openSUSE template typos
+* Changed openSUSE template to also work on Fedora and Mandriva
+* Bumped version number to '0.2.3'Bumped version number to '0.2.3'.
+* Some more template improvements
+* Commented out additional data files. They are likely to break installation
+* Bumped version to '0.2.2'
+* Don't require argparse explicitly
+* Bumped version to '0.2.1'
+* Fixed source tarball ending
+* Removed TODOs
+* Removed \*.pyc files and added '\*.pyc' to .gitignore
+* Fixed 'requires' for all templates
+* Bumped version number to '0.2'
+* Fixed author / email parsing
+* Better PyPI classifiers
+* Added MANIFEST.in for source distribution
+* Renamed 'COPYING' to 'LICENSE'
+* Also install documentation
+* Added 'build', 'dist' and 'MANIFEST' to .gitignore
+* Refactored again, this time it's a full-class package with a seperate script to execute it. Also, some smaller code issues fixed
+* Re-rewording
+* Rewording
+* Usage example
+* Some comments and system user name passed to templates (useful for 'Maintainer' in spec/dsc file)
+* Initial openSUSE dsc template
+* Initial Fedora spec template
+* Better and more generic spec/dsc generation function
+* Refactored again. Setup.py now loads settings from module directly
+* The 'package'->'module' rename broke quite some things, renaming back
+* Expanded usage section
+* Adapted to new template directory
+* Added some template stubs, refactored dir-layout and executable persmissions
+* Prepare module
+* Another TODO
+* Add another trivial 'help' command
+* Added another TODO
+* Remove gen\_changes stub for now
+* Comments and beautification
+* New 'show' method
+* Better description
+* This was all to easy :-)
+* Add Unicode marker
+* More code simplyfication
+* More complete openSUSE template
+* Simplify code
+* Fix year
+* Moved to Jinja2 templates, some parsing
+* Add dependency on Jinja2 templating engine
+* Renamed to 'py2pack', some minor improvements along the way
+* Some refactoring. Refer to 'module' instead of ambiguous 'package'
+* Some help clarification
+* Prepared openSUSE spec file template
+* Renamed script to simply 'egg2rpm' and adapted setup.py accordingly
+* Even more stuff done
+* Huge progress
+* Typo fix
+* Only a stub for now
+* Initial commit
