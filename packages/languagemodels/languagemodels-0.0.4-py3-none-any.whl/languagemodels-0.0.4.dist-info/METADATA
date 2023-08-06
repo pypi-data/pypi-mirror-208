@@ -1,0 +1,132 @@
+Metadata-Version: 2.1
+Name: languagemodels
+Version: 0.0.4
+Summary: Simple inference for large language models
+Home-page: https://github.com/jncraton/languagemodels
+Author: Jon Craton
+Author-email: jon@joncraton.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: accelerate
+Requires-Dist: sentence-transformers
+Requires-Dist: torch
+Requires-Dist: transformers
+
+Language Models
+===============
+
+[![PyPI version](https://badge.fury.io/py/languagemodels.svg)](https://badge.fury.io/py/languagemodels)
+[![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://languagemodels.netlify.app/)
+[![Build](https://github.com/jncraton/languagemodels/actions/workflows/build.yml/badge.svg)](https://github.com/jncraton/languagemodels/actions/workflows/build.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/722e625a-c6bc-4373-bd88-c017adc58c00/deploy-status)](https://app.netlify.com/sites/languagemodels/deploys)
+
+A Python package providing simple building blocks for exploring natural language processing.
+
+![Translation hello world example](media/hello.gif)
+
+Installation
+------------
+
+This package can be installed using the following command:
+
+```sh
+pip install languagemodels
+```
+
+Example Usage
+-------------
+
+Here are some usage examples as Python REPL sessions. This should work in the REPL, notebooks, or in traditional scripts and applications.
+
+### Text Completions
+
+```python
+>>> import languagemodels as lm
+
+>>> lm.complete("She hid in her room until")
+'she was sure she was safe'
+```
+
+### Instruction Following
+
+```python
+>>> import languagemodels as lm
+
+>>> lm.do("Translate to English: Hola, mundo!")
+'Hello, world!'
+
+>>> lm.do("What is the capital of France?")
+'paris'
+```
+
+### Classification
+
+```python
+>>> import languagemodels as lm
+
+>>> lm.classify("Language models are useful", "positive", "negative")
+'positive'
+```
+
+### Semantic Search
+
+```python
+>>> import languagemodels as lm
+
+>>> lm.store_doc("Mars is a planet")
+>>> lm.store_doc("The sun is hot")
+>>> lm.load_doc("What is Mars?")
+'Mars is a planet'
+```
+
+### Extractive Question Answering
+
+```python
+>>> import languagemodels as lm
+
+>>> lm.extract_answer("What color is the ball?", "There is a green ball and a red box")
+'green'
+```
+
+### External Retrieval
+
+```python
+>>> import languagemodels as lm
+
+>>> lm.fetch_wiki('Chemistry')
+'Chemistry is the scientific study...
+
+>>> lm.fetch_weather(41.8, -87.6)
+'Partly cloudy with a chance of rain...
+```
+
+### Misc Text Tools
+
+```python
+>>> import languagemodels as lm
+
+>>> get_date()
+'Friday, May 12, 2023 at 09:27AM'
+```
+
+[Full documentation](https://languagemodels.netlify.app/)
+
+Projects
+--------
+
+This package can be used to do the heavy lifting for a number of learning projects:
+
+- Basic chatbot
+- Chatbot with information retrieval
+- Chatbot with access to real-time information
+- Text classification
+- Extractive question answering
+- Semantic search
+- Document question answering
+
+
