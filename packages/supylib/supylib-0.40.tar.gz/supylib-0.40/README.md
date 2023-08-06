@@ -1,0 +1,94 @@
+supylib 0.40
+-------------------------
+Supportive Utility packages for PYthon 
+Eine Python-basierte Utility-Bibliothek für Datenbanken, GUI-Masken, Computer Vision, Signalverarbeitung und Machine Learning
+(c) Andreas Knoblauch, HS Albstadt-Sigmaringen, Germany, 2013-2023
+
+
+Sub-Packages:
+-------------------------
+Current Sub-Packages:
+   supy (__init__.py): contains only version number
+   forms3.py                 : a reusable form class
+   guimaker3.py              : An extended tkinter Frame that makes window menus and tool-bars automatically
+   sqldatabase.py            : Simple database class for persistent storage of data records in files that is based on SQLITE
+   sqldatabase_inputmask.py  : specification of input masks for database tables
+   sqlforms.py               : input forms for sql databases
+   sqltableeditor.py         : classes for editing sql tables
+   database_inputmask3.py    : python3 version of database_inputmask.py (database input masks); no longer used
+   widgets.py                : GUI widgets for SQL database access
+   utilities.py              : various utility functions
+   computervision.py         : functions for computer vision and (mostly 2D) signal processing
+   signals.py                : functions for (mostly 1D) signal processing and detection
+   rgps.py                   : classes and functions for Random-Grid-Path-Search 
+
+Deprecated packages (still python2)
+   forms.py                  : a reusable form class
+   guimaker.py               : An extended tkinter Frame that makes window menus and tool-bars automatically
+   database_inputmask.py     : database input masks
+   database.py               : Simple database class for persistent storage of data records in file
+   multibase.py              : Simple database class for persistent storage of data records in files       
+   serialize.py              : Simple encoder/decoder classes for serializing python objects and python classes
+
+
+Version History:
+-------------------------
+0.01 : 1/4/2013
+      - added supy_database.py, supy_multibase.py, supy_forms.py and others for MinotaurusGames under python2
+0.02 : 29/7/2014
+      - upgraded supy for python3, added supy_database_inputmask3.py, supy_sqldatabase.py, supy_sqldatabase_inputmask.py,
+        supy_sqltableeditor.py, supy_sqlforms.py and others, in particular, for studbase.py (student exam report database)
+0.03 : 12/5/2019
+      - added computervision.py for starting of SoftErOS and AI4INFRA projects (detection of damages on building face images),
+        in particular for labeling tools: LabelEd, ReLabelEd
+0.04 : 8/11/2019
+      - extended, debugged, initial commit to Git
+
+0.1  : 9/11/2022
+      - prepared packaging with PyPI (use pip3 install supylib); restructuring python package from supy_* to supy.*
+
+0.2  : 12/9/2022
+      - added getLoupeImage(.) and getMaskedOverlay(.) for KICAD labeling tool
+
+0.21 : 2/11/2022
+      - updates for version 0.21 for AI4INFRA project
+
+0.3  : 3/5/2023
+      - New subpackage signal.py for signal detection with Truncated Gaussian; updated getDoGKernel in computervision.py
+
+0.31 : 3/5/2023
+      - slight update; to have pip-conform version number > 0.21 !!
+      - updated signal.py for shipping bat_labeler.py for Lars Krause, Marcus Borst
+      
+0.40 : 14/5/2023
+      - renamed signal.py to signals.py (to avoid confusion with existing os-related python package signal.py)
+      - use version number 0.40 instead of 0.4 to be larger than 0.31!!
+
+
+Aktivierung/Sichtbarkeit
+-------------------------
+Der folgende Shell-Befehl macht das suplib/python Verzeichnis global sichtbar,
+indem vorne in PYTHONPATH und PATH gestellt wird (ggf. in .bashrc einfügen...):
+
+source /home/ak/projects/supylib/python/BashSrc
+
+
+Versionskontrolle mit Git/GitHub
+---------------------------------
+python: Python Sources von Supylib
+shipping: Packages prepared for shipping
+testing: testing area
+README: this file
+
+Excluded from Versionskontrolle:
+---------------------------------
+see python/.gitignore:
+
+Packaging:
+-----------
+see                        : https://packaging.python.org/en/latest/tutorials/packaging-projects/
+build package              : python3 -m build
+upload package to test-repo: python3 -m twine upload --repository testpypi dist/*
+upload package to PyPI     : python3 -m twine upload dist/*
+install from test-repo     : pip3 install --index-url https://test.pypi.org/simple/ --no-deps supylib
+install from PyPI          : pip3 install supylib
