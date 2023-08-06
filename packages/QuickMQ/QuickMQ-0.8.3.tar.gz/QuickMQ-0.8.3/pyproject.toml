@@ -1,0 +1,14 @@
+[build-system]
+requires = [
+    "setuptools >= 40.9.0",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = "--cov=quickmq --cov-report term --cov-report xml"
+testpaths = [
+    "tests",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
