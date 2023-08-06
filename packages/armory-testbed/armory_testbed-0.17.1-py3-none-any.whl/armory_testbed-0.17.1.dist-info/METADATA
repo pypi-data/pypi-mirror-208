@@ -1,0 +1,239 @@
+Metadata-Version: 2.1
+Name: armory-testbed
+Version: 0.17.1
+Summary: Adversarial Robustness Test Bed
+Project-URL: Source, https://github.com/twosixlabs/armory
+Project-URL: Documentation, https://armory.readthedocs.io/en/latest/
+Author-email: Two Six Technologies <armory@twosixtech.com>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.8
+Requires-Dist: docker
+Requires-Dist: jsonschema
+Requires-Dist: loguru
+Requires-Dist: pytest
+Requires-Dist: pyyaml
+Requires-Dist: requests
+Requires-Dist: setuptools-scm
+Requires-Dist: toml
+Provides-Extra: all
+Requires-Dist: armory-testbed[datasets]; extra == 'all'
+Requires-Dist: armory-testbed[developer]; extra == 'all'
+Requires-Dist: armory-testbed[engine]; extra == 'all'
+Requires-Dist: armory-testbed[jupyter]; extra == 'all'
+Requires-Dist: armory-testbed[math]; extra == 'all'
+Requires-Dist: armory-testbed[pytorch]; extra == 'all'
+Requires-Dist: armory-testbed[tensorflow]; extra == 'all'
+Provides-Extra: datasets
+Requires-Dist: armory-testbed[tensorflow]; extra == 'datasets'
+Requires-Dist: protobuf; extra == 'datasets'
+Requires-Dist: tensorflow-datasets!=4.9.0,>=4.6.0; extra == 'datasets'
+Provides-Extra: datasets-builder
+Requires-Dist: apache-beam>=2.22.0; extra == 'datasets-builder'
+Requires-Dist: armory-testbed[datasets,engine]; extra == 'datasets-builder'
+Provides-Extra: deepspeech
+Requires-Dist: armory-testbed[datasets,engine,math,pytorch]; extra == 'deepspeech'
+Requires-Dist: google-cloud-storage; extra == 'deepspeech'
+Requires-Dist: librosa; extra == 'deepspeech'
+Requires-Dist: python-levenshtein; extra == 'deepspeech'
+Requires-Dist: pytorch-lightning<1.5.0; extra == 'deepspeech'
+Requires-Dist: sox; extra == 'deepspeech'
+Requires-Dist: torchmetrics<0.8.0; extra == 'deepspeech'
+Requires-Dist: transformers; extra == 'deepspeech'
+Provides-Extra: developer
+Requires-Dist: bandit[toml]; extra == 'developer'
+Requires-Dist: black[jupyter]==22.*; extra == 'developer'
+Requires-Dist: flake8; extra == 'developer'
+Requires-Dist: hatch; extra == 'developer'
+Requires-Dist: hydra-core; extra == 'developer'
+Requires-Dist: isort; extra == 'developer'
+Requires-Dist: mkdocs; extra == 'developer'
+Requires-Dist: wheel; extra == 'developer'
+Provides-Extra: engine
+Requires-Dist: adversarial-robustness-toolbox==1.14.1; extra == 'engine'
+Requires-Dist: boto3; extra == 'engine'
+Requires-Dist: botocore; extra == 'engine'
+Requires-Dist: ffmpeg-python; extra == 'engine'
+Requires-Dist: opencv-python-headless==4.5.5.62; extra == 'engine'
+Requires-Dist: opencv-python==4.5.5.62; extra == 'engine'
+Requires-Dist: pillow; extra == 'engine'
+Requires-Dist: pydub; extra == 'engine'
+Requires-Dist: tensorboardx; extra == 'engine'
+Requires-Dist: tidecv; extra == 'engine'
+Provides-Extra: jupyter
+Requires-Dist: ipywidgets; extra == 'jupyter'
+Requires-Dist: jupyterlab; extra == 'jupyter'
+Requires-Dist: jupyterlab-widgets; extra == 'jupyter'
+Provides-Extra: math
+Requires-Dist: matplotlib; extra == 'math'
+Requires-Dist: numpy; extra == 'math'
+Requires-Dist: pandas; extra == 'math'
+Requires-Dist: scikit-learn<1.1.0; extra == 'math'
+Requires-Dist: scipy>=1.4.1; extra == 'math'
+Provides-Extra: pytorch
+Requires-Dist: armory-testbed[datasets,engine,math]; extra == 'pytorch'
+Requires-Dist: torch; extra == 'pytorch'
+Requires-Dist: torchaudio; extra == 'pytorch'
+Requires-Dist: torchvision; extra == 'pytorch'
+Provides-Extra: tensorflow
+Requires-Dist: armory-testbed[datasets,engine,math]; extra == 'tensorflow'
+Requires-Dist: tensorflow>=2.10.0; extra == 'tensorflow'
+Requires-Dist: tf-models-official; extra == 'tensorflow'
+Provides-Extra: yolo
+Requires-Dist: armory-testbed[engine]; extra == 'yolo'
+Requires-Dist: armory-testbed[tensorflow]; extra == 'yolo'
+Requires-Dist: pytorchyolo; extra == 'yolo'
+Description-Content-Type: text/markdown
+
+<div align="center">
+<img src="/docs/assets/logo.png" width="50%" title="Armory Logo">
+</div>
+
+[![CI][ci-badge]][ci-url]
+[![PyPI Status Badge][pypi-badge]][pypi-url]
+[![PyPI - Python Version][python-badge]][python-url]
+[![License: MIT][license-badge]][license-url]
+[![Docs][docs-badge]][docs-url]
+[![Code style: black][style-badge]][style-url]
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7561756.svg)](https://doi.org/10.5281/zenodo.7561756)
+
+
+# Overview
+
+Armory is a testbed for running scalable evaluations of adversarial defenses.
+Configuration files are used to launch local or cloud instances of the Armory docker
+containers. Models, datasets, and evaluation scripts can be pulled from external
+repositories or from the baselines within this project.
+
+Our evaluations are created so that attacks and defenses may be
+interchanged. To do this we standardize all attacks and defenses as subclasses of
+their respective implementations in the [Adversarial Robustness Toolbox (ART)](https://github.com/Trusted-AI/adversarial-robustness-toolbox) hosted by the LF AI & Data Foundation (LFAI).
+
+
+# Installation & Configuration
+
+TLDR: Try Armory [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/twosixlabs/armory/blob/master/notebooks/running_armory_scenarios_interactively.ipynb) or follow the instructions below to install locally.
+
+
+```bash
+pip install armory-testbed
+```
+
+Upon installing armory, a directory will be created at `~/.armory`. This user
+specific folder is the default directory for downloaded datasets, model weights, and
+evaluation outputs.
+
+To change these default directories simply run `armory configure` after installation.
+
+If installing from the git repo in editable mode, ensure that your pip version is 22+.
+
+
+# Usage
+
+There are three ways to interact with Armory's container system.
+
+## armory run
+* `armory run <path/to/config.json>`
+This will run a [configuration file](//github.com/twosixlabs/armory/raw/master/docs/configuration_files.md) end to end. Stdout
+and stderror logs will be displayed to the user, and the container will be removed
+gracefully upon completion. Results from the evaluation can be found in your output
+directory.
+
+* `armory run <path/to/config.json> --interactive`
+This will launch the framework-specific container specified in the
+configuration file, copy the configuration file into the container, and provide
+the commands to attach to the container in a separate terminal and run the
+configuration file end to end while attached to the container. A notable use
+case for this would be to debug using pdb. Similar to non-interactive mode, results
+from the evaluation can be found in the output directory. To later close the
+interactive container simply run CTRL+C from the terminal where this command was ran.
+
+## armory launch
+* `armory launch <armory|pytorch-deepspeech>`
+This will launch a framework specific container, with appropriate mounted volumes, for
+the user to attach to for debugging purposes. A command to attach to the container will
+be returned from this call, and it can be ran in a separate terminal. To later close
+the interactive container simply run CTRL+C from the terminal where this command was
+ran.
+
+* `armory launch <armory|pytorch-deepspeech> --jupyter`.
+Similar to the interactive launch, this will spin up a container for a specific
+framework, but will instead return the web address of a jupyter lab server where
+debugging can be performed. To close the jupyter server simply run CTRL+C from the
+terminal where this command was ran.
+
+## armory exec
+* `armory exec <armory|pytorch-deepspeech> -- <cmd>`
+This will run a specific command within a framework specific container. A notable use
+case for this would be to run test cases using pytest. After completion of the command
+the container will be removed.
+
+Note: Since Armory launches Docker containers, the python package must be run on
+system host (i.e. not inside of a docker container).
+
+### Example usage:
+```bash
+pip install armory-testbed
+armory configure
+
+git clone https://github.com/twosixlabs/armory-example.git
+cd armory-example
+armory run official_scenario_configs/cifar10_baseline.json
+```
+
+### What is available in the container:
+All containers have a pre-installed armory package so that baseline models,
+datasets, and scenarios can be used.
+
+Additionally, volumes (such as your current working directory) will be mounted from
+your system host so that you can modify code to be run, and retrieve outputs.
+For more information on these mounts, please see our [Docker documentation](//github.com/twosixlabs/armory/raw/master/docs/docker.md#docker-volume-mounts)
+
+# Scenarios
+Armory provides several baseline threat-model scenarios for various data modalities.
+When running an armory configuration file, the robustness of a defense will be
+evaluated against that given scenario. For more information please see our
+[Scenario Documentation](//github.com/twosixlabs/armory/raw/master/docs/scenarios.md).
+
+# FAQs
+Please see the [frequently asked questions](//github.com/twosixlabs/armory/raw/master/docs/faqs.md) documentation for more information on:
+* Dataset format and preprocessing
+* Access to underlying models from wrapped classifiers.
+
+# Contributing
+Armory is an open source project and as such we welcome contributions! Please refer to
+our [contribution docs](//github.com/twosixlabs/armory/raw/master/.github/CONTRIBUTING.md) for how to get started.
+
+# Acknowledgment
+This material is based upon work supported by the Defense Advanced Research Projects
+Agency (DARPA) under Contract No. HR001120C0114. Any opinions, findings and
+conclusions or recommendations expressed in this material are those of the author(s)
+and do not necessarily reflect the views of the Defense Advanced Research Projects
+Agency (DARPA).
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[ci-badge]: https://github.com/twosixlabs/armory/workflows/GitHub%20CI/badge.svg
+[ci-url]: https://github.com/twosixlabs/armory/actions/
+[pypi-badge]: https://badge.fury.io/py/armory-testbed.svg
+[pypi-url]: https://pypi.org/project/armory-testbed
+[python-badge]: https://img.shields.io/pypi/pyversions/armory-testbed
+[python-url]: https://pypi.org/project/armory-testbed
+[license-badge]: https://img.shields.io/badge/License-MIT-yellow.svg
+[license-url]: https://opensource.org/licenses/MIT
+[docs-badge]: https://readthedocs.org/projects/armory/badge/
+[docs-url]: https://readthedocs.org/projects/armory/
+[style-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
+[style-url]: https://github.com/ambv/black
