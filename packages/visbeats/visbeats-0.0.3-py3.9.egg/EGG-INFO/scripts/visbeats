@@ -1,0 +1,41 @@
+#!/Users/austinbrown/miniforge3/envs/visbeats-pip/bin/python
+
+import sys
+import argparse
+import matplotlib
+matplotlib.use('PS')
+sys.path.append('../visbeats')
+import visbeats
+import os
+
+
+def main(args):
+    print("args: {}".format(args))
+
+    source_url = args.source
+    target_url = args.target
+    height = int(args.height)
+
+    print("Source: {}\nTarget: {}".format(source_url, target_url))
+
+    output_path = args.output_path
+    if(output_path is None):
+        output_path = './new_result.mp4'
+    result = visbeats.AutoDancefer(source=source_url, target = target_url,
+                                  output_path = output_path,
+                                  synch_video_beat = 0,
+                                  synch_audio_beat = 0,
+                                  max_height = height)
+    print("Result saved to {}".format(result.getPath()))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source",
+                        help="Source video you want to warp. Can be a youtube vide id (get it from youtube urls 'https://www.youtube.com/watch?v=[VIDEO_ID]') or a path to a video file.")
+    parser.add_argument("target",
+                        help="Target song. For now now use a video (will update later). Can be a youtube vide id or a path to a video file.)")
+    parser.add_argument("-o", "--output_path", help="path for the output file")
+    parser.add_argument("-height", "--height", help="height of the output video", default=720)
+    args = parser.parse_args()
+    main(args)
