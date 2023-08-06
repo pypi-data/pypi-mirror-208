@@ -1,0 +1,70 @@
+Metadata-Version: 2.1
+Name: smpp-gateway
+Version: 1.0.4
+Summary: 
+Home-page: https://github.com/caktus/rapidsms-smpp-gateway
+License: MIT
+Author: Caktus Group
+Author-email: team@caktusgroup.com
+Requires-Python: >=3.8
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: RapidSMS (>=2.0)
+Requires-Dist: django (>=3.2,<4.0)
+Requires-Dist: psycopg2 (>=2.8)
+Requires-Dist: smpplib (>=2.2)
+Project-URL: Repository, https://github.com/caktus/rapidsms-smpp-gateway
+Description-Content-Type: text/markdown
+
+# rapidsms-smpp-gateway
+
+A [RapidSMS](https://rapidsms.readthedocs.io/en/latest/) SMPP gateway.
+
+## Management commands
+
+### `smpp_client`
+
+Start an SMPP client instance:
+
+```shell
+python manage.py smpp_client smppsim
+```
+
+Example configuration using environment variables:
+
+```shell
+export PGDATABASE=libya_elections
+export DATABASE_URL=postgresql://localhost/$PGDATABASE
+export SMPPLIB_HOST=localhost
+export SMPPLIB_PORT=2775
+export SMPPLIB_SYSTEM_ID=smppclient1
+export SMPPLIB_PASSWORD=password
+export SMPPLIB_SUBMIT_SM_PARAMS='{"foo": "bar"}'
+```
+
+### `listen_mo_messages`
+
+Listen for mobile-originated (MO) messages:
+
+```shell
+python manage.py listen_mo_messages --channel new_mo_msg
+```
+
+## Publish
+
+1. Update `pyproject.toml` with the version number
+2. Update `CHANGES.md` with release notes
+3. Create a new release and tag on GitHub. A `publish` Github Actions workflow is configured to run on tag creation.
+
+Or use Poetry's [publish](https://python-poetry.org/docs/cli/#publish) command:
+
+```sh
+poetry config pypi-token.pypi <get-from-pypi>
+poetry build
+poetry publish
+```
+
