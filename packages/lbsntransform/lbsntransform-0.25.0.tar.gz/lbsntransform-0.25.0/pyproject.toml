@@ -1,0 +1,121 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lbsntransform"
+authors = [{name = "Alexander Dunkel", email = "alexander.dunkel@tu-dresden.de"}]
+license = {text = "GNU GPLv3 or any higher"}
+description = "Location based social network (LBSN) data structure format & transfer tool"
+requires-python = ">=3.8"
+dependencies = [
+    "lbsnstructure>=1.2.0",
+    "protobuf>=4.21.9,<5",
+    "psycopg2-binary",
+    "ppygis3",
+    "shapely<2.0.0",
+    "emoji>=2.0.0",
+    "requests",
+    "geos",
+    "numpy",
+    "requests",
+    "regex",
+]
+dynamic = ["version"]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+Homepage = "https://gitlab.vgiscience.de/lbsn/lbsntransform"
+
+[project.optional-dependencies]
+nltk_stopwords = ["nltk"]
+
+[project.scripts]
+lbsntransform = "lbsntransform.__main__:main"
+
+[tool.semantic_release]
+version_variable = "src/lbsntransform/version.py:__version__"
+version_source = "commit"
+branch = "master"
+build_command = "python -m build"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["README.md"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = [
+    "lbsntransform",
+    "lbsntransform.*",
+]
+namespaces = false
+
+[tool.setuptools.dynamic]
+version = {attr = "lbsntransform/version.__version__"}
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.vscode
+  | _build
+  | buck-out
+  | build
+  | dist
+  | scripts/
+  | mkdocs_env/
+  | lbsntransform_env/
+  | dev/
+  | src/lbsntransform/config/config.py
+)/
+'''
+
+[tool.isort]
+profile = "black"
+known_first_party = ["lbsntransform"]
+line_length = 88
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["src/lbsnstransform", "tests"]
+
+[tool.mypy]
+# Error output
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+show_traceback = true
+pretty = true
+check_untyped_defs = false
+# Warnings
+warn_no_return = true
+warn_redundant_casts = true
+warn_unreachable = true
+files = ["src", "tests"]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.message_control]
+enable = ["c-extension-no-member", "no-else-return"]
+
+[tool.pylint.variables]
+dummy-variables-rgx = "_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_"
+ignored-argument-names = "_.*|^ignored_|^unused_|args|kwargs"
+
+[tool.codespell]
+ignore-words-list = " "

@@ -1,0 +1,46 @@
+site_name: lbsntransform Documentation
+site_url: https://lbsn.vgiscience.org/lbsntransform/docs/
+site_author: Alexander Dunkel
+copyright: CC BY 4.0, Alexander Dunkel, Marc Löchner, vgiscience.org and contributors
+
+repo_url: https://github.com/Sieboldianus/lbsntransform
+site_dir: site
+docs_dir: docs
+
+theme:
+  name: 'readthedocs'
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - python
+    - bash
+  collapse_navigation: true
+  custom_dir: docs/overrides
+
+markdown_extensions:
+    - toc:
+        permalink: true
+    - markdown_include.include:
+        base_path: docs
+    - admonition
+    - fenced_code
+    - sane_lists
+
+plugins:
+    - search
+    - git-revision-date-localized
+
+nav:
+    - Introduction: index.md
+    - User Guide:
+        - Installation: setup.md
+        - Use Cases: use-cases.md
+        - Input Types and Parameters: input-types.md
+        - Mappings: mappings.md
+        - Command Line Interface: argparse/args.md
+        - Examples: argparse/examples.md
+        - Developers: package.md
+        - API Reference (external): api/lbsntransform_.html
+        - Additional resources: resources.md
+        - Changelog: changelog.md
+    - About: about.md

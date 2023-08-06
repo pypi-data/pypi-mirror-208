@@ -1,0 +1,32 @@
+# For convenience, this conda yml can be used to create a
+# dev environment with the latest dependencies. Use with:
+# conda env create -n lbsntransform_dev -f environment_dev.yml
+# conda activate lbsntransform_dev
+# pip install --no-deps --editable .
+
+name: lbsntransform
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.5
+  - pip
+  - autopep8
+  - emoji>=2.0.0
+  - numpy
+  - protobuf>=4.21.9,<5
+  - psycopg2
+  - pylint
+  - pytest
+  - shapely<2.0.0
+  - requests
+  - bitarray
+  - nltk
+  - regex
+  - pip:
+    - pylint-exit
+    - ppygis3
+    - lbsnstructure>=1.2.0
+    - pytest-mypy
+    - geos
+

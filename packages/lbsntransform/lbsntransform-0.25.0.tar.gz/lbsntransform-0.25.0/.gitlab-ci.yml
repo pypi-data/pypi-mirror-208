@@ -1,0 +1,129 @@
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  # see
+  # https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies
+  paths:
+    - .cache/pip
+
+stages:
+  - test
+  - artifacts
+  - mkdocs
+  - deploy
+
+test:
+  image: registry.gitlab.vgiscience.org/tud_ifk/miniconda-cidefault
+  before_script:
+    # initialize conda shell
+    - conda init bash
+    - source ~/.bashrc
+    # activate default ci_env from registry image
+    # contains anybadge
+    - conda activate ci_env
+    - pip install --editable .[nltk_stopwords]
+    - python -c 'import nltk;nltk.download("stopwords")'
+  stage: test
+  script:
+    # perform integration test
+    - python tests/test_integration_yfcc.py
+
+artifacts:
+  image: registry.gitlab.vgiscience.org/tud_ifk/miniconda-cidefault
+  before_script:
+    # initialize conda shell
+    - conda init bash
+    - source ~/.bashrc
+    # activate default ci_env from registry image
+    # contains anybadge
+    - conda activate ci_env
+    # install lbsntransfrom
+    - pip install --editable .[nltk_stopwords]
+    # install additional packages
+    # needed in lbsntransform ci job
+    - python -c 'import nltk;nltk.download("stopwords")'
+    - pip install git+https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.vgiscience.de/tud_ifk/argdown.git
+    - pip install pylint bitarray pdoc3 pylint-exit
+  stage: artifacts
+  script:
+    # perform integration test
+    - python tests/test_integration_yfcc.py
+    # copy changelog
+    - cp CHANGELOG.md docs/changelog.md
+    # argparse to markdown conversion
+    # for mkdocs args page
+    - python docs/argparse/argparse_doc.py
+    - argdown --truncate-help parse_args.py > docs/argparse/args.md
+    - python docs/argparse/argparse_after_doc.py
+    # to enable all warnings during ci doc generation
+    # - export PYTHONWARNINGS='error::UserWarning'
+    - pdoc --config show_type_annotations=True --template-dir docs/apidoc/ --html --output-dir docs/api/ lbsntransform
+    # create badges
+    - pylint --output-format=text lbsntransform | tee pylint.txt || pylint-exit $?
+    - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
+    - echo "Pylint score was $score"
+    - anybadge -l pylint --value=$score --file=pylint.svg 2=red 4=orange 9=yellow 10=green
+    - version_var=$(sed -n "s#__version__ =\s*'\(.*\)'#\1#p" src/lbsntransform/version.py)
+    - echo "Version for badges $version_var"
+    - anybadge -l version --value="${version_var}" --file=pypi.svg --color=green
+    - anybadge -l mkdocs --value="Documentation" --file=documentation.svg --color=green
+  artifacts:
+    paths:
+      # quote because * is a
+      # special character in YAML
+      - '*.svg'
+      - docs/argparse/args.md
+      - docs/api/
+      - docs/changelog.md
+  rules:
+    # always execute on master or ci-test
+    - if:
+        $CI_COMMIT_BRANCH == "master" ||
+        $CI_COMMIT_BRANCH == "ci-test"
+
+pages:
+  stage: mkdocs
+  image: registry.gitlab.vgiscience.org/tud_ifk/alpine-mkdocs
+  script:
+    - mkdir -p public/docs/api/
+    - cp *.svg "public/"
+    # build docs
+    - mkdocs build
+    - mv site/* "public/docs/"
+    # copy pdoc3 compiled API ref
+    - mv docs/api/lbsntransform/* "public/docs/api/"
+  artifacts:
+    name: pages
+    paths:
+    - public
+  rules:
+    # only execute on master
+    - if:
+        $CI_COMMIT_BRANCH == "master"
+
+docker-image-branch:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull --tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -f docker/Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+  rules:
+    - if: $CI_COMMIT_BRANCH != "master"
+
+docker-image:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull --tag "$CI_REGISTRY_IMAGE" -f docker/Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
