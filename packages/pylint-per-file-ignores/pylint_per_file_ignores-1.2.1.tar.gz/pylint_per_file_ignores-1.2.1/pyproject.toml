@@ -1,0 +1,36 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool]
+
+[tool.black]
+max_line_length = 99
+quiet = true
+
+[tool.isort]
+profile = "black"
+quiet = true
+
+[tool.poetry]
+authors = ["Christopher Pickering <christopher@going.bg>"]
+description = "A pylint plugin to ignore error codes per file."
+license = "MIT"
+name = "pylint-per-file-ignores"
+readme = "readme.md"
+repository = "https://github.com/christopherpickering/pylint-per-file-ignores.git"
+version = "1.2.1"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+tomli = {version = "^2.0.1", python = "<3.11"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.0.0"
+flake8 = "6.0.0"
+isort = "^5.10.1"
+pylint = "^2.15.8"
+tox = "^4.0.8"
+
+[tool.pylint.messages_control]
+disable = "C0116,C0301,C0114,R0901,C0115,R0903,W0201,C0103"
