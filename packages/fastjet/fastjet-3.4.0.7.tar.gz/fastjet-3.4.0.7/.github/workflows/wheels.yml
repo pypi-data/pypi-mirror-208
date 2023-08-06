@@ -1,0 +1,109 @@
+name: wheels
+
+on:
+  workflow_dispatch:
+  release:
+    types:
+      - published
+
+jobs:
+  make_sdist:
+    name: Make SDist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build SDist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist/*.tar.gz
+
+  build_wheels:
+    name: "Build wheel: ${{ matrix.python }}, ${{ matrix.arch }} on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python: [37, 38, 39, 310, 311]
+        os: [ubuntu-latest, macos-latest]
+        arch: [auto64]
+        include:
+          - python: 37
+            os: ubuntu-latest
+            arch: aarch64
+          - python: 38
+            os: ubuntu-latest
+            arch: aarch64
+          - python: 39
+            os: ubuntu-latest
+            arch: aarch64
+          - python: 310
+            os: ubuntu-latest
+            arch: aarch64
+          - python: 311
+            os: ubuntu-latest
+            arch: aarch64
+
+    steps:
+      - uses: docker/setup-qemu-action@v2.1.0
+        if: matrix.arch != 'auto64'
+        with:
+         platforms: arm64
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install compiler tools on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install make gcc automake swig gmp mpfr boost
+          export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+      - uses: pypa/cibuildwheel@v2.12.3
+        env:
+          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_BUILD: cp${{ matrix.python }}-*
+          CIBW_BUILD_VERBOSITY: 2
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          path: wheelhouse/*.whl
+
+  test_sdist:
+    needs: [make_sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist/
+
+      - name: Install extra deps on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libboost-dev swig autoconf libtool
+
+      - name: test sdist
+        run: python -m pip install dist/*.tar.gz
+
+  upload_all:
+    needs: [build_wheels, make_sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@v1.8.6
+        with:
+          user: __token__
+          # Remember to generate this and set it in "GitHub Secrets"
+          password: ${{ secrets.pypi_password }}

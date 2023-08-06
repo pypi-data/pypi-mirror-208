@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pre-commit:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v4
+      - uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --hook-stage manual --all-files
+
+  checks:
+    name: Check Python ${{ matrix.python-version }}, ${{ matrix.arch }} on ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.7", "3.11"]
+        runs-on: [ubuntu-latest, macos-latest]
+        arch: [auto64]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install compiler tools on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install make gcc automake swig gmp mpfr boost
+          export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+      - name: Install extra deps on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libboost-dev libmpfr-dev swig autoconf libtool
+
+      - name: Install package
+        run: |
+          echo $PATH
+          python -m pip install '.[test]' -v
+
+      - name: Test package
+        run: python -m pytest -vv -rs -Wd
+
+  test_wheels:
+    name: "Wheel: ${{ matrix.python }}, ${{ matrix.arch }} on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: [311]
+        arch: [auto64]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: docker/setup-qemu-action@v2.1.0
+        if: matrix.arch != 'auto64'
+        with:
+         platforms: all
+
+      - name: Install compiler tools on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install make gcc automake swig gmp mpfr boost
+          export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+      - uses: pypa/cibuildwheel@v2.12.3
+        env:
+          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_BUILD: cp${{ matrix.python }}-*
+          CIBW_BUILD_VERBOSITY: 2
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          path: wheelhouse/*.whl
+
+  pass:
+    needs: [pre-commit, checks, test_wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All jobs passed"

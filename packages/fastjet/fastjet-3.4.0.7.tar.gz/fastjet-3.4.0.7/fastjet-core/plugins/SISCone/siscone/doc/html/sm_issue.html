@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>SISCone: split-merge issues</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<!------------>
+<!-- Header -->
+<!------------>
+<h1 align="center">SISCone Documentation</h1>
+<p>
+<a name="top"></a>
+<h3 align="center">Version 3.0.5</h3>
+</p>
+<hr size="1">
+
+<h2> 
+The split-merge variable issue:
+</h2>
+
+SISCone is intended to be a cone algorithm that is as close as
+possible to the <a
+href="http://xxx.lanl.gov/abs/hep-ex/0005012">Tevatron run II cone
+algorithm</a>, while also being infrared (IR) safe.
+
+<p> Though the main IR difficulties are related to the search for
+stable cones, and are solved by a seedless procedure, it turns out
+that the split-merge phase of the algorithm is also non-trivial.
+The Tevatron run II split-merge procedure requires that "protojets" be
+considered in a sequence determined by some ordering variable. A
+change in the sequence can leads to a change in the final jets.
+
+When trying to find the best suited variable for the ordering of protojets in
+the split--merge process of SISCone, we met a couple of physical issues.
+Their history goes as follows:
+<ul>
+<li> the <i>E<sub>t</sub></i> variable, suggested e.g. in the Tevatron Run II
+specification of the midpint algorithm, is not boost invariant.</li>
+
+<li> the <i>p<sub>t</sub></i> variable, used e.g. in practical midpoint
+implementations (except for MCFM), suffers from problems with two back-to-back
+protojets. Due to momentum conservation, they can have the same <i>p<sub>t</sub></i>.
+Their ordering is thus random and can be modified by the addition of a soft
+particle, leading to an IR unsafety problem.</li>
+
+
+<li> the <i>m<sub>t</sub></i> variable does not directly suffer from that
+problem:  two back-to-back jets only overlap if they cover a region in
+the eta-phi plane. In that case, their values of <i>m<sub>t</sub></i> will
+differ and the ordering is safe. This choice (the default one for
+SISCone 1.1.0) suffers unfortunately from one remaining issue: though
+<i>m<sub>t</sub></i> works for pure QCD, in the case of two back-to-back
+narrow-decay-width unstable particles (e.g. a pair of Higgs bosons), both <i>p<sub>t</sub>
+and </i><i>m<sub>t</sub></i> will be the same. </li>
+
+<li> As of SISCone 1.1.1, we use <i>pttilde</i>: the p-scheme pt
+(the sum of the moduli of transverse momenta of all particles in the
+protojet ) that interpolates between <i>p<sub>t</sub></i> and
+<i>m<sub>t</sub></i> according to the decay plane of the unstable
+massive particle. This will lift the degeneracy between decays of
+identical pairs of unstable particles, since the phase space for them
+to have identical decay planes vanishes.</li>
+</ul>
+
+<!------------>
+<!-- footer -->
+<!------------>
+<hr size="1">
+<a href="index.html">Home</a><br>
+Contacts: &nbsp;<a href="mailto:soyez@fastjet.fr">Gregory Soyez</a>
+&nbsp;<a href="mailto:gavin.salam@physics.ox.ac.uk">Gavin Salam</a>
+
+</body>
+</html>

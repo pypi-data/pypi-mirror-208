@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>SISCone: Performances</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<!------------>
+<!-- Header -->
+<!------------>
+<h1 align="center">SISCone Documentation</h1>
+<p>
+<a name="top"></a>
+<h3 align="center">Version 3.0.5</h3>
+</p>
+<hr size="1">
+
+<h2 align="center">Execution time</h2>
+This figure shows the execution time as a function of the number of particles and compares it with other algorithms.
+It has been obtained on a 3.4 GHz Pentium&reg; IV processor.
+<p>
+<img align="center" src="timings.png">
+</p>
+
+<hr size="1">
+
+<h2 align="center">Algorithm complexity</h2>
+<p>
+SISCone's complexity is dominated by the search for stable cones. If N is the number of particles in the event and n the number of particles in a cone, the complexity goes like
+</p>
+<p>
+&nbsp; &nbsp; &nbsp; &nbsp;N n log(n)
+</p>
+<p>
+dominated by the ordering of the O(n) points in the vicinity of each particle.
+</p>
+<p>
+Note: for the version of SISCone with progressive-removal, the stable-sone search has to be repeated O(N/n) times, yielding a O(N<sup>2</sup>log(n)) complexity.
+</p>
+
+<!------------>
+<!-- footer -->
+<!------------>
+<hr size="1">
+<a href="index.html">Home</a><br>
+Contacts: &nbsp;<a href="mailto:soyez@fastjet.fr">Gregory Soyez</a>
+&nbsp;<a href="mailto:gavin.salam@physics.ox.ac.uk">Gavin Salam</a>
+</body>
+</html>

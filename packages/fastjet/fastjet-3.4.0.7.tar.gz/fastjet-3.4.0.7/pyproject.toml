@@ -1,0 +1,25 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "setuptools_scm[toml]>=3.4",
+    "pybind11>=2.6.1",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+skip = "pp*"
+test-extras = "test"
+test-command = "pytest {project}/tests"
+manylinux-x86_64-image = "manylinux2014"
+manylinux-i686-image = "manylinux2014"
+
+[tool.cibuildwheel.linux]
+before-all = [
+    "yum update -y",
+    "yum install -y mpfr-devel",
+    "curl -L https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2 -o boost_1_80_0.tar.bz2",
+    "tar --bzip2 -xf boost_1_80_0.tar.bz2",
+    "mv boost_1_80_0/boost /usr/include/boost",
+]
+# Skip musllinux builds for the moment
+skip = "*-musllinux_*"
