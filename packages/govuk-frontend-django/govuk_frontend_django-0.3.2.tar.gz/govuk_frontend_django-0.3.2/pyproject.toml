@@ -1,0 +1,55 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "govuk-frontend-django"
+version = "0.3.2"
+description = "Django functionality to help when building a GOV.UK website."
+authors = [
+    "DBT Live Service Team <live.services@digital.trade.gov.uk>",
+    "Cam Lamb <cameron.lamb@digital.trade.gov.uk>",
+    "Sam Dudley <samuel.dudley@digital.trade.gov.uk>",
+]
+license = "MIT"
+readme = "README.md"
+homepage = "https://uktrade.github.io/govuk-frontend-django/"
+repository = "https://github.com/uktrade/govuk-frontend-django/"
+documentation = "https://uktrade.github.io/govuk-frontend-django/"
+packages = [
+    {include = "govuk_frontend_django"},
+    {include = "govuk_frontend_django/py.typed"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.1.7"
+jinja2 = "^3.1.2"
+govuk-frontend-jinja = "2.6.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+pyyaml = "^6.0"
+isort = "^5.12.0"
+autoflake = "^2.0.2"
+mypy = "^1.2.0"
+django-stubs = "^1.16.0"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.1.5"
+mkdocs-minify-plugin = "^0.6.4"
+mkdocs-redirects = "^1.2.0"
+mkdocstrings-python = "^0.9.0"
+pillow = "^9.5.0"
+cairosvg = "^2.7.0"
+mkdocs-tech-docs-template = "^0.0.25"
+mkdocs-awesome-pages-plugin = "^2.8.0"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "settings"
