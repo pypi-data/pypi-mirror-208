@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+{% block head_title %}
+  {{ request.current_page }}
+{% endblock head_title %}
+{% block content %}
+  <div class='flex-grow-1 overflow-auto'>{% placeholder "content" %}</div>
+{% endblock content %}
