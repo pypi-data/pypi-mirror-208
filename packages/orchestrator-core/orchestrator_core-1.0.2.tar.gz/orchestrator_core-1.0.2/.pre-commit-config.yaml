@@ -1,0 +1,76 @@
+default_language_version:
+  python: python3
+repos:
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.13.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies: [black==23.1.0]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-yaml
+      - id: debug-statements
+      - id: requirements-txt-fixer
+      - id: detect-private-key
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-bandit
+          - flake8-bugbear
+          - flake8-comprehensions
+          - flake8-docstrings
+          - flake8-logging-format
+          - flake8-pep3101
+          - flake8-print
+          - flake8-rst
+          - flake8-rst-docstrings
+          - flake8-tidy-imports
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.2.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - pydantic
+          - types-toml
+          - types-pytz
+          - types-python-dateutil
+          - types-requests
+          - types-Deprecated
+          - types-redis
+          - types-orjson
+          - types-tabulate
+          - strawberry-graphql
+        args:
+          - --no-warn-unused-ignores
+          - --allow-untyped-decorators
+        exclude: (test/.*|migrations/.*)
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-use-type-annotations
+      - id: python-check-mock-methods
+      - id: rst-backticks
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.2
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/andreoliwa/nitpick
+    rev: v0.33.1
+    hooks:
+      - id: nitpick-check

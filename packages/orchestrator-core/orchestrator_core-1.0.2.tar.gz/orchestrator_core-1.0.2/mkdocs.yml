@@ -1,0 +1,102 @@
+site_name: The Orchestrator Core
+site_description: An extensible workflow engine to manage customer facing resources and resource facing resources.
+site_url: https://workfloworchestrator.org/orchestrator-core
+theme:
+  name: material
+  palette:
+  - scheme: default
+    primary: teal
+    accent: amber
+    toggle:
+      icon: material/lightbulb-outline
+      name: Switch to light mode
+  - scheme: slate
+    primary: teal
+    accent: amber
+    toggle:
+      icon: material/lightbulb
+      name: Switch to dark mode
+  features:
+  - search.suggest
+  - search.highlight
+  - navigation.sections
+  - navigation.tracking
+  - navigation.instant
+  - navigation.indexes
+  - content.code.annotate
+plugins:
+  - search
+  - render_swagger
+  - include-markdown
+copyright: Copyright Workfloworchestrator; 2020-2021
+repo_name: workfloworchestrator/orchestrator-core
+repo_url: https://github.com/workfloworchestrator/orchestrator-core
+edit_uri: edit/main/docs/
+markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.inlinehilite
+  - attr_list
+  - codehilite
+
+extra_css:
+  - 'css/termynal.css'
+  - 'css/custom.css'
+extra_javascript:
+  - 'js/termynal.js'
+  - 'js/custom.js'
+
+nav:
+  - Orchestrator Core: index.md
+  - Getting Started:
+    - Base Application: getting-started/base.md
+    - Development setup: getting-started/development.md
+  - Architecture:
+    - Architecture; TLDR: architecture/tldr.md
+    - Orchestration Philosophy: architecture/orchestration/philosophy.md
+    - Internals:
+      - How do Workflows work?: architecture/application/workflow.md
+      - What are tasks?: architecture/application/tasks.md
+      - Validating input through forms: architecture/application/forms.md
+      - Domain Models: architecture/application/domainmodels.md
+    - Documentation:
+      - Command Line Interface: architecture/application/cli.md
+      - Web sockets: architecture/application/websockets.md
+      - Api Docs: architecture/application/api.md
+      - Scaling: architecture/application/scaling.md
+      - Python version: architecture/application/python.md
+  - Workshops:
+    - Beginner:
+      - Overview: workshops/beginner/overview.md
+      - Installation:
+        - Manual:
+          - Debian: workshops/beginner/debian.md
+          - MacOS: workshops/beginner/macos.md
+        - Docker compose: workshops/beginner/docker.md
+      - Start applications: workshops/beginner/start-applications.md
+      - Products:
+        - Scenario: workshops/beginner/scenario.md
+        - Domain models: workshops/beginner/domain-models.md
+        - Database migration: workshops/beginner/database-migration.md
+      - Workflows:
+        - Introduction: workshops/beginner/workflow-introduction.md
+        - Register workflows: workshops/beginner/register-workflows.md
+        - Input forms: workshops/beginner/input-forms.md
+        - Create UserGroup: workshops/beginner/create-user-group.md
+        - Modify UserGroup: workshops/beginner/modify-user-group.md
+        - Terminate UserGroup: workshops/beginner/terminate-user-group.md
+        - Create User: workshops/beginner/create-user.md
+        - Modify User: workshops/beginner/modify-user.md
+        - Terminate User: workshops/beginner/terminate-user.md
+      - Explore: workshops/beginner/explore.md
+  - Contributing:
+    - Guidelines: contributing/guidelines.md
+    - Testing: contributing/testing.md
