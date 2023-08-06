@@ -1,0 +1,172 @@
+.\" SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+.\" SPDX-License-Identifier: BSD-2-Clause
+.Dd May 13, 2023
+.Dt TOX-STAGES 1
+.Os
+.Sh NAME
+.Nm tox-stages
+.Nd run Tox environments in groups, stop on failure
+.Sh SYNOPSIS
+.Nm
+.Op Fl f Ar filename
+.Cm available
+.Nm
+.Op Fl f Ar filename
+.Cm run
+.Op Fl -arg Ar arg... | Fl A Ar arg...
+.Op Fl -parallel Ar spec | Fl p Ar spec
+.Op Ar stage...
+.Sh DESCRIPTION
+The
+.Nm
+tool is used to run Tox test environments in several
+stages, one or more environments running in parallel at each stage.
+If any of the test environments run at some stage shoud fail,
+.Nm
+will stop, not run anything further, and exit with
+a non-zero exit code.
+This allows quick static check tools like e.g.
+.Cm ruff
+to stop the testing process early, and also allows scenarios like running
+all the static check tools before the package's unit or functional
+tests to avoid unnecessary failures on simple errors.
+.Sh TAGGING TOX TEST ENVIRONMENTS
+The
+.Nm
+tool expects to be able to invoke an installation of
+Tox that will load the
+.Cm tox_trivtags
+plugin module distributed as part of
+the
+.Nm test-stages
+library.
+This module will add a
+.Va tags
+list of strings to the definition of each
+Tox environment; those tags can be specified in the
+.Pa tox.ini
+file as follows:
+.Pp
+.Dl [testenv:format]
+.Dl skip_install = True
+.Dl tags =
+.Dl "  check"
+.Dl "  format"
+.Dl deps =
+.Dl "  ..."
+.Sh SUBCOMMANDS
+.Ss available - can the tox-stages tool be run on this system
+The
+.Nm
+.Cm available
+subcommand exits with a code of zero (indicating success) if there is
+a suitable version of Tox installed in the same Python execution environment
+as the
+.Nm
+tool itself.
+.Ss run - run some Tox environments in stages
+The
+.Nm
+.Cm run
+subcommand starts the process of running Tox test
+environments, grouped in stages.
+If any of the test environments run at some stage shoud fail,
+.Nm
+will stop, not run anything further, and exit with
+a non-zero exit code.
+.Pp
+The
+.Cm run
+subcommand accepts the following options:
+.Bl -tag -width indent
+.It Fl -arg Ar argument | Fl A Ar argument
+Pass an additional command-line argument to each Tox invocation.
+This option may be specified more than once, and the arguments will be
+passed in the order given.
+.It Fl -parallel Ar spec | Fl p Ar spec
+Specify which stages to run in parallel.
+The
+.Ar spec
+parameter is a list of stage indices (1, 2, etc.) or
+ranges (4-6); the tests in the specified stages will be run in
+parallel, while the tests in the rest of the stages will not.
+By default, all tests are run in parallel.
+The special values
+.Dq ""
+(an empty string),
+.Dq 0
+(a single character, the digit zero), or
+.Dq none
+will be treated as an empty set, and
+no tests will be run in parallel.
+.El
+.Pp
+The positional arguments to the
+.Cm run
+subcommand are interpreted as
+test stage specifications as described in
+the parse-stages library's documentation.
+If no stage specifications are given on the command line,
+.Nm
+will read the
+.Pa pyproject.toml
+file in the same
+directory as the
+.Pa tox.ini
+file, and will look for a
+.Va tool.test-stages.stages
+list of strings to use.
+.Sh FILES
+If no stage specifications are given on the command line,
+.Nm
+will read the
+.Pa pyproject.toml
+file in the same
+directory as the
+.Pa tox.ini
+file, and will look for a
+.Va tool.test-stages.stages
+list of strings to use.
+.Sh EXAMPLES
+Run all the stages as defined in the
+.Pa pyproject.toml
+ file's
+.Va tool.test-stages.stages
+parameter:
+.Pp
+.Dl tox-stages run
+.Pp
+Run a specific set of stages, passing
+.Ar -- -k slug
+as additional
+Tox arguments so that e.g. a
+.Cm pytest
+environment that uses the Tox
+.Va {posargs}
+variable may only run a selected subset of tests:
+.Pp
+.Dl tox-stages -A -- -A -k -A slug @check unit-tests
+.Pp
+Execute a somewhat more complicated recipe:
+.Bl -tag -width \-
+.It -
+first, run all test environments with names containing "ruff" in parallel
+.It -
+then, run the rest of the test environments marked with the "check" tag,
+but not marked with the "manual" tag, one by one
+.It -
+then, run all test environments with names containing "unit" in parallel
+.It -
+finally, run the rest of the test environments marked with the "tests" tag,
+but not marked with the "manual" tag, in parallel
+.El
+.Pp
+.Dl tox-stages -p 1,3-4 ruff '@check and not @manual' unit '@tests and not @manual'
+.Sh AUTHORS
+The
+.Nm
+tool, along with its documentation, is developed as part of
+the
+.Nm test-stages library by
+.An Peter Pentchev
+.Aq roam@ringlet.net .

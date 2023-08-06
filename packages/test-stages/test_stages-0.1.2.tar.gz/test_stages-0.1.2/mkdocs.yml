@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: BSD-2-Clause
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - toc.integrate
+    - toc.follow
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+site_name: test-stages
+repo_url: https://gitlab.com/ppentchev/test-stages
+repo_name: test-stages
+site_author: ppentchev
+site_url: https://devel.ringlet.net/devel/test-stages/
+site_dir: site/docs
+nav:
+  - 'index.md'
+  - 'Changelog': 'changes.md'
+  - 'Command-line tools': 'cmd/index.md'
+  - 'The tox-stages tool': 'cmd/tox-stages.md'
+markdown_extensions:
+  - toc:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite:
+  - pymdownx.superfences:
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            heading_level: 3
+            show_root_heading: true
+  - search
+watch:
+  - 'src/test_stages'
+  - 'src/tox_trivtags'

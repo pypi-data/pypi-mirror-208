@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: BSD-2-Clause
+
+[tool.ruff]
+target-version = "py38"
+line-length = 100
+select = []
+ignore = [
+  # We know what "self" is... I hope
+  "ANN101",
+
+  # We let the "black" tool take care of most of the formatting
+  "COM812",
+
+  # No blank lines before the class docstring, TYVM
+  "D203",
+
+  # The multi-line docstring summary starts on the same line
+  "D213",
+]
+
+[tool.ruff.isort]
+force-single-line = true
+known-first-party = ["test_stages", "tox_trivtags"]
+lines-after-imports = 2
+single-line-exclusions = ["collections.abc", "typing"]
+
+[tool.ruff.per-file-ignores]
+# The self-test tool uses subprocess responsibly.
+"src/selftest/__main__.py" = ["S603", "S607"]
+
+# mypy needs a couple of assertions, and some of them will be a bit unwieldy if
+# broken down into multiple statements.
+"src/tox_trivtags/parse.py" = ["PT018", "S101"]
+
+# This is a unit test suite, it can output diagnostic messages.
+# Also, we try to use subprocess responsibly.
+"unit_tests/**.py" = ["S101", "S603", "S607", "T201"]

@@ -1,0 +1,118 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: BSD-2-Clause
+
+[build-system]
+requires = [
+  "hatchling >= 1.8, < 2",
+  "hatch-requirements-txt >= 0.3, < 0.5",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "test_stages"
+description = "Group Tox, Nox, etc environments into stages, run them in parallel"
+readme = "README.md"
+license = {text = "BSD-2-Clause"}
+requires-python = ">= 3.8"
+classifiers = [
+	"Development Status :: 4 - Beta",
+	"Environment :: Console",
+  "Framework :: tox",
+  "Intended Audience :: Developers",
+  "License :: DFSG approved",
+  "License :: Freely Distributable",
+  "License :: OSI Approved",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: POSIX",
+  "Operating System :: Unix",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Testing :: Unit",
+  "Topic :: Utilities",
+  "Typing :: Typed",
+]
+dynamic = ["dependencies", "version"]
+
+[[project.authors]]
+name = "Peter Pentchev"
+email = "roam@ringlet.net"
+
+[project.entry-points.tox]
+trivtags = "tox_trivtags"
+
+[project.optional-dependencies]
+tox = ["tox >= 3, < 4"]
+
+[project.scripts]
+tox-stages = "test_stages.tox_stages.__main__:main"
+
+[project.urls]
+Homepage = "https://devel.ringlet.net/devel/test-stages"
+Changes = "https://devel.ringlet.net/devel/test-stages/changes/"
+"Issue Tracker" = "https://gitlab.com/ppentchev/test-stages/-/issues"
+"Source Code" = "https://gitlab.com/ppentchev/test-stages"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/test_stages", "src/tox_trivtags"]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements/install.txt"]
+
+[tool.hatch.version]
+path = "src/test_stages/__init__.py"
+
+[tool.black]
+target-version = ["py38", "py39", "py310", "py311"]
+line-length = 100
+
+[tool.mypy]
+strict = true
+python_version = "3.8"
+
+# This is the list of the Pylint 2.16.1 default plugins.
+[tool.pylint]
+py-version = "3.8"
+load-plugins = [
+  "pylint.extensions.bad_builtin",
+  "pylint.extensions.broad_try_clause",
+  "pylint.extensions.check_elif",
+  "pylint.extensions.code_style",
+  # "pylint.extensions.comparetozero",  # clarity
+  "pylint.extensions.comparison_placement",
+  "pylint.extensions.confusing_elif",
+  "pylint.extensions.consider_refactoring_into_while_condition",
+  "pylint.extensions.consider_ternary_expression",
+  "pylint.extensions.dict_init_mutate",
+  "pylint.extensions.docparams",
+  "pylint.extensions.docstyle",
+  "pylint.extensions.dunder",
+  "pylint.extensions.empty_comment",
+  "pylint.extensions.emptystring",
+  "pylint.extensions.eq_without_hash",
+  "pylint.extensions.for_any_all",
+  "pylint.extensions.magic_value",
+  "pylint.extensions.mccabe",
+  "pylint.extensions.no_self_use",
+  "pylint.extensions.overlapping_exceptions",
+  "pylint.extensions.private_import",
+  "pylint.extensions.redefined_loop_name",
+  "pylint.extensions.redefined_variable_type",
+  "pylint.extensions.set_membership",
+  "pylint.extensions.typing",
+  "pylint.extensions.while_used",
+]
+
+[tool.pylint.main]
+disable = [
+  "consider-using-assignment-expr",
+]
+
+[tool.test-stages]
+stages = ["ruff and not @manual", "@check and not @manual", "@tests and not @manual"]
