@@ -1,0 +1,19 @@
+{% load static wagtailcore_tags django_auxiliaries_tags tour_guide_tags bibster_tags %}
+{% define_anchor 'section' 'references' level=0 as references_anchor_id %}
+<section id="{{ references_anchor_id }}">
+<header>
+<h2>References</h2>
+</header>
+<ol class="reference-list">
+{% for child_block in value %}
+{% format_reference_label child_block.value as anchor_label %}
+{% concat 'ref-' forloop.counter as anchor_identifier %}
+{% define_anchor 'ref' anchor_identifier level=0 label_prefix=anchor_label as anchor_id %}
+<li id="{{ anchor_id }}" class="reference">
+{% if label_references %}<span class="reference-label">{% label_anchor 'ref' anchor_identifier %}</span>{% endif %}
+{% format_reference child_block.value %}
+</li>
+{% endfor %}
+</ol>
+</section>
+

@@ -1,0 +1,9 @@
+{% load static wagtailcore_tags tour_guide_tags bibster_tags %}
+{% if value.category == 'ruminate:aside' %}
+<aside class="note aside">
+{% include_block value.text %}
+</aside>
+{% elif value.category == 'ruminate:endnote' %}
+<span class="endnote-label">{% label_anchor 'endnote' value.anchor_identifier %}</span>
+{% include_block value.text %}
+{% endif %}

@@ -1,0 +1,51 @@
+{% load static wagtailcore_tags django_auxiliaries_tags %}
+<!DOCTYPE html>
+<html class="no-js {% block html_class %}{% endblock %}" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+                {% if article.seo_title %}{{ article.seo_title }}{% else %}{{ article.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+                {% wagtail_site as current_site %}
+                {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% endblock %}
+        </title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% include_app_support container_element='head' %}
+
+        <style type="text/css">
+
+            main {
+                width: 100vw;
+                height: 100vh;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+                transform: translate(0px, 0px);
+                /*
+                padding-top: 5vh;
+                padding-bottom: 5vh;
+                */
+            }
+
+        </style>
+
+        {% block extra_css %}
+        {% endblock %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+
+        <main>
+        {% block content %}{% endblock %}
+        </main>
+
+        {% include_app_support container_element='body' %}
+
+        {% block extra_js %}
+        {% endblock %}
+    </body>
+</html>

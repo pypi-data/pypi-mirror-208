@@ -1,0 +1,12 @@
+{% load static wagtailcore_tags %}
+<article {% if self.block.meta.classname %}class="{{ self.block.meta.classname }}"{% endif %}>
+{% include_block value.intro %}
+{% include_block value.boilerplate %}
+{% include_block value.content %}
+{% if value.endnotes|length > 0 %}
+{% include "ruminate/article_endnotes.html" with value=value.endnotes %}
+{% endif %}
+{% if value.references %}
+{% include_block value.references %}
+{% endif %}
+</article>

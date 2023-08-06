@@ -1,0 +1,39 @@
+{% extends article.block.child_blocks.authors.meta.template %}
+{% load wagtailcore_tags %}
+
+{% block name_outer_open_tag %}<li>{% endblock %}
+{% block name_outer_close_tag %}</li>{% endblock %}
+{% block name_separator %}{% if not all_authors_have_visual %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block person_name %}
+{% if all_authors_have_visual %}
+{% include_block article.boilerplate.author_visual with content=stream_child.value.identify_with.portrait.value scale_factor=author_visual_scale_factor %}
+<span>{{ block.super }}</span>
+{% else %}
+<span>{{ block.super }}</span>
+{% endif %}
+{% endblock %}
+
+{% block organisation_name %}
+{% if all_authors_have_visual %}
+{% include_block article.boilerplate.author_visual with content=stream_child.value.identify_with.logo.value scale_factor=author_visual_scale_factor %}
+<span>{{ block.super }}</span>
+{% else %}
+<span>{{ block.super }}</span>
+{% endif %}
+{% endblock %}
+
+{% block list_close_tag %}
+{{ block.super }}
+<div class="publication-dates">
+{% if article.last_published_at == article.first_published_at %}
+<span class="date">Published <span class="date"><span class="date-day-month">{{ article.first_published_at|date:"j F" }}</span> <span class="date-year">{{ article.first_published_at|date:"Y" }}</span></span></span>
+{% else %}
+    <span>Last updated <span class="date"><span class="date-day-month">{{ article.last_published_at|date:"j F" }}</span> <span class="date-year">{{ article.first_published_at|date:"Y" }}</span></span>,</span><span> first published <span class="date"><span class="date-day-month">{{ article.first_published_at|date:"j F" }}</span> <span class="date-year">{{ article.first_published_at|date:"Y" }}</span></span>.</span>
+{% endif %}
+</div>
+<div class="keywords">
+<label>Keywords:</label>
+{% include_block article.tags %}
+</div>
+{% endblock %}
