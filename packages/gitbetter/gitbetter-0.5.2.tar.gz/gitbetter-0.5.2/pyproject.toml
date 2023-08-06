@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gitbetter"
+description = "Custom git shell to type less and commit more."
+version = "0.5.2"
+requires-python = ">=3.10"
+dependencies = ["argshell", "pathier", "pytest"]
+readme = "README.md"
+keywords = ["git", "shell", "cli", "terminal", "commit"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    ]
+
+[[project.authors]]
+name = "Matt Manes"
+email = "mattmanes@pm.me"
+
+[project.urls]
+"Homepage" = "https://github.com/matt-manes/gitbetter"
+"Documentation" = "https://github.com/matt-manes/gitbetter/tree/main/docs"
+"Source code" = "https://github.com/matt-manes/gitbetter/tree/main/src/gitbetter"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    ]
+pythonpath = "src"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    ".coverage",
+    ".pytest_cache",
+    ".vscode",
+    "tests",
+    ".gitignore"
+    ]
+[project.scripts]
+gitbetter = "gitbetter.gitbetter:main"
