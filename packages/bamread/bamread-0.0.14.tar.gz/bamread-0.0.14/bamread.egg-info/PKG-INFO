@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: bamread
+Version: 0.0.14
+Summary: Read bam files quickly into dataframes in Python
+Author-email: Endre Bakken Stovner <endbak@pm.me>
+License: MIT
+Project-URL: Homepage, http://github.com/endrebak/bamread
+Keywords: bioinformatics,bam,pysam
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Topic :: Scientific/Engineering
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+
+# bamread
+
+Read bam files quickly into dataframes in Python
+
+## Development
+
+### Development
+
+See [How to Publish an Open-Source Python Package to PyPI](https://realpython.com/pypi-publish-python-package/)
+
+Install
+
+```bash
+pip install .
+```
+
+Create sdist and wheel (requires [build](https://pypa-build.readthedocs.io/en/stable/))
+
+```bash
+python -m build
+```
+
+Check whether the package archives look fine:
+
+```bash
+twine check dist/*
+```
+
+Upload to PyPI test server
+
+```bash
+twine upload -r testpypi dist/*
+```
