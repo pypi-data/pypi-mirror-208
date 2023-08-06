@@ -1,0 +1,9 @@
+# (generated with --quick)
+
+class eval_mode:
+    __doc__: str
+    models: tuple
+    prev_states: list
+    def __enter__(self) -> None: ...
+    def __exit__(self, *args) -> bool: ...
+    def __init__(self, *models) -> None: ...
