@@ -1,0 +1,146 @@
+Metadata-Version: 2.1
+Name: mcmc_statphys
+Version: 0.2.1
+Summary: A library project of Monte Carlo simulation algorithms for some statistical physics models (in particular, the Ising model and its variants).
+Home-page: https://github.com/uynajgi/mcmc_statphys
+Author: Uynaj GI
+Author-email: suquan12148@outlook.com
+License: MIT license
+Keywords: mcmc_statphys
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.6
+License-File: LICENSE
+License-File: AUTHORS.rst
+
+=============
+mcmc_statphys
+=============
+
+
+.. image:: https://img.shields.io/pypi/v/mcmc_statphys.svg
+        :target: https://pypi.python.org/pypi/mcmc_statphys
+
+.. image:: https://img.shields.io/travis/uynajgi/mcmc_statphys.svg
+        :target: https://travis-ci.com/uynajgi/mcmc_statphys
+
+.. image:: https://readthedocs.org/projects/mcmc-statphys/badge/?version=latest
+        :target: https://mcmc-statphys.readthedocs.io/en/latest/?version=latest
+        :alt: Documentation Status
+
+
+
+
+A Python package of Monte Carlo simulation algorithms for some statistical physics models (in particular, the Ising model and its variants).
+
+
+* Free software: MIT license
+* Documentation: https://mcmc-statphys.readthedocs.io.
+
+
+Features
+--------
+
+A simple Ising model simulation.
+
+.. code-block:: python
+
+    >>> import mcmc_statphys as mcsp
+    >>> model = mcsp.model.Ising(12) # 12x12 Ising model
+    >>> algorithm = mcsp.method.Metropolis(model) # Metropolis algorithm
+    >>> uid = algorithm.equil_sample(T=1, max_iter=1000) # sample until equilibrium
+    >>> fig = mcsp.draw.Plot(algorithm) 
+    >>> fig.curve(uid=uid, comlumn='energy') # plot the energy curve
+
+Install
+-------
+
+the latest version of mcmc_statphys: 
+
+.. code-block:: console
+
+    $ pip install mcmc_statphys
+
+Bugs
+----
+
+Please report any bugs that you find `here`_. Or, even better, fork the repository on `GitHub`_ and create a pull request (PR). We welcome all changes, big or small, and we will help you make the PR if you are new to git (just ask on the issue and/or see `CONTRIBUTING`_).
+
+.. _here: https://github.com/uynajgi/mcmc_statphys/issues
+.. _GitHub: https://github.com/uynajgi/mcmc_statphys/
+.. _CONTRIBUTING: https://mcmc-statphys.readthedocs.io/en/latest/contributing.html
+
+Credits
+-------
+
+This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+
+=======
+History
+=======
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+[Unreleased]
+------------
+
+[0.2.1] - 2023-05-17
+---------------------
+
+Fixed
+~~~~~
+
+* Fix the bug of saving `_get_per_magnetization` in `_save_data` in `algorithm`
+
+Added
+~~~~~
+
+* Add moudle `analysis` to analyze the data
+* Add moudle `draw` to draw the figures
+* Add method `setspin` in `model`
+* Add tqmd to show the progress bar
+
+Doc
+~~~
+
+* Add documentation to README
+* Add documentation to Usages
+
+Changed
+~~~~~~~
+
+* Change the methods in the `analysis` module: removed the `Sample` and `ParameterSample` classes, added `Metropolis`, `Wolff`, `Anneal` classes and several methods
+
+[0.1.2] - 2023-05-15
+--------------------
+
+Security
+~~~~~~~~
+
+* Add function annotations to all functions
+* Add type hints to all functions
+* Add type hints to all variables
+* Change `mcmc_statphys.py` to `method.py`
+
+Doc
+~~~
+
+* Add documentation to README
+
+[0.1.1] - 2023-05-14
+--------------------
+
+* First release on PyPI.
