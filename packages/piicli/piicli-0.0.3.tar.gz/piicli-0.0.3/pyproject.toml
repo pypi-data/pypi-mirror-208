@@ -1,0 +1,31 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "piicli"
+version = "0.0.3"
+authors = ["Shubham Dogra <shubham.dogra@pingsafe.com>"]
+description = "A small example package"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+
+[tool.poetry.dependencies]
+PyYAML = "^6.0"
+boto3 = "^1.26.135"
+requests = "^2.30.0"
+
+
+[tool.poetry.scripts]
+piicli = "piicli.main:execute_binary"
+
+[tool.poetry.urls]
+"Homepage" = "https://github.com/pypa/sampleproject"
+"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+
