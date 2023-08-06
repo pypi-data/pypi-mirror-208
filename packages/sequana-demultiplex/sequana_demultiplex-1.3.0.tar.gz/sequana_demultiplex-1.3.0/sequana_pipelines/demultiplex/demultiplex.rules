@@ -1,0 +1,225 @@
+#
+#  This file is part of Sequana software
+#
+#  Copyright (c) 2016-2021 - Sequana Dev Team (https://sequana.readthedocs.io)
+#
+#  Distributed under the terms of the 3-clause BSD license.
+#  The full license is in the LICENSE file, distributed with this software.
+#
+#  Website:       https://github.com/sequana/sequana
+#  Website:       https://github.com/sequana/fastqc
+#  Documentation: http://sequana.readthedocs.io
+#  Documentation: https://github.com/sequana/fastqc/README.rst
+##############################################################################
+"""Sequana demultiplex pipeline
+
+Please see https://github.com/sequana/demultiplex page and wiki for information.
+
+This pipeline is part of Sequana software (https://sequana.readthedocs.io).
+
+You will need bcl2fastq/2.20.0 Please see REAME and wiki on https://github.com/sequana/sequana_demultiplex
+
+http://emea.support.illumina.com/downloads/bcl2fastq-conversion-software-v2-20.html?langsel=/fr/
+"""
+from sequana_pipetools import snaketools as sm
+from sequana_pipetools import PipelineManagerDirectory
+import os
+import json
+import sys
+
+# do not overwrite the snakemake logger !
+from sequana import logger as log
+
+# This must be defined before the include
+configfile: "config.yaml"
+
+sequana_wrapper_branch = "main"
+
+
+# A convenient manager
+manager = PipelineManagerDirectory("demultiplex", config)
+
+
+samplesheet = config['bcl2fastq']['samplesheet_file'].strip()
+
+
+if samplesheet.strip() != "":
+    if os.path.exists(samplesheet) is False:
+        log.error(f"Sample sheet {samplesheet} does not exist")
+        sys.exit(1)
+
+
+# Check the sample sheet
+try:
+    from sequana import iem
+    samplesheet = iem.IEM(samplesheet)
+    samplesheet.validate()
+except Exception as err:
+    log.error(err)
+    log.error("""Your sample sheet seems to be incorrect. Before running the pipeline
+you will have to fix it. You may use 'sequana samplesheet --quick-fix'""")
+    sys.exit(1)
+
+
+rule pipeline:
+    input:
+        "Stats/summary.txt",
+        "undetermined_barcodes.csv",
+        "barcodes.png",
+        "samples.png",
+        "summary.png",
+        ".sequana/rulegraph.svg",
+
+
+rule plot_unknown_barcodes:
+    input: "Stats/Stats.json"
+    output:
+        csv= "undetermined_barcodes.csv",
+        csv20= "undetermined_barcodes_20.csv",
+        png= "barcodes.png"
+    run:
+        from sequana.demultiplex import StatsFile
+        from pylab import savefig
+        import pandas as pd
+
+        s = StatsFile(input[0])
+        df = s.plot_unknown_barcodes()
+        savefig(output.png, dpi=200)
+        df.to_csv(output.csv20)
+
+        # df contains the best 20 undetermined barcode, let us save all of them
+        # for the users.
+        ub = s.data['UnknownBarcodes']
+        df = pd.DataFrame({x['Lane']:x['Barcodes'] for x in ub})
+        df.columns = ["Lane {}".format(x) for x in df.columns]
+        df.to_csv(output.csv)
+
+
+rule check_samplesheet:
+    input: config['bcl2fastq']['samplesheet_file']
+    output: temp("ss.log")
+    shell:
+        """
+        sequana samplesheet --check {input[0]} 2> {output[0]}
+        """
+
+rule bcl2fastq:
+    input:
+        valid_samplesheet="ss.log",
+        samplesheet=config['bcl2fastq']['samplesheet_file']
+    output:
+        "Stats/Stats.json",
+    params:
+        indir= config["general"]["input_directory"],
+        barcode_mismatch=config['bcl2fastq']['barcode_mismatch'],
+        ignore_missing_bcls=config['bcl2fastq']['ignore_missing_bcls'],
+        no_bgzf_compression=config['bcl2fastq']['no_bgzf_compression'],
+        merge_all_lanes=config['bcl2fastq']['merge_all_lanes'],
+        options=config['bcl2fastq']['options']
+    threads: config['bcl2fastq']['threads']
+    resources:
+       **config['bcl2fastq']['resources']
+    wrapper:
+        "main/wrappers/bcl2fastq"
+
+
+rule plot_barplot_samples:
+    input:  "Stats/Stats.json"
+    output:
+        barplot="samples.png"
+    run:
+        from sequana.demultiplex import StatsFile
+        s = StatsFile(input[0])
+        s.barplot_per_sample(filename=output.barplot)
+
+
+rule plot_summary:
+    input: "Stats/Stats.json"
+    output:
+        summary= "Stats/summary.txt",
+        barplot= "summary.png"
+    run:
+        from sequana.demultiplex import StatsFile
+        s = StatsFile(input[0])
+        s.barplot_summary(filename=output.barplot)
+        # save summary at the end because barplot output is not set.
+        s.to_summary_reads(output.summary)
+
+
+rule rulegraph:
+    input:
+        workflow.snakefile
+    output:
+        "rulegraph/rulegraph.dot"
+    params:
+        mapper = {},
+        configname = "config.yaml"
+    wrapper:
+        f"{sequana_wrapper_branch}/wrappers/rulegraph"
+
+
+rule dot2svg:
+    input:
+        "rulegraph/rulegraph.dot"
+    output:
+        ".sequana/rulegraph.svg"
+    container:
+        config['apptainers']['graphviz']
+    shell:
+        """dot -Tsvg {input} -o {output}"""
+
+
+localrules: rulegraph, check_samplesheet
+
+
+onsuccess:
+    shell("chmod -R g+w .")
+    manager.teardown()
+
+    from sequana.modules_report.summary import SummaryModule2
+
+    image1 = SummaryModule2.png_to_embedded_png("dummy", "barcodes.png",
+                style="text-align:center; width:60%; height:40%", 
+                alt="barcodes")
+
+    image2 = SummaryModule2.png_to_embedded_png("dummy", "summary.png",
+                style="width:60%; height:40%", alt="summary")
+
+    image3 = SummaryModule2.png_to_embedded_png("dummy", "samples.png",
+                style="width:60%; height:40%", alt="sample")
+
+
+    intro = """<div>
+<p style="text-align:justify">This report summarizes the demultiplexing of your raw data. Some additional help to interpret the following plots can be found on the pipeline <a href="https://github.com/sequana/sequana_demultiplex">home page</a> and  <a href="https://github.com/sequana/sequana_demultiplex/wiki"> wiki</a>.</p>
+
+<br>
+<hr>
+<br>
+
+<p style="text-align:justify">The following image shows the indices found in the most Undetermined barcodes per lane. An index in excess may indicate a wrong SampleSheet with a potential typo error or simply a missing sample/index. 
+The 20 most represented undetermined barcodes are available <a href="undetermined_barcodes_20.csv">here</a>. A full list of all undetermined indices is also downloaded <a href="undetermined_barcodes.csv">here</a> as a CSV file. The vertical dashed red line indicates the median of the number of reads found in the determined samples. If the bars are well below this vertical line, you data is probably well demultiplexed.</p> 
+<br><br>{} <hr> 
+<p style="text-align:justify">
+The following image shows the ratio of determined/undetermined reads after demultiplexing. Again, an excess of undetermined (larger than 10-20%) may indicate a wrongly labelled sample in your sample sheet.
+</p>  <br><br>{}<hr> 
+<p style="text-align:justify">
+The following image is similar. Instead of showing the index, we show here the number of reads per sample.</p>
+<br>{}
+
+
+</div>""".format(image1, image2, image3)
+
+    from sequana_pipelines import demultiplex
+    data = {
+            "name": manager.name,
+            "stats": "stats.txt", 
+            "rulegraph": ".sequana/rulegraph.svg",
+            "pipeline_version": demultiplex.version
+            }
+    s = SummaryModule2(data, intro=intro)
+
+onerror:
+    from sequana_pipetools.errors import PipeError
+    p = PipeError("demultiplex")
+    p.status()
+
