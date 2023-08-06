@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include "head_common.html.j2" %}
+
+    {% if description -%}
+    <meta name="description" content="{{ description }}">
+    {% endif -%}
+    <meta name="author" content="{{ commits[-1].author.name }}">
+    <meta property="article:published_time" content="{{ commits[-1].iso_time }}">
+    {% if commits|length > 1 -%}
+    <meta property="article:modified_time" content="{{ commits[0].iso_time }}">
+    {% endif -%}
+</head>
+
+<body>
+    <header>
+        {% include "navbar.html.j2" %}
+        <h1>{{ title }}</h1>
+        <p>
+            {% if description -%}
+            {{ description }}<br />
+            {%- endif %}
+            {% include "article_datetimes.html.j2" %}
+        </p>
+    </header>
+    <main>
+        {{ main_content }}
+    </main>
+    {% with author_name=commits[0].author.name %}
+    {% include "footer.html.j2" %}
+    {% endwith %}
+</body>
+
+</html>

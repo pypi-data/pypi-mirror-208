@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include "head_common.html.j2" %}
+    {%- for type, path in feeds.items() %}
+    <link href="{{path}}" type="application/{{type}}+xml" rel="alternate" title="Sitewide {{type}} feed" />
+    {%- endfor %}
+</head>
+
+<body>
+    <header>
+        {% with commits=articles[0].commits %}
+        {% include "navbar.html.j2" %}
+        {% endwith %}
+    </header>
+
+    <main>
+        {%- for article in articles %}
+        <article>
+            <h2><a href="/{{ article.relative_path }}">{{ article.title }}</a></h2>
+            <p>
+                {{ article.description }}
+            </p>
+            {% with commits=article.commits, read_time_minutes=article.read_time_minutes %}
+            {% include "article_datetimes.html.j2" %}
+            {% endwith %}
+        </article>
+        {%- endfor %}
+    </main>
+    {% with author_name=articles[0].commits[0].author.name %}
+    {% include "footer.html.j2" %}
+    {% endwith %}
+</body>
+
+</html>
