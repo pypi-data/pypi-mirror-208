@@ -1,0 +1,88 @@
+Metadata-Version: 2.1
+Name: artistools
+Version: 2023.5.16.2
+Summary: Plotting and analysis tools for the ARTIS 3D supernova radiative transfer code.
+Home-page: https://www.github.com/artis-mcrt/artistools/
+Author: ARTIS Collaboration
+Author-email: ARTIS Collaboration <luke.shingles@gmail.com>
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Framework :: Matplotlib
+Classifier: Intended Audience :: Science/Research
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: argcomplete (>=3.0)
+Requires-Dist: astropy (>=5.2)
+Requires-Dist: black (>=23.3)
+Requires-Dist: coveralls (>=3.3.1)
+Requires-Dist: extinction (>=0.4.6)
+Requires-Dist: lz4 (>=4.3)
+Requires-Dist: matplotlib (>=3.7)
+Requires-Dist: mypy (>=1.2)
+Requires-Dist: numpy (>=1.24)
+Requires-Dist: pandas (>=2.0.1)
+Requires-Dist: polars (>=0.17.8)
+Requires-Dist: pre-commit (>=3.2)
+Requires-Dist: psutil (>=5.9.1)
+Requires-Dist: pyarrow (>=11.0.0)
+Requires-Dist: pynonthermal (>=2021.10.12)
+Requires-Dist: pypdf2 (>=2.10.4)
+Requires-Dist: pytest (>=7.2)
+Requires-Dist: pytest-cov (>=4.0.0)
+Requires-Dist: pytest-runner (>=6.0.0)
+Requires-Dist: python-xz (>=0.5)
+Requires-Dist: pyvista (>=0.36)
+Requires-Dist: PyYAML (>=6.0)
+Requires-Dist: pyzstd (>=0.15)
+Requires-Dist: ruff (>=0.0.260)
+Requires-Dist: scipy (>=1.10)
+Requires-Dist: setuptools-scm[toml] (>=7.1)
+Requires-Dist: types-PyYAML (>=6.0)
+Requires-Dist: wheel (>=0.40)
+
+# Artistools
+
+> Artistools is collection of plotting, analysis, and file format conversion tools for the [ARTIS](https://github.com/artis-mcrt/artis) radiative transfer code.
+
+![GitHub Build and test status](https://github.com/artis-mcrt/artistools/workflows/Build%20and%20test/badge.svg)
+[![codecov](https://codecov.io/gh/artis-mcrt/artistools/branch/main/graph/badge.svg?token=XFlarJqeZd)](https://codecov.io/gh/artis-mcrt/artistools)
+[![CodeFactor](https://www.codefactor.io/repository/github/artis-mcrt/artistools/badge)](https://www.codefactor.io/repository/github/artis-mcrt/artistools)
+
+## Installation
+Requires Python >= 3.9
+
+First clone the repository, for example:
+```sh
+git clone https://github.com/artis-mcrt/artistools.git
+```
+Then from within the repository directory run:
+```sh
+python3 -m pip install -e .
+pre-commit install
+```
+
+## Usage
+Type "artistools" at the command-line to get a full list of commands. The most frequently used commands are:
+- plotartisestimators
+- plotartislightcurve
+- plotartisnltepops
+- plotartisnonthermal
+- plotartisradfield
+- plotartisspectrum
+
+Use the -h option to get a list of command-line arguments for each command. Most of these commands would usually be run from within an ARTIS simulation folder.
+
+## Example output
+
+![Emission plot](https://github.com/artis-mcrt/artistools/raw/main/images/fig-emission.png)
+![NLTE plot](https://github.com/artis-mcrt/artistools/raw/main/images/fig-nlte-Ni.png)
+![Estimator plot](https://github.com/artis-mcrt/artistools/raw/main/images/fig-estimators.png)
+
+## License
+Distributed under the MIT license. See [LICENSE](https://github.com/artis-mcrt/artistools/blob/main/LICENSE) for more information.
+
+[https://github.com/artis-mcrt/artistools](https://github.com/artis-mcrt/artistools)
