@@ -1,0 +1,2 @@
+class VacumException(Exception):
+    pass
