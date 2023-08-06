@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "rome-ways"
+version = "0.1.2"
+description = "A queue framework"
+authors = ["Marco Sievers de Almeida Ximit Gaia <im.ximit@gmail.com>"]
+license = "Apache License 2.0"
+readme = "README.md"
+packages = [
+    {include = "romeways"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+meeseeks-singleton = "^0.4.2"
+romeways_memory_queue = { version = "^0.2.0", optional = true}
+
+[tool.poetry.extras]
+memory = ["romeways_memory_queue"]
+
+[tool.poetry.urls]
+homepage = "https://github.com/CenturyBoys/romeways"
+repository = "https://github.com/CenturyBoys/romeways"
+documentation = "https://github.com/CenturyBoys/romeways"
+
+[tool.poetry.group.dev.dependencies]
+freezegun = "^1.2.2"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^4.0.0"
+pylint = "^2.17.4"
+mutatest = "^3.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
