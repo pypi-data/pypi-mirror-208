@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "gpt-hero-core"
+version = "0.0.4"
+description = "A Multi-Agent System for Auto-GPT-like Task Completion"
+authors = ["lucemia <lucemia@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "gpt_hero_core", from = "src" }]
+include = ["**/py.typed"]
+exclude = ["**/tests"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+stevedore = "^5.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.2.2"
+jinja2 = "^3.1.2"
+pydantic = "^1.10.7"
+typer = "^0.9.0"
+devtools = "^0.11.0"
+tomlkit = "^0.11.8"
+
+[tool.poetry.group.test.dependencies]
+syrupy = "^4.0.1"
+
+[tool.poetry.plugins]
+
+[tool.poetry-dynamic-versioning]
+enable = false
+pattern = "default-unprefixed"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+gpt-hero-scan-plugins = "gpt_hero_core.main:app"
