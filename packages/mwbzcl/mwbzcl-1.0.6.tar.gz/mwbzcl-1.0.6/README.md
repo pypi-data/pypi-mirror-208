@@ -1,0 +1,56 @@
+# Malware Bazaar Client
+This is `bwbzcl`, a Python-based client for the [bazaar.abuse.ch] API.
+
+## Installation
+The most recent release is available on the Python Package Index (PyPI):
+
+```
+pip install mwbzcl
+```
+
+This will also create an executable called `mwbzcl` in the bin directory.
+
+## Example Usage
+After setting the environment variable `MALWARE_BAZAAR_API_KEY` to the value from your [bazaar.abuse.ch] profile, a 
+typical session might look like the following:
+
+```Batch
+$ mwbzcl --json signature AgentTesla | jq -r "select(.tags[] | contains ("""exe""")) | .sha256"
+1f71b476b9450a59fc8b76f1c3e0ddb8eab1dcd34a0cb451b1d1d2f1aa882ab2
+a349d5cf195bf2126c239760539077607db536a57529957577b93ef58a44daf6
+24c871a763e208ba82f7ce7df48fea42c962214954181dc72f17c9112cc74c5e
+8d4cb50c1044910b9464e20dc05f2e61643cce2898348a0ede91330736a831df
+5eb9b4d6d7e12e2b605adb64d332ec0ef196520106ee561a99b528c7f82f49ef
+d69aa1932b2e702e5065ee19da9fc9cf2b05e7dbaa617141b14eaa501a14955e
+
+$ mwbzcl download 1f71b476b9450a59fc8b76f1c3e0ddb8eab1dcd34a0cb451b1d1d2f1aa882ab2
+[INFO] Downloaded 1 file(s), 0 skipped.
+```
+
+## Development
+I recommend creating a virtual environment to set up a local development environment:
+
+```Batch
+python -m venv C:\path\to\venv
+C:\path\to\venv\Scripts\activate.bat
+pip install -r requirements.txt
+SET PYTHONPATH=C:\path\to\repository\
+```
+
+Now you can call `client.py` as you would otherwise call `mwbzcl`.
+
+## Changelog
+
+### 2023-05-13 - Version 1.0.6
+
+* Allow to pass MD5 and SHA1 hashes for downloads:
+```bash
+$ mwbzcl download eb8d50fd5a3afa04fe7fb476f2df9e99 b915056524f1b25937074727cdf5f87c
+[WARNING] Argument "eb8d50fd5a3afa04fe7fb476f2df9e99" not a valid SHA256 hash...
+[WARNING] Translated to "3a60658cdbf960c135f07bd06d36124b5926b85c59a9c01948976b199e3959f8".
+[WARNING] Argument "b915056524f1b25937074727cdf5f87c" not a valid SHA256 hash...
+[ERROR] Query status of "hash_not_found"
+[INFO] Downloaded 1 file(s), 0 skipped.
+```
+
+[bazaar.abuse.ch]: https://bazaar.abuse.ch/
