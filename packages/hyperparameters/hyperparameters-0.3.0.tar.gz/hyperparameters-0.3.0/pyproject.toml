@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "Hyperparameters"
+version = "0.3.0"
+description = "Define your Hyperparameters once and use in argparse, hypertunning libraries, and as strongly-typed attributes in code!"
+authors = ["Oleh Lokshyn <olokshyn@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.urls]
+"Repository" = "https://github.com/olokshyn/Hyperparameters"
+"Bug Tracker" = "https://github.com/olokshyn/Hyperparameters/issues"
+
+[tool.poetry.dependencies]
+python = "~3.10"
+pydantic = "^1.10.7"
+ray = {extras = ["tune"], version = "^2.4.0", optional = true}
+
+[tool.poetry.extras]
+ray = ["ray"]
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.2.0"
+black = "^23.3.0"
+pytest = "^7.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
