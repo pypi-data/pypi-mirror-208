@@ -1,0 +1,213 @@
+# Copyright (c) 2023 Ian C. Good
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+
+[build-system]
+requires = ['hatchling']
+build-backend = 'hatchling.build'
+
+[project]
+name = 'pymap'
+dynamic = ['version']
+authors = [
+    { name = 'Ian Good', email = 'ian@icgood.net' },
+]
+description = 'Lightweight, asynchronous IMAP serving in Python.'
+license = { file = 'LICENSE.md' }
+readme = { file = 'README.md', content-type = 'text/markdown' }
+requires-python = '~=3.11'
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Topic :: Communications :: Email :: Post-Office',
+    'Topic :: Communications :: Email :: Post-Office :: IMAP',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3.11',
+]
+dependencies = [
+    'pysasl ~= 1.0',
+    'proxy-protocol ~= 0.11.1',
+]
+
+[project.optional-dependencies]
+admin = ['pymap-admin[error-details] ~= 0.10.2']
+macaroon = ['pymacaroons ~= 0.13.0']
+redis = ['redis ~= 4.2', 'msgpack ~= 1.0']
+sieve = ['sievelib ~= 1.2']
+swim = ['swim-protocol ~= 0.4.0']
+systemd = ['systemd-python']
+optional = ['hiredis', 'passlib ~= 1.7', 'pid ~= 3.0']
+
+[project.urls]
+'Homepage' = 'https://github.com/icgood/pymap/'
+'API Documentation' = 'https://icgood.github.io/pymap/'
+
+[project.scripts]
+pymap = 'pymap.main:main'
+
+[project.entry-points.'pymap.backend']
+dict = 'pymap.backend.dict:DictBackend'
+maildir = 'pymap.backend.maildir:MaildirBackend'
+redis = 'pymap.backend.redis:RedisBackend [redis]'
+
+[project.entry-points.'pymap.service']
+imap = 'pymap.imap:IMAPService'
+admin = 'pymap.admin:AdminService [admin]'
+managesieve = 'pymap.sieve.manage:ManageSieveService [sieve]'
+swim = 'pymap.cluster.swim:SwimService [swim]'
+
+[project.entry-points.'pymap.filter']
+sieve = 'pymap.sieve:SieveCompiler [sieve]'
+
+[project.entry-points.'pymap.token']
+macaroon = 'pymap.token.macaroon:MacaroonTokens [macaroon]'
+
+[project.entry-points.'pymap.admin.handlers']
+server = 'pymap.admin.handlers.system:SystemHandlers'
+mailbox = 'pymap.admin.handlers.mailbox:MailboxHandlers'
+user = 'pymap.admin.handlers.user:UserHandlers'
+
+[tool.hatch.version]
+path = 'pymap/__about__.py'
+
+[tool.hatch.build]
+exclude = [
+    '/.dockerignore',
+    '/doc',
+    '/docker',
+    '/.github',
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ['pymap']
+
+[tool.mypy]
+files = ['pymap', 'test']
+warn_redundant_casts = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = 'pymap.*' 
+# use strict = true once it works in module overrides
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = 'msgpack.*'
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = 'google.rpc.*'
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = 'pymacaroons.*'
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = 'sievelib.*'
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = 'systemd.*'
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = 'pid.*'
+ignore_missing_imports = true
+
+[tool.ruff]
+select = ['ANN', 'B', 'E', 'F', 'N', 'S', 'W']
+ignore = ['ANN101', 'ANN102', 'ANN401', 'N818', 'S101']
+line-length = 79
+
+[tool.ruff.per-file-ignores]
+"test/*" = ['ANN', 'S105', 'S106']
+"pymap/admin/handlers/*" = ['N802']
+
+[tool.autopep8]
+aggressive = 1
+
+[tool.pytest.ini_options]
+testpaths = 'test'
+asyncio_mode = 'auto'
+norecursedirs = 'doc'
+
+[tool.coverage.report]
+fail_under = 90
+omit = ['*/__about__.py', '*/maildir/*', '*/redis/*', '*/main.py']
+exclude_lines = [
+    'pragma: no cover',
+    'NotImplemented',
+    '^\s*...\s*$',
+    'def __repr__',
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+    'mypy',
+    'pytest',
+    'pytest-asyncio',
+    'pytest-cov',
+    'ruff',
+    'pycodestyle',
+    'autopep8',
+    'types-certifi',
+    'types-protobuf',
+    'types-redis',
+    'types-toml',
+    'types-passlib',
+]
+features = [
+    'admin',
+    'redis',
+    'macaroon',
+    'optional',
+    'sieve',
+    'swim',
+]
+
+[tool.hatch.envs.default.scripts]
+run-pytest = 'py.test --cov-report=term-missing --cov=pymap'
+run-mypy = 'mypy pymap test'
+run-ruff = 'ruff pymap test'
+run-autopep8 = 'autopep8 --exit-code -dr pymap test'
+check = ['run-pytest', 'run-autopep8', 'run-mypy', 'run-ruff']
+
+[[tool.hatch.envs.all.matrix]]
+python = ['3.11']
+
+[tool.hatch.envs.doc]
+dependencies = [
+    'sphinx',
+    'sphinx-autodoc-typehints',
+    'cloud_sptheme',
+]
+
+[tool.hatch.envs.doc.scripts]
+build = 'make -C doc html'
+browse = ['build', 'open doc/build/html/index.html']
