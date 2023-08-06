@@ -1,0 +1,125 @@
+{% extends "_base.html" %}
+
+{% block title_tab %}Privacy policy{% endblock %}
+{% block title_main %}Politica per la privacy{% endblock %}
+
+{% block content %}
+    <hr/>
+    <div class="row">
+        <div>
+            <h3>
+                Chi sei?
+            </h3>
+            <p>
+                Sono <b>Stefano Pigozzi</b>, lo studente magistrale che ha amministrato per anni il gruppo Telegram <b>Unimore Informatica</b>, e che ora sta effettuando la migrazione del gruppo verso Matrix, uno standard più versatile e libero per la messaggistica.
+            </p>
+            <p id="contact-me">
+                Se hai bisogno, puoi contattarmi su <a href="https://matrix.to/#/@steffo:ryg.one">Matrix</a>, <a href="https://t.me/Steffo">Telegram</a>, <a href="mailto:me@steffo.eu">via email</a> oppure sul <a href="https://fosstodon.org/@steffo">Fediverso</a>!
+            </p>
+        </div>
+        <img alt="" src="{{ url_for("static", filename="s-192.png") }}">
+    </div>
+    <hr/>
+    <h3>
+        Perchè hai bisogno dei miei dati?
+    </h3>
+    <p>
+        Ho bisogno dei tuoi dati per <b>assicurarmi che tu sia uno studente dell'Unimore</b>, e non un professore, una persona esterna, o (vade retro) uno spammer!
+    </p>
+    <p>
+        Visto che in passato si sono verificate intrusioni all'interno del gruppo Telegram, abbiamo sviluppato un sistema di verifica che permette solo agli studenti di partecipare a certi gruppi, al fine di evitare <u>ripercussioni</u> per discussioni che hanno avuto luogo al loro interno e in generale <u>abusi di potere</u>.
+    </p>
+    <p>
+        <small>La base giuridica del trattamento è quindi il <b>mio legittimo interesse</b> relativo alla sicurezza delle chat e della community.</small>
+    </p>
+    <hr/>
+    <h3>
+        Quali dati raccogli?
+    </h3>
+    <p>
+        Se entri nello spazio Matrix pubblico <b><i>Unimore</i></b>, raccolgo dal tuo evento di unione il seguente dato:
+    </p>
+    <ul>
+        <li>Il tuo <b>username Matrix</b></li>
+    </ul>
+    <p>
+        Se colleghi il tuo account Studenti@Unimore al tuo account Matrix, ottenendo accesso allo spazio Matrix privato <b><i>Zona Studenti</i></b>, mi salvo nel database anche le seguenti informazioni, prese dal tuo account Studenti@Unimore:
+    </p>
+    <ul>
+        <li>Il tuo <b>nome</b></li>
+        <li>Il tuo <b>cognome</b></li>
+        <li>La tua <b>email istituzionale</b></li>
+        <li>Se hai accettato oppure no l'invito alla <i>Zona Studenti</i></li>
+    </ul>
+    <hr/>
+    <h3>
+        Mi puoi fare un esempio?
+    </h3>
+    <p>
+        I dati su me stesso che sono salvati nel database sono:
+    </p>
+    <ul>
+        <li>Username Matrix: <b>@steffo:ryg.one</b></li>
+        <li>Nome: <b>Stefano</b></li>
+        <li>Cognome: <b>Pigozzi</b></li>
+        <li>Email istituzionale: <b>256895@studenti.unimore.it</b></li>
+        <li>Invito: <b>accettato</b></li>
+    </ul>
+    <hr/>
+    <h3>
+        Per quanto tieni salvati i dati?
+    </h3>
+    <p>
+        Mantengo i tuoi dati solo per il tempo per cui è necessario che la tua identità sia verificata, ovvero per tutto il <b>tempo in cui permani</b> negli spazi <i>Unimore</i> e <i>Zona Studenti</i>.
+    </p>
+    <p>
+        Abbandonando lo spazio <b><i>Zona Studenti</i></b>, i dati richiesti per entrare in esso vengono cancellati.
+    </p>
+    <p>
+        Abbandonando lo spazio <b><i>Unimore</i></b>, tutti i tuoi dati vengono completamente cancellati.
+    </p>
+    <hr/>
+    <h3>
+        Dove sono salvati i miei dati?
+    </h3>
+    <p>
+        I dati si trovano in un <b>volume Docker</b> di una macchina virtuale su <a href="https://www.oracle.com/cloud/">Oracle Cloud</a>, che si trova fisicamente a <b>Milano</b>.
+    </p>
+    <p>
+        <b>Solo io ho accesso ai dati</b>, e ho preso alcune misure di sicurezza per prevenire data breach.
+    </p>
+    <p>
+        Irregolarmente vengono effettuati <b>backup</b>, che sono archiviati su <a href="https://drive.google.com/">Google Drive</a>, criptati con una password che solo io: i contenuti non sono quindi accessibili a terzi!
+    </p>
+    <hr/>
+    <h3>
+        Hai bisogno di una verifica manuale?
+    </h3>
+    <p>
+        I tuoi dati vengono trattati da Loki in modo <b>interamente automatizzato</b>, quindi di default non faccio attenzione alle verifiche che vengono effettuate.
+    </p>
+    <p>
+        Se per qualsiasi motivo vuoi richiedere una <b>verifica manuale della tua identità</b> (per un bug, perchè non vuoi fare il login con Google, o perchè ne hai voglia te), <a href="#contact-me">contattami</a> e ti fornirò ulteriori informazioni su come procedere!
+    </p>
+    <hr/>
+    <h3>
+        Che diritti ho relativi ai miei dati?
+    </h3>
+    <p>
+        Il GDPR ti concede numerosi diritti relativi al trattamento dei tuoi dati, che puoi esercitare <a href="#contact-me">contattandomi agli indirizzi indicati sopra</a>.
+    </p>
+    <p>
+        In particolare, in qualsiasi momento puoi:
+    </p>
+    <ul>
+        <li>richiedere di vedere i tuoi dati</li>
+        <li>richiedere che sia apportata una modifica manuale ai tuoi dati, se incorretti</li>
+        <li>richiedere l'eliminazione manuale dei tuoi dati (sarai anche manualmente rimosso dai relativi spazi, però)</li>
+    </ul>
+    <p>
+        In aggiunta, se sei insoddisfatto di come sta venendo svolto il trattamento, puoi <a href="#contact-me">contattarmi sempre a uno degli indirizzi menzionati in precedenza</a> per risolvere la questione, o, se sei ancora insoddisfatto, è tuo diritto contattare il <a href="https://www.garanteprivacy.it/">Garante della Privacy</a>.
+    </p>
+    <p class="xs">
+        Ricorda che sono uno studente anche io, e che sto facendo il possibile per trattare i tuoi dati nel modo migliore che conosco; se ti accorgi di un bug, o hai qualche problema riguardo come gestisco i dati, fammelo sapere: <b>sono aperto a critiche e miglioramenti</b>!
+    </p>
+{% endblock %}
