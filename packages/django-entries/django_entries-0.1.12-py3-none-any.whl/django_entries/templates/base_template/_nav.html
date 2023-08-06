@@ -1,0 +1,12 @@
+{% url 'entries:view_home' as home_url %}
+{% url 'entries:view_about' as about_url %}
+{% url 'entries:list_entries' as entries_url %}
+
+<nav>
+    <hstack spacing=s align-x=center>
+        <a class="button" href="/">BrandX</a>
+        <spacer></spacer>
+        <a class="button" href="{{about_url}}">About</a>
+        <a class="button" href="{{entries_url}}">Blog</a>
+    </hstack>
+</nav>

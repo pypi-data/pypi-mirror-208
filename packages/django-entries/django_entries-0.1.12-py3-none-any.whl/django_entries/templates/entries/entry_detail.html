@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} {{entry.title}} | BrandX {% endblock title %}
+
+{% block content %}
+    <hstack spacing=s>
+        <h1>{{entry.title}}</h1>
+        {% if user.is_authenticated and user == entry.author %}
+            <spacer></spacer>
+            <button hx-get="{% url 'entries:add_entry' %}" hx-target="body" hx-boost="true">create</button>
+            <button hx-get="{% url 'entries:edit_entry' entry.slug %}" hx-target="body" hx-boost="true">edit</button>
+            <button hx-delete="{% url 'entries:delete_entry' entry.slug %}" hx-confirm="Are you sure you want to delete?" hx-boost="true">delete</button>
+        {% endif %}
+    </hstack>
+    <hstack>
+        <small>By: {{entry.author}}</small>
+        <small>, {{ entry.created|date }}</small>
+        {% if entry.modified != entry.created %}
+            <divider></divider>
+            <small>Updated: {{ entry.modified|date }}</small>
+        {% endif %}
+    </hstack>
+    <main>
+        <article>{{ entry.md_content}}</article>
+    </main>
+{% endblock content %}

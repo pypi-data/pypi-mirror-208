@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Home | BrandX {% endblock title %}
+
+{% block content %}
+    <hstack spacing=s>
+        <h1 stretch>Test Site</h1>
+        <spacer></spacer>
+        <input
+            id="autocomplete-search"
+            name="q" {% comment %} This is passed as a URL parameter on keyup trigger {% endcomment %}
+            type="search"
+            placeholder="Search"
+            hx-get="{% url 'entries:scroll_entries' %}"
+            hx-trigger="keyup changed delay:500ms"
+            hx-target="#search-results"
+        >
+    </hstack>
+    <main>
+        <section id="search-results">
+            {% include 'entries/entry_next.html' with template_for_item='entries/entry_item.html' %}
+        </section>
+    </main>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{edit_header|title}} | BrandX {% endblock title %}
+
+{% block content %}
+    <h1>{{edit_header|title}}</h1>
+    <main>
+      {% if mode == 'add' %}
+        {% url 'entries:add_entry' as submit_url %}
+      {% elif mode == 'edit' and slug %}
+        {% url 'entries:edit_entry' slug as submit_url %}
+      {% endif %}
+      <form method="post" action="{{submit_url}}">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field.label_tag }} {{ field }}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Submit">
+      </form>
+    </main>
+{% endblock content %}
+
+{% block extra_js %}<script type="text/javascript">var simplemde = new SimpleMDE({forceSync: true});</script>{% endblock extra_js %}
