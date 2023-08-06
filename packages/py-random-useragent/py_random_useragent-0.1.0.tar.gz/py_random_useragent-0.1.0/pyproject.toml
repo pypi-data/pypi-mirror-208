@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "py-random-useragent"
+version = "0.1.0"
+description = "Generate a random User Agent"
+authors = ["Oleg Suvorinov <suvorinovoleg@yandex.ru>"]
+readme = "README.md"
+packages = [{include = "py_random_useragent"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.30.0"
+lxml = "^4.9.2"
+
+[tool.poetry.scripts]
+random_ua = "py_random_useragent.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
