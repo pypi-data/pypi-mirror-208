@@ -1,0 +1,146 @@
+Metadata-Version: 2.1
+Name: pyhdtoolkit
+Version: 1.3.0
+Summary: An all-in-one toolkit package to ease my Python work in my PhD.
+Project-URL: homepage, https://github.com/fsoubelet/PyhDToolkit
+Project-URL: repository, https://github.com/fsoubelet/PyhDToolkit
+Project-URL: documentation, https://fsoubelet.github.io/PyhDToolkit
+Project-URL: changelog, https://fsoubelet.github.io/PyhDToolkit/release.html
+Author-email: Felix Soubelet <felix.soubelet@cern.ch>
+License-Expression: MIT
+License-File: LICENSE
+Keywords: Accelerator Physics,Docker,PHD,Physics Simulation,Visualisation
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: Topic :: Utilities
+Requires-Python: >=3.8
+Requires-Dist: cpymad>=1.9
+Requires-Dist: loguru<1.0
+Requires-Dist: matplotlib>=3.3
+Requires-Dist: numpy!=1.24,>=1.21
+Requires-Dist: optics-functions>=0.1
+Requires-Dist: pandas>=1.4
+Requires-Dist: pendulum>=2.0
+Requires-Dist: pydantic>=1.0
+Requires-Dist: rich>=12.0
+Requires-Dist: scipy>=1.6
+Requires-Dist: tfs-pandas>=3.2
+Provides-Extra: dev
+Requires-Dist: black>=22.1; extra == 'dev'
+Requires-Dist: isort>=5.10; extra == 'dev'
+Requires-Dist: ruff>=0.0.250; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: sphinx-codeautolink>=0.14; extra == 'docs'
+Requires-Dist: sphinx-copybutton<1.0; extra == 'docs'
+Requires-Dist: sphinx-gallery<1.0; extra == 'docs'
+Requires-Dist: sphinx-issues>=3.0; extra == 'docs'
+Requires-Dist: sphinx-panels<1.0; extra == 'docs'
+Requires-Dist: sphinx-prompt>=1.5; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme>=1.0; extra == 'docs'
+Requires-Dist: sphinx>=4.4; extra == 'docs'
+Requires-Dist: sphinxcontrib-bibtex>=2.4; extra == 'docs'
+Provides-Extra: test
+Requires-Dist: coverage[toml]>=5.2; extra == 'test'
+Requires-Dist: flaky>=3.5; extra == 'test'
+Requires-Dist: pytest-cov>=3.0; extra == 'test'
+Requires-Dist: pytest-mpl>=0.12; extra == 'test'
+Requires-Dist: pytest-randomly>=3.3; extra == 'test'
+Requires-Dist: pytest-xdist>=2.5; extra == 'test'
+Requires-Dist: pytest>=6.0; extra == 'test'
+Description-Content-Type: text/markdown
+
+<h1 align="center">
+  <b>PyhDToolkit</b>
+</h1>
+
+<p align="center">
+  <!-- PyPi Version -->
+  <a href="https://pypi.org/project/pyhdtoolkit">
+    <img alt="PyPI Version" src="https://img.shields.io/pypi/v/pyhdtoolkit?label=PyPI&logo=PyPI">
+  </a>
+
+  <!-- Github Release -->
+  <a href="https://github.com/fsoubelet/PyhDToolkit/releases">
+    <img alt="Github Release" src="https://img.shields.io/github/v/release/fsoubelet/PyhDToolkit?color=orange&label=Release&logo=Github">
+  </a>
+
+  <br/>
+
+  <!-- Github Actions Build -->
+  <a href="https://github.com/fsoubelet/PyhDToolkit/actions?query=workflow%3A%22Cron+Testing%22">
+    <img alt="Github Actions" src="https://github.com/fsoubelet/PyhDToolkit/workflows/Tests/badge.svg">
+  </a>
+
+  <!-- Code Coverage -->
+  <a href="https://codecov.io/gh/fsoubelet/PyhDToolkit">
+    <img src="https://codecov.io/gh/fsoubelet/PyhDToolkit/branch/master/graph/badge.svg?token=6SO90F2MJI"/>
+  </a>
+
+  <!-- Docker Image -->
+  <a href="https://hub.docker.com/r/fsoubelet/simenv">
+    <img alt="Docker Image" src="https://img.shields.io/docker/image-size/fsoubelet/simenv?label=Docker&sort=date">
+  </a>
+
+  <br/>
+
+  <!-- Code style -->
+  <a href="https://github.com/psf/Black">
+    <img alt="Code Style" src="https://img.shields.io/badge/Code%20Style-Black-9cf.svg">
+  </a>
+
+  <!-- Linter -->
+  <a href="https://github.com/PyCQA/pylint">
+    <img alt="Linter" src="https://img.shields.io/badge/Linter-Pylint-ce963f.svg">
+  </a>
+
+  <!-- Build tool -->
+  <a href="https://github.com/pypa/hatch">
+    <img alt="Build tool" src="https://img.shields.io/badge/Build%20Tool-Hatch-4e5dc8.svg">
+  </a>
+
+  <!-- Test runner -->
+  <a href="https://github.com/pytest-dev/pytest">
+    <img alt="Test runner" src="https://img.shields.io/badge/Test%20Runner-Pytest-ce963f.svg">
+  </a>
+
+  <!-- License -->
+  <a href="https://github.com/fsoubelet/PyhDToolkit/blob/master/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/fsoubelet/PyhDToolkit?color=9cf&label=License">
+  </a>
+</p>
+
+<p align="center">
+  ♻️ An all-in-one package for Python work in my PhD ♻️
+</p>
+
+<p align="center">
+  <!-- General DOI -->
+  <a href="https://zenodo.org/badge/latestdoi/227081702">
+    <img alt="DOI" src="https://zenodo.org/badge/227081702.svg">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.python.org/">
+    <img alt="Made With Python" src="https://forthebadge.com/images/badges/made-with-python.svg">
+  </a>
+</p>
+
+Link to [documentation].
+
+## License
+
+Copyright &copy; 2019 Felix Soubelet. [MIT License](LICENSE)
+
+[documentation]: https://fsoubelet.github.io/PyhDToolkit/

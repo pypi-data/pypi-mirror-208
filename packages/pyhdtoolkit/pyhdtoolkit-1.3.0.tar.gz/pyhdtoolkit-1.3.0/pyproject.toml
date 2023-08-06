@@ -1,0 +1,191 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "pyhdtoolkit/version.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+  "/docker",
+  "/examples",
+  "/tests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pyhdtoolkit"]
+
+[project]
+name = "pyhdtoolkit"
+readme = "README.md"
+description = "An all-in-one toolkit package to ease my Python work in my PhD."
+authors = [
+    {name = "Felix Soubelet", email = "felix.soubelet@cern.ch"},
+]
+license = "MIT"
+dynamic = ["version"]
+requires-python = ">=3.8"
+
+keywords = [
+  "PHD",
+  "Accelerator Physics",
+  "Physics Simulation",
+  "Visualisation",
+  "Docker",
+  ]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Utilities",
+]
+
+dependencies = [
+  "numpy >= 1.21,!=1.24",
+  "pandas >= 1.4",
+  "matplotlib >=3.3",
+  "scipy >= 1.6",
+  "tfs-pandas >= 3.2",
+  "loguru < 1.0",
+  "cpymad >= 1.9",
+  "rich >= 12.0",
+  "pydantic >= 1.0",
+  "pendulum >= 2.0",
+  "optics-functions >= 0.1",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest >= 6.0",
+  "pytest-cov >= 3.0",
+  "pytest-xdist >= 2.5",
+  "flaky >= 3.5",
+  "pytest-randomly >= 3.3",
+  "coverage[toml] >= 5.2",
+  "pytest-mpl >= 0.12",
+]
+dev = [
+  "black >= 22.1",
+  "isort >= 5.10",
+  "ruff >= 0.0.250",
+]
+docs = [
+  "Sphinx >= 4.4",
+  "sphinx-rtd-theme >= 1.0",
+  "sphinx-issues >= 3.0",
+  "sphinx_copybutton < 1.0",
+  "sphinxcontrib-bibtex >= 2.4",
+  "sphinx-panels < 1.0",
+  "sphinx-gallery < 1.0",
+  "sphinx-prompt >= 1.5",
+  "sphinx_codeautolink>=0.14",
+]
+
+[project.urls]
+homepage = "https://github.com/fsoubelet/PyhDToolkit"
+repository = "https://github.com/fsoubelet/PyhDToolkit"
+documentation = "https://fsoubelet.github.io/PyhDToolkit"
+changelog = "https://fsoubelet.github.io/PyhDToolkit/release.html"
+
+# ----- Testing Configuration ----- #
+
+[tool.pytest.ini_options]
+addopts = "--mpl --no-flaky-report --cov-report=xml --cov-report term-missing --cov-config=pyproject.toml --cov=pyhdtoolkit"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["pyhdtoolkit/"]
+
+[tool.coverage.report]
+ignore_errors = true
+omit = [
+  "pyhdtoolkit/cpymadtools/setup.py",
+  "pyhdtoolkit/utils/htc_monitor.py",
+]
+precision = 2
+
+# ----- Dev Tools Configuration ----- #
+
+[tool.isort]
+atomic = true
+ensure_newline_before_comments = true
+filter_files = true
+force_grid_wrap = 0
+force_single_line = false
+include_trailing_comma = true
+known_first_party = "pyhdtoolkit"
+known_third_party = "pytest"
+line_length = 110
+lines_between_types = 1
+multi_line_output = 3
+use_parentheses = true
+profile = "black"
+
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | tests/.*/setup.py
+  | acc-models-lhc
+)/
+'''
+
+[tool.ruff]
+ignore = ["E501"]
+line-length = 120
+
+# Exclude a variety of commonly ignored directories.
+exclude = ["pyhdtoolkit/cpymadtools/lhc/__init__.py"]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.8+.
+target-version = "py38"
+
+[tool.mypy]
+pretty = true
+strict_optional = false
+show_error_codes = true
+warn_redundant_casts = true
+ignore_missing_imports = true
+follow_imports = "skip"
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+fail-under = 95
+exclude = ["tests"]
+ignore-regex = []
+verbose = 2
+quiet = false
+whitelist-regex = []
+color = true
