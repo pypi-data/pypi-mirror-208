@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: django-ranks
+Version: 0.1
+Summary: A Django app for ranking models with OpenSkill.py
+Home-page: https://github.com/reedjones/django-ranks
+Author: Reed Jones
+Author-email: reedjones@mailfence.com
+License: MIT
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Requires-Python: >=3
+License-File: LICENSE
+
+============
+Django Ranks
+============
+
+Not ready yet, DO NOT USE
+
+Django Ranks is a Django app to conduct web-based Django Ranks. For each question,
+visitors can choose between a fixed number of answers.
+
+Detailed documentation is in the "docs" directory.
+
+Quick start
+-----------
+
+1. Add "Django Ranks" to your INSTALLED_APPS setting like this::
+
+    INSTALLED_APPS = [
+        ...,
+        "django_ranks",
+    ]
+
+2. Include the Django Ranks URLconf in your project urls.py like this::
+
+    path("ranks/", include("django_ranks.urls")),
+
+3. Run ``python manage.py migrate`` to create the Django Ranks models.
+
+4. Start the development server and visit http://127.0.0.1:8000/admin/
+   to create a poll (you'll need the Admin app enabled).
+
