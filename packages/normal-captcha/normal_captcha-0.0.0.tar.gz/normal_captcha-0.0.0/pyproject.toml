@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "normal_captcha"
+authors = [
+    {name = "ms5806166@gmail.com", email = "ms5806166@gmail.com"},
+]
+description = "A tool for solving normal captchas."
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+dependencies = [
+    "pytesseract==0.3.10",
+    'Pillow==9.5.0',
+]
+dynamic = ["version"]
+
+[project.scripts]
+my-script = "normal_captcha_solver.main:main"
