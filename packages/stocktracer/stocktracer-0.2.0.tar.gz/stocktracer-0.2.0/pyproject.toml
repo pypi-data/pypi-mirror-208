@@ -1,0 +1,132 @@
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src/stocktracer"]
+sources = ["src"]
+
+[project]
+name = "stocktracer"
+version = "0.2.0"
+authors = [
+  { name="Gary Yund", email="gary.yund@gmail.com" },
+]
+description = "Tools for aggregating efficient ways to consume and process publically traded equities on the US stock market. Includes support for SEC quarterly data processing."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+keywords = [ "sec-tools", "fundamental analysis", "stocks" ]
+classifiers = [
+    "License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Intended Audience :: Science/Research",
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+
+dynamic = ["dependencies"]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
+
+[project.urls]
+"Homepage" = "https://gyund.github.io/fundamental-analysis/"
+"Bug Tracker" = "https://github.com/gyund/fundamental-analysis/issues"
+
+[project.scripts]
+stocktracer = "stocktracer.__main__:main_cli"
+
+[tool.pytest.ini_options]
+# log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(pathname)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+testpaths = [
+    "src/",
+]
+# addopts = [
+#     "--import-mode=importlib",
+# ]
+
+markers =[
+    "webtest: mark a test as a webtest. These kinds of tests can trigger downloads or other network interactions.",
+    "slow: mark test as slow."
+    ]
+
+[tool.ruff]
+
+select = [
+    # stop the build if there are Python syntax errors or undefined names
+    "E9",
+    "F63",
+    "F7",
+    "F82"
+
+]
+
+format = "github"
+
+# fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+# unfixable = []
+
+
+target-version = "py310"
+line-length = 88
+
+[tool.isort] 
+profile = "black"
+
+[tool.coverage.run]
+branch = true
+source = ["src/stocktracer/"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+    ]
+
+[tool.pydocstyle]
+inherit = false
+match = '(?!(test_|conftest)).*\.py'
+match_dir = '^(?!(venv|tests|poc)).*'
+convention = "pep257"
+ignore_self_only_init = true
+
+[tool.pylint.main]
+source-roots = ["src"]
+fail-under = 9
+fail-on = [
+    # "redefined-builtin",    # unintended sideaffects
+    "unused-variable",      # cleaner code
+    "unused-import",        # cleaner code
+    "no-self-argument",     # possible bug, annotate correctly
+    "use-list-literal",     # cleaner code
+    "no-else-return",       # cleaner code
+    "no-member",            # make explicit for clarity 
+    # "invalid-name",         # consistency
+    ]
+
+[tool.pylint."messages control"]
+
+logging-format-style = "new"
+disable = ["line-too-long", "logging-fstring-interpolation", "too-few-public-methods"]
+# disable=["W1203"]
+# disable=["all"]
+
+[tool.pylint.format]
+max-line-length = "88"
+
+[tool.pylint.reports]
+output-format = ["colorized"]
