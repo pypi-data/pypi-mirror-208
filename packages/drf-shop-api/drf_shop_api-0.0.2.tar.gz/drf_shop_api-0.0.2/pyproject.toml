@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "drf-shop-api"
+version = "0.0.2"
+description = "Standalone shop app, that you can add to your project"
+authors = ["Oleksandr Korol <oleksandr.korol@coaxsoft.com>"]
+readme = "README.md"
+packages = [{include = "drf_shop_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^4.2.1"
+drf-yasg = "^1.21.5"
+rest-framework-simplejwt = "^0.0.2"
+django-filter = "^23.2"
+djangorestframework = "^3.14.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.265"
+mixer = "^7.2.2"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
