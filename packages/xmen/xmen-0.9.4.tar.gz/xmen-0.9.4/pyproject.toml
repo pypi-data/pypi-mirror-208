@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "xmen"
+version = "0.9.4"
+description = "An extensible toolkit for Cross-lingual (x) Medical Entity Normalization."
+license = "Apache-2.0"
+authors = ["Florian Borchert <florian.borchert@hpi.de>"]
+readme = "README.md"
+repository = "https://github.com/hpi-dhc/xmen"
+
+[tool.poetry.scripts]
+xmen = "xmen.cli.cli:main"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+datasets = "^2.0.0"
+lxml = "^4.8.0"
+transformers = "^4.17.0"
+neleval = "^3.1.1"
+numpy = "^1.21"
+pytorch-metric-learning = "0.9.98.dev1"
+sentencepiece = "^0.1.96"
+protobuf = "^3.20.0"
+omegaconf = "^2.3.0"
+langcodes = "^3.3.0"
+rich = "^12.3.0"
+torch = "^1.13.0"
+scispacy = "^0.5.2"
+sentence-transformers = "^2.2.2"
+faiss-gpu = {version = "^1.7.1", markers = 'sys_platform == "linux"'}
+faiss-cpu = {version = "^1.7.1", markers = 'sys_platform != "linux"'}
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.0"
+black = {extras = ["jupyter"], version = "^22.12.0"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+extend-exclude = '''xmen/ext'''
