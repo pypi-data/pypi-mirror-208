@@ -1,0 +1,19 @@
+[project]
+name = "windows_control"
+version = "0.0.1"
+description = "It is used to do some control with keyboard/mouse on windows (especially on win10)."
+readme = "README.md"
+requires-python = ">=3.8"
+
+[project.urls]
+repository = "https://github.com/dbsxdbsx/windows_control"
+# documentation = "readthedocs.org"
+# changelog = "github.com/me/spam/blob/master/CHANGELOG.md"
+
+[build-system]
+requires = ["maturin>=0.14,<=0.15"]
+build-backend = "maturin"
+
+[tool.maturin]
+# "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
+features = ["pyo3/extension-module"]
