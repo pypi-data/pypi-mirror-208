@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "fiat-cli"
+version = "0.7.0"
+license = "MIT"
+description = "🤩 - Fiat CLI Component"
+authors = ["Jiacheng Li <cheng2029@foxmail.com>"]
+readme = "README.md"
+packages = [{include = "fiat"}]
+
+[tool.poetry.scripts]
+fiat = "fiat.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.7.0"}
+docker = "^6.0.1"
+ray = {extras = ["default"], version = "^2.4.0"}
+envd = "^0.3.21"
+
+
+[[tool.poetry.source]]
+name = "mirrors"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+default = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
