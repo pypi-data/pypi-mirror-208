@@ -1,0 +1,32 @@
+[build-system]
+requires = ["poetry-core>=1.2.1"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "django_dnoticias_auth"
+version = "1.3.3.6"
+authors = [
+    "Pedro Mendes <pedro.trabalho.uma@gmail.com>",
+    "Nélson Gomes <ngoncalves@dnoticias.pt>",
+]
+description = "Dnoticias Authentication Backend"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+packages = [
+    {include = "dnoticias_auth"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+django = "*"
+requests = "*"
+mozilla_django_oidc = "*"
+django-dnoticias-services = "*"
+django-redis-sessions = "*"
+python-keycloak = "*"
+hiredis="2.2.2"
+redis="3.5.3"
+
+[tool.poetry.files]
+extra-files = ["dnoticias_auth/templates/*"]
