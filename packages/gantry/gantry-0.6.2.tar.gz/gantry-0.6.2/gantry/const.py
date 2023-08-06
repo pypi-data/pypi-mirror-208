@@ -1,0 +1,6 @@
+PROD_API_URL = "https://app.gantry.io"
+DEFAULT_ENV = "dev"
+STATUS_PARAM = "response"
+OK_STATUS = "ok"
+ERR_STATUS = "error"
+GENERIC_MESSAGE = "Request failed"
