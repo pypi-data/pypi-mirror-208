@@ -1,0 +1,136 @@
+# SPDX-License-Identifier: MIT
+
+stages:
+  - static-analysis
+  - build
+  - test
+  - release
+
+################################################################################
+#                                   DEFAULTS                                   #
+################################################################################
+
+variables:
+  XDG_CACHE_HOME: $CI_PROJECT_DIR/.cache
+  CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
+
+default:
+  image: python:3.11
+  cache: &cache
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - .cache/pip
+      - .venv
+    policy: pull
+  before_script:
+    - python --version
+    - pip install --user pipenv
+    - export PATH="$PATH:${XDG_DATA_HOME:-$HOME/.local}/bin"
+    - export PIPENV_VENV_IN_PROJECT=true
+
+################################################################################
+#                                     .PRE                                     #
+################################################################################
+
+virtualenv:
+  stage: .pre
+  cache:
+    <<: *cache
+    policy: pull-push
+  rules:
+    - when: on_success  # https://gitlab.com/gitlab-org/gitlab-runner/-/issues/5970
+  script:
+    - pipenv sync --dev
+
+################################################################################
+#                               STATIC-ANALYSIS                                #
+################################################################################
+
+black:
+  stage: static-analysis
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - pipenv run pre-commit run black --show-diff-on-failure --from-ref origin/"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --to-ref HEAD
+
+isort:
+  stage: static-analysis
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - pipenv run pre-commit run isort --show-diff-on-failure --from-ref origin/"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --to-ref HEAD
+
+ruff:
+  stage: static-analysis
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - pipenv run pre-commit run ruff --show-diff-on-failure --from-ref origin/"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --to-ref HEAD
+
+pipenv-verify:
+  stage: static-analysis
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git rebase -x 'pipenv verify' origin/"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+
+pipenv-check:
+  stage: static-analysis
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git rebase -x 'pipenv check' origin/"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+
+################################################################################
+#                                    BUILD                                     #
+################################################################################
+
+build-each:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git rebase -x 'pipenv run build' origin/"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+
+build-last:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - pipenv run build
+  artifacts:
+    name: dist
+    paths:
+      - ./dist
+    expire_in: 1 week
+
+################################################################################
+#                                   RELEASE                                    #
+################################################################################
+
+tag:
+  stage: release
+  interruptible: false
+  resource_group: tagging
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - version=$(pipenv run version)
+    - git config user.email "$GITLAB_USER_EMAIL"
+    - git config user.name "$GITLAB_USER_NAME"
+    - git tag -a "$version" -m "version $version"
+    - git push --tag "$CI_SERVER_PROTOCOL://oauth2:$TAG_TOKEN@$CI_SERVER_HOST:$CI_SERVER_PORT/$CI_PROJECT_PATH"
+
+publish:
+  stage: release
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+  script:
+    - pipenv run publish
