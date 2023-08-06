@@ -1,0 +1,17 @@
+This library contains 3 functions that are meant to be used for tensor transformations. 
+Mostly they are built using standard python library with some functionalities of numpy.
+
+The 3 functions in question:
+
+-transpose2d(tensor): takes a tensor in the format "list[list[float]]". This tensor will
+then be transposed. Returns a list.
+
+-window1d(array, size, *shift, *stride): "array" takes an array in format list or np.ndarray;
+"size", of which size you want to get your windows; "shift" (default = 1) optional argument, which 
+determines step in between window calculations; "stride" (default = 1) optional argument, which 
+represents the step size. Returns a list.
+
+-convolution2d(matrix, kernel, *stride): "matrix" takes an np.ndarray that you would like to make 
+calculations on; "kernel" takes an np.ndarray that will be used to do calculations on original
+matrix; "stride" (default = 1) optional argument that represents the step size, when generating
+result. Returns np.ndarray.
