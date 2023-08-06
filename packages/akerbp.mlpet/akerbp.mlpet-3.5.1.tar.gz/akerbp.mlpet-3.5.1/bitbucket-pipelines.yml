@@ -1,0 +1,95 @@
+image: python:3.8
+
+definitions:
+  steps:
+    - step: &scan
+        name: Security Scan
+        script:
+          # Run a security scan for sensitive data.
+          # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
+          - pipe: atlassian/git-secrets-scan:0.5.1
+    - step: &unit-testing
+        name: Unit Testing
+        deployment: testing
+        caches:
+          - pip
+        script:
+          - pip install .
+          - pip install pytest coverage
+          - coverage run --source=. -m pytest -v -ra
+          - coverage report
+    - step: &flake8-linting
+        name: Linting
+        caches:
+          - pip
+        script:
+          - pip install flake8==6.0.0 flake8-bugbear==23.1.17
+          - flake8 -v .
+    - step: &black-formatting
+        name: Formatting
+        caches:
+          - pip
+        script:
+          - pip install black==22.8.0
+          - black --check --diff .
+    - step: &isort-sorting
+        name: Sorting
+        caches:
+          - pip
+        script:
+          - pip install isort==5.10.1
+          - isort --check --diff .
+    - step: &mypy-type-checking
+        name: Type Checking
+        caches:
+          - pip
+        script:
+          - pip install mypy
+          - mypy --install-types --non-interactive
+          - mypy
+    - step: &version-checking
+        name: Version Checking
+        caches:
+          - pip
+        script:
+          - pip install requests toml python-dateutil packaging
+          - python3 version.py
+    - step: &check-install
+        name: Check Install
+        caches:
+          - pip
+        script:
+          - pip install .
+          - python -c "import akerbp.mlpet as akbpmlp; from akerbp.mlpet import __version__; print(__version__)"
+    - step: &publish
+        name: Release to PyPI
+        deployment: production-pypi
+        trigger: manual
+        caches:
+          - pip
+        script:
+          - pip install twine==4.0.2 build==0.10.0
+          - python -m build
+          - python -m twine upload --non-interactive dist/* --username=$TWINE_USERNAME --password=$TWINE_PASSWORD
+
+pipelines:
+  pull-requests:
+    "**": # Run for PRs from all branches
+      - parallel:
+          - step: *unit-testing
+          - step: *scan
+          - step: *flake8-linting
+          - step: *mypy-type-checking
+          - step: *black-formatting
+          - step: *isort-sorting
+          - step: *version-checking
+          - step: *check-install # Check install in empty environment with no preset environment variables.
+
+  branches:
+    master:
+      - step:
+          name: Mirror latest version to public repo
+          script:
+            - git remote add public git@bitbucket.org:akerbp/akerbp.mlpet.git
+            - git push public master
+      - step: *publish

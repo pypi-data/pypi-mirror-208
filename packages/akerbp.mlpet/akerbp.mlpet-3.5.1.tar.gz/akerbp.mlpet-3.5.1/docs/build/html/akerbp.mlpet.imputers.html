@@ -1,0 +1,479 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="preprocessors module" href="akerbp.mlpet.preprocessors.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/>
+        <title>imputers module - akerbp.mlpet 1.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">akerbp.mlpet 1.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">akerbp.mlpet 1.1.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Package Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="akerbp.mlpet.html">akerbp.mlpet package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.dataloader.html">dataloader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.dataset.html">dataset module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.feature_engineering.html">feature_engineering module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.utilities.html">utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.preprocessors.html">preprocessors module</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">imputers module</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="imputers-module">
+<h1>imputers module<a class="headerlink" href="#imputers-module" title="Permalink to this headline">#</a></h1>
+<div class="table-wrapper"><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.imputers.apply_depth_trend_imputation" title="akerbp.mlpet.imputers.apply_depth_trend_imputation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.apply_depth_trend_imputation</span></code></a>(df, ...)</p></td>
+<td><p>Apply imputation models to impute curves in given dataframe</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.enable_iterative_imputer</span></code></p></td>
+<td><p>Enables IterativeImputer</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.imputers.generate_imputation_models" title="akerbp.mlpet.imputers.generate_imputation_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.generate_imputation_models</span></code></a>(df, ...)</p></td>
+<td><p>Generates 3rd order polynomial regression models with the DEPTH column as the target y variable and each curve in the provided curves keyword argument as the x variable (i.e.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.imputers.impute_depth_trend" title="akerbp.mlpet.imputers.impute_depth_trend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.impute_depth_trend</span></code></a>(df, ...)</p></td>
+<td><p>Imputation of curves based on polynomial regression models of the curve based on DEPTH</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.imputers.individual_imputation_models" title="akerbp.mlpet.imputers.individual_imputation_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.individual_imputation_models</span></code></a>(df, ...)</p></td>
+<td><p>Determines whether an individual or global model would be best for a given list of curves to check and generates individual models if the checks are passed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.imputers.iterative_impute" title="akerbp.mlpet.imputers.iterative_impute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.iterative_impute</span></code></a>(df, ...)</p></td>
+<td><p>Imputes all numerical columns with sklearn's iterative imputer using a Bayesian Ridge as the estimator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.imputers.simple_impute" title="akerbp.mlpet.imputers.simple_impute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.imputers.simple_impute</span></code></a>(df, **kwargs)</p></td>
+<td><p>Imputes missing values in specified columns with sklearn's SimpleImputer using the mean strategy for numeric columns and the most_frequent strategy for categorical columns</p></td>
+</tr>
+</tbody>
+</table></div>
+<span class="target" id="module-akerbp.mlpet.imputers"></span><dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.simple_impute">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">simple_impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#simple_impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.simple_impute" title="Permalink to this definition">#</a></dt>
+<dd><p>Imputes missing values in specified columns with sklearn’s SimpleImputer
+using the mean strategy for numeric columns and the most_frequent strategy
+for categorical columns</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe with columns to impute</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>categorical_curves</strong> – List of column names that should be considered as
+categorical. If not provided, defaults to trying to determine these
+using the get_col_types utility function</p></li>
+<li><p><strong>depth_column</strong> – The name of the depth column to be excluded from imputation
+if desired. Defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>dataframe with imputed values and a dictionary containing the</dt><dd><p>fitted imputers</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.iterative_impute">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">iterative_impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#iterative_impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.iterative_impute" title="Permalink to this definition">#</a></dt>
+<dd><p>Imputes all numerical columns with sklearn’s iterative imputer using a
+Bayesian Ridge as the estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe with columns to impute</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>imputer</strong> (<em>_BaseImputer</em><em>, </em><em>optional</em>) – This kwarg is NOT YET IMPLEMENTED.
+Defaults to None.</p></li>
+<li><p><strong>depth_column</strong> – The name of the depth column to be excluded from imputation
+if desired. Defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe with imputed values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.generate_imputation_models">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">generate_imputation_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#generate_imputation_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.generate_imputation_models" title="Permalink to this definition">#</a></dt>
+<dd><p>Generates 3rd order polynomial regression models with the DEPTH column as the
+target y variable and each curve in the provided curves keyword argument as the
+x variable (i.e. a model per curve).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to get data</p>
+</dd>
+</dl>
+<dl>
+<dt>Keywords Args:</dt><dd><dl class="simple">
+<dt>curves (list): list of curves names to generate models for. If this</dt><dd><p>argument is not provided, no models are generated because it defaults
+to an empty list.</p>
+</dd>
+</dl>
+<p>depth_column: the curve that indicates the depth</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dictionary with models for each curve based on DEPTH</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.individual_imputation_models">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">individual_imputation_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#individual_imputation_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.individual_imputation_models" title="Permalink to this definition">#</a></dt>
+<dd><p>Determines whether an individual or global model would be best for a given
+list of curves to check and generates individual models if the checks are
+passed. We check the percentage of missing data and the
+spread of actual data with some thresholds to decide if we should use an
+individual model. If the spread of the data is greater than 0.7 and the
+percentage of missing data is less than 60%, an individual model is created.
+These thresholds can be changed via the kwargs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe with data</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curves</strong> (<em>list</em>) – list of curves to create individual models for provided
+they pass the relevant thresholds</p></li>
+<li><p><strong>imputation_models</strong> (<em>dict</em>) – models given for each curve
+(usually global models). If not provided, defaults to an empty dict</p></li>
+<li><p><strong>data_spread_threshold</strong> (<em>float</em>) – The data spread threshold that determines
+whether or not an individual model for the curve should be created.</p></li>
+<li><p><strong>missing_data_threshold</strong> (<em>float</em>) – The data spread threshold that determines
+whether or not an individual model for the curve should be created.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>updated imputation models dictionary (if provided via kwargs)</dt><dd><p>with individual models replacing existing models (where applicable)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.apply_depth_trend_imputation">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">apply_depth_trend_imputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#apply_depth_trend_imputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.apply_depth_trend_imputation" title="Permalink to this definition">#</a></dt>
+<dd><p>Apply imputation models to impute curves in given dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to which impute values</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curves</strong> (<em>list</em>) – list of curves to apply the imputation to.</p></li>
+<li><p><strong>imputation_models</strong> (<em>dict</em>) – imputation models for each curve. If a model
+is not provided for each curve, a KeyError is raised</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe with imputed values based on depth trend</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.impute_depth_trend">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">impute_depth_trend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#impute_depth_trend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.impute_depth_trend" title="Permalink to this definition">#</a></dt>
+<dd><p>Imputation of curves based on polynomial regression models of the curve based on DEPTH</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – df to impute curves</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curves_to_impute</strong> (<em>list</em>) – list of curves to depth impute</p></li>
+<li><p><strong>imputation_models</strong> (<em>dict</em>) – dictionary with curves as keys and the sklearn model as value</p></li>
+<li><p><strong>save_imputation_models</strong> (<em>bool</em>) – whether to save the models in the folder_path</p></li>
+<li><p><strong>folder_path</strong> (<em>str</em>) – The path to the folder where the imputation models
+should be saved.</p></li>
+<li><p><strong>allow_individual_models</strong> (<em>bool</em>) – whether to allow individual models if seen that it has enough data</p></li>
+<li><p><strong>so</strong> (<em>to do</em>) – </p></li>
+<li><p><strong>curves_mappings</strong> (<em>dict</em>) – A mapping dictionary to allow mapping curve names
+to more standardized names. Defaults to {} (ie. no standardization).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>dataframe with curves imputed, and the imputations models that</dt><dd><p>were used to impute the curves stored in a dict</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple(pd.DataFrame, dict)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.imputers.fillna_callibration_values">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.imputers.</span></span><span class="sig-name descname"><span class="pre">fillna_callibration_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curves</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calib_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize_level_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/imputers.html#fillna_callibration_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.imputers.fillna_callibration_values" title="Permalink to this definition">#</a></dt>
+<dd><p>Imputes missing values with values of closest wells. The values will be anything
+the user has chosen, eg mode, mean, median, which is the value in the
+calib_values given. Calib values can be acquired with the function
+utilities.get_calibration_values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to impute</p></li>
+<li><p><strong>curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – curves to impute missing values</p></li>
+<li><p><strong>calib_values</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>pd.DataFrame</em><em>]</em>) – dictionary with keys being well id</p></li>
+<li><p><strong>level</strong> (<em>str</em>) – </p></li>
+<li><p><strong>level</strong> – grouping chosen by the user for the values (eg group/formation)</p></li>
+<li><p><strong>id_column</strong> (<em>str</em>) – well id name in df</p></li>
+<li><p><strong>standardize_level_names</strong> (<em>bool optional</em>) – whether to standardize formation</p></li>
+<li><p><strong>True.</strong> (<em>or group names. Defaults to</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>imputed dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="akerbp.mlpet.preprocessors.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">preprocessors module</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Aker BP
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

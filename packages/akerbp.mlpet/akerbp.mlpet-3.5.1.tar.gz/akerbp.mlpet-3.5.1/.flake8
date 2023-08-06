@@ -1,0 +1,23 @@
+[flake8]
+ignore = E203, E266, E501, W503, B950, B905, B907, B028
+# Remove B905 from above list when we start supporting Python 3.10
+# line length is intentionally set to 88 here because black uses Bugbear
+# See https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length for more details
+# Also choosing to suppress B950 as black will try and handle line-length as
+# best it can.
+max-line-length = 88
+max-complexity = 18
+select = B,C,E,F,W,T4,B9
+
+# for use in CI/CD pipeline
+show_source = True
+statistics = True
+
+# To ensure flake8 doesn't go crazy
+exclude =
+    .git
+    docs/
+    build/
+    dist/
+    .venv/
+    __pycache__

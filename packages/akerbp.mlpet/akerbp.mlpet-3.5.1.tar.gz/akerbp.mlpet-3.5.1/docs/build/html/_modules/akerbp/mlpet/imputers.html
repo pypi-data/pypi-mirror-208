@@ -1,0 +1,622 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/>
+        <title>akerbp.mlpet.imputers - akerbp.mlpet 1.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">akerbp.mlpet 1.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">akerbp.mlpet 1.1.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Package Documentation</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../akerbp.mlpet.html">akerbp.mlpet package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../akerbp.mlpet.dataloader.html">dataloader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../akerbp.mlpet.dataset.html">dataset module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../akerbp.mlpet.feature_engineering.html">feature_engineering module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../akerbp.mlpet.utilities.html">utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../akerbp.mlpet.preprocessors.html">preprocessors module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../akerbp.mlpet.imputers.html">imputers module</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for akerbp.mlpet.imputers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas.core.frame</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="c1"># necessary for iterative imputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.experimental</span> <span class="kn">import</span> <span class="n">enable_iterative_imputer</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">IterativeImputer</span><span class="p">,</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute._base</span> <span class="kn">import</span> <span class="n">_BaseImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">BayesianRidge</span><span class="p">,</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+
+<span class="kn">from</span> <span class="nn">akerbp.mlpet.utilities</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_col_types</span><span class="p">,</span>
+    <span class="n">standardize_group_formation_name</span><span class="p">,</span>
+    <span class="n">standardize_names</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="simple_impute"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.simple_impute">[docs]</a><span class="k">def</span> <span class="nf">simple_impute</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Imputes missing values in specified columns with sklearn's SimpleImputer</span>
+<span class="sd">    using the mean strategy for numeric columns and the most_frequent strategy</span>
+<span class="sd">    for categorical columns</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): dataframe with columns to impute</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        categorical_curves: List of column names that should be considered as</span>
+<span class="sd">            categorical. If not provided, defaults to trying to determine these</span>
+<span class="sd">            using the get_col_types utility function</span>
+<span class="sd">        depth_column: The name of the depth column to be excluded from imputation</span>
+<span class="sd">            if desired. Defaults to None</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: dataframe with imputed values and a dictionary containing the</span>
+<span class="sd">            fitted imputers</span>
+<span class="sd">    """</span>
+    <span class="n">depth_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"depth_column"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">num_cols</span><span class="p">,</span> <span class="n">cat_cols</span> <span class="o">=</span> <span class="n">get_col_types</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"categorical_curves"</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+
+    <span class="c1"># Impute numerical columns</span>
+    <span class="n">missing_cols_num</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">num_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">depth_column</span> <span class="ow">in</span> <span class="n">missing_cols_num</span><span class="p">:</span>
+        <span class="n">missing_cols_num</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">depth_column</span><span class="p">)</span>
+    <span class="n">num_imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">)</span>
+    <span class="n">num_imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">missing_cols_num</span><span class="p">])</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">missing_cols_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">missing_cols_num</span><span class="p">])</span>
+
+    <span class="n">artifacts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"simple_numerical_imputer"</span><span class="p">:</span> <span class="n">num_imputer</span><span class="p">}</span>
+
+    <span class="c1"># Impute the categorical columns</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cat_cols</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">missing_cols_cat</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cat_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">cat_imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">"most_frequent"</span><span class="p">)</span>
+        <span class="n">cat_imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">missing_cols_cat</span><span class="p">])</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">missing_cols_cat</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">cat_imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">missing_cols_cat</span><span class="p">]),</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">missing_cols_cat</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">artifacts</span><span class="p">[</span><span class="s2">"simple_categorical_imputer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cat_imputer</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="iterative_impute"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.iterative_impute">[docs]</a><span class="k">def</span> <span class="nf">iterative_impute</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Imputes all numerical columns with sklearn's iterative imputer using a</span>
+<span class="sd">    Bayesian Ridge as the estimator.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): dataframe with columns to impute</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        imputer (_BaseImputer, optional): This kwarg is NOT YET IMPLEMENTED.</span>
+<span class="sd">            Defaults to None.</span>
+<span class="sd">        depth_column: The name of the depth column to be excluded from imputation</span>
+<span class="sd">            if desired. Defaults to None</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: dataframe with imputed values</span>
+<span class="sd">    """</span>
+    <span class="n">depth_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"depth_column"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">imputer</span><span class="p">:</span> <span class="n">_BaseImputer</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"imputer"</span><span class="p">)</span>
+    <span class="c1"># Only interested in numerical columns so no need to flood console with</span>
+    <span class="c1"># warnings related to categorical curves</span>
+    <span class="n">num_cols</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_col_types</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Iterative impute</span>
+    <span class="n">missing_featutes</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">num_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">depth_column</span> <span class="ow">in</span> <span class="n">missing_featutes</span><span class="p">:</span>
+        <span class="n">missing_featutes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">depth_column</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">imputer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">imputer</span> <span class="o">=</span> <span class="n">IterativeImputer</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">BayesianRidge</span><span class="p">())</span>
+        <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">missing_featutes</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Providing an imputer is not implemented yet!"</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">missing_featutes</span><span class="p">]</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">missing_featutes</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="generate_imputation_models"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.generate_imputation_models">[docs]</a><span class="k">def</span> <span class="nf">generate_imputation_models</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Generates 3rd order polynomial regression models with the DEPTH column as the</span>
+<span class="sd">    target y variable and each curve in the provided curves keyword argument as the</span>
+<span class="sd">    x variable (i.e. a model per curve).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): dataframe to get data</span>
+
+<span class="sd">    Keywords Args:</span>
+<span class="sd">        curves (list): list of curves names to generate models for. If this</span>
+<span class="sd">            argument is not provided, no models are generated because it defaults</span>
+<span class="sd">            to an empty list.</span>
+
+<span class="sd">        depth_column: the curve that indicates the depth</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: dictionary with models for each curve based on DEPTH</span>
+<span class="sd">    """</span>
+    <span class="n">curves</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"curves"</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">depth_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"depth_column"</span><span class="p">,</span> <span class="s2">"DEPTH"</span><span class="p">)</span>
+    <span class="n">imputation_models</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="p">{</span><span class="s2">"poly_transform"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">curves</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">depth_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="s2">"To generate imputation models, the depth_column parameter is required."</span>
+                <span class="s2">" It does not exist in the provided dataframe!"</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
+            <span class="c1"># remove nan values</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">depth_column</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())]</span>
+            <span class="c1"># polynomial features and regression fitting</span>
+            <span class="n">poly</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">depth_column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">depth_poly</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">depth_column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">linear_model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+            <span class="n">linear_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">depth_poly</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">imputation_models</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s2">"poly_transform"</span><span class="p">]</span> <span class="o">=</span> <span class="n">poly</span>
+            <span class="n">imputation_models</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s2">"model"</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_model</span>
+
+    <span class="k">return</span> <span class="n">imputation_models</span></div>
+
+
+<div class="viewcode-block" id="individual_imputation_models"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.individual_imputation_models">[docs]</a><span class="k">def</span> <span class="nf">individual_imputation_models</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Determines whether an individual or global model would be best for a given</span>
+<span class="sd">    list of curves to check and generates individual models if the checks are</span>
+<span class="sd">    passed. We check the percentage of missing data and the</span>
+<span class="sd">    spread of actual data with some thresholds to decide if we should use an</span>
+<span class="sd">    individual model. If the spread of the data is greater than 0.7 and the</span>
+<span class="sd">    percentage of missing data is less than 60%, an individual model is created.</span>
+<span class="sd">    These thresholds can be changed via the kwargs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): dataframe with data</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        curves (list): list of curves to create individual models for provided</span>
+<span class="sd">            they pass the relevant thresholds</span>
+<span class="sd">        imputation_models (dict): models given for each curve</span>
+<span class="sd">            (usually global models). If not provided, defaults to an empty dict</span>
+<span class="sd">        data_spread_threshold (float): The data spread threshold that determines</span>
+<span class="sd">             whether or not an individual model for the curve should be created.</span>
+<span class="sd">        missing_data_threshold (float): The data spread threshold that determines</span>
+<span class="sd">             whether or not an individual model for the curve should be created.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: updated imputation models dictionary (if provided via kwargs)</span>
+<span class="sd">            with individual models replacing existing models (where applicable)</span>
+<span class="sd">    """</span>
+    <span class="c1"># Process kwargs</span>
+    <span class="n">curves</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"curves"</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">imputation_models</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"imputation_models"</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">data_spread_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data_spread_threshold"</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">)</span>
+    <span class="n">missing_data_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"missing_data_threshold"</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">curves</span><span class="p">:</span>
+        <span class="n">curves_to_generate_individual_model_for</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
+            <span class="c1"># if a curve model was not in the given models dicitonary, add it</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">imputation_models</span><span class="p">:</span>
+                <span class="n">curves_to_generate_individual_model_for</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="c1"># also add it if an individual model would be better</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">perc_missing</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">idx_nona</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span><span class="o">.</span><span class="n">index</span>
+                <span class="n">spread</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx_nona</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">idx_nona</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span>
+                    <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">spread</span> <span class="o">&gt;</span> <span class="n">data_spread_threshold</span>
+                    <span class="ow">and</span> <span class="n">perc_missing</span> <span class="o">&lt;</span> <span class="n">missing_data_threshold</span>
+                <span class="p">):</span>
+                    <span class="n">curves_to_generate_individual_model_for</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">curves_to_generate_individual_model_for</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">individual_models</span> <span class="o">=</span> <span class="n">generate_imputation_models</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">"curves"</span><span class="p">:</span> <span class="n">curves_to_generate_individual_model_for</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="c1"># replace global models by individual ones</span>
+            <span class="n">imputation_models</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">individual_models</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">imputation_models</span></div>
+
+
+<div class="viewcode-block" id="apply_depth_trend_imputation"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.apply_depth_trend_imputation">[docs]</a><span class="k">def</span> <span class="nf">apply_depth_trend_imputation</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Apply imputation models to impute curves in given dataframe</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): dataframe to which impute values</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        curves (list): list of curves to apply the imputation to.</span>
+<span class="sd">        imputation_models (dict): imputation models for each curve. If a model</span>
+<span class="sd">            is not provided for each curve, a KeyError is raised</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: dataframe with imputed values based on depth trend</span>
+<span class="sd">    """</span>
+    <span class="c1"># Process kwargs</span>
+    <span class="n">curves</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"curves"</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">if</span> <span class="n">curves</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imputation_models</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"imputation_models"</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="s2">"No imputation models could be applied to the requested curves "</span>
+                <span class="s2">"because no models were passed to the method!"</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">imputation_models</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Attempting to impute for </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2"> but no corresponding imputation "</span>
+                    <span class="s2">"model was provided for that curve!"</span>
+                <span class="p">)</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">())</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">DEPTH</span><span class="o">.</span><span class="n">notna</span><span class="p">())]</span><span class="o">.</span><span class="n">index</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">well_data_missing</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing</span><span class="p">,</span> <span class="s2">"DEPTH"</span><span class="p">]</span>
+                <span class="c1"># impute values with depth trend - linear model</span>
+                <span class="n">poly_preds</span> <span class="o">=</span> <span class="n">imputation_models</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s2">"poly_transform"</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">well_data_missing</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">poly_preds</span> <span class="o">=</span> <span class="n">imputation_models</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">poly_preds</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">poly_preds</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="impute_depth_trend"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.impute_depth_trend">[docs]</a><span class="k">def</span> <span class="nf">impute_depth_trend</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Imputation of curves based on polynomial regression models of the curve based on DEPTH</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): df to impute curves</span>
+
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        curves_to_impute (list): list of curves to depth impute</span>
+<span class="sd">        imputation_models (dict): dictionary with curves as keys and the sklearn model as value</span>
+<span class="sd">        save_imputation_models (bool): whether to save the models in the folder_path</span>
+<span class="sd">        folder_path (str): The path to the folder where the imputation models</span>
+<span class="sd">            should be saved.</span>
+<span class="sd">        allow_individual_models (bool): whether to allow individual models if seen that it has enough data</span>
+<span class="sd">        to do so (better performance per well)</span>
+<span class="sd">        curves_mappings (dict): A mapping dictionary to allow mapping curve names</span>
+<span class="sd">            to more standardized names. Defaults to {} (ie. no standardization).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple(pd.DataFrame, dict): dataframe with curves imputed, and the imputations models that</span>
+<span class="sd">            were used to impute the curves stored in a dict</span>
+<span class="sd">    """</span>
+
+    <span class="n">curves</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"curves_to_impute"</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">imputation_models</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"imputation_models"</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">save_imputation_models</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"save_imputation_models"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folder_path"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="n">allow_individual_models</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"allow_individual_models"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">curves_mappings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"curves_mapping"</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="k">if</span> <span class="n">curves</span><span class="p">:</span>
+        <span class="c1"># we need to first standardize names if possible</span>
+        <span class="k">if</span> <span class="n">curves_mappings</span><span class="p">:</span>
+            <span class="n">curves</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">standardize_names</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">curves_mappings</span><span class="p">)</span>
+
+        <span class="c1"># check if depth and all other curves in df</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"DEPTH"</span><span class="p">]):</span>
+            <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Cannot perform depth trend imputation as not all curves are in the dataset."</span>
+            <span class="p">)</span>
+
+        <span class="c1"># if imputation models do not exist</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">imputation_models</span><span class="p">:</span>
+            <span class="c1"># generate models</span>
+            <span class="n">imputation_models</span> <span class="o">=</span> <span class="n">generate_imputation_models</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">"curves"</span><span class="p">:</span> <span class="n">curves</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">save_imputation_models</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">folder_path</span><span class="p">:</span>
+                    <span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span>
+                        <span class="n">imputation_models</span><span class="p">,</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="n">folder_path</span><span class="p">,</span>
+                            <span class="s2">"imputation_models.joblib"</span><span class="p">,</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">"Save imputation models was set to true but no "</span>
+                        <span class="s2">" folder_path kwarg was passed to the method!"</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># check if imputation models is provided as a dict with the same format</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imputation_models</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">imputation_models</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">allow_individual_models</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="s2">"Some provided curves for imputing do not have models. Models will be generated."</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">"Curves included in the imputation models dictionary inconsistent with curves to impute"</span><span class="p">,</span>
+                            <span class="n">imputation_models</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+                            <span class="n">curves</span><span class="p">,</span>
+                        <span class="p">)</span>
+            <span class="c1"># check if it is preferable to use individual models instead of given global models</span>
+            <span class="k">if</span> <span class="n">allow_individual_models</span><span class="p">:</span>
+                <span class="n">imputation_models</span> <span class="o">=</span> <span class="n">individual_imputation_models</span><span class="p">(</span>
+                    <span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">"curves"</span><span class="p">:</span> <span class="n">curves</span><span class="p">,</span> <span class="s2">"imputation_models"</span><span class="p">:</span> <span class="n">imputation_models</span><span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="c1"># apply imputation</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">apply_depth_trend_imputation</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">"curves"</span><span class="p">:</span> <span class="n">curves</span><span class="p">,</span> <span class="s2">"imputation_models"</span><span class="p">:</span> <span class="n">imputation_models</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">{</span><span class="s2">"imputation_models"</span><span class="p">:</span> <span class="n">imputation_models</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="fillna_callibration_values"><a class="viewcode-back" href="../../../akerbp.mlpet.imputers.html#akerbp.mlpet.imputers.fillna_callibration_values">[docs]</a><span class="k">def</span> <span class="nf">fillna_callibration_values</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">curves</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">calib_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">id_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">standardize_level_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Imputes missing values with values of closest wells. The values will be anything</span>
+<span class="sd">    the user has chosen, eg mode, mean, median, which is the value in the</span>
+<span class="sd">    calib_values given. Calib values can be acquired with the function</span>
+<span class="sd">    utilities.get_calibration_values.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): dataframe to impute</span>
+<span class="sd">        curves (List[str]): curves to impute missing values</span>
+<span class="sd">        calib_values (Dict[str, pd.DataFrame]): dictionary with keys being well id</span>
+<span class="sd">        and values a dataframe with values per level</span>
+<span class="sd">        level (str): grouping chosen by the user for the values (eg group/formation)</span>
+<span class="sd">        id_column (str): well id name in df</span>
+<span class="sd">        standardize_level_names (bool optional): whether to standardize formation</span>
+<span class="sd">        or group names. Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: imputed dataframe</span>
+<span class="sd">    """</span>
+    <span class="n">missing_curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span> <span class="o">+</span> <span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="n">id_column</span><span class="p">]</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_curves</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing necessary curves in dataframe: </span><span class="si">{</span><span class="n">missing_curves</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">df_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">standardize_level_names</span> <span class="ow">and</span> <span class="n">level</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"FORMATION"</span><span class="p">,</span> <span class="s2">"GROUP"</span><span class="p">]:</span>
+        <span class="n">df_</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">standardize_group_formation_name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">df_</span><span class="p">[</span><span class="n">id_column</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
+            <span class="n">df_</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_</span><span class="p">[</span><span class="n">id_column</span><span class="p">]</span> <span class="o">==</span> <span class="n">well</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="n">df_</span><span class="p">[</span><span class="n">id_column</span><span class="p">]</span> <span class="o">==</span> <span class="n">well</span><span class="p">,</span> <span class="n">c</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">calib_values</span><span class="p">[</span><span class="n">well</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="n">c</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">df_</span></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Aker BP
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

@@ -1,0 +1,766 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="imputers module" href="akerbp.mlpet.imputers.html" /><link rel="prev" title="utilities module" href="akerbp.mlpet.utilities.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.02.14.1"/>
+        <title>preprocessors module - akerbp.mlpet 1.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=a8f031f701c6af50c9919b48f173a5785af06fac" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">akerbp.mlpet 1.1.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">akerbp.mlpet 1.1.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Package Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="akerbp.mlpet.html">akerbp.mlpet package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.dataloader.html">dataloader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.dataset.html">dataset module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.feature_engineering.html">feature_engineering module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.utilities.html">utilities module</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">preprocessors module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="akerbp.mlpet.imputers.html">imputers module</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="preprocessors-module">
+<h1>preprocessors module<a class="headerlink" href="#preprocessors-module" title="Permalink to this headline">#</a></h1>
+<div class="table-wrapper"><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.encode_columns" title="akerbp.mlpet.preprocessors.encode_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.encode_columns</span></code></a>(df, ...)</p></td>
+<td><p>Encodes categorical columns. Only available for:</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.feature_engineering</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.fill_zloc_from_depth" title="akerbp.mlpet.preprocessors.fill_zloc_from_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.fill_zloc_from_depth</span></code></a>(df, ...)</p></td>
+<td><p>Fill missing values in Z_LOC column with values from the DEPTH_MD column</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.fillna_with_fillers" title="akerbp.mlpet.preprocessors.fillna_with_fillers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.fillna_with_fillers</span></code></a>(df, ...)</p></td>
+<td><p>Fills all NaNs in numeric columns with a num_filler and all NaNs in categorical columns with a cat_filler.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.normalize_curves" title="akerbp.mlpet.preprocessors.normalize_curves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.normalize_curves</span></code></a>(df, ...)</p></td>
+<td><p>Normalizes dataframe columns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.process_wells" title="akerbp.mlpet.preprocessors.process_wells"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.process_wells</span></code></a>(df, ...)</p></td>
+<td><p>Performs preprocessing per well</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.remove_noise" title="akerbp.mlpet.preprocessors.remove_noise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.remove_noise</span></code></a>(df, ...)</p></td>
+<td><p>Removes noise by applying a median rolling window on each curve.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.remove_outliers" title="akerbp.mlpet.preprocessors.remove_outliers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.remove_outliers</span></code></a>(df, ...)</p></td>
+<td><p>Returns the dataframe after applying the curve specific cutoff values if the threshold (th) of the number of outliers is passed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.remove_small_negative_values" title="akerbp.mlpet.preprocessors.remove_small_negative_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.remove_small_negative_values</span></code></a>(df, ...)</p></td>
+<td><p>Replaces small negative values with np.NaN in all the numeric columns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.scale_curves" title="akerbp.mlpet.preprocessors.scale_curves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.scale_curves</span></code></a>(df, ...)</p></td>
+<td><p>Scales specified columns</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.select_columns" title="akerbp.mlpet.preprocessors.select_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.select_columns</span></code></a>(df, ...)</p></td>
+<td><p>Returns a dataframe with only curves chosen by user, filtered from the original dataframe</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.drop_columns" title="akerbp.mlpet.preprocessors.drop_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.drop_columns</span></code></a>(df, ...)</p></td>
+<td><p>Returns a dataframe with the requested curves dropped</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#akerbp.mlpet.preprocessors.set_as_nan" title="akerbp.mlpet.preprocessors.set_as_nan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">akerbp.mlpet.preprocessors.set_as_nan</span></code></a>(df, ...)</p></td>
+<td><p>Replaces the provided numerical and categorical values with np.nan in the respective numerical and categorical columns.</p></td>
+</tr>
+</tbody>
+</table></div>
+<span class="target" id="module-akerbp.mlpet.preprocessors"></span><p>This module contains all the preprocessors available to the Dataset class of the
+mlpet repo (besides the preprocessing functions found in feature_engineering and
+imputers). All preprocessing functions in mlpet <strong>MUST</strong> follow a strict API
+in order to be used in conjunction with the preprocess method of the Dataset
+class.</p>
+<p>The preprocessing API looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">some_preprocessing_function</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="n">do_something</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+</div>
+<p>This API allows for defining a preprocessing pipeline at runtime and passing it
+to the preprocess method instead of defining it prior to the initialisation of
+the Dataset class.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.set_as_nan">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">set_as_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#set_as_nan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.set_as_nan" title="Permalink to this definition">#</a></dt>
+<dd><p>Replaces the provided numerical and categorical values with np.nan in the
+respective numerical and categorical columns. If numerical or categorical
+column names are not provided they will be inferred using the get_col_types
+utility function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to apply metadata to</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>numerical_curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The numerical columns in which the
+numerical value should be replaced with np.nan.</p></li>
+<li><p><strong>categorical_curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The categorical columns in which
+the numerical value should be replaced with np.nan.</p></li>
+<li><p><strong>numerical_value</strong> (<em>float/int</em><em>, </em><em>optional</em>) – The numerical value that should be replaced with np.nan.</p></li>
+<li><p><strong>categorical_value</strong> (<em>str</em><em>, </em><em>optional</em>) – The categorical value that should be replaced with np.nan.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>The original dataframe filled with np.nan where</dt><dd><p>requested</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>df (pd.Dataframe)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.remove_outliers">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">remove_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#remove_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.remove_outliers" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the dataframe after applying the curve specific cutoff values if
+the threshold (th) of the number of outliers is passed. The following
+curves and corresponding cutoff values are used (if they exist in the
+provided curves list):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>GR: low cutoff: 0, high cutoff: 250</p></li>
+<li><p>RMED: high cutoff: 100</p></li>
+<li><p>RDEP: high cutoff: 100</p></li>
+<li><p>RSHA: high cutoff: 100</p></li>
+<li><p>NEU: low cutoff: -0.5, high cutoff: 1 (replaced with np.nan)</p></li>
+<li><p>PEF: high cutoff: 10 (replaced with np.nan)</p></li>
+</ul>
+</div></blockquote>
+<p>If not otherwise specified above, values above/below the cutoffs are replaced
+with the corresponding cutoff value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to remove outliers</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>outlier_curves</strong> (<em>list</em>) – The curves to remove outliers for using the above rules</p></li>
+<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – threshold of number of samples that are outliers.
+Used for displaying warnings of too many samples removed. Defaults to 0.05.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe without outliers</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.remove_small_negative_values">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">remove_small_negative_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#remove_small_negative_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.remove_small_negative_values" title="Permalink to this definition">#</a></dt>
+<dd><p>Replaces small negative values with np.NaN in all the numeric columns. The
+small negative values are determined by defining a nan_threshold. If the
+negative value is smaller than the threshold it is set to nan. Naturally,
+this operation is only done on numeric columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to be preprocessed</p></li>
+<li><p><strong>numerical_curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The column names for which small negative values should
+be replaced with NaNs. If not provided, this list is generated using
+the get_col_types utility function</p></li>
+<li><p><strong>nan_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – The threshold determing the smallest
+acceptable negative value. Defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>preprocessed dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.fill_zloc_from_depth">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">fill_zloc_from_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#fill_zloc_from_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.fill_zloc_from_depth" title="Permalink to this definition">#</a></dt>
+<dd><p>Fill missing values in Z_LOC column with values from the DEPTH_MD column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The dataframe containing both Z_LOC and DEPTH_MD columns</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>The original dataframe with the Z_LOC column filled where</dt><dd><p>possible.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.fillna_with_fillers">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">fillna_with_fillers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#fillna_with_fillers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.fillna_with_fillers" title="Permalink to this definition">#</a></dt>
+<dd><p>Fills all NaNs in numeric columns with a num_filler and all NaNs in
+categorical columns with a cat_filler. All four of these variables are
+passed as kwargs.</p>
+<p>If a num_filler and/or cat_filler is passed without corresponding column
+names, column types are inferred using the get_col_type utility function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The dataframe to be preprocessed</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>num_filler</strong> (<em>float</em>) – The numeric value to fill nans with in the numeric</p></li>
+<li><p><strong>numerical_curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The column names for all numeric columns
+where the NaNs will be filled with the num_filler</p></li>
+<li><p><strong>cat_filler</strong> (<em>float</em>) – The numeric value to fill nans with in the numeric</p></li>
+<li><p><strong>categorical_curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The column names for all numeric columns
+where the NaNs will be filled with the num_filler</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Preprocessed dataframe</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.encode_columns">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">encode_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#encode_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.encode_columns" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>Encodes categorical columns. Only available for:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>FORMATION column - categories are encoded using the formations_map</dt><dd><p>provided in the kwargs.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>GROUP column - categories are encoded using the groups_map</dt><dd><p>provided in the kwargs</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>lsuName column - categories are encoded using the groups_map</dt><dd><p>provided in the kwargs</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Note: All names are standardized prior to mapping using the utility function</dt><dd><p>standardize_group_formation_name and all categories that weren’t mapped
+are encoded with -1.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to which apply encoding of categorical variables</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>columns_to_encode</strong> (<em>list</em>) – which columns to encode. Default to no columns being
+encoded. If no columns are passed the get_col_types utility function
+is used to determine the categorical columns</p></li>
+<li><p><strong>formations_map</strong> (<em>dict</em>) – A mapping dictionary mapping formation names to
+corresponding integers. Defaults to an empty dictionary (ie no encoding).</p></li>
+<li><p><strong>groups_map</strong> (<em>dict</em>) – A mapping dictionary mapping group names to
+corresponding integers. Defaults to an empty dictionary (ie no encoding).</p></li>
+<li><p><strong>missing_encoding_value</strong> (<em>int</em>) – The value to fill encode categories for which
+no match was found in the provided mappings. Defaults to -1.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe with categorical columns encoded</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.select_columns">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">select_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#select_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.select_columns" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a dataframe with only curves chosen by user, filtered from the original dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to filter</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curves_to_select</strong> (<em>list</em>) – which curves should be kept. Defaults to None.</p></li>
+<li><p><strong>label_column</strong> (<em>str</em>) – The name of the label column to keep if also desired. Defaults to None</p></li>
+<li><p><strong>id_column</strong> (<em>str</em>) – The name of the id column to keep if also desired. Defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe with relevant curves</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.drop_columns">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">drop_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#drop_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.drop_columns" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a dataframe with the requested curves dropped</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to filter</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p><strong>curves_to_drop</strong> (<em>list</em>) – The curves to be dropped. Defaults to None.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe with requested curves dropped</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.normalize_curves">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">normalize_curves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#normalize_curves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.normalize_curves" title="Permalink to this definition">#</a></dt>
+<dd><p>Normalizes dataframe columns.</p>
+<p>We choose one well to be a “key well” and normalize all other wells to
+its low and high values. This process requires the kwarg ‘id_column’ to be
+passed so that wells can be grouped by their ID.</p>
+<p>For each curve to be normalized, high and low quantiles are calculated
+per well (the high and low percentage keyword arguments dictate this).</p>
+<p>If the user provides key wells, key wells calculation is not perfomed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe with columns to normalize</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curves_to_normalize</strong> (<em>list</em>) – List of curves (column names) to normalize.
+Defaults to None (i.e. no curves being normalized).</p></li>
+<li><p><strong>id_column</strong> (<em>str</em>) – The name of the well ID column. This keyword argument
+<strong>MUST</strong> be provided to use this method.</p></li>
+<li><p><strong>low_perc</strong> (<em>float</em>) – low quantile to use as min value. Defaults to 5%</p></li>
+<li><p><strong>high_perc</strong> (<em>float</em>) – high quantile to use as max value. Defaults to 95%</p></li>
+<li><p><strong>user_key_wells</strong> (<em>dict</em>) – dictionary with curves as keys and min/max values
+and key well as values</p></li>
+<li><p><strong>save_key_wells</strong> (<em>bool</em>) – whether to save keys wells dictionary in
+folder_path. Defaults to False</p></li>
+<li><p><strong>folder_path</strong> (<em>str</em>) – The folder to save the key wells dictionary in.
+Defaults to “” so an error will be raised is saving is set to True
+but no folder_path is provided.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>pd.DataFrame with normalized values and dictionary with key wells</dt><dd><p>that were used to normalize the curves_to_normalize</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple(pd.DataFrame, dict)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.scale_curves">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">scale_curves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">sklearn.base.BaseEstimator</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#scale_curves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.scale_curves" title="Permalink to this definition">#</a></dt>
+<dd><p>Scales specified columns</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe containing columns to scale</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>curves_to_scale</strong> (<em>list</em>) – list of curves (column names) to scale</p></li>
+<li><p><strong>scaler_method</strong> (<em>str</em>) – string of any sklearn scalers. Defaults to RobustScaler</p></li>
+<li><p><strong>scaler_kwargs</strong> (<em>dict</em>) – dictionary of any kwargs to pass to the sklearn scaler</p></li>
+<li><p><strong>scaler</strong> (<em>BaseEstimator</em>) – a pre-fitted sklearn scaler object to apply directly
+to the curves_to_scale. If this kwarg is provided none of the other
+kwargs <strong>BESIDES</strong> curves_to_scale is needed.</p></li>
+<li><p><strong>save_scaler</strong> (<em>bool</em>) – whether to save scaler in folder_path or not. Defaults
+to False.</p></li>
+<li><p><strong>folder_path</strong> (<em>str</em>) – Which folder to save the scalers in. Defaults to no
+path so a path needs to be provided if the save_scaler kwarg is set
+to True.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>scaled columns and the scaler object that was used to scale the</dt><dd><p>scaled columns stored in a dict.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple(pd.DataFrame, dict)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.process_wells">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">process_wells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#process_wells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.process_wells" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs preprocessing per well</p>
+<p>This a convenience function that will perform several preprocessing steps
+per well if an id_column is provided in the kwargs. Otherwise it will treat
+the entire df as one well and preprocess it according to the same pipeline as
+the per well treatment.</p>
+<p>The preprocessing pipeline performed is as follows:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>imputation (if the ‘imputer’ kwarg is set)</p></li>
+<li><p>feature engineering:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Rolling features created using the add_rolling_features function</dt><dd><p>(if the ‘rolling_features’ kwarg is set)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Gradient features created using the add_gradient_features function</dt><dd><p>(if the ‘gradient_features’ kwarg is set)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Sequential features created using the add_sequential_features function</dt><dd><p>(if the ‘sequential_features’ kwarg is set)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+<p>The kwargs for each method discussed above must also be provided to this
+method. Please refer to the specific methods to determine which kwargs to
+provide</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe of data to be preprocessed</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id_column</strong> (<em>str</em>) – The well ID column name to use to groupby well ID</p></li>
+<li><p><strong>imputation_type</strong> (<em>str</em>) – <p>Which imputer to use. Can be one of the following two
+options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><dl class="simple">
+<dt>’iterative’ - runs the iterative_impute method from the</dt><dd><p>imputers module. Please refer to that method to read up on
+all necessary kwargs to use that method properly</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>’simple’ - runs the simple_impute method from the</dt><dd><p>imputers module. Please refer to that method to read up on
+all necessary kwargs to use that method properly</p>
+</dd>
+</dl>
+</li>
+</ol>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe of preprocessed data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.remove_noise">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">remove_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#remove_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.remove_noise" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes noise by applying a median rolling window on each curve.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Both kwargs are required for this function. If they are not provided,
+no noise filtering is performed and the df is returned untouched</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – dataframe to which apply median filtering</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>noisy_curves</strong> (<em>list</em>) – list of curves (columns) to apply noise removal with median filter
+if none are provided, median filtering will be applied to all
+numerical columns. Numerical columns are identified using the
+get_col_types utility function</p></li>
+<li><p><strong>noise_removal_window</strong> (<em>int</em>) – the window size to use when applying median filtering</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe after removing noise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="akerbp.mlpet.preprocessors.apply_calibration">
+<span class="sig-prename descclassname"><span class="pre">akerbp.mlpet.preprocessors.</span></span><span class="sig-name descname"><span class="pre">apply_calibration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_measured</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_predicted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curves</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_curves</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_thres</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">9999.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calib_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize_level_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/akerbp/mlpet/preprocessors.html#apply_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#akerbp.mlpet.preprocessors.apply_calibration" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies calibration to predicted curves, removing biases with the help of measured
+curves, either in the same well or closest wells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_measured</strong> (<em>pd.DataFrame</em>) – original dataframe with measured values</p></li>
+<li><p><strong>df_predicted</strong> (<em>pd.DataFrame</em>) – datframe with predicted values, same column names</p></li>
+<li><p><strong>curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – curves to which apply calibration</p></li>
+<li><p><strong>location_curves</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – which curves to use for distance to get closest wells</p></li>
+<li><p><strong>level</strong> (<em>str</em>) – which grouping type to apply calibration (poer group, per formation)</p></li>
+<li><p><strong>mode</strong> (<em>str</em>) – type of value aggregation (mean, median, mode)</p></li>
+<li><p><strong>id_column</strong> (<em>str</em>) – well id</p></li>
+<li><p><strong>distance_thres</strong> (<em>float</em><em>, </em><em>optional</em>) – threshold for a well to be considered close enough.</p></li>
+<li><p><strong>9999.0.</strong> (<em>Defaults to</em>) – </p></li>
+<li><p><strong>calib_map</strong> (<em>pd.DataFrame</em><em>, </em><em>optional</em>) – calibration map for the level. Defaults to None.</p></li>
+<li><p><strong>standardize_level_names</strong> (<em>bool optional</em>) – whether to standardize formation</p></li>
+<li><p><strong>True.</strong> (<em>or group names. Defaults to</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dataframe with calibrated values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="akerbp.mlpet.imputers.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">imputers module</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="akerbp.mlpet.utilities.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">utilities module</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Aker BP
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>
