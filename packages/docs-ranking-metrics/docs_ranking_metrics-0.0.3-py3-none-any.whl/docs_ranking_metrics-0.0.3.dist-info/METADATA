@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: docs-ranking-metrics
+Version: 0.0.3
+Summary: The package contains functions for calculating ranking metrics
+Home-page: https://github.com/betepok506/RankingMetrics
+Author: Andrey Rotanov
+Author-email: rotanov07@mail.ru
+License: UNKNOWN
+Keywords: test
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7, <4
+Description-Content-Type: text/markdown
+Requires-Dist: rank-bm25 (>=0.2.2)
+Requires-Dist: sentence-transformers (>=2.2.2)
+Requires-Dist: numpy
+Provides-Extra: all
+Provides-Extra: test
+Requires-Dist: coverage ; extra == 'test'
+
+# Описание
+Данный репозиторий содержит реализацию алгоритмов ранжирования Bm25, LaBSE 
+с подсчетом метрик: 
+* Top@1;
+* Top@3;
+* Top@5;
+* Средняя позиция в выдачах (AverageLoc);
+* Оценка как часто фейковый документ выше релевантных (FDARO)
+
+
+# Установка
+Для установки пакета воспользуйтесь командой
+```
+pip install docs-ranking-metrics
+```
+
+# Пример использования
+Пример использования представлен в `examples/using_metrics.py`
+
+```commandline
+# Объявление метрик
+metrics = [LaBSE(), Bm25()]
+# Объявление класса агрегирующего обновление метрик
+rank_metrics = RankingMetrics(metrics)
+
+...
+
+'''
+Обновление значений метрик, где 
+query - запрос по которому сгенерирован документ, 
+sentences - массив документов,
+labels - метки документов
+'''
+rank_metrics.update(query, sentences, labels)
+
+...
+# Получение значений подсчитанных метрик ввиде словаря
+rank_metrics.get()
+```
+
+Возможный вывод метода get:
+```
+{
+    'LaBSE_AverageLoc': 10.5, 
+    'Bm25_AverageLoc': 1.13513, 
+    'LaBSE_Top@1': 0.0, 
+    'LaBSE_Top@3': 0.013513, 
+    'LaBSE_Top@5': 0.013513, 
+    'Bm25_Top@1': 0.91891, 
+    'Bm25_Top@3': 1.0, 
+    'Bm25_Top@5': 1.0, 
+    'LaBSE_FDARO': 0.6216, 
+    'Bm25_FDARO': 1.0
+}
+```
+
+
