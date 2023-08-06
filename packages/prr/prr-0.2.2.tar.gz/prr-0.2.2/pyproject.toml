@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "prr"
+version = "0.2.2"
+description = "prr - command-line LLM prompt runner"
+authors = [ "Zbigniew Sobiecki <zbigniew@fwdoperators.com>" , "Mateusz Kozak <mateusz@fwdoperators.com>" ]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+openai = "^0.27.6"
+python-dotenv = "^1.0.0"
+anthropic = "^0.2.7"
+rich = "^13.3.5"
+Jinja2 = "^3.1.2"
+pyyaml = "^6.0"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.12.0"
+black = "^23.3.0"
+isort = "^5.12.0"
+
+[tool.poetry.scripts]
+prr = { callable = "prr:main" }
+
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/black_compatibility/
+profile = "black"
+
+[project.urls]
+Homepage = "https://github.com/Forward-Operators/prr"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
