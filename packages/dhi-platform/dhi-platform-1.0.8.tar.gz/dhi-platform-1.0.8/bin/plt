@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+function showHelp {
+    echo -e ${0##*/} cfg\\t\\tPlatform configuration operations
+    echo -e "    ds\\t\\tPlatform dataset operations"
+    echo -e "    eng\\t\\tPlatform engine execution operations"
+    echo -e "    prj\\t\\tPlatform project operations"
+    echo -e "    prjm\\tPlatform project member operations"
+    echo -e "    raw\\tPlatform raw service operations"
+    echo -e "    rb\\t\\tPlatform recycle bin operations"
+    echo -e "    reader\\tPlatform readers operations"
+    echo -e "    tr\\t\\tPlatform transfers operations"
+    echo -e "    ts\\t\\tPlatform time series operations"
+    echo -e "    writer\\tPlatform writers operations"
+    echo -e "    gw\\tPlatform gateway operations"
+}
+
+if [ "$1" == "" ]; then
+    showHelp
+elif [ "$2" == "" ]; then
+    python3 -m dhi.platform.cli.help dhi.platform.cli.$1
+else
+    python3 -m dhi.platform.cli.$1.$2 "${@:3}"
+fi
