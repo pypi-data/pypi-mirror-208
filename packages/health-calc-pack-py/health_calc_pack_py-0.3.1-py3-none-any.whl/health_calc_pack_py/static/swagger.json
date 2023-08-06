@@ -1,0 +1,120 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Health Calc Pack Py",
+      "version": "1.0"
+    },
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/imc": {
+        "post": {
+          "summary": "Calcular IMC",
+          "description": "Calcula o Índice de Massa Corporal (IMC) com base no peso e na altura fornecidos.",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/IMCRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "IMC calculado com sucesso",
+              "schema": {
+                "$ref": "#/definitions/IMCResponse"
+              }
+            }
+          }
+        }
+      },
+      "/macronutrientes": {
+        "post": {
+          "summary": "Calcular Macronutrientes",
+          "description": "Calcula os macronutrientes necessários para um indivíduo de acordo com seu objetivo nutricional.",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/MacronutrientesRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Macronutrientes calculados com sucesso",
+              "schema": {
+                "$ref": "#/definitions/MacronutrientesResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "IMCRequest": {
+        "type": "object",
+        "properties": {
+          "peso": {
+            "type": "number",
+            "format": "double"
+          },
+          "altura": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["peso", "altura"]
+      },
+      "IMCResponse": {
+        "type": "object",
+        "properties": {
+          "imc": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "MacronutrientesRequest": {
+        "type": "object",
+        "properties": {
+          "peso": {
+            "type": "number",
+            "format": "double"
+          },
+          "objetivo": {
+            "type": "string"
+          }
+        },
+        "required": ["peso", "objetivo"]
+      },
+      "MacronutrientesResponse": {
+        "type": "object",
+        "properties": {
+          "carboidratos": {
+            "type": "number",
+            "format": "double"
+          },
+          "proteinas": {
+            "type": "number",
+            "format": "double"
+          },
+          "gorduras": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      }
+    }
+  }
+  
