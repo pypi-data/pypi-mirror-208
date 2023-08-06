@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: wirebind
+Version: 0.0.1
+Summary: A networking library for distributed applications
+License: MIT
+Author: Paul Butler
+Author-email: paul@driftingin.space
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: cbor2 (>=5.4.6,<6.0.0)
+Requires-Dist: websockets (>=11.0.2,<12.0.0)
+Description-Content-Type: text/markdown
+
+# wirebind
+
+[![Python Tests](https://github.com/drifting-in-space/wirebind/actions/workflows/python.yml/badge.svg)](https://github.com/drifting-in-space/wirebind/actions/workflows/python.yml)
+
+In a typical client/server application, the client and server communicate by passing messages to each other. Wirebind allows applications to instead interact with local data structures, which it synchronizes over a long-lived WebSocket connection.
+
+The goal of wirebind is to make client/server applications as fun to build as single-process ones.
+
