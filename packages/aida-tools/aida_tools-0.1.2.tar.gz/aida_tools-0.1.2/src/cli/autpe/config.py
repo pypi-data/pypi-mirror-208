@@ -1,0 +1,23 @@
+MAPPING = {
+    "Pubblicato": "published",
+    "Tipologia": "is_person",
+    "Nome / Denominazione": "first_name",
+    "Cognome Nome": "last_name",
+    "Integrazione": "integration",
+    "Nome / Denominazione 2": "first_name_2",
+    "Cognome Nome 2": "last_name_2",
+    "Integrazione 2": "integration_2",
+    "Date di esistenza DA giorno": "existence_from_day",
+    "Date di esistenza DA mese": "existence_from_month",
+    "Date di esistenza DA anno": "existence_from_year",
+    "Date di esistenza A giorno": "existence_to_day",
+    "Date di esistenza A mese": "existence_to_month",
+    "Date di esistenza A anno": "existence_to_year",
+    "Storia": "story",
+    "Funzione": "function",
+    "Funzione 2": "function_2",
+    "Funzione 3": "function_3",
+    "Luoghi": "place_id",
+    "Luoghi - Tipo di relazione": "place_relation_type",
+    "Stato compilazione": "fill_status"
+}

@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "aida-tools"
+version = "0.1.2"
+description = ""
+authors = ["Matteo Spanio <dev2@audioinnova.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    {include = "aida_tools", from = "src"},
+    {include = "cli", from = "src"},
+    {include = "models", from = "src"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+rich = "^13.3.5"
+mariadb = "^1.1.6"
+
+[tool.poetry.group.dev.dependencies]
+pydantic = "^1.10.7"
+pytest = "^7.3.1"
+
+[tool.poetry.scripts]
+import-tommasoli = "cli.tommasoli.app:main"
+import-autpe = "cli.autpe.app:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
