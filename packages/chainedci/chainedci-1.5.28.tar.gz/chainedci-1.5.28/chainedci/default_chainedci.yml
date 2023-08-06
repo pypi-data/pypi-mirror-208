@@ -1,0 +1,120 @@
+---
+log:
+  # log level in [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+  level: INFO
+  # log format
+  format: "%(asctime) s(%(levelname)-5.5s) %(message)s"
+  file:
+    # File to save the logs
+    name: chainedci.log
+  # Print the deprecation warnings
+  deprecation_warning: "False"
+  # In case of raise_ex, raise an exception or just print the message and exit
+  exception_or_exit: "False"
+  # Hide tokens
+  hide_tokens: "True"
+
+artifacts:
+  # For 'certificates' artifact source
+  certificates:
+    # Get it from this source folder
+    src: certificates
+    # Save it to this one
+    dest: vars/certificates.yml
+  # For ansible_ssh_creds artifact source
+  ssh_creds:
+    # Get it from this source folder
+    src: ssh_creds
+    # Save it to this one
+    dest: vars/vaulted_ssh_credentials.yml
+  # For ssh_access artifact source
+  ssh_access:
+    # Get it from this source folder
+    src: config/ssh_gateways
+    # Save it to this one
+    dest: vars/ssh_gateways.yml
+  static:
+    # Get it from this source folder
+    src: config/artifacts
+    extension: .zip
+  # For PDF/IDF files
+  pdfidf:
+    # Get it from this source folder
+    src: config
+    extension: .yaml
+    idf_prefix: idf-
+    pdf_dest: vars/pdf.yml
+    idf_dest: vars/idf.yml
+
+# Specific steps
+specific_steps:
+  # Name of the step that will not trigger a pipeline but only prepare
+  # an artifact
+  config: config
+  # Name of the step that will trig a new chainedci pipeline
+  trigger_myself: trigger
+
+encryption:
+  # Encryption method
+  # Only ansible_vault is supported for now
+  method: ansible_vault
+  # Name of the environment variable that will contains the encryption key
+  key_env_name: ANSIBLE_VAULT_PASSWORD
+
+auth:
+  # Env vars name for the gitlab private token (the user one :())
+  private_token_env: CI_private_token
+
+timers:
+  # Default seconds to wait in 'pending' state - 15 min
+  pending: 900
+  # Default seconds to wait in 'running' state - 75 min
+  running: 4500
+  # Default seconds to wait in 'unknown' state - 75 min
+  unknown: 45
+  # Time between 2 retries
+  retries_sleep: 15
+  # Timeout way of calculation
+  # if True, the timeout value at step level is consided as a number of
+  # retries, and the real timeout will be timeout * retries_sleep
+  timeout_retrocompatibility: "True"
+
+generator:
+  # Main file path
+  gitlabci_main: .gitlab-ci.yml
+  # ci mode ['dynamic', 'splitted', 'allinone']
+  mode: splitted
+  # If splitted mode, create included files in this folder
+  ci_included_folder: .gitlab-ci
+  # If splitted_mode, create files with this prefix
+  ci_included_prefix: scenario_
+  # If dynamic mode, push the scenario in this file
+  ci_dynamic_file: scenario.yml
+  # If dynamic mode, generate dynamic stages from scenario steps
+  ci_dynamic_stages: "True"
+  # Vault password fetch
+  #  - 'file':    a file is already present, pushed by the CI as a file
+  #  - 'var':     a var is set by the CI as an environment variable
+  #  - 'varfile': a var is set by the CI as an environment variable, but push
+  #               in a file in 'before_script'
+  # Variable name can be changed in config <encryption.key_env_name>
+  ci_vault_input: file
+  # container images:
+  images:
+    # Yaml checking image
+    yaml_checking: sdesbure/yamllint:latest
+
+init:
+  # Init folder structure
+  tree:
+    scenarios:
+      # Folder containing scenario definitions
+      folder: 'scenarios'
+      # group vars like folder containing projects definitions
+      group: 'group_vars'
+      # host vars like folder containing scenarios definitions
+      definitions: 'host_vars'
+      # inventory listing active scenarios
+      inventory: 'inventory'
+    # folder containing configs
+    config: configs

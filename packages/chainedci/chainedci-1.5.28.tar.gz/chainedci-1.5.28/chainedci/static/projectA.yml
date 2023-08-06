@@ -1,0 +1,19 @@
+---
+jumphost:
+  server: jumphost_url
+  user: user
+environment: environmentA
+scenario_steps:
+  config:
+    project: config
+    input_artifact:
+      local_files:
+        projectA_config1.yml: config1.yml
+        projectA_config2.yml: config2.yml
+  deploy_what_i_want:
+    project: project_A
+    get_artifacts: config
+    extra_parameters:
+      VAR1: true
+      VAR2: true
+      VAR3: false
