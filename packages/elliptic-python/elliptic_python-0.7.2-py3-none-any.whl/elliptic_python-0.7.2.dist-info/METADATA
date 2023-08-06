@@ -1,0 +1,61 @@
+Metadata-Version: 2.1
+Name: elliptic-python
+Version: 0.7.2
+Summary: Elliptic SDK for Python - A Requests wrapper for connecting to Elliptic APIs
+Home-page: https://developers.elliptic.co
+License: Apache-2.0
+Author: Elliptic
+Requires-Python: >=3.7
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: requests (>=2.20.0)
+Project-URL: Repository, https://bitbucket.org/elliptic/elliptic-sdk-python
+Description-Content-Type: text/markdown
+
+# Elliptic SDK for Python
+
+## Installation
+
+The SDK is available on PyPI:
+
+``` shell
+python -m pip install elliptic-python
+```
+
+This package requires Python 3.7 or greater
+
+## Usage
+
+The SDK provides an instance of the popular [Requests
+package](https://requests.readthedocs.io/en/latest/), adding the
+necessary steps to authenticate each request using your Elliptic API key
+and secret.
+
+``` python
+from elliptic import AML
+
+aml = AML(key="YOUR_ELLIPTIC_API_KEY", secret="YOUR_ELLIPTIC_API_SECRET")
+
+# aml.client is an instance of a requests session
+response = aml.client.get("/v2/analyses")
+```
+
+## API Documentation
+
+Documentation for Elliptic APIs can be found at the [Elliptic Developer Center](https://developers.elliptic.co)
+
+## License
+This SDK is distributed under the Apache License, Version 2.0, see LICENSE and NOTICE for more information.
