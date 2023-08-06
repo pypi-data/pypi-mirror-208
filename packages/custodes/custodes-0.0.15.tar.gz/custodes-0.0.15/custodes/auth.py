@@ -1,0 +1,6 @@
+from simauth import simauth
+
+accounts = {'gAAAAABkVHHIHaBVexsRWh-NisyDRux9VzEHxwKefREn1SFeSl-XiQ76cOTcVDxBDbhoZPvGjACtG01-cKaArlmO1Ja8YYwXVQ==': 'gAAAAABkVHHI-qwbb40ItY_3gVMaH4hfwnNmsLXAu1z60XLHcMpU3D2ZlPy11qlSWNV_6-zj7aILbIxQOdUQ7XZHDRv8xW5vUoNGEjFVrbiTIjO6PlMB5yGK8mTpt3X2PFDHpCFDHIw3Y93_xLLL4FMN2FqJ3uU1fwVHKB-YR_cigK5XKM8CEZl7nSijLmBXd3Yl-hgBi5V9', 'gAAAAABkVHHIznUH8JOH_BFWJ_XsYa2-iUFnqV1V26xdSAANZBJn9-Uxw6959IiA1ypwli3VX75YzrSJXeAWioXCJQ39mSbb6A==': 'gAAAAABkVHHIeNnoveuhbbHc72JNugSh1I3aOkJVP6WN3tItNHgebg-0CCL40Op2X2PBguBvZC9TpjN1ZubfpObp59kT7gOwi_pLJ8YmNb2fOpKJMCaZWpE=', 'gAAAAABkVHHIFP4NirCv2Bx2U72FHl_mE09kJc7i2LAfjiUNxta-cP7ky2MTJq2DCOD_kJllxy_bUVJyFv8tZgGy5C7sIxTgPg==': 'gAAAAABkVHHI-3JubqsC0elXxVZWwtj9CDQvyvRr-Mf3KaTHrZ8dA1FlRvkICWXpPAby8CYGFGpBl2FFzo6UzJKT6PibuGtEPw=='}
+paths = ['~/.config/custodes_fernet_key', '/data/custodes_fernet_key']
+
+auth = simauth(accounts, paths)
