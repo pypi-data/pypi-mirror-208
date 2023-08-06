@@ -1,0 +1,31 @@
+[package]
+authors = [
+    "Christopher Schwan <handgranaten-herbert@posteo.de>",
+    "Alessandro Candido <candido.ale@gmail.com>",
+    "Felix Hekhorn <felix.hekhorn@mi.infn.it>"
+]
+description = "Python bindings to PineAPPL"
+name = "pineappl_py"
+readme = "README.md"
+
+categories= ["science"]
+edition= "2021"
+keywords= ["high-energy-physics", "physics"]
+license= "GPL-3.0-or-later"
+repository= "https://github.com/NNPDF/pineappl"
+rust-version= "1.64.0"
+version= "0.6.0-alpha.17"
+
+[package.metadata.maturin]
+name = "pineappl"
+
+[lib]
+name = "pineappl"
+crate-type = ["cdylib"]
+
+[dependencies]
+itertools = "0.10.1"
+ndarray = "0.15.4"
+numpy = "0.16.2"
+pineappl = { path = "local_dependencies/pineappl", version = "0.6.0-alpha.17" }
+pyo3 = { features = ["extension-module"], version = "0.16.4" }
