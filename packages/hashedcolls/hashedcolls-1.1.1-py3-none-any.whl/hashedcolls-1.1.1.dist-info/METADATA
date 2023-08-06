@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: hashedcolls
+Version: 1.1.1
+Summary: Hashed dict/list collections
+Author: @jedi2light
+Author-email: jedi2light@jedi2light.moe
+Maintainer: @jedi2light
+Maintainer-email: jedi2light@jedi2light.moe
+License: WTFPL
+Project-URL: Source, https://gitlab.com/jedi2light/hashedcolls.git
+Project-URL: Bug Tracker, https://gitlab.com/jedi2light/hashedcolls/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+# HashedColls - hashed dict/list collections
+
+## Simple Usage
+
+```python3
+from hashedcolls import HashedDict
+from hashedcolls import HashedList
+
+d = HashedDict
+l = HashedList
+
+my = d({d({1: 1}): 1, l([1, 2, 3]): 2, (1,): 3})
+```
+
+## How it works?
+
+By default, `dict` and `list` Python 3 collections can not be used
+as a key for a `dict`,  because they are mutable, thus are not `hashable`.  
+But both `HashedDict` and `HashedList` contain `__hash__()` method implemented.  
+How it works is that both of these classes have `Hashed` mixin included,
+so they are able to use `Hashed.elements2hash()` function,
+that basically returns `__hash__()` of all elements (`items()` in case of a `dict`).
