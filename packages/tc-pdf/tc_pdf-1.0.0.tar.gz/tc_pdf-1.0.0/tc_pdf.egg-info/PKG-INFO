@@ -1,0 +1,83 @@
+Metadata-Version: 2.1
+Name: tc-pdf
+Version: 1.0.0
+Summary: PDF Preview
+Home-page: http://github.com/intellisense/tc_pdf
+Author: Aamir Rind
+Author-email: aamir.adnan.rind@gmail.com
+License: MIT
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: tests
+License-File: LICENSE
+
+Thumbor / PDF Preview
+=====================
+
+This extension provides preview for PDF.
+
+Features
+--------
+
+Given a PDF URL return preview image of first page
+
+Installation
+------------
+
+- Prerequisite: Following system libraries are required:
+
+        - `ImageMagick <https://www.imagemagick.org/script/index.php>`_
+        - `Ghostscript <https://www.ghostscript.com/>`_
+
+- Install using ``pip``
+
+    .. code-block:: bash
+
+        $ pip install tc_pdf
+
+- Register the extension within Thumbor's configuration file
+
+    .. code-block:: bash
+
+        COMMUNITY_EXTENSIONS = [
+            'tc_pdf',
+            ...
+        ]
+
+- Launch thumbor with the Thumbor Community custom application:
+
+    .. code-block:: bash
+
+        $ thumbor -a tc_core.app.App
+
+Usage
+-----
+
+``tc_pdf`` handler route requires ``/pdf/`` in URL after all filters but before the resource URL part e.g.
+
+    .. code-block::
+
+        http://<thumbor_server>/unsafe/240x240/smart/pdf/localhost:8000/media/document/test.pdf
+
+If you are using `libthumbor <https://github.com/thumbor/libthumbor>`_ to generate URLs then you can use this `patch <https://gist.github.com/intellisense/46538f858de8bf9bceee6a7fe0b0f245>`_ for ``CryptoURL`` class and then use it like this:
+
+    .. code-block::
+    
+        from crypto import CryptoURL
+        
+        crypto = CryptoURL(key='my-security-key')
+
+        encrypted_url = crypto.generate(
+            width=300,
+            height=200,
+            smart=True,
+            image_url='/path/to/my/pdf_file.pdf',
+            pdf=True, # <-- Pass this
+        )
+
+
