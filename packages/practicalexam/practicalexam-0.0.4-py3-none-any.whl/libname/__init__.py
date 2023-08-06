@@ -1,0 +1,1 @@
+from libname import nqueen
