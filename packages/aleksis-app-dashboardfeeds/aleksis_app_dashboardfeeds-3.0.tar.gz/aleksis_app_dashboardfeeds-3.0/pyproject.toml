@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "AlekSIS-App-DashboardFeeds"
+version = "3.0"
+packages = [
+    { include = "aleksis" }
+]
+readme = "README.rst"
+include = [
+    { path = "aleksis/**/*.mo", format = ["sdist", "wheel"] },
+    { path = "*.rst", format = "sdist" },
+    { path = "docs/*", format = "sdist" },
+    { path = "docs/**/*", format = "sdist" },
+    { path = "conftest.py", format = "sdist" },
+    { path = "tox.ini", format = "sdist" }
+]
+
+description = "AlekSIS (School Information System) — App Dashboard Feeds (Include feeds from external resources as widgets on dashboard)"
+authors = ["Julian Leucker <leuckerj@gmail.com>", "Dominik George <dominik.george@teckids.org>"]
+maintainers = ["Jonathan Weth <wethjo@katharineum.de>", "Dominik George <dominik.george@teckids.org>"]
+license = "EUPL-1.2-or-later"
+homepage = "https://aleksis.org/"
+repository = "https://edugit.org/AlekSIS/official/AlekSIS-App-DashboardFeeds"
+documentation = "https://aleksis.org/AlekSIS/docs/html/"
+keywords = ["SIS", "education", "school", "calendar", "rss"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django :: 3.0",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Typing :: Typed",
+]
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://edugit.org/api/v4/projects/461/packages/pypi/simple"
+secondary = true
+
+[tool.poetry.dependencies]
+python = "^3.9"
+feedparser = "^6.0.0"
+django-feed-reader = "^1.0.0"
+ics = "^0.7"
+aleksis-core = "^3.0"
+
+[tool.poetry.dev-dependencies]
+aleksis-builddeps = "*"
+
+[tool.poetry.plugins."aleksis.app"]
+dashboardfeeds = "aleksis.apps.dashboardfeeds.apps:DefaultConfig"
+
+[tool.black]
+line-length = 100
+exclude = "/migrations/"
+
+[build-system]
+requires = ["poetry>=1.0"]
+build-backend = "poetry.masonry.api"

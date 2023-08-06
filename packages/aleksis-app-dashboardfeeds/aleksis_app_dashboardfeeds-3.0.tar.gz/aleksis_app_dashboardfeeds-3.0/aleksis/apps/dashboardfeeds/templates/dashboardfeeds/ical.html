@@ -1,0 +1,22 @@
+{% load i18n static %}
+
+<div class="card ">
+  <div class="card-content">
+    <span class="card-title">{% trans "Current Events" %}</span>
+    {% for event in feed_events %}
+      <div class="card-panel event-card">
+        <span class="title">{{ event.name }}</span>
+        <br>{{ event.date_formatted }}
+      </div>
+    {% empty %}
+      <span>{% trans "No events to display" %}</span>
+    {% endfor %}
+  </div>
+  {% if feed_events and base_url %}
+    <div class="card-action">
+      <a href="{{ base_url }}" target="_blank">
+        {% trans "Further events" %}
+      </a>
+    </div>
+  {% endif %}
+</div>
