@@ -1,0 +1,14 @@
+---
+- name: Stopping influx
+  command: docker stop influx
+
+- name: Make a tar of the files
+  archive:
+    path: /influx-data
+    dest: /influx-data.tar.gz
+
+- name: Pull back execution environment
+  fetch: src=/influx-data.tar.gz dest={{ backup_dir }}/{{ inventory_hostname }}-influxdb.tar.gz flat=yes
+
+- name: Starting influx
+  command: docker start influx
