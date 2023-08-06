@@ -1,0 +1,24 @@
+<html>
+
+<body>
+    <script>
+        {% comment %}
+        actualTimestamp is a serverside variable because we need to compare the token expiration
+        with the serverside current timestamp, if the client has a different timezone than the
+        server, the token will be expired always, even if the token expiration is in the future.
+        {% endcomment %}
+        let actualTimestamp = {{ actual_timestamp }};
+        let accessTokenExpiration = {{ expiration_timestamp }};
+        let haveCookie = {% if request.COOKIES.ACCESS_TOKEN_EXPIRATION != '' %}true{% else %}false{% endif %};
+        let isAuthenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+        if (
+            (accessTokenExpiration != 0 && actualTimestamp >= accessTokenExpiration)
+            || haveCookie === false || isAuthenticated === false
+        ) {
+            window.location.href = '{% url "oidc_authentication_init" %}?next='+window.location.href;
+        }
+    </script>
+</body>
+
+</html>

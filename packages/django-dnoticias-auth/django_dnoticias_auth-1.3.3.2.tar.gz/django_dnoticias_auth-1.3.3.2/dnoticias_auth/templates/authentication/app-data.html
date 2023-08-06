@@ -1,0 +1,21 @@
+<script>
+    const ACCESS_TOKEN = "{{ access_token }}"
+    const REFRESH_TOKEN = "{{ refresh_token }}"
+    const ACCESS_TOKEN_EXPIRES_IN = "{{ access_token_expires_in }}"
+    const REFRESH_TOKEN_EXPIRES_IN = "{{ refresh_token_expires_in }}"
+    const NEXT_URL = "{{ next_url }}"
+
+    (function() {
+        function redirectToNextUrl() {
+            window.location.replace(NEXT_URL)
+        }
+
+        function callReactNativeEvent(event) {
+            if(window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(event);
+            } else {
+                console.warning("no window.ReactNativeWebView", event)
+            }
+        }
+    })
+</script>
