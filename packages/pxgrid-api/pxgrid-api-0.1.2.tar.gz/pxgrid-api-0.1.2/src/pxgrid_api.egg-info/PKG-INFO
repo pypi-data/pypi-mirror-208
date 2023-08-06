@@ -1,0 +1,504 @@
+Metadata-Version: 2.1
+Name: pxgrid-api
+Version: 0.1.2
+Summary: pxGrid API library and command line tool
+Author-email: Viktor Bobrov <vibobrov@cisco.com>
+License:                                  Apache License
+                                   Version 2.0, January 2004
+                                http://www.apache.org/licenses/
+        
+           TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+        
+           1. Definitions.
+        
+              "License" shall mean the terms and conditions for use, reproduction,
+              and distribution as defined by Sections 1 through 9 of this document.
+        
+              "Licensor" shall mean the copyright owner or entity authorized by
+              the copyright owner that is granting the License.
+        
+              "Legal Entity" shall mean the union of the acting entity and all
+              other entities that control, are controlled by, or are under common
+              control with that entity. For the purposes of this definition,
+              "control" means (i) the power, direct or indirect, to cause the
+              direction or management of such entity, whether by contract or
+              otherwise, or (ii) ownership of fifty percent (50%) or more of the
+              outstanding shares, or (iii) beneficial ownership of such entity.
+        
+              "You" (or "Your") shall mean an individual or Legal Entity
+              exercising permissions granted by this License.
+        
+              "Source" form shall mean the preferred form for making modifications,
+              including but not limited to software source code, documentation
+              source, and configuration files.
+        
+              "Object" form shall mean any form resulting from mechanical
+              transformation or translation of a Source form, including but
+              not limited to compiled object code, generated documentation,
+              and conversions to other media types.
+        
+              "Work" shall mean the work of authorship, whether in Source or
+              Object form, made available under the License, as indicated by a
+              copyright notice that is included in or attached to the work
+              (an example is provided in the Appendix below).
+        
+              "Derivative Works" shall mean any work, whether in Source or Object
+              form, that is based on (or derived from) the Work and for which the
+              editorial revisions, annotations, elaborations, or other modifications
+              represent, as a whole, an original work of authorship. For the purposes
+              of this License, Derivative Works shall not include works that remain
+              separable from, or merely link (or bind by name) to the interfaces of,
+              the Work and Derivative Works thereof.
+        
+              "Contribution" shall mean any work of authorship, including
+              the original version of the Work and any modifications or additions
+              to that Work or Derivative Works thereof, that is intentionally
+              submitted to Licensor for inclusion in the Work by the copyright owner
+              or by an individual or Legal Entity authorized to submit on behalf of
+              the copyright owner. For the purposes of this definition, "submitted"
+              means any form of electronic, verbal, or written communication sent
+              to the Licensor or its representatives, including but not limited to
+              communication on electronic mailing lists, source code control systems,
+              and issue tracking systems that are managed by, or on behalf of, the
+              Licensor for the purpose of discussing and improving the Work, but
+              excluding communication that is conspicuously marked or otherwise
+              designated in writing by the copyright owner as "Not a Contribution."
+        
+              "Contributor" shall mean Licensor and any individual or Legal Entity
+              on behalf of whom a Contribution has been received by Licensor and
+              subsequently incorporated within the Work.
+        
+           2. Grant of Copyright License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              copyright license to reproduce, prepare Derivative Works of,
+              publicly display, publicly perform, sublicense, and distribute the
+              Work and such Derivative Works in Source or Object form.
+        
+           3. Grant of Patent License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              (except as stated in this section) patent license to make, have made,
+              use, offer to sell, sell, import, and otherwise transfer the Work,
+              where such license applies only to those patent claims licensable
+              by such Contributor that are necessarily infringed by their
+              Contribution(s) alone or by combination of their Contribution(s)
+              with the Work to which such Contribution(s) was submitted. If You
+              institute patent litigation against any entity (including a
+              cross-claim or counterclaim in a lawsuit) alleging that the Work
+              or a Contribution incorporated within the Work constitutes direct
+              or contributory patent infringement, then any patent licenses
+              granted to You under this License for that Work shall terminate
+              as of the date such litigation is filed.
+        
+           4. Redistribution. You may reproduce and distribute copies of the
+              Work or Derivative Works thereof in any medium, with or without
+              modifications, and in Source or Object form, provided that You
+              meet the following conditions:
+        
+              (a) You must give any other recipients of the Work or
+                  Derivative Works a copy of this License; and
+        
+              (b) You must cause any modified files to carry prominent notices
+                  stating that You changed the files; and
+        
+              (c) You must retain, in the Source form of any Derivative Works
+                  that You distribute, all copyright, patent, trademark, and
+                  attribution notices from the Source form of the Work,
+                  excluding those notices that do not pertain to any part of
+                  the Derivative Works; and
+        
+              (d) If the Work includes a "NOTICE" text file as part of its
+                  distribution, then any Derivative Works that You distribute must
+                  include a readable copy of the attribution notices contained
+                  within such NOTICE file, excluding those notices that do not
+                  pertain to any part of the Derivative Works, in at least one
+                  of the following places: within a NOTICE text file distributed
+                  as part of the Derivative Works; within the Source form or
+                  documentation, if provided along with the Derivative Works; or,
+                  within a display generated by the Derivative Works, if and
+                  wherever such third-party notices normally appear. The contents
+                  of the NOTICE file are for informational purposes only and
+                  do not modify the License. You may add Your own attribution
+                  notices within Derivative Works that You distribute, alongside
+                  or as an addendum to the NOTICE text from the Work, provided
+                  that such additional attribution notices cannot be construed
+                  as modifying the License.
+        
+              You may add Your own copyright statement to Your modifications and
+              may provide additional or different license terms and conditions
+              for use, reproduction, or distribution of Your modifications, or
+              for any such Derivative Works as a whole, provided Your use,
+              reproduction, and distribution of the Work otherwise complies with
+              the conditions stated in this License.
+        
+           5. Submission of Contributions. Unless You explicitly state otherwise,
+              any Contribution intentionally submitted for inclusion in the Work
+              by You to the Licensor shall be under the terms and conditions of
+              this License, without any additional terms or conditions.
+              Notwithstanding the above, nothing herein shall supersede or modify
+              the terms of any separate license agreement you may have executed
+              with Licensor regarding such Contributions.
+        
+           6. Trademarks. This License does not grant permission to use the trade
+              names, trademarks, service marks, or product names of the Licensor,
+              except as required for reasonable and customary use in describing the
+              origin of the Work and reproducing the content of the NOTICE file.
+        
+           7. Disclaimer of Warranty. Unless required by applicable law or
+              agreed to in writing, Licensor provides the Work (and each
+              Contributor provides its Contributions) on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+              implied, including, without limitation, any warranties or conditions
+              of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+              PARTICULAR PURPOSE. You are solely responsible for determining the
+              appropriateness of using or redistributing the Work and assume any
+              risks associated with Your exercise of permissions under this License.
+        
+           8. Limitation of Liability. In no event and under no legal theory,
+              whether in tort (including negligence), contract, or otherwise,
+              unless required by applicable law (such as deliberate and grossly
+              negligent acts) or agreed to in writing, shall any Contributor be
+              liable to You for damages, including any direct, indirect, special,
+              incidental, or consequential damages of any character arising as a
+              result of this License or out of the use or inability to use the
+              Work (including but not limited to damages for loss of goodwill,
+              work stoppage, computer failure or malfunction, or any and all
+              other commercial damages or losses), even if such Contributor
+              has been advised of the possibility of such damages.
+        
+           9. Accepting Warranty or Additional Liability. While redistributing
+              the Work or Derivative Works thereof, You may choose to offer,
+              and charge a fee for, acceptance of support, warranty, indemnity,
+              or other liability obligations and/or rights consistent with this
+              License. However, in accepting such obligations, You may act only
+              on Your own behalf and on Your sole responsibility, not on behalf
+              of any other Contributor, and only if You agree to indemnify,
+              defend, and hold each Contributor harmless for any liability
+              incurred by, or claims asserted against, such Contributor by reason
+              of your accepting any such warranty or additional liability.
+        
+           END OF TERMS AND CONDITIONS
+        
+           APPENDIX: How to apply the Apache License to your work.
+        
+              To apply the Apache License to your work, attach the following
+              boilerplate notice, with the fields enclosed by brackets "[]"
+              replaced with your own identifying information. (Don't include
+              the brackets!)  The text should be enclosed in the appropriate
+              comment syntax for the file format. We also recommend that a
+              file or class name and description of purpose be included on the
+              same "printed page" as the copyright notice for easier
+              identification within third-party archives.
+        
+           Copyright [yyyy] [name of copyright owner]
+        
+           Licensed under the Apache License, Version 2.0 (the "License");
+           you may not use this file except in compliance with the License.
+           You may obtain a copy of the License at
+        
+               http://www.apache.org/licenses/LICENSE-2.0
+        
+           Unless required by applicable law or agreed to in writing, software
+           distributed under the License is distributed on an "AS IS" BASIS,
+           WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+           See the License for the specific language governing permissions and
+           limitations under the License.
+        
+Project-URL: Homepage, https://github.com/vbobrov/px-api
+Keywords: pxgrid
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+
+# Introduction
+This repo includes two components.
+* A python API library making it easier to interact with pxGrid services on ISE
+* Interactive CLI utility to interface with pxGrid without writing any code
+
+pxGrid requires FQDNs of all the nodes to be resolvable. It is not possible to use the library or the CLI utility to connect to ISE via IP address, even if there's just one node. Hosts record will work as well.
+
+## Features
+* Support for both certificate and password authentication when connecting to pxGrid nodes
+* Commands and methods to interact with most pxGrid services
+* Websocket support for subscribing to topics.
+* Debug capabilities to show all low level interactions with pxGrid
+
+## Limitations
+
+* pxGrid API 2.0 only. No support for 1.0
+* Private key must be unencrypted
+* No support for Dynamic Topics
+* Websockets (subscribing to topics) require that the pxGrid node certificate is trusted
+
+## Additonal reference material:
+* https://github.com/cisco-pxgrid/pxgrid-rest-ws/wiki
+* https://developer.cisco.com/docs/pxgrid/
+* https://developer.cisco.com/codeexchange/github/repo/cisco-pxgrid/python-advanced-examples
+
+
+# PXAPI Library
+
+This library simplifies interaction with ISE pxGrid
+
+
+## Installation
+
+```
+# Install the module
+pip install pxgrid-api
+```
+
+## Usage
+
+pxapi.py file has comments throughout describing all functions.  
+All data is returned in the original form, converted to python dict
+
+### REST API
+These are fairly straight forward. Review the comments in the code for reference.
+
+```python
+#!/usr/bin/env python3
+from pxapi import PXAPI
+
+# Instatiate object. Root CA argument can be omitted to disable server certificate verification.
+api=PXAPI('pxgridnode.example.com','client-name','client.cer','client.key','root.cer')
+
+# Check account activation status. This will connect to pxGrid node and check if our account is in approved and enabled state
+# With this default usage, the function will return immediately with either True or False on the state of the account
+api.account_activate()
+
+# Optionally, function can wait until the account is approved and retry every 60 seconds
+api.account_activate(True)
+
+# Some examples
+# Retrive all sessions
+print(api.get_sessions())
+
+# Retrieve all Trustsec egress policies
+print(api.trustsec_get_egress_policies())
+
+# Retrive all NON-Compliant MDM endpoints
+print(api.mdm_get_endpoints_by_type('NON-COMPLIANT'))
+```
+
+### Password based authentication
+This type of authentication avoids having to work with client side certificates and private keys.
+
+In order to use password based authentication, it needs to be first enabled in ISE under Administration > pxGrid Services > Settings
+
+The first step to use password authentication is to request a bootstrap account with a password generated by ISE.
+
+```python
+# Instatiate API object with minimum information. Root CA argument can be omitted to disable server certificate verification.
+api=PXAPI('pxgridnode.example.com','pwdclient1','','','root.cer')
+
+# Next, create the account. The account will be created with the username specified as client name above.
+# The password returned by ISE has to be stored on the client side.
+# The account will show in Initialized state on ISE
+# This API call can be executed multiple times with the same name to generate a new password until the account is activated below
+account_info=api.account_create()
+print(account_info)
+{'nodeName': 'pwdclient1', 'password': 'doosV8AEKqL7URUE', 'userName': 'pwdclient1'}
+password=accountInfo['password']
+
+# We now need to initialize API again with the password this time
+api=PXAPI('pxgridnode.example.com','pwdclient1','','','root.cer',password)
+
+# To request this account to be approved, we need to execute accountActivate API call.
+# Note that once this account is requested to be activated, you can no longer call accountCreate API above with the same client name
+# Once the account is in Pending state, it has to be approved in ISE under Administration > pxGrid Services > Client Management
+account_status=api.account_activate()
+print(account_status)
+{'accountState': 'PENDING', 'version': '2.0'}
+
+# To confirm that the accounts is approved, we can call accountActivate again.
+account_status=api.account_activate()
+print(account_status)
+{'accountState': 'ENABLED', 'version': '2.0'}
+
+# From here on, you can start using the API using the stored password.
+api=PXAPI('pxgridnode.example.com','pwdclient1','','','root.cer',password)
+
+```
+
+### Subscribing to pxGrid topics
+
+ISE uses web sockets as a mechanism for exchange real-time data with pxGrid clients  
+When data is received from ISE, the api will convert it to **StompFrame** class and pass it a callback function
+
+```python
+def on_message(stomp_frame):
+    print(f"Command: {stomp_frame.command}")
+    print(f"Headers: {json.dumps(stomp_frame.headers,indent=2)}")
+    try:
+        print(f"Data: {json.dumps(stomp_frame.data,indent=2)}")
+    except:
+        pass
+
+api=PXAPI('pxgridnode.example.com','client-name','client.cer','client.key','root.cer')
+api.topic_subscribe("com.cisco.ise.session","sessionTopic",on_message)
+
+```
+
+# pxshell
+
+This utility is an interactive wrapper for PXAPI library. It allows interaction with pxGrid using simple CLI interface.
+
+## Installation
+This cli utility is installed along with PXAPI with the same command.
+
+```
+# Install the module
+pip install pxgrid-api
+```
+
+## Usage
+
+All commands are document and help can be retrived using help &lt;command&gt;
+```
+$ pxshell
+pxshell> help
+
+Documented commands (type help <topic>):
+========================================
+accountcreate  anc     debug  mdm       radius   sxp     trustsec   
+activate       config  help   profiler  session  system  trustseccfg
+
+Undocumented commands:
+======================
+EOF
+
+pxshell> help config
+Config options:
+                save <file>: Save config to file
+                load <file>: Load config from file
+                apply [file]: Instatiate connection to pxGrid. Optionaly load the file and apply in one step
+                show: Show current settings 
+                pxnode <hostname>: Set pxGrid PSN FQDN
+                name <clientname>: Set pxGrid client name
+                cert <certfile>: Set client certificate file name
+                key <keyfile>: Set client private key
+                root [<rootfile>]: Set root CA file. Leave out <rootfile> to disable server certificate verification
+```
+
+Before the utility can interface with pxGrid, it has to be configured with pxGrid information and certificates.  
+Note that client side certificate and private key is not required for password based authentication. See an example below.
+This is done with config command. The config can also be saved and loaded from a file. The file is in human readable json format.  
+config apply command must be used to instantiate the API connection.
+
+```
+pxshell> config pxnode pxgridnode.example.com
+pxshell> config name client-name
+pxshell> config cert client.cer
+pxshell> config key client.key
+pxshell> config root root.cer
+pxshell> config show
+{'client_name': 'client-name', 'px_node': 'pxgridnode.example.com', 'client_cert_file': 'client.cer', 'client_key_file': 'client.key', 'root_ca_file': 'root.cer'}
+pxshell> config save px.cfg
+pxshell> config load px.cfg
+pxshell> config apply <--config apply command is used to create the api object with the requested parameters
+pxshell> config apply px.cfg <--config apply can load the config file in one step
+
+```
+### Examples
+
+Check if account is approved in ISE
+```
+pxshell> activate
+{'accountState': 'ENABLED', 'version': '2.0'}
+```
+Using password based authentication
+```
+pxshell> config pxnode pxgridnode.example.com
+pxshell> config name pwdclient
+pxshell> config root root.cer
+pxshell> config apply
+pxshell> accountcreate
+{
+  "nodeName": "pwdclient",
+  "password": "Pbclmnup25NTsKul",
+  "userName": "pwdclient"
+}
+Password automatically set in the config. Use config show to verify
+
+**** Be sure to save the config at this point to save the password ****
+pxshell> config save pwdclient.cfg
+
+**** Next, we request the account to be approved on ISE ****
+pxshell> config apply
+pxshell> activate
+{
+  "accountState": "PENDING",
+  "version": "2.0"
+}
+
+**** After the account is approved in ISE GUI, activate returns ENABLED ****
+pxshell> activate
+{
+  "accountState": "ENABLED",
+  "version": "2.0"
+}
+
+**** From here on, you can use all the other commands to interact with pxGrid ****
+```
+Working with ANC
+```
+pxshell> anc create Restrict QUARANTINE
+{'name': 'Restrict', 'actions': ['QUARANTINE']}
+pxshell> anc policies
+{'policies': [{'name': 'Quarantine', 'actions': ['QUARANTINE']}, {'name': 'Restrict', 'actions': ['QUARANTINE']}, {'name': 'Shutdown', 'actions': ['SHUT_DOWN']}]}
+pxshell> anc delete Restrict
+{}
+pxshell> anc policies
+{'policies': [{'name': 'Quarantine', 'actions': ['QUARANTINE']}, {'name': 'Shutdown', 'actions': ['SHUT_DOWN']}]}
+pxshell> anc topics
+statusTopic
+pxshell> anc subscribe statusTopic
+Ctrl-C to disconnect...
+Received Packet: command=CONNECTED content=
+Received Packet: command=MESSAGE content={"operationId":"vb-ise-pan1.vblan.com:35","macAddress":"11:22:33:44:55:66","status":"SUCCESS","policyName":"Quarantine"}
+Received Packet: command=MESSAGE content={"operationId":"vb-ise-pan1.vblan.com:36","macAddress":"11:22:33:44:55:66","status":"SUCCESS"}
+```
+Working with sessions
+```
+pxshell> session all
+{'sessions': [{'timestamp': '2020-09-29T22:45:45.489-04:00', 'state': 'STARTED', 'userName': '18:60:24:00:00:02', 'callingStationId': '18:60:24:00:00:02', 'calledStationId': '88:5A:92:7F:BF:82', 'auditSessionId': 'AC1F01070000005FDCE6C13E', 'ipAddresses': ['172.31.8.150'], 'macAddress': '18:60:24:00:00:02', 'nasIpAddress': '172.31.1.7', 'nasPortId': 'GigabitEthernet1/0/2', 'nasIdentifier': 'sw4', 'nasPortType': 'Ethernet', 'endpointProfile': 'HP-Kali', 'adNormalizedUser': '18:60:24:00:00:02', 'providers': ['None'], 'endpointCheckResult': 'none', 'identitySourcePortStart': 0, 'identitySourcePortEnd': 0, 'identitySourcePortFirst': 0, 'serviceType': 'Call Check', 'networkDeviceProfileName': 'Cisco', 'radiusFlowType': 'WiredMAB', 'mdmRegistered': False, 'mdmCompliant': False, 'mdmDiskEncrypted': False, 'mdmJailBroken': False, 'mdmPinLocked': False, 'selectedAuthzProfiles': ['Quarantine']}]}
+
+pxshell> session topics
+sessionTopic
+groupTopic
+pxshell> session subscribe sessionTopic
+Ctrl-C to disconnect...
+Received Packet: command=CONNECTED content=
+Received Packet: command=MESSAGE content={"sessions":[{"timestamp":"2020-10-02T16:41:03.984-04:00","state":"STARTED","userName":"18:60:24:00:00:02","callingStationId":"18:60:24:00:00:02","calledStationId":"88:5A:92:7F:BF:82","auditSessionId":"AC1F010700000068EB0BEF16","ipAddresses":["172.31.8.150"],"macAddress":"18:60:24:00:00:02","nasIpAddress":"172.31.1.7","nasPortId":"GigabitEthernet1/0/2","nasIdentifier":"sw4","nasPortType":"Ethernet","ancPolicy":"Quarantine","endpointProfile":"HP-Kali","adNormalizedUser":"18:60:24:00:00:02","providers":["None"],"endpointCheckResult":"none","identitySourcePortStart":0,"identitySourcePortEnd":0,"identitySourcePortFirst":0,"serviceType":"Call Check","networkDeviceProfileName":"Cisco","radiusFlowType":"WiredMAB","mdmRegistered":false,"mdmCompliant":false,"mdmDiskEncrypted":false,"mdmJailBroken":false,"mdmPinLocked":false,"selectedAuthzProfiles":["Quarantine"]}]}
+Received Packet: command=MESSAGE content={"sessions":[{"timestamp":"2020-10-02T16:41:13.199-04:00","state":"DISCONNECTED","userName":"18:60:24:00:00:02","callingStationId":"18:60:24:00:00:02","calledStationId":"88:5A:92:7F:BF:82","auditSessionId":"AC1F010700000068EB0BEF16","ipAddresses":["172.31.8.150"],"macAddress":"18:60:24:00:00:02","nasIpAddress":"172.31.1.7","nasPortId":"GigabitEthernet1/0/2","nasIdentifier":"sw4","nasPortType":"Ethernet","ancPolicy":"Quarantine","endpointProfile":"HP-Kali","adNormalizedUser":"18:60:24:00:00:02","providers":["None"],"endpointCheckResult":"none","identitySourcePortStart":0,"identitySourcePortEnd":0,"identitySourcePortFirst":0,"serviceType":"Call Check","networkDeviceProfileName":"Cisco","radiusFlowType":"WiredMAB","mdmRegistered":false,"mdmCompliant":false,"mdmDiskEncrypted":false,"mdmJailBroken":false,"mdmPinLocked":false,"selectedAuthzProfiles":["Quarantine"]}]}
+```
+Working with Trustsec config
+```
+pxshell> trustseccfg sgt
+{'securityGroups': [{'id': '92bb1950-8c01-11e6-996c-525400b48521', 'name': 'ANY', 'description': 'Any Security Group', 'tag': 65535}, {'id': '934557f0-8c01-11e6-996c-525400b48521', 'name': 'Auditors', 'description': 'Auditor Security Group', 'tag': 9}, {'id': '935d4cc0-8c01-11e6-996c-525400b48521', 'name': 'BYOD', 'description': 'BYOD Security Group', 'tag': 15}, {'id': '9370d4c0-8c01-11e6-996c-525400b48521', 'name': 'Contractors', 'description': 'Contractor Security Group', 'tag': 5}, {'id': '93837260-8c01-11e6-996c-525400b48521', 'name': 'Developers', 'description': 'Developer Security Group', 'tag': 8}, {'id': '9396d350-8c01-11e6-996c-525400b48521', 'name': 'Development_Servers', 'description': 'Development Servers Security Group', 'tag': 12}, {'id': '93ad6890-8c01-11e6-996c-525400b48521', 'name': 'Employees', 'description': 'Employee Security Group', 'tag': 4}, {'id': '93c66ed0-8c01-11e6-996c-525400b48521', 'name': 'Guests', 'description': 'Guest Security Group', 'tag': 6}, {'id': '93e1bf00-8c01-11e6-996c-525400b48521', 'name': 'Network_Services', 'description': 'Network Services Security Group', 'tag': 3}, {'id': '93f91790-8c01-11e6-996c-525400b48521', 'name': 'PCI_Servers', 'description': 'PCI Servers Security Group', 'tag': 14}, {'id': '940facd0-8c01-11e6-996c-525400b48521', 'name': 'Point_of_Sale_Systems', 'description': 'Point of Sale Security Group', 'tag': 10}, {'id': '9423aa00-8c01-11e6-996c-525400b48521', 'name': 'Production_Servers', 'description': 'Production Servers Security Group', 'tag': 11}, {'id': '9437a730-8c01-11e6-996c-525400b48521', 'name': 'Production_Users', 'description': 'Production User Security Group', 'tag': 7}, {'id': '944b2f30-8c01-11e6-996c-525400b48521', 'name': 'Quarantined_Systems', 'description': 'Quarantine Security Group', 'tag': 255}, {'id': '94621290-8c01-11e6-996c-525400b48521', 'name': 'Test_Servers', 'description': 'Test Servers Security Group', 'tag': 13}, {'id': '947832a0-8c01-11e6-996c-525400b48521', 'name': 'TrustSec_Devices', 'description': 'TrustSec Devices Security Group', 'tag': 2}, {'id': '92adf9f0-8c01-11e6-996c-525400b48521', 'name': 'Unknown', 'description': 'Unknown Security Group', 'tag': 0}]}
+pxshell> trustseccfg topics
+securityGroupVnVlanTopic
+securityGroupTopic
+securityGroupAclTopic
+pxshell> trustseccfg subscribe securityGroupTopic
+Ctrl-C to disconnect...
+Received Packet: command=CONNECTED content=
+Received Packet: command=MESSAGE content={"operation":"CREATE","securityGroup":{"id":"05000d80-04ea-11eb-8d63-1a05c3bba070","name":"hackers","description":"","tag":16}}
+Received Packet: command=MESSAGE content={"operation":"DELETE","securityGroup":{"id":"05000d80-04ea-11eb-8d63-1a05c3bba070","name":"hackers","description":"","tag":16}}
+```
+Working with profiler
+```
+pxshell> profiler topics
+topic
+pxshell> profiler subscribe topic
+Ctrl-C to disconnect...
+Received Packet: command=CONNECTED content=
+Received Packet: command=MESSAGE content={"operation":"CREATE","profile":{"id":"4fd41a00-04ee-11eb-8d63-1a05c3bba070","name":"test-device","fullName":"test-device"}}
+Received Packet: command=MESSAGE content={"operation":"DELETE","profile":{"id":"4fd41a00-04ee-11eb-8d63-1a05c3bba070","name":"test-device","fullName":"test-device"}}
+```
