@@ -1,0 +1,80 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "itkwidgets"
+authors = [{name = "Matt McCormick", email = "matt.mccormick@kitware.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+dynamic = ["version", "description"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    'Development Status :: 3 - Alpha',
+    'Framework :: IPython',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Science/Research',
+    'Topic :: Multimedia :: Graphics',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+]
+keywords = [
+    "jupyter",
+    "jupyterlab-extension",
+    "widgets",
+    "itk",
+    "imaging",
+    "visualization",
+    "webgl",
+    "webgpu",
+]
+
+requires-python = ">=3.7"
+dependencies = [
+    "itkwasm >= 1.0b.78",
+    "imjoy-rpc >= 0.5.16",
+    "imjoy-utils >= 0.1.2",
+    "importlib-metadata == 4.13.0 ; python_version == '3.7'",
+    "ngff-zarr[dask-image] >= 0.2.0",
+    "numcodecs",
+    "zarr",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build]
+exclude = [
+  "/js/node_modules",
+  "/examples",
+]
+
+[project.urls]
+Home = "https://itkwidgets.readthedocs.io/en/latest/"
+Documentation = "https://itkwidgets.readthedocs.io/en/latest/"
+Source = "https://github.com/InsightSoftwareConsortium/itkwidgets"
+
+[project.optional-dependencies]
+all = [
+    "imjoy-jupyterlab-extension >=0.1.13 ; python_version > '3.7'",
+    "imjoy-elfinder[jupyter] ; python_version > '3.7'",
+    "imjoy-jupyter-extension >=0.3.0 ; python_version > '3.7'"
+]
+lab = [
+    "imjoy-jupyterlab-extension >=0.1.13",
+    "imjoy-elfinder[jupyter]"
+]
+notebook = [
+    "imjoy-jupyter-extension >=0.3.0",
+    "imjoy-elfinder[jupyter]"
+]
+test = [
+    "pytest >=2.7.3",
+    "nbmake",
+]
+doc = ["sphinx"]
