@@ -1,0 +1,143 @@
+Metadata-Version: 2.1
+Name: epitools
+Version: 0.0.7
+Summary: EpiTools Plugin
+Author-email: "Daniel R. Matthews" <d.matthews@ucl.ac.uk>, Giulia Paci <g.paci@ucl.ac.uk>, "Pablo V. Munuera" <p.munuera@ucl.ac.uk>, "Patrick J. Roddy" <patrick.roddy@ucl.ac.uk>, "Paul J. Smith" <paul.j.smith@ucl.ac.uk>, Yanlan Mao <y.mao@ucl.ac.uk>
+License: BSD 3-Clause Licence
+        
+        Copyright (c) 2022-2023, EpiTools Developers All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+        
+            Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+        
+            Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+        
+            Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Code, https://github.com/epitools/epitools
+Project-URL: Download, https://pypi.org/project/epitools
+Project-URL: Homepage, https://github.com/epitools/epitools
+Project-URL: Issues, https://github.com/epitools/epitools/issues
+Classifier: Framework :: napari
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENCE.md
+Requires-Dist: PartSeg
+Requires-Dist: magicgui
+Requires-Dist: matplotlib
+Requires-Dist: napari
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: qtpy
+Requires-Dist: scikit-image (>=0.20)
+Requires-Dist: scipy
+Provides-Extra: dev
+Requires-Dist: black ; extra == 'dev'
+Requires-Dist: mypy ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: pyqt5 ; extra == 'dev'
+Requires-Dist: ruff ; extra == 'dev'
+Requires-Dist: tox ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: myst-parser ; extra == 'docs'
+Requires-Dist: pydata-sphinx-theme ; extra == 'docs'
+Requires-Dist: pytz ; extra == 'docs'
+Requires-Dist: sphinx-autobuild ; extra == 'docs'
+Requires-Dist: sphinx (<5) ; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints ; extra == 'docs'
+Requires-Dist: sphinxcontrib-video ; extra == 'docs'
+Requires-Dist: types-pytz ; extra == 'docs'
+Provides-Extra: pyqt
+Requires-Dist: PyQt5 (!=5.15.0,>=5.12.3) ; extra == 'pyqt'
+Provides-Extra: pyside
+Requires-Dist: PySide2 (!=5.15.0,>=5.13.2) ; extra == 'pyside'
+Provides-Extra: qt
+Requires-Dist: epitools[pyside] ; extra == 'qt'
+Provides-Extra: wf
+Requires-Dist: btrack[napari] (>=0.6.1) ; extra == 'wf'
+Requires-Dist: napari-segment-blobs-and-things-with-membranes ; extra == 'wf'
+
+[![Licence](https://img.shields.io/pypi/l/epitools.svg?color=green)](https://raw.githubusercontent.com/epitools/epitools/main/LICENCE.md)
+[![PyPI](https://img.shields.io/pypi/v/epitools.svg?color=green)](https://pypi.org/project/epitools)
+[![Python Version](https://img.shields.io/pypi/pyversions/epitools.svg?color=green)](https://python.org)
+[![tests](https://github.com/epitools/epitools/actions/workflows/test.yml/badge.svg)](https://github.com/epitools/epitools/actions/workflows/test.yml)
+[![Documentation](https://readthedocs.org/projects/epitools/badge/?version=latest)](https://epitools.readthedocs.io/en/latest/?badge=latest)
+[![coverage](https://coveralls.io/repos/github/epitools/epitools/badge.svg?branch=main)](https://coveralls.io/github/epitools/epitools?branch=main)
+[![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/epitools)](https://napari-hub.org/plugins/epitools)
+
+# Welcome to EpiTools!
+
+EpiTools is a Python package and associated [napari](https://napari.org/stable/) plugin to extract the membrane signal from epithelial tissues and analyze it with the aid of computer vision.
+
+The development of EpiTools was inspired by the challenges in analyzing time-lapses of growing Drosophila imaginal discs.
+
+The folded morphology, the very small apical cell surfaces and the long time series required a new automated cell recognition to accurately study growth dynamics.
+
+## Installation
+
+The recommended way to install `EpiTools` is via
+[pip](https://pypi.org/project/pip)
+
+```sh
+python -m pip install epitools
+```
+
+To install the latest development version of `EpiTools` clone this repository
+and run
+
+```sh
+python -m pip install -e .
+```
+
+If working on Apple Silicon make sure to also install the following package from
+[conda-forge](https://conda-forge.org).
+
+```sh
+conda install -c conda-forge pyqt
+```
+
+### Recommended Companion Napari Plugins
+
+To also install the recommended plugins for the `EpiTools` workflow run
+
+```sh
+python -m pip install epitools[wf]
+```
+
+and
+
+```sh
+python -m pip install -e .[wf]
+```
+
+If working on Apple Silicon make sure to also install the following package from
+[conda-forge](https://conda-forge.org)
+
+```sh
+conda install -c conda-forge cvxopt
+```
+
+which is required for [btrack](https://github.com/quantumjot/btrack).
+
+## Issues
+
+If you encounter any problems, please
+[file an issue](https://github.com/epitools/epitools/issues) along with a
+detailed description.
+
+## Contributing
+
+Contributions are very welcome. Tests can be run with [tox](https://tox.wiki),
+please ensure the coverage at least stays the same before you submit a pull request.
