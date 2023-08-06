@@ -1,0 +1,1 @@
+from kolibri.output.display import DefaultDisplay
