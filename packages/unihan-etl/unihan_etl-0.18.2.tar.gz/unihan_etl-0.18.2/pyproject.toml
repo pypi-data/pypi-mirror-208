@@ -1,0 +1,168 @@
+[tool.poetry]
+name = "unihan-etl"
+version = "0.18.2"
+description = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
+license = "MIT"
+authors = ["Tony Narlock <tony@git-pull.com>"]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development :: Internationalization",
+  "Topic :: Software Development :: Localization",
+  "Topic :: Utilities",
+  "Typing :: Typed",
+]
+keywords = [
+  "unihan",
+  "unicode",
+  "cjk",
+  "yaml",
+  "json",
+  "chinese",
+  "japanese",
+  "korean",
+  "hanzi",
+  "dictionary",
+  "dataset",
+]
+homepage = "https://unihan-etl.git-pull.com"
+readme = "README.md"
+
+packages = [
+  { include = "*", from = "src" },
+]
+include = [
+  { path = "tests", format = "sdist" },
+]
+
+[tool.poetry.scripts]
+unihan-etl = "unihan_etl.__main__:run"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/cihai/unihan-etl/issues"
+Documentation = "https://unihan-etl.git-pull.com"
+Repository = "https://github.com/cihai/unihan-etl"
+Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+unicodecsv = "*"
+appdirs = "*"
+zhon = "*"
+PyYAML = "*"
+
+[tool.poetry.dev-dependencies]
+### Docs ###
+sphinx = "*"
+sphinx-argparse = "*"
+furo = "*"
+gp-libs = "*"
+sphinx-autobuild = "*"
+sphinx-autodoc-typehints = "*"
+sphinx-inline-tabs = "<2023.4.21"  # For Python 3.7 support
+sphinxext-opengraph = "<0.8"  # https://github.com/wpilibsuite/sphinxext-opengraph/issues/100
+sphinx-copybutton = "*"
+sphinxext-rediraffe = "*"
+myst_parser = ">=0.18.1"
+docutils = "*"
+
+### Testing ###
+pytest = "*"
+pytest-rerunfailures = "*"
+pytest-watcher = "*"
+
+### Coverage ###
+codecov = "*"
+coverage = "*"
+pytest-cov = "*"
+
+### Format ###
+black = "*"
+isort = "*"
+
+### Lint ###
+flake8 = [
+  { version = "*", python = "^3.7" },
+  { version = ">=5", python = "^3.8" },
+]
+flake8-bugbear = "*"
+flake8-comprehensions = "*"
+mypy = "*"
+types-docutils = "*"
+types-PyYAML = "*"
+types-appdirs = "*"
+types-requests = "*"
+
+[tool.poetry.extras]
+docs = [
+  "docutils",
+  "sphinx",
+  "sphinx-argparse",
+  "sphinx-autodoc-typehints",
+  "sphinx-autobuild",
+  "sphinx-copybutton",
+  "sphinxext-opengraph",
+  "sphinx-inline-tabs",
+  "sphinxext-rediraffe",
+  "myst_parser",
+  "furo",
+  "gp-libs",
+]
+test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
+coverage = ["codecov", "coverage", "pytest-cov"]
+format = ["black", "isort"]
+lint = [
+  "flake8",
+  "flake8-bugbear",
+  "flake8-comprehensions",
+  "mypy",
+  "types-docutils",
+  "types-PyYAML",
+  "types-appdirs",
+  "types-requests",
+]
+
+[tool.mypy]
+strict = true
+
+[[tool.mypy.overrides]]
+module = [
+  "zhon.*",
+]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "*/_compat.py",
+  "docs/conf.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "if __name__ == .__main__.:",
+  "pragma: no cover",
+  "def __repr__",
+  "raise NotImplementedError",
+  "return NotImplemented",
+  "if TYPE_CHECKING:",
+  "if t.TYPE_CHECKING:",
+  "@overload( |$)",
+]
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
