@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "giant-redirect-import"
+version = "0.2"
+description = "Reusable package which adds an option to bulk import redirects from a csv file"
+authors = ["Will-Hoey <will.hoey@hotmail.co.uk>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/giantmade/giant-redirect-import"
+repository = "https://github.com/giantmade/giant-redirect-import"
+keywords = ["import", "app"]
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+include = [
+    "LICENSE",
+]
+packages = [
+    { include = "giant_redirect_import" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+django = "<2.2"
+django-cms = "<3.7.2"
+black = "^19.10b0"
+pytest-django = "^3.9.0"
+pytest-cov = "^2.10.0"
+pytest-mock = "^3.2.0"
+six = "^1.15.0"
+
+
+[[tool.poetry.source]]
+name = "TestPyPi"
+url = "https://test.pypi.org/simple/"
+secondary = true
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
