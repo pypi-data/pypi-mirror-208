@@ -1,0 +1,69 @@
+Metadata-Version: 2.1
+Name: pyipums
+Version: 0.0.2
+Summary: A Python package to explore IPUMS data.
+License: MIT
+Author: Francisco Javier Arceo
+Author-email: franciscojavierarceo@users.noreply.github.com
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: ipumspy (>=0.3.0,<0.4.0)
+Requires-Dist: pytest (>=7.3.1,<8.0.0)
+Description-Content-Type: text/markdown
+
+# PyIPUMS
+
+PyIPUMS is a library for working with data from [IPUMS](https://www.ipums.org/).
+
+# Example
+
+Example that provides the IPUMS metadata in a dictionary.
+```
+import json
+import pandas as pd
+from src.pyipums.parse_xml import read_ipums_ddi
+from ipumspy import readers, ddi
+
+
+def read_ipums_micro(ddi, data_file_path, n_max=None):
+    # Read the fixed-width data file using the extracted column information
+    df = pd.read_fwf(
+        data_file_path,
+        dtypes=ddi["column_dtypes"],
+        colspecs=ddi["column_specs"],
+        header=None,
+        names=ddi["columns"],
+        nrows=n_max,
+        compression="gzip",
+    )
+
+    return df
+
+
+def main():
+    ddi_file_path = "./usa_00003.xml"
+    data_file_path = "./usa_00003.dat.gz"
+    cps_ddi = read_ipums_ddi(ddi_file_path)
+    print(json.dumps(cps_ddi["file_metadata"], indent=2))
+    cps_data = read_ipums_micro(cps_ddi, data_file_path, n_max=100)
+    print(cps_data.head())
+```
+
+
+# Modifying 
+
+If you are looking to make changes to the library I recommend using [poetry](https://python-poetry.org/docs/).
+```
+poetry env use 3.8
+pyenv shell 3.8
+poetry shell
+```
+
+# License
+MIT
+
