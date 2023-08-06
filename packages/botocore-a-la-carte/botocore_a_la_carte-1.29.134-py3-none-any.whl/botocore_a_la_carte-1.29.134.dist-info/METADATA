@@ -1,0 +1,760 @@
+Metadata-Version: 2.1
+Name: botocore-a-la-carte
+Version: 1.29.134
+Summary: botocore re-uploaded with a-la-carte data packages.
+Home-page: https://github.com/thejcannon/botocore-a-la-carte
+Author: Amazon Web Services
+License: Apache License 2.0
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >= 3.7
+License-File: LICENSE.txt
+License-File: NOTICE
+Requires-Dist: jmespath (<2.0.0,>=0.7.1)
+Requires-Dist: python-dateutil (<3.0.0,>=2.1)
+Requires-Dist: urllib3 (<1.27,>=1.25.4)
+Provides-Extra: accessanalyzer
+Requires-Dist: botocore-a-la-carte-accessanalyzer (==1.29.134) ; extra == 'accessanalyzer'
+Provides-Extra: account
+Requires-Dist: botocore-a-la-carte-account (==1.29.134) ; extra == 'account'
+Provides-Extra: acm
+Requires-Dist: botocore-a-la-carte-acm (==1.29.134) ; extra == 'acm'
+Provides-Extra: acm-pca
+Requires-Dist: botocore-a-la-carte-acm-pca (==1.29.134) ; extra == 'acm-pca'
+Provides-Extra: alexaforbusiness
+Requires-Dist: botocore-a-la-carte-alexaforbusiness (==1.29.134) ; extra == 'alexaforbusiness'
+Provides-Extra: amp
+Requires-Dist: botocore-a-la-carte-amp (==1.29.134) ; extra == 'amp'
+Provides-Extra: amplify
+Requires-Dist: botocore-a-la-carte-amplify (==1.29.134) ; extra == 'amplify'
+Provides-Extra: amplifybackend
+Requires-Dist: botocore-a-la-carte-amplifybackend (==1.29.134) ; extra == 'amplifybackend'
+Provides-Extra: amplifyuibuilder
+Requires-Dist: botocore-a-la-carte-amplifyuibuilder (==1.29.134) ; extra == 'amplifyuibuilder'
+Provides-Extra: apigateway
+Requires-Dist: botocore-a-la-carte-apigateway (==1.29.134) ; extra == 'apigateway'
+Provides-Extra: apigatewaymanagementapi
+Requires-Dist: botocore-a-la-carte-apigatewaymanagementapi (==1.29.134) ; extra == 'apigatewaymanagementapi'
+Provides-Extra: apigatewayv2
+Requires-Dist: botocore-a-la-carte-apigatewayv2 (==1.29.134) ; extra == 'apigatewayv2'
+Provides-Extra: appconfig
+Requires-Dist: botocore-a-la-carte-appconfig (==1.29.134) ; extra == 'appconfig'
+Provides-Extra: appconfigdata
+Requires-Dist: botocore-a-la-carte-appconfigdata (==1.29.134) ; extra == 'appconfigdata'
+Provides-Extra: appflow
+Requires-Dist: botocore-a-la-carte-appflow (==1.29.134) ; extra == 'appflow'
+Provides-Extra: appintegrations
+Requires-Dist: botocore-a-la-carte-appintegrations (==1.29.134) ; extra == 'appintegrations'
+Provides-Extra: application-autoscaling
+Requires-Dist: botocore-a-la-carte-application-autoscaling (==1.29.134) ; extra == 'application-autoscaling'
+Provides-Extra: application-insights
+Requires-Dist: botocore-a-la-carte-application-insights (==1.29.134) ; extra == 'application-insights'
+Provides-Extra: applicationcostprofiler
+Requires-Dist: botocore-a-la-carte-applicationcostprofiler (==1.29.134) ; extra == 'applicationcostprofiler'
+Provides-Extra: appmesh
+Requires-Dist: botocore-a-la-carte-appmesh (==1.29.134) ; extra == 'appmesh'
+Provides-Extra: apprunner
+Requires-Dist: botocore-a-la-carte-apprunner (==1.29.134) ; extra == 'apprunner'
+Provides-Extra: appstream
+Requires-Dist: botocore-a-la-carte-appstream (==1.29.134) ; extra == 'appstream'
+Provides-Extra: appsync
+Requires-Dist: botocore-a-la-carte-appsync (==1.29.134) ; extra == 'appsync'
+Provides-Extra: arc-zonal-shift
+Requires-Dist: botocore-a-la-carte-arc-zonal-shift (==1.29.134) ; extra == 'arc-zonal-shift'
+Provides-Extra: athena
+Requires-Dist: botocore-a-la-carte-athena (==1.29.134) ; extra == 'athena'
+Provides-Extra: auditmanager
+Requires-Dist: botocore-a-la-carte-auditmanager (==1.29.134) ; extra == 'auditmanager'
+Provides-Extra: autoscaling
+Requires-Dist: botocore-a-la-carte-autoscaling (==1.29.134) ; extra == 'autoscaling'
+Provides-Extra: autoscaling-plans
+Requires-Dist: botocore-a-la-carte-autoscaling-plans (==1.29.134) ; extra == 'autoscaling-plans'
+Provides-Extra: backup
+Requires-Dist: botocore-a-la-carte-backup (==1.29.134) ; extra == 'backup'
+Provides-Extra: backup-gateway
+Requires-Dist: botocore-a-la-carte-backup-gateway (==1.29.134) ; extra == 'backup-gateway'
+Provides-Extra: backupstorage
+Requires-Dist: botocore-a-la-carte-backupstorage (==1.29.134) ; extra == 'backupstorage'
+Provides-Extra: batch
+Requires-Dist: botocore-a-la-carte-batch (==1.29.134) ; extra == 'batch'
+Provides-Extra: billingconductor
+Requires-Dist: botocore-a-la-carte-billingconductor (==1.29.134) ; extra == 'billingconductor'
+Provides-Extra: braket
+Requires-Dist: botocore-a-la-carte-braket (==1.29.134) ; extra == 'braket'
+Provides-Extra: budgets
+Requires-Dist: botocore-a-la-carte-budgets (==1.29.134) ; extra == 'budgets'
+Provides-Extra: ce
+Requires-Dist: botocore-a-la-carte-ce (==1.29.134) ; extra == 'ce'
+Provides-Extra: chime
+Requires-Dist: botocore-a-la-carte-chime (==1.29.134) ; extra == 'chime'
+Provides-Extra: chime-sdk-identity
+Requires-Dist: botocore-a-la-carte-chime-sdk-identity (==1.29.134) ; extra == 'chime-sdk-identity'
+Provides-Extra: chime-sdk-media-pipelines
+Requires-Dist: botocore-a-la-carte-chime-sdk-media-pipelines (==1.29.134) ; extra == 'chime-sdk-media-pipelines'
+Provides-Extra: chime-sdk-meetings
+Requires-Dist: botocore-a-la-carte-chime-sdk-meetings (==1.29.134) ; extra == 'chime-sdk-meetings'
+Provides-Extra: chime-sdk-messaging
+Requires-Dist: botocore-a-la-carte-chime-sdk-messaging (==1.29.134) ; extra == 'chime-sdk-messaging'
+Provides-Extra: chime-sdk-voice
+Requires-Dist: botocore-a-la-carte-chime-sdk-voice (==1.29.134) ; extra == 'chime-sdk-voice'
+Provides-Extra: cleanrooms
+Requires-Dist: botocore-a-la-carte-cleanrooms (==1.29.134) ; extra == 'cleanrooms'
+Provides-Extra: cloud9
+Requires-Dist: botocore-a-la-carte-cloud9 (==1.29.134) ; extra == 'cloud9'
+Provides-Extra: cloudcontrol
+Requires-Dist: botocore-a-la-carte-cloudcontrol (==1.29.134) ; extra == 'cloudcontrol'
+Provides-Extra: clouddirectory
+Requires-Dist: botocore-a-la-carte-clouddirectory (==1.29.134) ; extra == 'clouddirectory'
+Provides-Extra: cloudformation
+Requires-Dist: botocore-a-la-carte-cloudformation (==1.29.134) ; extra == 'cloudformation'
+Provides-Extra: cloudfront
+Requires-Dist: botocore-a-la-carte-cloudfront (==1.29.134) ; extra == 'cloudfront'
+Provides-Extra: cloudhsm
+Requires-Dist: botocore-a-la-carte-cloudhsm (==1.29.134) ; extra == 'cloudhsm'
+Provides-Extra: cloudhsmv2
+Requires-Dist: botocore-a-la-carte-cloudhsmv2 (==1.29.134) ; extra == 'cloudhsmv2'
+Provides-Extra: cloudsearch
+Requires-Dist: botocore-a-la-carte-cloudsearch (==1.29.134) ; extra == 'cloudsearch'
+Provides-Extra: cloudsearchdomain
+Requires-Dist: botocore-a-la-carte-cloudsearchdomain (==1.29.134) ; extra == 'cloudsearchdomain'
+Provides-Extra: cloudtrail
+Requires-Dist: botocore-a-la-carte-cloudtrail (==1.29.134) ; extra == 'cloudtrail'
+Provides-Extra: cloudtrail-data
+Requires-Dist: botocore-a-la-carte-cloudtrail-data (==1.29.134) ; extra == 'cloudtrail-data'
+Provides-Extra: cloudwatch
+Requires-Dist: botocore-a-la-carte-cloudwatch (==1.29.134) ; extra == 'cloudwatch'
+Provides-Extra: codeartifact
+Requires-Dist: botocore-a-la-carte-codeartifact (==1.29.134) ; extra == 'codeartifact'
+Provides-Extra: codebuild
+Requires-Dist: botocore-a-la-carte-codebuild (==1.29.134) ; extra == 'codebuild'
+Provides-Extra: codecatalyst
+Requires-Dist: botocore-a-la-carte-codecatalyst (==1.29.134) ; extra == 'codecatalyst'
+Provides-Extra: codecommit
+Requires-Dist: botocore-a-la-carte-codecommit (==1.29.134) ; extra == 'codecommit'
+Provides-Extra: codedeploy
+Requires-Dist: botocore-a-la-carte-codedeploy (==1.29.134) ; extra == 'codedeploy'
+Provides-Extra: codeguru-reviewer
+Requires-Dist: botocore-a-la-carte-codeguru-reviewer (==1.29.134) ; extra == 'codeguru-reviewer'
+Provides-Extra: codeguruprofiler
+Requires-Dist: botocore-a-la-carte-codeguruprofiler (==1.29.134) ; extra == 'codeguruprofiler'
+Provides-Extra: codepipeline
+Requires-Dist: botocore-a-la-carte-codepipeline (==1.29.134) ; extra == 'codepipeline'
+Provides-Extra: codestar
+Requires-Dist: botocore-a-la-carte-codestar (==1.29.134) ; extra == 'codestar'
+Provides-Extra: codestar-connections
+Requires-Dist: botocore-a-la-carte-codestar-connections (==1.29.134) ; extra == 'codestar-connections'
+Provides-Extra: codestar-notifications
+Requires-Dist: botocore-a-la-carte-codestar-notifications (==1.29.134) ; extra == 'codestar-notifications'
+Provides-Extra: cognito-identity
+Requires-Dist: botocore-a-la-carte-cognito-identity (==1.29.134) ; extra == 'cognito-identity'
+Provides-Extra: cognito-idp
+Requires-Dist: botocore-a-la-carte-cognito-idp (==1.29.134) ; extra == 'cognito-idp'
+Provides-Extra: cognito-sync
+Requires-Dist: botocore-a-la-carte-cognito-sync (==1.29.134) ; extra == 'cognito-sync'
+Provides-Extra: comprehend
+Requires-Dist: botocore-a-la-carte-comprehend (==1.29.134) ; extra == 'comprehend'
+Provides-Extra: comprehendmedical
+Requires-Dist: botocore-a-la-carte-comprehendmedical (==1.29.134) ; extra == 'comprehendmedical'
+Provides-Extra: compute-optimizer
+Requires-Dist: botocore-a-la-carte-compute-optimizer (==1.29.134) ; extra == 'compute-optimizer'
+Provides-Extra: config
+Requires-Dist: botocore-a-la-carte-config (==1.29.134) ; extra == 'config'
+Provides-Extra: connect
+Requires-Dist: botocore-a-la-carte-connect (==1.29.134) ; extra == 'connect'
+Provides-Extra: connect-contact-lens
+Requires-Dist: botocore-a-la-carte-connect-contact-lens (==1.29.134) ; extra == 'connect-contact-lens'
+Provides-Extra: connectcampaigns
+Requires-Dist: botocore-a-la-carte-connectcampaigns (==1.29.134) ; extra == 'connectcampaigns'
+Provides-Extra: connectcases
+Requires-Dist: botocore-a-la-carte-connectcases (==1.29.134) ; extra == 'connectcases'
+Provides-Extra: connectparticipant
+Requires-Dist: botocore-a-la-carte-connectparticipant (==1.29.134) ; extra == 'connectparticipant'
+Provides-Extra: controltower
+Requires-Dist: botocore-a-la-carte-controltower (==1.29.134) ; extra == 'controltower'
+Provides-Extra: crt
+Requires-Dist: awscrt (==0.16.9) ; extra == 'crt'
+Provides-Extra: cur
+Requires-Dist: botocore-a-la-carte-cur (==1.29.134) ; extra == 'cur'
+Provides-Extra: customer-profiles
+Requires-Dist: botocore-a-la-carte-customer-profiles (==1.29.134) ; extra == 'customer-profiles'
+Provides-Extra: databrew
+Requires-Dist: botocore-a-la-carte-databrew (==1.29.134) ; extra == 'databrew'
+Provides-Extra: dataexchange
+Requires-Dist: botocore-a-la-carte-dataexchange (==1.29.134) ; extra == 'dataexchange'
+Provides-Extra: datapipeline
+Requires-Dist: botocore-a-la-carte-datapipeline (==1.29.134) ; extra == 'datapipeline'
+Provides-Extra: datasync
+Requires-Dist: botocore-a-la-carte-datasync (==1.29.134) ; extra == 'datasync'
+Provides-Extra: dax
+Requires-Dist: botocore-a-la-carte-dax (==1.29.134) ; extra == 'dax'
+Provides-Extra: detective
+Requires-Dist: botocore-a-la-carte-detective (==1.29.134) ; extra == 'detective'
+Provides-Extra: devicefarm
+Requires-Dist: botocore-a-la-carte-devicefarm (==1.29.134) ; extra == 'devicefarm'
+Provides-Extra: devops-guru
+Requires-Dist: botocore-a-la-carte-devops-guru (==1.29.134) ; extra == 'devops-guru'
+Provides-Extra: directconnect
+Requires-Dist: botocore-a-la-carte-directconnect (==1.29.134) ; extra == 'directconnect'
+Provides-Extra: discovery
+Requires-Dist: botocore-a-la-carte-discovery (==1.29.134) ; extra == 'discovery'
+Provides-Extra: dlm
+Requires-Dist: botocore-a-la-carte-dlm (==1.29.134) ; extra == 'dlm'
+Provides-Extra: dms
+Requires-Dist: botocore-a-la-carte-dms (==1.29.134) ; extra == 'dms'
+Provides-Extra: docdb
+Requires-Dist: botocore-a-la-carte-docdb (==1.29.134) ; extra == 'docdb'
+Provides-Extra: docdb-elastic
+Requires-Dist: botocore-a-la-carte-docdb-elastic (==1.29.134) ; extra == 'docdb-elastic'
+Provides-Extra: drs
+Requires-Dist: botocore-a-la-carte-drs (==1.29.134) ; extra == 'drs'
+Provides-Extra: ds
+Requires-Dist: botocore-a-la-carte-ds (==1.29.134) ; extra == 'ds'
+Provides-Extra: dynamodb
+Requires-Dist: botocore-a-la-carte-dynamodb (==1.29.134) ; extra == 'dynamodb'
+Provides-Extra: dynamodbstreams
+Requires-Dist: botocore-a-la-carte-dynamodbstreams (==1.29.134) ; extra == 'dynamodbstreams'
+Provides-Extra: ebs
+Requires-Dist: botocore-a-la-carte-ebs (==1.29.134) ; extra == 'ebs'
+Provides-Extra: ec2
+Requires-Dist: botocore-a-la-carte-ec2 (==1.29.134) ; extra == 'ec2'
+Provides-Extra: ec2-instance-connect
+Requires-Dist: botocore-a-la-carte-ec2-instance-connect (==1.29.134) ; extra == 'ec2-instance-connect'
+Provides-Extra: ecr
+Requires-Dist: botocore-a-la-carte-ecr (==1.29.134) ; extra == 'ecr'
+Provides-Extra: ecr-public
+Requires-Dist: botocore-a-la-carte-ecr-public (==1.29.134) ; extra == 'ecr-public'
+Provides-Extra: ecs
+Requires-Dist: botocore-a-la-carte-ecs (==1.29.134) ; extra == 'ecs'
+Provides-Extra: efs
+Requires-Dist: botocore-a-la-carte-efs (==1.29.134) ; extra == 'efs'
+Provides-Extra: eks
+Requires-Dist: botocore-a-la-carte-eks (==1.29.134) ; extra == 'eks'
+Provides-Extra: elastic-inference
+Requires-Dist: botocore-a-la-carte-elastic-inference (==1.29.134) ; extra == 'elastic-inference'
+Provides-Extra: elasticache
+Requires-Dist: botocore-a-la-carte-elasticache (==1.29.134) ; extra == 'elasticache'
+Provides-Extra: elasticbeanstalk
+Requires-Dist: botocore-a-la-carte-elasticbeanstalk (==1.29.134) ; extra == 'elasticbeanstalk'
+Provides-Extra: elastictranscoder
+Requires-Dist: botocore-a-la-carte-elastictranscoder (==1.29.134) ; extra == 'elastictranscoder'
+Provides-Extra: elb
+Requires-Dist: botocore-a-la-carte-elb (==1.29.134) ; extra == 'elb'
+Provides-Extra: elbv2
+Requires-Dist: botocore-a-la-carte-elbv2 (==1.29.134) ; extra == 'elbv2'
+Provides-Extra: emr
+Requires-Dist: botocore-a-la-carte-emr (==1.29.134) ; extra == 'emr'
+Provides-Extra: emr-containers
+Requires-Dist: botocore-a-la-carte-emr-containers (==1.29.134) ; extra == 'emr-containers'
+Provides-Extra: emr-serverless
+Requires-Dist: botocore-a-la-carte-emr-serverless (==1.29.134) ; extra == 'emr-serverless'
+Provides-Extra: es
+Requires-Dist: botocore-a-la-carte-es (==1.29.134) ; extra == 'es'
+Provides-Extra: events
+Requires-Dist: botocore-a-la-carte-events (==1.29.134) ; extra == 'events'
+Provides-Extra: evidently
+Requires-Dist: botocore-a-la-carte-evidently (==1.29.134) ; extra == 'evidently'
+Provides-Extra: finspace
+Requires-Dist: botocore-a-la-carte-finspace (==1.29.134) ; extra == 'finspace'
+Provides-Extra: finspace-data
+Requires-Dist: botocore-a-la-carte-finspace-data (==1.29.134) ; extra == 'finspace-data'
+Provides-Extra: firehose
+Requires-Dist: botocore-a-la-carte-firehose (==1.29.134) ; extra == 'firehose'
+Provides-Extra: fis
+Requires-Dist: botocore-a-la-carte-fis (==1.29.134) ; extra == 'fis'
+Provides-Extra: fms
+Requires-Dist: botocore-a-la-carte-fms (==1.29.134) ; extra == 'fms'
+Provides-Extra: forecast
+Requires-Dist: botocore-a-la-carte-forecast (==1.29.134) ; extra == 'forecast'
+Provides-Extra: forecastquery
+Requires-Dist: botocore-a-la-carte-forecastquery (==1.29.134) ; extra == 'forecastquery'
+Provides-Extra: frauddetector
+Requires-Dist: botocore-a-la-carte-frauddetector (==1.29.134) ; extra == 'frauddetector'
+Provides-Extra: fsx
+Requires-Dist: botocore-a-la-carte-fsx (==1.29.134) ; extra == 'fsx'
+Provides-Extra: gamelift
+Requires-Dist: botocore-a-la-carte-gamelift (==1.29.134) ; extra == 'gamelift'
+Provides-Extra: gamesparks
+Requires-Dist: botocore-a-la-carte-gamesparks (==1.29.134) ; extra == 'gamesparks'
+Provides-Extra: glacier
+Requires-Dist: botocore-a-la-carte-glacier (==1.29.134) ; extra == 'glacier'
+Provides-Extra: globalaccelerator
+Requires-Dist: botocore-a-la-carte-globalaccelerator (==1.29.134) ; extra == 'globalaccelerator'
+Provides-Extra: glue
+Requires-Dist: botocore-a-la-carte-glue (==1.29.134) ; extra == 'glue'
+Provides-Extra: grafana
+Requires-Dist: botocore-a-la-carte-grafana (==1.29.134) ; extra == 'grafana'
+Provides-Extra: greengrass
+Requires-Dist: botocore-a-la-carte-greengrass (==1.29.134) ; extra == 'greengrass'
+Provides-Extra: greengrassv2
+Requires-Dist: botocore-a-la-carte-greengrassv2 (==1.29.134) ; extra == 'greengrassv2'
+Provides-Extra: groundstation
+Requires-Dist: botocore-a-la-carte-groundstation (==1.29.134) ; extra == 'groundstation'
+Provides-Extra: guardduty
+Requires-Dist: botocore-a-la-carte-guardduty (==1.29.134) ; extra == 'guardduty'
+Provides-Extra: health
+Requires-Dist: botocore-a-la-carte-health (==1.29.134) ; extra == 'health'
+Provides-Extra: healthlake
+Requires-Dist: botocore-a-la-carte-healthlake (==1.29.134) ; extra == 'healthlake'
+Provides-Extra: honeycode
+Requires-Dist: botocore-a-la-carte-honeycode (==1.29.134) ; extra == 'honeycode'
+Provides-Extra: iam
+Requires-Dist: botocore-a-la-carte-iam (==1.29.134) ; extra == 'iam'
+Provides-Extra: identitystore
+Requires-Dist: botocore-a-la-carte-identitystore (==1.29.134) ; extra == 'identitystore'
+Provides-Extra: imagebuilder
+Requires-Dist: botocore-a-la-carte-imagebuilder (==1.29.134) ; extra == 'imagebuilder'
+Provides-Extra: importexport
+Requires-Dist: botocore-a-la-carte-importexport (==1.29.134) ; extra == 'importexport'
+Provides-Extra: inspector
+Requires-Dist: botocore-a-la-carte-inspector (==1.29.134) ; extra == 'inspector'
+Provides-Extra: inspector2
+Requires-Dist: botocore-a-la-carte-inspector2 (==1.29.134) ; extra == 'inspector2'
+Provides-Extra: internetmonitor
+Requires-Dist: botocore-a-la-carte-internetmonitor (==1.29.134) ; extra == 'internetmonitor'
+Provides-Extra: iot
+Requires-Dist: botocore-a-la-carte-iot (==1.29.134) ; extra == 'iot'
+Provides-Extra: iot-data
+Requires-Dist: botocore-a-la-carte-iot-data (==1.29.134) ; extra == 'iot-data'
+Provides-Extra: iot-jobs-data
+Requires-Dist: botocore-a-la-carte-iot-jobs-data (==1.29.134) ; extra == 'iot-jobs-data'
+Provides-Extra: iot-roborunner
+Requires-Dist: botocore-a-la-carte-iot-roborunner (==1.29.134) ; extra == 'iot-roborunner'
+Provides-Extra: iot1click-devices
+Requires-Dist: botocore-a-la-carte-iot1click-devices (==1.29.134) ; extra == 'iot1click-devices'
+Provides-Extra: iot1click-projects
+Requires-Dist: botocore-a-la-carte-iot1click-projects (==1.29.134) ; extra == 'iot1click-projects'
+Provides-Extra: iotanalytics
+Requires-Dist: botocore-a-la-carte-iotanalytics (==1.29.134) ; extra == 'iotanalytics'
+Provides-Extra: iotdeviceadvisor
+Requires-Dist: botocore-a-la-carte-iotdeviceadvisor (==1.29.134) ; extra == 'iotdeviceadvisor'
+Provides-Extra: iotevents
+Requires-Dist: botocore-a-la-carte-iotevents (==1.29.134) ; extra == 'iotevents'
+Provides-Extra: iotevents-data
+Requires-Dist: botocore-a-la-carte-iotevents-data (==1.29.134) ; extra == 'iotevents-data'
+Provides-Extra: iotfleethub
+Requires-Dist: botocore-a-la-carte-iotfleethub (==1.29.134) ; extra == 'iotfleethub'
+Provides-Extra: iotfleetwise
+Requires-Dist: botocore-a-la-carte-iotfleetwise (==1.29.134) ; extra == 'iotfleetwise'
+Provides-Extra: iotsecuretunneling
+Requires-Dist: botocore-a-la-carte-iotsecuretunneling (==1.29.134) ; extra == 'iotsecuretunneling'
+Provides-Extra: iotsitewise
+Requires-Dist: botocore-a-la-carte-iotsitewise (==1.29.134) ; extra == 'iotsitewise'
+Provides-Extra: iotthingsgraph
+Requires-Dist: botocore-a-la-carte-iotthingsgraph (==1.29.134) ; extra == 'iotthingsgraph'
+Provides-Extra: iottwinmaker
+Requires-Dist: botocore-a-la-carte-iottwinmaker (==1.29.134) ; extra == 'iottwinmaker'
+Provides-Extra: iotwireless
+Requires-Dist: botocore-a-la-carte-iotwireless (==1.29.134) ; extra == 'iotwireless'
+Provides-Extra: ivs
+Requires-Dist: botocore-a-la-carte-ivs (==1.29.134) ; extra == 'ivs'
+Provides-Extra: ivs-realtime
+Requires-Dist: botocore-a-la-carte-ivs-realtime (==1.29.134) ; extra == 'ivs-realtime'
+Provides-Extra: ivschat
+Requires-Dist: botocore-a-la-carte-ivschat (==1.29.134) ; extra == 'ivschat'
+Provides-Extra: kafka
+Requires-Dist: botocore-a-la-carte-kafka (==1.29.134) ; extra == 'kafka'
+Provides-Extra: kafkaconnect
+Requires-Dist: botocore-a-la-carte-kafkaconnect (==1.29.134) ; extra == 'kafkaconnect'
+Provides-Extra: kendra
+Requires-Dist: botocore-a-la-carte-kendra (==1.29.134) ; extra == 'kendra'
+Provides-Extra: kendra-ranking
+Requires-Dist: botocore-a-la-carte-kendra-ranking (==1.29.134) ; extra == 'kendra-ranking'
+Provides-Extra: keyspaces
+Requires-Dist: botocore-a-la-carte-keyspaces (==1.29.134) ; extra == 'keyspaces'
+Provides-Extra: kinesis
+Requires-Dist: botocore-a-la-carte-kinesis (==1.29.134) ; extra == 'kinesis'
+Provides-Extra: kinesis-video-archived-media
+Requires-Dist: botocore-a-la-carte-kinesis-video-archived-media (==1.29.134) ; extra == 'kinesis-video-archived-media'
+Provides-Extra: kinesis-video-media
+Requires-Dist: botocore-a-la-carte-kinesis-video-media (==1.29.134) ; extra == 'kinesis-video-media'
+Provides-Extra: kinesis-video-signaling
+Requires-Dist: botocore-a-la-carte-kinesis-video-signaling (==1.29.134) ; extra == 'kinesis-video-signaling'
+Provides-Extra: kinesis-video-webrtc-storage
+Requires-Dist: botocore-a-la-carte-kinesis-video-webrtc-storage (==1.29.134) ; extra == 'kinesis-video-webrtc-storage'
+Provides-Extra: kinesisanalytics
+Requires-Dist: botocore-a-la-carte-kinesisanalytics (==1.29.134) ; extra == 'kinesisanalytics'
+Provides-Extra: kinesisanalyticsv2
+Requires-Dist: botocore-a-la-carte-kinesisanalyticsv2 (==1.29.134) ; extra == 'kinesisanalyticsv2'
+Provides-Extra: kinesisvideo
+Requires-Dist: botocore-a-la-carte-kinesisvideo (==1.29.134) ; extra == 'kinesisvideo'
+Provides-Extra: kms
+Requires-Dist: botocore-a-la-carte-kms (==1.29.134) ; extra == 'kms'
+Provides-Extra: lakeformation
+Requires-Dist: botocore-a-la-carte-lakeformation (==1.29.134) ; extra == 'lakeformation'
+Provides-Extra: lambda
+Requires-Dist: botocore-a-la-carte-lambda (==1.29.134) ; extra == 'lambda'
+Provides-Extra: lex-models
+Requires-Dist: botocore-a-la-carte-lex-models (==1.29.134) ; extra == 'lex-models'
+Provides-Extra: lex-runtime
+Requires-Dist: botocore-a-la-carte-lex-runtime (==1.29.134) ; extra == 'lex-runtime'
+Provides-Extra: lexv2-models
+Requires-Dist: botocore-a-la-carte-lexv2-models (==1.29.134) ; extra == 'lexv2-models'
+Provides-Extra: lexv2-runtime
+Requires-Dist: botocore-a-la-carte-lexv2-runtime (==1.29.134) ; extra == 'lexv2-runtime'
+Provides-Extra: license-manager
+Requires-Dist: botocore-a-la-carte-license-manager (==1.29.134) ; extra == 'license-manager'
+Provides-Extra: license-manager-linux-subscriptions
+Requires-Dist: botocore-a-la-carte-license-manager-linux-subscriptions (==1.29.134) ; extra == 'license-manager-linux-subscriptions'
+Provides-Extra: license-manager-user-subscriptions
+Requires-Dist: botocore-a-la-carte-license-manager-user-subscriptions (==1.29.134) ; extra == 'license-manager-user-subscriptions'
+Provides-Extra: lightsail
+Requires-Dist: botocore-a-la-carte-lightsail (==1.29.134) ; extra == 'lightsail'
+Provides-Extra: location
+Requires-Dist: botocore-a-la-carte-location (==1.29.134) ; extra == 'location'
+Provides-Extra: logs
+Requires-Dist: botocore-a-la-carte-logs (==1.29.134) ; extra == 'logs'
+Provides-Extra: lookoutequipment
+Requires-Dist: botocore-a-la-carte-lookoutequipment (==1.29.134) ; extra == 'lookoutequipment'
+Provides-Extra: lookoutmetrics
+Requires-Dist: botocore-a-la-carte-lookoutmetrics (==1.29.134) ; extra == 'lookoutmetrics'
+Provides-Extra: lookoutvision
+Requires-Dist: botocore-a-la-carte-lookoutvision (==1.29.134) ; extra == 'lookoutvision'
+Provides-Extra: m2
+Requires-Dist: botocore-a-la-carte-m2 (==1.29.134) ; extra == 'm2'
+Provides-Extra: machinelearning
+Requires-Dist: botocore-a-la-carte-machinelearning (==1.29.134) ; extra == 'machinelearning'
+Provides-Extra: macie
+Requires-Dist: botocore-a-la-carte-macie (==1.29.134) ; extra == 'macie'
+Provides-Extra: macie2
+Requires-Dist: botocore-a-la-carte-macie2 (==1.29.134) ; extra == 'macie2'
+Provides-Extra: managedblockchain
+Requires-Dist: botocore-a-la-carte-managedblockchain (==1.29.134) ; extra == 'managedblockchain'
+Provides-Extra: marketplace-catalog
+Requires-Dist: botocore-a-la-carte-marketplace-catalog (==1.29.134) ; extra == 'marketplace-catalog'
+Provides-Extra: marketplace-entitlement
+Requires-Dist: botocore-a-la-carte-marketplace-entitlement (==1.29.134) ; extra == 'marketplace-entitlement'
+Provides-Extra: marketplacecommerceanalytics
+Requires-Dist: botocore-a-la-carte-marketplacecommerceanalytics (==1.29.134) ; extra == 'marketplacecommerceanalytics'
+Provides-Extra: mediaconnect
+Requires-Dist: botocore-a-la-carte-mediaconnect (==1.29.134) ; extra == 'mediaconnect'
+Provides-Extra: mediaconvert
+Requires-Dist: botocore-a-la-carte-mediaconvert (==1.29.134) ; extra == 'mediaconvert'
+Provides-Extra: medialive
+Requires-Dist: botocore-a-la-carte-medialive (==1.29.134) ; extra == 'medialive'
+Provides-Extra: mediapackage
+Requires-Dist: botocore-a-la-carte-mediapackage (==1.29.134) ; extra == 'mediapackage'
+Provides-Extra: mediapackage-vod
+Requires-Dist: botocore-a-la-carte-mediapackage-vod (==1.29.134) ; extra == 'mediapackage-vod'
+Provides-Extra: mediastore
+Requires-Dist: botocore-a-la-carte-mediastore (==1.29.134) ; extra == 'mediastore'
+Provides-Extra: mediastore-data
+Requires-Dist: botocore-a-la-carte-mediastore-data (==1.29.134) ; extra == 'mediastore-data'
+Provides-Extra: mediatailor
+Requires-Dist: botocore-a-la-carte-mediatailor (==1.29.134) ; extra == 'mediatailor'
+Provides-Extra: memorydb
+Requires-Dist: botocore-a-la-carte-memorydb (==1.29.134) ; extra == 'memorydb'
+Provides-Extra: meteringmarketplace
+Requires-Dist: botocore-a-la-carte-meteringmarketplace (==1.29.134) ; extra == 'meteringmarketplace'
+Provides-Extra: mgh
+Requires-Dist: botocore-a-la-carte-mgh (==1.29.134) ; extra == 'mgh'
+Provides-Extra: mgn
+Requires-Dist: botocore-a-la-carte-mgn (==1.29.134) ; extra == 'mgn'
+Provides-Extra: migration-hub-refactor-spaces
+Requires-Dist: botocore-a-la-carte-migration-hub-refactor-spaces (==1.29.134) ; extra == 'migration-hub-refactor-spaces'
+Provides-Extra: migrationhub-config
+Requires-Dist: botocore-a-la-carte-migrationhub-config (==1.29.134) ; extra == 'migrationhub-config'
+Provides-Extra: migrationhuborchestrator
+Requires-Dist: botocore-a-la-carte-migrationhuborchestrator (==1.29.134) ; extra == 'migrationhuborchestrator'
+Provides-Extra: migrationhubstrategy
+Requires-Dist: botocore-a-la-carte-migrationhubstrategy (==1.29.134) ; extra == 'migrationhubstrategy'
+Provides-Extra: mobile
+Requires-Dist: botocore-a-la-carte-mobile (==1.29.134) ; extra == 'mobile'
+Provides-Extra: mq
+Requires-Dist: botocore-a-la-carte-mq (==1.29.134) ; extra == 'mq'
+Provides-Extra: mturk
+Requires-Dist: botocore-a-la-carte-mturk (==1.29.134) ; extra == 'mturk'
+Provides-Extra: mwaa
+Requires-Dist: botocore-a-la-carte-mwaa (==1.29.134) ; extra == 'mwaa'
+Provides-Extra: neptune
+Requires-Dist: botocore-a-la-carte-neptune (==1.29.134) ; extra == 'neptune'
+Provides-Extra: network-firewall
+Requires-Dist: botocore-a-la-carte-network-firewall (==1.29.134) ; extra == 'network-firewall'
+Provides-Extra: networkmanager
+Requires-Dist: botocore-a-la-carte-networkmanager (==1.29.134) ; extra == 'networkmanager'
+Provides-Extra: nimble
+Requires-Dist: botocore-a-la-carte-nimble (==1.29.134) ; extra == 'nimble'
+Provides-Extra: oam
+Requires-Dist: botocore-a-la-carte-oam (==1.29.134) ; extra == 'oam'
+Provides-Extra: omics
+Requires-Dist: botocore-a-la-carte-omics (==1.29.134) ; extra == 'omics'
+Provides-Extra: opensearch
+Requires-Dist: botocore-a-la-carte-opensearch (==1.29.134) ; extra == 'opensearch'
+Provides-Extra: opensearchserverless
+Requires-Dist: botocore-a-la-carte-opensearchserverless (==1.29.134) ; extra == 'opensearchserverless'
+Provides-Extra: opsworks
+Requires-Dist: botocore-a-la-carte-opsworks (==1.29.134) ; extra == 'opsworks'
+Provides-Extra: opsworkscm
+Requires-Dist: botocore-a-la-carte-opsworkscm (==1.29.134) ; extra == 'opsworkscm'
+Provides-Extra: organizations
+Requires-Dist: botocore-a-la-carte-organizations (==1.29.134) ; extra == 'organizations'
+Provides-Extra: osis
+Requires-Dist: botocore-a-la-carte-osis (==1.29.134) ; extra == 'osis'
+Provides-Extra: outposts
+Requires-Dist: botocore-a-la-carte-outposts (==1.29.134) ; extra == 'outposts'
+Provides-Extra: panorama
+Requires-Dist: botocore-a-la-carte-panorama (==1.29.134) ; extra == 'panorama'
+Provides-Extra: personalize
+Requires-Dist: botocore-a-la-carte-personalize (==1.29.134) ; extra == 'personalize'
+Provides-Extra: personalize-events
+Requires-Dist: botocore-a-la-carte-personalize-events (==1.29.134) ; extra == 'personalize-events'
+Provides-Extra: personalize-runtime
+Requires-Dist: botocore-a-la-carte-personalize-runtime (==1.29.134) ; extra == 'personalize-runtime'
+Provides-Extra: pi
+Requires-Dist: botocore-a-la-carte-pi (==1.29.134) ; extra == 'pi'
+Provides-Extra: pinpoint
+Requires-Dist: botocore-a-la-carte-pinpoint (==1.29.134) ; extra == 'pinpoint'
+Provides-Extra: pinpoint-email
+Requires-Dist: botocore-a-la-carte-pinpoint-email (==1.29.134) ; extra == 'pinpoint-email'
+Provides-Extra: pinpoint-sms-voice
+Requires-Dist: botocore-a-la-carte-pinpoint-sms-voice (==1.29.134) ; extra == 'pinpoint-sms-voice'
+Provides-Extra: pinpoint-sms-voice-v2
+Requires-Dist: botocore-a-la-carte-pinpoint-sms-voice-v2 (==1.29.134) ; extra == 'pinpoint-sms-voice-v2'
+Provides-Extra: pipes
+Requires-Dist: botocore-a-la-carte-pipes (==1.29.134) ; extra == 'pipes'
+Provides-Extra: polly
+Requires-Dist: botocore-a-la-carte-polly (==1.29.134) ; extra == 'polly'
+Provides-Extra: pricing
+Requires-Dist: botocore-a-la-carte-pricing (==1.29.134) ; extra == 'pricing'
+Provides-Extra: privatenetworks
+Requires-Dist: botocore-a-la-carte-privatenetworks (==1.29.134) ; extra == 'privatenetworks'
+Provides-Extra: proton
+Requires-Dist: botocore-a-la-carte-proton (==1.29.134) ; extra == 'proton'
+Provides-Extra: qldb
+Requires-Dist: botocore-a-la-carte-qldb (==1.29.134) ; extra == 'qldb'
+Provides-Extra: qldb-session
+Requires-Dist: botocore-a-la-carte-qldb-session (==1.29.134) ; extra == 'qldb-session'
+Provides-Extra: quicksight
+Requires-Dist: botocore-a-la-carte-quicksight (==1.29.134) ; extra == 'quicksight'
+Provides-Extra: ram
+Requires-Dist: botocore-a-la-carte-ram (==1.29.134) ; extra == 'ram'
+Provides-Extra: rbin
+Requires-Dist: botocore-a-la-carte-rbin (==1.29.134) ; extra == 'rbin'
+Provides-Extra: rds
+Requires-Dist: botocore-a-la-carte-rds (==1.29.134) ; extra == 'rds'
+Provides-Extra: rds-data
+Requires-Dist: botocore-a-la-carte-rds-data (==1.29.134) ; extra == 'rds-data'
+Provides-Extra: redshift
+Requires-Dist: botocore-a-la-carte-redshift (==1.29.134) ; extra == 'redshift'
+Provides-Extra: redshift-data
+Requires-Dist: botocore-a-la-carte-redshift-data (==1.29.134) ; extra == 'redshift-data'
+Provides-Extra: redshift-serverless
+Requires-Dist: botocore-a-la-carte-redshift-serverless (==1.29.134) ; extra == 'redshift-serverless'
+Provides-Extra: rekognition
+Requires-Dist: botocore-a-la-carte-rekognition (==1.29.134) ; extra == 'rekognition'
+Provides-Extra: resiliencehub
+Requires-Dist: botocore-a-la-carte-resiliencehub (==1.29.134) ; extra == 'resiliencehub'
+Provides-Extra: resource-explorer-2
+Requires-Dist: botocore-a-la-carte-resource-explorer-2 (==1.29.134) ; extra == 'resource-explorer-2'
+Provides-Extra: resource-groups
+Requires-Dist: botocore-a-la-carte-resource-groups (==1.29.134) ; extra == 'resource-groups'
+Provides-Extra: resourcegroupstaggingapi
+Requires-Dist: botocore-a-la-carte-resourcegroupstaggingapi (==1.29.134) ; extra == 'resourcegroupstaggingapi'
+Provides-Extra: robomaker
+Requires-Dist: botocore-a-la-carte-robomaker (==1.29.134) ; extra == 'robomaker'
+Provides-Extra: rolesanywhere
+Requires-Dist: botocore-a-la-carte-rolesanywhere (==1.29.134) ; extra == 'rolesanywhere'
+Provides-Extra: route53
+Requires-Dist: botocore-a-la-carte-route53 (==1.29.134) ; extra == 'route53'
+Provides-Extra: route53-recovery-cluster
+Requires-Dist: botocore-a-la-carte-route53-recovery-cluster (==1.29.134) ; extra == 'route53-recovery-cluster'
+Provides-Extra: route53-recovery-control-config
+Requires-Dist: botocore-a-la-carte-route53-recovery-control-config (==1.29.134) ; extra == 'route53-recovery-control-config'
+Provides-Extra: route53-recovery-readiness
+Requires-Dist: botocore-a-la-carte-route53-recovery-readiness (==1.29.134) ; extra == 'route53-recovery-readiness'
+Provides-Extra: route53domains
+Requires-Dist: botocore-a-la-carte-route53domains (==1.29.134) ; extra == 'route53domains'
+Provides-Extra: route53resolver
+Requires-Dist: botocore-a-la-carte-route53resolver (==1.29.134) ; extra == 'route53resolver'
+Provides-Extra: rum
+Requires-Dist: botocore-a-la-carte-rum (==1.29.134) ; extra == 'rum'
+Provides-Extra: s3
+Requires-Dist: botocore-a-la-carte-s3 (==1.29.134) ; extra == 's3'
+Provides-Extra: s3control
+Requires-Dist: botocore-a-la-carte-s3control (==1.29.134) ; extra == 's3control'
+Provides-Extra: s3outposts
+Requires-Dist: botocore-a-la-carte-s3outposts (==1.29.134) ; extra == 's3outposts'
+Provides-Extra: sagemaker
+Requires-Dist: botocore-a-la-carte-sagemaker (==1.29.134) ; extra == 'sagemaker'
+Provides-Extra: sagemaker-a2i-runtime
+Requires-Dist: botocore-a-la-carte-sagemaker-a2i-runtime (==1.29.134) ; extra == 'sagemaker-a2i-runtime'
+Provides-Extra: sagemaker-edge
+Requires-Dist: botocore-a-la-carte-sagemaker-edge (==1.29.134) ; extra == 'sagemaker-edge'
+Provides-Extra: sagemaker-featurestore-runtime
+Requires-Dist: botocore-a-la-carte-sagemaker-featurestore-runtime (==1.29.134) ; extra == 'sagemaker-featurestore-runtime'
+Provides-Extra: sagemaker-geospatial
+Requires-Dist: botocore-a-la-carte-sagemaker-geospatial (==1.29.134) ; extra == 'sagemaker-geospatial'
+Provides-Extra: sagemaker-metrics
+Requires-Dist: botocore-a-la-carte-sagemaker-metrics (==1.29.134) ; extra == 'sagemaker-metrics'
+Provides-Extra: sagemaker-runtime
+Requires-Dist: botocore-a-la-carte-sagemaker-runtime (==1.29.134) ; extra == 'sagemaker-runtime'
+Provides-Extra: savingsplans
+Requires-Dist: botocore-a-la-carte-savingsplans (==1.29.134) ; extra == 'savingsplans'
+Provides-Extra: scheduler
+Requires-Dist: botocore-a-la-carte-scheduler (==1.29.134) ; extra == 'scheduler'
+Provides-Extra: schemas
+Requires-Dist: botocore-a-la-carte-schemas (==1.29.134) ; extra == 'schemas'
+Provides-Extra: sdb
+Requires-Dist: botocore-a-la-carte-sdb (==1.29.134) ; extra == 'sdb'
+Provides-Extra: secretsmanager
+Requires-Dist: botocore-a-la-carte-secretsmanager (==1.29.134) ; extra == 'secretsmanager'
+Provides-Extra: securityhub
+Requires-Dist: botocore-a-la-carte-securityhub (==1.29.134) ; extra == 'securityhub'
+Provides-Extra: securitylake
+Requires-Dist: botocore-a-la-carte-securitylake (==1.29.134) ; extra == 'securitylake'
+Provides-Extra: serverlessrepo
+Requires-Dist: botocore-a-la-carte-serverlessrepo (==1.29.134) ; extra == 'serverlessrepo'
+Provides-Extra: service-quotas
+Requires-Dist: botocore-a-la-carte-service-quotas (==1.29.134) ; extra == 'service-quotas'
+Provides-Extra: servicecatalog
+Requires-Dist: botocore-a-la-carte-servicecatalog (==1.29.134) ; extra == 'servicecatalog'
+Provides-Extra: servicecatalog-appregistry
+Requires-Dist: botocore-a-la-carte-servicecatalog-appregistry (==1.29.134) ; extra == 'servicecatalog-appregistry'
+Provides-Extra: servicediscovery
+Requires-Dist: botocore-a-la-carte-servicediscovery (==1.29.134) ; extra == 'servicediscovery'
+Provides-Extra: ses
+Requires-Dist: botocore-a-la-carte-ses (==1.29.134) ; extra == 'ses'
+Provides-Extra: sesv2
+Requires-Dist: botocore-a-la-carte-sesv2 (==1.29.134) ; extra == 'sesv2'
+Provides-Extra: shield
+Requires-Dist: botocore-a-la-carte-shield (==1.29.134) ; extra == 'shield'
+Provides-Extra: signer
+Requires-Dist: botocore-a-la-carte-signer (==1.29.134) ; extra == 'signer'
+Provides-Extra: simspaceweaver
+Requires-Dist: botocore-a-la-carte-simspaceweaver (==1.29.134) ; extra == 'simspaceweaver'
+Provides-Extra: sms
+Requires-Dist: botocore-a-la-carte-sms (==1.29.134) ; extra == 'sms'
+Provides-Extra: sms-voice
+Requires-Dist: botocore-a-la-carte-sms-voice (==1.29.134) ; extra == 'sms-voice'
+Provides-Extra: snow-device-management
+Requires-Dist: botocore-a-la-carte-snow-device-management (==1.29.134) ; extra == 'snow-device-management'
+Provides-Extra: snowball
+Requires-Dist: botocore-a-la-carte-snowball (==1.29.134) ; extra == 'snowball'
+Provides-Extra: sns
+Requires-Dist: botocore-a-la-carte-sns (==1.29.134) ; extra == 'sns'
+Provides-Extra: sqs
+Requires-Dist: botocore-a-la-carte-sqs (==1.29.134) ; extra == 'sqs'
+Provides-Extra: ssm
+Requires-Dist: botocore-a-la-carte-ssm (==1.29.134) ; extra == 'ssm'
+Provides-Extra: ssm-contacts
+Requires-Dist: botocore-a-la-carte-ssm-contacts (==1.29.134) ; extra == 'ssm-contacts'
+Provides-Extra: ssm-incidents
+Requires-Dist: botocore-a-la-carte-ssm-incidents (==1.29.134) ; extra == 'ssm-incidents'
+Provides-Extra: ssm-sap
+Requires-Dist: botocore-a-la-carte-ssm-sap (==1.29.134) ; extra == 'ssm-sap'
+Provides-Extra: sso
+Requires-Dist: botocore-a-la-carte-sso (==1.29.134) ; extra == 'sso'
+Provides-Extra: sso-admin
+Requires-Dist: botocore-a-la-carte-sso-admin (==1.29.134) ; extra == 'sso-admin'
+Provides-Extra: sso-oidc
+Requires-Dist: botocore-a-la-carte-sso-oidc (==1.29.134) ; extra == 'sso-oidc'
+Provides-Extra: stepfunctions
+Requires-Dist: botocore-a-la-carte-stepfunctions (==1.29.134) ; extra == 'stepfunctions'
+Provides-Extra: storagegateway
+Requires-Dist: botocore-a-la-carte-storagegateway (==1.29.134) ; extra == 'storagegateway'
+Provides-Extra: sts
+Requires-Dist: botocore-a-la-carte-sts (==1.29.134) ; extra == 'sts'
+Provides-Extra: support
+Requires-Dist: botocore-a-la-carte-support (==1.29.134) ; extra == 'support'
+Provides-Extra: support-app
+Requires-Dist: botocore-a-la-carte-support-app (==1.29.134) ; extra == 'support-app'
+Provides-Extra: swf
+Requires-Dist: botocore-a-la-carte-swf (==1.29.134) ; extra == 'swf'
+Provides-Extra: synthetics
+Requires-Dist: botocore-a-la-carte-synthetics (==1.29.134) ; extra == 'synthetics'
+Provides-Extra: textract
+Requires-Dist: botocore-a-la-carte-textract (==1.29.134) ; extra == 'textract'
+Provides-Extra: timestream-query
+Requires-Dist: botocore-a-la-carte-timestream-query (==1.29.134) ; extra == 'timestream-query'
+Provides-Extra: timestream-write
+Requires-Dist: botocore-a-la-carte-timestream-write (==1.29.134) ; extra == 'timestream-write'
+Provides-Extra: tnb
+Requires-Dist: botocore-a-la-carte-tnb (==1.29.134) ; extra == 'tnb'
+Provides-Extra: transcribe
+Requires-Dist: botocore-a-la-carte-transcribe (==1.29.134) ; extra == 'transcribe'
+Provides-Extra: transfer
+Requires-Dist: botocore-a-la-carte-transfer (==1.29.134) ; extra == 'transfer'
+Provides-Extra: translate
+Requires-Dist: botocore-a-la-carte-translate (==1.29.134) ; extra == 'translate'
+Provides-Extra: voice-id
+Requires-Dist: botocore-a-la-carte-voice-id (==1.29.134) ; extra == 'voice-id'
+Provides-Extra: vpc-lattice
+Requires-Dist: botocore-a-la-carte-vpc-lattice (==1.29.134) ; extra == 'vpc-lattice'
+Provides-Extra: waf
+Requires-Dist: botocore-a-la-carte-waf (==1.29.134) ; extra == 'waf'
+Provides-Extra: waf-regional
+Requires-Dist: botocore-a-la-carte-waf-regional (==1.29.134) ; extra == 'waf-regional'
+Provides-Extra: wafv2
+Requires-Dist: botocore-a-la-carte-wafv2 (==1.29.134) ; extra == 'wafv2'
+Provides-Extra: wellarchitected
+Requires-Dist: botocore-a-la-carte-wellarchitected (==1.29.134) ; extra == 'wellarchitected'
+Provides-Extra: wisdom
+Requires-Dist: botocore-a-la-carte-wisdom (==1.29.134) ; extra == 'wisdom'
+Provides-Extra: workdocs
+Requires-Dist: botocore-a-la-carte-workdocs (==1.29.134) ; extra == 'workdocs'
+Provides-Extra: worklink
+Requires-Dist: botocore-a-la-carte-worklink (==1.29.134) ; extra == 'worklink'
+Provides-Extra: workmail
+Requires-Dist: botocore-a-la-carte-workmail (==1.29.134) ; extra == 'workmail'
+Provides-Extra: workmailmessageflow
+Requires-Dist: botocore-a-la-carte-workmailmessageflow (==1.29.134) ; extra == 'workmailmessageflow'
+Provides-Extra: workspaces
+Requires-Dist: botocore-a-la-carte-workspaces (==1.29.134) ; extra == 'workspaces'
+Provides-Extra: workspaces-web
+Requires-Dist: botocore-a-la-carte-workspaces-web (==1.29.134) ; extra == 'workspaces-web'
+Provides-Extra: xray
+Requires-Dist: botocore-a-la-carte-xray (==1.29.134) ; extra == 'xray'
+
+``botocore-a-la-carte``
+-----------------------
+
+``botocore-a-la-carte`` is a re-packaging of ``botocore`` such that each service's data JSON exists in a
+separate package, and are opted-into through package extras.
+
+The package ``botocore-a-la-carte`` contains the base code/resources for ``botocore`` to operate, and has
+a package extra per service (referencing a package which contains just the JSON data for that service).
+
+Installation and Usage
+----------------------
+
+⚠️ The package extras must be installed in the same directory as this package (such as in a virtual environment).
+This package does not support being installed in separate locations pointed to by ``sys.path``.
+This is a limitation of the core ``botocore`` package and the Python packaging ecosystem. ⚠️
+
+Example:
+
+``botocore-a-la-carte`` with no extras allows you to use core ``botocore`` functionality
+(e.g. load credentials, sign requests, etc...).
+
+.. code-block:: console
+
+    $ pip install botocore-a-la-carte
+    ...
+    $ python
+    >>> import botocore
+    ...
+
+If you require specific service support, specify the service name as an extra:
+
+.. code-block:: console
+
+    $ pip install botocore-a-la-carte[s3, ec2]
+    ...
+    $ python
+    >>> import botocore.session
+    >>> session = botocore.session.get_session()
+    >>> client = session.create_client('ec2')
+    >>> print(client.describe_instances())
+
+
+
