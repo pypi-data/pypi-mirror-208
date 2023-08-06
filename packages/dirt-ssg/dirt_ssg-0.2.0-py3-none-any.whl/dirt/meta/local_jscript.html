@@ -1,0 +1,47 @@
+
+<div id="dirt_box" style="background-color: lightgray; width: 100%;
+ position: fixed; top: 0px; left: 0px; float: right;">
+  Explore: $extraslink
+  DEBUG:
+  <span id="dirt_message">---</span> [<span id="dirt_debug">---</span>]
+</div>
+<script>
+(function(){
+onload_counter=0
+elt = document.getElementById('dirt_message');
+function display(msg) {elt.textContent = msg;}
+function dbg(msg) {document.getElementById('dirt_debug').textContent = msg;}
+var last_timestamp = '$timestamp'    //DEBUG
+display(last_timestamp);dbg('Startup');
+var xhr = new XMLHttpRequest();
+xhr.onload = function(ev) {
+  display("onload"+xhr.status);dbg(xhr.responseText);
+  if (xhr.readyState === 4) {
+    if (xhr.status === 200) {
+      update_timestamp = xhr.responseText;
+      if (update_timestamp != last_timestamp) {
+        console.log("Update: " + update_timestamp + " <<< " + last_timestamp);
+        display(update_timestamp);dbg(last_timestamp);
+        last_timestamp = update_timestamp;
+        location.reload();
+      } else {
+        display(update_timestamp);dbg(onload_counter++);
+      }
+    } else {
+      console.log("[dirt]onload: "+xhr.statusText+"(HTTP status)");
+    }
+  }
+};
+xhr.onerror = function(ev) {
+  console.log("[dirt]onerror: "+xhr.statusText+"(XHR error)");
+};
+counter = 0
+function updater() {
+  xhr.open("GET", "/$filename", true);
+  xhr.send();
+  setTimeout(updater, 1000*$interval);
+}
+updater();
+})()
+</script>
+<noscript><p>(Enable JavaScript for Dirt SSG auto-update.)</p></noscript>
