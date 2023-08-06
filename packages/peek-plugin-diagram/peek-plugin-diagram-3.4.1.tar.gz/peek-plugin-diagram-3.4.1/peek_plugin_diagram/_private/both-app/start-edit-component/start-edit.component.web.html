@@ -1,0 +1,104 @@
+<nz-modal
+    (nzOnCancel)="closePopup()"
+    [nzVisible]="popupShown"
+    nzTitle="Create or Edit Diagram Branch"
+    [nzFooter]="null"
+    [nzWidth]="600"
+>
+    <div class="button-div">
+        <div></div>
+        <div class="btn-group">
+            <button (click)="startEditing()" nz-button nzType="primary">
+                Start Editing
+            </button>
+        </div>
+    </div>
+    <nz-tabset (nzSelectedIndexChange)="barIndex = $event">
+        <nz-tab nzTitle="Create New">
+            <div class="peek-details-section">
+                <div class="container-fluid">
+                    <!--Displayed form data -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="details-section-title">Name</div>
+                            <div class="details-section-value">
+                                <input
+                                    [(ngModel)]="newBranch.name"
+                                    class="editable"
+                                    type="text"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="details-section-title">Comment</div>
+                            <div class="details-section-value">
+                                <div class="details-section-value">
+                                    <textarea
+                                        [(ngModel)]="newBranch.comment"
+                                        class="multiline editable"
+                                        type="text"
+                                    >
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-tab>
+        <nz-tab nzTitle="Edit Branch">
+            <div class="filter-div">
+                <input
+                    *ngIf="!noAllItems()"
+                    [(ngModel)]="filterText"
+                    nz-input
+                    placeholder="Filter"
+                    type="text"
+                    nz-tooltip
+                    [nzTooltipMouseEnterDelay]="1.0"
+                    nzTooltipTitle="Enter some text here to filter the list"
+                    nzTooltipPlacement="top"
+                />
+                <nz-switch
+                    nz-input
+                    [(ngModel)]="showOnlyMine"
+                    nzCheckedChildren="Mine"
+                    nzUnCheckedChildren="Mine"
+                    nz-tooltip
+                    [nzTooltipMouseEnterDelay]="1.0"
+                    nzTooltipTitle="Show only branches you created?"
+                    nzTooltipPlacement="top"
+                >
+                </nz-switch>
+                <nz-switch
+                    [(ngModel)]="sortByDate"
+                    nzCheckedChildren="Date"
+                    nzUnCheckedChildren="Date"
+                    nz-tooltip
+                    [nzTooltipMouseEnterDelay]="1.0"
+                    nzTooltipTitle="Sort the list by date or by name?"
+                    nzTooltipPlacement="top"
+                >
+                </nz-switch>
+            </div>
+            
+            <p *ngIf="noItems()">You have no existing branches.</p>
+            <p *ngIf="noFilteredItems()">Your filter returned no
+                                         items.</p>
+            <div *ngIf="!noItems()" class="scroll-outer">
+                <nz-list nzBordered nzSize="large">
+                    <nz-list-item
+                        (click)="selectBranch(item)"
+                        *ngFor="let item of (items$ | async)"
+                        [class.selected]="isBranchSelected(item)"
+                        style="cursor: pointer"
+                    >
+                        {{ item.name }}
+                    </nz-list-item>
+                </nz-list>
+            </div>
+        </nz-tab>
+    </nz-tabset>
+</nz-modal>
