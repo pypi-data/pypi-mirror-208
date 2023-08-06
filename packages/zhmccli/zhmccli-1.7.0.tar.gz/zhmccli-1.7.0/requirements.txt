@@ -1,0 +1,65 @@
+# Pip requirements file for zhmccli runtime dependencies.
+#
+# The order of packages is significant, because pip processes them in the order
+# of appearance. Changing the order has an impact on the overall integration
+# process, which may cause wedges in the gate later.
+
+# Make sure that the package versions in minimum-constraints.txt are also
+# the minimum versions required in requirements.txt and dev-requirements.txt.
+
+# Direct dependencies (except pip, setuptools, wheel):
+
+# zhmcclient @ git+https://github.com/zhmcclient/python-zhmcclient.git@master
+zhmcclient>=1.8.0  # Apache
+
+# click <7.0 did not properly declare supported Python versions
+# click 8.0 has dropped support for Python 2.7,3.5
+# safety 2.2.0 depends on click>=8.0.2 and is run only on Python>=3.6
+click>=7.0,<8.0; python_version <= '3.5'
+click>=8.0.2; python_version >= '3.6'
+
+# click-repl 0.2 is needed for compatibility with Click 8.0 (see issue #819 click-repl incompatible)
+click-repl>=0.1.6; python_version <= '3.5'
+click-repl>=0.2; python_version >= '3.6'
+
+click-spinner>=0.1.6 # MIT
+progressbar2>=3.12.0 # BSD
+six>=1.14.0; python_version <= '3.9' # MIT
+six>=1.16.0; python_version >= '3.10' # MIT
+tabulate>=0.8.2; python_version <= '3.9' # MIT
+tabulate>=0.8.8; python_version >= '3.10' # MIT
+python-dateutil>=2.8.2  # Apache, BSD
+
+# prompt-toolkit is pulled in by click-repl.
+# prompt-toolkit>=2.0 conflicts with ipython and jupyter-console.
+# prompt-toolkit>=3.0 does not support py27.
+prompt-toolkit>=1.0.15,<2.0.0; python_version == '2.7'
+prompt-toolkit>=2.0.1; python_version >= '3.5'
+
+# PyYAML 5.3 has removed support for Python 3.4
+# PyYAML 5.3 fixed narrow build error on Python 2.7
+# PyYAML 5.3.1 addressed issue 38100 reported by safety
+# PyYAML 5.2 addressed issue 38639 reported by safety
+# PyYAML 5.4 fixes safety issue 39611
+PyYAML>=5.3.1; python_version <= '3.5'
+PyYAML>=5.4; python_version >= '3.6'
+
+jsonschema>=3.0.1
+yamlloader>=0.5.5
+
+# urllib3 is used to disable warnings
+urllib3>=1.26.5  # MIT
+
+
+# Indirect dependencies (commented out, only listed to document their license):
+
+# certifi # MPL 2.0, from requests
+# chardet # LGPL, from requests
+# decorator # BSD, from zhmcclient
+# docopt # MIT, from stomp.py
+# idna # BSD, from requests
+# python-utils # BSD, from progressbar2
+# pytz # MIT, from zhmcclient
+# requests # Apache, from zhmcclient
+# stomp.py # Apache, from zhmcclient
+# wcwidth # MIT, from prompt-toolkit
