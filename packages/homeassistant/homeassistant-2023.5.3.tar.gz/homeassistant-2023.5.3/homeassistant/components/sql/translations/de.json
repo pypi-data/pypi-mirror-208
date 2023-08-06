@@ -1,0 +1,65 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Konto wurde bereits konfiguriert"
+        },
+        "error": {
+            "column_invalid": "Die Spalte `{column}` wird von der Abfrage nicht zur\u00fcckgegeben",
+            "db_url_invalid": "Datenbank-URL ung\u00fcltig",
+            "query_invalid": "SQL-Abfrage ung\u00fcltig"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "column": "Spalte",
+                    "db_url": "Datenbank-URL",
+                    "name": "Name",
+                    "query": "Abfrage ausw\u00e4hlen",
+                    "unit_of_measurement": "Ma\u00dfeinheit",
+                    "value_template": "Wertvorlage"
+                },
+                "data_description": {
+                    "column": "Spalte f\u00fcr die zur\u00fcckgegebene Abfrage, die als Status angezeigt werden soll",
+                    "db_url": "Datenbank-URL, leer lassen, um die HA-Recorder-Datenbank zu verwenden",
+                    "name": "Name, der f\u00fcr den Konfigurationseintrag und auch f\u00fcr den Sensor verwendet wird",
+                    "query": "Auszuf\u00fchrende Abfrage, muss mit 'SELECT' beginnen",
+                    "unit_of_measurement": "Ma\u00dfeinheit (optional)",
+                    "value_template": "Wertvorlage (optional)"
+                }
+            }
+        }
+    },
+    "issues": {
+        "entity_id_query_does_full_table_scan": {
+            "description": "Die Abfrage `{query}` enth\u00e4lt das Schl\u00fcsselwort `entity_id`, verweist aber nicht auf die Tabelle `states_meta`. Dies f\u00fchrt zu einem vollst\u00e4ndigen Tabellenscan und einer Instabilit\u00e4t der Datenbank. Bitte lese die Dokumentation und verwende stattdessen `states_meta.entity_id`.",
+            "title": "Die SQL-Abfrage f\u00fchrt einen vollst\u00e4ndigen Tabellenscan durch"
+        }
+    },
+    "options": {
+        "error": {
+            "column_invalid": "Die Spalte `{column}` wird von der Abfrage nicht zur\u00fcckgegeben",
+            "db_url_invalid": "Datenbank-URL ung\u00fcltig",
+            "query_invalid": "SQL-Abfrage ung\u00fcltig"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "column": "Spalte",
+                    "db_url": "Datenbank-URL",
+                    "name": "Name",
+                    "query": "Abfrage ausw\u00e4hlen",
+                    "unit_of_measurement": "Ma\u00dfeinheit",
+                    "value_template": "Wertvorlage"
+                },
+                "data_description": {
+                    "column": "Spalte f\u00fcr die zur\u00fcckgegebene Abfrage, die als Status angezeigt werden soll",
+                    "db_url": "Datenbank-URL, leer lassen, um die HA-Recorder-Datenbank zu verwenden",
+                    "name": "Name, der f\u00fcr den Konfigurationseintrag und auch f\u00fcr den Sensor verwendet wird",
+                    "query": "Auszuf\u00fchrende Abfrage, muss mit 'SELECT' beginnen",
+                    "unit_of_measurement": "Ma\u00dfeinheit (optional)",
+                    "value_template": "Wertvorlage (optional)"
+                }
+            }
+        }
+    }
+}

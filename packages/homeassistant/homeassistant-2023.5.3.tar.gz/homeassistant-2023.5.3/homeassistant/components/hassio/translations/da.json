@@ -1,0 +1,83 @@
+{
+    "entity": {
+        "binary_sensor": {
+            "state": {
+                "name": "K\u00f8rer"
+            }
+        },
+        "sensor": {
+            "agent_version": {
+                "name": "OS Agent-version"
+            },
+            "apparmor_version": {
+                "name": "Apparmor-version"
+            },
+            "cpu_percent": {
+                "name": "CPU-procent"
+            },
+            "disk_free": {
+                "name": "Disk fri"
+            },
+            "disk_total": {
+                "name": "Disk-total"
+            },
+            "disk_used": {
+                "name": "Disk-forbrug"
+            },
+            "memory_percent": {
+                "name": "Hukommelsesprocent"
+            },
+            "version": {
+                "name": "Version"
+            },
+            "version_latest": {
+                "name": "Nyeste version"
+            }
+        }
+    },
+    "issues": {
+        "issue_system_multiple_data_disks": {
+            "title": "Der er fundet flere datadiske"
+        },
+        "issue_system_reboot_required": {
+            "fix_flow": {
+                "abort": {
+                    "apply_suggestion_fail": "Kunne ikke genstarte systemet. Tjek supervisor-logfilerne for at f\u00e5 flere oplysninger."
+                },
+                "step": {
+                    "system_execute_reboot": {
+                        "description": "Der blev \u00e6ndret indstillinger, som kr\u00e6ver en genstart af systemet for at f\u00e5 virkning.\n\nDenne rettelse vil udf\u00f8re en genstart af systemet, hvilket vil g\u00f8re Home Assistant og alle tilf\u00f8jelser utilg\u00e6ngelige i en kort periode."
+                    }
+                }
+            },
+            "title": "Genstart n\u00f8dvendig"
+        },
+        "unhealthy": {
+            "description": "Systemet er i \u00f8jeblikket usundt p\u00e5 grund af {reason}. Brug linket for at l\u00e6re mere og se, hvordan du l\u00f8ser dette.",
+            "title": "Usundt system \u2013 {reason}"
+        },
+        "unsupported": {
+            "description": "Systemet underst\u00f8ttes ikke p\u00e5 grund af {reason}. Brug linket for at l\u00e6re mere og se, hvordan du l\u00f8ser dette."
+        },
+        "unsupported_supervisor_version": {
+            "title": "Ikke-underst\u00f8ttet system - Supervisor-version"
+        }
+    },
+    "system_health": {
+        "info": {
+            "agent_version": "Agent-version",
+            "board": "Kort",
+            "disk_total": "Disk-total",
+            "disk_used": "Disk-forbrug",
+            "docker_version": "Docker-version",
+            "healthy": "Sund",
+            "host_os": "V\u00e6rtsoperativsystem",
+            "installed_addons": "Installerede tilf\u00f8jelsesprogrammer",
+            "supervisor_api": "Supervisor-API",
+            "supervisor_version": "Supervisor-version",
+            "supported": "Underst\u00f8ttet",
+            "update_channel": "Opdateringskanal",
+            "version_api": "Version-API"
+        }
+    }
+}

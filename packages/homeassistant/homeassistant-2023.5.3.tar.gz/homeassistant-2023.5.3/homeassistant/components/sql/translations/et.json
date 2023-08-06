@@ -1,0 +1,65 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Kasutaja on juba seadistatud"
+        },
+        "error": {
+            "column_invalid": "P\u00e4ring ei tagasta veergu {column}",
+            "db_url_invalid": "Andmebaasi URL on vigane",
+            "query_invalid": "SQL-p\u00e4ring on kehtetu"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "column": "Veerg",
+                    "db_url": "Andmebaasi URL",
+                    "name": "Nimi",
+                    "query": "Vali p\u00e4ring",
+                    "unit_of_measurement": "M\u00f5\u00f5t\u00fchik",
+                    "value_template": "V\u00e4\u00e4rtuse mall"
+                },
+                "data_description": {
+                    "column": "Tagastatud p\u00e4ringu veerg olekuna esitamiseks",
+                    "db_url": "Andmebaasi URL, j\u00e4ta HA salvesti andmebaasi kasutamiseks t\u00fchjaks",
+                    "name": "Nimi, mida kasutatakse Config Entry'i ja ka anduri jaoks",
+                    "query": "K\u00e4ivitatav p\u00e4ring peab algama 'SELECT'-iga.",
+                    "unit_of_measurement": "M\u00f5\u00f5t\u00fchik (valikuline)",
+                    "value_template": "V\u00e4\u00e4rtuse mall (valikuline)"
+                }
+            }
+        }
+    },
+    "issues": {
+        "entity_id_query_does_full_table_scan": {
+            "description": "P\u00e4ring `{query}` sisaldab v\u00f5tmes\u00f5na `entity_id`, kuid ei viita tabelile `states_meta`. See p\u00f5hjustab t\u00e4ieliku tabeli skaneerimise ja andmebaasi ebastabiilsuse. Palun vaadake dokumentatsiooni ja kasutage selle asemel `states_meta.entity_id`.",
+            "title": "SQL-p\u00e4ring kontrollib kogu tabelit"
+        }
+    },
+    "options": {
+        "error": {
+            "column_invalid": "P\u00e4ring ei tagasta veergu {column}",
+            "db_url_invalid": "Andmebaasi URL on vigane",
+            "query_invalid": "V\u00e4\u00e4rtuse mall on kehtetu"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "column": "Veerg",
+                    "db_url": "Andmebaasi URL",
+                    "name": "Nimi",
+                    "query": "Vali p\u00e4ring",
+                    "unit_of_measurement": "M\u00f5\u00f5t\u00fchik",
+                    "value_template": "Tagastatud p\u00e4ringu veerg olekuna esitamiseks"
+                },
+                "data_description": {
+                    "column": "Tagastatud p\u00e4ringu veerg olekuna esitamiseks",
+                    "db_url": "Andmebaasi URL, j\u00e4ta t\u00fchjaks, et kasutada HA vaikeandmebaasi",
+                    "name": "Nimi, mida kasutatakse Config Entry'i ja ka anduri jaoks",
+                    "query": "K\u00e4ivitatav p\u00e4ring peab algama 'SELECT'-iga.",
+                    "unit_of_measurement": "M\u00f5\u00f5t\u00fchik (valikuline)",
+                    "value_template": "V\u00e4\u00e4rtuse mall (valikuline)"
+                }
+            }
+        }
+    }
+}

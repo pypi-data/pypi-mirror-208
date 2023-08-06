@@ -1,0 +1,65 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Akun sudah dikonfigurasi"
+        },
+        "error": {
+            "column_invalid": "Kolom `{column}` tidak dikembalikan oleh kueri",
+            "db_url_invalid": "URL database tidak valid",
+            "query_invalid": "Kueri SQL tidak valid"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "column": "Kolom",
+                    "db_url": "URL Database",
+                    "name": "Nama",
+                    "query": "Kueri Select",
+                    "unit_of_measurement": "Satuan Ukuran",
+                    "value_template": "Templat Nilai"
+                },
+                "data_description": {
+                    "column": "Kolom pada kueri yang dikembalikan untuk ditampilkan sebagai status",
+                    "db_url": "URL database, kosongkan untuk menggunakan database recorder HA",
+                    "name": "Nama yang akan digunakan untuk Entri Konfigurasi dan juga Sensor",
+                    "query": "Kueri untuk dijalankan, perlu dimulai dengan 'SELECT'",
+                    "unit_of_measurement": "Satuan Ukuran (opsional)",
+                    "value_template": "Template Nilai (opsional)"
+                }
+            }
+        }
+    },
+    "issues": {
+        "entity_id_query_does_full_table_scan": {
+            "description": "Kueri `{query}` mengandung kata kunci `entity_id` namun tidak merujuk ke tabel `states_meta`. Hal ini akan menyebabkan pemindaian tabel secara penuh (full scan) dan ketidakstabilan basis data. Periksa dokumentasi dan gunakan `states_meta.entity_id` sebagai gantinya.",
+            "title": "Kueri SQL melakukan pemindaian tabel lengkap"
+        }
+    },
+    "options": {
+        "error": {
+            "column_invalid": "Kolom `{column}` tidak dikembalikan oleh kueri",
+            "db_url_invalid": "URL database tidak valid",
+            "query_invalid": "Kueri SQL tidak valid"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "column": "Kolom",
+                    "db_url": "URL Database",
+                    "name": "Nama",
+                    "query": "Kueri Select",
+                    "unit_of_measurement": "Satuan Ukuran",
+                    "value_template": "Templat Nilai"
+                },
+                "data_description": {
+                    "column": "Kolom pada kueri yang dikembalikan untuk ditampilkan sebagai status",
+                    "db_url": "URL database, kosongkan untuk menggunakan database recorder HA",
+                    "name": "Nama yang akan digunakan untuk Entri Konfigurasi dan juga Sensor",
+                    "query": "Kueri untuk dijalankan, perlu dimulai dengan 'SELECT'",
+                    "unit_of_measurement": "Satuan Ukuran (opsional)",
+                    "value_template": "Template Nilai (opsional)"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "device_automation": {
+        "condition_type": {
+            "is_home": "{entity_name} is thuis",
+            "is_not_home": "{entity_name} is niet thuis"
+        },
+        "trigger_type": {
+            "enters": "{entity_name} gaat een zone binnen",
+            "leaves": "{entity_name} verlaat een zone"
+        }
+    },
+    "entity_component": {
+        "_": {
+            "name": "Apparaattracker",
+            "state": {
+                "home": "Thuis",
+                "not_home": "Afwezig"
+            },
+            "state_attributes": {
+                "battery": {
+                    "name": "Batterij"
+                },
+                "gps_accuracy": {
+                    "name": "GPS-nauwkeurigheid"
+                },
+                "latitude": {
+                    "name": "Breedtegraad"
+                },
+                "longitude": {
+                    "name": "Lengtegraad"
+                },
+                "source_type": {
+                    "name": "Bron",
+                    "state": {
+                        "bluetooth": "Bluetooth",
+                        "bluetooth_le": "Bluetooth LE",
+                        "gps": "GPS",
+                        "router": "Router"
+                    }
+                }
+            }
+        }
+    },
+    "title": "Apparaattracker"
+}

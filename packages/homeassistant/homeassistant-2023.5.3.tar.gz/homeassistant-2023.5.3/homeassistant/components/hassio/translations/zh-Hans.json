@@ -1,0 +1,82 @@
+{
+    "entity": {
+        "binary_sensor": {
+            "state": {
+                "name": "\u8fd0\u884c\u4e2d"
+            }
+        },
+        "sensor": {
+            "agent_version": {
+                "name": "OS Agent \u7248\u672c"
+            },
+            "apparmor_version": {
+                "name": "Apparmor \u7248\u672c"
+            },
+            "cpu_percent": {
+                "name": "CPU \u767e\u5206\u6bd4"
+            },
+            "disk_free": {
+                "name": "\u53ef\u7528\u7a7a\u95f4"
+            },
+            "disk_total": {
+                "name": "\u78c1\u76d8\u603b\u5bb9\u91cf"
+            },
+            "disk_used": {
+                "name": "\u5df2\u4f7f\u7528\u7a7a\u95f4"
+            },
+            "memory_percent": {
+                "name": "\u5185\u5b58\u767e\u5206\u6bd4"
+            },
+            "version": {
+                "name": "\u7248\u672c"
+            },
+            "version_latest": {
+                "name": "\u6700\u65b0\u7248\u672c"
+            }
+        }
+    },
+    "issues": {
+        "issue_system_multiple_data_disks": {
+            "fix_flow": {
+                "abort": {
+                    "apply_suggestion_fail": "\u65e0\u6cd5\u91cd\u547d\u540d\u6587\u4ef6\u7cfb\u7edf\u3002\u68c0\u67e5supervisor\u65e5\u5fd7\u4ee5\u83b7\u53d6\u66f4\u591a\u8be6\u7ec6\u4fe1\u606f\u3002"
+                },
+                "step": {
+                    "system_rename_data_disk": {
+                        "description": "\u201c{reference}\u201d\u662f\u4e00\u4e2a\u540d\u4e3a\u201chassos-data\u201d\u7684\u6587\u4ef6\u7cfb\u7edf\uff0c\u4e0d\u662f\u6d3b\u52a8\u6570\u636e\u78c1\u76d8\u3002\u8fd9\u4f1a\u5bfc\u81f4 Home Assistant \u5728\u7cfb\u7edf\u91cd\u542f\u65f6\u9009\u62e9\u9519\u8bef\u7684\u6570\u636e\u78c1\u76d8\u3002 \n\n\u4f7f\u7528\u4fee\u590d\u9009\u9879\u91cd\u547d\u540d\u6587\u4ef6\u7cfb\u7edf\u4ee5\u9632\u6b62\u8fd9\u79cd\u60c5\u51b5\u53d1\u751f\u3002\u6216\u8005\uff0c\u60a8\u53ef\u4ee5\u5c06\u6570\u636e\u78c1\u76d8\u79fb\u52a8\u5230\u9a71\u52a8\u5668\uff08\u8986\u76d6\u5176\u5185\u5bb9\uff09\u6216\u4ece\u7cfb\u7edf\u4e2d\u5220\u9664\u9a71\u52a8\u5668\u3002"
+                    }
+                }
+            },
+            "title": "\u68c0\u6d4b\u5230\u591a\u4e2a\u6570\u636e\u76d8"
+        },
+        "issue_system_reboot_required": {
+            "fix_flow": {
+                "abort": {
+                    "apply_suggestion_fail": "\u65e0\u6cd5\u91cd\u65b0\u542f\u52a8\u7cfb\u7edf\u3002\u68c0\u67e5 supervisor \u65e5\u5fd7\u4ee5\u83b7\u53d6\u66f4\u591a\u8be6\u7ec6\u4fe1\u606f\u3002"
+                },
+                "step": {
+                    "system_execute_reboot": {
+                        "description": "\u8bbe\u7f6e\u5df2\u66f4\u6539\uff0c\u9700\u8981\u91cd\u65b0\u542f\u52a8\u7cfb\u7edf\u624d\u80fd\u751f\u6548\u3002 \n\n\u6b64\u4fee\u590d\u7a0b\u5e8f\u5c06\u542f\u52a8\u7cfb\u7edf\u91cd\u542f\uff0c\u8fd9\u5c06\u4f7f Home Assistant \u548c\u6240\u6709\u9644\u52a0\u7ec4\u4ef6\u5728\u77ed\u65f6\u95f4\u5185\u65e0\u6cd5\u8bbf\u95ee\u3002"
+                    }
+                }
+            },
+            "title": "\u9700\u8981\u91cd\u542f"
+        }
+    },
+    "system_health": {
+        "info": {
+            "board": "\u677f\u5b50",
+            "disk_total": "\u78c1\u76d8\u5927\u5c0f",
+            "disk_used": "\u78c1\u76d8\u5df2\u7528",
+            "docker_version": "Docker \u7248\u672c",
+            "healthy": "\u5065\u5eb7",
+            "host_os": "\u5bbf\u4e3b\u64cd\u4f5c\u7cfb\u7edf",
+            "installed_addons": "\u5df2\u5b89\u88c5\u7684\u52a0\u8f7d\u9879",
+            "supervisor_api": "Supervisor API",
+            "supervisor_version": "Supervisor \u7248\u672c",
+            "supported": "\u53d7\u652f\u6301",
+            "update_channel": "\u66f4\u65b0\u901a\u9053",
+            "version_api": "API \u7248\u672c"
+        }
+    }
+}
