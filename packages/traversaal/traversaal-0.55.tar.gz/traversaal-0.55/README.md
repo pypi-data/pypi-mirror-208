@@ -1,0 +1,44 @@
+## Traversaal
+
+Traversaal is a Python package that provides a simple semantic search functionality for hotel data. It leverages large language models such as BERT to encode hotel descriptions and reviews, allowing users to perform semantic search queries and retrieve relevant results based on the provided search query.
+
+## Features
+
+- Efficient semantic search for hotel data based on descriptions and reviews.
+- Utilizes state-of-the-art language models to encode and compare text embeddings.
+- Returns relevant search results with corresponding scores for ranking.
+- Supports GPU acceleration for faster encoding and search performance.
+
+## Installation
+
+You can install Traversaal using pip:
+
+```bash
+pip install traversaal
+
+import pandas as pd
+import traversaal
+
+model_name = 'bert-base-uncased'
+search = traversaal.SemanticSearch(model_name)
+
+df = pd.read_csv('hotels.csv')
+encoded_data = search.encode_data(df)
+query = 'great location and service'
+
+relevant_results = search.search(encoded_data, query)
+
+print("\nRelevant Results:")
+print(relevant_results.head())
+
+
+For more detailed usage examples and API documentation, please refer to the GitHub repository.
+
+Contributing
+Contributions to Traversaal are welcome! If you encounter any issues, have suggestions, or would like to contribute enhancements or new features, please feel free to submit a pull request on the GitHub repository.
+
+License
+Traversaal is licensed under the MIT License. See the LICENSE file for more details.
+
+
+```
