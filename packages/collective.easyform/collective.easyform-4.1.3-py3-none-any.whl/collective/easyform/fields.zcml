@@ -1,0 +1,77 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    >
+  <adapter factory=".fields.FieldExtenderValidator" />
+  <adapter factory=".fields.GroupFieldExtenderValidator" />
+  <adapter
+      name="default"
+      factory=".fields.FieldExtenderDefault"
+      />
+  <adapter
+      name="default"
+      factory=".fields.GroupFieldExtenderDefault"
+      />
+  <utility
+      name="collective.easyform.fields.Label"
+      component=".fields.LabelFactory"
+      />
+  <utility
+      name="collective.easyform.fields.Label"
+      component=".fields.LabelHandler"
+      />
+  <utility
+      name="collective.easyform.fields.RichLabel"
+      component=".fields.RichLabelFactory"
+      />
+  <utility
+      name="collective.easyform.fields.RichLabel"
+      component=".fields.RichLabelHandler"
+      />
+  <configure zcml:condition="installed plone.formwidget.recaptcha">
+    <utility
+        name="collective.easyform.fields.ReCaptcha"
+        component=".fields.ReCaptchaFactory"
+        />
+    <utility
+        name="collective.easyform.fields.ReCaptcha"
+        component=".fields.ReCaptchaHandler"
+        />
+    <adapter
+        provides="z3c.form.interfaces.IValidator"
+        for="collective.easyform.interfaces.IEasyForm
+             *
+             *
+             collective.easyform.interfaces.IReCaptcha
+             *"
+        factory="plone.formwidget.recaptcha.ReCaptchaValidator"
+        />
+  </configure>
+  <configure zcml:condition="installed plone.formwidget.hcaptcha">
+    <utility
+        name="collective.easyform.fields.HCaptcha"
+        component=".fields.HCaptchaFactory"
+        />
+    <utility
+        name="collective.easyform.fields.HCaptcha"
+        component=".fields.HCaptchaHandler"
+        />
+    <adapter
+        provides="z3c.form.interfaces.IValidator"
+        for="collective.easyform.interfaces.IEasyForm
+             *
+             *
+             collective.easyform.interfaces.IHCaptcha
+             *"
+        factory="plone.formwidget.hcaptcha.HCaptchaValidator"
+        />
+  </configure>
+    <utility
+        name="collective.easyform.fields.Likert"
+        component=".fields.LikertFactory"
+        />
+    <utility
+        name="collective.easyform.fields.Likert"
+        component=".fields.LikertHandler"
+        />
+</configure>
