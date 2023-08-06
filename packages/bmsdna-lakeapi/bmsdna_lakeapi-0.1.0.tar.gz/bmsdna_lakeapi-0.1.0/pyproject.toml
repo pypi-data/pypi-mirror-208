@@ -1,0 +1,78 @@
+[tool.poetry]
+name = "bmsdna-lakeapi"
+version = "0.1.0"
+description = ""
+authors = ["DWH Team <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "bmsdna"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.1"
+deltalake = "^0.9.0"
+pyyaml = "^6.0"
+aiocache = "^0.12.1"
+pypika = "^0.48.9"
+
+# schema stuff
+jsonschema = {version = "^4.17.3", optional=true}
+python2jsonschema = { version ="^0.8", optional=true}
+duckdb = "^0.7.1"
+polars = "^0.17.13"
+
+# polars stuff
+xlsx2csv = { version ="^0.8.1", optional = true }
+
+# auth
+argon2-cffi = {version = "^21.3.0", optional=true}
+
+# datafusion
+datafusion = {version = "^24.0.0", optional = true }
+xlsxwriter = "^3.1.0"
+pyjwt = {version = "^2.6.0", optional = true}
+"ruamel.yaml" = {version = "^0.17.26", optional = true}
+
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.308"
+black = "^23.3.0"
+
+
+
+
+
+
+[tool.poetry.group.test.dependencies]
+faker = "^18.7.0"
+pytest = "^7.3.1"
+httpx = "^0.24.0"
+pytest-env = "^0.8.1"
+pytest-cov = "^4.0.0"
+pytest-benchmark = "^4.0.0"
+pandas = "^2.0.1"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+venv = ".venv"
+venvPath = "."
+pythonVersion = "3.10"
+typeCheckingMode = "basic"
+
+[tool.black]
+line-length = 119
+
+[tool.poetry.extras]
+schema = ["jsonschema", "python2jsonschema"]
+polars = ["polars", "xlsx2csv"]
+auth = ["argon2-cffi", "pyjwt"]
+datafusion= ["datafusion"]
+useradd = ["ruamel.yaml"]
+
+[tool.poetry.scripts]
+validate_lakeapi_schema = { callable = "bmsdna.lakeapi.tools.validateschema:validate_schema_cli", extras = ["schema"] }
+add_lakeapi_user = { callable = "bmsdna.lakeapi.tools.useradd:useradd_cli", extras = ["useradd"] }
