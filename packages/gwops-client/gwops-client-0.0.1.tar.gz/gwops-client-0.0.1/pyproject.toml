@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools_scm[toml]>=6.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gwops-client"
+description = "gwops client"
+version = "0.0.1"
+readme = "README.md"
+authors = [{name = "mapenghui", email = "maph@bao.ac.cn"}]
+classifiers = [
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: System :: Networking"
+]
+dependencies = [
+    "pika"
+]
+requires-python = ">=3.7"
+
+[tool.setuptools.packages.find]
+include = ["gwops_client"]

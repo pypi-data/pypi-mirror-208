@@ -1,0 +1,1 @@
+# GWOPS RabbitMQ Client
