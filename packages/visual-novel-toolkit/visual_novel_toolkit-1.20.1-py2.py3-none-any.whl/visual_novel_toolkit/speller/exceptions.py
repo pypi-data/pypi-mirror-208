@@ -1,0 +1,2 @@
+class SpellerError(Exception):
+    pass
