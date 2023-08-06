@@ -1,0 +1,47 @@
+Metadata-Version: 2.1
+Name: savant_rs
+Version: 0.1.4
+Classifier: Programming Language :: Rust
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+License-File: LICENSE
+Summary: Savant rust optimization library
+Keywords: computer-vision,video-processing
+Home-Page: https://github.com/insight-platform/savant-rs
+Author: Ivan Kudriavtsev <ivan.a.kudryavtsev@gmail.com>
+Author-email: Ivan Kudriavtsev <ivan.a.kudryavtsev@gmail.com>
+License: Apache-2.0
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
+Project-URL: Source Code, https://github.com/insight-platform/savant-rs
+
+# Savant Primitives And Optimized Algorithms
+
+Savant Library with new generation primitives re-implemented in Rust.
+
+Run tests:
+
+```bash
+cargo test --no-default-features
+```
+
+Run benchmarks:
+```bash
+cargo bench --no-default-features
+```
+
+Build Wheel:
+
+```bash
+RUSTFLAGS=" -C target-cpu=x86-64-v3 -C opt-level=3" maturin build --release -o dist
+```
+
+Install Wheel:
+
+```bash
+pip3 install --force-reinstall dist/savant_primitives-0.1.2-cp38-cp38-manylinux2014_x86_64.whl
+```
+
+## License
+
+[Apache License 2.0](LICENSE)
