@@ -1,0 +1,92 @@
+{
+    "device_automation": {
+        "action_type": {
+            "set_hvac_mode": "Wijzig de HVAC-modus op {entity_name}",
+            "set_preset_mode": "Wijzig voorinstelling op {entity_name}"
+        },
+        "condition_type": {
+            "is_hvac_mode": "{entity_name} is ingesteld op een specifieke HVAC-modus",
+            "is_preset_mode": "{entity_name} is ingesteld op een specifieke vooraf ingestelde modus"
+        },
+        "trigger_type": {
+            "current_humidity_changed": "{entity_name} gemeten vochtigheid veranderd",
+            "current_temperature_changed": "{entity_name} gemeten temperatuur veranderd",
+            "hvac_mode_changed": "{entity_name} HVAC-modus gewijzigd"
+        }
+    },
+    "entity_component": {
+        "_": {
+            "name": "Thermostaat",
+            "state": {
+                "auto": "Automatisch",
+                "fan_only": "Alleen ventilator",
+                "heat": "Verwarmen",
+                "off": "Uit"
+            },
+            "state_attributes": {
+                "current_humidity": {
+                    "name": "Huidige luchtvochtigheid"
+                },
+                "current_temperature": {
+                    "name": "Huidige temperatuur"
+                },
+                "fan_mode": {
+                    "name": "Ventilatormodus",
+                    "state": {
+                        "auto": "Automatisch",
+                        "diffuse": "Diffuus",
+                        "focus": "Concentratie",
+                        "high": "Hoog",
+                        "low": "Laag",
+                        "medium": "Gemiddeld",
+                        "middle": "Midden",
+                        "off": "Uit",
+                        "on": "Aan"
+                    }
+                },
+                "humidity": {
+                    "name": "Luchtvochtigheid instelling"
+                },
+                "hvac_action": {
+                    "name": "Huidige actie",
+                    "state": {
+                        "cooling": "Koelen",
+                        "drying": "Drogen",
+                        "fan": "Ventilator",
+                        "heating": "Verwarmen",
+                        "idle": "Inactief",
+                        "off": "Uit"
+                    }
+                },
+                "preset_mode": {
+                    "name": "Voorinstelling",
+                    "state": {
+                        "activity": "Activiteit",
+                        "away": "Afwezig",
+                        "boost": "Boost",
+                        "comfort": "Comfort",
+                        "home": "Thuis",
+                        "none": "Geen",
+                        "sleep": "Slapen"
+                    }
+                },
+                "preset_modes": {
+                    "name": "Voorinstellingen"
+                },
+                "swing_mode": {
+                    "state": {
+                        "both": "Beide",
+                        "horizontal": "Horizontaal",
+                        "off": "Uit",
+                        "on": "Aan",
+                        "vertical": "Verticaal"
+                    }
+                },
+                "temperature": {
+                    "name": "Gewenste temperatuur"
+                }
+            }
+        }
+    },
+    "title": "Klimaat"
+}

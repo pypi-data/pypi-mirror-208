@@ -1,0 +1,85 @@
+{
+    "entity": {
+        "sensor": {
+            "agent_version": {
+                "name": "OS Agent-versie"
+            },
+            "apparmor_version": {
+                "name": "Apparmor-versie"
+            },
+            "cpu_percent": {
+                "name": "CPU-percentage"
+            },
+            "disk_free": {
+                "name": "Schijfruimte vrij"
+            },
+            "disk_total": {
+                "name": "Schijfruimte totaal"
+            },
+            "disk_used": {
+                "name": "Schijfruimte gebruikt"
+            },
+            "memory_percent": {
+                "name": "Geheugenpercentage"
+            },
+            "version": {
+                "name": "Versie"
+            },
+            "version_latest": {
+                "name": "Nieuwste versie"
+            }
+        }
+    },
+    "issues": {
+        "issue_system_multiple_data_disks": {
+            "fix_flow": {
+                "abort": {
+                    "apply_suggestion_fail": "Het bestandssysteem kon niet hernoemd worden. Controleer de Supervisor-logboeken voor meer details."
+                }
+            },
+            "title": "Meerdere dataschijven gedetecteerd"
+        },
+        "issue_system_reboot_required": {
+            "fix_flow": {
+                "abort": {
+                    "apply_suggestion_fail": "Het systeem kon niet herstart worden. Controleer de Supervisor-logboeken voor meer details."
+                }
+            },
+            "title": "Herstart is vereist"
+        },
+        "unhealthy": {
+            "description": "Systeem is momenteel niet in orde vanwege {reason} . Gebruik de link voor meer informatie en hoe u dit kunt oplossen.",
+            "title": "Ongezond systeem - {reason}"
+        },
+        "unhealthy_docker": {
+            "description": "Het systeem is momenteel niet in orde omdat Docker onjuist is geconfigureerd. Gebruik de link voor meer informatie en hoe u dit kunt oplossen.",
+            "title": "Ongezond systeem - Docker verkeerd geconfigureerd"
+        },
+        "unhealthy_privileged": {
+            "description": "Het systeem is momenteel niet in orde omdat het geen bevoorrechte toegang heeft tot de docker runtime. Gebruik de link voor meer informatie en hoe u dit kunt oplossen."
+        },
+        "unsupported": {
+            "title": "Niet-ondersteund systeem - {reason}"
+        },
+        "unsupported_cgroup_version": {
+            "title": "Niet-ondersteund systeem - CGroup version"
+        }
+    },
+    "system_health": {
+        "info": {
+            "agent_version": "Agent-versie",
+            "board": "Bord",
+            "disk_total": "Totale schijfruimte",
+            "disk_used": "Gebruikte schijfruimte",
+            "docker_version": "Docker versie",
+            "healthy": "Gezond",
+            "host_os": "Host-besturingssysteem",
+            "installed_addons": "Ge\u00efnstalleerde add-ons",
+            "supervisor_api": "Supervisor API",
+            "supervisor_version": "Supervisor versie",
+            "supported": "Ondersteund",
+            "update_channel": "Update kanaal",
+            "version_api": "API Versie"
+        }
+    }
+}
