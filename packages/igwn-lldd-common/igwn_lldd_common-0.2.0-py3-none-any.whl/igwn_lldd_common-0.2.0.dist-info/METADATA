@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: igwn-lldd-common
+Version: 0.2.0
+Summary: International Gravitational Wave Network (IGWN) low latency data distribution
+Home-page: https://git.ligo.org/computing/lowlatency/igwn-lldd-common/
+Author: Rhys Poulton
+Author-email: poulton@ego-gw.it
+License: GPL-3.0-or-later
+Project-URL: Bug Tracker, https://git.ligo.org/computing/lowlatency/igwn-lldd-common/-/issues
+Project-URL: Source Code, https://git.ligo.org/computing/lowlatency/igwn-lldd-common
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: confluent-kafka
+Requires-Dist: configargparse
+Requires-Dist: gpstime
+Requires-Dist: watchdog
+Provides-Extra: apache-kafka
+Requires-Dist: kafka-python ; extra == 'apache-kafka'
+Provides-Extra: test
+Requires-Dist: flaky ; extra == 'test'
+Requires-Dist: kafka-python ; extra == 'test'
+Requires-Dist: pytest (>=3.9.1) ; extra == 'test'
+Requires-Dist: pytest-cov (>=2.4.0) ; extra == 'test'
+
+# IGWN - Low Latency Data Distribution
+
+The IGWN - Low Latency Data Distribution (lldd) is software to distribute low latency data used by the International Gravitational-Wave Observatory Network (IGWN). 
+
+This software currently utilizes the [Apache Kafka](https://kafka.apache.org/) event streaming platform to distribute the low latency data by connecting to Kafka Broker(s) to produce or consume Kafka messages containing the data. 
+
