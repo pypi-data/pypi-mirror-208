@@ -1,0 +1,132 @@
+Metadata-Version: 2.1
+Name: mb-cli
+Version: 1.0.0
+Summary: Majestic Bank CLI application
+Home-page: https://notmtth.xyz
+License: GPL-3
+Keywords: majesticbank,cryptocurrency,monero,cli
+Author: NotMtth
+Author-email: notmtth@xmpp.is
+Requires-Python: >=3.10,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: httpx (>=0.24.0,<0.25.0)
+Requires-Dist: inquirerpy (>=0.3.4,<0.4.0)
+Requires-Dist: python-dotenv (>=1.0.0,<2.0.0)
+Requires-Dist: rich (>=13.3.5,<14.0.0)
+Requires-Dist: socksio (>=1.0.0,<2.0.0)
+Requires-Dist: typer (>=0.9.0,<0.10.0)
+Project-URL: Repository, https://codeberg.org/NotMtth/mb-cli
+Description-Content-Type: text/markdown
+
+# Majestic Bank CLI application
+Majestic Bank CLI application made in pure Python.
+
+[MB site](https://majestictfvnfjgo5hqvmuzynak4kjl5tjs3j5zdabawe6n2aaebldad.onion/) • [my site](https://notmtth.xyz) • [MB PGP key](https://majestictfvnfjgo5hqvmuzynak4kjl5tjs3j5zdabawe6n2aaebldad.onion/pgp.txt) • [MB signed mirrors](https://majestictfvnfjgo5hqvmuzynak4kjl5tjs3j5zdabawe6n2aaebldad.onion/mirrors.txt)
+
+## Python dependencies
+
+```
+typer
+httpx
+python-dotenv
+rich
+inquirerpy
+socksio
+```
+
+## Installation
+
+### Recommended (auto-installation)
+
+`pip install mb-cli`
+
+### Manual
+
+Git clone the repo:
+
+`git clone https://codeberg.org/notmtth/mb-cli.git && cd mb-cli`
+
+Install __Poetry__ and all the dependencies:
+
+`pip install poetry && poetry install`
+
+Build using __Poetry__:
+
+`poetry build && cd dist`
+
+Install the build locally:
+
+`pip install --user mb_cli<...>.whl`
+
+## Tor
+
+The app is meant to be used with both Tor and the clearnet, obviously using 
+a proxy is always highly recommended for your anonymity.
+
+`--proxy` flag can be used after every **exchange** related command:
+
+```
+$ mb-cli exchange rates --help
+                                                                                                                                                                                                           
+ Usage: mb-cli exchange rates [OPTIONS]                                                                                                                                                                    
+                                                                                                                                                                                                           
+ Show rates and exit.                                                                                                                                                                                      
+ Put --proxy to use Tor.                                                                                                                                                                                   
+                                                                                                                                                                                                           
+╭─ Options ────────────────────────────────────────────────────╮
+│  --proxy  -p        Toggle Tor proxy. [default: True]        │
+│  --help             Show this message and exit.              │
+╰──────────────────────────────────────────────────────────────╯
+```
+
+## Personalization
+
+You can change some settings all contained in the `.env` file: 
+
+### Clearnet domain
+
+(as there is only one onion, always verify links @ /mirrors.txt with their pgp)
+
+```
+CLEAR_DOMAIN='https://majesticbank.sc/api/v1'
+```
+
+### Proxy 
+
+```
+TOR_PROXY='socks5://127.0.0.1:9050'
+```
+
+### Referral
+
+```
+MB_REFERRAL='kvqi8Q'
+```
+
+This code can be obtained by creating an account on their website, it gives me a % 
+when creating an order, so if you want to support me leave it as it is.
+It can't be blank *(check api.py, line 38)* so, if you want to change it you can get your own.
+
+## Donations
+
+Monero:
+
+```
+4ASpDUymEkgcBBDoqp7HFs2xqiTuddJzbhvHmSVQWdt51mbbtxjMWP4LwvbYk6xqTDNnj9FyvSRGqMvRYxWuKyALJbf8265
+```
+
+Wownero:
+
+```
+WW2jekePGc7UoK7wqvJPUs9fBW6ocUwzCTymuedUr47rFVJ18yERWT7M4Sn35QQae94TT2TvpCydYLgsAHVLftNa2nr73rtmS
+```
+
+## TODO
+
+- [ ] Ascii qr codes for addresses in create order / track
+- [ ] More...
+
+Suggestions are welcome :D
