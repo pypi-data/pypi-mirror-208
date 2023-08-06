@@ -1,0 +1,105 @@
+{#
+The Mia! Accounting Project
+income-statement.html: The income statement
+
+ Copyright (c) 2023 imacat.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+Author: imacat@mail.imacat.idv.tw (imacat)
+First written: 2023/3/7
+#}
+{% extends "accounting/base.html" %}
+
+{% block accounting_scripts %}
+  <script src="{{ url_for("accounting.static", filename="js/material-fab-speed-dial.js") }}"></script>
+  <script src="{{ url_for("accounting.static", filename="js/period-chooser.js") }}"></script>
+{% endblock %}
+
+{% block header %}{% block title %}{% if report.currency.code == accounting_default_currency_code() %}{{ A_("Income Statement %(period)s", period=report.period.desc|title) }}{% else %}{{ A_("Income Statement of %(currency)s %(period)s", currency=report.currency.name|title, period=report.period.desc|title) }}{% endif %}{% endblock %}{% endblock %}
+
+{% block content %}
+
+<div class="mb-3 accounting-toolbar">
+  {% with use_currency_chooser = true,
+          use_period_chooser = true %}
+    {% include "accounting/report/include/toolbar-buttons.html" %}
+  {% endwith %}
+</div>
+
+{% include "accounting/report/include/add-journal-entry-material-fab.html" %}
+
+{% include "accounting/report/include/period-chooser.html" %}
+
+{% include "accounting/report/include/search-modal.html" %}
+
+{% if report.has_data %}
+  <div class="accounting-sheet">
+    <div class="d-none d-sm-flex justify-content-center mb-3">
+      <h2 class="text-center">
+        {% if report.currency.code == accounting_default_currency_code() %}
+          {{ A_("Income Statement %(period)s", period=report.period.desc|title) }}
+        {% else %}
+          {{ A_("Income Statement of %(currency)s %(period)s", currency=report.currency.name|title, period=report.period.desc|title) }}
+        {% endif %}
+      </h2>
+    </div>
+
+    <div class="accounting-report-table accounting-income-statement-table">
+      <div class="accounting-report-table-header">
+        <div class="accounting-report-table-row">
+          <div class="accounting-amount">{{ A_("Amount") }}</div>
+        </div>
+      </div>
+      <div class="accounting-report-table-body">
+        {% for section in report.sections %}
+          <div class="accounting-report-table-row accounting-income-statement-section">
+            <div>
+              <span class="d-none d-md-inline">{{ section.title.code }}</span>
+              {{ section.title.title|title }}
+            </div>
+          </div>
+          {% for subsection in section.subsections %}
+            <div class="accounting-report-table-row accounting-income-statement-subsection">
+              <div>
+                <span class="d-none d-md-inline">{{ subsection.title.code }}</span>
+                {{ subsection.title.title|title }}
+              </div>
+            </div>
+            {% for account in subsection.accounts %}
+              <a class="accounting-report-table-row accounting-income-statement-account" href="{{ account.url }}">
+                <div>
+                  <span class="d-none d-md-inline">{{ account.account.code }}</span>
+                  {{ account.account.title|title }}
+                </div>
+                <div class="accounting-amount {% if account.amount < 0 %} text-danger {% endif %}">{{ account.amount|accounting_report_format_amount }}</div>
+              </a>
+            {% endfor %}
+            <div class="accounting-report-table-row accounting-income-statement-subtotal">
+              <div>{{ A_("Total") }}</div>
+              <div class="accounting-amount {% if subsection.total < 0 %} text-danger {% endif %}">{{ subsection.total|accounting_report_format_amount }}</div>
+            </div>
+          {% endfor %}
+          <div class="accounting-report-table-row accounting-income-statement-total">
+            <div>{{ section.accumulated.title|title }}</div>
+            <div class="accounting-amount {% if section.accumulated.amount < 0 %} text-danger {% endif %}">{{ section.accumulated.amount|accounting_report_format_amount }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% else %}
+  <p>{{ A_("There is no data.") }}</p>
+{% endif %}
+
+{% endblock %}
