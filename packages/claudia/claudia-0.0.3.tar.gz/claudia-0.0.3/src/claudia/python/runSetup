@@ -1,0 +1,73 @@
+# !/bin/bash
+set +e
+
+function script_teardown() {
+  exit_status=${1:-1}
+  exit ${exit_status}
+}
+
+function detect_OS() {
+  if [[ $OSTYPE == 'darwin'* ]]; 
+  then
+    echo 'macOS detected'
+  else
+    echo 'Linux OS detected'
+  fi
+}
+
+function install_pip3() {
+  if which pip3 > /dev/null
+    then
+        echo "Prerequisite check passed: pip3 is installed."
+    else
+        echo "Error. pip3 is not installed. Exiting setup..." 1>&2
+        script_teardown 1
+  fi
+}
+
+function install_xrpl_py() {
+  package='xrpl-py'
+  if [ `pip3 list | grep -c $package` -eq 0 ]; 
+      then
+          pip3 install xrpl-py
+      else
+          echo "xrpl-py is installed already."
+  fi
+}
+
+function install_behave() {
+  package='behave'
+  if [ `pip3 list | grep -c $package` -eq 0 ]; 
+      then
+          pip3 install behave
+      else
+          echo "behave is installed already."
+  fi
+}
+
+function install_py_hamcrest() {
+  package='PyHamcrest'
+  if [ `pip3 list | grep -c $package` -eq 0 ]; 
+      then
+          pip3 install PyHamcrest
+      else
+          echo "PyHamcrest is installed already."
+  fi
+}
+
+function validate_launch_dir() {
+  FILE=./behave.ini
+
+  if [[ ! -f ${FILE} ]]; then
+    echo "Please navigate to 'python' directory and relaunch."
+    script_teardown 1
+  fi
+}
+
+# validate_launch_dir
+# detect_OS
+install_pip3
+install_xrpl_py
+install_behave
+install_py_hamcrest
+script_teardown 0
