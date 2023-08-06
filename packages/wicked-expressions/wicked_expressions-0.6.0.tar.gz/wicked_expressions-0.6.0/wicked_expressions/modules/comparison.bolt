@@ -1,0 +1,220 @@
+from contextlib import contextmanager
+
+from ./utils import Rebindable, parse_holder
+from ./config import Config
+
+
+class ExpressionComparison(Rebindable):
+    _INVERTED_OPERATOR = {
+        '==': '!=',
+        '!=': '==',
+        '<': '>=',
+        '>': '<=',
+        '<=': '>',
+        '>=': '<'
+    }
+
+    def __init__(self, arg_0, operator='==', arg_1=None, initialized=False, check_exists=False):
+        self.arg_0 = arg_0
+        self.operator = operator
+        self.arg_1 = arg_1
+        self.initialized = initialized
+        self.check_exists = check_exists
+
+    @classmethod
+    def monkeypatch(cls, Scoreboard, Data, ScoreSource, DataSource):
+        cls.ScoreSource = ScoreSource
+        cls.DataSource = DataSource
+        cls.temp_scoreboard = Scoreboard(Config.SCOREBOARD_ROOT)
+        cls.temp_storage = Data.storage(Config.STORAGE_ROOT)
+
+    @contextmanager
+    def __branch__(self):
+        score_count = 0
+        
+        if isinstance(self.arg_0, self.ScoreSource):
+            score_count += 1
+        if isinstance(self.arg_1, self.ScoreSource):
+            score_count += 1
+        
+        # exists check
+        if self.check_exists:
+            if isinstance(self.arg_0, self.ScoreSource):
+                with self.compare_score_to_score(self.arg_0, self.arg_0):
+                    yield True
+            elif isinstance(self.arg_0, self.DataSource):
+                with self.check_data_exists(self.arg_0):
+                    yield True
+        
+        # pseudo bool check
+        # Any :: None
+        elif self.arg_1 is None:
+            with self.check_boolean(self.arg_0):
+                yield True
+        
+        # ScoreSource :: ScoreSource
+        elif score_count == 2:
+            with self.compare_score_to_score(self.arg_0, self.arg_1):
+                yield True
+        
+        # ScoreSource :: Any || Any :: ScoreSource
+        elif score_count == 1:
+            # Any = DataSource
+            if isinstance(self.arg_0, self.DataSource) or isinstance(self.arg_1, self.DataSource):
+                with self.compare_any_to_any(self.arg_0, self.arg_1):
+                    yield True
+            # Any = ScoreSource
+            else:
+                with self.compare_score_to_constant(self.arg_0, self.arg_1):
+                    yield True
+    
+        # DataSource :: DataSource
+        elif score_count == 0:
+            if self.operator in ('==', '!='):
+                with self.compare_data_to_data(self.arg_0, self.arg_1):
+                    yield True
+            else:
+                with self.compare_any_to_any(self.arg_0, self.arg_1):
+                    yield True
+
+        self.initialized = True
+
+    def __not__(self):
+        return ExpressionComparison(self.arg_0, self._INVERTED_OPERATOR[self.operator], self.arg_1, initialized=self.initialized, check_exists=self.check_exists)
+
+    @contextmanager
+    def check_boolean(self, arg_0):
+        temp = self.temp_scoreboard['$temp']
+
+        if not self.initialized:
+            temp = arg_0
+
+        if self.operator == '==':
+            if score temp.holder temp.obj matches 1:
+                yield True
+        elif self.operator == '!=':
+            if score temp.holder temp.obj matches 0:
+                yield True
+
+    @contextmanager
+    def compare_score_to_constant(self, arg_0, arg_1):
+        arg_0_holder = parse_holder(arg_0.holder)
+
+        if self.operator == '==':
+            if score arg_0_holder arg_0.obj matches arg_1:
+                yield True
+        elif self.operator == '!=':
+            unless score arg_0_holder arg_0.obj matches arg_1:
+                yield True
+        elif self.operator == '<':
+            unless score arg_0_holder arg_0.obj matches (arg_1, None):
+                yield True
+        elif self.operator == '>':
+            unless score arg_0_holder arg_0.obj matches (None, arg_1):
+                yield True
+        elif self.operator == '<=':
+            if score arg_0_holder arg_0.obj matches (None, arg_1):
+                yield True
+        elif self.operator == '>=':
+            if score arg_0_holder arg_0.obj matches (arg_1, None):
+                yield True
+
+    @contextmanager
+    def compare_score_to_score(self, arg_0, arg_1):
+        arg_0_holder = parse_holder(arg_0.holder)
+        arg_1_holder = parse_holder(arg_1.holder)
+
+        if self.operator == '==':
+            if score arg_0_holder arg_0.obj = arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '!=':
+            unless score arg_0_holder arg_0.obj = arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '<':
+            if score arg_0_holder arg_0.obj < arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '>':
+            if score arg_0_holder arg_0.obj > arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '<=':
+            if score arg_0_holder arg_0.obj <= arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '>=':
+            if score arg_0_holder arg_0.obj >= arg_1_holder arg_1.obj:
+                yield True
+
+    @contextmanager
+    def compare_any_to_any(self, input_arg_0, input_arg_1):
+        arg_0 = self.temp_scoreboard['$arg_0']
+        arg_1 = self.temp_scoreboard['$arg_1']
+        arg_0_holder = parse_holder(arg_0.holder)
+        arg_1_holder = parse_holder(arg_1.holder)
+
+        if not self.initialized:
+            if self.operator not in ('==', '!='):
+                arg_0 = input_arg_0
+                arg_1 = input_arg_1
+
+        if self.operator in ('==', '!='):
+            # exception for `==` & `!=` operators
+            with self.compare_data_to_data(input_arg_0, input_arg_1):
+                yield True
+        elif self.operator == '<':
+            if score arg_0_holder arg_0.obj < arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '>':
+            if score arg_0_holder arg_0.obj > arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '<=':
+            if score arg_0_holder arg_0.obj <= arg_1_holder arg_1.obj:
+                yield True
+        elif self.operator == '>=':
+            if score arg_0_holder arg_0.obj >= arg_1_holder arg_1.obj:
+                yield True
+
+    @contextmanager
+    def compare_data_to_data(self, arg_0, arg_1):
+        is_not_equal = self.temp_scoreboard['$is_not_equal']
+        tmp = self.temp_storage['temp']
+
+        if not self.initialized:
+            tmp = arg_0
+
+            # attempt override
+            store success score is_not_equal.holder is_not_equal.obj:
+                tmp = arg_1
+
+        if self.operator == '==':
+            # 0 = equal (override failed)
+            if score is_not_equal.holder is_not_equal.obj matches 0:
+                yield True
+
+        elif self.operator == '!=':
+            # 1 = not equal (override succeeded)
+            if score is_not_equal.holder is_not_equal.obj matches 1:
+                yield True
+
+    @contextmanager
+    def check_data_exists(self, arg_0):
+        if arg_0._type == 'storage':
+            if self.operator == '==':
+                if data storage arg_0._target arg_0._path:
+                    yield True
+            elif self.operator == '!=':
+                unless data storage arg_0._target arg_0._path:
+                    yield True
+        elif arg_0._type == 'entity':
+            selector = parse_holder(arg_0._target)
+            if self.operator == '==':
+                if data entity selector arg_0._path:
+                    yield True
+            elif self.operator == '!=':
+                unless data entity selector arg_0._path:
+                    yield True
+        elif arg_0._type == 'block':
+            if self.operator == '==':
+                if data block arg_0._target arg_0._path:
+                    yield True
+            elif self.operator == '!=':
+                unless data block arg_0._target arg_0._path:
+                    yield True
