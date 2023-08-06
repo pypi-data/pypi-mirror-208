@@ -1,0 +1,25 @@
+About
+=====
+***mlfactory*** is a simple modular wrapper library that abstracts several different types of neural network architectures and techniques for computer vision (pytorch and tensorflow backend) providing seemless easy to use training in a few lines of code. 
+
+Using the standard modular philosophy you can also define your own neural network in pytorch/tensorflow, and if youre lazy to write the data loaders or the training loop then pass the network to our submodules !, or vice versa.
+
+
+Table of contents
+=================
+
+<!--ts-->
+   * [Out of box colab usage](#out-of-box-colab-usage)
+   * [Getting Started](#getting-started)
+<!--te-->
+
+Out of box colab usage
+======================
+
+1. Easy monocular depth estimation - https://colab.research.google.com/drive/1T2gONs_gst4zpdS7fBoIaQclgg3J2Jgk?usp=sharing
+
+
+Getting Started
+===============
+
+pip install mlfactory
