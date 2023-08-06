@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "gvmkit-build"
+version = "0.2.9"
+description = ""
+authors = ["Przemysław K. Rekucki <prekucki@rcl.pl>"]
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Environment :: Console',
+    'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+    'Intended Audience :: Developers'
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+docker = "^5.0"
+argparse = "^1.4.0"
+alive-progress = "^1.5.1"
+termcolor = "1.1.0"
+typing = "^3.7.4"
+typing_extensions = "^3.7.4"
+requests = "2.27.*"
+srvlookup = "^2.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4"
+black = { version = "^19.10b0" }
+mypy = "^0.780"
+isort = {extras = ["pyproject"], version = "^4.3.21"}
+setuptools = "^47.3.1"
+
+
+[tool.poetry.scripts]
+gvmkit-build = "gvmkit_build:build"
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+
+[tool.poe.tasks]
+test={ script = "pytest:main" }
+fmt="black ."
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.masonry.api"
