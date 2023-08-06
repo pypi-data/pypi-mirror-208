@@ -1,0 +1,47 @@
+$id: "https://gael-systems.com/drb-python/image"
+$schema: "http://json-schema.org/draft-07/schema"
+title: DRB-Python Image
+description: ""
+definitions:
+  extractor:
+    type: object
+    minProperties: 1
+    maxProperties: 1
+    additionalProperties: no
+    properties:
+      python:
+        type: string
+      script:
+        type: object
+      xquery:
+        type: string
+      constant: { }
+  resolutions:
+    type: array
+    contains:
+      type: object
+      items: { $ref: '#/definitions/extractor' }
+  image:
+    type: object
+    minProperties: 1
+    maxProperties: 2
+    additionalProperties: no
+    properties:
+      name: {
+        type: string
+      }
+      extractor:
+        type: object
+        items: { $ref: '#/definitions/extractor' }
+        minItems: 1
+properties:
+  topic:
+    type: string
+  default:
+    type: string
+  image:
+    type: object
+    items: { $ref: '#/definitions/image' }
+    minItems: 1
+additionalProperties: no
+required: [topic, image]
