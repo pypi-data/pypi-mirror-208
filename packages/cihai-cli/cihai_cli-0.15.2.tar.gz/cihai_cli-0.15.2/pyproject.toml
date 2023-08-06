@@ -1,0 +1,142 @@
+[tool.poetry]
+name = "cihai-cli"
+version = "0.15.2"
+description = "Command line frontend for the cihai CJK language library"
+license = "MIT"
+authors = ["Tony Narlock <tony@git-pull.com>"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development :: Internationalization",
+  "Topic :: Software Development :: Localization",
+  "Topic :: System :: Shells",
+  "Topic :: Utilities",
+]
+keywords = [
+  "unihan",
+  "sqlalchemy",
+  "library",
+  "cjk",
+  "unicode",
+  "dictionary",
+  "dataset",
+  "encyclopedia",
+  "chinese",
+  "japanese",
+  "korean",
+  "languages",
+  "study",
+  "cli",
+  "terminal",
+  "shell",
+]
+homepage = "https://cihai-cli.git-pull.com"
+readme = "README.md"
+packages = [
+  { include = "*", from = "src" },
+]
+include = [
+  { path = "tests", format = "sdist" },
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/cihai/cihai-cli/issues"
+Documentation = "https://cihai-cli.git-pull.com"
+Repository = "https://github.com/cihai/cihai-cli"
+"Release notes" = "https://github.com/cihai/cihai-cli/blob/master/CHANGES"
+"Q & A" = "https://github.com/cihai/cihai-cli/discussions"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+cihai = "~0.18.3"
+PyYAML = "*"
+
+[tool.poetry.dev-dependencies]
+### Docs ###
+sphinx = "*"
+gp-libs = "0.0.1a16"
+furo = "*"
+sphinx-autobuild = "*"
+sphinx-autodoc-typehints = "*"
+sphinx-argparse = "*"
+sphinx-inline-tabs = "<2023.4.21"  # For Python 3.7 support
+sphinxext-opengraph = "<0.8"  # https://github.com/wpilibsuite/sphinxext-opengraph/issues/100
+sphinx-copybutton = "*"
+sphinxext-rediraffe = "*"
+myst_parser = ">=0.18.1"
+docutils = "*"
+
+### Testing ###
+pytest = "*"
+pytest-rerunfailures = "*"
+pytest-watcher = "*"
+
+### Coverage ###
+codecov = "*"
+coverage = "*"
+pytest-cov = "*"
+
+### Format ###
+black = "*"
+isort = "*"
+
+### Lint ###
+flake8 = [
+  { version = "*", python = "^3.7" },
+  { version = ">=5", python = "^3.8" },
+]
+flake8-bugbear = "*"
+flake8-comprehensions = "*"
+mypy = "*"
+types-PyYAML = "*"
+
+### Quirks ###
+importlib-metadata = "<5"  # https://github.com/PyCQA/flake8/issues/1701
+
+[tool.poetry.scripts]
+cihai = "cihai_cli.cli:cli"
+
+[tool.poetry.extras]
+docs = [
+  "docutils",
+  "sphinx",
+  "sphinx-argparse",
+  "sphinx-autodoc-typehints",
+  "sphinx-autobuild",
+  "sphinx-copybutton",
+  "sphinxext-opengraph",
+  "sphinx-inline-tabs",
+  "sphinxext-rediraffe",
+  "myst_parser",
+  "furo",
+  "gp-libs",
+]
+test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
+coverage = ["codecov", "coverage", "pytest-cov"]
+format = ["black", "isort"]
+lint = [
+  "flake8",
+  "flake8-bugbear",
+  "flake8-comprehensions",
+  "mypy",
+  "types-PyYAML",
+]
+
+[[tool.mypy.overrides]]
+module = [
+  "cihai.*",
+]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
