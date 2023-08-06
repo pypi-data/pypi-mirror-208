@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: gretel-trainer
+Version: 0.8.1
+Summary: Synthetic Data Generation with optional Differential Privacy
+Home-page: https://github.com/gretelai/gretel-trainer
+License: https://gretel.ai/license/source-available-license
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: Free To Use But Restricted
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.9
+License-File: LICENSE
+Requires-Dist: boto3 (~=1.20)
+Requires-Dist: gretel-client (>=0.16.0)
+Requires-Dist: gretel-synthetics[utils]
+Requires-Dist: jinja2 (~=3.1)
+Requires-Dist: networkx (~=3.0)
+Requires-Dist: pandas (~=1.3)
+Requires-Dist: plotly (~=5.11)
+Requires-Dist: pydantic (~=1.9)
+Requires-Dist: requests (~=2.25)
+Requires-Dist: scikit-learn (~=1.0)
+Requires-Dist: smart-open[s3] (~=5.2)
+Requires-Dist: sqlalchemy (~=1.4)
+Provides-Extra: connectors
+Requires-Dist: mysqlclient ; extra == 'connectors'
+Requires-Dist: psycopg2-binary ; extra == 'connectors'
+Requires-Dist: snowflake-sqlalchemy ; extra == 'connectors'
+Provides-Extra: mysql
+Requires-Dist: mysqlclient ; extra == 'mysql'
+Provides-Extra: postgres
+Requires-Dist: psycopg2-binary ; extra == 'postgres'
+Provides-Extra: snowflake
+Requires-Dist: snowflake-sqlalchemy ; extra == 'snowflake'
+
+UNKNOWN
+
