@@ -1,0 +1,2 @@
+class DivideTextError(Exception):
+    pass
