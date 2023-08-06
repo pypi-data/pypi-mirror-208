@@ -1,0 +1,864 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "SLEPC4PY" "1" "May 15, 2023" "3.1" "SLEPc for Python"
+.SH NAME
+slepc4py \- SLEPc for Python
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.INDENT 0.0
+.TP
+.B Authors
+Lisandro Dalcin, Jose E. Roman
+.TP
+.B Contact
+\fI\%dalcinl@gmail.com\fP, \fI\%jroman@dsic.upv.es\fP
+.TP
+.B Web Site
+\fI\%https://gitlab.com/slepc/slepc\fP
+.TP
+.B Date
+May 15, 2023
+.UNINDENT
+.SS Abstract
+.sp
+This document describes \fI\%slepc4py\fP, a \fI\%Python\fP port to the \fI\%SLEPc\fP
+libraries.
+.sp
+\fI\%SLEPc\fP is a software package for the parallel solution of
+large\-scale eigenvalue problems. It can be used for computing
+eigenvalues and eigenvectors of large, sparse matrices, or matrix
+pairs, and also for computing singular values and vectors of a
+rectangular matrix.
+.sp
+\fI\%SLEPc\fP relies on \fI\%PETSc\fP for basic functionality such as the
+representation of matrices and vectors, and the solution of linear
+systems of equations. Thus, \fI\%slepc4py\fP must be used together with
+its companion \fI\%petsc4py\fP\&.
+.SH CONTENTS
+.SS Overview
+.sp
+\fISLEPc for Python\fP (slepc4py) is a Python package that provides
+convenient access to the functionality of SLEPc.
+.sp
+SLEPc [1], [2] implements algorithms and tools for the numerical
+solution of large, sparse eigenvalue problems on parallel
+computers. It can be used for linear eigenvalue problems in either
+standard or generalized form, with real or complex arithmetic.
+It can also be used for computing a partial SVD of a large, sparse,
+rectangular matrix, and to solve nonlinear eigenvalue problems
+(polynomial or general). Additionally, SLEPc provides solvers for
+the computation of the action of a matrix function on a vector.
+.sp
+SLEPc is intended for computing a subset of the spectrum of a matrix
+(or matrix pair). One can for instance approximate the largest
+magnitude eigenvalues, or the smallest ones, or even those eigenvalues
+located near a given region of the complex plane. Interior eigenvalues
+are harder to compute, so SLEPc provides different methodologies. One
+such method is to use a spectral transformation. Cheaper alternatives
+are also available.
+.IP [1] 5
+J. E. Roman, C. Campos, L. Dalcin, E. Romero, A. Tomas.
+SLEPc Users Manual. DSIC\-II/24/02 \- Revision 3.19
+D. Sistemas Informaticos y Computacion, Universitat Politecnica de
+Valencia. 2023.
+.IP [2] 5
+Vicente Hernandez, Jose E. Roman and Vicente Vidal.
+SLEPc: A Scalable and Flexible Toolkit for the Solution of
+Eigenvalue Problems, ACM Trans. Math. Softw. 31(3), pp. 351\-362,
+2005.
+.SS Features
+.sp
+Currently, the following types of eigenproblems can be addressed:
+.INDENT 0.0
+.IP \(bu 2
+Standard eigenvalue problem, \fIAx=kx\fP, either for Hermitian or
+non\-Hermitian matrices.
+.IP \(bu 2
+Generalized eigenvalue problem, \fIAx=kBx\fP, either Hermitian
+positive\-definite or not.
+.IP \(bu 2
+Partial singular value decomposition of a rectangular matrix,
+\fIAu=sv\fP\&.
+.IP \(bu 2
+Polynomial eigenvalue problem, \fIP(k)x=0\fP\&.
+.IP \(bu 2
+Nonlinear eigenvalue problem, \fIT(k)x=0\fP\&.
+.IP \(bu 2
+Computing the action of a matrix function on a vector, \fIw=f(alpha A)v\fP\&.
+.UNINDENT
+.sp
+For the linear eigenvalue problem, the following methods are available:
+.INDENT 0.0
+.IP \(bu 2
+Krylov eigensolvers, particularly Krylov\-Schur, Arnoldi, and
+Lanczos.
+.IP \(bu 2
+Davidson\-type eigensolvers, including Generalized Davidson and
+Jacobi\-Davidson.
+.IP \(bu 2
+Subspace iteration and single vector iterations (inverse iteration,
+RQI).
+.IP \(bu 2
+Conjugate gradient for the minimization of the Rayleigh quotient.
+.IP \(bu 2
+A contour integral solver.
+.UNINDENT
+.sp
+For singular value computations, the following alternatives can be
+used:
+.INDENT 0.0
+.IP \(bu 2
+Use an eigensolver via the cross\-product matrix \fIA’A\fP or the cyclic
+matrix \fI[0 A; A’ 0]\fP\&.
+.IP \(bu 2
+Explicitly restarted Lanczos bidiagonalization.
+.IP \(bu 2
+Implicitly restarted Lanczos bidiagonalization (thick\-restart
+Lanczos).
+.UNINDENT
+.sp
+For polynomial eigenvalue problems, the following methods are available:
+.INDENT 0.0
+.IP \(bu 2
+Use an eigensolver to solve the generalized eigenvalue problem
+obtained after linearization.
+.IP \(bu 2
+TOAR and Q\-Arnoldi, memory efficient variants of Arnoldi for polynomial
+eigenproblems.
+.UNINDENT
+.sp
+For general nonlinear eigenvalue problems, the following methods can be used:
+.INDENT 0.0
+.IP \(bu 2
+Solve a polynomial eigenproblem obtained via polynomial interpolation.
+.IP \(bu 2
+Rational interpolation and linearization (NLEIGS).
+.IP \(bu 2
+Newton\-type methods such as SLP or RII.
+.UNINDENT
+.sp
+Computation of interior eigenvalues is supported by means of the
+following methodologies:
+.INDENT 0.0
+.IP \(bu 2
+Spectral transformations, such as shift\-and\-invert. This technique
+implicitly uses the inverse of the shifted matrix \fI(A\-tI)\fP in order
+to compute eigenvalues closest to a given target value, \fIt\fP\&.
+.IP \(bu 2
+Harmonic extraction, a cheap alternative to shift\-and\-invert that
+also tries to approximate eigenvalues closest to a target, \fIt\fP, but
+without requiring a matrix inversion.
+.UNINDENT
+.sp
+Other remarkable features include:
+.INDENT 0.0
+.IP \(bu 2
+High computational efficiency, by using NumPy and SLEPc under the
+hood.
+.IP \(bu 2
+Data\-structure neutral implementation, by using efficient sparse
+matrix storage provided by PETSc. Implicit matrix representation is
+also available by providing basic operations such as matrix\-vector
+products as user\-defined Python functions.
+.IP \(bu 2
+Run\-time flexibility, by specifying numerous setting at the command
+line.
+.IP \(bu 2
+Ability to do the computation in parallel.
+.UNINDENT
+.SS Components
+.sp
+SLEPc provides the following components, which are mirrored by slepc4py
+for its use from Python. The first five components are solvers for
+different classes of problems, while the rest can be considered
+auxiliary object.
+.INDENT 0.0
+.TP
+.B EPS
+The Eigenvalue Problem Solver is the component that provides all
+the functionality necessary to define and solve an
+eigenproblem. It provides mechanisms for completely specifying
+the problem: the problem type (e.g. standard symmetric), number
+of eigenvalues to compute, part of the spectrum of
+interest. Once the problem has been defined, a collection of
+solvers can be used to compute the required solutions.  The
+behaviour of the solvers can be tuned by means of a few
+parameters, such as the maximum dimension of the subspace to be
+used during the computation.
+.TP
+.B SVD
+This component is the analog of EPS for the case of Singular
+Value Decompositions. The user provides a rectangular matrix and
+specifies how many singular values and vectors are to be
+computed, whether the largest or smallest ones, as well as some
+other parameters for fine tuning the computation. Different
+solvers are available, as in the case of EPS.
+.TP
+.B PEP
+This component is the analog of EPS for the case of Polynomial
+Eigenvalue Problems. The user provides the coefficient matrices of
+the polynomial. Several parameters can be specified, as in
+the case of EPS. It is also possible to indicate whether the
+problem belongs to a special type, e.g., symmetric or gyroscopic.
+.TP
+.B NEP
+This component covers the case of general nonlinear eigenproblems,
+T(lambda)x=0. The user provides the parameter\-dependent matrix T
+via the split form or by means of callback functions.
+.TP
+.B MFN
+This component provides the functionality for computing the action
+of a matrix function on a vector. Given a matrix A and a vector b,
+the call MFNSolve(mfn,b,x) computes x=f(A)b, where f is a function
+such as the exponential.
+.TP
+.B ST
+The Spectral Transformation is a component that provides
+convenient implementations of common spectral
+transformations. These are simple transformations that map
+eigenvalues to different positions, in such a way that
+convergence to wanted eigenvalues is enhanced. The most common
+spectral transformation is shift\-and\-invert, that allows for the
+computation of eigenvalues closest to a given target value.
+.TP
+.B BV
+This component encapsulates the concept of a set of Basis Vectors
+spanning a vector space. This component provides convenient access
+to common operations such as orthogonalization of vectors. The
+BV component is usually not required by end\-users.
+.TP
+.B DS
+The Dense System (or Direct Solver) component, used internally to
+solve dense eigenproblems of small size that appear in the course
+of iterative eigensolvers.
+.TP
+.B FN
+A component used to define mathematical functions. This is required
+by the end\-user for instance to define function T(.) when solving
+nonlinear eigenproblems with NEP in split form.
+.UNINDENT
+.SS Tutorial
+.sp
+This tutorial is intended for basic use of slepc4py. For more advanced
+use, the reader is referred to SLEPc tutorials as well as to slepc4py
+reference documentation.
+.SS Commented source of a simple example
+.sp
+In this section, we include the source code of example \fBdemo/ex1.py\fP
+available in the slepc4py distribution, with comments inserted inline.
+.sp
+The first thing to do is initialize the libraries. This is normally
+not required, as it is done automatically at import time. However, if
+you want to gain access to the facilities for accessing command\-line
+options, the following lines must be executed by the main script prior
+to any petsc4py or slepc4py calls:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+import sys, slepc4py
+slepc4py.init(sys.argv)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Next, we have to import the relevant modules. Normally, both PETSc and
+SLEPc modules have to be imported in all slepc4py programs. It may be
+useful to import NumPy as well:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+from petsc4py import PETSc
+from slepc4py import SLEPc
+import numpy
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+At this point, we can use any petsc4py and slepc4py operations. For
+instance, the following lines allow the user to specify an integer
+command\-line argument \fBn\fP with a default value of 30 (see the next
+section for example usage of command\-line options):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+opts = PETSc.Options()
+n = opts.getInt(\(aqn\(aq, 30)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+It is necessary to build a matrix to define an eigenproblem (or two in
+the case of generalized eigenproblems). The following fragment of code
+creates the matrix object and then fills the non\-zero elements one by
+one. The matrix of this particular example is tridiagonal, with value
+2 in the diagonal, and \-1 in off\-diagonal positions. See petsc4py
+documentation for details about matrix objects:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+A = PETSc.Mat().create()
+A.setSizes([n, n])
+A.setFromOptions()
+A.setUp()
+
+rstart, rend = A.getOwnershipRange()
+
+# first row
+if rstart == 0:
+    A[0, :2] = [2, \-1]
+    rstart += 1
+# last row
+if rend == n:
+    A[n\-1, \-2:] = [\-1, 2]
+    rend \-= 1
+# other rows
+for i in range(rstart, rend):
+    A[i, i\-1:i+2] = [\-1, 2, \-1]
+
+A.assemble()
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The solver object is created in a similar way as other objects in
+petsc4py:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+E = SLEPc.EPS(); E.create()
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Once the object is created, the eigenvalue problem must be
+specified. At least one matrix must be provided. The problem type must
+be indicated as well, in this case it is HEP (Hermitian eigenvalue
+problem). Apart from these, other settings could be provided here (for
+instance, the tolerance for the computation). After all options have
+been set, the user should call the \fBsetFromOptions()\fP operation, so
+that any options specified at run time in the command line are passed
+to the solver object:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+E.setOperators(A)
+E.setProblemType(SLEPc.EPS.ProblemType.HEP)
+E.setFromOptions()
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+After that, the \fBsolve()\fP method will run the selected eigensolver,
+keeping the solution stored internally:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+E.solve()
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Once the computation has finished, we are ready to print the results.
+First, some informative data can be retrieved from the solver object:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Print = PETSc.Sys.Print
+
+Print()
+Print("******************************")
+Print("*** SLEPc Solution Results ***")
+Print("******************************")
+Print()
+
+its = E.getIterationNumber()
+Print("Number of iterations of the method: %d" % its)
+
+eps_type = E.getType()
+Print("Solution method: %s" % eps_type)
+
+nev, ncv, mpd = E.getDimensions()
+Print("Number of requested eigenvalues: %d" % nev)
+
+tol, maxit = E.getTolerances()
+Print("Stopping condition: tol=%.4g, maxit=%d" % (tol, maxit))
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+For retrieving the solution, it is necessary to find out how many
+eigenpairs have converged to the requested precision:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+nconv = E.getConverged()
+Print("Number of converged eigenpairs %d" % nconv)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+For each of the \fBnconv\fP eigenpairs, we can retrieve the eigenvalue
+\fBk\fP, and the eigenvector, which is represented by means of two
+petsc4py vectors \fBvr\fP and \fBvi\fP (the real and imaginary part of the
+eigenvector, since for real matrices the eigenvalue and eigenvector
+may be complex).  We also compute the corresponding relative errors in
+order to make sure that the computed solution is indeed correct:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+if nconv > 0:
+    # Create the results vectors
+    vr, wr = A.getVecs()
+    vi, wi = A.getVecs()
+    #
+    Print()
+    Print("        k          ||Ax\-kx||/||kx|| ")
+    Print("\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\- \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-")
+    for i in range(nconv):
+        k = E.getEigenpair(i, vr, vi)
+        error = E.computeError(i)
+        if k.imag != 0.0:
+            Print(" %9f%+9f j %12g" % (k.real, k.imag, error))
+        else:
+            Print(" %12f      %12g" % (k.real, error))
+    Print()
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Example of command\-line usage
+.sp
+Now we illustrate how to specify command\-line options in order to
+extract the full potential of slepc4py.
+.sp
+A simple execution of the \fBdemo/ex1.py\fP script will result in the
+following output:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python demo/ex1.py
+
+******************************
+*** SLEPc Solution Results ***
+******************************
+
+Number of iterations of the method: 4
+Solution method: krylovschur
+Number of requested eigenvalues: 1
+Stopping condition: tol=1e\-07, maxit=100
+Number of converged eigenpairs 4
+
+    k          ||Ax\-kx||/||kx||
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\- \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+     3.989739        5.76012e\-09
+     3.959060        1.41957e\-08
+     3.908279        6.74118e\-08
+     3.837916        8.34269e\-08
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+For specifying different setting for the solver parameters, we can use
+SLEPc command\-line options with the \fB\-eps\fP prefix. For instance, to
+change the number of requested eigenvalues and the tolerance:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python demo/ex1.py \-eps_nev 10 \-eps_tol 1e\-11
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The method used by the solver object can also be set at run time:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python demo/ex1.py \-eps_type subspace
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+All the above settings can also be changed within the source code by
+making use of the appropriate slepc4py method. Since options can be
+set from within the code and the command\-line, it is often useful to
+view the particular settings that are currently being used:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python demo/ex1.py \-eps_view
+
+EPS Object: 1 MPI process
+  type: krylovschur
+    50% of basis vectors kept after restart
+    using the locking variant
+  problem type: symmetric eigenvalue problem
+  selected portion of the spectrum: largest eigenvalues in magnitude
+  number of eigenvalues (nev): 1
+  number of column vectors (ncv): 16
+  maximum dimension of projected problem (mpd): 16
+  maximum number of iterations: 100
+  tolerance: 1e\-08
+  convergence test: relative to the eigenvalue
+BV Object: 1 MPI process
+  type: svec
+  17 columns of global length 30
+  orthogonalization method: classical Gram\-Schmidt
+  orthogonalization refinement: if needed (eta: 0.7071)
+  block orthogonalization method: GS
+  doing matmult as a single matrix\-matrix product
+DS Object: 1 MPI process
+  type: hep
+  solving the problem with: Implicit QR method (_steqr)
+ST Object: 1 MPI process
+  type: shift
+  shift: 0
+  number of matrices: 1
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Note that for computing eigenvalues of smallest magnitude we can use
+the option \fB\-eps_smallest_magnitude\fP, but for interior eigenvalues
+things are not so straightforward. One possibility is to try with
+harmonic extraction, for instance to get the eigenvalues closest to
+0.6:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python demo/ex1.py \-eps_harmonic \-eps_target 0.6
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Depending on the problem, harmonic extraction may fail to converge. In
+those cases, it is necessary to specify a spectral transformation
+other than the default. In the command\-line, this is indicated with
+the \fB\-st_\fP prefix. For example, shift\-and\-invert with a value of the
+shift equal to 0.6 would be:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python demo/ex1.py \-st_type sinvert \-eps_target 0.6
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Installation
+.SS Using \fBpip\fP or \fBeasy_install\fP
+.sp
+You can use \fBpip\fP to install \fBslepc4py\fP and its
+dependencies (\fBmpi4py\fP is optional but highly recommended):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ pip install [\-\-user] numpy mpi4py
+$ pip install [\-\-user] petsc petsc4py
+$ pip install [\-\-user] slepc slepc4py
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Alternatively, you can use \fBeasy_install\fP (deprecated):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ easy_install [\-\-user] slepc4py
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+If you already have working PETSc and SLEPc installs, set environment
+variables \fBSLEPC_DIR\fP and \fBPETSC_DIR\fP (and perhaps
+\fBPETSC_ARCH\fP for non\-prefix installs) to appropriate values
+and next use \fBpip\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ export SLEPC_DIR=/path/to/slepc
+$ export PETSC_DIR=/path/to/petsc
+$ export PETSC_ARCH=arch\-linux2\-c\-opt
+$ pip install [\-\-user] petsc4py slepc4py
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Using \fBdistutils\fP
+.SS Requirements
+.sp
+You need to have the following software properly installed in order to
+build \fISLEPc for Python\fP:
+.INDENT 0.0
+.IP \(bu 2
+Any \fI\%MPI\fP implementation [1] (e.g., \fI\%MPICH\fP or \fI\%Open MPI\fP),
+built with shared libraries.
+.IP \(bu 2
+A matching version of \fI\%PETSc\fP built with shared libraries.
+.IP \(bu 2
+A matching version of \fI\%SLEPc\fP built with shared libraries.
+.IP \(bu 2
+\fI\%NumPy\fP package.
+.IP \(bu 2
+\fI\%petsc4py\fP package.
+.UNINDENT
+.IP [1] 5
+Unless you have appropriately configured and built SLEPc and
+PETSc without MPI (configure option \fB\-\-with\-mpi=0\fP).
+.IP [2] 5
+You may need to use a parallelized version of the Python
+interpreter with some MPI\-1 implementations (e.g. MPICH1).
+.SS Downloading
+.sp
+The \fISLEPc for Python\fP package is available for download at the
+Python Package Index. You can use
+\fBcurl\fP or \fBwget\fP to get a release tarball.
+.INDENT 0.0
+.IP \(bu 2
+Using \fBcurl\fP:
+.INDENT 2.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ curl \-LO https://pypi.io/packages/source/s/slepc4py/slepc4py\-X.Y.Z.tar.gz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.IP \(bu 2
+Using \fBwget\fP:
+.INDENT 2.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ wget https://pypi.io/packages/source/s/slepc4py/slepc4py\-X.Y.Z.tar.gz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Building
+.sp
+After unpacking the release tarball:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ tar \-zxf slepc4py\-X.Y.tar.gz
+$ cd slepc4py\-X.Y
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+the distribution is ready for building.
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+\fBMac OS X\fP users employing a Python distribution built
+with \fBuniversal binaries\fP may need to set the environment
+variables \fBMACOSX_DEPLOYMENT_TARGET\fP, \fBSDKROOT\fP,
+and \fBARCHFLAGS\fP to appropriate values. As an example,
+assume your Mac is running \fBSnow Leopard\fP on a \fB64\-bit Intel\fP
+processor and you want to override the hard\-wired cross\-development
+SDK in Python configuration, your environment should be modified
+like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ export MACOSX_DEPLOYMENT_TARGET=10.6
+$ export SDKROOT=/
+$ export ARCHFLAGS=\(aq\-arch x86_64\(aq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+Some environment configuration is needed to inform the location of
+PETSc and SLEPc. You can set (using \fBsetenv\fP,
+\fBexport\fP or what applies to you shell or system) the
+environment variables \fBSLEPC_DIR\(ga\fP, \fBPETSC_DIR\fP, and
+\fBPETSC_ARCH\fP indicating where you have built/installed SLEPc
+and PETSc:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ export SLEPC_DIR=/usr/local/slepc
+$ export PETSC_DIR=/usr/local/petsc
+$ export PETSC_ARCH=arch\-linux2\-c\-opt
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Alternatively, you can edit the file \fBsetup.cfg\fP and provide the
+required information below the \fB[config]\fP section:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[config]
+slepc_dir  = /usr/local/slepc
+petsc_dir  = /usr/local/petsc
+petsc_arch = arch\-linux2\-c\-opt
+\&...
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Finally, you can build the distribution by typing:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python setup.py build
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Installing
+.sp
+After building, the distribution is ready for installation.
+.sp
+If you have root privileges (either by log\-in as the root user of by
+using \fBsudo\fP) and you want to install \fISLEPc for Python\fP in
+your system for all users, just do:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python setup.py install
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The previous steps will install the \fBslepc4py\fP package at standard
+location \fB\fIprefix\fP\fP\fB/lib/python\fP\fIX\fP\fB\&.\fP\fIX\fP\fB/site\-packages\fP\&.
+.sp
+If you do not have root privileges or you want to install \fISLEPc for
+Python\fP for your private use, just do:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python setup.py install \-\-user
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Citations
+.sp
+If SLEPc for Python been significant to a project that leads to an
+academic publication, please acknowledge that fact by citing the
+project.
+.INDENT 0.0
+.IP \(bu 2
+L. Dalcin, P. Kler, R. Paz, and A. Cosimo,
+\fIParallel Distributed Computing using Python\fP,
+Advances in Water Resources, 34(9):1124\-1139, 2011.
+\fI\%http://dx.doi.org/10.1016/j.advwatres.2011.04.013\fP
+.IP \(bu 2
+V. Hernandez, J.E. Roman, and V. Vidal,
+\fISLEPc: A scalable and flexible toolkit for the solution of eigenvalue problems\fP,
+ACM Transactions on Mathematical Software, 31(3):351\-362, 2005.
+\fI\%http://dx.doi.org/10.1145/1089014.1089019\fP
+.UNINDENT
+.SH AUTHOR
+Lisandro Dalcin
+.SH COPYRIGHT
+2023, Lisandro Dalcin and Jose Roman
+.\" Generated by docutils manpage writer.
+.
