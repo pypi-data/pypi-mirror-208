@@ -1,0 +1,84 @@
+[package]
+name = "rgrow"
+description = "A modular Tile Assembly Model simulator, inspired by Xgrow."
+readme = "../README.md"
+version = "0.12.2"
+authors = ["Constantine Evans <const@costi.eu>"]
+edition = "2021"
+repository = "https://github.com/evansfmm/rgrow"
+license = "BSD-3-Clause"
+categories = ["science", "simulation"]
+resolver = "2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "sierpinski"
+harness = false
+
+[[bench]]
+name = "ratestore"
+harness = false
+
+[[bench]]
+name = "ui"
+harness = false
+
+[lib]
+name = "rgrow"
+path = "src/lib.rs"
+#crate_type = ["rlib", "cdylib"]
+
+[[bin]]
+name = "rgrow"
+path = "src/main.rs"
+
+[features]
+default = ["ui", "use_rayon"]
+ui = ["fltk", "pixels"]
+use_rayon = ["rayon"]
+python = ["pyo3", "numpy"]
+
+[dependencies]
+fltk = { version = "^1.4", features = [
+    "rwh05",
+    "fltk-bundled",
+], optional = true }
+num-format = "0.4"
+fnv = "1.0"
+bimap = "0.6"
+serde_yaml = "0.9"
+serde_json = "1"
+serde = {version = "1", features=["derive"]}
+pixels = { version = "^0.12", optional = true }
+phf = { version = "^0", features = ["macros"] }
+nom = { version = "7", optional = false }
+# winit = { version = "^0", optional = true }
+# winit_input_helper = {version = "^0", optional = true}
+# winit-modular = {version = "^0", optional = true}
+rayon = { version = "1", optional = true }
+thiserror = "1"
+anyhow = "1"
+numpy = { version = "^0.18", optional = true }
+pyo3 = {version = "^0.18", features = ["extension-module", "multiple-pymethods"], optional = true }
+rand = {version = "^0", features = ["small_rng"]}
+ndarray = {version = "^0.15", features = ["serde"]}
+
+[dependencies.clap]
+version = "4"
+features = ["derive"]
+
+
+[dependencies.cached]
+version = "0.18"
+default-features = false
+
+[dependencies.num-traits]
+version = "0.2"
+
+[package.metadata.docs.rs]
+no-default-features = true
+features = ["use_rayon", "python"]

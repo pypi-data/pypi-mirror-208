@@ -1,0 +1,38 @@
+[package]
+name = "pyrgrow"
+description = "Python interface to rgrow."
+version = "0.12.2"
+authors = ["Constantine Evans <const@costi.eu>"]
+edition = "2021"
+repository = "https://github.com/evansfmm/rgrow"
+license = "BSD-3-Clause"
+categories = ["science", "simulation"]
+resolver = "2"
+
+
+[features]
+default = ["use_rayon", "ui"]         # "ui"
+use_rayon = ["rgrow/use_rayon"]
+ui = ["rgrow/ui"]
+
+[lib]
+name = "rgrow"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+bincode = "^1"
+indent = "0.1.1"
+serde = {version = "1", features=["derive"]}
+rand = {version = "^0", features = ["small_rng"]}
+ndarray = {version = "^0.15", features = ["serde"]}
+numpy = "^0.18"
+
+[dependencies.rgrow]
+path = "local_dependencies/rgrow"
+features = ["python"]
+default-features = false
+
+[dependencies.pyo3]
+version = "^0.18.3"
+features = ["extension-module"]
