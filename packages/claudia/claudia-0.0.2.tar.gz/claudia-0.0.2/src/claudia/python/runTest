@@ -1,0 +1,201 @@
+# !/bin/bash
+set +e
+
+clientType="websocket"
+network="local"
+tag="smoke"
+feature="payments"
+
+trap 'script_teardown 1' INT
+
+function usage() {
+  echo "Usage: $0 [Optional parameters]"
+  echo "\n  --clientType: The type of client to be used. Allowed values are 'websocket' and 'jsonrpc' and is defaulted to $clientType. \n  More information: https://xrpl.org/get-started-using-http-websocket-apis.html#differences-between-json-rpc-and-websocket>"
+  echo "\n  --network: The network to be used to run the tests on. Allowed values are 'local', 'devnet' and 'testnet' and is defaulted to $network. \n  More information: https://xrpl.org/parallel-networks.html"
+  echo "\n  --tag: Tag name of the all the tests to be included in the test run. Allowed values are 'smoke', 'regression' and 'time_intensive' and is defaulted to $tag. \n  More information: https://behave.readthedocs.io/en/latest/tag_expressions.html"
+  echo "\n  --feature <Feature file to be used for the test run. Allowed values are 'payments', 'trustline', 'nft_mint_burn', and 'all' and is defaulted to $feature. \n  More information: https://behave.readthedocs.io/en/latest/tutorial.html?highlight=feature#feature-files"
+  echo "\n"
+  exit 1
+}
+
+function load_feature_files() {
+  cp -fr ../features/*.feature ./features
+}
+
+function cleanup_feature_files() {
+  rm -rf ./features/*.feature
+}
+
+function script_teardown() {
+  exit_status=${1:-1}
+  cleanup_feature_files
+  exit ${exit_status}
+}
+
+function validate_input_flags() {
+  if [[ "${clientType}" != "websocket" ]] && [[ "${clientType}" != "jsonrpc" ]];
+  then
+    echo ${clientType}
+    echo "ERROR: Invalid clientType. Flag is set to '$clientType'. Allowed values are 'websocket' and 'jsonrpc'."
+    usage
+    script_teardown 1
+  fi
+
+  if [[ "${network}" != "local" ]] && [[ "${network}" != "devnet" ]] && [[ "${network}" != "testnet" ]];
+  then
+    echo "ERROR: Invalid network. Flag is set to '$network'. Allowed values are 'local', 'devnet' and 'testnet'."
+    usage
+    script_teardown 1
+  fi
+
+  if [[ "${tag}" != "smoke" ]] && [[ "${tag}" != "regression" ]] && [[ "${tag}" != "time_intensive" ]];
+  then
+    echo "ERROR: Invalid tag. Flag is set to '$tag'. Allowed values are 'smoke', 'regression' and 'time_intensive'."
+    usage
+    script_teardown 1
+  fi
+
+  if [[ "${feature}" != "payments" ]] && [[ "${feature}" != "trustline" ]] && [[ "${feature}" != "nft_mint_burn" ]] && [[ "${feature}" != "all" ]];
+  then
+    echo "ERROR: Invalid feature. Flag is set to '$feature'. Allowed values are 'payments', 'trustline', 'nft_mint_burn', and 'all'."
+    usage
+    script_teardown 1
+  fi
+}
+
+function set_launch_vars() {
+  if [[ $network == "local" ]];
+  then
+    if [[ $clientType = "websocket" ]];
+    then
+      export CONNECTION_SCHEME="ws"
+      export CONNECTION_URL="127.0.0.5:6006"
+      export CONNECTION_TYPE="websocket"
+    elif [[ $clientType = "jsonrpc" ]];
+    then
+      export CONNECTION_SCHEME="http"
+      export CONNECTION_URL="127.0.0.5:51234"
+      export CONNECTION_TYPE="jsonrpc"
+    fi
+  fi
+  
+  if [[ $network == "devnet" ]];
+  then
+    if [[ $clientType = "websocket" ]];
+    then
+      export CONNECTION_SCHEME="wss"
+      export CONNECTION_URL="s.devnet.rippletest.net:51233"
+      export CONNECTION_TYPE="websocket"
+    elif [[ $clientType == "jsonrpc" ]];
+    then
+      export CONNECTION_SCHEME="https"
+      export CONNECTION_URL="s.devnet.rippletest.net:51234"
+      export CONNECTION_TYPE="jsonrpc"
+    fi
+  fi
+  
+  if [[ $network == "testnet" ]];
+  then
+    if [[ $clientType = "websocket" ]];
+    then
+      export CONNECTION_SCHEME="wss"
+      export CONNECTION_URL="s.altnet.rippletest.net:51233"
+      export CONNECTION_TYPE="websocket"
+    elif [[ $clientType = "jsonrpc" ]];
+    then
+      export CONNECTION_SCHEME="https"
+      export CONNECTION_URL="s.altnet.rippletest.net:51234"
+      export CONNECTION_TYPE="jsonrpc"
+    fi
+  fi
+}
+
+function run_tests() {
+  echo "Launching all tests in ${feature}.feature with ${tag} tag."
+  echo "network=$network"
+  echo "tag=$tag"
+  echo "feature=$feature"
+  echo "CONNECTION_SCHEME=$CONNECTION_SCHEME"
+  echo "CONNECTION_URL=$CONNECTION_URL"
+  echo "CONNECTION_TYPE=$CONNECTION_TYPE"
+
+  if [[ "${feature}" == "all" ]];
+  then
+    behave --no-skipped --tags=$tag
+  else
+    behave --no-skipped --tags=$tag ./features/${feature}.feature
+  fi
+}
+
+while [ "$1" != "" ]; do
+  case $1 in
+    --clientType )
+      shift
+      clientType="${1:-$clientType}"
+      ;;
+
+    --network )
+      shift
+      network="${1:-$network}"
+      ;;
+
+    --tag )
+      shift
+      tag="${1:-$tag}"
+      ;;
+
+    --feature )
+      shift
+      feature="${1:-$feature}"
+      ;;
+
+    --help | * )
+      echo "${1} is not a valid flag"
+      usage
+  esac
+  shift
+done
+
+function validate_launch_dir() {
+  FILE=./behave.ini
+
+  if [[ ! -f ${FILE} ]]; then
+    echo "Please navigate to 'python' directory and relaunch."
+    script_teardown 1
+  fi
+}
+
+
+function validate_pip3() {
+  if which pip3 > /dev/null
+    then
+        # echo "Prerequisite check passed: pip3 is installed."
+        return
+    else
+        echo "Error. pip3 is not installed. Exiting setup..." 1>&2
+        script_teardown 1
+  fi
+}
+
+function validate_dependencies() {
+  declare -a packages=("xrpl-py" "behave" "PyHamcrest")
+
+  for package in "${packages[@]}"
+  do
+    if [ `pip3 list | grep -c $package` -eq 0 ]; 
+      then
+          echo "Required package ${package} not installed. Run './runSetup' first."
+          script_teardown 1
+  fi
+  done
+}
+
+# validate_launch_dir
+validate_pip3
+validate_dependencies
+
+validate_input_flags
+set_launch_vars
+load_feature_files
+run_tests
+script_teardown $?
