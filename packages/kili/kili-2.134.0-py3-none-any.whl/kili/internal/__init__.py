@@ -1,0 +1,56 @@
+"""Module for methods and classes that are for internal use by Kili Technology only."""
+
+from typeguard import typechecked
+
+from kili.core.helpers import format_result
+from kili.entrypoints.mutations.organization import MutationsOrganization
+from kili.entrypoints.mutations.project.queries import GQL_DELETE_PROJECT
+from kili.entrypoints.mutations.user.queries import GQL_RESET_PASSWORD
+from kili.entrypoints.queries.api_key import QueriesApiKey
+
+
+class KiliInternal(MutationsOrganization, QueriesApiKey):
+    """Inherit classes for internal use by Kili Technology only."""
+
+    def __init__(self, kili):
+        """Initializes the class.
+
+        Args:
+            kili: Kili object
+        """
+        self.kili = kili
+        super().__init__(self.kili.auth)
+
+    @typechecked
+    def reset_password(self, email: str):
+        """Reset password.
+
+        WARNING: This method is for internal use only.
+
+        Args:
+            email: Email of the person whose password has to be reset.
+
+        Returns:
+            A result object which indicates if the mutation was successful,
+                or an error message.
+        """
+        variables = {"where": {"email": email}}
+        result = self.auth.client.execute(GQL_RESET_PASSWORD, variables)
+        return format_result("data", result)
+
+    @typechecked
+    def delete_project(self, project_id: str):
+        """Delete project permanently.
+
+        WARNING: This resolver is for internal use by Kili Technology only.
+
+        Args:
+            project_id: Identifier of the project
+
+        Returns:
+            A result object which indicates if the mutation was successful,
+                or an error message.
+        """
+        variables = {"projectID": project_id}
+        result = self.auth.client.execute(GQL_DELETE_PROJECT, variables)
+        return format_result("data", result)
