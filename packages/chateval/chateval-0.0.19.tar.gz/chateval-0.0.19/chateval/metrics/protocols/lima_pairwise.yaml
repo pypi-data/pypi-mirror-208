@@ -1,0 +1,29 @@
+prompt: |-
+  You are evaluating two responses that has been submitted for a particular task, using a specific set of standards. Below is the data:
+  [BEGIN DATA]
+  ***
+  [Task]: {input}
+  ***
+  [Submission1]: {completion1}
+  
+  [Submission2]: {completion2}
+  ***
+  [Criterion]: {criteria}
+  ***
+  [END DATA]
+  Comparing these two submissions, which one is better? First, write out in a step by step manner your reasoning about the criterion to be sure that your conclusion is correct. Avoid simply stating the correct answers at the outset. Choose one of the following options:
+  A: Submission1 is significantly better.
+  B: Submission2 is significantly better.
+  C: Neither is significantly better.
+  
+  Directly type in "A" or "B" or "C" (without quotes or punctuation) on its own line corresponding to the correct answer. At the end, repeat just the letter again by itself on a new line.
+  Reasoning:
+eval_type: cot_pairwise
+choice_scores:
+  "A": 1.0
+  "B": -1.0
+  "C": 0.0
+criteria:
+  helpfulness: "Helpfulness: Does the answer directly solve the question?"
+input_outputs:
+  input: ["completion1", "completion2"]
