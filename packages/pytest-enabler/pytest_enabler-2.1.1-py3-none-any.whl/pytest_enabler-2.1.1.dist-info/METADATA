@@ -1,0 +1,70 @@
+Metadata-Version: 2.1
+Name: pytest-enabler
+Version: 2.1.1
+Summary: Enable installed pytest plugins
+Home-page: https://github.com/jaraco/pytest-enabler
+Author: Jason R. Coombs
+Author-email: jaraco@jaraco.com
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Framework :: Pytest
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: toml
+Requires-Dist: jaraco.functools
+Requires-Dist: jaraco.context
+Provides-Extra: docs
+Requires-Dist: sphinx (>=3.5) ; extra == 'docs'
+Requires-Dist: jaraco.packaging (>=9) ; extra == 'docs'
+Requires-Dist: rst.linker (>=1.9) ; extra == 'docs'
+Requires-Dist: furo ; extra == 'docs'
+Requires-Dist: sphinx-lint ; extra == 'docs'
+Provides-Extra: testing
+Requires-Dist: pytest (>=6) ; extra == 'testing'
+Requires-Dist: pytest-checkdocs (>=2.4) ; extra == 'testing'
+Requires-Dist: pytest-cov ; extra == 'testing'
+Requires-Dist: pytest-enabler (>=1.3) ; extra == 'testing'
+Requires-Dist: pytest-ruff ; extra == 'testing'
+Requires-Dist: types-toml ; extra == 'testing'
+Requires-Dist: pytest-black (>=0.3.7) ; (platform_python_implementation != "PyPy") and extra == 'testing'
+Requires-Dist: pytest-mypy (>=0.9.1) ; (platform_python_implementation != "PyPy") and extra == 'testing'
+
+.. image:: https://img.shields.io/pypi/v/pytest-enabler.svg
+   :target: https://pypi.org/project/pytest-enabler
+
+.. image:: https://img.shields.io/pypi/pyversions/pytest-enabler.svg
+
+.. image:: https://github.com/jaraco/pytest-enabler/workflows/tests/badge.svg
+   :target: https://github.com/jaraco/pytest-enabler/actions?query=workflow%3A%22tests%22
+   :alt: tests
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Code style: Black
+
+.. .. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
+..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
+
+.. image:: https://img.shields.io/badge/skeleton-2023-informational
+   :target: https://blog.jaraco.com/skeleton
+
+The 'enabler' plugin allows configuration of plugins if present, but omits the settings if the plugin is not present. For example, to configure black to be enabled if the plugin is present, but not when it is not, add the following to your pyproject.toml::
+
+    [tool.pytest-enabler.black]
+    addopts = "--black"
+
+Then, to temporarily disable a plugin, use pytest's built-in support for disabling a plugin::
+
+    pytest -p no:black
+
+Known to work with the following plugins:
+
+- pytest-black
+- pytest-cov
+- pytest-flake8
+- pytest-mypy
+- pytest-ruff
+- pytest-xdist
