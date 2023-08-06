@@ -1,0 +1,130 @@
+Metadata-Version: 2.1
+Name: get-github-code
+Version: 0.2
+Summary: a small python library to get code from github repositories.
+Home-page: https://github.com/Vlad2030/get-code-from-github
+License: GNU
+Keywords: urllib3,aiohttp,asyncio,orjson
+Author: vladdd0
+Author-email: vlad123123v@gmail.com
+Requires-Python: >=3.7.0,<4.0.0
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Environment :: Plugins
+Classifier: Framework :: AsyncIO
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Software Development :: Libraries
+Provides-Extra: all
+Provides-Extra: orjson
+Requires-Dist: aiohttp (>=3.8.3)
+Requires-Dist: asyncio (>=3.4.3)
+Requires-Dist: orjson (>=3.5.2) ; extra == "orjson" or extra == "all"
+Requires-Dist: urllib3 (>=1.26.5)
+Project-URL: Documentation, https://get-code-from-github.readthedocs.io/en/latest/
+Project-URL: Repository, https://github.com/Vlad2030/get-code-from-github
+Description-Content-Type: text/markdown
+
+## Get code from GitHub
+[![pypi](https://img.shields.io/pypi/v/get_github_code)](https://pypi.org/project/get-github-code/)
+[![](https://img.shields.io/pypi/pyversions/get_github_code)](https://pypi.org/project/get-github-code/)
+[![CodeFactor](https://www.codefactor.io/repository/github/vlad2030/get-code-from-github/badge/main)](https://www.codefactor.io/repository/github/vlad2030/get-code-from-github/overview/main)
+
+this is a small python library to get code from github repositories
+
+## How to install
+```bash
+pip3 install get_github_code
+```
+
+## Usage
+is easy to use
+
+```python
+from get_github_code import get_code
+
+code = get_code(
+    user="Vlad2030",
+    repo="get-code-from-github",
+    branch="main",
+    file_path="VERSION",
+)
+
+print(code)
+# 0.2
+```
+
+or asynchronous
+
+```python
+import asyncio
+from get_github_code import async_get_code
+
+async def main() -> None:
+    code = await async_get_code(
+        user="Vlad2030",
+        repo="get-code-from-github",
+        branch="main",
+        file_path="VERSION",
+    )
+
+    print(code)
+
+asyncio.run(main())
+# 0.2
+```
+
+additionally you can through the class by calling property
+
+```python
+import asyncio
+from get_github_code import GetCode
+
+file = GetCode(
+    user="Vlad2030",
+    repo="get-code-from-github",
+    branch="main",
+    file_path="VERSION",
+)
+
+print(file.get_code)
+# 0.2
+
+async def main() -> None:
+    file = GetCode(
+        user="Vlad2030",
+        repo="get-code-from-github",
+        branch="main",
+        file_path="VERSION",
+    )
+
+    print(file.async_get_code)
+
+asyncio.run(main())
+# 0.2
+```
+
+## Documentation
+[How to install](https://github.com/Vlad2030/get-code-from-github/blob/main/docs/install.md)
+
+[Classes/GetCode](https://github.com/Vlad2030/get-code-from-github/blob/main/docs/classes/GetCode.md)
+
+[functions/get_code](https://github.com/Vlad2030/get-code-from-github/blob/main/docs/functions/get_code.md)
+
+[functions/async_get_code](https://github.com/Vlad2030/get-code-from-github/blob/main/docs/functions/async_get_code.md)
+
+
+> 2023, version 0.2
