@@ -1,0 +1,219 @@
+{
+  "name": "TaDaemonPython",
+  "types": [
+    {
+      "name": "signandsubmit.mtx.algo.000",
+      "attributes": [
+        {
+          "type": "string",
+          "name": "TypeName",
+          "desc": "The TypeName of this type."
+        },
+        {
+          "type": "string",
+          "name": "SignerAddress",
+          "desc": "The public address for the desired final signer."
+        },
+        {
+          "type": "int",
+          "name": "Threshold",
+          "desc": "The threshold for the Multisig."
+        },
+        {
+          "type": "list[string]",
+          "name": "Addresses",
+          "desc": "The ordered list of addresses for the Multisig."
+        },
+        {
+          "type": "string",
+          "name": "Mtx",
+          "desc": "The encoded, partially signed MultisigTransaction."
+        }
+      ],
+      "axioms": [
+        {
+          "name": "Correct TypeName",
+          "number": 1,
+          "desc": "TypeName must be signandsubmit.mtx.algo.000"
+        },
+        {
+          "name": "Basic typing",
+          "number": 2,
+          "desc": "SignerAddress is string, Mtx is a string, Addresses is a list of strings, Threshold is an int."
+        },
+        {
+          "name": "Basic formatting",
+          "number": 3,
+          "desc": "SignerAddress has AlgoAddressString format, Mtx has AlgoMsgPackEncoded format, elts of Addresses have AlgoAddressString format."
+        },
+        {
+          "name": "Mtx is MultisigTransaction",
+          "number": 4,
+          "desc": "Once decoded, Mtx is a MultisigTransaction"
+        },
+        {
+          "name": "Internal consistency",
+          "number": 5,
+          "desc": "SignerAddress is one of the Addresses.\nThreshold is the threshold for the MultisigTransaction.\nAddresses are the list of addresses for the MultisigTransaction (order matters)."
+        },
+        {
+          "name": "Mtx threshold gets met",
+          "number": 6,
+          "desc": "Once the SignerAddress signs, the Mtx meets its threshold of signatures."
+        }
+      ],
+      "desc": "Meant for one account of a MultisigAccount to send to another account in that MultisigAccount for co-signing."
+    },
+    {
+      "name": "optin.tadeed.algo.001",
+      "attributes": [
+        {
+          "type": "string",
+          "name": "TypeName",
+          "desc": "The type_name of this type."
+        },
+        {
+          "type": "string",
+          "name": "TaDaemonAddr",
+          "desc": "The public address of the TaDaemon's algo account."
+        },
+        {
+          "type": "string",
+          "name": "TaOwnerAddr",
+          "desc": "The public address of the TaOwner account."
+        },
+        {
+          "type": "string",
+          "name": "ValidatorAddr",
+          "desc": "The public address of account for the Validator for this TaDeed."
+        },
+        {
+          "type": "string",
+          "name": "NewDeedOptInMtx",
+          "desc": "OptIn MultisigTransaction for the new TaDeed NFT."
+        }
+      ],
+      "axioms": [
+        {
+          "name": "Correct TypeName",
+          "number": 1,
+          "desc": "TypeName must be optin.tadeed.algo.001"
+        },
+        {
+          "name": "Basic typing",
+          "number": 2,
+          "desc": "TaDaemonAddr is a string, TaOwnerAddr is a string, ValidatorAddr is a string, NewDeedOptInMtx is a string."
+        },
+        {
+          "name": "Basic formatting",
+          "number": 3,
+          "desc": "TaDaemonAddr has AlgoAddressString format, TaOwnerAddr has AlgoAddressString format, ValidatorAddr has AlgoAddressString format, NewDeedOptInMtx has AlgoMsgPackEncoded format."
+        },
+        {
+          "name": "NewDeedOptInMtx must be MultisigTransaction",
+          "number": 4,
+          "desc": "Once decoded, NewDeedOptInMtx must be a MultisigTransaction"
+        },
+        {
+          "name": "NewDeedOptinMtx txn type check",
+          "number": 5,
+          "desc": "NewDeedOptinMtx transaction must be an OptIn Transaction"
+        },
+        {
+          "name": "Txn consistency check",
+          "number": 6,
+          "desc": "Txn sender is TaMulti, OptIn asset is a new TaDeed created and owned by GnfAdminAccount"
+        },
+        {
+          "name": "Old TaDeed check",
+          "number": 7,
+          "desc": "TaMulti 2-sig [GnfAdminAccount, TaDaemonAddr,\nTaOwnerAddr] owns exactly 1 TaDeed. The creator of the old TaDeed is either the GnfAdminAccount or the ValidatorMulti 2-sig [GnfAdminAccount, ValidatorAddr]. The asset index of the old TaDeed is\nless than the asset index of the new TaDeed. Finally, if the creator of the old TaDeed is the\nGnfAdminAccount, then the TaMulti is opted into (but does not own) exactly one TaDeed created by the\nValidatorMulti account and owned by the GnfAdminAccount."
+        },
+        {
+          "name": "Correctly signed",
+          "number": 8,
+          "desc": "NewDeedOptInMtx must be signed by Gnf Admin, and the signature must match the txn."
+        }
+      ],
+      "desc": "Message from GNodeFactory to PythonTaDaemon for TaMulti acct (2-sig [GnfAdmin, TaDaemon, TaOwner]) opting into new TaDeed."
+    },
+    {
+      "name": "exchange.tadeed.algo.010",
+      "attributes": [
+        {
+          "type": "string",
+          "name": "TypeName",
+          "desc": "The type_name of this type."
+        },
+        {
+          "type": "string",
+          "name": "TaDaemonAddr",
+          "desc": "The public address of the TaDaemon's algo account."
+        },
+        {
+          "type": "string",
+          "name": "TaOwnerAddr",
+          "desc": "The public address of the TaOwner account."
+        },
+        {
+          "type": "string",
+          "name": "ValidatorAddr",
+          "desc": "The public address of account for thee Validator for this TaDeed."
+        },
+        {
+          "type": "string",
+          "name": "NewTaDeedIdx",
+          "desc": "The asset index for the new TaDeed NFT."
+        },
+        {
+          "type": "string",
+          "name": "OldDeedTransferMtx",
+          "desc": "The encoded MultisigTransaction that can transfer the old TaDeed from the TaMulti back to the Gnf."
+        }
+      ],
+      "axioms": [
+        {
+          "name": "payload in api",
+          "number": 1,
+          "desc": "MessageType must be one of the TypeNames in this API "
+        },
+        {
+          "name": "Basic typing",
+          "number": 2,
+          "desc": "TaDaemonAddr is a string, TaOwnerAddr is a string, ValidatorAddr is a string, NewDeedOptInMtx is a string"
+        },
+        {
+          "name": "Basic formatting",
+          "number": 3,
+          "desc": "TaDaemonAddr has AlgoAddressString format, TaOwnerAddr has AlgoAddressString format, ValidatorAddr has AlgoAddressString format, NewDeedOptInMtx has AlgoMsgPackEncoded format"
+        },
+        {
+          "name": "OldDeedTransferMtx must be MultisigTransaction",
+          "number": 4,
+          "desc": "Once decoded, OldDeedTransferMtx must be a MultisigTransaction"
+        },
+        {
+          "name": "OldDeedTransferMtx txn type check",
+          "number": 5,
+          "desc": "OldDeedOptinMtx transaction must be an AssetTransferTxn"
+        },
+        {
+          "name": "Txn consistency check",
+          "number": 6,
+          "desc": "Total must be 1, sender must be TaMulti, receiver must be GnfAdmin, asset must be a TaDeed"
+        },
+        {
+          "name": "TaDeed order",
+          "number": 7,
+          "desc": "The asset index of the new TaDeed must be greater than the asset index of the old TaDeed"
+        },
+        {
+          "name": "Correctly signed",
+          "number": 8,
+          "desc": "OldDeedTransferMtx must be signed by GnfAdmin, and the signature must match the txn"
+        }
+      ],
+      "desc": "Message for exchanging the old TaDeed in the TaMulti acct (2-sig [GnfAdmin, TaDaemon, TaOwner]) account with the new TaDeed in the GnfAdmin account."
+    }
+  ]
+}
