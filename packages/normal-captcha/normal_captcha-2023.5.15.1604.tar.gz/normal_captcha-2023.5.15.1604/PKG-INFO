@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: normal_captcha
+Version: 2023.5.15.1604
+Summary: A tool for solve normal captcha
+Author-email: "ms5806166@gmail.com" <ms5806166@gmail.com>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: pytesseract==0.3.10
+Requires-Dist: Pillow==9.5.0
+
+````python
+from normal_captcha.main import NormalCaptcha
+
+text = (
+    NormalCaptcha(
+        './<imageName>',
+        'path\\to\\tesseract.exe')
+    .process()
+)
+print(text)
+````
