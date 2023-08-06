@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: elefantolib-fastapi
+Version: 0.2.5
+Summary: 
+Author: gglassota
+Author-email: gglassota2@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: elefantolib (>=0.11.1,<0.12.0)
+Requires-Dist: fastapi (>=0.95.1,<0.96.0)
+Requires-Dist: redis (>=4.5.5,<5.0.0)
+Description-Content-Type: text/markdown
+
+## Elefantolib for FastAPI
+
+> **_NOTE:_**  Only for this library developers. After clone this repository you should run command:
+> 
+
+ ```console 
+git config core.hooksPath .githooks
+```
+
+
+## Installation
+
+<div class="termy">
+
+```console
+poetry add elefantolib-fastapi
+```
+</div>
+
+## Example
+
+### Prepare
+
+* Add environmental variables
+
+```
+SECRET=
+ALGORITHM=
+ISSUER=
+```
+* Defaults:
+    
+    - SECRET - not set, this is required
+    - ALGORITHM=HS256
+    - ISSUER=Consumer
+
+### Create it
+
+* Create a file `main.py` with:
+
+```Python
+from elefantolib_fastapi.requests import Request
+from elefantolib_fastapi.routes import APIRoute
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+app.router.route_class = APIRoute
+
+
+@app.get('/')
+def index(request: Request):
+    # TODO something
+    response = request.pfm.services.some_service_name.get('path-to-endpoint')
+    return response
+
+```
