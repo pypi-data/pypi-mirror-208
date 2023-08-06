@@ -1,0 +1,110 @@
+Metadata-Version: 2.1
+Name: pyebsdindex
+Version: 0.1.2
+Summary: Python based tool for Hough/Radon based EBSD indexing
+Home-page: https://pyebsdindex.readthedocs.io
+Download-URL: https://pypi.python.org/pypi/pyebsdindex
+Author: ['Dave Rowenhorst', 'Håkon Wiik Ånes']
+Maintainer: Dave Rowenhorst
+Maintainer-email: 
+License: Custom
+Project-URL: Bug Tracker, https://github.com/USNavalResearchLaboratory/PyEBSDIndex/issues
+Project-URL: Documentation, https://pyebsdindex.readthedocs.io
+Project-URL: Source Code, https://github.com/USNavalResearchLaboratory/PyEBSDIndex
+Keywords: EBSD,electron backscatter diffraction,HI,Hough indexing,NLPAR
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: Other/Proprietary License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: License
+Requires-Dist: h5py
+Requires-Dist: matplotlib
+Requires-Dist: numpy
+Requires-Dist: numba
+Requires-Dist: pyswarms
+Requires-Dist: scipy
+Provides-Extra: all
+Requires-Dist: pyopencl ; extra == 'all'
+Requires-Dist: ray[default] (>=1.13) ; extra == 'all'
+Requires-Dist: nbsphinx (>=0.7) ; extra == 'all'
+Requires-Dist: numpydoc ; extra == 'all'
+Requires-Dist: pydata-sphinx-theme ; extra == 'all'
+Requires-Dist: sphinx (>=3.0.2) ; extra == 'all'
+Requires-Dist: sphinx-codeautolink[ipython] ; extra == 'all'
+Requires-Dist: sphinx-copybutton (>=0.2.5) ; extra == 'all'
+Requires-Dist: sphinx-design ; extra == 'all'
+Requires-Dist: sphinx-gallery ; extra == 'all'
+Requires-Dist: coverage (>=5.0) ; extra == 'all'
+Requires-Dist: pytest (>=5.4) ; extra == 'all'
+Requires-Dist: pytest-cov (>=2.8.1) ; extra == 'all'
+Provides-Extra: dev
+Requires-Dist: nbsphinx (>=0.7) ; extra == 'dev'
+Requires-Dist: numpydoc ; extra == 'dev'
+Requires-Dist: pydata-sphinx-theme ; extra == 'dev'
+Requires-Dist: sphinx (>=3.0.2) ; extra == 'dev'
+Requires-Dist: sphinx-codeautolink[ipython] ; extra == 'dev'
+Requires-Dist: sphinx-copybutton (>=0.2.5) ; extra == 'dev'
+Requires-Dist: sphinx-design ; extra == 'dev'
+Requires-Dist: sphinx-gallery ; extra == 'dev'
+Requires-Dist: coverage (>=5.0) ; extra == 'dev'
+Requires-Dist: pytest (>=5.4) ; extra == 'dev'
+Requires-Dist: pytest-cov (>=2.8.1) ; extra == 'dev'
+Requires-Dist: pyopencl ; extra == 'dev'
+Requires-Dist: ray[default] (>=1.13) ; extra == 'dev'
+Provides-Extra: doc
+Requires-Dist: nbsphinx (>=0.7) ; extra == 'doc'
+Requires-Dist: numpydoc ; extra == 'doc'
+Requires-Dist: pydata-sphinx-theme ; extra == 'doc'
+Requires-Dist: sphinx (>=3.0.2) ; extra == 'doc'
+Requires-Dist: sphinx-codeautolink[ipython] ; extra == 'doc'
+Requires-Dist: sphinx-copybutton (>=0.2.5) ; extra == 'doc'
+Requires-Dist: sphinx-design ; extra == 'doc'
+Requires-Dist: sphinx-gallery ; extra == 'doc'
+Provides-Extra: gpu
+Requires-Dist: pyopencl ; extra == 'gpu'
+Provides-Extra: parallel
+Requires-Dist: ray[default] (>=1.13) ; extra == 'parallel'
+Provides-Extra: tests
+Requires-Dist: coverage (>=5.0) ; extra == 'tests'
+Requires-Dist: pytest (>=5.4) ; extra == 'tests'
+Requires-Dist: pytest-cov (>=2.8.1) ; extra == 'tests'
+
+# PyEBSDIndex
+
+Python based tool for Hough/Radon based EBSD orientation indexing.
+
+[![Build status](https://github.com/USNavalResearchLaboratory/PyEBSDIndex/actions/workflows/build.yml/badge.svg)](https://github.com/USNavalResearchLaboratory/PyEBSDIndex/actions/workflows/build.yml)
+[![Documentation status](https://readthedocs.org/projects/pyebsdindex/badge/?version=latest)](https://pyebsdindex.readthedocs.io/en/latest/)
+[![PyPI version](https://img.shields.io/pypi/v/pyebsdindex.svg)](https://pypi.python.org/pypi/pyebsdindex)
+
+The pattern processing is based on a GPU pipeline, and is based on the work of S. I.
+Wright and B. L. Adams. Metallurgical Transactions A-Physical Metallurgy and Materials
+Science, 23(3):759–767, 1992, and N. Krieger Lassen. Automated Determination of Crystal
+Orientations from Electron Backscattering Patterns. PhD thesis, The Technical University
+of Denmark, 1994.
+
+The band indexing is achieved through triplet voting using the methods outlined by A.
+Morawiec. Acta Crystallographica Section A Foundations and Advances, 76(6):719–734,
+2020.
+
+Additionally NLPAR pattern processing is included (original distribution
+[NLPAR](https://github.com/USNavalResearchLaboratory/NLPAR); P. T. Brewick, S. I.
+Wright, and D. J. Rowenhorst. Ultramicroscopy, 200:50–61, May 2019.).
+
+Documentation with installation instructions, a user guide, API reference, changelog,
+and contributing guide is available at https://pyebsdindex.readthedocs.io.
+
+## Installation
+
+See [the documentation](https://pyebsdindex.readthedocs.io/en/latest/installation.html)
+for installation instructions.
