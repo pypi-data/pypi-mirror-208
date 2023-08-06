@@ -1,0 +1,39 @@
+<div class="nav-wrapper">
+    <label class="sidebar-toggle primary-toggle" for="__primary">
+        <i class="material-icons">menu</i>
+    </label>
+    <div class="headnav-items__start">
+        <div class="headnav-item hide-on-small-only">
+            {%- include "brand-logo.html" %}
+        </div>
+    </div>
+    <div class="headnav-items__content">
+        <div class="me-auto headnav-items__center">
+            {% include "components/headnav-items.html" %}
+        </div>
+        <div class="headnav-items__end">
+            <div class="headnav-item">
+                <ul>
+                    <li>
+                        {% include "search-button.html" %}
+                    </li>
+                    <li>
+                        <a id="theme-switch" href="#"><i class="material-icons">dark_mode</i></a>
+                    </li>
+                    {{ _icon_declare.declare_icon_links(theme_header_icons) }}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="headnav-persistent--mobile">
+        <ul>
+            <li>
+                {%- include "search-button.html" %}
+            </li>
+            <li>
+                <a id="theme-switch--mobile" href="#"><i class="material-icons">dark_mode</i></a>
+            </li>
+        </ul>
+    </div>
+</div>

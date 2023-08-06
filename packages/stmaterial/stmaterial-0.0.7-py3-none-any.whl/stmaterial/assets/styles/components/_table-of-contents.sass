@@ -1,0 +1,58 @@
+.stm-toc
+  height: 100%
+
+.toc-wrapper
+  position: sticky
+  top: calc($navbar-height + 2.8rem + 15px)
+  overflow: auto
+  max-height: calc(100vh - $navbar-height - 2.8rem - 15px)
+
+.toc-scroll
+  .nav
+    display: none
+
+    &.visible
+      display: block
+
+    >.active>ul
+      display: block
+
+.toc-title
+  display: flex
+  gap: 0.25em
+  padding-left: 16px
+  border-left: 1px solid var(--separator-color)
+
+ul.table-of-contents
+  margin-bottom: 0
+  margin-top: 0
+  font-size: 1rem
+
+  li
+    width: 100%
+    word-wrap: break-word
+    border-left: 1px solid var(--separator-color)
+
+    a
+      display: inline-block
+      font-size: 14px
+      font-weight: 400
+      color: var(--font-color-medium)
+      padding-left: 16px
+      height: 1.5rem
+      line-height: 1.5rem
+      width: 100%
+      word-wrap: break-word
+
+      &:hover
+        color: lighten(#757575, 20%)
+        padding-left: 15px
+        border-left: 1px solid var(--primary-color)
+
+    ul
+      padding: 0 0 0 1rem
+
+    &.scroll-current >.reference
+      border-left: 1px solid var(--primary-color-raised-focus-solid)
+      color: var(--primary-color-raised-focus-solid)
+      font-weight: bold

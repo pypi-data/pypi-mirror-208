@@ -1,0 +1,145 @@
+// Colors used throughout this theme.
+//
+// The aim is to give the user more control. Thus, instead of hard-coding colors
+// in various parts of the stylesheet, the approach taken is to define all
+// colors as CSS variables and reusing them in all the places.
+//
+// `colors-dark` depends on `colors` being included at a lower specificity.
+
+@mixin colors {
+  // primary and secondary color
+  --primary-color: #26a69a;
+  --primary-color-dark: #009688;
+  --primary-color-numeric: 38, 166, 154;
+  --primary-color-raised-hover-solid: #30b0a4;
+  --primary-color-raised-focus-solid: #44c4b8;
+  --primary-color-font-medium-color: rgba(var(--primary-color-numeric), 0.7);
+  --primary-color-font-disabled-color: rgba(var(--primary-color-numeric), 0.4);
+  --primary-color-hover-opaque: rgba(var(--primary-color-numeric), 0.06);
+  --primary-color-focus-opaque: rgba(var(--primary-color-numeric), 0.18);
+  --secondary-color: #ef5350;
+  --secondary-color-hover-solid: #fe625f;
+  --secondary-color-focus-solid: #ff7b78;
+
+  // font related color
+  --font-color-main: rgba(0, 0, 0, 0.87);
+  --font-color-medium: rgba(0, 0, 0, 0.56);
+  --font-color-disabled: rgba(0, 0, 0, 0.38);
+  --font-on-primary-color-main: rgba(255, 255, 255, 0.87);
+  --font-on-primary-color-dark-main: rgba(255, 255, 255, 0.87);
+  --font-on-primary-color-dark-medium: rgba(255, 255, 255, 0.6);
+  --font-on-primary-color-medium: rgba(255, 255, 255, 0.6);
+  --font-on-primary-color-disabled: rgba(255, 255, 255, 0.38);
+  --font-on-secondary-color-main: rgba(0, 0, 0, 0.87);
+
+  // background color
+  --surface-color: #eeeeee;
+  --background-color: #ffffff;
+  --background-color-sidenav: aliceblue;
+  --background-color-disabled: rgba(0, 0, 0, 0.12);
+  --background-color-level-4dp: rgba(0, 0, 0, 0.09);
+  --background-color-level-16dp-solid: var(--surface-color);
+  --background-color-slight-emphasis: rgba(0, 0, 0, 0.025);
+  --background-color-card: var(--surface-color);
+
+  // others color
+  --hover-color: rgba(0, 0, 0, 0.04);
+  --focus-color: rgba(0, 0, 0, 0.12);
+  --focus-color-solid: #e0e0e0;
+  --tooltip-background-color: #313033;
+  --tooltip-font-color: rgba(255, 255, 255, 0.77);
+  --separator-color: #dddddd;
+  --error-color: #f44336;
+  --slider-track-color: rgba(0, 0, 0, 0.26);
+  --switch-thumb-off-color: #ffffff;
+  --carousel-indicator-color: rgba(255, 255, 255, 0.45);
+  --carousel-indicator-active-color: #fff;
+  --md_sys_color_on-surface: 28, 27, 31;
+
+  //dependent variables
+  --color-highlighted-background: var(--focus-color);
+  --color-highlighted-text: var(--secondary-color-focus-solid);
+  --button-raised-background-hover: var(--primary-color-raised-hover-solid);
+
+  // colors from furo
+  --color-background-hover--transparent: #efeff400;
+  --color-background-border: #eeebee;
+  --color-highlight-on-target: #ffffcc;
+  --color-background-hover: #efeff4ff;
+  --color-problematic: #b30000;
+  --color-table-header-background: var(--background-color-slight-emphasis);
+  --color-table-border: var(--color-background-border);
+  --color-api-background: var(--color-background-hover--transparent);
+  --color-api-background-hover: var(--color-background-hover);
+  --color-api-overall: var(--font-color-medium);
+  --color-api-name: var(--color-problematic);
+  --color-api-pre-name: var(--color-problematic);
+  --color-api-paren: var(--font-color-medium);
+  --color-api-keyword: var(--font-color-main);
+
+  // GUI Labels
+  --color-guilabel-background: #ddeeff80;
+  --color-guilabel-border: #bedaf580;
+  --color-guilabel-text: var(--font-color-main);
+  // Dropdown colors
+  --dropdown-color: var(--primary-color);
+
+  --input-focus-color: var(--secondary-color-focus-solid);
+}
+
+@mixin colors-dark {
+  // primary and secondary color
+  --primary-color: #b39ddb;
+  --primary-color-dark: #9575cd;
+  --primary-color-numeric: 179, 157, 219;
+  --primary-color-raised-hover-solid: #c2acea;
+  --primary-color-raised-focus-solid: #dbc5ff;
+  --secondary-color: #cddc39;
+  --secondary-color-hover-solid: #dceb48;
+  --secondary-color-focus-solid: #f5ff61;
+  // font related color
+  --font-color-main: rgba(255, 255, 255, 0.87);
+  --font-color-medium: rgba(255, 255, 255, 0.6);
+  --font-color-disabled: rgba(255, 255, 255, 0.38);
+  --font-on-primary-color-main: rgba(0, 0, 0, 0.87);
+  --font-on-primary-color-dark-main: rgba(255, 255, 255, 0.87);
+  --font-on-primary-color-dark-medium: rgba(255, 255, 255, 0.6);
+  --font-on-primary-color-medium: rgba(0, 0, 0, 0.56);
+  --font-on-primary-color-disabled: rgba(0, 0, 0, 0.38);
+
+  // background color
+  --surface-color: #242424;
+  --background-color: #121212;
+  --background-color-sidenav: #121212;
+  --background-color-disabled: rgba(255, 255, 255, 0.12);
+  --background-color-level-4dp: rgba(255, 255, 255, 0.09);
+  --background-color-level-16dp-solid: #262626;
+  --background-color-card: var(--surface-color);
+  --background-color-slight-emphasis: rgba(255, 255, 255, 0.05);
+
+  // others color
+  --hover-color: rgba(255, 255, 255, 0.04);
+  --focus-color: rgba(255, 255, 255, 0.12);
+  --focus-color-solid: #424242;
+  --separator-color: #424242;
+  --error-color: #cf6679;
+  --slider-track-color: rgba(255, 255, 255, 0.26);
+  --switch-thumb-off-color: #bababa;
+  --md_sys_color_on-surface: 230, 225, 229;
+
+  //tmp definition
+  --color-highlighted-background: var(--focus-color);
+  --color-highlighted-text: var(--secondary-color-focus-solid);
+
+  // colors from furo
+  --color-background-hover: #1e2124ff;
+  --color-problematic: #ee5151;
+  --color-background-hover--transparent: #1e212400;
+  --color-background-border: #303335;
+  --color-highlight-on-target: #333300;
+  --color-api-keyword: var(--font-color-medium);
+
+  // GUI Labels
+  --color-guilabel-background: #08356380;
+  --color-guilabel-border: #13395f80;
+}
