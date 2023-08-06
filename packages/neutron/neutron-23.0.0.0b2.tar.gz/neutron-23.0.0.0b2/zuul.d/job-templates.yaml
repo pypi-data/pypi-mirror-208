@@ -1,0 +1,137 @@
+- project-template:
+    name: neutron-tox-override-jobs
+    check:
+      jobs:
+        - openstack-tox-py38:  # from openstack-python3-jobs template
+            timeout: 3600
+            irrelevant-files:  &irrelevant-files
+              - ^\.pylintrc$
+              - ^.*\.conf\.sample$
+              - ^.*\.rst$
+              - ^doc/.*$
+              - ^neutron/locale/.*$
+              - ^neutron/tests/fullstack/.*$
+              - ^neutron/tests/functional/.*$
+              - ^releasenotes/.*$
+              - ^setup.cfg$
+              - ^plugin.spec$
+              - ^tools/ovn_migration/.*$
+              - ^tools/.*$
+              - ^vagrant/.*$
+              - ^devstack/.*$
+              - ^playbooks/.*$
+              - ^roles/.*$
+              - ^rally-jobs/.*$
+              - ^zuul.d/(?!(job-templates)).*\.yaml
+        - openstack-tox-py39: # from openstack-python3-jobs template
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+        - openstack-tox-py310: # from openstack-python3-jobs template
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+        # NOTE(ralonsoh): to be updated when "openstack-tox-py311" is defined
+        # and added to "openstack-python3-jobs" template.
+        - tox-py311:
+            voting: false
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+        - openstack-tox-cover:  # from openstack-cover-jobs template
+            timeout: 4800
+            irrelevant-files:  *irrelevant-files
+    check-arm64:
+      jobs:
+        - openstack-tox-py38-arm64: # from openstack-python3-jobs-arm64 template
+            timeout: 4800
+            irrelevant-files:  *irrelevant-files
+        - openstack-tox-py39-arm64: # from openstack-python3-jobs-arm64 template
+            timeout: 4800
+            irrelevant-files:  *irrelevant-files
+        - openstack-tox-py310-arm64: # from openstack-python3-jobs-arm64 template
+            timeout: 4800
+            irrelevant-files:  *irrelevant-files
+    gate:
+      jobs:
+        - openstack-tox-py38:  # from openstack-python3-jobs template
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+        - openstack-tox-py39:  # from openstack-python3-jobs template
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+        - openstack-tox-py310: # from openstack-python3-jobs template
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+
+- project-template:
+    name: neutron-experimental-jobs
+    experimental:
+      jobs:
+        - neutron-functional-with-uwsgi-with-neutron-lib-master
+        - neutron-fullstack-with-uwsgi-with-neutron-lib-master
+        - neutron-ovn-tempest-full-multinode-ovs-master
+        - neutron-ovn-grenade-multinode
+        - neutron-ovn-tempest-ovs-master
+        - neutron-ovn-tempest-ovs-release
+        - neutron-ovs-tempest-with-neutron-lib-master
+        - neutron-ovn-tempest-with-uwsgi-loki
+
+- project-template:
+    name: neutron-periodic-jobs
+    periodic:
+      jobs: &neutron-periodic-jobs
+        # NOTE(ralonsoh): to be removed when "openstack-tox-py311" is defined
+        # and added to "openstack-python3-jobs" template.
+        - tox-py311:
+            timeout: 3600
+        - neutron-functional
+        - neutron-functional-with-uwsgi-fips
+        - neutron-functional-with-pyroute2-master
+        - neutron-functional-with-sqlalchemy-master
+        - neutron-fullstack
+        - neutron-fullstack-with-uwsgi-fips
+        - neutron-fullstack-with-pyroute2-master
+        - neutron-ovs-tempest-slow
+        - neutron-ovn-tempest-slow
+        - neutron-ovs-tempest-with-os-ken-master
+        - neutron-ovn-tempest-postgres-full
+        - neutron-ovn-tempest-mariadb-full
+        - neutron-ovn-tempest-ipv6-only-ovs-master
+        - neutron-ovn-tempest-ovs-master-centos-9-stream
+        - neutron-ovn-tempest-with-neutron-lib-master
+        - neutron-ovn-tempest-with-sqlalchemy-master
+        - neutron-ovs-tempest-with-sqlalchemy-master
+        - neutron-ovs-tempest-fips
+        - neutron-ovn-tempest-ovs-release-fips
+        - devstack-tobiko-neutron:
+            voting: true
+        - ironic-tempest-ipa-wholedisk-bios-agent_ipmitool-tinyipa
+        - openstacksdk-functional-devstack-networking
+        - neutron-linuxbridge-tempest-plugin-scenario-nftables
+        - neutron-ovs-tempest-plugin-scenario-iptables_hybrid-nftables
+        - devstack-enforce-scope
+        - openstack-tox-py39-with-oslo-master:
+            timeout: 3600
+            irrelevant-files:  *irrelevant-files
+        - neutron-functional-with-oslo-master
+        - neutron-ovs-tempest-with-oslo-master
+        - neutron-ovn-tempest-ovs-release-with-oslo-master
+    experimental:
+      jobs: *neutron-periodic-jobs
+
+- project-template:
+    name: neutron-skip-level-jobs
+    # NOTE(ralonsoh): during Bobcat (non SLURP release), these
+    # jobs are not executed in the "check" queue.
+    #check:
+    #  jobs:
+    #    - neutron-ovs-grenade-multinode-skip-level:
+    #        voting: false
+    #    - neutron-ovn-grenade-multinode-skip-level:
+    #        voting: false
+    periodic:
+      jobs:
+        - neutron-ovs-grenade-multinode-skip-level
+        - neutron-ovn-grenade-multinode-skip-level
+    experimental:
+      jobs:
+        - neutron-ovs-grenade-multinode-skip-level
+        - neutron-ovn-grenade-multinode-skip-level
