@@ -1,0 +1,118 @@
+[project]
+name = "cellfinder-core"
+description = "Automated 3D cell detection in large microscopy images"
+readme = "README.md"
+authors = [
+    {name = "Adam Tyson, Christian Niedworok, Charly Rousseau", email = "code@adamltyson.com"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "dask[array]",
+    "fancylog>=0.0.7",
+    "imlib>=0.0.26",
+    "natsort",
+    "numba",
+    "numpy",
+    "scikit-image",
+    "scikit-learn",
+    # See https://github.com/brainglobe/cellfinder-core/issues/103 for < 2.12.0 pin
+    "tensorflow-macos>=2.5.0,<2.12.0; platform_system=='Darwin' and platform_machine=='arm64'",
+    "tensorflow>=2.5.0,<2.12.0; platform_system!='Darwin' or platform_machine!='arm64'",
+    "tifffile",
+    "tqdm",
+]
+dynamic = ['version']
+
+[project.urls]
+Homepage = "https://brainglobe.info/cellfinder"
+"Source Code" = "https://github.com/brainglobe/cellfinder-core"
+"Bug Tracker" = "https://github.com/brainglobe/cellfinder-core/issues"
+Documentation = "https://docs.brainglobe.info/cellfinder"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "gitpython",
+    "pre-commit",
+    "pyinstrument",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-timeout",
+    "tox",
+]
+
+[project.scripts]
+cellfinder_download = "cellfinder_core.download.cli:main"
+cellfinder_train = "cellfinder_core.train.train_yml:cli"
+
+[build-system]
+requires = [
+    "setuptools>=45",
+    "wheel",
+    "setuptools_scm[toml]>=6.2",
+]
+build-backend = 'setuptools.build_meta'
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools_scm]
+
+[tool.cibuildwheel]
+build = "cp38-* cp39-* cp310-*"
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=cellfinder_core --cov-report=xml"
+filterwarnings = [
+    "error",
+    # Raised by tensorflow; should be removed when tensorflow 2.12.0 is released. Fix is:
+    # https://github.com/tensorflow/tensorflow/commit/b23c5750c9f35a87872793eef7c56e74ec55d4a7
+    "ignore:`np.bool8` is a deprecated alias for `np.bool_`",
+    # See https://github.com/numba/numba/issues/8676
+    "ignore:.*:numba.core.errors.NumbaTypeSafetyWarning"
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "serial",
+]
+log_level = "WARNING"
+
+[tool.black]
+target-version = ['py38', 'py39', 'py310']
+skip-string-normalization = false
+line-length = 79
+
+[tool.ruff]
+line-length = 79
+exclude = ["__init__.py","build",".eggs"]
+select = ["I", "E", "F"]
+fix = true
+
+[tool.ruff.isort]
+known-first-party = ["cellfinder_core"]
+
+[tool.mypy]
+python_version = "3.8"
+
+[[tool.mypy.overrides]]
+module = [
+    "cellfinder_core.detect.*",
+]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
