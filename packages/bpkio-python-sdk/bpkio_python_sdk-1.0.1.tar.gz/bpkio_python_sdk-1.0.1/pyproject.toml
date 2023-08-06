@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "bpkio-python-sdk"
+version = "1.0.1"
+description = "An (opinionated) Python SDK for the broadpeak.io REST APIs"
+authors = ["Fabre Lambeau <fabre.lambeau@gmail.com>"]
+readme = "README.md"
+packages = [{include = "bpkio_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^1.10.7"
+uplink = "^0.9.7"
+setuptools = "^67.6.1"
+m3u8 = "^3.4.0"
+lxml = "^4.9.2"
+diskcache = "^5.4.0"
+mpd-parser = "^0.1.2"
+pymediainfo = "^6.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+pytest = "^7.2.2"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+graphviz = "^0.20.1"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
