@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: ngdataenginterface
+Version: 0.0.4
+Summary: A library for facilitating the development of data engineering pipelines
+Author: NG.CASH
+Requires-Python: >=3.9,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: boto3 (>=1.26.133,<2.0.0)
+Requires-Dist: pyspark (>=3.4.0,<4.0.0)
+Requires-Dist: pytest (>=6.2.5,<7.0.0)
+Requires-Dist: pytest-cov (>=3.0.0,<4.0.0)
+Description-Content-Type: text/markdown
+
+# ngdataenginterface
+
+## Installation
+
+To install the `ngdataenginterface` package from PyPI, you can use `pip`:
+
+```shell
+pip install ngdataenginterface
+```
+
+## installing a Specific Version
+
+If you need to install a specific version of the package, you can specify it using the == operator:
+
+```shell 
+pip install ngdataenginterface==1.0.0
+```
+
+Replace 1.0.0 with the desired version number.
+
+## Development
+
+### Instaling Java and PySpark
+
+PySpark uses Java underlying hence you need to have Java on your Mac. Since Java is a third party, you can install it using the Homebrew command brew. Since Oracle Java is not open source anymore, I am using the OpenJDK version 11. Run the below command in the terminal to install it.
+
+```shell
+brew install openjdk@11
+```
+
+### Creating a Virtual Environment
+
+It's recommended to create a virtual environment before working on the ngdataenginterface package. You can use venv to create a virtual environment:
+
+```shell
+python -m venv myenv
+```
+
+Activate the virtual environment:
+- On Windows
+```shell
+.\env\Scripts\activate
+```
+- On macOS and Linux
+```shell
+source myenv/bin/activate
+```
+
+### Installing Locally
+
+To install the ngdataenginterface package locally for development, navigate to the package directory and run:
+
+```shell
+pip install -e .
+```
+
+The -e flag stands for "editable," which creates a symbolic link to the package directory. This allows you to make changes to the code and see the effects without reinstalling the package.
