@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: bgrm
+Version: 11
+Summary: Remove backgrounds from video feeds in your web cam applications.
+Home-page: https://github.com/blueOkiris/bgrm
+License: GPL-3.0-only
+Keywords: bgrm,background,removal,teams,linux,mediapipe,opencv,bg,rm
+Author: Dylan Turner
+Author-email: dylan.turner@tutanota.com
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: cvzone (==1.5.3)
+Requires-Dist: mediapipe (==0.10.0)
+Requires-Dist: opencv-python (==4.6.0.66)
+Requires-Dist: protobuf (==3.20.2)
+Requires-Dist: v4l2-python3 (==0.3.1)
+Project-URL: Repository, https://github.com/blueOkiris/bgrm
+Description-Content-Type: text/markdown
+
+# Background Remover
+
+## The Need
+
+It's been good long while since Microsoft first released a Teams version for Linux and yet, one of Teams' coolest features doesn't exist in said Linux version: removable backgrounds. As someone who uses Linux for their daily driver, this annoys me.
+
+Well, I'm an engineer, so of course, I found a solution.
+
+Using OpenCV and a v4l2loopback device (basically a virtual webcam you can write data to), I threw together a Python application that takes your normal webcam input, removes and replaces the background, and outputs that to the created video device. Problem solved :)
+
+Note, this will work anywhere WebCams are used, not just Teams
+
+Now, the program can also be used to remove backgrounds from video files and save them as video files as well!
+
+## How to Use
+
+### WebCam Replacement
+
+Dependencies:
+  - x86 or x64 only as mediapipe, a dependency, doesn't support ARM
+    + Although, there are versions of mediapipe that may work if you have Apple Silicon or a Raspberry Pi
+    + If on ARM, you'll have to install from the GitHub source and modify pyproject.toml to use a custom mediapipe library like [mediapipe-silicon](https://pypi.org/project/mediapipe-silicon/) or [mediapipe-rpi4](https://pypi.org/project/mediapipe-rpi4/)  or something else
+  - python >= 3.8 (3.11 is what's supported officially)
+  - pip
+  - v4l2loopback
+
+Setup:
+1. Configure v4l2loopback (may not be necessary):
+  - Recommended something like this:
+    ```
+    export DEVICE_ARR=(`ls /sys/devices/virtual/video4linux | tr -d 'video'`); \
+    sudo modprobe v4l2loopback \
+        devices=1 exclusive_caps=1 video_nr=${DEVICE_ARR[1]} max_buffers=2 \
+        card_label=v4l2lo
+    ```
+2. Install with `pip install bgrm`
+
+Then, you can run: 
+- Run with `python -m bgrm <options>` (use `--help` to see all options)
+- Example: `python -m bgrm -b ~/Pictures/Wallpapers/ni-skyline-wallpaper.png -w 320 -H 240 -s 2.0`
+
+### File Replacement
+
+You can also remove the background from video files. It works just like the WebCam, but instead of setting the `--camera` cli arg, you call the program like this:
+
+`python -m bgrm --file_mode -i <input file> -o <output file> <other options>`
+
+## Build from Repo
+
+You can also build the package yourself from source (or grab the latest version from the releases tab)
+
+To do that you need the "poetry" build system.
+
+Run `poetry build` and install the whl from the dist/ folder
+
