@@ -1,0 +1,35 @@
+Tests of the (slightly) customized collections in ``plib.stdlib.coll``,
+to ensure that the ``nextitem`` methods retrieve the appropriate "next"
+member of the collection.
+
+    >>> from plib.stdlib import coll
+
+The ``fifo`` collection should retrieve the "oldest" item. Note that
+we say ``list(f)`` to display the object because the ``repr`` of the
+object itself is not consistent across platforms.
+
+    >>> f = coll.fifo()
+    >>> f.append(1)
+    >>> list(f)
+    [1]
+    >>> f.append(2)
+    >>> list(f)
+    [1, 2]
+    >>> f.nextitem()
+    1
+    >>> f.nextitem()
+    2
+
+The ``stack`` collection should retrieve the most recent item.
+
+    >>> s = coll.stack()
+    >>> s.append(1)
+    >>> s
+    [1]
+    >>> s.append(2)
+    >>> s
+    [1, 2]
+    >>> s.nextitem()
+    2
+    >>> s.nextitem()
+    1
