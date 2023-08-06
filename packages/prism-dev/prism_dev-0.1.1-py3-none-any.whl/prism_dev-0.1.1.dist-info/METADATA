@@ -1,0 +1,146 @@
+Metadata-Version: 2.1
+Name: prism-dev
+Version: 0.1.1
+Summary: The easiest way to create data pipelines in Python.
+Author: prism founders
+Author-email: hello@runprism.com
+License: Apache-2.0
+Project-URL: homepage, https://www.runprism.com
+Project-URL: documentation, https://docs.runprism.com
+Project-URL: repository, https://github.com/runprism/prism
+Platform: unix
+Platform: linux
+Platform: osx
+Platform: win32
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: astor (>=0.7)
+Requires-Dist: boto3 (>=1)
+Requires-Dist: botocore (>=1)
+Requires-Dist: click (>=8)
+Requires-Dist: networkx (>=2)
+Requires-Dist: numpy (>=1)
+Requires-Dist: pandas (>=1)
+Requires-Dist: PyYAML (>=6)
+Requires-Dist: requests (>=2)
+Requires-Dist: Jinja2 (==3.1.2)
+Requires-Dist: MarkupSafe (>=2.0)
+Requires-Dist: coolname (>=2.2)
+Requires-Dist: shortuuid (>=1.0)
+Requires-Dist: rich-argparse (>=1.1.0)
+Provides-Extra: bigquery
+Requires-Dist: google-api-python-client (>=2) ; extra == 'bigquery'
+Requires-Dist: google-auth (>=2) ; extra == 'bigquery'
+Requires-Dist: google-cloud-bigquery (>=2) ; extra == 'bigquery'
+Requires-Dist: db-dtypes (>=1) ; extra == 'bigquery'
+Provides-Extra: dbt
+Requires-Dist: dbt-core (>=1) ; extra == 'dbt'
+Provides-Extra: docker
+Requires-Dist: docker (>=6.0) ; extra == 'docker'
+Provides-Extra: postgres
+Requires-Dist: psycopg2-binary (>=2.9) ; extra == 'postgres'
+Provides-Extra: pyspark
+Requires-Dist: pyspark (>=3) ; extra == 'pyspark'
+Provides-Extra: redshift
+Requires-Dist: psycopg2-binary (>=2.9) ; extra == 'redshift'
+Provides-Extra: snowflake
+Requires-Dist: snowflake-connector-python (>=2) ; extra == 'snowflake'
+Requires-Dist: pyarrow (<10.1.0,>=10.0.1) ; extra == 'snowflake'
+Provides-Extra: testing
+Requires-Dist: dbt-snowflake (>=1) ; extra == 'testing'
+Requires-Dist: pytest (>=7) ; extra == 'testing'
+Requires-Dist: fastparquet (<1,>=0.8) ; extra == 'testing'
+Requires-Dist: tox (>=3.24) ; extra == 'testing'
+Provides-Extra: trino
+Requires-Dist: trino (>=0.319) ; extra == 'trino'
+
+<p align="center">
+  <img src="https://github.com/runprism/prism/raw/main/.github/prism_logo_light.png" alt="prism logo" width="350"/>
+</p>
+<p align="center">
+    <a href="https://pypi.python.org/pypi/prism-ds/" alt="PyPI version">
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/prism-ds?color=2081c1&labelColor=090422"></a>
+    <a href="https://pepy.tech/badge/prism-ds/" alt="Downloads">
+        <img src="https://static.pepy.tech/personalized-badge/prism-ds?period=total&units=international_system&left_color=black&right_color=blue&left_text=Downloads"/>
+    </a>
+</p>
+<div align="center">
+
+[![CI Linux](https://github.com/runprism/prism/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/runprism/prism/actions/workflows/ci-linux.yml)
+[![CI MacOS](https://github.com/runprism/prism/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/runprism/prism/actions/workflows/ci-macos.yml)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+
+
+</div>
+
+# :wave: Welcome to Prism!
+[Prism](https://www.runprism.com/) is the easiest way to create data pipelines in Python.
+
+## Introduction
+Data projects often require multiple steps that need to be executed in sequence (think extract-transform-load, data wrangling, etc.). With Prism, users can break down their project into modular tasks, manage dependencies, and execute complex computations in sequence.
+
+Here are some of Prism's main features:
+- **Real-time dependency declaration**: With Prism, analysts can declare dependencies using a simple function call. No need to explicitly keep track of the pipeline order — at runtime, Prism automatically parses the function calls and builds the dependency graph.
+- **Intuitive logging**: Prism automatically logs events for parsing the configuration files, compiling the tasks and creating the DAG, and executing the tasks. No configuration is required.
+- **Flexible CLI**: Users can instantiate, compile, and run projects using a simple, but powerful command-line interface.
+- **“Batteries included”**: Prism comes with all the essentials needed to get up and running quickly. Users can create and run their first DAG in less than 2 minutes. 
+- **Integrations**: Prism integrates with several tools that are popular in the data community, including Snowflake, Google BigQuery, Redshift, PySpark, and dbt. We're adding more integrations every day, so let us know what you'd like to see!
+
+
+## Getting Started
+
+Prism can be installed via ```pip```. Prism requires Python >= 3.7.
+
+```
+pip install --upgrade pip
+pip install prism-ds
+```
+
+To get started with Prism projects, check out our [documentation](https://docs.runprism.com). Some sections of interest include:
+
+- :key: [Fundamentals](https://docs.runprism.com/fundamentals)
+- :seedling: [CLI](https://docs.runprism.com/cli)
+- :electric_plug: [Integrations](https://docs.runprism.com/integrations)
+- :bulb: [Use Cases](https://docs.runprism.com/use-cases)
+
+In addition, check out some [example projects](https://github.com/runprism/prism_examples).
+
+
+## Integrations
+Prism integrates with a wide variety of third-party developer tools There are two kinds of integrations that Prism supports: adapters, and agents.
+
+### Adapters
+Adapters allow users to connect to data warehouses or analytics engines. Prism currently supports the following adapters:
+| Adapter      | Command |
+| ------------ | ----------- |
+| **dbt** | ```pip install "prism-ds[dbt]"``` |
+| **Google BigQuery** | ```pip install "prism-ds[bigquery]"``` |
+| **Postgres** | ```pip install "prism-ds[postgres]"``` |
+| **PySpark** | ```pip install "prism-ds[pyspark]"``` |
+| **Redshift** | ```pip install "prism-ds[redshift]"``` |
+| **Snowflake** | ```pip install "prism-ds[snowflake]"``` |
+| **Trino** | ```pip install "prism-ds[trino]"``` |
+
+### Agents
+Agents allow users to run their projects on external computing environments, e.g., Docker containers, EC2 instances, EMR clusters, and more. Prism currently supports the following agents:
+| Agent      | Command |
+| ------------ | ----------- |
+| **docker** | ```pip install "prism-ds[docker]"``` |
+| **ec2** | N/A - comes with base Prism |
+
+
+## Product Roadmap
+
+We're always looking to improve our product. Here's what we're working on at the moment:
+
+- **Additional Agents**: EMR clusters, Databricks clusters, and more!
+- **Additional adapters**: Celery, Dask, MySQL, Presto, and more!
+- **Cloud deployment**: Managed orchestration platform to deploy Prism projects in the cloud
+
+Let us know if you'd like to see another feature!
