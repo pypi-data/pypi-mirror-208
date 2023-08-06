@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: wf-data-monitor
+Version: 1.0.2
+Summary: 
+Home-page: https://github.com/WildflowerSchools/wf-data-monitor
+License: MIT
+Author: Benjamin Jaffe-Talberg
+Author-email: ben.talberg@wildflowerschools.org
+Requires-Python: >=3.8,<3.12
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: apscheduler (>=3.10.1,<4.0.0)
+Requires-Dist: boto3 (>=1.26.106,<2.0.0)
+Requires-Dist: psycopg2 (>=2.9.5,<3.0.0)
+Requires-Dist: pydantic (>=1.10.6,<2.0.0)
+Requires-Dist: python-dateutil (>=2.8.2,<3.0.0)
+Requires-Dist: python-dotenv (>=1.0.0,<2.0.0)
+Requires-Dist: scipy (>=1.10.1,<2.0.0)
+Requires-Dist: slack-sdk (>=3.20.2,<4.0.0)
+Requires-Dist: toml (>=0.10.2,<0.11.0)
+Requires-Dist: wf-honeycomb-io (>=2.1.0,<3.0.0)
+Requires-Dist: wf-video-io (>=3.2.2,<4.0.0)
+Project-URL: Repository, https://github.com/WildflowerSchools/wf-data-monitor
+Description-Content-Type: text/markdown
+
+# wf-data-monitor
+
+Analyze important Wildflower data streams/sources and raise alerts when known issues arise
+
+## Development
+
+### Requirements
+
+* [Poetry](https://python-poetry.org/)
+* [just](https://github.com/casey/just)
+
+### Install
+
+`poetry install`
+
+
+#### Install w/ Python Version from PyEnv
+
+```
+# Specify pyenv python version
+pyenv shell --unset
+pyenv local <<VERSION>>
+
+# Set poetry python to pyenv version
+poetry env use $(pyenv which python)
+poetry cache clear . --all
+poetry install
+```
+
+## Task list
+* TBD
+
