@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "postodon"
+version = "0.0.3"
+description = "Post to Mastodon"
+authors = ["msleigh"]
+readme = "README.md"
+packages = [{include = "postodon"}]
+license = "Apache-2.0"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+"homepage" = "https://github.com/msleigh/postodon"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/msleigh/postodon/issues"
+"CI" = "https://github.com/msleigh/postodon/actions"
+"Changelog" = "https://github.com/msleigh/postodon/releases"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.30.0"
+sphinx = "^7.0.1"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.1.12"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.3.1"
+
+[tool.project.scripts]
+postodon = "postodon:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
