@@ -1,0 +1,37 @@
+::let:
+  x:
+    a: 1
+    b: 2
+
+result:
+  ::get: x.a + x.b
+
+items:
+  ::sort:
+    - - bob
+      - alice
+      - mallory
+
+objects:
+  ::sort_by:
+    - name
+    - - name: bob
+        id: 2
+      - name: alice
+        id: 3
+      - name: mallory
+        id: 7
+
+tests:
+  - ::starts_with:
+      - hello
+      - hello world
+  - ::ends_with:
+      - world
+      - hello world
+  - ::ends_with:
+      - hello
+      - hello world
+  - ::starts_with:
+      - world
+      - hello world

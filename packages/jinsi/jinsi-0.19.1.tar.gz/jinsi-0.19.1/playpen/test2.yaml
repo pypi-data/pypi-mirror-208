@@ -1,0 +1,54 @@
+::let:
+  x: foo
+  y: bar
+  $x: qux
+  $y: quuz
+
+  template:
+    - ::get: x
+    - ::get: y
+    - ::get: $x
+    - ::get: $y
+    - ::get: $z
+
+formatted: hello <<x>> woohoo <<y>> yeah <<$x>> and <<$y>>
+
+cool:
+  some-<<x>>: <<y>>
+  woohoo: <<x>>/<<y>>
+
+list:
+  - ::get: x
+  - ::get: y
+  - ::get: $x
+  - ::get: $y
+  - ::get: SHELL
+  - ::get: HOSTNAME
+    ::else: unknown
+
+x:
+  ::let:
+    something:
+      ::get: $m
+  y:
+    - ::get: something
+      ::let:
+        $m: 3
+      ::else:
+        ::get: $z
+    - ::get: $q
+      ::else: All okay.
+
+applied:
+  ::let:
+    x: keyfoo
+    y: keybar
+    $x: keyqux
+    $y: keyquuz
+    $z: zeeee
+
+  ::call template:
+    $y: callquuz
+
+applied2:
+  ::call: template
