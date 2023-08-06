@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+
+  search_test:
+    image: udata/elasticsearch:7.16.2
+    container_name: es01_test
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+    tmpfs: /usr/share/elasticsearch/data
+    expose:
+      - "9200"
+    ports:
+      - "9201:9200"
