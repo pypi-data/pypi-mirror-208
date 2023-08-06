@@ -1,0 +1,63 @@
+{% extends 'ndr_core/result_renderers/styles/renderer_transcription_and_fragment.html' %}
+{% load ndr_utils %}
+
+{% block result_tags %}
+    <a href="#">
+        <span  data-toggle="tooltip" data-placement="top" title="Tooltip on top" class="badge badge-secondary small" style="font-weight: normal; background-color: {{ result.original_data.type.id|translate_to_color:30 }};">{{ result.original_data.type.id|translate_dict_value:'type' }}</span>
+    </a>
+    {% if result.original_data.type.is_original %}
+        <span class="badge badge-secondary small" style="font-weight: normal; background-color: #4DC7A0;">Original</span>
+    {% else %}
+        <span class="badge badge-secondary small" style="font-weight: normal; background-color: #e4606d;">Reprint</span>
+    {% endif %}
+    {% if result.original_data.type.is_header %}
+        <span class="badge badge-secondary small" style="font-weight: normal; background-color: #7abaff;">Header</span>
+    {% endif %}
+    {% if result.original_data.type.language %}
+        <span class="badge badge-secondary small" style="font-weight: normal;">{{ result.original_data.type.language|translate_dict_value:'lang' }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block tags %}
+    <p class="text-center pt-3">
+        Categories:
+        {% for tag in result.original_data.tags.tags %}
+            <a href="#" class="badge border border-secondary small text-dark" style="font-weight: normal; background-color: {{ tag|translate_to_color:80 }};">{{ tag|translate_dict_value:'tags' }}</a>
+        {% endfor %}
+    </p>
+{% endblock %}
+
+{% block title_line %}
+    <i>{{ result.original_data.source.title }}</i>: <strong>{{ result.original_data.date.ref|format_date }}</strong>, Issue {{ result.original_data.source.issue }}, p. {{ result.original_data.source.selector.page }}
+{% endblock %}
+
+{% block text %}
+        <p class="text-center bg-light border rounded p-3">
+            "{{ result.original_data.transcription.original }}"
+        </p>
+
+{% endblock %}
+
+{% block fragment_image %}
+    <p class="text-center p-3 border rounded">
+        {% if result.original_data.source.selector.fragment|is_list %}
+            {% for frag in result.original_data.source.selector.fragment %}
+                <img class="img-fluid" src="{{ frag|reduce_iiif_size:25 }}" alt="IIIF fragment">
+            {% endfor %}
+        {% else %}
+            {% if result.original_data.source.selector.fragment|reduce_iiif_size:25 != '' %}
+                <img class="img-fluid" src="{{ result.original_data.source.selector.fragment|reduce_iiif_size:25 }}" alt="IIIF fragment">
+            {% else %}
+                (no image found)
+            {% endif %}
+        {% endif %}
+
+    </p>
+{% endblock %}
+
+{% block citation_info %}
+    Cite:
+    <span id="copyTarget_{{ result.original_data.source.selector.id|url_parse }}">
+        {{ result.original_data.source.title }}, {{ result.original_data.date.ref }} (Issue {{ result.original_data.source.issue }}), p. {{ result.original_data.source.selector.page }}, https://avisblatt.philhist.unibas.ch
+    </span>
+{% endblock %}

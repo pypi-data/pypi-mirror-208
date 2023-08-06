@@ -1,0 +1,128 @@
+{% load static %}
+{% load ndr_values %}
+
+{% config_value 'main_view' as logo_view_name %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        {% include 'ndr_core/base/base_header_tags.html' %}
+        <link href="{% static 'ndr_core/css/ndr_core_default.css' %}" rel="stylesheet">
+        {% block custom_css %}
+            <!-- custom css -->
+        {% endblock %}
+    </head>
+
+    <body>
+        <div>
+            <div class="container">
+                <header class="py-3">
+                    <div class="row flex-nowrap justify-content-between align-items-center">
+                        <div class="col-4 pt-1">
+                            {% block logo %}
+                                <a href="/"><img src="{% block logo_url %}{% static 'ndr_core/images/logo.png' %}{% endblock %}" style="height: 5em;"/></a>
+                            {% endblock logo %}
+                        </div>
+
+                        <div class="col-4 text-center">
+                        </div>
+
+                        <div class="d-flex justify-content-end align-items-center navbar-light p-2 d-md-none d-lg-none d-xl-none">
+                            <button class="navbar-toggler order-first" type="button" data-toggle="collapse" data-target="#links" aria-controls="links" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon "></span>
+                            </button>
+                        </div>
+                    </div>
+
+
+                        <nav class="navbar navbar-expand-md navbar-light">
+                            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                <ul class="navbar-nav">
+                                    {% for nav_item in navigation %}
+                                        {% if nav_item.ndrcorepage_set.all %}
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle{% if nav_item.view_name == page.view_name or page in nav_item.ndrcorepage_set.all %} active{% endif %}" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                    {{ nav_item.label }}
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="{{ nav_item.url }}">
+                                                        {{ nav_item.label }}
+                                                    </a>
+                                                    {% for sub_page in nav_item.ndrcorepage_set.all %}
+                                                        <a class="dropdown-item" href="{{ sub_page.url }}">
+                                                            {{ sub_page.label }}
+                                                        </a>
+                                                    {% endfor %}
+                                                </div>
+                                            </li>
+                                        {% else %}
+                                            <li class="nav-item">
+                                                <a class="nav-link{% if nav_item.view_name == page.view_name %} active{% endif %}" href="{{ nav_item.url }}">
+                                                    {{ nav_item.label }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </nav>
+
+                    <div class="collapse py-1 mb-2 ml-0 d-xl-none d-lg-none" id="links"> <!-- mobile - all other sizes -->
+                        <nav class="d-flex flex-column">
+                            <div class="col-12 offset-md-1">
+                                <ul class="navbar-nav mr-auto navbar-ul-items">
+                                    {% for nav_item in navigation %}
+                                         <li class="nav-item border">
+                                             <a class="nav-link p-3 text-center{% if nav_item.view_name == page.view_name %} active{% endif %}" style="display: block;" href="{{ nav_item.url }}">{{ nav_item.label }}</a>
+                                         </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+
+                    <hr class="p-0 m-0" style="height:2px;border-width:0;color:gray;background-color:gray">
+                </header>
+            </div>
+        </div>  <!-- end of navigation -->
+
+
+        <div class="container">
+            {% block page_title %}
+                <h1>{{ page.name }}</h1>
+            {% endblock %}
+
+            {% block content %}
+                {{ rendered_text|safe }}
+            {% endblock %}
+
+            {% block generated_content %}
+            {% endblock %}
+
+        </div>
+
+        <div class="container">
+            {% block footer %}
+                {% include 'ndr_core/base/footer.html' %}
+            {% endblock %}
+        </div>
+
+
+        <script src="{% static 'ndr_core/js/popper.min.js' %}"></script>
+        <script src="{% static 'ndr_core/js/bootstrap.min.js' %}"></script>
+
+        <script src="{% static 'fontawesomefree/js/fontawesome.js' %}"></script>
+        <script src="{% static 'fontawesomefree/js/solid.js' %}"></script>
+        <script src="{% static 'fontawesomefree/js/brands.js' %}"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+
+        {% block page_js %}
+        {% endblock %}
+
+    </body>
+</html>

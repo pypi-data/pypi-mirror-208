@@ -1,0 +1,93 @@
+{% extends 'ndr_core/admin_views/base.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block content %}
+    <h2><i class="fa-regular fa-window-maximize"></i> Change UI Style</h2>
+    <div class="card-deck">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Options</h5>
+                <div class="list-group">
+                    <a href="{% url 'ndr_core:help_chapter' 'ui_style' %}" class="list-group-item list-group-item-action py-2">
+                        <i class="fa-regular fa-circle-info"></i>
+                        Help
+                    </a>
+                </div>
+                <p></p>
+                <h5 class="card-title">Settings</h5>
+                Your UI Style is:<br/>
+                <div class="list-group-item list-group-item-action py-2">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                {% with 'ndr_core/images/admin/'|add:ui_style.filename|add:'.png' as image_static %}
+                                    <img src="{% static image_static %}" class="img-fluid" alt="Image 1">
+                                {% endwith %}
+                            </div>
+                            <div class="col-8">
+                                {{ ui_style.label }}<br/>
+                                <small>{{ ui_style.description }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-3" style="max-height: 50vh;">
+            <div class="overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title">Available UI Styles</h5>
+                    <div class="list-group">
+                        {% for ui_style in ui_styles %}
+                            <a href="{% url 'ndr_core:view_ui_style' ui_style.pk %}" class="list-group-item list-group-item-action">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            {% with 'ndr_core/images/admin/'|add:ui_style.filename|add:'.png' as image_static %}
+                                                <img src="{% static image_static %}" class="img-fluid" alt="Image 1">
+                                            {% endwith %}
+                                        </div>
+                                        <div class="col-8">
+                                            {{ ui_style.label }}<br/>
+                                            <small>{{ ui_style.description }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if object %}
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ object.label }}</h5>
+                <p>{{ object.description }}</p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3">Base HTML template</div>
+                        <div class="col"><code>ndr_core/base/styles/base_{{ object.filename }}.html</code></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                {% if object.pk == ui_style.pk %}
+                    <a href="{% url 'ndr_core:choose_ui_settings' object.pk %}" role="button" class="btn btn-secondary disabled">This Style is your Page Style</a>
+                {% else %}
+                    <a href="{% url 'ndr_core:choose_ui_settings' object.pk %}" role="button" class="btn btn-warning">Set this Style as your Page Style</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="alert alert-info small" role="alert">
+        <i class="fa-regular fa-circle-info"></i>
+        UI Styles define how your page is structured and where your base elements (such as the navigation) are.
+    </div>
+
+{% endblock %}

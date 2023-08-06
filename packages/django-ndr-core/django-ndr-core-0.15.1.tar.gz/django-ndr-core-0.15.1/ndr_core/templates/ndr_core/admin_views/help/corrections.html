@@ -1,0 +1,27 @@
+<div class="card-deck">
+    <div class="card bg-light mb-3">
+        <div class="card-body">
+            <h5 class="card-title">How Manage Corrections</h5>
+            <p class="card-text">
+                NDR Core has the option that users can mark entries for correction. This means that if they see an
+                error in the database, they can mark it (and add a correction suggestion). These suggestions are
+                collected and available in your administration interface. You can export them to further process
+                them.
+            </p>
+
+            <h6>Enable or Disable the Correction Option</h6>
+            <p class="card-text">
+                Go to <a href="{% url 'ndr_core:configure_corrections' %}">Maintenance > View Correction Suggestions</a>
+                to enable or disable the correction feature. If it is enabled, the option bar of your result template
+                will contain a button to mark the entry as erroneous.
+            </p>
+
+            <h6>Export Corrections</h6>
+            <p class="card-text">
+                You can export correction suggestions to a TSV file for further processing. Go to
+                <a href="{% url 'ndr_core:configure_corrections' %}">Maintenance > View Correction Suggestions</a>
+                and use the export function.
+            </p>
+        </div>
+    </div>
+</div>

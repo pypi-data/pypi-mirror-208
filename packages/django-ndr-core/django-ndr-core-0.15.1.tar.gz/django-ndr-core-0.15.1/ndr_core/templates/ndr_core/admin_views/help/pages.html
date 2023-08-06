@@ -1,0 +1,63 @@
+<div class="card-deck">
+    <div class="card bg-light mb-3">
+        <div class="card-body">
+            <h5 class="card-title">How To Create Pages</h5>
+            <p class="card-text">
+                Your web site consists of a number of pages. A page has a <strong>title</strong>, a <strong>navigation
+                label</strong>, a <strong>view name</strong> and a <strong>type</strong>. Depending on the type, a
+                number of additional parameters may be specified.
+            </p>
+            <p class="card-text">
+                <ul class="card-text">
+                    <li>
+                        The <strong>title</strong> is displayed on the top of your page. (Or in a different location,
+                        depending on your <a href="{% url 'ndr_core:help_chapter' 'ui_style' %}">UI-Style</a>.)
+                    </li>
+                    <li>
+                        The <strong>navigation label</strong> is displayed as part of your navigation.
+                    </li>
+                    <li>
+                        The <strong>type</strong> defines what your page is able to do (for example: show text,
+                        provide a search form, show a list, etc.).
+                    </li>
+                    <li>
+                        The <strong>view name</strong> ist the URL part which is used to display your page. All created
+                        pages have a URL in the form: https://yourhost.org/p/<span class="text-danger">view_name</span>/
+                    </li>
+                    <li>
+                        Optionally, you can set a <strong>parent page</strong>. If you do so, this page becomes a sub-
+                        page of the selected parent page and is not shown in the main navigation.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% include 'ndr_core/admin_views/help/page_types/template_page.html' %}
+{% include 'ndr_core/admin_views/help/page_types/search_page.html' %}
+{% include 'ndr_core/admin_views/help/page_types/list_page.html' %}
+{% include 'ndr_core/admin_views/help/page_types/flip_book_page.html' %}
+{% include 'ndr_core/admin_views/help/page_types/contact.html' %}
+{% include 'ndr_core/admin_views/help/page_types/about.html' %}
+
+<div class="card-deck">
+    <div class="card bg-light mb-3">
+        <div class="card-body">
+            <h6>See also</h6>
+            <p class="card-text">
+                <i>
+                    (Administration pages in <span class="bg-primary text-white">blue</span>, help pages in
+                    <span class="bg-secondary text-white">grey</span>, external links in
+                    <span class="bg-warning">yellow</span>)
+                </i>
+            </p>
+            <p class="card-text">
+                <a href="{% url 'ndr_core:configure_pages' %}" class="btn btn-sm btn-primary" role="button">Manage Pages</a>
+                <a href="{% url 'ndr_core:create_page' %}" class="btn btn-sm btn-primary" role="button">Create New Page</a>
+                <a href="{% url 'ndr_core:configure_images' %}" class="btn btn-sm btn-primary" role="button">Manage Page Images</a>
+                <a href="{% url 'ndr_core:configure_messages' %}" class="btn btn-sm btn-primary" role="button">Inbox</a>
+            </p>
+        </div>
+    </div>
+</div>
