@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: quickshear
+Version: 1.2.0
+Summary: Quickshear Defacing for Neuroimages
+Project-URL: Homepage, https://github.com/nipy/quickshear
+Author: Nakeisha Schimke, John Hale
+Maintainer: Christopher J. Markiewicz
+Maintainer-email: neuroimaging@python.org
+License: Copyright (c) 2011, Nakeisha Schimke. All rights reserved.
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+         * Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+         * Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+         * Neither the name of the The University of Tulsa nor the names of its
+           contributors may be used to endorse or promote products derived from this
+           software without specific prior written permission.
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+        ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+        WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+        ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+        (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+        LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+        ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+        SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+License-File: LICENSE
+Keywords: neuroimaging,neuroscience
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Build Tools
+Requires-Dist: nibabel
+Requires-Dist: numpy
+Description-Content-Type: text/x-rst
+
+Quickshear
+----------
+Quickshear uses a skull stripped version of an anatomical images as a reference
+to deface the unaltered anatomical image.
+
+Usage::
+
+    quickshear.py [-h] anat_file mask_file defaced_file [buffer]
+
+    Quickshear defacing for neuroimages
+
+    positional arguments:
+      anat_file     filename of neuroimage to deface
+      mask_file     filename of brain mask
+      defaced_file  filename of defaced output image
+      buffer        buffer size (in voxels) between shearing plane and the brain
+                    (default: 10.0)
+
+    optional arguments:
+      -h, --help    show this help message and exit
+
+For a full description, see the following paper:
+
+.. [Schimke2011] Schimke, Nakeisha, and John Hale. "Quickshear defacing for neuroimages."
+    Proceedings of the 2nd USENIX conference on Health security and privacy.
+    USENIX Association, 2011.
