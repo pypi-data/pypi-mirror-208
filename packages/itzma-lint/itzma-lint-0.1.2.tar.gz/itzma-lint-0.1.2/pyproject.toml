@@ -1,0 +1,77 @@
+[build-system]
+requires = [
+    "setuptools",
+    "setuptools-scm",
+    "wheel",
+]
+build-backend="setuptools.build_meta"
+
+[project]
+name = "itzma-lint"
+authors = [{name = "Tattie Chitrakorn", email = "tc3117@columbia.edu"}]
+description="A customized linter for personal use"
+readme = "README.md"
+version="0.1.2"
+requires-python = ">=3.9"
+
+dependencies = ["flake8", "nltk", "inflection"]
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+repository = "https://github.com/tchitrakorn/itzma-lint"
+
+[project.optional-dependencies]
+develop = [
+    "pylint",
+    "coverage",
+    "black",
+    "bump2version>=1.0.0",
+    "check-manifest",
+    "mypy",
+]
+
+[tool.black]
+color = true
+line-length = 120
+target-version = ['py310']
+skip-string-normalization = true
+
+[tool.check-manifest]
+ignore = [
+]
+
+[tool.isort]
+line_length = 120
+known_first_party = 'pydantic'
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+
+[tool.mypy]
+python_version = '3.10'
+# show_error_codes = true
+# follow_imports = 'silent'
+# strict_optional = true
+# warn_redundant_casts = true
+# warn_unused_ignores = true
+# disallow_any_generics = true
+# check_untyped_defs = true
+# no_implicit_reexport = true
+# warn_unused_configs = true
+# disallow_subclassing_any = true
+# disallow_incomplete_defs = true
+# disallow_untyped_decorators = true
+# disallow_untyped_calls = true
