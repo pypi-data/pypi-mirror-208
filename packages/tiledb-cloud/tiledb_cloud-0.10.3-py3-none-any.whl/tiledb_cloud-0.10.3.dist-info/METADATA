@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: tiledb-cloud
+Version: 0.10.3
+Summary: TileDB Cloud platform Python client
+Project-URL: homepage, https://tiledb.com
+Project-URL: repository, https://github.com/TileDB-Inc/TileDB-Cloud-Py
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: attrs (>=21.4.0)
+Requires-Dist: certifi
+Requires-Dist: cloudpickle (>=1.4.1)
+Requires-Dist: packaging
+Requires-Dist: pandas (<2,>=1.2.4)
+Requires-Dist: pyarrow (>=3.0.0)
+Requires-Dist: python-dateutil
+Requires-Dist: six (>=1.10)
+Requires-Dist: tblib (~=1.7)
+Requires-Dist: tiledb (>=0.15.2)
+Requires-Dist: urllib3 (>=1.26)
+Provides-Extra: all
+Requires-Dist: networkx (>=2) ; extra == 'all'
+Requires-Dist: plotly (>=4) ; extra == 'all'
+Requires-Dist: pydot ; extra == 'all'
+Requires-Dist: tiledb-plot-widget (>=0.1.7) ; extra == 'all'
+Provides-Extra: viz-plotly
+Requires-Dist: networkx (>=2) ; extra == 'viz-plotly'
+Requires-Dist: plotly (>=4) ; extra == 'viz-plotly'
+Requires-Dist: pydot ; extra == 'viz-plotly'
+Provides-Extra: viz-tiledb
+Requires-Dist: networkx (>=2) ; extra == 'viz-tiledb'
+Requires-Dist: pydot ; extra == 'viz-tiledb'
+Requires-Dist: tiledb-plot-widget (>=0.1.7) ; extra == 'viz-tiledb'
+
+# TileDB-Cloud-Py
+
+This repository contains the Python client for the TileDB Cloud Service.
+
+## Quick Links
+
+### Installation
+
+See [Installation Instructions](https://docs.tiledb.com/cloud/client-api/installation)
+
+### Quickstart
+
+See [Quickstart](https://docs.tiledb.com/cloud/quickstart) section of the docs.
+
+### Testing
+
+* Selection:
+  * All tests: `pytest`
+  * All tests with verbosity: `pytest -vs`
+  * Tests with `taskgraphs` in their names: `pytest -vsk taskgraphs`
+* Credentials:
+  * These tests run on TileDB Cloud using your current environment variable `TILEDB_REST_TOKEN` -- you will need a valid API token for the tests to pass
+  * For continuous integration, the token is configured for the `unittest` user and all tests should pass
+  * For interactive use, if your `TILEDB_REST_TOKEN` points to your own account, most tests will run, except for those that explicitly check against contents of the `unittest` account which are skipped
