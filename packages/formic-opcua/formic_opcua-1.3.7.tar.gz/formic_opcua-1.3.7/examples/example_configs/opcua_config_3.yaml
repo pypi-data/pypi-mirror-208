@@ -1,0 +1,22 @@
+# Copyright Formic Technologies 2023
+server_settings:
+  url: "opc.tcp://localhost:4840/COMPANY_NAME/opcua/"
+  uri: "http://COMPANY_NAME.com"
+  server_name: COMPANY_NAME_opcua
+
+opcua_nodes:
+  connection_status:
+    initial_value: 30
+    type: UInt32
+  system_safety_status:
+    initial_value: ''
+    type: String
+  system_state:
+    initial_value: 0
+    type: UInt32
+  critical_system_statuses:
+    other_faults:
+      misc:
+        door_status:
+          initial_value: 0
+          type: UInt32
