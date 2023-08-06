@@ -1,0 +1,294 @@
+**WARNING: this project is still under development and may not be stable!**
+
+# dcTrackClient ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/dcTrackClient/python-publish.yml?label=publish&logo=pypi) ![PyPI](https://img.shields.io/pypi/v/dcTrackClient) ![PyPI - Downloads](https://img.shields.io/pypi/dm/dcTrackClient)
+
+Sunbird [dcTrack](https://www.sunbirddcim.com/) API client in Python
+
+## Initialize a connection to the dcTrack API
+
+Import the class:
+
+```py
+from dcTrackClient import Client
+```
+
+Authenticate using a base URL (the same URL to access the GUI) and a username and password:
+
+```py
+api = Client('https://dctrack.example.com/', username='user', password='pass')
+```
+
+Authenticate using a base URL and an API token:
+
+```py
+api = Client('https://dctrack.example.com/', apiToken='asdf')
+```
+
+## Usage Example
+
+### Create an item:
+
+- This example shows the minimum attributes required to create an item
+- See [the official documentation](#official-dctrack-documentation) for a comprehensive list of attributes
+- This function returns the JSON object for the newly created item
+- If it fails, the function will return a JSON object containing the error message
+
+```py
+api.createItem({'cmbLocation': 'SAMPLE LOCATION', 'tiName': 'NEW-ITEM', 'cmbMake': 'Generic', 'cmbModel': 'Generic^Rackable^01'})
+```
+
+### Retrieve item details:
+
+```py
+item = api.getItem(1234)
+```
+
+Returns:
+
+```json
+{
+    "item": {
+        ... // item attributes in here
+    }
+}
+```
+
+### Modify an existing item:
+
+```py
+api.modifyItem(1234, {'tiSerialNumber': 'SN-12345', 'tiAssetTag': 'DEV-12345'})
+```
+
+### Delete an existing item:
+
+```py
+api.deleteItem(1234)
+```
+
+## Official DcTrack Documentation
+
+Visit this link for the official documentation on request bodies and attrribute names.
+
+https://www.sunbirddcim.com/help/dcTrack/v900/API/en/Default.htm
+
+## getItem(id)
+> Get item details using the item ID.
+```
+GET api/v2/dcimoperations/items/{id}
+```
+|Parameter|Type|
+|---|---|
+|id|number|
+
+## createItem(returnDetails, payload)
+> Create a new item. When returnDetails is set to true, the API call will return the full json payload. If set to false, the call returns only the "id" and "tiName".
+```
+POST api/v2/dcimoperations/items payload
+```
+|Parameter|Type|
+|---|---|
+|returnDetails|boolean|
+|payload|object|
+
+## updateItem(id, returnDetails, payload)
+> Update an existing item. When returnDetails is set to true, the API call will return the full json payload. If set to false, the call returns only the "id" and "tiName".
+```
+PUT api/v2/dcimoperations/items/{id} payload
+```
+|Parameter|Type|
+|---|---|
+|id|number|
+|returnDetails|boolean|
+|payload|object|
+
+## deleteItem(id)
+> Delete an item using the item ID.
+```
+DELETE api/v2/dcimoperations/items/{id}
+```
+|Parameter|Type|
+|---|---|
+|id|number|
+
+## searchItems(pageNumber, pageSize, payload)
+> Search for items using criteria JSON object. Search criteria can be any of the fields applicable to items, including custom fields. Specify the fields to be included in the response. This API supports pagination. Returns a list of items with the specified information.
+```
+POST api/v2/quicksearch/items payload
+```
+|Parameter|Type|
+|---|---|
+|pageNumber|number|
+|pageSize|number|
+|payload|object|
+
+## cabinetItems(CabinetId)
+> Returns a list of Items contained in a Cabinet using the ItemID of the Cabinet. The returned list includes all of the Cabinet's Items including Passive Items.
+```
+GET api/v2/items/cabinetItems/{CabinetId}
+```
+|Parameter|Type|
+|---|---|
+|CabinetId|number|
+
+## manageItemsBulk(payload)
+> Add/Update/Delete Items.
+```
+POST api/v2/dcimoperations/items/bulk payload
+```
+|Parameter|Type|
+|---|---|
+|payload|object|
+
+## getMakes()
+> Returns a list of makes with basic information.
+```
+GET api/v2/makes
+```
+*No parameters.*
+
+## createMake(payload)
+> Add a new Make. Returns JSON entity containing Make information that was passed in from the Request payload.
+```
+POST api/v2/makes payload
+```
+|Parameter|Type|
+|---|---|
+|payload|object|
+
+## updateMake(makeId, payload)
+> Modify a Make. Returns JSON entity containing Make information that was passed in from the Request payload.
+```
+PUT api/v2/makes/{makeId} payload
+```
+|Parameter|Type|
+|---|---|
+|makeId|number|
+|payload|object|
+
+## deleteMake(makeId)
+> Delete a Make.
+```
+DELETE api/v2/makes/{makeId}
+```
+|Parameter|Type|
+|---|---|
+|makeId|number|
+
+## searchMakes(makeName)
+> Search for a make using the make name. Returns a list of makes with basic information.
+```
+GET api/v2/dcimoperations/search/makes/{makeName}
+```
+|Parameter|Type|
+|---|---|
+|makeName|string|
+
+## getModel(modelId, usedCounts)
+> Get Model fields for the specified Model ID. usedCounts is an optional parameter that determines if the count of Items for the specified model is returned in the response. If set to "true" the counts will be included in the response, if omitted or set to "false" the item count will not be included in the response.
+```
+GET api/v2/models/{modelId}
+```
+|Parameter|Type|
+|---|---|
+|modelId|number|
+|usedCounts|number|
+
+## createModel(returnDetails, proceedOnWarning, payload)
+> Add a new Model. Returns JSON entity containing Make information that was passed in from the Request payload. "proceedOnWarning" relates to the warning messages that are thrown in dcTrack when you try to delete custom fields that are in use. The "proceedOnWarning" value can equal either "true" or "false." If "proceedOnWarning" equals "true," business warnings will be ignored. If "proceedOnWarning" equals "false," business warnings will not be ignored. Fields that are not in the payload will remain unchanged.
+```
+POST api/v2/models payload
+```
+|Parameter|Type|
+|---|---|
+|returnDetails|boolean|
+|proceedOnWarning|boolean|
+|payload|object|
+
+## deleteModel(id)
+> Delete a Model using the Model ID.
+```
+DELETE api/v2/models/{id}
+```
+|Parameter|Type|
+|---|---|
+|id|number|
+
+## searchModels(pageNumber, pageSize, payload)
+> Search for models by user supplied search criteria. Returns a list of models with the "selectedColumns" returned in the payload. Search by Alias is not supported.
+```
+POST api/v2/quicksearch/models payload
+```
+|Parameter|Type|
+|---|---|
+|pageNumber|number|
+|pageSize|number|
+|payload|object|
+
+## deleteModelImage(id, orientation)
+> Delete a Mode Image using the Model ID and the Image Orientation, where id is the Model Id and orientation is either front or back
+```
+DELETE api/v2/models/images/{id}/{orientation}
+```
+|Parameter|Type|
+|---|---|
+|id|number|
+|orientation|string|
+
+## getConnector(connectorId, usedCount)
+> Get a Connector record by ID. Returns a Connector with all information including Compatible Connectors. The usedCount parameter is optional. If usedCount is true, the response will include the number of times the connector is in use by Models and Items. If false, no counts are returned. If omitted the default is false.
+```
+GET api/v2/settings/connectors/{connectorId}
+```
+|Parameter|Type|
+|---|---|
+|connectorId|number|
+|usedCount|boolean|
+
+## createConnector(payload)
+> Add a new Connector. Returns JSON entity containing Connector information that was passed in from the Request payload.
+```
+POST api/v2/settings/connectors payload
+```
+|Parameter|Type|
+|---|---|
+|payload|object|
+
+## updateConnector(connectorId, payload)
+> Update an existing Connector. Returns JSON entity containing Connector information that was passed in from the Request payload.
+```
+PUT api/v2/settings/connectors/{connectorId} payload
+```
+|Parameter|Type|
+|---|---|
+|connectorId|number|
+|payload|object|
+
+## deleteConnector(payload)
+> Delete one or more Connector records.
+```
+POST api/v2/settings/connectors/delete payload
+```
+|Parameter|Type|
+|---|---|
+|payload|object|
+
+## searchConnectors(pageNumber, pageSize, usedCount, payload)
+> Retrieve a List of Connectors. Returns JSON entity containing Connector information that was passed in from the Request payload. Please note, Compatible Connectors are not returned by this API, but can be returned when querying a single Connector using the /api/v2/settings/connectors/{connectorId} API.
+```
+POST api/v2/settings/connectors/quicksearch payload
+```
+|Parameter|Type|
+|---|---|
+|pageNumber|number|
+|pageSize|number|
+|usedCount|boolean|
+|payload|object|
+
+## deleteConnectorImage(connectorId)
+> Delete a Connector Image using the Connector ID.
+```
+DELETE api/v2/settings/connectors/{connectorId}/images
+```
+|Parameter|Type|
+|---|---|
+|connectorId|number|
