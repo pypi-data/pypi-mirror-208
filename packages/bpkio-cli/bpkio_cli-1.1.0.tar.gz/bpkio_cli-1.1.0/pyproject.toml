@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "bpkio-cli"
+version = "1.1.0"
+description = "A command line interface to the broadpeak.io APIs, with additional helpers"
+authors = ["Fabre Lambeau <fabre.lambeau@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "bpkio_cli" }]
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["*/__init__.py", "*/__version__.py", "*/_version.py"]
+
+[tool.poetry.dependencies]
+# bpkio-python-sdk = { path = "../bpkio-python-sdk", develop = true }
+bpkio-python-sdk = "^1.0.1"
+python = "^3.10"
+click = "^8.1.3"
+colorama = "^0.4.6"
+# inquirerpy = { git = "https://github.com/kazhala/InquirerPy" }
+inquirerpy = "^0.3.4"
+tabulate = "^0.9.0"
+arrow = "^1.2.3"
+dateparser = "^1.1.8"
+setuptools = "^67.6.1"
+cloup = "^2.0.0.post1"
+diskcache = "^5.4.0"
+pygments = "^2.15.1"
+
+[tool.poetry.scripts]
+bic = "bpkio_cli.__main__:safe_entry_point"
+bic-debug = "bpkio_cli.__main__:debug_entry_point"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+black = "^23.1.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
