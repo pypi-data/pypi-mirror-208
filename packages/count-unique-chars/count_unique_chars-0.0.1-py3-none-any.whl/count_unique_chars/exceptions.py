@@ -1,0 +1,2 @@
+class TypeNotStrException(Exception):
+    pass
