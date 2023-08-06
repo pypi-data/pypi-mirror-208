@@ -1,0 +1,123 @@
+Metadata-Version: 2.1
+Name: astronomer-e2e-test
+Version: 0.3.5
+Summary: Astronomer scripts for internal use
+License: MIT
+Author: Steven Miller
+Author-email: sjmiller609@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Software Development :: Build Tools
+Requires-Dist: behave (>=1.2.6,<2.0.0)
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: gitdb2 (>=4.0.2,<5.0.0)
+Requires-Dist: gitpython (>=3.1.29,<4.0.0)
+Requires-Dist: graphqlclient (>=0.2.4,<0.3.0)
+Requires-Dist: packaging (>=22.0,<23.0)
+Requires-Dist: pexpect (>=4.8.0,<5.0.0)
+Requires-Dist: pygithub (>=1.57,<2.0)
+Requires-Dist: pytest (>=7.2.0,<8.0.0)
+Requires-Dist: pyyaml (>=6.0,<7.0)
+Requires-Dist: requests (>=2.28.1,<3.0.0)
+Requires-Dist: stripe (>=5.0.0,<6.0.0)
+Description-Content-Type: text/markdown
+
+# Astronomer end to end testing
+
+This repository contains a set of test files
+for validating Astronomer Platform functionality.
+It uses the [Python Behave](https://behave.readthedocs.io/en/latest/)
+framework to create literate tests and output.
+
+CircleCI: https://circleci.com/gh/astronomer/workflows/astronomer_e2e_test
+
+Docker Hub: https://hub.docker.com/r/astronomerinc/ap-e2e-test
+
+## Tests
+
+See the platform/features directory for details.
+
+Current:
+
+- Auth
+  - Login with CLI
+  - Login with API
+- Workspaces
+  - List
+  - Create
+  - Delete
+  - Change Active
+- Deployment
+  - List
+  - Create [local, celery, k8s]
+  - Delete
+
+### TODO
+
+- DAGs of various types (will require Docker engine be available)
+- Known regressions that should be fixed
+
+### Usage
+
+These tests are used via `helm test` in the astronomer/astronomer repository.
+
+You will need a user on the platform you intend to test.
+
+### With Docker
+
+#### Run
+
+```shell
+docker run --rm -it \
+  -e ASTRO_USER="name@domain.com" \
+  -e ASTRO_PASS="..." \
+  -e HOUSTON_URL="https://houston.my-base-domain.com/v1" \
+  astronomerinc/ap-e2e-test:latest
+```
+
+## Building the package
+
+### Docker image
+
+```sh
+docker build -t astronomerinc/ap-e2e-test:latest .
+```
+
+### Python wheel
+
+```sh
+poetry build -f wheel
+```
+
+#### Run
+
+```sh
+cd platform
+
+# Run all tests
+behave
+
+# Run specific test
+behave features/000_auth.feature
+```
+
+## Releasing
+
+First, bump the version and show th your changes:
+
+```sh
+poetry version <major|minor|patch>
+git commit -m "version 9.8.7"  # whatever version shows up in `git diff`
+```
+
+```sh
+poetry publish --username="$PYPI_USERNAME" --password="$PYPI_PASSWORD"
+```
+
