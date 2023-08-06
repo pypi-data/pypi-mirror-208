@@ -1,0 +1,92 @@
+[tool.poetry]
+name = "db-contrib-tool"
+version = "0.6.4"
+description = "The `db-contrib-tool` - MongoDB's tool for contributors."
+authors = ["DAG team <dev-prod-dag@mongodb.com>"]
+readme = "README.md"
+repository = "https://github.com/10gen/db-contrib-tool"
+include = [
+    "src/db_contrib_tool/bisect/*.sh",
+    "src/db_contrib_tool/config/*.yml",
+    "src/db_contrib_tool/config/*.yaml",
+]
+
+[tool.poetry.scripts]
+db-contrib-tool = "db_contrib_tool.cli:cli"
+
+[tool.poetry.dependencies]
+# Python version should be set to the minimum supported toolchain version
+python = "^3.7"
+distro = "1.6.0"
+PyYAML = "6.0"
+requests = "2.26.0"
+structlog = "21.4.0"
+PyGithub = "1.55"
+"evergreen.py" = "3.4.5"
+analytics-python = "1.4.0"
+pkce = "1.0.3"
+oauthlib = "3.1.1"
+requests-oauthlib = "1.3.0"
+pydantic = "1.8.2"
+Inject = "^4.3.1"
+tenacity = "^8.0.1"
+click = "^8.1.3"
+packaging = "^23.0"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3"
+mock = "^4.0.3"
+pytest = "^6.2"
+pre-commit = "^2.15.0"
+isort = "^5.10.1"
+pytest-cov = "^2.8"
+pytest-black = "^0.3"
+pytest-flake8 = "^1.0"
+flake8 = "<5.0" # https://github.com/tholo/pytest-flake8/issues/87
+pytest-mypy = "^0.8"
+pytest-pydocstyle = "^2.0"
+pydocstyle = "<6.2" # https://github.com/PyCQA/pydocstyle/issues/620
+pytest-isort = "^2.0"
+types-PyYAML = "^6.0.11"
+types-requests = "^2.28.10"
+
+[tool.black]
+line-length = 100
+target-version = ['py37']
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 100
+
+[tool.pytest.ini_options]
+flake8-ignore = "W605 W503 W291 E203 E501 F821"
+addopts = "--flake8 --black --mypy --isort --pydocstyle"
+testpaths = [
+    "src",
+    "tests",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+]
+ignore_errors = true
+
+[tool.pydocstyle]
+ignore = "D104,D203,D212,D301,D407,D412"
+match = "(?!(?:test_|conftest)).*\\.py"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
