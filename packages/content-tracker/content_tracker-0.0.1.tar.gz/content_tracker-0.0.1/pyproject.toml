@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "content-tracker"
+description = "Tracking changes in arbitrary content."
+authors = [{ name = "Takahiro Yano", email = "speg03@gmail.com" }]
+
+readme = "README.md"
+license = "MIT"
+
+requires-python = ">=3.7"
+keywords = ["content", "changes", "diff", "tracking"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing",
+]
+
+dynamic = ["version"]
+
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+
+[project.urls]
+Homepage = "https://github.com/speg03/content-tracker"
+Repository = "https://github.com/speg03/content-tracker"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/content_tracker/_version.py"
+
+[tool.pytest.ini_options]
+addopts = "--cov=content_tracker --cov-report=term-missing --cov-report=xml"

@@ -1,0 +1,93 @@
+name: Python Tests
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+**"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+          cache: pip
+
+      - name: Install dependencies
+        run: python3 -m pip install build
+
+      - name: Build
+        run: make dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: packages
+          path: ./dist
+          retention-days: 1
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: packages
+          path: ./dist
+
+      - name: Install dependencies
+        run: python3 -m pip install "$(find ./dist -name '*-py3-none-any.whl' | tail -1)[test]"
+
+      - name: Test
+        run: make test
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+
+  publish:
+    needs: test
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: packages
+          path: ./dist
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+
+  release:
+    needs: publish
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: "${{ github.ref_name }}",
+              name: "${{ github.ref_name }}",
+              generate_release_notes: true
+            })
