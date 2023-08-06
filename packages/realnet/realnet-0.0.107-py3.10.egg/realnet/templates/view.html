@@ -1,0 +1,541 @@
+{% set views=None %}
+{% if views %}
+    <div class="row">
+        <ul class="nav nav-pills justify-content-center">
+            {% for subview in views %}
+                {% if app %}
+                    {% if active_subview_name and subview.name == active_subview_name %}
+                    <li class="nav-item">
+                    <a class="nav-link active" href="?app={{app.name | lower}}&view={{view.name}}&subview={{subview.name}}">{{subview.name}}</a> 
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="?app={{app.name | lower}}&view={{view.name}}&subview={{subview.name}}">{{subview.name}}</a> 
+                    </li>
+                    {% endif %}
+                {% else %}
+                    {% if active_subview_name and subview.name == active_subview_name %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="?view={{view.name}}&subview={{subview.name}}">{{subview.name}}</a> 
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="?view={{view.name}}&subview={{subview.name}}">{{subview.name}}</a> 
+                    </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% for subview in views %}
+                {% if active_subview_name and subview.name == active_subview_name %}
+                    {% with item=item, items=items, view=subview %}
+                        {% include "view.html" %}
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+    </div>
+{% else %}
+    {% if view['type'] == 'ListView' %}
+    <div class="row  justify-content-center align-items-center">
+        <div class="col-auto .text-center w-80">
+            <table class="table table-fit table-striped w-auto table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Icon</th>
+                        <th scope="col">Name</th>
+                        {% if view['attributes'] and view['attributes']['columns'] %}
+                            {% for column in view['attributes']['columns'] %}
+                                <th>
+                                    {{column['name']}}
+                                </th>
+                            {% endfor %}    
+                        {% endif %}
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set list_items = [] %}
+
+                {% if view['attributes'] and view['attributes']['internal'] == 'true' %}
+                  {% if view['attributes']['source'] == 'attributes' %} 
+                    {% set list_items = get_items_from_attributes(item.attributes, None) %}
+                  {% else %}
+                    {% set list_items = get_items_from_attributes(item.attributes, view['attributes']['source']) %}
+                  {% endif %}
+                {% else %}
+                  {% set list_items = items %}
+                {% endif %}
+
+                {% for item in list_items or [] %}
+                    <tr >
+                        <th scope="row">
+                            {{loop.index}}
+                        </th>
+                        <th scope="row">
+                            {% if item.attributes %}
+                            <i class="material-icons mr-1">{{item.attributes['icon']}}</i>
+                            {% endif %}
+                        </th>
+                        <td>
+                            {% if item.attributes and item.attributes['resource'] %}
+                                <a  href="/{{item.attributes['resource']}}/{{item.id}}">{{item.name}}</a>
+                            {% else %}
+                                <a  href="/items/{{item.id}}">{{item.name}}</a>
+                            {% endif %}
+                        </td>
+                        {% if view['attributes'] and view['attributes']['columns'] %}
+                            {% for column in view['attributes']['columns'] %}
+                              {% if column['attributes']['target'] == 'type' %}
+                                <td>
+                                  {% if item.type is string %}
+                                    {{item.type}}
+                                  {% else %}
+                                    {{item.instance.type.name}}
+                                  {% endif %}
+                                </td>
+                              {% else %}
+                                <td>
+                                  {{item.attributes[column['attributes']['target']]}}
+                                </td>
+                              {% endif %}
+                            {% endfor %}    
+                        {% endif %}
+                        <td>
+                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="material-icons mr-1">more_vert</i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                  {% if item.attributes and item.attributes['forms'] %}
+                                    {% set type_name = None %} 
+                                    {% if item.instance %} 
+                                      {% set type_name = item.instance.type.name %}
+                                    {% elif item.type %}
+                                      {% set type_name = item.type.name %}
+                                    {% else %}
+                                      {% set type_name = item.name %}
+                                    {% endif %} 
+                                    <button data-toggle="modal" 
+                                            data-target="#form_{{(item['attributes']['forms']|selectattr('name', 'eq', 'edit')|list)[0]['attributes']['form']}}" 
+                                            class="dropdown-item edit-button" 
+                                            data-item="{{item.to_dict()}}" 
+                                            data-id="{{item.id}}" 
+                                            data-type="{{type_name}}" 
+                                            data-name="{{item.name}}" 
+                                            data-resource="{{(item['attributes']['forms']|selectattr('name', 'eq', 'edit')|list)[0]['attributes']['path']}}" 
+                                            type="button"><i class="material-icons mr-1">edit</i>Edit</button>
+                                    <button data-toggle="modal" 
+                                            data-target="#form_{{(item['attributes']['forms']|selectattr('name', 'eq', 'delete')|list)[0]['attributes']['form']}}" 
+                                            class="dropdown-item delete-button" 
+                                            data-id="{{item.id}}" 
+                                            data-type="{{type_name}}" 
+                                            data-name="{{item.name}}" 
+                                            data-resource="{{(item['attributes']['forms']|selectattr('name', 'eq', 'delete')|list)[0]['attributes']['path']}}" 
+                                            type="button"><i class="material-icons mr-1">delete</i>Delete</button>
+                                  {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+      function updateForm(key, item, control) {
+        var json_item = item.replaceAll("\'","\"");
+        try {
+          json_item = JSON.parse(json_item);
+        } catch(e) {
+          console.log('*** failed parsing json item ***', e);
+        }
+        if(key === 'name' || key === 'type') {
+          control.val(json_item[key]);
+        } else if(key === 'value') {
+          var value = json_item['attributes'][key];
+          if(typeof(value) === 'string' || typeof(value) === 'number') {
+            control.val(value);  
+          } else {
+            control.val(JSON.stringify(json_item['attributes'][key]));
+          }
+        } else {
+          control.val(json_item['attributes'][key]);
+        }
+      }
+      $(document).ready(function(){
+        $('.edit-button').on('click', function(event) {
+          $($(this).attr('data-target')).find('.modal-body #control_id').val($(this).attr('data-id'));
+          $($(this).attr('data-target')).find('.modal-body #control_type').val($(this).attr('data-type')).change();
+          $($(this).attr('data-target')).find('form').attr('action', '/' + $(this).attr('data-resource'));
+          $($(this).attr('data-target')).find('.modal-body #control_name').val($(this).attr('data-name'));
+          $($(this).attr('data-target')).find('.modal-header #title-name').text($(this).attr('data-name'));
+          const item = $(this).attr('data-item');
+          $($(this).attr('data-target')).find('.form-control').each(function () { updateForm($(this).attr('name'), item, $(this))});
+          //todo populate edit form with item attributes
+          //console.log('edit:', $(this).attr('data-id'), $(this).attr('data-target'));
+        });
+        $('.delete-button').on('click', function(event) {
+          $($(this).attr('data-target')).find('.modal-body #control_id').val($(this).attr('data-id'));
+          $($(this).attr('data-target')).find('.modal-body #control_type').val($(this).attr('data-type')).change();
+          $($(this).attr('data-target')).find('form').attr('action', '/' + $(this).attr('data-resource'));
+          $($(this).attr('data-target')).find('.modal-body #control_name').val($(this).attr('data-name'));
+          $($(this).attr('data-target')).find('.modal-header #title-name').text($(this).attr('data-name'));
+          //console.log('delete:', $(this).attr('data-id'), $(this).attr('data-target'));
+        });
+      });
+    </script>
+    {% elif view['type'] == 'FormView' %}
+    <div class="row  justify-content-center align-items-center">
+        <div class="col-8 .text-center">
+            {% set form=all_forms[view.attributes['form']] %}
+            {% if form.attributes['upload'] == 'true' %} 
+                      <form enctype="multipart/form-data" id="form-view-form" action="/{{form.attributes['path']}}" method="{{form.attributes['method']}}" data-item="{{item.to_dict()}}">
+                        <div class="modal-header">
+                          {% if form.attributes['edit'] == 'true' %} 
+                            <h5 class="modal-title" id="exampleModalLabel">{{form.attributes['title_prefix']}} {{item.name}}</h5>
+                          {% elif form.attributes['type'] %} 
+                            <h5 class="modal-title" id="exampleModalLabel">{{form.attributes['title_prefix']}} {{form.attributes['type']}}</h5>
+                          {% elif item %}
+                            <h5 class="modal-title" id="exampleModalLabel">{{form.attributes['title_prefix']}} {{item.name}}</h5> 
+                          {% endif %}
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          {% if form.attributes['text'] %}
+                          <div>
+                            {{form.attributes['text']}}
+                          </div>
+                          {% endif %}
+                          {% for control in form.items %}
+                            {% with item=item, control=control, form=form %}
+                              {% include "control.html" %}
+                            {% endwith %}
+                          {% endfor %}
+                          <div class="form-group">
+                            <div class="custom-file" id="customFile" lang="sr">
+                              <input type="file" class="custom-file-input" id="file" aria-describedby="fileHelp" name="file">
+                                <label class="custom-file-label" for="file">
+                                  File not selected...
+                                </label>
+                            </div>
+                          </div>
+                          <div class="progress" >
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:20%;">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" id="create_cancel">Close</button>
+                          <button type="submit" class="btn btn-primary" id="create_submit">{{form.attributes['submit_text']}}</button>
+                          <button type="button" class="btn btn-primary" id="create_submitting" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Uploading in progress...
+                          </button>
+                        </div>
+                      </form>
+                    {% else %} 
+                      <form action="/{{form.attributes['path']}}" id="form-view-form" method="{{form.attributes['method']}}" data-item="{{item.to_json_string(True)}}">
+                        <div class="modal-header">
+                          {% if form.attributes['edit'] == 'true' %} 
+                            <h5 class="modal-title" id="exampleModalLabel">{{form.attributes['title_prefix']}} {{item.name}}</h5>
+                          {% elif form.attributes['type'] %} 
+                            <h5 class="modal-title" id="exampleModalLabel">{{form.attributes['title_prefix']}} {{form.attributes['type']}}</h5>
+                          {% elif item %}
+                            <h5 class="modal-title" id="exampleModalLabel">{{form.attributes['title_prefix']}} {{item.name}}</h5> 
+                          {% endif %}
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          {% if form.attributes['text'] %}
+                          <div>
+                            {{form.attributes['text']}}
+                          </div>
+                          {% endif %}
+                          {% for control in form.items %}
+                            {% if not (control.instance.type and control.instance.type.name == 'ButtonCtrl') %}
+                              {% with item=item, control=control, form=form %}
+                                {% include "control.html" %}
+                              {% endwith %}
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                          {% for control in form.items %}
+                            {% if control.instance.type and control.instance.type.name == 'ButtonCtrl' %}
+                              {% with item=item, control=control, form=form %}
+                                {% include "control.html" %}
+                              {% endwith %}
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </form>
+                    {% endif %}
+        </div>
+    </div>
+    <script>
+      function updateForm(key, item, control) {
+        //console.log(key);
+        //console.log(item);
+        var json_item = item;//.replaceAll("\'","\"");
+        try {
+          json_item = JSON.parse(json_item);
+        } catch(e) {
+          //console.log('*** failed parsing json item ***', e);
+        }
+        if(key === 'name' || key === 'type') {
+          control.val(json_item[key]);
+        } else if(key === 'base') {
+          console.log(json_item['instance']);
+          const base = json_item['instance']['type']['base'];
+          console.log('base', base);
+          if (base) {
+            control.val(base['name']);
+          }
+        } else if(key === 'value') {
+          var value = json_item['attributes'][key];
+          if(typeof(value) === 'string' || typeof(value) === 'number') {
+            control.val(value);  
+          } else {
+            control.val(JSON.stringify(json_item['attributes'][key]));
+          }
+        } else {
+          control.val(json_item['attributes'][key]);
+        }
+      }
+      $(document).ready(function(){
+        const item = $('#form-view-form').attr('data-item');
+        //console.log(item);
+        //$('#form-view-form').find('form').attr('action', '/' + item['attributes']['resource']);
+        $('#form-view-form').find('.form-control').each(function () { updateForm($(this).attr('name'), item, $(this))});
+      });
+    </script>
+    {% elif view['type'] == 'CodeView' %}
+      <div class="row justify-content-end mb-1 mt-1">
+        <div class="col-10">
+            <input type="hidden" id="language" value="python">
+            <input type="hidden" id="file_id" value="{{item.id}}">
+        </div>
+        <div class="col-2">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button type="button" class="btn btn-success ml-2 mr-2">Reset</button>
+                  <button type="button" class="btn btn-warning" id="save">Save</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-12">
+          <div id="editor" style="min-height: 85vh; width:100%;"></div>
+        </div>
+      </div>
+    <script src="{{url_for('static', filename='/scripts/ace/ace.js')}}"></script>
+    <script src="{{url_for('static', filename='/scripts/ace/ext-beautify.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+        var editor = ace.edit("editor");
+        editor.setOption("useWorker", false);
+        //console.log(editor);
+        editor.setTheme("ace/theme/monokai");
+        editor.setFontSize("18px");
+        var language = $('#language').val();
+        if (language === 'javascript') {
+            editor.session.setMode("ace/mode/javascript");
+        } else if (language === 'python') {
+            editor.session.setMode("ace/mode/python");
+        } else if (language === 'json') {
+            editor.session.setMode("ace/mode/json");
+        } else if (language === 'html') {
+            editor.session.setMode("ace/mode/html");
+        } else if (language === 'css') {
+            editor.session.setMode("ace/mode/css");
+        }
+        file_id = $('#file_id').val();
+        if(file_id) {
+            $.ajax({
+                url: '/files/' + file_id + '/data',
+                type: 'GET',
+                success: function(result){ 
+                editor.setValue(result);
+                }   
+            });
+        }
+        $('#save').on('click', function(event) {
+            //console.log('clicked');
+            const formData = new FormData();
+            var ed = ace.edit("editor");
+
+            formData.append('data', ed.getSession().getValue());
+            //console.log(ed.getSession().getValue());
+            $.ajax({
+                    url: '/files/' + file_id + '/data',
+                    type: 'POST',
+                    data : formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(result){ 
+                    window.location.reload();
+                    }   
+            });
+        });
+        });
+    </script>
+    {% elif view['type'] == 'ARView' %}
+      <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+      <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+      <style>
+        .arjs-loader {
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background-color: rgba(0, 0, 0, 0.8);
+          z-index: 9999;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+       
+        .arjs-loader div {
+          text-align: center;
+          font-size: 1.25em;
+          color: white;
+        }
+      </style>
+      <div class="row justify-content-end mb-1 mt-1">
+        <div class="col-10">
+            <input type="hidden" id="language" value="python">
+        </div>
+        <div class="col-2">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button type="button" class="btn btn-success ml-2 mr-2">Reset</button>
+                  <button type="button" class="btn btn-warning" id="save">Load</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-12">
+          <div class="arjs-loader">
+            <div>Loading, please wait...</div>
+          </div>
+         
+          <a-scene>
+            <!--<a-entity gltf-model="url(.)" position="-1 0.5 -3" rotation="0 45 0"></a-entity>-->
+            <a-entity gltf-model="url(.)" position="0 0 0" rotation="0 0 0" id="scene_content"></a-entity>
+            <a-entity position="0 0 1">
+              <a-entity light="type: point; intensity: 3"></a-entity>
+            </a-entity>
+            <a-camera look-controls active position="0 0 1" target="0 0 0" near="0.1" far="10000" fov="60"></a-camera>
+            <!--<a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+            <a-sky color="#ECECEC"></a-sky>-->
+          </a-scene>
+        </div>
+      </div>
+      
+    <script>
+        $(document).ready(function(){
+        
+        });
+    </script>
+    {% elif view['type'] == 'SceneView' %}
+      <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+      <script>
+        AFRAME.registerComponent("fit", {
+          init: function() {
+            const el = document.querySelector("#scene_content");
+            var object = el.object3D;
+            console.log(object);
+            var bbox = new THREE.Box3().setFromObject(object);
+            console.log(bbox.min, bbox.max)
+            const distance = this.el.object3D.position.distanceTo(object.position)
+            var height = object.getAttribute("geometry").height
+            var newFov = 2 * Math.atan((height / 2) / distance) * (180 / Math.PI); // in degrees
+            console.log(newFov);
+            this.el.sceneEl.camera.fov = newFov
+          }
+        })
+      </script>
+      <style>
+        .arjs-loader {
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background-color: rgba(0, 0, 0, 0.8);
+          z-index: 9999;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      
+        .arjs-loader div {
+          text-align: center;
+          font-size: 1.25em;
+          color: white;
+        }
+      </style>
+      <div class="row justify-content-end mb-1 mt-1">
+        <div class="col-10">
+            <input type="hidden" id="language" value="python">
+        </div>
+        <div class="col-2">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button type="button" class="btn btn-success ml-2 mr-2">Reset</button>
+                  <button type="button" class="btn btn-warning" id="save">Load</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-12">
+          <div class="arjs-loader">
+            <div>Loading, please wait...</div>
+          </div>
+          
+          <!-- A-Frame Scene -->
+          <a-scene>
+            <a-entity gltf-model="url(./{{item.id}}/data)" position="0 0 0" rotation="0 0 0" id="scene_content"></a-entity>
+            <a-entity position="0 0 1">
+              <a-entity light="type: point; intensity: 3"></a-entity>
+            </a-entity>
+            <a-camera look-controls active position="0 0 1" fit></a-camera>
+            <a-plane position="0 1.6 -2"></a-plane>
+
+            <!-- 
+            <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+            <a-sky color="#ECECEC"></a-sky>
+            -->
+          </a-scene>
+        </div>
+      </div>
+      
+    <script>
+        $(document).ready(function(){
+        
+        });
+    </script>
+    {% else %}
+    type:{{view['type']}} showing {{item.name}} with {{items | length}} items
+    {% endif %}
+{% endif %}
