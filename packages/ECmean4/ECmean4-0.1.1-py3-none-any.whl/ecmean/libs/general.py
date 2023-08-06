@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+'''
+Shared functions for XArray ECmean4
+'''
+
+import os
+import logging
+import pandas as pd
+import numpy as np
+
+
+##################
+# HELP FUNCTIONS #
+##################
+
+
+# def is_number(s):
+#     """Check if input is a float type"""
+
+#     try:
+#         float(s)
+#         return True
+#     except ValueError:
+#         return False
+
+
+def numeric_loglevel(loglevel):
+    """Define the logging level """
+    # log level with logging
+    # currently basic definition trought the text
+    numeric_level = getattr(logging, loglevel.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError(f'Invalid log level: {loglevel}')
+
+    return numeric_level
+
+
+def check_time_axis(xtime, years):
+    """Check if we have 12 months per year and if the required years
+    have been found in the NetCDF files. """
+
+    #unique, counts = np.unique(xtime.dt.month, return_counts=True)
+    unique, counts = np.unique(xtime.time.resample(time='1M').mean(), return_counts=True)
+    if len(unique) != 12 or not all(counts == counts[0]):
+        logging.warning('Check your data: some months might be missing...')
+
+    # apparently this is already satisfied by the file browsing
+    # set1=set(years)
+    # set2=set(xtime.dt.year.values)
+    # missing = list(set1.difference(set2))
+    # if missing:
+    #     logging.warning('Some years are missing')
+    #     logging.warning(missing)
+
+
+# def chunks(iterable, num):
+#     """Generate num adjacent chunks of data from a list iterable
+#     Split lists in a convenient way for a parallel process"""
+
+#     size = int(np.ceil(len(iterable) / num))
+#     it = iter(iterable)
+#     return iter(lambda: tuple(itertools.islice(it, size)), ())
+
+# def split(iterable, num):
+#     k, m = divmod(len(iterable), num)
+#     return (iterable[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(num))
+
+def runtime_weights(varlist):
+    """
+    Define the weights to estimate the best repartition of the cores
+    This is done a-priori, considering that 
+    1) compound variables are more difficult to compute
+    2) 3d variables requires more evaluation
+    """
+
+    w = {}
+    for k in varlist:
+        if k in ['ua', 'ta', 'va', 'hus']:
+            t = 8
+        elif k in ['pme', 'net_sfc_nosn', 'net_sfc', 'toamsfc_nosn', 'toamsfc',
+                   'pr_oce', 'pme_oce', 'pr_land', 'pme_land', 'net_toa']:
+            t = 3
+        else:
+            t = 1
+        w[k] = t
+
+    return w
+
+
+def weight_split(a, n):
+    """
+    Use the weights by runtime_weights to provide a number of n chunks based on the
+    minimum possible value of each chunk computing time. Then, provide the list of variables
+    to be used in the multiprocessing routine
+    """
+
+    ws = sorted(runtime_weights(a).items(), key=lambda x: x[1], reverse=True)
+    ordered = dict(ws)
+
+    elists = [[0] for _ in range(n)]
+    olists = [[] for _ in range(n)]
+
+    count = 0
+    for fff, value in ordered.items():
+        elists[count].append(value)
+        olists[count].append(fff)
+        count = elists.index(min(elists))
+
+    #for f in ordered.keys():
+    #    elists[count].append(ordered[f])
+    #    olists[count].append(f)
+    #    count = elists.index(min(elists))
+
+    return olists
+
+def check_interface(var, face):
+    """Check if a var is defined in the interface file"""
+
+    if var in face['variables']:
+        return True
+    else:
+        logging.warning('%s is not defined in the interface file, skipping it!', var)
+        return False
+
+
+def get_domain(var, face):
+    """Given a variable var extract its domain (oce or atm) from the interface.
+    To do so it creates a dictionary providing the domain associated with a component.
+    (the interface file specifies the component for each domain instead)"""
+
+    comp = face['filetype'][face['variables'][var]['filetype']]['component']
+    d = face['model']['component']
+    domain = dict(zip([list(d.values())[x]
+                  for x in range(len(d.values()))], d.keys()))
+    return domain[comp]
+
+
+# def get_component(face):  # unused function
+#     """Return a dictionary providing the domain associated with a variable
+#     (the interface file specifies the domain for each component instead)"""
+
+#     d = face['component']
+#     p = dict(zip([list(d.values())[x]['domain']
+#              for x in range(len(d.values()))], d.keys()))
+#     return p
+
+
+####################
+# OUTPUT FUNCTIONS #
+####################
+
+def dict_to_dataframe(varstat):
+    """very clumsy conversion of the nested 3-level dictionary
+    to a pd.dataframe: NEED TO BE IMPROVED"""
+    data_table = {}
+    for i in varstat.keys():
+        pippo = {}
+        for outerKey, innerDict in varstat[i].items():
+            for innerKey, values in innerDict.items():
+                pippo[(outerKey, innerKey)] = values
+        data_table[i] = pippo
+    data_table = pd.DataFrame(data_table).T
+    return data_table
+
+
+def write_tuning_table(linefile, varmean, var_table, diag, ref):
+    """Write results appending one line to a text file.
+       Write a tuning table: need to fix reference to face/ref"""
+
+    if not os.path.isfile(linefile):
+        with open(linefile, 'w', encoding='utf-8') as f:
+            print('%model  ens  exp from   to ', end='', file=f)
+            for var in var_table:
+                print('{:>12s}'.format(var), end=' ', file=f)
+            print('\n%                         ', end=' ', file=f)
+            for var in var_table:
+                print('{:>12s}'.format(ref[var]['units']), end=' ', file=f)
+            print(file=f)
+
+    with open(linefile, 'a', encoding='utf-8') as f:
+        print(f'{diag.modelname} {diag.ensemble} {diag.expname}',
+              '{:4d} {:4d} '.format(diag.year1, diag.year2), end='', file=f)
+        for var in var_table:
+            print(
+                '{:12.5f}'.format(
+                    varmean[var]['ALL']['Global'] *
+                    ref[var].get(
+                        'factor',
+                        1)),
+                end=' ',
+                file=f)
+        print(file=f)
+
+
+def init_mydict(one, two):
+    """Initialize a two level dictionary"""
+    dd = {}
+    for o in one:
+        dd[o] = {}
+        for t in two:
+            dd[o][t] = float('NaN')
+
+    return dd
