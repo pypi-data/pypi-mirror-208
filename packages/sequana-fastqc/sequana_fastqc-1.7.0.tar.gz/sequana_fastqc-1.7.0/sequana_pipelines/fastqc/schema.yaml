@@ -1,0 +1,72 @@
+# Schema validator for the fastqc config file
+# author: Thomas Cokelaer
+
+type: map
+mapping:
+    "input_directory":
+        type: str
+        required: False
+    "input_pattern":
+        type: str
+        required: False
+    "fastqc":
+        type: map
+        mapping:
+            "do_group":
+                type: bool
+            "options":
+                type: str
+                required: False
+            "threads":
+                type: int
+                required: True
+            "resources":
+                type: any
+                required: true
+    "apptainers":
+        type: any
+
+
+    "multiqc":
+        type: map
+        mapping:
+            "do":
+              type: bool
+            "options":
+                type: str
+            "modules":
+                type: str
+            "config_file":
+                type: str
+            "input_directory":
+                type: str
+            "resources":
+                type: any
+                required: true
+    "general":
+        type: map
+        mapping:
+            "method_choice":
+                type: str
+                enum: ['falco', 'fastqc']
+    "falco":
+        type: map
+        mapping:
+            "do_group":
+                type: bool
+            "options":
+                type: str
+                required: False
+            "threads":
+                type: int
+                required: True
+            "resources":
+                type: any
+                required: true
+
+    "plotting_and_stats":
+        type: map
+        mapping:
+            "resources":
+                type: any
+                required: true
