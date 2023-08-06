@@ -1,0 +1,34 @@
+ansible-builder>=3.0.0
+ansible-runner<3,>=2.3.1
+jinja2
+jsonschema
+onigurumacffi<2,>=1.1.0
+pyyaml
+tzdata
+
+[:python_version < "3.10.0"]
+importlib-metadata
+
+[:python_version >= "3.11"]
+setuptools>=63.1.0
+
+[docs]
+mkdocs-ansible>=0.1.2
+
+[lock]
+
+[test]
+ansible-core
+coverage-enable-subprocess
+coverage[toml]>=7.0.0b1
+darglint
+flake8-docstrings
+libtmux
+pre-commit
+pytest-mock
+pytest-plus
+pytest-subtests
+pytest-xdist
+
+[test:python_version < "3.10.0"]
+typing-extensions
