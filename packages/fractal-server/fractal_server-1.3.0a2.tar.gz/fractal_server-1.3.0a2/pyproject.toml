@@ -1,0 +1,104 @@
+[tool.poetry]
+name = "fractal-server"
+version = "1.3.0a2"
+description = "Server component of the Fractal analytics platform"
+authors = [
+    "Jacopo Nespolo <jacopo.nespolo@exact-lab.it>",
+    "Marco Franzon <marco.franzon@exact-lab.it>",
+    "Tommaso Comparin <tommaso.comparin@exact-lab.it>",
+]
+readme = "README.md"
+homepage = "https://github.com/fractal-analytics-platform/fractal-server"
+license = "BSD-3-Clause"
+
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-dotenv = "^0.20.0"
+fastapi = "^0.95.0"
+sqlmodel = "^0.0.8"
+aiosqlite = "^0.17.0"
+fastapi-users = {extras = ["oauth"], version = "^10.1"}
+alembic = "^1.9.1"
+uvicorn = "^0.20.0"
+sqlalchemy = "^1.4"
+SQLAlchemy-Utils = "^0.38.3"
+
+clusterfutures = { version = "^0.5", optional = true}
+cloudpickle = {version = ">=2.2.1 <2.3.0", optional = true}
+
+asyncpg = { version = "^0.27.0", optional = true }
+psycopg2 = { version = "^2.9.5", optional = true }
+gunicorn = { version = "^20.1.0", optional = true }
+
+[tool.poetry.extras]
+slurm = ["clusterfutures", "cloudpickle"]
+postgres = ["asyncpg", "psycopg2"]
+gunicorn = ["gunicorn"]
+
+[tool.poetry.group.dev.dependencies]
+asgi-lifespan = "^2"
+pytest = "^7.2"
+httpx = "^0.23"
+devtools = "^0.10"
+pytest-asyncio = "^0.20"
+bumpver = "^2022.1120"
+Pillow = "^9.1.1"
+pytest-mock = "^3.8"
+pre-commit = "^2.19"
+coverage = {extras = ["toml"], version = "^6.4.4"}
+mypy = "^0.982"
+pytest-subprocess = "^1.4"
+pytest-docker = {extras = ["docker-compose-v1"], version = "^1.0"}
+pytest-pretty = "^1.0.1"
+
+[tool.poetry.group.doc.dependencies]
+mkdocs = "^1.4.2"
+mkdocstrings = {extras = ["python"], version = "^0.20"}
+mkdocs-material = "^8.5.9"
+mkdocs-gen-files = "^0.4.0"
+mkdocs-literate-nav = "^0.5.0"
+mkdocs-section-index = "^0.3.4"
+mkdocs-coverage = "^0.2.6"
+mkdocs-render-swagger-plugin = "^0.0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+filterwarnings = [
+    "error::RuntimeWarning",
+    "error::pytest.PytestUnraisableExceptionWarning",
+]
+
+[tool.bumpver]
+current_version = "1.3.0a2"
+version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'version = "{version}"',
+]
+"fractal_server/__init__.py" = [
+    '__VERSION__ = "{version}"'
+]
+
+[tool.poetry.scripts]
+fractalctl = "fractal_server.__main__:run"
+
+[tool.coverage.run]
+branch = true
+parallel = true
+relative_files = true
+omit = ["tests/*", "fractal_server/common/tests/*"]
+
+[[tool.mypy.overrides]]
+module = ["devtools", "uvicorn", "sqlalchemy_utils"]
+ignore_missing_imports = true
