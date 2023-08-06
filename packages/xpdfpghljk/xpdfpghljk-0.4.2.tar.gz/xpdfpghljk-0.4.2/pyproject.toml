@@ -1,0 +1,23 @@
+[project]
+name = "xpdfpghljk"
+version = "0.4.2"
+description = "This is just a cython + packaging + cibuildwheel test"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "Liam Pattinson"}
+]
+
+[project.scripts]
+cython_test = "xpdfpghljk.hello:hello_world"
+
+[build-system]
+build-backend = 'setuptools.build_meta'
+requires = ["setuptools", "cython"]
+
+[tool.cibuildwheel]
+archs = ["native"]
+build = "cp38-*"
+
+[tool.setuptools]
+packages = ["xpdfpghljk"]
