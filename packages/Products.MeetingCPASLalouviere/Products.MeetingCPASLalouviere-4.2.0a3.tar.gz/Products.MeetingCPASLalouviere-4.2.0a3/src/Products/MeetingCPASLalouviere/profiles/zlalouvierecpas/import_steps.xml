@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<import-steps>
+    <import-step id="installMeetingMeetingCPASLalouviere" version="20200408-01"
+              handler="Products.MeetingCPASLalouviere.setuphandlers.installMeetingCPASLalouviere"
+              title="Install MeetingCPASLalouviere.">
+    Install MeetingCPASLalouviere.
+    </import-step>
+
+    <import-step id="initializetool-MeetingCPASLalouviere" version="20200408-01"
+              handler="Products.MeetingCPASLalouviere.setuphandlers.initializeTool"
+              title="Initialize MeetingCPASLalouviere with examples.">
+    <dependency step="installMeetingCPASLalouviere"/>
+    Initialize portal_plonemeeting folders for La Louviere.
+    </import-step>
+    <import-step id="finalizeInstanceMeetingCPASLalouviere" version="20200408-01"
+              handler="Products.MeetingCPASLalouviere.setuphandlers.finalizeInstance"
+              title="Finalize instance.">
+    <dependency step="installMeetingCPASLalouviere"/>
+    Finalize instance.
+    </import-step>
+</import-steps>
