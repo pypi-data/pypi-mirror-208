@@ -1,0 +1,73 @@
+[tool.poetry]
+name = "tfimm"
+version = "0.2.14"
+description = "TensorFlow port of PyTorch Image Models (timm) - image models with pretrained weights"
+authors = ["Martins Bruveris <martins.bruveris@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/martinsbruveris/tensorflow-image-models"
+repository = "https://github.com/martinsbruveris/tensorflow-image-models"
+keywords = ["tensorfow", "pretrained models", "visual transformer"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+include = [
+    "CHANGELOG.md",
+    "LICENSE",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+markdown = "^3.3.6"  # 3.3.5 has a bug with poetry
+numpy = "*"
+tensorflow = "^2.8"
+
+# Documentation
+sphinx = { version = "*", optional = true }
+sphinx-rtd-theme = { version = "*", optional = true }
+
+[tool.poetry.dev-dependencies]
+black = { version = "*", allow-prereleases = true }
+flake8 = "*"
+isort = "*"
+pytest = "*"
+pytest-timeout = "*"
+pytest-xdist = "*"
+
+[tool.poetry.extras]
+# To compile documentation
+docs = ["sphinx", "sphinx-rtd-theme"]
+
+[tool.pytest.ini_options]
+timeout = 60  # We need tests to be not too slow, because of GitHub limits
+
+[tool.black]
+line-length = 88
+include = "\\.pyi?$"
+exclude = """
+/(
+    \\.git
+  | \\.tox
+  | \\.venv
+  | tmp
+)/
+"""
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry>=1.0"]
+build-backend = "poetry.masonry.api"
