@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: param-sweeps
+Version: 0.1.5
+Summary: Parameter sweeper for ui.json powered applications
+Home-page: https://mirageoscience.com
+Keywords: geology,geophysics,earth sciences
+Author: Mira Geoscience
+Author-email: benjamink@mirageoscience.com
+Requires-Python: >=3.8,<3.11
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Dist: geoh5py (>=0.6.0)
+Requires-Dist: numpy (>=1.21.5,<2.0.0)
+Project-URL: Repository, https://github.com/MiraGeoscience/param-sweeps
+Description-Content-Type: text/markdown
+
+# Param-sweeps
+
+A Parameter sweeper for applications driven by ui.json files
+
+This package contains two main modules.  One is for generating sweep
+files, and the other is to run a sweep over some number of parameters
+in a driver application.
+
+### Basic Usage
+
+To generate a sweep file from a ui.json file for an existing
+application, use the following command:
+
+```bash
+python -m param_sweeps.generate some_file.ui.json
+```
+
+This will create a new `some_file_sweep.ui.json` file that may be run
+with:
+
+```bash
+python -m param_sweeps.driver some_file_sweep.ui.json
+```
+
+By default, this would execute a single run of the original parameters.
+To design a sweep, simply drag the `some_file_sweep.ui.json` file into
+the [Geoscience ANALYST Pro](https://mirageoscience.com/mining-industry-software/geoscience-analyst-pro/)
+session that produced the original file and select start, end, and number
+of samples values for parameters that you would like to sweep.
+
+
+To organize the output, param-sweeps uses a `UUID` file naming scheme, with
+a `lookup.json` file to map individual parameter sets back to their respective
+files.
+
