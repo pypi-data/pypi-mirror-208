@@ -1,0 +1,6 @@
+MODEL_INSTALL_COMMANDS_FILE = "model_install_commands.sh"
+DOCKERFILE = "Dockerfile"
+ENVIRONMENT_YML = "environment.yml"
+REQUIREMENTS_TXT = "requirements.txt"
+STATUS_FILE = "status.json"
+DONE_TAG = "done"
