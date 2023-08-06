@@ -1,0 +1,428 @@
+---
+###############################################################################
+# aff2191f-5b06-4121-a9fa-f3d93f6c6331 -- Sentinel-1 Product
+###############################################################################
+drbItemClass: aff2191f-5b06-4121-a9fa-f3d93f6c6331
+variables:
+  - name: node_metadata_section
+    xquery: |
+      ./manifest.safe/XFDU/metadataSection
+  - name: node_platform
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject[@ID="platform"]/metadataWrap/
+        xmlData/platform
+  - name: node_acquisition_period
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject[@ID="acquisitionPeriod"]/
+        metadataWrap/xmlData/acquisitionPeriod
+  - name: node_time_anx
+    xquery: |
+      declare variable $node_acquisition_period external;
+      $node_acquisition_period/extension/timeANX
+  - name: node_orbit_reference
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject[matches(@ID,".+OrbitReference")]/
+        metadataWrap/xmlData/orbitReference
+  - name: node_processing
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject[@ID="processing"]/metadataWrap/
+          xmlData/processing[1]
+  - name: node_stand_alone_product_info
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject
+        [matches(@ID, "standAloneProductInformation|generalProductInformation")]/
+        metadataWrap/xmlData/*fn:matches(name(),
+        "standAloneProductInformation|generalProductInformation")]
+  - name: value_beginning_datetime
+    xquery: |
+      declare variable $node_acquisition_period external;
+      concat(substring(data($node_acquisition_period/startTime), 1, 26), "Z")
+  - name: value_ending_datetime
+    xquery: |
+      declare variable $node_acquisition_period external;
+      concat(substring(data($node_acquisition_period/stopTime), 1, 26), "Z")
+  - name: value_processing_date
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/@start)
+      then concat(substring(data($node_processing/@start), 1, 26), "Z")
+      else
+        if ($node_processing/@stop)
+        then concat(substring(data($node_processing/@stop), 1, 26), "Z")
+        else()
+  - name: value_product_type
+    python: |
+      return node.name[4:14]
+  - name: value_coordinate
+    xquery: |
+      declare variable $node_metadata_section external;
+      string-join(
+        for $i in ./manifest.safe/XFDU/metadataSection/
+                  metadataObject[matches(@ID,"+FrameSet")]
+                  metadataWrap/xmlData/frameset/frame,
+          return concat(data($i/footprint/coordinates), ""),
+        ""
+      )
+metadata:
+  # platform ##################################################################
+  - name: platformShortName
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/familyName)
+  - name: platformSerialIdentifier
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/number)
+  # instrument ################################################################
+  - name: instrumentShortName
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/instrument/familyName/@abbreviation)
+  # sensor ####################################################################
+  - name: operationalMode
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/instrument/extension/instrumentMode/mode)
+  - name: swathIdentifier
+    xquery: |
+      declare variable $node_platform external;
+      let $VAR_instrumentMode := $node_platform/instrument/extension/instrumentMode
+      return
+        (: For Level-0 :)
+        if ($VAR_instrumentMode/swathNumber)
+        then data($VAR_instrumentMode/swathNumber)
+        else
+          (: For Level-1 and Level-2 :)
+          if ($VAR_instrumentMode/swath)
+          then data($VAR_instrumentMode/swath)
+          else ()
+  # processing ################################################################
+  - name: processingDate
+    xquery: |
+      declare variable $value_processing_date external;
+      $value_processing_date
+  - name: processingCenter
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/facility/@site)
+      then data($node_processing/facility/@site)
+      else()
+  - name: processorName
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/software)
+      then data($node_processing/software[1]/@*[name()='name'])
+      else
+        if ($node_processing/facility/software)
+        then data($node_processing/facility/software/@*[name()='name'])
+        else ()
+  - name: processorVersion
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/software)
+      then data($node_processing/software[1]/@*[name()='version'])
+      else
+        if ($node_processing/facility/software)
+        then data($node_processing/facility/software/@*[name()='version'])
+        else ()
+  # acquisition ###############################################################
+  - name: beginningDateTime
+    python: |
+      return value_beginning_datetime
+  - name: endingDateTime
+    python: |
+      return value_ending_datetime
+  - name: polarisationChannels
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      data($node_stand_alone_product_info/transmitterReceiverPolarisation)
+  - name: datatakeId
+    python: |
+      return int(node_stand_alone_product_info['missionDataTakeID'].value)
+  - name: startTimeFromAscendingNode
+    python: |
+      return node_time_anx['startTimeANX'].value
+  - name: completionTimeFromAscendingNode
+    python: |
+      return node_time_anx['stopTimeANX'].value
+  # orbit #####################################################################
+  - name: orbitNumber
+    xquery: |
+      declare variable $node_orbit_reference external;
+      data($node_orbit_reference/orbitNumber[@type="start"])
+  - name: orbitDirection
+    xquery: |
+      declare variable $node_orbit_reference external;
+      data($node_orbit_reference/extension/orbitProperties/pass)
+  - name: cycleNumber
+    python: |
+      return node_orbit_reference['cycleNumber'].value
+  - name: relativeOrbitNumber
+    xquery: |
+      declare variable $node_orbit_reference external;
+      data($node_orbit_reference/relativeOrbitNumber[@type="start"])
+  # others ####################################################################
+  - name: productType
+    python: |
+      return value_product_type
+  - name: productClass
+    python: |
+      return node_stand_alone_product_info['productClass'].value
+  - name: instrumentConfigurationID
+    python: |
+      return int(node_stand_alone_product_info['instrumentConfigurationID'].value)
+  - name: sliceProductFlag
+    python: |
+      return node_stand_alone_product_info['sliceProductFlag'].value
+  - name: sliceNumber
+    python: |
+      try:
+        return node_stand_alone_product_info['sliceNumber'].value
+      except Exception:
+        return None
+  - name: totalSlices
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      if ($node_stand_alone_product_info/totalNumberOfSlices)
+      then data($node_stand_alone_product_info/totalNumberOfSlices)
+      else
+        if ($node_stand_alone_product_info/totalSlices)
+        then data($node_stand_alone_product_info/totalSlices)
+        else ()
+
+---
+###############################################################################
+# 800588f9-9a98-4383-a661-572b9a18c3dc -- Sentinel-1 Level 0 Product
+###############################################################################
+drbItemClass: 800588f9-9a98-4383-a661-572b9a18c3dc
+variables:
+  - name: node_stand_alone_product_info
+    xquery: |
+      manifest.safe/XFDU/metadataSection/metadataObject[fn:matches(@ID,
+      "standAloneProductInformation|generalProductInformation")]/
+      metadataWrap/xmlData/*[fn:matches(name(),
+      "standAloneProductInformation|generalProductInformation")]
+metadata:
+  # other #####################################################################
+  - name: productConsolidation
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      data($node_stand_alone_product_info/productConsolidation)
+---
+###############################################################################
+# 84f8d85f-4d2b-4be6-99ad-9a295eb1c252 -- Sentinel-1 Level 1 Product
+###############################################################################
+drbItemClass: 84f8d85f-4d2b-4be6-99ad-9a295eb1c252
+variables:
+  - name: node_stand_alone_product_info
+    xquery: |
+      manifest.safe/XFDU/metadataSection/metadataObject[@ID="generalProductInformation"]/
+      metadataWrap/xmlData/*[fn:matches(name(),
+      "standAloneProductInformation|generalProductInformation")]
+metadata:
+  # other #####################################################################
+  - name: timeliness
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      data($node_stand_alone_product_info/productTimelinessCategory)
+  - name: productComposition
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      data($node_stand_alone_product_info/productComposition)
+  - name: segmentStartTime
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      let $VAR_segmentStartTime := $node_stand_alone_product_info/segmentStartTime
+      return
+         if ($VAR_segmentStartTime)
+         then
+            fn:concat(fn:substring(fn:data($VAR_segmentStartTime), 1, 23), "Z")
+         else ()
+
+---
+###############################################################################
+# 029c85f0-d567-46ef-8098-3bb32095d8d4 -- Sentinel-1 Level 2 Product
+###############################################################################
+drbItemClass: 029c85f0-d567-46ef-8098-3bb32095d8d4
+variables:
+  - name: node_stand_alone_product_info
+    xquery: |
+      manifest.safe/XFDU/metadataSection/metadataObject[@ID="generalProductInformation"]/
+      metadataWrap/xmlData/*[fn:matches(name(),
+      "standAloneProductInformation|generalProductInformation")]
+metadata:
+  # other #####################################################################
+  - name: timeliness
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      data($node_stand_alone_product_info/productTimelinessCategory)
+  - name: productComposition
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      data($node_stand_alone_product_info/productComposition)
+  - name: segmentStartTime
+    xquery: |
+      declare variable $node_stand_alone_product_info external;
+      let $VAR_segmentStartTime := $node_stand_alone_product_info/segmentStartTime
+      return
+         if ($VAR_segmentStartTime)
+         then
+            fn:concat(fn:substring(fn:data($VAR_segmentStartTime), 1, 23), "Z")
+         else ()
+
+
+---
+###############################################################################
+# 8c9f1960-f544-47ae-ba45-424b8cc48b45 -- Sentinel-1 Auxiliary Product
+###############################################################################
+drbItemClass: 8c9f1960-f544-47ae-ba45-424b8cc48b45
+variables:
+  - name: node_metadata_section
+    xquery: |
+      ./manifest.safe/XFDU/metadataSection
+  - name: node_platform
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject[@ID="platform"]/metadataWrap/
+          xmlData/platform
+  - name: node_processing
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject[@ID="processing"]/metadataWrap/
+          xmlData/processing[1]
+  - name: node_stand_alone_prd_info
+    xquery: |
+      declare variable $node_metadata_section external;
+      $node_metadata_section/metadataObject
+          [matches(@ID, "standAloneProductInformation|generalProductInformation")]/
+          metadataWrap/xmlData/standAloneProductInformation
+  - name: value_processing_date
+    python: |
+      attrs = node_processing.attributes
+      if ('start', None) in attrs.keys():
+        return attrs['start', None][0:26] + 'Z'
+      elif ('stop', None) in attrs.keys():
+        return attrs['stop', None][0:26] + 'Z'
+      else:
+        return "UNKNOWN"
+  - name: value_product_type
+    python: |
+      return node_stand_alone_prd_info['auxProductType'].value
+  - name: value_beginning_datetime
+    python: |
+      return node_stand_alone_prd_info['validity'].value + 'Z'
+metadata:
+  # Platform
+  - name: platformShortName
+    python: |
+      return node_platform['familyName'].value
+  - name: platformSerialIdentifier
+    python: |
+      return node_platform['number'].value
+  # Instrument
+  - name: instrumentShortName
+    python: |
+        return node_platform['instrument']['familyName'].get_attribute('abbreviation')
+  # Processing
+  - name: processingDate
+    python: |
+      return value_processing_date
+  - name: processingCenter
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/facility/@site)
+      then data($node_processing/facility/@site)
+      else ()
+  - name: processorName
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/software/@site)
+      then data($node_processing/software[1]/@*[name()="name"])
+      else
+        if ($node_processing/facility/software)
+        then data($node_processing/facility/software/@name)
+        else ()
+  - name: processorVersion
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/software)
+      then data($node_processing/software[1]/@*[name()="version"])
+      else
+        if ($node_processing/facility/software)
+        then data($node_processing/facility/software/@*[name()="version"])
+        else ()
+  - name: beginningDateTime
+    python: |
+      return value_beginning_datetime
+  # Other
+  - name: productType
+    python: |
+      return value_product_type
+  - name: productGeneration
+    python: |
+      return node_stand_alone_prd_info['generation'].value
+  - name: instrumentConfigurationID
+    python: |
+      return int(node_stand_alone_prd_info['instrumentConfigurationId'].value)
+---
+###############################################################################
+# 40273ef3-a898-4779-a788-12322b7ad527 -- Sentinel-1 EOF Auxiliary Product
+###############################################################################
+drbItemClass: 40273ef3-a898-4779-a788-12322b7ad527
+variables:
+  - name: node_fixed_headers
+    xquery: |
+      ./Earth_Explorer_File/Earth_Explorer_Header/Fixed_Header
+  - name: value_product_type
+    xquery: |
+      declare variable $node_fixed_headers external;
+      data($node_fixed_headers/File_Type)
+  - name: value_processing_date
+    xquery: |
+      declare variable $node_fixed_headers external;
+      concat(substring(data($node_fixed_headers/Source/Creation_Date), 5, 19), ".000Z")
+  - name: value_beginning_datetime
+    xquery: |
+      declare variable $node_fixed_headers external;
+      concat(substring(data($node_fixed_headers/Validity_Period/Validity_Start), 5, 19), ".000Z")
+  - name: value_ending_datetime
+    xquery: |
+      declare variable $node_fixed_headers external;
+      concat(substring(data($node_fixed_headers/Validity_Period/Validity_Stop), 5, 19), ".000Z")
+metadata:
+  - name: platformShortName
+    constant: SENTINEL-1
+  - name: platformSerialIdentifier
+    python: |
+      if node.name.startswith('S1A'):
+        return "A"
+      elif node.name.startswith('S1B'):
+        return "B"
+      else:
+        return ""
+  - name: processingDate
+    python: |
+      return value_processing_date
+  - name: processingCenter
+    xquery: |
+      declare variable $node_fixed_headers external;
+      data($node_fixed_headers/Source/System)
+  - name: processorVersion
+    xquery: |
+      declare variable $node_fixed_headers external;
+      data($node_fixed_headers/Source/Creator_Version)
+  - name: beginningDateTime
+    python: |
+      return value_beginning_datetime
+  - name: endingDateTime
+    python: |
+      return value_ending_datetime
+  - name: productType
+    python: |
+      return value_product_type
+
