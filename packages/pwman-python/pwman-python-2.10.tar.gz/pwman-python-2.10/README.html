@@ -1,0 +1,174 @@
+<section id="pwman-commandline-password-manager">
+<h2>pwman - Commandline password manager</h2>
+<p><a href="https://bues.ch/h/pwman" rel="nofollow">Homepage</a></p>
+<p><a href="https://bues.ch/cgit/pwman.git" rel="nofollow">Git repository</a></p>
+<p><a href="https://github.com/mbuesch/pwman" rel="nofollow">Github repository</a></p>
+<p>pwman is a commandline based password manager. It encrypts the password database file using strong AES-256 encryption.</p>
+<p>pwman has support for the following things:</p>
+<ul class="simple">
+<li><p>Store arbitrary attributes and text data along with the passwords and login credentials.</p></li>
+<li><p>Generate two factor authentication tokens (<a href="https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm" rel="nofollow">TOTP</a>).</p></li>
+<li><p>Database search with Regular Expressions or SQL LIKE syntax.</p></li>
+<li><p>Database compare (diff). In pwman prompt, at pwman command line and as <cite>git diff</cite> extension.</p></li>
+<li><p>Shell-style Tab-completion for all commands.</p></li>
+<li><p>Custom Python scripts for arbitrary database processing.</p></li>
+<li><p>Export of the complete database as SQL text dump, CSV dump and human readable plain text dump.</p></li>
+</ul>
+</section>
+<section id="algorithms">
+<h2>Algorithms</h2>
+<table>
+<tbody>
+<tr><td><p>Encryption algorithm:</p></td>
+<td><p>AES in CBC mode with 256 bit key.</p></td>
+</tr>
+<tr><td><p>Key derivation function (KDF):</p></td>
+<td><p>Argon2id with 24 MiB memory cost
+or more (see environment variables below).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="install-pwman">
+<h2>Install pwman</h2>
+<p>pwman does not have to be installed. The <cite>pwman</cite> script can be run directly from the source tree.
+It is not recommended to install pwman into the operating system.</p>
+<section id="installing-pwman-into-a-virtualenv">
+<h3>Installing pwman into a virtualenv</h3>
+<p>If you want to install pwman into a Python virtualenv, run the following commands to create a new venv and install pwman from <a href="https://pypi.org/" rel="nofollow">PyPi</a>:</p>
+<pre><code>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>--system-site-packages<span class="w"> </span>./pwman-venv<span class="w">
+</span>.<span class="w"> </span>./pwman-venv/bin/activate<span class="w">
+</span>pip3<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pwman-python</code></pre>
+</section>
+</section>
+<section id="run-pwman">
+<h2>Run pwman</h2>
+<p>Just run the <cite>pwman</cite> executable to start pwman.</p>
+<p>Type <cite>pwman -h</cite> for help about the command line options.</p>
+</section>
+<section id="pwman-prompt">
+<h2>pwman prompt</h2>
+<p>If started without options, pwman enters the command prompt:</p>
+<pre><code>pwman$</code></pre>
+<p>Type the command <cite>help</cite> and press enter to see help about all possible commands.</p>
+</section>
+<section id="command-help">
+<h2>Command help</h2>
+<p>To get help about a specific command, enter the command into the prompt and append a question mark without spaces in between:</p>
+<pre><code>pwman$ find?</code></pre>
+</section>
+<section id="using-a-custom-script-to-process-the-database-content">
+<h2>Using a custom script to process the database content</h2>
+<p>A custom Python script can be passed to <cite>pwman</cite> as command line option. Such a script can do anything to the content of the database.</p>
+<p>Please see the example script <cite>examplescript.py</cite> for more information.</p>
+</section>
+<section id="api-documentation">
+<h2>API documentation</h2>
+<p>The API documentation can be found in the <a href="doc/api/" rel="nofollow">API documentation directory</a>.</p>
+</section>
+<section id="crypto-backends">
+<h2>Crypto backends</h2>
+<p>Pwman uses either <a href="https://pypi.org/project/pycryptodomex/" rel="nofollow">Cryptodome</a> or <a href="https://pypi.org/project/pyaes/" rel="nofollow">pyaes</a> for AES encryption.
+Therefore, either one of these Python modules has to be installed.
+Pwman first tries to use Cryptodome and then falls back to pyaes, if Cryptodome is not installed.</p>
+<p>For key derivation either <a href="https://pypi.org/project/argon2-cffi/" rel="nofollow">argon2-cffi</a> or <a href="https://pypi.org/project/argon2pure/" rel="nofollow">argon2pure</a> can be used.
+Preferably <cite>argon2-cffi</cite> shall be installed.
+As an option <cite>argon2pure</cite> is supported.
+<cite>argon2pure</cite> is a pure Python implementation of the algorithm and it is <em>extremely</em> slow.
+Therefore, it will never be selected automatically.
+See environment variables.</p>
+</section>
+<section id="environment-variables">
+<h2>Environment variables</h2>
+<p>Environment variables that affect pwman operation are:</p>
+<table>
+<thead>
+<tr><th class="head"><p>Environment variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Possible values</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr><td><p>PWMAN_CRYPTOLIB</p></td>
+<td><p>Select the crypto backend</p></td>
+<td><p>“cryptodome”, “pyaes”</p></td>
+<td><p>probe in order</p></td>
+</tr>
+<tr><td><p>PWMAN_ARGON2LIB</p></td>
+<td><p>Select the Argon2 backend</p></td>
+<td><p>“argon2-cffi”, “argon2pure”</p></td>
+<td><p>“argon2-cffi”</p></td>
+</tr>
+<tr><td><p>PWMAN_ARGON2MEM</p></td>
+<td><p>Set the amount of memory (in KiB) used
+for key derivation.
+Increasing this value improves security,
+but it also increases the amount of memory
+required during encryption and decryption.</p></td>
+<td><p>Number of KiB,
+but not less than 24584.</p></td>
+<td><p>24584</p></td>
+</tr>
+<tr><td><p>PWMAN_ARGON2TIME</p></td>
+<td><p>Set the time used for key derivation.
+Increasing this value improves security,
+but it also increases the time required
+for encryption and decryption.</p></td>
+<td><p>Number of iterations,
+but not less than 2
+and not less than
+2500000 / PWMAN_ARGON2MEM.</p></td>
+<td><p>163</p></td>
+</tr>
+<tr><td><p>PWMAN_DATABASE</p></td>
+<td><p>Path to the default database</p></td>
+<td><p>any file path</p></td>
+<td><p>~/.pwman.db</p></td>
+</tr>
+<tr><td><p>PWMAN_RAWGETPASS</p></td>
+<td><p>If true, do not use safe master
+password input. Read directly
+from stdin instead.</p></td>
+<td><p>boolean
+(0, 1, true, false, yes, no)</p></td>
+<td><p>false</p></td>
+</tr>
+</tbody>
+</table>
+<p>You probably don’t need to set any environment variable to use pwman.
+The default values are most likely what you want.</p>
+</section>
+<section id="out-of-memory-errors">
+<h2>Out of memory errors</h2>
+<p>Pwman uses a strong and memory hard algorithm (Argon2id) to derive the master encryption key from the user supplied master passphrase.
+This algorithm uses lots of memory (and time) to make brute forcing the key expensive.
+This significantly improves security, if the master passphrase has less entropy than the raw AES-256 key.</p>
+<p>Pwman also locks all memory to RAM, so that no secrets and keys are written to swap disk space.
+Therefore, pwman might crash if the actual memory usage during key derivation exceeds the system’s memory lock limit.</p>
+<p>To increase the locked memory available to applications, please increase the OS limits by installing a raised limit as follows:</p>
+<pre><code><span class="c1"># as root:
+</span>cp<span class="w"> </span>pwman-memlock-limits.conf<span class="w"> </span>/etc/security/limits.d/<span class="w">
+</span>reboot</code></pre>
+</section>
+<section id="swap-partition">
+<h2>Swap partition</h2>
+<p>Pwman locks all memory to ensure that no secrets are copied from RAM to possibly unencrypted swap disk space.</p>
+<p>However, pwman can only lock its own memory.
+It cannot lock memory owned by the window manager, X11, Wayland, the terminal emulator or anything else.
+Therefore, it is <em>strongly</em> recommended to avoid using unencrypted swap disk space when using pwman.
+If you have unencrypted swap space it is possible that (parts of) the database or the master passphrase end up being written to it.</p>
+<p>Therefore, please use encrypted swap space, if you need swap space.
+If you do not need swap space, please disable swap entirely.</p>
+<p>Do <em>not</em> use unencrypted swap space.</p>
+<p>Pwman currently only locks memory on Linux and Android platforms.
+If pwman is unable to lock memory, it will print a warning message and give you a chance to abort.</p>
+</section>
+<section id="license-copyright">
+<h2>License / Copyright</h2>
+<p>Copyright (c) 2011-2023 Michael Büsch &lt;<a href="mailto:m&#37;&#52;&#48;bues&#46;ch">m<span>&#64;</span>bues<span>&#46;</span>ch</a>&gt;</p>
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</p>
+</section>
+
