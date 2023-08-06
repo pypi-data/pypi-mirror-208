@@ -1,0 +1,4640 @@
+"""Constants about the US-crop-related Gro Ontology entity ids. """
+
+from enum import Enum
+from typing import Dict
+
+GRO_YIELD_MODELS = {
+ "argentina-corn": {"region_name":"Argentina","region_id":1010,"item_name":"Corn","item_id":274,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "argentina-soybeans": {"region_name":"Argentina","region_id":1010,"item_name":"Soybeans","item_id":270,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "australia-wheat": {"region_name":"Australia","region_id":1013,"item_name":"Wheat","item_id":95,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "blacksea-winterwheat": {"region_name":"Black Sea","region_id":100000196,"item_name":"Winter wheat","item_id":3357,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "brazil-corn": {"region_name":"Brazil","region_id":1029,"item_name":"Corn","item_id":274,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "brazil-soybeans": {"region_name":"Brazil","region_id":1029,"item_name":"Soybeans","item_id":270,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "canada-springwheat": {"region_name":"Canada","region_id":1037,"item_name":"Spring wheat","item_id":3358,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "china-corn": {"region_name":"China, mainland","region_id":1231,"item_name":"Corn","item_id":274,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "china: wheat": {"region_name":"China, mainland","region_id":1231,"item_name":"Wheat","item_id":95,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "china-winterwheat": {"region_name":"China, mainland","region_id":1231,"item_name":"Winter wheat","item_id":3357,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "india-wheat": {"region_name":"India","region_id":1094,"item_name":"Wheat","item_id":95,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "russia-winterwheat": {"region_name":"Russia","region_id":1168,"item_name":"Winter wheat","item_id":3357,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "urkaine-wheat": {"region_name":"Ukraine","region_id":1210,"item_name":"Wheat","item_id":95,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "us-corn": {"region_name":"United States","region_id":1215,"item_name":"Corn","item_id":274,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "us-hardredwinterwheat": {"region_name":"United States","region_id":1215,"item_name":"Hard red winter wheat","item_id":2484,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "us-soybeans": {"region_name":"United States","region_id":1215,"item_name":"Soybeans","item_id":270,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "us-wheat": {"region_name":"United States","region_id":1215,"item_name":"Wheat","item_id":95,"metric_name":"Yield (mass/area)","metric_id":170037},
+ "us-winterwheat": {"region_name":"United States","region_id":1215,"item_name":"Winter wheat","item_id":3357,"metric_name":"Yield (mass/area)","metric_id":170037},
+}
+
+class FrequencyList(Enum):
+    DAILY =   1
+    WEEKLY =   2
+    EIGHT_DAY =   3
+    DEKADAL =   4
+    SIXTEEN_DAY =   5
+    MONTHLY =   6
+    QUARTERLY =   7
+    SEMI_ANNUAL =   8
+    ANNUAL =   9
+    OVERLAPPING_DEKADAL =  10
+    NON_OVERLAPPING_DEKADAL =  11
+    CONSTANT =  12
+    PERMANENT =  13
+    TYPICAL_DATE =  14
+    POINT_IN_TIME =  15
+    SEASONAL =  16
+    TWO_YEAR =  17
+    FIVE_YEAR =  18
+    TEN_YEAR =  19
+    NONE =  20
+    BIWEEKLY =  21
+    THREE_YEAR =  22
+    SEMI_MONTHLY =  23
+    ONCE_A_WEEK =  24
+    MONTHLY_YEAR_TO_DATE =  25
+    WEEKLY_YEAR_TO_DATE =  26
+    QUARTERLY_YEAR_TO_DATE =  27
+    SEMI_MONTHLY_YEAR_TO_DATE =  28
+    ONCE_A_MONTH =  29
+    MONTHLY_5_YEAR_CENTERED_MEAN =  30
+    ANNUAL_5_YEAR_CENTERED_MEAN =  31
+    ANNUAL_20_YEAR_TRAILING_MEAN =  32
+    MONTHLY_20_YEAR_TRAILING_MEAN =  33
+
+# item_name categories 
+class ItemNameCategoryList(Enum):
+	CORN = 'corn'
+	SOYBEANS = 'soybeans'
+
+# Area Weighting Series
+class AreaWeightingSeriesList(Enum):
+	SOYBEANS_YIELD = '170037_270_yield_model'
+	CORN_YIELD = '170037_274_yield_model'
+	SOYBEANS_PRICE = '15851828_270_dtn_aggregated'
+	CORN_PRICE = '15851828_274_dtn_aggregated'
+
+
+# lowercased custom regions
+# a dict was used as opposed to Enum class due to 
+# presence of '-', '.' and '&' characters in region names
+# outer keys are source_names, inner_keys are region_names
+CROP_BUDGET_REGIONS = {
+             'illinois_crop_budget': {'central illinois': 1000000000001,
+                                      'northern illinois': 1000000000002,
+                                      'southern illinois': 1000000000003},
+             'indiana_crop_budget': {'adams': 1000000000005,
+                                     'allen': 1000000000006,
+                                     'bartholomew': 1000000000007,
+                                     'benton': 1000000000008,
+                                     'blackford': 1000000000009,
+                                     'boone': 1000000000010,
+                                     'brown': 1000000000011,
+                                     'carroll': 1000000000012,
+                                     'cass': 1000000000013,
+                                     'clark': 1000000000014,
+                                     'clay': 1000000000015,
+                                     'clinton': 1000000000016,
+                                     'crawford': 1000000000017,
+                                     'daviess': 1000000000018,
+                                     'dearborn': 1000000000019,
+                                     'decatur': 1000000000020,
+                                     'dekalb': 1000000000021,
+                                     'delaware': 1000000000022,
+                                     'dubois': 1000000000023,
+                                     'elkhart': 1000000000024,
+                                     'fayette': 1000000000025,
+                                     'floyd': 1000000000026,
+                                     'fountain': 1000000000027,
+                                     'franklin': 1000000000028,
+                                     'fulton': 1000000000029,
+                                     'gibson': 1000000000030,
+                                     'grant': 1000000000031,
+                                     'greene': 1000000000032,
+                                     'hamilton': 1000000000033,
+                                     'hancock': 1000000000034,
+                                     'harrison': 1000000000035,
+                                     'hendricks': 1000000000036,
+                                     'henry': 1000000000037,
+                                     'howard': 1000000000038,
+                                     'huntington': 1000000000039,
+                                     'indiana': 1000000000004,
+                                     'jackson': 1000000000040,
+                                     'jasper': 1000000000041,
+                                     'jay': 1000000000042,
+                                     'jefferson': 1000000000043,
+                                     'jennings': 1000000000044,
+                                     'johnson': 1000000000045,
+                                     'knox': 1000000000046,
+                                     'kosciusko': 1000000000047,
+                                     'la porte': 1000000000048,
+                                     'lagrange': 1000000000049,
+                                     'lake': 1000000000050,
+                                     'lawrence': 1000000000051,
+                                     'madison': 1000000000052,
+                                     'marion': 1000000000053,
+                                     'marshall': 1000000000054,
+                                     'martin': 1000000000055,
+                                     'miami': 1000000000056,
+                                     'monroe': 1000000000057,
+                                     'montgomery': 1000000000058,
+                                     'morgan': 1000000000059,
+                                     'newton': 1000000000060,
+                                     'noble': 1000000000061,
+                                     'ohio': 1000000000062,
+                                     'orange': 1000000000063,
+                                     'owen': 1000000000064,
+                                     'parke': 1000000000065,
+                                     'perry': 1000000000066,
+                                     'pike': 1000000000067,
+                                     'porter': 1000000000068,
+                                     'posey': 1000000000069,
+                                     'pulaski': 1000000000070,
+                                     'putnam': 1000000000071,
+                                     'randolph': 1000000000072,
+                                     'ripley': 1000000000073,
+                                     'rush': 1000000000074,
+                                     'scott': 1000000000075,
+                                     'shelby': 1000000000076,
+                                     'spencer': 1000000000077,
+                                     'st. joseph': 1000000000078,
+                                     'starke': 1000000000079,
+                                     'steuben': 1000000000080,
+                                     'sullivan': 1000000000081,
+                                     'switzerland': 1000000000082,
+                                     'tippecanoe': 1000000000083,
+                                     'tipton': 1000000000084,
+                                     'union': 1000000000085,
+                                     'vanderburgh': 1000000000086,
+                                     'vermillion': 1000000000087,
+                                     'vigo': 1000000000088,
+                                     'wabash': 1000000000089,
+                                     'warren': 1000000000090,
+                                     'warrick': 1000000000091,
+                                     'washington': 1000000000092,
+                                     'wayne': 1000000000093,
+                                     'wells': 1000000000094,
+                                     'white': 1000000000095,
+                                     'whitely': 1000000000096},
+             'iowa_crop_budget': {'iowa': 1000000000097},
+             'kansas_crop_budget': {'north central kansas': 1000000000160,
+                                    'northeast kansas': 1000000000098,
+                                    'northwest kansas': 1000000000099,
+                                    'south central kansas': 1000000000161,
+                                    'southeast kansas': 1000000000100,
+                                    'southwest kansas': 1000000000101,
+                                    'west central kansas': 1000000000162},
+             'kentucky_crop_budget': {'central kentucky': 1000000000102,
+                                      'kentucky': 1000000000103,
+                                      'west kentucky': 1000000000104},
+             'minnesota_crop_budget': {'central minnesota': 1000000000105,
+                                       # `minnesota statewide` is available for backward compatibility,
+                                       # has been renamed to `minnesota` now
+                                       'minnesota statewide': 1000000000106,
+                                       'minnesota': 1000000000106,
+                                       'northwestern minnesota': 1000000000107,
+                                       'southern minnesota': 1000000000108},
+             'missouri_crop_budget': {'missouri': 1000000000109},
+             'nebraska_crop_budget': {'eastern': 1000000000110,
+                                      'nebraska': 1000000000111,
+                                      'panhandle': 1000000000112,
+                                      'southwest': 1000000000113},
+             'north_dakota_crop_budget': {'east central north dakota': 1000000000114,
+                                          'north central north dakota': 1000000000115,
+                                          'north east north dakota': 1000000000116,
+                                          'north red river valley north dakota': 1000000000117,
+                                          'north west north dakota': 1000000000118,
+                                          'south central north dakota': 1000000000119,
+                                          'south east north dakota': 1000000000120,
+                                          'south red river valley north dakota': 1000000000121,
+                                          'south west north dakota': 1000000000122},
+             'ohio_crop_budget': {'ohio': 1000000000159},
+             'south_dakota_crop_budget': {'central & east': 1000000000123,
+                                          'central & west': 1000000000125,
+                                          'east & central': 1000000000126},
+             'texas_crop_budget': {'texas ag district 1': 1000000000142,
+                                   'texas ag district 10': 1000000000143,
+                                   'texas ag district 11': 1000000000144,
+                                   'texas ag district 11 - lower coast': 1000000000145,
+                                   'texas ag district 11 - northwest': 1000000000146,
+                                   'texas ag district 11 - northwest - lower coast': 1000000000147,
+                                   'texas ag district 11 - upper coast': 1000000000148,
+                                   'texas ag district 12': 1000000000160,
+                                   'texas ag district 12 - rio grande valley': 1000000000149,
+                                   'texas ag district 2': 1000000000150,
+                                   'texas ag district 3': 1000000000151,
+                                   'texas ag district 4': 1000000000141,
+                                   'texas ag district 6': 1000000000152,
+                                   'texas ag district 6 - el paso county': 1000000000153,
+                                   'texas ag district 6 - st. lawrence': 1000000000154,
+                                   'texas ag district 6 - trans pecos': 1000000000155,
+                                   'texas ag district 7': 1000000000156,
+                                   'texas ag district 8': 1000000000157,
+                                   'texas ag district 9': 1000000000158},
+             'united_states_crop_budget': {'arkansas non-delta rice production region': 1000000000124,
+                                           'basin and range': 1000000000127,
+                                           'california rice production region': 1000000000128,
+                                           'eastern uplands': 1000000000129,
+                                           'fruitful rim': 1000000000130,
+                                           'gulf coast rice production region': 1000000000131,
+                                           'heartland': 1000000000132,
+                                           'mississippi portal': 1000000000133,
+                                           'mississippi river delta rice production region': 1000000000134,
+                                           'northern crescent': 1000000000135,
+                                           'northern great plains': 1000000000136,
+                                           'prairie gateway': 1000000000137,
+                                           'southern seaboard': 1000000000138,
+                                           'united states': 1000000000139},
+             'wisconsin_crop_budget': {'wisconsin': 1000000000140}}
+
+
+# Automatically generated
+from enum import Enum
+class US_States(Enum):
+    ALABAMA = 13051
+    ALASKA = 13052
+    ARIZONA = 13053
+    ARKANSAS = 13054
+    CALIFORNIA = 13055
+    COLORADO = 13056
+    CONNECTICUT = 13057
+    DELAWARE = 13058
+    DISTRICT_OF_COLUMBIA = 13059
+    FLORIDA = 13060
+    GEORGIA = 13061
+    HAWAII = 13062
+    IDAHO = 13063
+    ILLINOIS = 13064
+    INDIANA = 13065
+    IOWA = 13066
+    KANSAS = 13067
+    KENTUCKY = 13068
+    LOUISIANA = 13069
+    MAINE = 13070
+    MARYLAND = 13071
+    MASSACHUSETTS = 13072
+    MICHIGAN = 13073
+    MINNESOTA = 13074
+    MISSISSIPPI = 13075
+    MISSOURI = 13076
+    MONTANA = 13077
+    NEBRASKA = 13078
+    NEVADA = 13079
+    NEW_HAMPSHIRE = 13080
+    NEW_JERSEY = 13081
+    NEW_MEXICO = 13082
+    NEW_YORK = 13083
+    NORTH_CAROLINA = 13084
+    NORTH_DAKOTA = 13085
+    OHIO = 13086
+    OKLAHOMA = 13087
+    OREGON = 13088
+    PENNSYLVANIA = 13089
+    RHODE_ISLAND = 13090
+    SOUTH_CAROLINA = 13091
+    SOUTH_DAKOTA = 13092
+    TENNESSEE = 13093
+    TEXAS = 13094
+    UTAH = 13095
+    VERMONT = 13096
+    VIRGINIA = 13097
+    WASHINGTON = 13098
+    WEST_VIRGINIA = 13099
+    WISCONSIN = 13100
+    WYOMING = 13101
+    # adding some crop-specific region states
+    US_Corn_Belt_States = 100000100
+    US_Soybean_Belt_States = 100000101
+    US_Western_Corn_Belt_States = 100023363
+    US_Eastern_Corn_Belt_States = 100023361
+	# for Yield Model
+    UNITED_STATES = 1215
+
+NATIONAL_AND_STATE_CROP_BUDGET_REGIONS = {
+	'indiana': US_States.INDIANA,
+	'iowa': US_States.IOWA,
+	'kentucky': US_States.KENTUCKY,
+	'missouri': US_States.MISSOURI,
+	'nebraska': US_States.NEBRASKA,
+	'ohio': US_States.OHIO,
+	'united states': US_States.UNITED_STATES,
+	'wisconsin': US_States.WISCONSIN,
+}
+
+
+# Automatically generated
+class US_Counties(Enum):
+	ALABAMA__MARENGO = 136804
+	ALABAMA__RUSSELL = 136815
+	ALABAMA__FAYETTE = 136787
+	ALABAMA__JEFFERSON = 136795
+	ALABAMA__JACKSON = 136794
+	ALABAMA__COOSA = 136777
+	ALABAMA__COFFEE = 136774
+	ALABAMA__LAWRENCE = 136798
+	ALABAMA__MONROE = 136808
+	ALABAMA__TALLADEGA = 136819
+	ALABAMA__BLOUNT = 136763
+	ALABAMA__CHILTON = 136769
+	ALABAMA__BARBOUR = 136761
+	ALABAMA__GREENE = 136790
+	ALABAMA__PICKENS = 136812
+	ALABAMA__CHAMBERS = 136767
+	ALABAMA__LOWNDES = 136801
+	ALABAMA__HENRY = 136792
+	ALABAMA__MORGAN = 136810
+	ALABAMA__LIMESTONE = 136800
+	ALABAMA__CLARKE = 136771
+	ALABAMA__MACON = 136802
+	ALABAMA__CHOCTAW = 136770
+	ALABAMA__WILCOX = 136824
+	ALABAMA__CLEBURNE = 136773
+	ALABAMA__PERRY = 136811
+	ALABAMA__DE_KALB = 136783
+	ALABAMA__CLAY = 136772
+	ALABAMA__TUSCALOOSA = 136821
+	ALABAMA__COLBERT = 136775
+	ALABAMA__CALHOUN = 136766
+	ALABAMA__AUTAUGA = 136759
+	ALABAMA__GENEVA = 136789
+	ALABAMA__WALKER = 136822
+	ALABAMA__HOUSTON = 136793
+	ALABAMA__PIKE = 136813
+	ALABAMA__LAMAR = 136796
+	ALABAMA__BUTLER = 136765
+	ALABAMA__WASHINGTON = 136823
+	ALABAMA__CHEROKEE = 136768
+	ALABAMA__ETOWAH = 136786
+	ALABAMA__BULLOCK = 136764
+	ALABAMA__SAINT_CLAIR = 136816
+	ALABAMA__MONTGOMERY = 136809
+	ALABAMA__DALLAS = 136782
+	ALABAMA__BALDWIN = 136760
+	ALABAMA__SHELBY = 136817
+	ALABAMA__MARSHALL = 136806
+	ALABAMA__LAUDERDALE = 136797
+	ALABAMA__CULLMAN = 136780
+	ALABAMA__MOBILE = 136807
+	ALABAMA__BIBB = 136762
+	ALABAMA__WINSTON = 136825
+	ALABAMA__RANDOLPH = 136814
+	ALABAMA__LEE = 136799
+	ALABAMA__ELMORE = 136784
+	ALABAMA__MARION = 136805
+	ALABAMA__FRANKLIN = 136788
+	ALABAMA__HALE = 136791
+	ALABAMA__TALLAPOOSA = 136820
+	ALABAMA__DALE = 136781
+	ALABAMA__ESCAMBIA = 136785
+	ALABAMA__COVINGTON = 136778
+	ALABAMA__SUMTER = 136818
+	ALABAMA__CONECUH = 136776
+	ALABAMA__MADISON = 136803
+	ALABAMA__CRENSHAW = 136779
+	ALASKA__VALDEZ_CORDOVA = 136848
+	ALASKA__SKAGWAY_YAKUTAT_ANGOON = 136846
+	ALASKA__JUNEAU = 136835
+	ALASKA__PRINCE_OF_WALES_OUTER_KETCHI = 136844
+	ALASKA__NORTHWEST_ARCTIC = 136843
+	ALASKA__ALEUTIANS_WEST = 136827
+	ALASKA__DILLINGHAM = 136832
+	ALASKA__KETCHIKAN_GATEWAY = 136837
+	ALASKA__ANCHORAGE = 136828
+	ALASKA__NOME = 136841
+	ALASKA__YAKUTAT_CITY_AND_BOROUGH = 100023588
+	ALASKA__WRANGELL_CITY_AND_BOROUGH = 100023587
+	ALASKA__SKAGWAY_MUNICIPALITY = 100023586
+	ALASKA__PRINCE_OF_WALES_HYDER_CENSUS_AREA = 100023585
+	ALASKA__PETERSBURG_BOROUGH = 100023584
+	ALASKA__KUSILVAK_CENSUS_AREA = 100023583
+	ALASKA__HOONAH_ANGOON_CENSUS_AREA = 100023582
+	ALASKA__BETHEL = 136829
+	ALASKA__DENALI = 136831
+	ALASKA__MATANUSKA_SUSITNA = 136840
+	ALASKA__ALEUTIANS_EAST = 136826
+	ALASKA__SOUTHEAST_FAIRBANKS = 136847
+	ALASKA__BRISTOL_BAY = 136830
+	ALASKA__WRANGELL_PETERSBURG = 136850
+	ALASKA__FAIRBANKS_NORTH_STAR = 136833
+	ALASKA__KODIAK_ISLAND = 136838
+	ALASKA__YUKON_KOYUKUK = 136851
+	ALASKA__KENAI_PENINSULA = 136836
+	ALASKA__WADE_HAMPTON = 136849
+	ALASKA__HAINES = 136834
+	ALASKA__NORTH_SLOPE = 136842
+	ALASKA__SITKA = 136845
+	ALASKA__LAKE_AND_PENINSULA = 136839
+	ARIZONA__MOHAVE = 136860
+	ARIZONA__GREENLEE = 136857
+	ARIZONA__GILA = 136855
+	ARIZONA__YAVAPAI = 136865
+	ARIZONA__COCHISE = 136853
+	ARIZONA__PINAL = 136863
+	ARIZONA__SANTA_CRUZ = 136864
+	ARIZONA__YUMA = 136866
+	ARIZONA__COCONINO = 136854
+	ARIZONA__NAVAJO = 136861
+	ARIZONA__GRAHAM = 136856
+	ARIZONA__LA_PAZ = 136858
+	ARIZONA__APACHE = 136852
+	ARIZONA__MARICOPA = 136859
+	ARIZONA__PIMA = 136862
+	ARKANSAS__CLAY = 136877
+	ARKANSAS__RANDOLPH = 136927
+	ARKANSAS__CLEVELAND = 136879
+	ARKANSAS__HOT_SPRING = 136896
+	ARKANSAS__CLARK = 136876
+	ARKANSAS__SEBASTIAN = 136932
+	ARKANSAS__CONWAY = 136881
+	ARKANSAS__MARION = 136911
+	ARKANSAS__HOWARD = 136897
+	ARKANSAS__JACKSON = 136900
+	ARKANSAS__PRAIRIE = 136925
+	ARKANSAS__CRITTENDEN = 136884
+	ARKANSAS__SHARP = 136934
+	ARKANSAS__CROSS = 136885
+	ARKANSAS__LOGAN = 136908
+	ARKANSAS__GREENE = 136894
+	ARKANSAS__DALLAS = 136886
+	ARKANSAS__COLUMBIA = 136880
+	ARKANSAS__MONROE = 136914
+	ARKANSAS__SEARCY = 136931
+	ARKANSAS__PIKE = 136921
+	ARKANSAS__MILLER = 136912
+	ARKANSAS__WASHINGTON = 136938
+	ARKANSAS__GARLAND = 136892
+	ARKANSAS__PHILLIPS = 136920
+	ARKANSAS__CRAIGHEAD = 136882
+	ARKANSAS__WHITE = 136939
+	ARKANSAS__NEVADA = 136916
+	ARKANSAS__ASHLEY = 136868
+	ARKANSAS__GRANT = 136893
+	ARKANSAS__BENTON = 136870
+	ARKANSAS__ARKANSAS = 136867
+	ARKANSAS__FULTON = 136891
+	ARKANSAS__SCOTT = 136930
+	ARKANSAS__JEFFERSON = 136901
+	ARKANSAS__SALINE = 136929
+	ARKANSAS__DREW = 136888
+	ARKANSAS__POLK = 136923
+	ARKANSAS__JOHNSON = 136902
+	ARKANSAS__FAULKNER = 136889
+	ARKANSAS__LAWRENCE = 136904
+	ARKANSAS__POPE = 136924
+	ARKANSAS__MISSISSIPPI = 136913
+	ARKANSAS__LEE = 136905
+	ARKANSAS__YELL = 136941
+	ARKANSAS__SAINT_FRANCIS = 136928
+	ARKANSAS__LONOKE = 136909
+	ARKANSAS__IZARD = 136899
+	ARKANSAS__STONE = 136935
+	ARKANSAS__CARROLL = 136874
+	ARKANSAS__NEWTON = 136917
+	ARKANSAS__LITTLE_RIVER = 136907
+	ARKANSAS__PULASKI = 136926
+	ARKANSAS__LINCOLN = 136906
+	ARKANSAS__DESHA = 136887
+	ARKANSAS__PERRY = 136919
+	ARKANSAS__OUACHITA = 136918
+	ARKANSAS__SEVIER = 136933
+	ARKANSAS__WOODRUFF = 136940
+	ARKANSAS__CALHOUN = 136873
+	ARKANSAS__CRAWFORD = 136883
+	ARKANSAS__LAFAYETTE = 136903
+	ARKANSAS__FRANKLIN = 136890
+	ARKANSAS__INDEPENDENCE = 136898
+	ARKANSAS__UNION = 136936
+	ARKANSAS__POINSETT = 136922
+	ARKANSAS__BRADLEY = 136872
+	ARKANSAS__CLEBURNE = 136878
+	ARKANSAS__BAXTER = 136869
+	ARKANSAS__MONTGOMERY = 136915
+	ARKANSAS__HEMPSTEAD = 136895
+	ARKANSAS__BOONE = 136871
+	ARKANSAS__VAN_BUREN = 136937
+	ARKANSAS__MADISON = 136910
+	ARKANSAS__CHICOT = 136875
+	CALIFORNIA__SIERRA = 136987
+	CALIFORNIA__IMPERIAL = 136954
+	CALIFORNIA__MERCED = 136965
+	CALIFORNIA__SAN_FRANCISCO = 136979
+	CALIFORNIA__MARIN = 136962
+	CALIFORNIA__LOS_ANGELES = 136960
+	CALIFORNIA__MADERA = 136961
+	CALIFORNIA__LAKE = 136958
+	CALIFORNIA__EL_DORADO = 136950
+	CALIFORNIA__MONTEREY = 136968
+	CALIFORNIA__SAN_DIEGO = 136978
+	CALIFORNIA__SOLANO = 136989
+	CALIFORNIA__SAN_LUIS_OBISPO = 136981
+	CALIFORNIA__RIVERSIDE = 136974
+	CALIFORNIA__SONOMA = 136990
+	CALIFORNIA__KINGS = 136957
+	CALIFORNIA__TEHAMA = 136993
+	CALIFORNIA__VENTURA = 136997
+	CALIFORNIA__SUTTER = 136992
+	CALIFORNIA__PLUMAS = 136973
+	CALIFORNIA__BUTTE = 136945
+	CALIFORNIA__COLUSA = 136947
+	CALIFORNIA__ORANGE = 136971
+	CALIFORNIA__SANTA_BARBARA = 136983
+	CALIFORNIA__MENDOCINO = 136964
+	CALIFORNIA__STANISLAUS = 136991
+	CALIFORNIA__LASSEN = 136959
+	CALIFORNIA__TUOLUMNE = 136996
+	CALIFORNIA__ALAMEDA = 136942
+	CALIFORNIA__DEL_NORTE = 136949
+	CALIFORNIA__SHASTA = 136986
+	CALIFORNIA__HUMBOLDT = 136953
+	CALIFORNIA__YOLO = 136998
+	CALIFORNIA__SAN_MATEO = 136982
+	CALIFORNIA__SISKIYOU = 136988
+	CALIFORNIA__AMADOR = 136944
+	CALIFORNIA__SAN_BERNARDINO = 136977
+	CALIFORNIA__NAPA = 136969
+	CALIFORNIA__PLACER = 136972
+	CALIFORNIA__TRINITY = 136994
+	CALIFORNIA__NEVADA = 136970
+	CALIFORNIA__SAN_BENITO = 136976
+	CALIFORNIA__TULARE = 136995
+	CALIFORNIA__ALPINE = 136943
+	CALIFORNIA__CONTRA_COSTA = 136948
+	CALIFORNIA__INYO = 136955
+	CALIFORNIA__SANTA_CRUZ = 136985
+	CALIFORNIA__FRESNO = 136951
+	CALIFORNIA__CALAVERAS = 136946
+	CALIFORNIA__GLENN = 136952
+	CALIFORNIA__MARIPOSA = 136963
+	CALIFORNIA__MONO = 136967
+	CALIFORNIA__YUBA = 136999
+	CALIFORNIA__SANTA_CLARA = 136984
+	CALIFORNIA__MODOC = 136966
+	CALIFORNIA__SAN_JOAQUIN = 136980
+	CALIFORNIA__KERN = 136956
+	CALIFORNIA__SACRAMENTO = 136975
+	COLORADO__PITKIN = 137049
+	COLORADO__TELLER = 137060
+	COLORADO__CUSTER = 137014
+	COLORADO__MINERAL = 137040
+	COLORADO__GUNNISON = 137026
+	COLORADO__EL_PASO = 137020
+	COLORADO__DOUGLAS = 137018
+	COLORADO__DOLORES = 137017
+	COLORADO__DELTA = 137015
+	COLORADO__OURAY = 137046
+	COLORADO__CROWLEY = 137013
+	COLORADO__RIO_GRANDE = 137053
+	COLORADO__PHILLIPS = 137048
+	COLORADO__SAN_MIGUEL = 137057
+	COLORADO__CONEJOS = 137011
+	COLORADO__BACA = 137004
+	COLORADO__HINSDALE = 137027
+	COLORADO__CLEAR_CREEK = 137010
+	COLORADO__SAGUACHE = 137055
+	COLORADO__MESA = 137039
+	COLORADO__MONTEZUMA = 137042
+	COLORADO__JACKSON = 137029
+	COLORADO__WASHINGTON = 137061
+	COLORADO__MOFFAT = 137041
+	COLORADO__PROWERS = 137050
+	COLORADO__RIO_BLANCO = 137052
+	COLORADO__ADAMS = 137000
+	COLORADO__PUEBLO = 137051
+	COLORADO__LAKE = 137034
+	COLORADO__COSTILLA = 137012
+	COLORADO__KIOWA = 137031
+	COLORADO__ROUTT = 137054
+	COLORADO__WELD = 137062
+	COLORADO__LINCOLN = 137037
+	COLORADO__BROOMFIELD = 137007
+	COLORADO__BOULDER = 137006
+	COLORADO__HUERFANO = 137028
+	COLORADO__FREMONT = 137022
+	COLORADO__CHAFFEE = 137008
+	COLORADO__LAS_ANIMAS = 137036
+	COLORADO__ELBERT = 137021
+	COLORADO__LOGAN = 137038
+	COLORADO__LA_PLATA = 137033
+	COLORADO__SEDGWICK = 137058
+	COLORADO__ALAMOSA = 137001
+	COLORADO__MONTROSE = 137043
+	COLORADO__DENVER = 137016
+	COLORADO__PARK = 137047
+	COLORADO__GILPIN = 137024
+	COLORADO__ARAPAHOE = 137002
+	COLORADO__GRAND = 137025
+	COLORADO__YUMA = 137063
+	COLORADO__ARCHULETA = 137003
+	COLORADO__SUMMIT = 137059
+	COLORADO__OTERO = 137045
+	COLORADO__MORGAN = 137044
+	COLORADO__EAGLE = 137019
+	COLORADO__LARIMER = 137035
+	COLORADO__KIT_CARSON = 137032
+	COLORADO__BENT = 137005
+	COLORADO__CHEYENNE = 137009
+	COLORADO__SAN_JUAN = 137056
+	COLORADO__JEFFERSON = 137030
+	COLORADO__GARFIELD = 137023
+	CONNECTICUT__NEW_HAVEN = 137068
+	CONNECTICUT__TOLLAND = 137070
+	CONNECTICUT__WINDHAM = 137071
+	CONNECTICUT__NEW_LONDON = 137069
+	CONNECTICUT__HARTFORD = 137065
+	CONNECTICUT__FAIRFIELD = 137064
+	CONNECTICUT__MIDDLESEX = 137067
+	CONNECTICUT__LITCHFIELD = 137066
+	DELAWARE__NEW_CASTLE = 137073
+	DELAWARE__SUSSEX = 137074
+	DELAWARE__KENT = 137072
+	DISTRICT_OF_COLUMBIA__DISTRICT_OF_COLUMBIA = 137075
+	FLORIDA__WAKULLA = 137140
+	FLORIDA__WALTON = 137141
+	FLORIDA__BAY = 137078
+	FLORIDA__OKEECHOBEE = 137122
+	FLORIDA__MANATEE = 137115
+	FLORIDA__PALM_BEACH = 137125
+	FLORIDA__PUTNAM = 137129
+	FLORIDA__SANTA_ROSA = 137132
+	FLORIDA__MADISON = 137114
+	FLORIDA__PINELLAS = 137127
+	FLORIDA__MARION = 137116
+	FLORIDA__LEE = 137110
+	FLORIDA__HILLSBOROUGH = 137103
+	FLORIDA__COLUMBIA = 137087
+	FLORIDA__ESCAMBIA = 137091
+	FLORIDA__ALACHUA = 137076
+	FLORIDA__COLLIER = 137086
+	FLORIDA__BREVARD = 137080
+	FLORIDA__INDIAN_RIVER = 137105
+	FLORIDA__HARDEE = 137099
+	FLORIDA__HERNANDO = 137101
+	FLORIDA__UNION = 137138
+	FLORIDA__DUVAL = 137090
+	FLORIDA__GADSDEN = 137094
+	FLORIDA__BAKER = 137077
+	FLORIDA__HENDRY = 137100
+	FLORIDA__PASCO = 137126
+	FLORIDA__CLAY = 137085
+	FLORIDA__FLAGLER = 137092
+	FLORIDA__GLADES = 137096
+	FLORIDA__GULF = 137097
+	FLORIDA__HIGHLANDS = 137102
+	FLORIDA__JACKSON = 137106
+	FLORIDA__SEMINOLE = 137134
+	FLORIDA__LAKE = 137109
+	FLORIDA__MONROE = 137119
+	FLORIDA__CHARLOTTE = 137083
+	FLORIDA__SARASOTA = 137133
+	FLORIDA__SUMTER = 137135
+	FLORIDA__VOLUSIA = 137139
+	FLORIDA__MIAMI_DADE = 137118
+	FLORIDA__GILCHRIST = 137095
+	FLORIDA__CALHOUN = 137082
+	FLORIDA__OSCEOLA = 137124
+	FLORIDA__SAINT_LUCIE = 137131
+	FLORIDA__SAINT_JOHNS = 137130
+	FLORIDA__NASSAU = 137120
+	FLORIDA__JEFFERSON = 137107
+	FLORIDA__POLK = 137128
+	FLORIDA__MARTIN = 137117
+	FLORIDA__HAMILTON = 137098
+	FLORIDA__LAFAYETTE = 137108
+	FLORIDA__OKALOOSA = 137121
+	FLORIDA__BROWARD = 137081
+	FLORIDA__SUWANNEE = 137136
+	FLORIDA__DIXIE = 137089
+	FLORIDA__HOLMES = 137104
+	FLORIDA__LEVY = 137112
+	FLORIDA__LIBERTY = 137113
+	FLORIDA__TAYLOR = 137137
+	FLORIDA__DESOTO = 137088
+	FLORIDA__BRADFORD = 137079
+	FLORIDA__CITRUS = 137084
+	FLORIDA__FRANKLIN = 137093
+	FLORIDA__WASHINGTON = 137142
+	FLORIDA__LEON = 137111
+	FLORIDA__ORANGE = 137123
+	GEORGIA__CHARLTON = 137166
+	GEORGIA__FRANKLIN = 137201
+	GEORGIA__TALBOT = 137272
+	GEORGIA__CAMDEN = 137162
+	GEORGIA__TROUP = 137283
+	GEORGIA__TIFT = 137279
+	GEORGIA__TATTNALL = 137274
+	GEORGIA__HENRY = 137217
+	GEORGIA__EVANS = 137196
+	GEORGIA__CHATHAM = 137167
+	GEORGIA__PEACH = 137253
+	GEORGIA__CLAYTON = 137173
+	GEORGIA__CHATTAHOOCHEE = 137168
+	GEORGIA__CANDLER = 137163
+	GEORGIA__BURKE = 137159
+	GEORGIA__HOUSTON = 137218
+	GEORGIA__LEE = 137230
+	GEORGIA__SCREVEN = 137266
+	GEORGIA__WAYNE = 137293
+	GEORGIA__PIERCE = 137255
+	GEORGIA__JENKINS = 137224
+	GEORGIA__LINCOLN = 137232
+	GEORGIA__PULASKI = 137258
+	GEORGIA__GLASCOCK = 137204
+	GEORGIA__OGLETHORPE = 137251
+	GEORGIA__PIKE = 137256
+	GEORGIA__SEMINOLE = 137267
+	GEORGIA__COBB = 137175
+	GEORGIA__LANIER = 137228
+	GEORGIA__FULTON = 137202
+	GEORGIA__BUTTS = 137160
+	GEORGIA__HABERSHAM = 137210
+	GEORGIA__RICHMOND = 137263
+	GEORGIA__WARE = 137290
+	GEORGIA__COLUMBIA = 137178
+	GEORGIA__JASPER = 137221
+	GEORGIA__HART = 137215
+	GEORGIA__MUSCOGEE = 137248
+	GEORGIA__CALHOUN = 137161
+	GEORGIA__NEWTON = 137249
+	GEORGIA__LOWNDES = 137234
+	GEORGIA__WARREN = 137291
+	GEORGIA__CRAWFORD = 137181
+	GEORGIA__EFFINGHAM = 137193
+	GEORGIA__UNION = 137286
+	GEORGIA__MADISON = 137237
+	GEORGIA__GORDON = 137206
+	GEORGIA__GWINNETT = 137209
+	GEORGIA__ECHOLS = 137192
+	GEORGIA__ROCKDALE = 137264
+	GEORGIA__WHITE = 137296
+	GEORGIA__HARALSON = 137213
+	GEORGIA__BIBB = 137153
+	GEORGIA__DADE = 137183
+	GEORGIA__PICKENS = 137254
+	GEORGIA__MCINTOSH = 137240
+	GEORGIA__WILCOX = 137298
+	GEORGIA__DEKALB = 137186
+	GEORGIA__UPSON = 137287
+	GEORGIA__BALDWIN = 137147
+	GEORGIA__FLOYD = 137199
+	GEORGIA__LIBERTY = 137231
+	GEORGIA__GREENE = 137208
+	GEORGIA__WILKES = 137299
+	GEORGIA__DECATUR = 137185
+	GEORGIA__WALTON = 137289
+	GEORGIA__FAYETTE = 137198
+	GEORGIA__BERRIEN = 137152
+	GEORGIA__MILLER = 137242
+	GEORGIA__WHITFIELD = 137297
+	GEORGIA__COFFEE = 137176
+	GEORGIA__MCDUFFIE = 137239
+	GEORGIA__TERRELL = 137277
+	GEORGIA__MONTGOMERY = 137245
+	GEORGIA__GILMER = 137203
+	GEORGIA__ELBERT = 137194
+	GEORGIA__GRADY = 137207
+	GEORGIA__BRANTLEY = 137155
+	GEORGIA__DODGE = 137187
+	GEORGIA__DOUGLAS = 137190
+	GEORGIA__WHEELER = 137295
+	GEORGIA__LONG = 137233
+	GEORGIA__APPLING = 137143
+	GEORGIA__MURRAY = 137247
+	GEORGIA__HEARD = 137216
+	GEORGIA__CLINCH = 137174
+	GEORGIA__IRWIN = 137219
+	GEORGIA__COLQUITT = 137177
+	GEORGIA__CRISP = 137182
+	GEORGIA__COWETA = 137180
+	GEORGIA__MORGAN = 137246
+	GEORGIA__TWIGGS = 137285
+	GEORGIA__BRYAN = 137157
+	GEORGIA__BULLOCH = 137158
+	GEORGIA__CLARKE = 137171
+	GEORGIA__JOHNSON = 137225
+	GEORGIA__QUITMAN = 137260
+	GEORGIA__JACKSON = 137220
+	GEORGIA__BANKS = 137148
+	GEORGIA__TAYLOR = 137275
+	GEORGIA__STEWART = 137270
+	GEORGIA__GLYNN = 137205
+	GEORGIA__TURNER = 137284
+	GEORGIA__BEN_HILL = 137151
+	GEORGIA__EMANUEL = 137195
+	GEORGIA__WALKER = 137288
+	GEORGIA__DOOLY = 137188
+	GEORGIA__MARION = 137238
+	GEORGIA__MACON = 137236
+	GEORGIA__WEBSTER = 137294
+	GEORGIA__TOWNS = 137281
+	GEORGIA__TREUTLEN = 137282
+	GEORGIA__JONES = 137226
+	GEORGIA__HANCOCK = 137212
+	GEORGIA__CHATTOOGA = 137169
+	GEORGIA__LAURENS = 137229
+	GEORGIA__WILKINSON = 137300
+	GEORGIA__BARROW = 137149
+	GEORGIA__PAULDING = 137252
+	GEORGIA__FORSYTH = 137200
+	GEORGIA__WORTH = 137301
+	GEORGIA__THOMAS = 137278
+	GEORGIA__BLECKLEY = 137154
+	GEORGIA__EARLY = 137191
+	GEORGIA__MERIWETHER = 137241
+	GEORGIA__CLAY = 137172
+	GEORGIA__DOUGHERTY = 137189
+	GEORGIA__HARRIS = 137214
+	GEORGIA__BACON = 137145
+	GEORGIA__LAMAR = 137227
+	GEORGIA__SCHLEY = 137265
+	GEORGIA__CARROLL = 137164
+	GEORGIA__POLK = 137257
+	GEORGIA__HALL = 137211
+	GEORGIA__CHEROKEE = 137170
+	GEORGIA__RANDOLPH = 137262
+	GEORGIA__TALIAFERRO = 137273
+	GEORGIA__BARTOW = 137150
+	GEORGIA__MITCHELL = 137243
+	GEORGIA__COOK = 137179
+	GEORGIA__TELFAIR = 137276
+	GEORGIA__OCONEE = 137250
+	GEORGIA__ATKINSON = 137144
+	GEORGIA__JEFF_DAVIS = 137222
+	GEORGIA__MONROE = 137244
+	GEORGIA__STEPHENS = 137269
+	GEORGIA__BROOKS = 137156
+	GEORGIA__BAKER = 137146
+	GEORGIA__PUTNAM = 137259
+	GEORGIA__CATOOSA = 137165
+	GEORGIA__FANNIN = 137197
+	GEORGIA__SUMTER = 137271
+	GEORGIA__WASHINGTON = 137292
+	GEORGIA__TOOMBS = 137280
+	GEORGIA__RABUN = 137261
+	GEORGIA__JEFFERSON = 137223
+	GEORGIA__DAWSON = 137184
+	GEORGIA__SPALDING = 137268
+	GEORGIA__LUMPKIN = 137235
+	HAWAII__KAUAI = 137305
+	HAWAII__MAUI = 137306
+	HAWAII__HAWAII = 137302
+	HAWAII__KALAWAO = 137304
+	HAWAII__HONOLULU = 137303
+	IDAHO__TWIN_FALLS = 137348
+	IDAHO__BINGHAM = 137312
+	IDAHO__LINCOLN = 137338
+	IDAHO__BOISE = 137314
+	IDAHO__WASHINGTON = 137350
+	IDAHO__BUTTE = 137318
+	IDAHO__NEZ_PERCE = 137341
+	IDAHO__CAMAS = 137319
+	IDAHO__GOODING = 137330
+	IDAHO__KOOTENAI = 137334
+	IDAHO__ADA = 137307
+	IDAHO__CARIBOU = 137321
+	IDAHO__IDAHO = 137331
+	IDAHO__LATAH = 137335
+	IDAHO__BONNER = 137315
+	IDAHO__MADISON = 137339
+	IDAHO__CUSTER = 137325
+	IDAHO__LEMHI = 137336
+	IDAHO__GEM = 137329
+	IDAHO__CASSIA = 137322
+	IDAHO__JEROME = 137333
+	IDAHO__FRANKLIN = 137327
+	IDAHO__ELMORE = 137326
+	IDAHO__LEWIS = 137337
+	IDAHO__BOUNDARY = 137317
+	IDAHO__MINIDOKA = 137340
+	IDAHO__POWER = 137345
+	IDAHO__JEFFERSON = 137332
+	IDAHO__BANNOCK = 137309
+	IDAHO__BENEWAH = 137311
+	IDAHO__PAYETTE = 137344
+	IDAHO__CLEARWATER = 137324
+	IDAHO__VALLEY = 137349
+	IDAHO__FREMONT = 137328
+	IDAHO__ADAMS = 137308
+	IDAHO__OWYHEE = 137343
+	IDAHO__BLAINE = 137313
+	IDAHO__CANYON = 137320
+	IDAHO__BONNEVILLE = 137316
+	IDAHO__SHOSHONE = 137346
+	IDAHO__ONEIDA = 137342
+	IDAHO__CLARK = 137323
+	IDAHO__TETON = 137347
+	IDAHO__BEAR_LAKE = 137310
+	ILLINOIS__TAZEWELL = 137440
+	ILLINOIS__MCHENRY = 137413
+	ILLINOIS__WHITESIDE = 137448
+	ILLINOIS__FAYETTE = 137376
+	ILLINOIS__JERSEY = 137392
+	ILLINOIS__MACOUPIN = 137406
+	ILLINOIS__MARION = 137408
+	ILLINOIS__PEORIA = 137422
+	ILLINOIS__KNOX = 137398
+	ILLINOIS__COLES = 137365
+	ILLINOIS__LAWRENCE = 137401
+	ILLINOIS__OGLE = 137421
+	ILLINOIS__PULASKI = 137427
+	ILLINOIS__SALINE = 137433
+	ILLINOIS__PIKE = 137425
+	ILLINOIS__POPE = 137426
+	ILLINOIS__MONTGOMERY = 137418
+	ILLINOIS__WABASH = 137443
+	ILLINOIS__EDWARDS = 137374
+	ILLINOIS__LEE = 137402
+	ILLINOIS__ADAMS = 137351
+	ILLINOIS__DUPAGE = 137372
+	ILLINOIS__BOND = 137353
+	ILLINOIS__WILLIAMSON = 137450
+	ILLINOIS__HENDERSON = 137386
+	ILLINOIS__ALEXANDER = 137352
+	ILLINOIS__CARROLL = 137358
+	ILLINOIS__BOONE = 137354
+	ILLINOIS__EDGAR = 137373
+	ILLINOIS__MACON = 137405
+	ILLINOIS__JASPER = 137390
+	ILLINOIS__WILL = 137449
+	ILLINOIS__UNION = 137441
+	ILLINOIS__SCOTT = 137436
+	ILLINOIS__FULTON = 137379
+	ILLINOIS__LIVINGSTON = 137403
+	ILLINOIS__JOHNSON = 137394
+	ILLINOIS__SHELBY = 137437
+	ILLINOIS__FRANKLIN = 137378
+	ILLINOIS__PERRY = 137423
+	ILLINOIS__MASSAC = 137411
+	ILLINOIS__KANE = 137395
+	ILLINOIS__SAINT_CLAIR = 137432
+	ILLINOIS__FORD = 137377
+	ILLINOIS__KANKAKEE = 137396
+	ILLINOIS__BROWN = 137355
+	ILLINOIS__CHRISTIAN = 137361
+	ILLINOIS__ROCK_ISLAND = 137431
+	ILLINOIS__STEPHENSON = 137439
+	ILLINOIS__CALHOUN = 137357
+	ILLINOIS__JO_DAVIESS = 137393
+	ILLINOIS__WHITE = 137447
+	ILLINOIS__PUTNAM = 137428
+	ILLINOIS__HENRY = 137387
+	ILLINOIS__CLARK = 137362
+	ILLINOIS__IROQUOIS = 137388
+	ILLINOIS__PIATT = 137424
+	ILLINOIS__MOULTRIE = 137420
+	ILLINOIS__CUMBERLAND = 137368
+	ILLINOIS__CHAMPAIGN = 137360
+	ILLINOIS__MCDONOUGH = 137412
+	ILLINOIS__EFFINGHAM = 137375
+	ILLINOIS__HANCOCK = 137384
+	ILLINOIS__CASS = 137359
+	ILLINOIS__HAMILTON = 137383
+	ILLINOIS__MONROE = 137417
+	ILLINOIS__WASHINGTON = 137445
+	ILLINOIS__JACKSON = 137389
+	ILLINOIS__KENDALL = 137397
+	ILLINOIS__GREENE = 137381
+	ILLINOIS__CRAWFORD = 137367
+	ILLINOIS__WINNEBAGO = 137451
+	ILLINOIS__LAKE = 137400
+	ILLINOIS__GRUNDY = 137382
+	ILLINOIS__DE_KALB = 137369
+	ILLINOIS__MARSHALL = 137409
+	ILLINOIS__MCLEAN = 137414
+	ILLINOIS__VERMILION = 137442
+	ILLINOIS__CLINTON = 137364
+	ILLINOIS__LA_SALLE = 137399
+	ILLINOIS__MENARD = 137415
+	ILLINOIS__COOK = 137366
+	ILLINOIS__WOODFORD = 137452
+	ILLINOIS__GALLATIN = 137380
+	ILLINOIS__STARK = 137438
+	ILLINOIS__HARDIN = 137385
+	ILLINOIS__LOGAN = 137404
+	ILLINOIS__BUREAU = 137356
+	ILLINOIS__MASON = 137410
+	ILLINOIS__WAYNE = 137446
+	ILLINOIS__DE_WITT = 137370
+	ILLINOIS__MERCER = 137416
+	ILLINOIS__RANDOLPH = 137429
+	ILLINOIS__MORGAN = 137419
+	ILLINOIS__JEFFERSON = 137391
+	ILLINOIS__RICHLAND = 137430
+	ILLINOIS__MADISON = 137407
+	ILLINOIS__SANGAMON = 137434
+	ILLINOIS__SCHUYLER = 137435
+	ILLINOIS__WARREN = 137444
+	ILLINOIS__CLAY = 137363
+	ILLINOIS__DOUGLAS = 137371
+	INDIANA__FOUNTAIN = 137475
+	INDIANA__CLAY = 137463
+	INDIANA__BROWN = 137459
+	INDIANA__PIKE = 137515
+	INDIANA__WABASH = 137537
+	INDIANA__ADAMS = 137453
+	INDIANA__WASHINGTON = 137540
+	INDIANA__CLINTON = 137464
+	INDIANA__CRAWFORD = 137465
+	INDIANA__BOONE = 137458
+	INDIANA__GIBSON = 137478
+	INDIANA__STARKE = 137527
+	INDIANA__VIGO = 137536
+	INDIANA__FLOYD = 137474
+	INDIANA__SULLIVAN = 137529
+	INDIANA__FULTON = 137477
+	INDIANA__RANDOLPH = 137520
+	INDIANA__WHITLEY = 137544
+	INDIANA__DAVIESS = 137466
+	INDIANA__ORANGE = 137511
+	INDIANA__LAPORTE = 137498
+	INDIANA__JOHNSON = 137493
+	INDIANA__MARTIN = 137503
+	INDIANA__ELKHART = 137472
+	INDIANA__MONROE = 137505
+	INDIANA__JASPER = 137489
+	INDIANA__HENRY = 137485
+	INDIANA__PARKE = 137513
+	INDIANA__HENDRICKS = 137484
+	INDIANA__JENNINGS = 137492
+	INDIANA__BLACKFORD = 137457
+	INDIANA__GRANT = 137479
+	INDIANA__DELAWARE = 137470
+	INDIANA__SAINT_JOSEPH = 137523
+	INDIANA__DUBOIS = 137471
+	INDIANA__CARROLL = 137460
+	INDIANA__PERRY = 137514
+	INDIANA__RIPLEY = 137521
+	INDIANA__NOBLE = 137509
+	INDIANA__JEFFERSON = 137491
+	INDIANA__TIPPECANOE = 137531
+	INDIANA__HUNTINGTON = 137487
+	INDIANA__WHITE = 137543
+	INDIANA__WELLS = 137542
+	INDIANA__VANDERBURGH = 137534
+	INDIANA__ALLEN = 137454
+	INDIANA__KOSCIUSKO = 137495
+	INDIANA__GREENE = 137480
+	INDIANA__NEWTON = 137508
+	INDIANA__DEARBORN = 137468
+	INDIANA__UNION = 137533
+	INDIANA__KNOX = 137494
+	INDIANA__OWEN = 137512
+	INDIANA__PORTER = 137516
+	INDIANA__WARREN = 137538
+	INDIANA__MORGAN = 137507
+	INDIANA__HANCOCK = 137482
+	INDIANA__BARTHOLOMEW = 137455
+	INDIANA__POSEY = 137517
+	INDIANA__BENTON = 137456
+	INDIANA__HOWARD = 137486
+	INDIANA__WAYNE = 137541
+	INDIANA__SHELBY = 137525
+	INDIANA__MADISON = 137500
+	INDIANA__DECATUR = 137469
+	INDIANA__VERMILLION = 137535
+	INDIANA__MARSHALL = 137502
+	INDIANA__PULASKI = 137518
+	INDIANA__HAMILTON = 137481
+	INDIANA__FAYETTE = 137473
+	INDIANA__TIPTON = 137532
+	INDIANA__WARRICK = 137539
+	INDIANA__STEUBEN = 137528
+	INDIANA__FRANKLIN = 137476
+	INDIANA__MIAMI = 137504
+	INDIANA__JACKSON = 137488
+	INDIANA__LAKE = 137497
+	INDIANA__LAGRANGE = 137496
+	INDIANA__OHIO = 137510
+	INDIANA__CASS = 137461
+	INDIANA__RUSH = 137522
+	INDIANA__MARION = 137501
+	INDIANA__SCOTT = 137524
+	INDIANA__PUTNAM = 137519
+	INDIANA__CLARK = 137462
+	INDIANA__HARRISON = 137483
+	INDIANA__MONTGOMERY = 137506
+	INDIANA__DE_KALB = 137467
+	INDIANA__SPENCER = 137526
+	INDIANA__LAWRENCE = 137499
+	INDIANA__SWITZERLAND = 137530
+	INDIANA__JAY = 137490
+	IOWA__ALLAMAKEE = 137547
+	IOWA__HUMBOLDT = 137590
+	IOWA__WARREN = 137635
+	IOWA__PALO_ALTO = 137618
+	IOWA__GUTHRIE = 137583
+	IOWA__TAMA = 137630
+	IOWA__VAN_BUREN = 137633
+	IOWA__FRANKLIN = 137579
+	IOWA__BREMER = 137553
+	IOWA__CRAWFORD = 137568
+	IOWA__LINN = 137601
+	IOWA__CALHOUN = 137557
+	IOWA__CLINTON = 137567
+	IOWA__ADAIR = 137545
+	IOWA__FAYETTE = 137577
+	IOWA__HOWARD = 137589
+	IOWA__CLARKE = 137564
+	IOWA__MONTGOMERY = 137613
+	IOWA__KOSSUTH = 137599
+	IOWA__STORY = 137629
+	IOWA__SAC = 137625
+	IOWA__WINNESHIEK = 137640
+	IOWA__SHELBY = 137627
+	IOWA__LYON = 137604
+	IOWA__DALLAS = 137569
+	IOWA__APPANOOSE = 137548
+	IOWA__HARDIN = 137586
+	IOWA__SIOUX = 137628
+	IOWA__LEE = 137600
+	IOWA__MITCHELL = 137610
+	IOWA__HENRY = 137588
+	IOWA__CLAYTON = 137566
+	IOWA__WOODBURY = 137641
+	IOWA__OBRIEN = 137615
+	IOWA__UNION = 137632
+	IOWA__HAMILTON = 137584
+	IOWA__MARION = 137607
+	IOWA__EMMET = 137576
+	IOWA__KEOKUK = 137598
+	IOWA__ADAMS = 137546
+	IOWA__WINNEBAGO = 137639
+	IOWA__MILLS = 137609
+	IOWA__TAYLOR = 137631
+	IOWA__MARSHALL = 137608
+	IOWA__PAGE = 137617
+	IOWA__SCOTT = 137626
+	IOWA__IDA = 137591
+	IOWA__GRUNDY = 137582
+	IOWA__JONES = 137597
+	IOWA__WASHINGTON = 137636
+	IOWA__BUTLER = 137556
+	IOWA__MONROE = 137612
+	IOWA__LUCAS = 137603
+	IOWA__DUBUQUE = 137575
+	IOWA__PLYMOUTH = 137619
+	IOWA__MUSCATINE = 137614
+	IOWA__BOONE = 137552
+	IOWA__CLAY = 137565
+	IOWA__DES_MOINES = 137573
+	IOWA__MONONA = 137611
+	IOWA__CARROLL = 137558
+	IOWA__DAVIS = 137570
+	IOWA__POCAHONTAS = 137620
+	IOWA__IOWA = 137592
+	IOWA__MAHASKA = 137606
+	IOWA__WAYNE = 137637
+	IOWA__JASPER = 137594
+	IOWA__BENTON = 137550
+	IOWA__MADISON = 137605
+	IOWA__AUDUBON = 137549
+	IOWA__POLK = 137621
+	IOWA__JOHNSON = 137596
+	IOWA__JACKSON = 137593
+	IOWA__BUENA_VISTA = 137555
+	IOWA__POTTAWATTAMIE = 137622
+	IOWA__BUCHANAN = 137554
+	IOWA__HANCOCK = 137585
+	IOWA__HARRISON = 137587
+	IOWA__RINGGOLD = 137624
+	IOWA__CHEROKEE = 137562
+	IOWA__POWESHIEK = 137623
+	IOWA__CHICKASAW = 137563
+	IOWA__FREMONT = 137580
+	IOWA__CEDAR = 137560
+	IOWA__WORTH = 137642
+	IOWA__DELAWARE = 137572
+	IOWA__BLACK_HAWK = 137551
+	IOWA__OSCEOLA = 137616
+	IOWA__JEFFERSON = 137595
+	IOWA__CASS = 137559
+	IOWA__GREENE = 137581
+	IOWA__FLOYD = 137578
+	IOWA__WAPELLO = 137634
+	IOWA__WRIGHT = 137643
+	IOWA__WEBSTER = 137638
+	IOWA__CERRO_GORDO = 137561
+	IOWA__DICKINSON = 137574
+	IOWA__DECATUR = 137571
+	IOWA__LOUISA = 137602
+	KANSAS__REPUBLIC = 137722
+	KANSAS__COWLEY = 137661
+	KANSAS__STEVENS = 137738
+	KANSAS__GRAHAM = 137676
+	KANSAS__DOUGLAS = 137666
+	KANSAS__BOURBON = 137649
+	KANSAS__JEWELL = 137688
+	KANSAS__SCOTT = 137729
+	KANSAS__SALINE = 137728
+	KANSAS__BARBER = 137647
+	KANSAS__CRAWFORD = 137662
+	KANSAS__NEOSHO = 137710
+	KANSAS__SEDGWICK = 137730
+	KANSAS__CLOUD = 137658
+	KANSAS__CHEYENNE = 137655
+	KANSAS__WALLACE = 137743
+	KANSAS__MORRIS = 137707
+	KANSAS__MORTON = 137708
+	KANSAS__MCPHERSON = 137702
+	KANSAS__WOODSON = 137747
+	KANSAS__HARVEY = 137683
+	KANSAS__GRANT = 137677
+	KANSAS__MITCHELL = 137705
+	KANSAS__FRANKLIN = 137673
+	KANSAS__ALLEN = 137644
+	KANSAS__FINNEY = 137671
+	KANSAS__DICKINSON = 137664
+	KANSAS__RUSSELL = 137727
+	KANSAS__RAWLINS = 137720
+	KANSAS__MIAMI = 137704
+	KANSAS__COFFEY = 137659
+	KANSAS__ANDERSON = 137645
+	KANSAS__CHASE = 137652
+	KANSAS__HARPER = 137682
+	KANSAS__WILSON = 137746
+	KANSAS__SHERIDAN = 137733
+	KANSAS__MEADE = 137703
+	KANSAS__STANTON = 137737
+	KANSAS__HAMILTON = 137681
+	KANSAS__GEARY = 137674
+	KANSAS__KIOWA = 137692
+	KANSAS__BARTON = 137648
+	KANSAS__BROWN = 137650
+	KANSAS__COMANCHE = 137660
+	KANSAS__ROOKS = 137725
+	KANSAS__JEFFERSON = 137687
+	KANSAS__POTTAWATOMIE = 137718
+	KANSAS__EDWARDS = 137667
+	KANSAS__LINN = 137697
+	KANSAS__LANE = 137694
+	KANSAS__HODGEMAN = 137685
+	KANSAS__SUMNER = 137739
+	KANSAS__ATCHISON = 137646
+	KANSAS__SHAWNEE = 137732
+	KANSAS__DONIPHAN = 137665
+	KANSAS__PHILLIPS = 137717
+	KANSAS__SHERMAN = 137734
+	KANSAS__CHEROKEE = 137654
+	KANSAS__CLARK = 137656
+	KANSAS__DECATUR = 137663
+	KANSAS__LYON = 137699
+	KANSAS__RILEY = 137724
+	KANSAS__OSBORNE = 137714
+	KANSAS__RUSH = 137726
+	KANSAS__KEARNY = 137690
+	KANSAS__GREELEY = 137679
+	KANSAS__GRAY = 137678
+	KANSAS__SEWARD = 137731
+	KANSAS__PAWNEE = 137716
+	KANSAS__TREGO = 137741
+	KANSAS__RENO = 137721
+	KANSAS__CHAUTAUQUA = 137653
+	KANSAS__NEMAHA = 137709
+	KANSAS__NORTON = 137712
+	KANSAS__OTTAWA = 137715
+	KANSAS__KINGMAN = 137691
+	KANSAS__NESS = 137711
+	KANSAS__LINCOLN = 137696
+	KANSAS__FORD = 137672
+	KANSAS__MARION = 137700
+	KANSAS__WASHINGTON = 137744
+	KANSAS__PRATT = 137719
+	KANSAS__WABAUNSEE = 137742
+	KANSAS__LEAVENWORTH = 137695
+	KANSAS__HASKELL = 137684
+	KANSAS__STAFFORD = 137736
+	KANSAS__GOVE = 137675
+	KANSAS__LOGAN = 137698
+	KANSAS__MARSHALL = 137701
+	KANSAS__ELLSWORTH = 137670
+	KANSAS__MONTGOMERY = 137706
+	KANSAS__JACKSON = 137686
+	KANSAS__WYANDOTTE = 137748
+	KANSAS__WICHITA = 137745
+	KANSAS__SMITH = 137735
+	KANSAS__ELLIS = 137669
+	KANSAS__OSAGE = 137713
+	KANSAS__JOHNSON = 137689
+	KANSAS__THOMAS = 137740
+	KANSAS__ELK = 137668
+	KANSAS__BUTLER = 137651
+	KANSAS__GREENWOOD = 137680
+	KANSAS__CLAY = 137657
+	KANSAS__RICE = 137723
+	KANSAS__LABETTE = 137693
+	KENTUCKY__MCCRACKEN = 137827
+	KENTUCKY__SCOTT = 137853
+	KENTUCKY__SHELBY = 137854
+	KENTUCKY__JEFFERSON = 137804
+	KENTUCKY__FULTON = 137786
+	KENTUCKY__KNOX = 137809
+	KENTUCKY__MORGAN = 137836
+	KENTUCKY__GRAYSON = 137791
+	KENTUCKY__CHRISTIAN = 137772
+	KENTUCKY__ESTILL = 137781
+	KENTUCKY__GREENUP = 137793
+	KENTUCKY__ADAIR = 137749
+	KENTUCKY__HOPKINS = 137802
+	KENTUCKY__MENIFEE = 137831
+	KENTUCKY__GREEN = 137792
+	KENTUCKY__OWEN = 137842
+	KENTUCKY__BUTLER = 137764
+	KENTUCKY__OWSLEY = 137843
+	KENTUCKY__MARION = 137823
+	KENTUCKY__CASEY = 137771
+	KENTUCKY__LAWRENCE = 137812
+	KENTUCKY__PERRY = 137845
+	KENTUCKY__JOHNSON = 137806
+	KENTUCKY__HANCOCK = 137794
+	KENTUCKY__MONTGOMERY = 137835
+	KENTUCKY__KNOTT = 137808
+	KENTUCKY__LESLIE = 137814
+	KENTUCKY__MCCREARY = 137828
+	KENTUCKY__WEBSTER = 137865
+	KENTUCKY__LIVINGSTON = 137818
+	KENTUCKY__HENRY = 137800
+	KENTUCKY__METCALFE = 137833
+	KENTUCKY__CARROLL = 137769
+	KENTUCKY__CLINTON = 137775
+	KENTUCKY__ELLIOTT = 137780
+	KENTUCKY__BALLARD = 137752
+	KENTUCKY__DAVIESS = 137778
+	KENTUCKY__PIKE = 137846
+	KENTUCKY__CRITTENDEN = 137776
+	KENTUCKY__CARLISLE = 137768
+	KENTUCKY__MCLEAN = 137829
+	KENTUCKY__BOURBON = 137757
+	KENTUCKY__HARLAN = 137796
+	KENTUCKY__LEE = 137813
+	KENTUCKY__LETCHER = 137815
+	KENTUCKY__MERCER = 137832
+	KENTUCKY__WOODFORD = 137868
+	KENTUCKY__MARSHALL = 137824
+	KENTUCKY__SIMPSON = 137855
+	KENTUCKY__FAYETTE = 137782
+	KENTUCKY__TAYLOR = 137857
+	KENTUCKY__WASHINGTON = 137863
+	KENTUCKY__BELL = 137755
+	KENTUCKY__ROWAN = 137851
+	KENTUCKY__BULLITT = 137763
+	KENTUCKY__BOONE = 137756
+	KENTUCKY__BOYLE = 137759
+	KENTUCKY__BATH = 137754
+	KENTUCKY__LARUE = 137810
+	KENTUCKY__BRECKINRIDGE = 137762
+	KENTUCKY__CALDWELL = 137765
+	KENTUCKY__HENDERSON = 137799
+	KENTUCKY__FRANKLIN = 137785
+	KENTUCKY__LYON = 137820
+	KENTUCKY__KENTON = 137807
+	KENTUCKY__WOLFE = 137867
+	KENTUCKY__HICKMAN = 137801
+	KENTUCKY__TRIMBLE = 137860
+	KENTUCKY__EDMONSON = 137779
+	KENTUCKY__GRANT = 137789
+	KENTUCKY__FLOYD = 137784
+	KENTUCKY__JESSAMINE = 137805
+	KENTUCKY__NELSON = 137838
+	KENTUCKY__GALLATIN = 137787
+	KENTUCKY__ANDERSON = 137751
+	KENTUCKY__HARDIN = 137795
+	KENTUCKY__BRACKEN = 137760
+	KENTUCKY__POWELL = 137847
+	KENTUCKY__LEWIS = 137816
+	KENTUCKY__HARRISON = 137797
+	KENTUCKY__PULASKI = 137848
+	KENTUCKY__ROCKCASTLE = 137850
+	KENTUCKY__MEADE = 137830
+	KENTUCKY__CLARK = 137773
+	KENTUCKY__UNION = 137861
+	KENTUCKY__LAUREL = 137811
+	KENTUCKY__MARTIN = 137825
+	KENTUCKY__PENDLETON = 137844
+	KENTUCKY__MONROE = 137834
+	KENTUCKY__ALLEN = 137750
+	KENTUCKY__BARREN = 137753
+	KENTUCKY__MASON = 137826
+	KENTUCKY__CLAY = 137774
+	KENTUCKY__MUHLENBERG = 137837
+	KENTUCKY__CUMBERLAND = 137777
+	KENTUCKY__RUSSELL = 137852
+	KENTUCKY__GARRARD = 137788
+	KENTUCKY__BREATHITT = 137761
+	KENTUCKY__TODD = 137858
+	KENTUCKY__OHIO = 137840
+	KENTUCKY__WHITLEY = 137866
+	KENTUCKY__GRAVES = 137790
+	KENTUCKY__CARTER = 137770
+	KENTUCKY__ROBERTSON = 137849
+	KENTUCKY__NICHOLAS = 137839
+	KENTUCKY__SPENCER = 137856
+	KENTUCKY__CALLOWAY = 137766
+	KENTUCKY__HART = 137798
+	KENTUCKY__WARREN = 137862
+	KENTUCKY__LOGAN = 137819
+	KENTUCKY__BOYD = 137758
+	KENTUCKY__MADISON = 137821
+	KENTUCKY__WAYNE = 137864
+	KENTUCKY__JACKSON = 137803
+	KENTUCKY__TRIGG = 137859
+	KENTUCKY__LINCOLN = 137817
+	KENTUCKY__FLEMING = 137783
+	KENTUCKY__CAMPBELL = 137767
+	KENTUCKY__OLDHAM = 137841
+	KENTUCKY__MAGOFFIN = 137822
+	LOUISIANA__DE_SOTO = 137884
+	LOUISIANA__WINN = 137932
+	LOUISIANA__JACKSON = 137893
+	LOUISIANA__RICHLAND = 137910
+	LOUISIANA__AVOYELLES = 137873
+	LOUISIANA__SAINT_BERNARD = 137912
+	LOUISIANA__MOREHOUSE = 137902
+	LOUISIANA__BOSSIER = 137876
+	LOUISIANA__CALDWELL = 137879
+	LOUISIANA__JEFFERSON_DAVIS = 137895
+	LOUISIANA__SAINT_LANDRY = 137917
+	LOUISIANA__WEST_BATON_ROUGE = 137929
+	LOUISIANA__GRANT = 137890
+	LOUISIANA__WASHINGTON = 137927
+	LOUISIANA__NATCHITOCHES = 137903
+	LOUISIANA__ORLEANS = 137904
+	LOUISIANA__WEBSTER = 137928
+	LOUISIANA__WEST_CARROLL = 137930
+	LOUISIANA__ASSUMPTION = 137872
+	LOUISIANA__WEST_FELICIANA = 137931
+	LOUISIANA__BEAUREGARD = 137874
+	LOUISIANA__RED_RIVER = 137909
+	LOUISIANA__CONCORDIA = 137883
+	LOUISIANA__SAINT_CHARLES = 137913
+	LOUISIANA__LAFAYETTE = 137897
+	LOUISIANA__JEFFERSON = 137894
+	LOUISIANA__LA_SALLE = 137896
+	LOUISIANA__OUACHITA = 137905
+	LOUISIANA__IBERVILLE = 137892
+	LOUISIANA__RAPIDES = 137908
+	LOUISIANA__CATAHOULA = 137881
+	LOUISIANA__EAST_FELICIANA = 137887
+	LOUISIANA__EAST_CARROLL = 137886
+	LOUISIANA__CALCASIEU = 137878
+	LOUISIANA__SAINT_TAMMANY = 137920
+	LOUISIANA__LINCOLN = 137899
+	LOUISIANA__CLAIBORNE = 137882
+	LOUISIANA__EVANGELINE = 137888
+	LOUISIANA__TENSAS = 137922
+	LOUISIANA__BIENVILLE = 137875
+	LOUISIANA__SAINT_JAMES = 137915
+	LOUISIANA__VERNON = 137926
+	LOUISIANA__SAINT_JOHN_THE_BAPTIST = 137916
+	LOUISIANA__ASCENSION = 137871
+	LOUISIANA__ALLEN = 137870
+	LOUISIANA__SAINT_HELENA = 137914
+	LOUISIANA__SABINE = 137911
+	LOUISIANA__UNION = 137924
+	LOUISIANA__CAMERON = 137880
+	LOUISIANA__LIVINGSTON = 137900
+	LOUISIANA__POINTE_COUPEE = 137907
+	LOUISIANA__VERMILION = 137925
+	LOUISIANA__SAINT_MARTIN = 137918
+	LOUISIANA__CADDO = 137877
+	LOUISIANA__TERREBONNE = 137923
+	LOUISIANA__LAFOURCHE = 137898
+	LOUISIANA__FRANKLIN = 137889
+	LOUISIANA__EAST_BATON_ROUGE = 137885
+	LOUISIANA__IBERIA = 137891
+	LOUISIANA__MADISON = 137901
+	LOUISIANA__SAINT_MARY = 137919
+	LOUISIANA__PLAQUEMINES = 137906
+	LOUISIANA__TANGIPAHOA = 137921
+	LOUISIANA__ACADIA = 137869
+	MAINE__SAGADAHOC = 137944
+	MAINE__HANCOCK = 137937
+	MAINE__KNOX = 137939
+	MAINE__KENNEBEC = 137938
+	MAINE__OXFORD = 137941
+	MAINE__LINCOLN = 137940
+	MAINE__CUMBERLAND = 137935
+	MAINE__AROOSTOOK = 137934
+	MAINE__ANDROSCOGGIN = 137933
+	MAINE__PISCATAQUIS = 137943
+	MAINE__PENOBSCOT = 137942
+	MAINE__WASHINGTON = 137947
+	MAINE__FRANKLIN = 137936
+	MAINE__YORK = 137948
+	MAINE__WALDO = 137946
+	MAINE__SOMERSET = 137945
+	MARYLAND__KENT = 137962
+	MARYLAND__SOMERSET = 137967
+	MARYLAND__MONTGOMERY = 137963
+	MARYLAND__PRINCE_GEORGES = 137964
+	MARYLAND__CECIL = 137955
+	MARYLAND__GARRETT = 137959
+	MARYLAND__HARFORD = 137960
+	MARYLAND__CAROLINE = 137953
+	MARYLAND__BALTIMORE_CITY = 100023578
+	MARYLAND__ALLEGANY = 137949
+	MARYLAND__WICOMICO = 137970
+	MARYLAND__WASHINGTON = 137969
+	MARYLAND__HOWARD = 137961
+	MARYLAND__SAINT_MARYS = 137966
+	MARYLAND__ANNE_ARUNDEL = 137950
+	MARYLAND__CARROLL = 137954
+	MARYLAND__TALBOT = 137968
+	MARYLAND__BALTIMORE = 137951
+	MARYLAND__FREDERICK = 137958
+	MARYLAND__WORCESTER = 137971
+	MARYLAND__CHARLES = 137956
+	MARYLAND__CALVERT = 137952
+	MARYLAND__DORCHESTER = 137957
+	MARYLAND__QUEEN_ANNES = 137965
+	MASSACHUSETTS__ESSEX = 137976
+	MASSACHUSETTS__BRISTOL = 137974
+	MASSACHUSETTS__SUFFOLK = 137984
+	MASSACHUSETTS__MIDDLESEX = 137980
+	MASSACHUSETTS__PLYMOUTH = 137983
+	MASSACHUSETTS__BERKSHIRE = 137973
+	MASSACHUSETTS__NANTUCKET = 137981
+	MASSACHUSETTS__HAMPDEN = 137978
+	MASSACHUSETTS__HAMPSHIRE = 137979
+	MASSACHUSETTS__BARNSTABLE = 137972
+	MASSACHUSETTS__WORCESTER = 137985
+	MASSACHUSETTS__FRANKLIN = 137977
+	MASSACHUSETTS__NORFOLK = 137982
+	MASSACHUSETTS__DUKES = 137975
+	MICHIGAN__BAY = 137994
+	MICHIGAN__LAPEER = 138029
+	MICHIGAN__KALKASKA = 138025
+	MICHIGAN__CALHOUN = 137998
+	MICHIGAN__SAINT_CLAIR = 138059
+	MICHIGAN__CHEBOYGAN = 138001
+	MICHIGAN__JACKSON = 138023
+	MICHIGAN__OAKLAND = 138048
+	MICHIGAN__PRESQUE_ISLE = 138056
+	MICHIGAN__SCHOOLCRAFT = 138062
+	MICHIGAN__CASS = 137999
+	MICHIGAN__MARQUETTE = 138037
+	MICHIGAN__GOGEBIC = 138012
+	MICHIGAN__HILLSDALE = 138015
+	MICHIGAN__GRAND_TRAVERSE = 138013
+	MICHIGAN__WASHTENAW = 138066
+	MICHIGAN__WAYNE = 138067
+	MICHIGAN__KENT = 138026
+	MICHIGAN__MONTCALM = 138044
+	MICHIGAN__BENZIE = 137995
+	MICHIGAN__CLARE = 138003
+	MICHIGAN__EMMET = 138009
+	MICHIGAN__IONIA = 138019
+	MICHIGAN__BERRIEN = 137996
+	MICHIGAN__MASON = 138038
+	MICHIGAN__GLADWIN = 138011
+	MICHIGAN__ALGER = 137987
+	MICHIGAN__INGHAM = 138018
+	MICHIGAN__WEXFORD = 138068
+	MICHIGAN__MECOSTA = 138039
+	MICHIGAN__KEWEENAW = 138027
+	MICHIGAN__CHARLEVOIX = 138000
+	MICHIGAN__ISABELLA = 138022
+	MICHIGAN__LUCE = 138033
+	MICHIGAN__MIDLAND = 138041
+	MICHIGAN__SANILAC = 138061
+	MICHIGAN__CLINTON = 138004
+	MICHIGAN__HURON = 138017
+	MICHIGAN__MACKINAC = 138034
+	MICHIGAN__HOUGHTON = 138016
+	MICHIGAN__MONROE = 138043
+	MICHIGAN__BARAGA = 137992
+	MICHIGAN__SAGINAW = 138058
+	MICHIGAN__VAN_BUREN = 138065
+	MICHIGAN__ROSCOMMON = 138057
+	MICHIGAN__IRON = 138021
+	MICHIGAN__CRAWFORD = 138005
+	MICHIGAN__OGEMAW = 138050
+	MICHIGAN__ALPENA = 137989
+	MICHIGAN__CHIPPEWA = 138002
+	MICHIGAN__ONTONAGON = 138051
+	MICHIGAN__ANTRIM = 137990
+	MICHIGAN__SHIAWASSEE = 138063
+	MICHIGAN__ALLEGAN = 137988
+	MICHIGAN__LAKE = 138028
+	MICHIGAN__TUSCOLA = 138064
+	MICHIGAN__LENAWEE = 138031
+	MICHIGAN__MENOMINEE = 138040
+	MICHIGAN__KALAMAZOO = 138024
+	MICHIGAN__OSCEOLA = 138052
+	MICHIGAN__EATON = 138008
+	MICHIGAN__MANISTEE = 138036
+	MICHIGAN__MISSAUKEE = 138042
+	MICHIGAN__BRANCH = 137997
+	MICHIGAN__LEELANAU = 138030
+	MICHIGAN__DICKINSON = 138007
+	MICHIGAN__GENESEE = 138010
+	MICHIGAN__OCEANA = 138049
+	MICHIGAN__SAINT_JOSEPH = 138060
+	MICHIGAN__LIVINGSTON = 138032
+	MICHIGAN__GRATIOT = 138014
+	MICHIGAN__MONTMORENCY = 138045
+	MICHIGAN__MACOMB = 138035
+	MICHIGAN__MUSKEGON = 138046
+	MICHIGAN__DELTA = 138006
+	MICHIGAN__ALCONA = 137986
+	MICHIGAN__ARENAC = 137991
+	MICHIGAN__OTTAWA = 138055
+	MICHIGAN__IOSCO = 138020
+	MICHIGAN__OTSEGO = 138054
+	MICHIGAN__OSCODA = 138053
+	MICHIGAN__BARRY = 137993
+	MICHIGAN__NEWAYGO = 138047
+	MINNESOTA__WABASHA = 138147
+	MINNESOTA__CHISAGO = 138081
+	MINNESOTA__PIPESTONE = 138127
+	MINNESOTA__STEVENS = 138143
+	MINNESOTA__CLAY = 138082
+	MINNESOTA__GOODHUE = 138093
+	MINNESOTA__FREEBORN = 138092
+	MINNESOTA__HUBBARD = 138097
+	MINNESOTA__ROCK = 138135
+	MINNESOTA__LE_SUEUR = 138108
+	MINNESOTA__BECKER = 138071
+	MINNESOTA__AITKIN = 138069
+	MINNESOTA__STEARNS = 138141
+	MINNESOTA__RENVILLE = 138133
+	MINNESOTA__SHERBURNE = 138139
+	MINNESOTA__BELTRAMI = 138072
+	MINNESOTA__NICOLLET = 138120
+	MINNESOTA__ROSEAU = 138136
+	MINNESOTA__TODD = 138145
+	MINNESOTA__OLMSTED = 138123
+	MINNESOTA__MAHNOMEN = 138111
+	MINNESOTA__OTTER_TAIL = 138124
+	MINNESOTA__STEELE = 138142
+	MINNESOTA__RED_LAKE = 138131
+	MINNESOTA__BROWN = 138076
+	MINNESOTA__NOBLES = 138121
+	MINNESOTA__CHIPPEWA = 138080
+	MINNESOTA__HOUSTON = 138096
+	MINNESOTA__WASHINGTON = 138150
+	MINNESOTA__GRANT = 138094
+	MINNESOTA__WINONA = 138153
+	MINNESOTA__MEEKER = 138115
+	MINNESOTA__WADENA = 138148
+	MINNESOTA__DODGE = 138088
+	MINNESOTA__SIBLEY = 138140
+	MINNESOTA__MCLEOD = 138114
+	MINNESOTA__CLEARWATER = 138083
+	MINNESOTA__MILLE_LACS = 138116
+	MINNESOTA__BLUE_EARTH = 138075
+	MINNESOTA__CARVER = 138078
+	MINNESOTA__MARSHALL = 138112
+	MINNESOTA__POPE = 138129
+	MINNESOTA__FILLMORE = 138091
+	MINNESOTA__TRAVERSE = 138146
+	MINNESOTA__YELLOW_MEDICINE = 138155
+	MINNESOTA__LAKE = 138106
+	MINNESOTA__WILKIN = 138152
+	MINNESOTA__DAKOTA = 138087
+	MINNESOTA__KANDIYOHI = 138102
+	MINNESOTA__JACKSON = 138100
+	MINNESOTA__CASS = 138079
+	MINNESOTA__LAKE_OF_THE_WOODS = 138107
+	MINNESOTA__KANABEC = 138101
+	MINNESOTA__ISANTI = 138098
+	MINNESOTA__DOUGLAS = 138089
+	MINNESOTA__PENNINGTON = 138125
+	MINNESOTA__REDWOOD = 138132
+	MINNESOTA__BIG_STONE = 138074
+	MINNESOTA__ITASCA = 138099
+	MINNESOTA__LAC_QUI_PARLE = 138105
+	MINNESOTA__SWIFT = 138144
+	MINNESOTA__COTTONWOOD = 138085
+	MINNESOTA__WRIGHT = 138154
+	MINNESOTA__HENNEPIN = 138095
+	MINNESOTA__MARTIN = 138113
+	MINNESOTA__WASECA = 138149
+	MINNESOTA__BENTON = 138073
+	MINNESOTA__NORMAN = 138122
+	MINNESOTA__CARLTON = 138077
+	MINNESOTA__PINE = 138126
+	MINNESOTA__RICE = 138134
+	MINNESOTA__SCOTT = 138138
+	MINNESOTA__MOWER = 138118
+	MINNESOTA__LYON = 138110
+	MINNESOTA__COOK = 138084
+	MINNESOTA__POLK = 138128
+	MINNESOTA__WATONWAN = 138151
+	MINNESOTA__SAINT_LOUIS = 138137
+	MINNESOTA__KITTSON = 138103
+	MINNESOTA__MURRAY = 138119
+	MINNESOTA__LINCOLN = 138109
+	MINNESOTA__ANOKA = 138070
+	MINNESOTA__MORRISON = 138117
+	MINNESOTA__KOOCHICHING = 138104
+	MINNESOTA__RAMSEY = 138130
+	MINNESOTA__FARIBAULT = 138090
+	MINNESOTA__CROW_WING = 138086
+	MISSISSIPPI__SUNFLOWER = 138222
+	MISSISSIPPI__TISHOMINGO = 138226
+	MISSISSIPPI__NEWTON = 138206
+	MISSISSIPPI__ATTALA = 138159
+	MISSISSIPPI__PRENTISS = 138214
+	MISSISSIPPI__KEMPER = 138190
+	MISSISSIPPI__LEAKE = 138195
+	MISSISSIPPI__MADISON = 138200
+	MISSISSIPPI__LAUDERDALE = 138193
+	MISSISSIPPI__DESOTO = 138172
+	MISSISSIPPI__AMITE = 138158
+	MISSISSIPPI__WALTHALL = 138229
+	MISSISSIPPI__CLAIBORNE = 138166
+	MISSISSIPPI__COVINGTON = 138171
+	MISSISSIPPI__GEORGE = 138175
+	MISSISSIPPI__CLAY = 138168
+	MISSISSIPPI__PEARL_RIVER = 138210
+	MISSISSIPPI__MARSHALL = 138202
+	MISSISSIPPI__YALOBUSHA = 138236
+	MISSISSIPPI__FRANKLIN = 138174
+	MISSISSIPPI__CHICKASAW = 138164
+	MISSISSIPPI__TALLAHATCHIE = 138223
+	MISSISSIPPI__LAFAYETTE = 138191
+	MISSISSIPPI__UNION = 138228
+	MISSISSIPPI__PONTOTOC = 138213
+	MISSISSIPPI__LEFLORE = 138197
+	MISSISSIPPI__SCOTT = 138217
+	MISSISSIPPI__WINSTON = 138235
+	MISSISSIPPI__WEBSTER = 138233
+	MISSISSIPPI__SMITH = 138220
+	MISSISSIPPI__FORREST = 138173
+	MISSISSIPPI__TUNICA = 138227
+	MISSISSIPPI__CLARKE = 138167
+	MISSISSIPPI__ISSAQUENA = 138183
+	MISSISSIPPI__CHOCTAW = 138165
+	MISSISSIPPI__WILKINSON = 138234
+	MISSISSIPPI__CARROLL = 138163
+	MISSISSIPPI__HINDS = 138180
+	MISSISSIPPI__YAZOO = 138237
+	MISSISSIPPI__LEE = 138196
+	MISSISSIPPI__WASHINGTON = 138231
+	MISSISSIPPI__LINCOLN = 138198
+	MISSISSIPPI__BOLIVAR = 138161
+	MISSISSIPPI__CALHOUN = 138162
+	MISSISSIPPI__LAWRENCE = 138194
+	MISSISSIPPI__RANKIN = 138216
+	MISSISSIPPI__JACKSON = 138185
+	MISSISSIPPI__MONTGOMERY = 138204
+	MISSISSIPPI__COAHOMA = 138169
+	MISSISSIPPI__PERRY = 138211
+	MISSISSIPPI__MONROE = 138203
+	MISSISSIPPI__ITAWAMBA = 138184
+	MISSISSIPPI__MARION = 138201
+	MISSISSIPPI__SHARKEY = 138218
+	MISSISSIPPI__STONE = 138221
+	MISSISSIPPI__OKTIBBEHA = 138208
+	MISSISSIPPI__TIPPAH = 138225
+	MISSISSIPPI__BENTON = 138160
+	MISSISSIPPI__HUMPHREYS = 138182
+	MISSISSIPPI__PIKE = 138212
+	MISSISSIPPI__TATE = 138224
+	MISSISSIPPI__NESHOBA = 138205
+	MISSISSIPPI__GREENE = 138176
+	MISSISSIPPI__JEFFERSON = 138187
+	MISSISSIPPI__JONES = 138189
+	MISSISSIPPI__LAMAR = 138192
+	MISSISSIPPI__JEFFERSON_DAVIS = 138188
+	MISSISSIPPI__ALCORN = 138157
+	MISSISSIPPI__ADAMS = 138156
+	MISSISSIPPI__QUITMAN = 138215
+	MISSISSIPPI__HARRISON = 138179
+	MISSISSIPPI__HOLMES = 138181
+	MISSISSIPPI__NOXUBEE = 138207
+	MISSISSIPPI__PANOLA = 138209
+	MISSISSIPPI__COPIAH = 138170
+	MISSISSIPPI__WAYNE = 138232
+	MISSISSIPPI__GRENADA = 138177
+	MISSISSIPPI__LOWNDES = 138199
+	MISSISSIPPI__WARREN = 138230
+	MISSISSIPPI__HANCOCK = 138178
+	MISSISSIPPI__JASPER = 138186
+	MISSISSIPPI__SIMPSON = 138219
+	MISSOURI__AUDRAIN = 138241
+	MISSOURI__MONTGOMERY = 138307
+	MISSOURI__DUNKLIN = 138272
+	MISSOURI__CALLAWAY = 138251
+	MISSOURI__PHELPS = 138318
+	MISSOURI__BARTON = 138243
+	MISSOURI__MONROE = 138306
+	MISSOURI__ATCHISON = 138240
+	MISSOURI__OSAGE = 138313
+	MISSOURI__SAINT_CHARLES = 138329
+	MISSOURI__DE_KALB = 138269
+	MISSOURI__WRIGHT = 138351
+	MISSOURI__CAMDEN = 138252
+	MISSOURI__RALLS = 138324
+	MISSOURI__JASPER = 138286
+	MISSOURI__PERRY = 138316
+	MISSOURI__WAYNE = 138348
+	MISSOURI__IRON = 138284
+	MISSOURI__HICKORY = 138280
+	MISSOURI__LACLEDE = 138290
+	MISSOURI__SAINT_LOUIS_CITY = 100023579
+	MISSOURI__PULASKI = 138322
+	MISSOURI__POLK = 138321
+	MISSOURI__SULLIVAN = 138342
+	MISSOURI__PIKE = 138319
+	MISSOURI__MCDONALD = 138301
+	MISSOURI__TEXAS = 138344
+	MISSOURI__CASS = 138256
+	MISSOURI__VERNON = 138345
+	MISSOURI__MORGAN = 138308
+	MISSOURI__MONITEAU = 138305
+	MISSOURI__JACKSON = 138285
+	MISSOURI__LINCOLN = 138294
+	MISSOURI__MARION = 138300
+	MISSOURI__STODDARD = 138340
+	MISSOURI__HOWARD = 138282
+	MISSOURI__HOLT = 138281
+	MISSOURI__CRAWFORD = 138265
+	MISSOURI__CLAY = 138261
+	MISSOURI__MISSISSIPPI = 138304
+	MISSOURI__STONE = 138341
+	MISSOURI__GRUNDY = 138277
+	MISSOURI__CEDAR = 138257
+	MISSOURI__OZARK = 138314
+	MISSOURI__BOLLINGER = 138246
+	MISSOURI__PETTIS = 138317
+	MISSOURI__LAWRENCE = 138292
+	MISSOURI__JEFFERSON = 138287
+	MISSOURI__CAPE_GIRARDEAU = 138253
+	MISSOURI__SCHUYLER = 138335
+	MISSOURI__OREGON = 138312
+	MISSOURI__WASHINGTON = 138347
+	MISSOURI__DENT = 138270
+	MISSOURI__GENTRY = 138275
+	MISSOURI__COOPER = 138264
+	MISSOURI__SAINT_LOUIS = 138332
+	MISSOURI__RAY = 138326
+	MISSOURI__GASCONADE = 138274
+	MISSOURI__MERCER = 138302
+	MISSOURI__SHELBY = 138339
+	MISSOURI__CALDWELL = 138250
+	MISSOURI__SAINT_FRANCOIS = 138331
+	MISSOURI__RIPLEY = 138328
+	MISSOURI__MARIES = 138299
+	MISSOURI__LEWIS = 138293
+	MISSOURI__LAFAYETTE = 138291
+	MISSOURI__GREENE = 138276
+	MISSOURI__CHARITON = 138258
+	MISSOURI__MADISON = 138298
+	MISSOURI__NEW_MADRID = 138309
+	MISSOURI__DOUGLAS = 138271
+	MISSOURI__DADE = 138266
+	MISSOURI__BOONE = 138247
+	MISSOURI__BUTLER = 138249
+	MISSOURI__TANEY = 138343
+	MISSOURI__ANDREW = 138239
+	MISSOURI__ADAIR = 138238
+	MISSOURI__RANDOLPH = 138325
+	MISSOURI__BARRY = 138242
+	MISSOURI__KNOX = 138289
+	MISSOURI__HENRY = 138279
+	MISSOURI__NODAWAY = 138311
+	MISSOURI__DAVIESS = 138268
+	MISSOURI__WORTH = 138350
+	MISSOURI__BATES = 138244
+	MISSOURI__LIVINGSTON = 138296
+	MISSOURI__CLINTON = 138262
+	MISSOURI__MILLER = 138303
+	MISSOURI__PEMISCOT = 138315
+	MISSOURI__REYNOLDS = 138327
+	MISSOURI__SCOTLAND = 138336
+	MISSOURI__CLARK = 138260
+	MISSOURI__DALLAS = 138267
+	MISSOURI__BENTON = 138245
+	MISSOURI__NEWTON = 138310
+	MISSOURI__SAINT_CLAIR = 138330
+	MISSOURI__JOHNSON = 138288
+	MISSOURI__PUTNAM = 138323
+	MISSOURI__SHANNON = 138338
+	MISSOURI__SAINTE_GENEVIEVE = 138333
+	MISSOURI__FRANKLIN = 138273
+	MISSOURI__WARREN = 138346
+	MISSOURI__SCOTT = 138337
+	MISSOURI__CHRISTIAN = 138259
+	MISSOURI__CARROLL = 138254
+	MISSOURI__COLE = 138263
+	MISSOURI__MACON = 138297
+	MISSOURI__HARRISON = 138278
+	MISSOURI__WEBSTER = 138349
+	MISSOURI__CARTER = 138255
+	MISSOURI__BUCHANAN = 138248
+	MISSOURI__HOWELL = 138283
+	MISSOURI__PLATTE = 138320
+	MISSOURI__LINN = 138295
+	MISSOURI__SALINE = 138334
+	MONTANA__VALLEY = 138404
+	MONTANA__POWDER_RIVER = 138389
+	MONTANA__LINCOLN = 138378
+	MONTANA__JUDITH_BASIN = 138374
+	MONTANA__CASCADE = 138358
+	MONTANA__SHERIDAN = 138397
+	MONTANA__CUSTER = 138360
+	MONTANA__RICHLAND = 138393
+	MONTANA__CARBON = 138356
+	MONTANA__TREASURE = 138403
+	MONTANA__PRAIRIE = 138391
+	MONTANA__FERGUS = 138365
+	MONTANA__GARFIELD = 138368
+	MONTANA__DANIELS = 138361
+	MONTANA__MISSOULA = 138383
+	MONTANA__HILL = 138372
+	MONTANA__PARK = 138385
+	MONTANA__GRANITE = 138371
+	MONTANA__PHILLIPS = 138387
+	MONTANA__MINERAL = 138382
+	MONTANA__GALLATIN = 138367
+	MONTANA__LAKE = 138375
+	MONTANA__DAWSON = 138362
+	MONTANA__WIBAUX = 138406
+	MONTANA__POWELL = 138390
+	MONTANA__FALLON = 138364
+	MONTANA__SANDERS = 138396
+	MONTANA__GLACIER = 138369
+	MONTANA__WHEATLAND = 138405
+	MONTANA__LEWIS_AND_CLARK = 138376
+	MONTANA__GOLDEN_VALLEY = 138370
+	MONTANA__JEFFERSON = 138373
+	MONTANA__PETROLEUM = 138386
+	MONTANA__FLATHEAD = 138366
+	MONTANA__TOOLE = 138402
+	MONTANA__PONDERA = 138388
+	MONTANA__SWEET_GRASS = 138400
+	MONTANA__CHOUTEAU = 138359
+	MONTANA__STILLWATER = 138399
+	MONTANA__TETON = 138401
+	MONTANA__SILVER_BOW = 138398
+	MONTANA__BLAINE = 138354
+	MONTANA__ROOSEVELT = 138394
+	MONTANA__DEER_LODGE = 138363
+	MONTANA__YELLOWSTONE = 138407
+	MONTANA__MEAGHER = 138381
+	MONTANA__BEAVERHEAD = 138352
+	MONTANA__MUSSELSHELL = 138384
+	MONTANA__MCCONE = 138380
+	MONTANA__BIG_HORN = 138353
+	MONTANA__ROSEBUD = 138395
+	MONTANA__BROADWATER = 138355
+	MONTANA__RAVALLI = 138392
+	MONTANA__CARTER = 138357
+	MONTANA__MADISON = 138379
+	MONTANA__LIBERTY = 138377
+	NEBRASKA__HOWARD = 138454
+	NEBRASKA__SIOUX = 138490
+	NEBRASKA__FRANKLIN = 138438
+	NEBRASKA__BUTLER = 138419
+	NEBRASKA__VALLEY = 138495
+	NEBRASKA__WEBSTER = 138498
+	NEBRASKA__CUSTER = 138428
+	NEBRASKA__HOLT = 138452
+	NEBRASKA__MCPHERSON = 138467
+	NEBRASKA__OTOE = 138473
+	NEBRASKA__JEFFERSON = 138455
+	NEBRASKA__KEARNEY = 138457
+	NEBRASKA__NUCKOLLS = 138472
+	NEBRASKA__NEMAHA = 138471
+	NEBRASKA__HITCHCOCK = 138451
+	NEBRASKA__HOOKER = 138453
+	NEBRASKA__PHELPS = 138476
+	NEBRASKA__GOSPER = 138444
+	NEBRASKA__JOHNSON = 138456
+	NEBRASKA__BANNER = 138411
+	NEBRASKA__ANTELOPE = 138409
+	NEBRASKA__POLK = 138479
+	NEBRASKA__KEITH = 138458
+	NEBRASKA__DIXON = 138433
+	NEBRASKA__CUMING = 138427
+	NEBRASKA__HALL = 138447
+	NEBRASKA__HARLAN = 138449
+	NEBRASKA__LINCOLN = 138463
+	NEBRASKA__DAWSON = 138431
+	NEBRASKA__ROCK = 138482
+	NEBRASKA__DOUGLAS = 138435
+	NEBRASKA__WHEELER = 138499
+	NEBRASKA__DAKOTA = 138429
+	NEBRASKA__CASS = 138420
+	NEBRASKA__BROWN = 138416
+	NEBRASKA__CLAY = 138425
+	NEBRASKA__BURT = 138418
+	NEBRASKA__DUNDY = 138436
+	NEBRASKA__GAGE = 138441
+	NEBRASKA__KNOX = 138461
+	NEBRASKA__GRANT = 138445
+	NEBRASKA__FURNAS = 138440
+	NEBRASKA__SCOTTS_BLUFF = 138486
+	NEBRASKA__HAMILTON = 138448
+	NEBRASKA__GARDEN = 138442
+	NEBRASKA__GARFIELD = 138443
+	NEBRASKA__KEYA_PAHA = 138459
+	NEBRASKA__PAWNEE = 138474
+	NEBRASKA__HAYES = 138450
+	NEBRASKA__THAYER = 138492
+	NEBRASKA__SEWARD = 138487
+	NEBRASKA__SALINE = 138483
+	NEBRASKA__THOMAS = 138493
+	NEBRASKA__GREELEY = 138446
+	NEBRASKA__SHERIDAN = 138488
+	NEBRASKA__CHASE = 138422
+	NEBRASKA__FRONTIER = 138439
+	NEBRASKA__WASHINGTON = 138496
+	NEBRASKA__PERKINS = 138475
+	NEBRASKA__FILLMORE = 138437
+	NEBRASKA__ARTHUR = 138410
+	NEBRASKA__MERRICK = 138468
+	NEBRASKA__DODGE = 138434
+	NEBRASKA__THURSTON = 138494
+	NEBRASKA__ADAMS = 138408
+	NEBRASKA__DAWES = 138430
+	NEBRASKA__STANTON = 138491
+	NEBRASKA__BOYD = 138415
+	NEBRASKA__MADISON = 138466
+	NEBRASKA__MORRILL = 138469
+	NEBRASKA__SAUNDERS = 138485
+	NEBRASKA__WAYNE = 138497
+	NEBRASKA__BOONE = 138413
+	NEBRASKA__RICHARDSON = 138481
+	NEBRASKA__PIERCE = 138477
+	NEBRASKA__YORK = 138500
+	NEBRASKA__SARPY = 138484
+	NEBRASKA__CHEYENNE = 138424
+	NEBRASKA__PLATTE = 138478
+	NEBRASKA__BOX_BUTTE = 138414
+	NEBRASKA__COLFAX = 138426
+	NEBRASKA__LANCASTER = 138462
+	NEBRASKA__KIMBALL = 138460
+	NEBRASKA__CEDAR = 138421
+	NEBRASKA__SHERMAN = 138489
+	NEBRASKA__CHERRY = 138423
+	NEBRASKA__NANCE = 138470
+	NEBRASKA__DEUEL = 138432
+	NEBRASKA__BUFFALO = 138417
+	NEBRASKA__RED_WILLOW = 138480
+	NEBRASKA__LOUP = 138465
+	NEBRASKA__BLAINE = 138412
+	NEBRASKA__LOGAN = 138464
+	NEVADA__DOUGLAS = 138504
+	NEVADA__NYE = 138513
+	NEVADA__CARSON_CITY = 138501
+	NEVADA__LANDER = 138509
+	NEVADA__LYON = 138511
+	NEVADA__CHURCHILL = 138502
+	NEVADA__EUREKA = 138507
+	NEVADA__LINCOLN = 138510
+	NEVADA__CLARK = 138503
+	NEVADA__STOREY = 138515
+	NEVADA__ESMERALDA = 138506
+	NEVADA__PERSHING = 138514
+	NEVADA__MINERAL = 138512
+	NEVADA__HUMBOLDT = 138508
+	NEVADA__WASHOE = 138516
+	NEVADA__WHITE_PINE = 138517
+	NEVADA__ELKO = 138505
+	NEW_HAMPSHIRE__COOS = 138521
+	NEW_HAMPSHIRE__CHESHIRE = 138520
+	NEW_HAMPSHIRE__BELKNAP = 138518
+	NEW_HAMPSHIRE__ROCKINGHAM = 138525
+	NEW_HAMPSHIRE__STRAFFORD = 138526
+	NEW_HAMPSHIRE__MERRIMACK = 138524
+	NEW_HAMPSHIRE__SULLIVAN = 138527
+	NEW_HAMPSHIRE__CARROLL = 138519
+	NEW_HAMPSHIRE__GRAFTON = 138522
+	NEW_HAMPSHIRE__HILLSBOROUGH = 138523
+	NEW_JERSEY__MORRIS = 138541
+	NEW_JERSEY__GLOUCESTER = 138535
+	NEW_JERSEY__ATLANTIC = 138528
+	NEW_JERSEY__OCEAN = 138542
+	NEW_JERSEY__BURLINGTON = 138530
+	NEW_JERSEY__CAMDEN = 138531
+	NEW_JERSEY__UNION = 138547
+	NEW_JERSEY__ESSEX = 138534
+	NEW_JERSEY__CAPE_MAY = 138532
+	NEW_JERSEY__SUSSEX = 138546
+	NEW_JERSEY__HUNTERDON = 138537
+	NEW_JERSEY__HUDSON = 138536
+	NEW_JERSEY__SALEM = 138544
+	NEW_JERSEY__CUMBERLAND = 138533
+	NEW_JERSEY__BERGEN = 138529
+	NEW_JERSEY__MERCER = 138538
+	NEW_JERSEY__MONMOUTH = 138540
+	NEW_JERSEY__MIDDLESEX = 138539
+	NEW_JERSEY__WARREN = 138548
+	NEW_JERSEY__PASSAIC = 138543
+	NEW_JERSEY__SOMERSET = 138545
+	NEW_MEXICO__TORRANCE = 138579
+	NEW_MEXICO__LOS_ALAMOS = 138564
+	NEW_MEXICO__VALENCIA = 138581
+	NEW_MEXICO__CIBOLA = 138552
+	NEW_MEXICO__BERNALILLO = 138549
+	NEW_MEXICO__SAN_JUAN = 138572
+	NEW_MEXICO__OTERO = 138568
+	NEW_MEXICO__UNION = 138580
+	NEW_MEXICO__SANTA_FE = 138575
+	NEW_MEXICO__SANDOVAL = 138574
+	NEW_MEXICO__LEA = 138562
+	NEW_MEXICO__MORA = 138567
+	NEW_MEXICO__TAOS = 138578
+	NEW_MEXICO__SOCORRO = 138577
+	NEW_MEXICO__GRANT = 138558
+	NEW_MEXICO__COLFAX = 138553
+	NEW_MEXICO__SAN_MIGUEL = 138573
+	NEW_MEXICO__RIO_ARRIBA = 138570
+	NEW_MEXICO__CATRON = 138550
+	NEW_MEXICO__SIERRA = 138576
+	NEW_MEXICO__QUAY = 138569
+	NEW_MEXICO__DEBACA = 138555
+	NEW_MEXICO__HARDING = 138560
+	NEW_MEXICO__HIDALGO = 138561
+	NEW_MEXICO__GUADALUPE = 138559
+	NEW_MEXICO__LUNA = 138565
+	NEW_MEXICO__CURRY = 138554
+	NEW_MEXICO__CHAVES = 138551
+	NEW_MEXICO__ROOSEVELT = 138571
+	NEW_MEXICO__DONA_ANA = 138556
+	NEW_MEXICO__MCKINLEY = 138566
+	NEW_MEXICO__LINCOLN = 138563
+	NEW_MEXICO__EDDY = 138557
+	NEW_YORK__RICHMOND = 138624
+	NEW_YORK__GREENE = 138601
+	NEW_YORK__DELAWARE = 138594
+	NEW_YORK__CAYUGA = 138587
+	NEW_YORK__SCHUYLER = 138630
+	NEW_YORK__ROCKLAND = 138625
+	NEW_YORK__WYOMING = 138642
+	NEW_YORK__FRANKLIN = 138598
+	NEW_YORK__RENSSELAER = 138623
+	NEW_YORK__YATES = 138643
+	NEW_YORK__KINGS = 138605
+	NEW_YORK__MONROE = 138609
+	NEW_YORK__FULTON = 138599
+	NEW_YORK__ONTARIO = 138616
+	NEW_YORK__WAYNE = 138640
+	NEW_YORK__TOMPKINS = 138636
+	NEW_YORK__TIOGA = 138635
+	NEW_YORK__BRONX = 138584
+	NEW_YORK__ONONDAGA = 138615
+	NEW_YORK__CATTARAUGUS = 138586
+	NEW_YORK__HAMILTON = 138602
+	NEW_YORK__SCHOHARIE = 138629
+	NEW_YORK__CHEMUNG = 138589
+	NEW_YORK__HERKIMER = 138603
+	NEW_YORK__ORANGE = 138617
+	NEW_YORK__MONTGOMERY = 138610
+	NEW_YORK__QUEENS = 138622
+	NEW_YORK__ERIE = 138596
+	NEW_YORK__NIAGARA = 138613
+	NEW_YORK__WARREN = 138638
+	NEW_YORK__WASHINGTON = 138639
+	NEW_YORK__STEUBEN = 138632
+	NEW_YORK__LEWIS = 138606
+	NEW_YORK__LIVINGSTON = 138607
+	NEW_YORK__CHENANGO = 138590
+	NEW_YORK__COLUMBIA = 138592
+	NEW_YORK__MADISON = 138608
+	NEW_YORK__NASSAU = 138611
+	NEW_YORK__OTSEGO = 138620
+	NEW_YORK__NEW_YORK = 138612
+	NEW_YORK__WESTCHESTER = 138641
+	NEW_YORK__ONEIDA = 138614
+	NEW_YORK__SENECA = 138631
+	NEW_YORK__CORTLAND = 138593
+	NEW_YORK__DUTCHESS = 138595
+	NEW_YORK__SUFFOLK = 138633
+	NEW_YORK__ULSTER = 138637
+	NEW_YORK__JEFFERSON = 138604
+	NEW_YORK__ESSEX = 138597
+	NEW_YORK__ORLEANS = 138618
+	NEW_YORK__OSWEGO = 138619
+	NEW_YORK__GENESEE = 138600
+	NEW_YORK__ALLEGANY = 138583
+	NEW_YORK__SAINT_LAWRENCE = 138626
+	NEW_YORK__CLINTON = 138591
+	NEW_YORK__PUTNAM = 138621
+	NEW_YORK__CHAUTAUQUA = 138588
+	NEW_YORK__ALBANY = 138582
+	NEW_YORK__SARATOGA = 138627
+	NEW_YORK__BROOME = 138585
+	NEW_YORK__SULLIVAN = 138634
+	NEW_YORK__SCHENECTADY = 138628
+	NORTH_CAROLINA__ROCKINGHAM = 138722
+	NORTH_CAROLINA__MOORE = 138706
+	NORTH_CAROLINA__GASTON = 138679
+	NORTH_CAROLINA__TYRRELL = 138732
+	NORTH_CAROLINA__MARTIN = 138701
+	NORTH_CAROLINA__GREENE = 138683
+	NORTH_CAROLINA__HOKE = 138690
+	NORTH_CAROLINA__DAVIDSON = 138672
+	NORTH_CAROLINA__CRAVEN = 138668
+	NORTH_CAROLINA__UNION = 138733
+	NORTH_CAROLINA__CLAY = 138665
+	NORTH_CAROLINA__RICHMOND = 138720
+	NORTH_CAROLINA__MACON = 138699
+	NORTH_CAROLINA__CALDWELL = 138657
+	NORTH_CAROLINA__AVERY = 138649
+	NORTH_CAROLINA__TRANSYLVANIA = 138731
+	NORTH_CAROLINA__MCDOWELL = 138702
+	NORTH_CAROLINA__DAVIE = 138673
+	NORTH_CAROLINA__HARNETT = 138686
+	NORTH_CAROLINA__ANSON = 138647
+	NORTH_CAROLINA__YANCEY = 138743
+	NORTH_CAROLINA__GUILFORD = 138684
+	NORTH_CAROLINA__MECKLENBURG = 138703
+	NORTH_CAROLINA__CHEROKEE = 138663
+	NORTH_CAROLINA__IREDELL = 138692
+	NORTH_CAROLINA__BURKE = 138655
+	NORTH_CAROLINA__PAMLICO = 138712
+	NORTH_CAROLINA__ORANGE = 138711
+	NORTH_CAROLINA__LINCOLN = 138698
+	NORTH_CAROLINA__NORTHAMPTON = 138709
+	NORTH_CAROLINA__CHOWAN = 138664
+	NORTH_CAROLINA__HAYWOOD = 138687
+	NORTH_CAROLINA__WATAUGA = 138738
+	NORTH_CAROLINA__ONSLOW = 138710
+	NORTH_CAROLINA__COLUMBUS = 138667
+	NORTH_CAROLINA__GRAHAM = 138681
+	NORTH_CAROLINA__DARE = 138671
+	NORTH_CAROLINA__NEW_HANOVER = 138708
+	NORTH_CAROLINA__STOKES = 138728
+	NORTH_CAROLINA__WASHINGTON = 138737
+	NORTH_CAROLINA__HENDERSON = 138688
+	NORTH_CAROLINA__WARREN = 138736
+	NORTH_CAROLINA__STANLY = 138727
+	NORTH_CAROLINA__CATAWBA = 138661
+	NORTH_CAROLINA__PENDER = 138714
+	NORTH_CAROLINA__CAMDEN = 138658
+	NORTH_CAROLINA__ASHE = 138648
+	NORTH_CAROLINA__ROBESON = 138721
+	NORTH_CAROLINA__SURRY = 138729
+	NORTH_CAROLINA__HYDE = 138691
+	NORTH_CAROLINA__CURRITUCK = 138670
+	NORTH_CAROLINA__JACKSON = 138693
+	NORTH_CAROLINA__ROWAN = 138723
+	NORTH_CAROLINA__DURHAM = 138675
+	NORTH_CAROLINA__JOHNSTON = 138694
+	NORTH_CAROLINA__ALLEGHANY = 138646
+	NORTH_CAROLINA__CABARRUS = 138656
+	NORTH_CAROLINA__NASH = 138707
+	NORTH_CAROLINA__PASQUOTANK = 138713
+	NORTH_CAROLINA__BEAUFORT = 138650
+	NORTH_CAROLINA__JONES = 138695
+	NORTH_CAROLINA__WILKES = 138740
+	NORTH_CAROLINA__PERQUIMANS = 138715
+	NORTH_CAROLINA__WILSON = 138741
+	NORTH_CAROLINA__FORSYTH = 138677
+	NORTH_CAROLINA__DUPLIN = 138674
+	NORTH_CAROLINA__RANDOLPH = 138719
+	NORTH_CAROLINA__PITT = 138717
+	NORTH_CAROLINA__GATES = 138680
+	NORTH_CAROLINA__CASWELL = 138660
+	NORTH_CAROLINA__CHATHAM = 138662
+	NORTH_CAROLINA__SCOTLAND = 138726
+	NORTH_CAROLINA__CLEVELAND = 138666
+	NORTH_CAROLINA__LEE = 138696
+	NORTH_CAROLINA__MADISON = 138700
+	NORTH_CAROLINA__ALEXANDER = 138645
+	NORTH_CAROLINA__WAYNE = 138739
+	NORTH_CAROLINA__SWAIN = 138730
+	NORTH_CAROLINA__SAMPSON = 138725
+	NORTH_CAROLINA__LENOIR = 138697
+	NORTH_CAROLINA__BLADEN = 138652
+	NORTH_CAROLINA__HALIFAX = 138685
+	NORTH_CAROLINA__BUNCOMBE = 138654
+	NORTH_CAROLINA__FRANKLIN = 138678
+	NORTH_CAROLINA__HERTFORD = 138689
+	NORTH_CAROLINA__WAKE = 138735
+	NORTH_CAROLINA__RUTHERFORD = 138724
+	NORTH_CAROLINA__CARTERET = 138659
+	NORTH_CAROLINA__MITCHELL = 138704
+	NORTH_CAROLINA__EDGECOMBE = 138676
+	NORTH_CAROLINA__CUMBERLAND = 138669
+	NORTH_CAROLINA__YADKIN = 138742
+	NORTH_CAROLINA__VANCE = 138734
+	NORTH_CAROLINA__POLK = 138718
+	NORTH_CAROLINA__BERTIE = 138651
+	NORTH_CAROLINA__PERSON = 138716
+	NORTH_CAROLINA__MONTGOMERY = 138705
+	NORTH_CAROLINA__ALAMANCE = 138644
+	NORTH_CAROLINA__GRANVILLE = 138682
+	NORTH_CAROLINA__BRUNSWICK = 138653
+	NORTH_DAKOTA__MOUNTRAIL = 138774
+	NORTH_DAKOTA__PIERCE = 138778
+	NORTH_DAKOTA__SARGENT = 138784
+	NORTH_DAKOTA__RENVILLE = 138781
+	NORTH_DAKOTA__CAVALIER = 138753
+	NORTH_DAKOTA__STUTSMAN = 138790
+	NORTH_DAKOTA__NELSON = 138775
+	NORTH_DAKOTA__LOGAN = 138767
+	NORTH_DAKOTA__BENSON = 138746
+	NORTH_DAKOTA__WELLS = 138795
+	NORTH_DAKOTA__DUNN = 138756
+	NORTH_DAKOTA__GRIGGS = 138763
+	NORTH_DAKOTA__WALSH = 138793
+	NORTH_DAKOTA__RAMSEY = 138779
+	NORTH_DAKOTA__GOLDEN_VALLEY = 138760
+	NORTH_DAKOTA__RICHLAND = 138782
+	NORTH_DAKOTA__DIVIDE = 138755
+	NORTH_DAKOTA__MCINTOSH = 138769
+	NORTH_DAKOTA__BOTTINEAU = 138748
+	NORTH_DAKOTA__SIOUX = 138786
+	NORTH_DAKOTA__MCKENZIE = 138770
+	NORTH_DAKOTA__BURKE = 138750
+	NORTH_DAKOTA__EMMONS = 138758
+	NORTH_DAKOTA__BILLINGS = 138747
+	NORTH_DAKOTA__RANSOM = 138780
+	NORTH_DAKOTA__SHERIDAN = 138785
+	NORTH_DAKOTA__GRAND_FORKS = 138761
+	NORTH_DAKOTA__FOSTER = 138759
+	NORTH_DAKOTA__DICKEY = 138754
+	NORTH_DAKOTA__EDDY = 138757
+	NORTH_DAKOTA__HETTINGER = 138764
+	NORTH_DAKOTA__TRAILL = 138792
+	NORTH_DAKOTA__MCLEAN = 138771
+	NORTH_DAKOTA__STARK = 138788
+	NORTH_DAKOTA__STEELE = 138789
+	NORTH_DAKOTA__PEMBINA = 138777
+	NORTH_DAKOTA__MCHENRY = 138768
+	NORTH_DAKOTA__MERCER = 138772
+	NORTH_DAKOTA__TOWNER = 138791
+	NORTH_DAKOTA__BOWMAN = 138749
+	NORTH_DAKOTA__WARD = 138794
+	NORTH_DAKOTA__GRANT = 138762
+	NORTH_DAKOTA__SLOPE = 138787
+	NORTH_DAKOTA__MORTON = 138773
+	NORTH_DAKOTA__ROLETTE = 138783
+	NORTH_DAKOTA__WILLIAMS = 138796
+	NORTH_DAKOTA__CASS = 138752
+	NORTH_DAKOTA__LAMOURE = 138766
+	NORTH_DAKOTA__BARNES = 138745
+	NORTH_DAKOTA__KIDDER = 138765
+	NORTH_DAKOTA__OLIVER = 138776
+	NORTH_DAKOTA__BURLEIGH = 138751
+	NORTH_DAKOTA__ADAMS = 138744
+	OHIO__PORTAGE = 138863
+	OHIO__WYANDOT = 138884
+	OHIO__MEDINA = 138848
+	OHIO__HARDIN = 138829
+	OHIO__FRANKLIN = 138821
+	OHIO__RICHLAND = 138866
+	OHIO__MORGAN = 138854
+	OHIO__ALLEN = 138798
+	OHIO__HARRISON = 138830
+	OHIO__MIAMI = 138851
+	OHIO__CARROLL = 138806
+	OHIO__LUCAS = 138844
+	OHIO__MORROW = 138855
+	OHIO__SANDUSKY = 138868
+	OHIO__WILLIAMS = 138882
+	OHIO__MADISON = 138845
+	OHIO__UNION = 138876
+	OHIO__SCIOTO = 138869
+	OHIO__PERRY = 138860
+	OHIO__PUTNAM = 138865
+	OHIO__ROSS = 138867
+	OHIO__HURON = 138835
+	OHIO__AUGLAIZE = 138802
+	OHIO__MONROE = 138852
+	OHIO__DARKE = 138815
+	OHIO__JACKSON = 138836
+	OHIO__CLARK = 138808
+	OHIO__WASHINGTON = 138880
+	OHIO__CUYAHOGA = 138814
+	OHIO__HIGHLAND = 138832
+	OHIO__HAMILTON = 138827
+	OHIO__HOLMES = 138834
+	OHIO__HOCKING = 138833
+	OHIO__WOOD = 138883
+	OHIO__ASHTABULA = 138800
+	OHIO__TRUMBULL = 138874
+	OHIO__MEIGS = 138849
+	OHIO__GUERNSEY = 138826
+	OHIO__BROWN = 138804
+	OHIO__PIKE = 138862
+	OHIO__SHELBY = 138871
+	OHIO__SENECA = 138870
+	OHIO__MERCER = 138850
+	OHIO__HANCOCK = 138828
+	OHIO__CRAWFORD = 138813
+	OHIO__ERIE = 138818
+	OHIO__VINTON = 138878
+	OHIO__DEFIANCE = 138816
+	OHIO__FAYETTE = 138820
+	OHIO__LORAIN = 138843
+	OHIO__ASHLAND = 138799
+	OHIO__GREENE = 138825
+	OHIO__COLUMBIANA = 138811
+	OHIO__ADAMS = 138797
+	OHIO__STARK = 138872
+	OHIO__PICKAWAY = 138861
+	OHIO__BELMONT = 138803
+	OHIO__CLINTON = 138810
+	OHIO__VAN_WERT = 138877
+	OHIO__BUTLER = 138805
+	OHIO__DELAWARE = 138817
+	OHIO__FAIRFIELD = 138819
+	OHIO__MARION = 138847
+	OHIO__ATHENS = 138801
+	OHIO__CLERMONT = 138809
+	OHIO__OTTAWA = 138858
+	OHIO__TUSCARAWAS = 138875
+	OHIO__JEFFERSON = 138837
+	OHIO__MUSKINGUM = 138856
+	OHIO__NOBLE = 138857
+	OHIO__GALLIA = 138823
+	OHIO__MAHONING = 138846
+	OHIO__SUMMIT = 138873
+	OHIO__LICKING = 138841
+	OHIO__GEAUGA = 138824
+	OHIO__MONTGOMERY = 138853
+	OHIO__LAKE = 138839
+	OHIO__COSHOCTON = 138812
+	OHIO__PAULDING = 138859
+	OHIO__HENRY = 138831
+	OHIO__WAYNE = 138881
+	OHIO__LOGAN = 138842
+	OHIO__KNOX = 138838
+	OHIO__FULTON = 138822
+	OHIO__PREBLE = 138864
+	OHIO__WARREN = 138879
+	OHIO__LAWRENCE = 138840
+	OHIO__CHAMPAIGN = 138807
+	OKLAHOMA__JOHNSTON = 138919
+	OKLAHOMA__COMANCHE = 138900
+	OKLAHOMA__BEAVER = 138888
+	OKLAHOMA__LOGAN = 138926
+	OKLAHOMA__PAWNEE = 138943
+	OKLAHOMA__CUSTER = 138904
+	OKLAHOMA__LINCOLN = 138925
+	OKLAHOMA__ADAIR = 138885
+	OKLAHOMA__WOODWARD = 138961
+	OKLAHOMA__MCCLAIN = 138931
+	OKLAHOMA__NOBLE = 138936
+	OKLAHOMA__WASHINGTON = 138958
+	OKLAHOMA__HASKELL = 138915
+	OKLAHOMA__TILLMAN = 138955
+	OKLAHOMA__WASHITA = 138959
+	OKLAHOMA__GRANT = 138911
+	OKLAHOMA__MARSHALL = 138929
+	OKLAHOMA__CRAIG = 138902
+	OKLAHOMA__HUGHES = 138916
+	OKLAHOMA__CHOCTAW = 138896
+	OKLAHOMA__JACKSON = 138917
+	OKLAHOMA__OKMULGEE = 138940
+	OKLAHOMA__LOVE = 138927
+	OKLAHOMA__GARFIELD = 138908
+	OKLAHOMA__GRADY = 138910
+	OKLAHOMA__HARMON = 138913
+	OKLAHOMA__ROGERS = 138950
+	OKLAHOMA__ROGER_MILLS = 138949
+	OKLAHOMA__CHEROKEE = 138895
+	OKLAHOMA__MCCURTAIN = 138932
+	OKLAHOMA__JEFFERSON = 138918
+	OKLAHOMA__OSAGE = 138941
+	OKLAHOMA__CARTER = 138894
+	OKLAHOMA__ALFALFA = 138886
+	OKLAHOMA__LE_FLORE = 138924
+	OKLAHOMA__MURRAY = 138934
+	OKLAHOMA__ELLIS = 138907
+	OKLAHOMA__WOODS = 138960
+	OKLAHOMA__GREER = 138912
+	OKLAHOMA__TULSA = 138956
+	OKLAHOMA__SEQUOYAH = 138952
+	OKLAHOMA__TEXAS = 138954
+	OKLAHOMA__PITTSBURG = 138945
+	OKLAHOMA__KAY = 138920
+	OKLAHOMA__BLAINE = 138890
+	OKLAHOMA__PAYNE = 138944
+	OKLAHOMA__OKLAHOMA = 138939
+	OKLAHOMA__MAJOR = 138928
+	OKLAHOMA__PUSHMATAHA = 138948
+	OKLAHOMA__BECKHAM = 138889
+	OKLAHOMA__STEPHENS = 138953
+	OKLAHOMA__CADDO = 138892
+	OKLAHOMA__NOWATA = 138937
+	OKLAHOMA__DELAWARE = 138905
+	OKLAHOMA__COTTON = 138901
+	OKLAHOMA__MAYES = 138930
+	OKLAHOMA__CANADIAN = 138893
+	OKLAHOMA__OKFUSKEE = 138938
+	OKLAHOMA__PONTOTOC = 138946
+	OKLAHOMA__LATIMER = 138923
+	OKLAHOMA__COAL = 138899
+	OKLAHOMA__DEWEY = 138906
+	OKLAHOMA__WAGONER = 138957
+	OKLAHOMA__CREEK = 138903
+	OKLAHOMA__SEMINOLE = 138951
+	OKLAHOMA__KIOWA = 138922
+	OKLAHOMA__POTTAWATOMIE = 138947
+	OKLAHOMA__CLEVELAND = 138898
+	OKLAHOMA__KINGFISHER = 138921
+	OKLAHOMA__HARPER = 138914
+	OKLAHOMA__ATOKA = 138887
+	OKLAHOMA__MCINTOSH = 138933
+	OKLAHOMA__CIMARRON = 138897
+	OKLAHOMA__OTTAWA = 138942
+	OKLAHOMA__GARVIN = 138909
+	OKLAHOMA__BRYAN = 138891
+	OKLAHOMA__MUSKOGEE = 138935
+	OREGON__CLACKAMAS = 138964
+	OREGON__UNION = 138992
+	OREGON__LANE = 138981
+	OREGON__COOS = 138967
+	OREGON__TILLAMOOK = 138990
+	OREGON__UMATILLA = 138991
+	OREGON__MULTNOMAH = 138987
+	OREGON__CURRY = 138969
+	OREGON__DESCHUTES = 138970
+	OREGON__DOUGLAS = 138971
+	OREGON__MALHEUR = 138984
+	OREGON__CROOK = 138968
+	OREGON__KLAMATH = 138979
+	OREGON__SHERMAN = 138989
+	OREGON__LAKE = 138980
+	OREGON__YAMHILL = 138997
+	OREGON__BAKER = 138962
+	OREGON__WASHINGTON = 138995
+	OREGON__GRANT = 138973
+	OREGON__LINCOLN = 138982
+	OREGON__BENTON = 138963
+	OREGON__MARION = 138985
+	OREGON__HARNEY = 138974
+	OREGON__MORROW = 138986
+	OREGON__WALLOWA = 138993
+	OREGON__JACKSON = 138976
+	OREGON__COLUMBIA = 138966
+	OREGON__POLK = 138988
+	OREGON__WASCO = 138994
+	OREGON__JOSEPHINE = 138978
+	OREGON__LINN = 138983
+	OREGON__CLATSOP = 138965
+	OREGON__GILLIAM = 138972
+	OREGON__WHEELER = 138996
+	OREGON__HOOD_RIVER = 138975
+	OREGON__JEFFERSON = 138977
+	PENNSYLVANIA__COLUMBIA = 139016
+	PENNSYLVANIA__CLEARFIELD = 139014
+	PENNSYLVANIA__CLARION = 139013
+	PENNSYLVANIA__CHESTER = 139012
+	PENNSYLVANIA__CENTRE = 139011
+	PENNSYLVANIA__CARBON = 139010
+	PENNSYLVANIA__CAMERON = 139009
+	PENNSYLVANIA__CAMBRIA = 139008
+	PENNSYLVANIA__BUTLER = 139007
+	PENNSYLVANIA__BUCKS = 139006
+	PENNSYLVANIA__BRADFORD = 139005
+	PENNSYLVANIA__BLAIR = 139004
+	PENNSYLVANIA__BERKS = 139003
+	PENNSYLVANIA__TIOGA = 139056
+	PENNSYLVANIA__UNION = 139057
+	PENNSYLVANIA__JEFFERSON = 139030
+	PENNSYLVANIA__JUNIATA = 139031
+	PENNSYLVANIA__LACKAWANNA = 139032
+	PENNSYLVANIA__LANCASTER = 139033
+	PENNSYLVANIA__LAWRENCE = 139034
+	PENNSYLVANIA__LEBANON = 139035
+	PENNSYLVANIA__LEHIGH = 139036
+	PENNSYLVANIA__LUZERNE = 139037
+	PENNSYLVANIA__LYCOMING = 139038
+	PENNSYLVANIA__MC_KEAN = 139039
+	PENNSYLVANIA__MERCER = 139040
+	PENNSYLVANIA__MIFFLIN = 139041
+	PENNSYLVANIA__MONROE = 139042
+	PENNSYLVANIA__MONTGOMERY = 139043
+	PENNSYLVANIA__MONTOUR = 139044
+	PENNSYLVANIA__NORTHAMPTON = 139045
+	PENNSYLVANIA__NORTHUMBERLAND = 139046
+	PENNSYLVANIA__SNYDER = 139052
+	PENNSYLVANIA__DAUPHIN = 139019
+	PENNSYLVANIA__FOREST = 139024
+	PENNSYLVANIA__CUMBERLAND = 139018
+	PENNSYLVANIA__CRAWFORD = 139017
+	PENNSYLVANIA__CLINTON = 139015
+	PENNSYLVANIA__ADAMS = 138998
+	PENNSYLVANIA__ALLEGHENY = 138999
+	PENNSYLVANIA__ARMSTRONG = 139000
+	PENNSYLVANIA__BEAVER = 139001
+	PENNSYLVANIA__BEDFORD = 139002
+	PENNSYLVANIA__SOMERSET = 139053
+	PENNSYLVANIA__SULLIVAN = 139054
+	PENNSYLVANIA__SUSQUEHANNA = 139055
+	PENNSYLVANIA__PERRY = 139047
+	PENNSYLVANIA__PHILADELPHIA = 139048
+	PENNSYLVANIA__PIKE = 139049
+	PENNSYLVANIA__POTTER = 139050
+	PENNSYLVANIA__SCHUYLKILL = 139051
+	PENNSYLVANIA__VENANGO = 139058
+	PENNSYLVANIA__WARREN = 139059
+	PENNSYLVANIA__WASHINGTON = 139060
+	PENNSYLVANIA__WAYNE = 139061
+	PENNSYLVANIA__WESTMORELAND = 139062
+	PENNSYLVANIA__WYOMING = 139063
+	PENNSYLVANIA__YORK = 139064
+	PENNSYLVANIA__FRANKLIN = 139025
+	PENNSYLVANIA__FULTON = 139026
+	PENNSYLVANIA__GREENE = 139027
+	PENNSYLVANIA__HUNTINGDON = 139028
+	PENNSYLVANIA__INDIANA = 139029
+	PENNSYLVANIA__FAYETTE = 139023
+	PENNSYLVANIA__ERIE = 139022
+	PENNSYLVANIA__ELK = 139021
+	PENNSYLVANIA__DELAWARE = 139020
+	RHODE_ISLAND__KENT = 139066
+	RHODE_ISLAND__PROVIDENCE = 139068
+	RHODE_ISLAND__NEWPORT = 139067
+	RHODE_ISLAND__BRISTOL = 139065
+	RHODE_ISLAND__WASHINGTON = 139069
+	SOUTH_CAROLINA__ALLENDALE = 139072
+	SOUTH_CAROLINA__COLLETON = 139084
+	SOUTH_CAROLINA__GEORGETOWN = 139091
+	SOUTH_CAROLINA__DORCHESTER = 139087
+	SOUTH_CAROLINA__HAMPTON = 139094
+	SOUTH_CAROLINA__ANDERSON = 139073
+	SOUTH_CAROLINA__SPARTANBURG = 139111
+	SOUTH_CAROLINA__PICKENS = 139108
+	SOUTH_CAROLINA__BERKELEY = 139077
+	SOUTH_CAROLINA__LAURENS = 139099
+	SOUTH_CAROLINA__CHESTERFIELD = 139082
+	SOUTH_CAROLINA__KERSHAW = 139097
+	SOUTH_CAROLINA__CHESTER = 139081
+	SOUTH_CAROLINA__CLARENDON = 139083
+	SOUTH_CAROLINA__OCONEE = 139106
+	SOUTH_CAROLINA__SUMTER = 139112
+	SOUTH_CAROLINA__UNION = 139113
+	SOUTH_CAROLINA__MARLBORO = 139103
+	SOUTH_CAROLINA__YORK = 139115
+	SOUTH_CAROLINA__BAMBERG = 139074
+	SOUTH_CAROLINA__WILLIAMSBURG = 139114
+	SOUTH_CAROLINA__RICHLAND = 139109
+	SOUTH_CAROLINA__BARNWELL = 139075
+	SOUTH_CAROLINA__MARION = 139102
+	SOUTH_CAROLINA__SALUDA = 139110
+	SOUTH_CAROLINA__FLORENCE = 139090
+	SOUTH_CAROLINA__CALHOUN = 139078
+	SOUTH_CAROLINA__JASPER = 139096
+	SOUTH_CAROLINA__GREENWOOD = 139093
+	SOUTH_CAROLINA__LEE = 139100
+	SOUTH_CAROLINA__HORRY = 139095
+	SOUTH_CAROLINA__LANCASTER = 139098
+	SOUTH_CAROLINA__CHEROKEE = 139080
+	SOUTH_CAROLINA__LEXINGTON = 139101
+	SOUTH_CAROLINA__ABBEVILLE = 139070
+	SOUTH_CAROLINA__CHARLESTON = 139079
+	SOUTH_CAROLINA__BEAUFORT = 139076
+	SOUTH_CAROLINA__MCCORMICK = 139104
+	SOUTH_CAROLINA__AIKEN = 139071
+	SOUTH_CAROLINA__GREENVILLE = 139092
+	SOUTH_CAROLINA__ORANGEBURG = 139107
+	SOUTH_CAROLINA__DILLON = 139086
+	SOUTH_CAROLINA__EDGEFIELD = 139088
+	SOUTH_CAROLINA__NEWBERRY = 139105
+	SOUTH_CAROLINA__DARLINGTON = 139085
+	SOUTH_CAROLINA__FAIRFIELD = 139089
+	SOUTH_DAKOTA__AURORA = 139116
+	SOUTH_DAKOTA__BROOKINGS = 139120
+	SOUTH_DAKOTA__CHARLES_MIX = 139126
+	SOUTH_DAKOTA__JACKSON = 139150
+	SOUTH_DAKOTA__GREGORY = 139141
+	SOUTH_DAKOTA__HAND = 139144
+	SOUTH_DAKOTA__POTTER = 139168
+	SOUTH_DAKOTA__CODINGTON = 139129
+	SOUTH_DAKOTA__EDMUNDS = 139137
+	SOUTH_DAKOTA__HAMLIN = 139143
+	SOUTH_DAKOTA__MOODY = 139165
+	SOUTH_DAKOTA__YANKTON = 139180
+	SOUTH_DAKOTA__HAAKON = 139142
+	SOUTH_DAKOTA__STANLEY = 139173
+	SOUTH_DAKOTA__ROBERTS = 139169
+	SOUTH_DAKOTA__SANBORN = 139170
+	SOUTH_DAKOTA__TRIPP = 139176
+	SOUTH_DAKOTA__HUTCHINSON = 139148
+	SOUTH_DAKOTA__MCPHERSON = 139160
+	SOUTH_DAKOTA__SPINK = 139172
+	SOUTH_DAKOTA__HARDING = 139146
+	SOUTH_DAKOTA__BENNETT = 139118
+	SOUTH_DAKOTA__SULLY = 139174
+	SOUTH_DAKOTA__DEWEY = 139135
+	SOUTH_DAKOTA__HANSON = 139145
+	SOUTH_DAKOTA__TURNER = 139177
+	SOUTH_DAKOTA__MELLETTE = 139162
+	SOUTH_DAKOTA__CAMPBELL = 139125
+	SOUTH_DAKOTA__ZIEBACH = 139181
+	SOUTH_DAKOTA__MCCOOK = 139159
+	SOUTH_DAKOTA__BEADLE = 139117
+	SOUTH_DAKOTA__BUFFALO = 139123
+	SOUTH_DAKOTA__WALWORTH = 139179
+	SOUTH_DAKOTA__JERAULD = 139151
+	SOUTH_DAKOTA__DOUGLAS = 139136
+	SOUTH_DAKOTA__LAKE = 139154
+	SOUTH_DAKOTA__CUSTER = 139131
+	SOUTH_DAKOTA__BON_HOMME = 139119
+	SOUTH_DAKOTA__LINCOLN = 139156
+	SOUTH_DAKOTA__BUTTE = 139124
+	SOUTH_DAKOTA__DAVISON = 139132
+	SOUTH_DAKOTA__HUGHES = 139147
+	SOUTH_DAKOTA__PERKINS = 139167
+	SOUTH_DAKOTA__MINNEHAHA = 139164
+	SOUTH_DAKOTA__HYDE = 139149
+	SOUTH_DAKOTA__BRULE = 139122
+	SOUTH_DAKOTA__MARSHALL = 139158
+	SOUTH_DAKOTA__GRANT = 139140
+	SOUTH_DAKOTA__UNION = 139178
+	SOUTH_DAKOTA__CORSON = 139130
+	SOUTH_DAKOTA__FAULK = 139139
+	SOUTH_DAKOTA__MINER = 139163
+	SOUTH_DAKOTA__TODD = 139175
+	SOUTH_DAKOTA__CLAY = 139128
+	SOUTH_DAKOTA__JONES = 139152
+	SOUTH_DAKOTA__PENNINGTON = 139166
+	SOUTH_DAKOTA__BROWN = 139121
+	SOUTH_DAKOTA__SHANNON = 139171
+	SOUTH_DAKOTA__MEADE = 139161
+	SOUTH_DAKOTA__DEUEL = 139134
+	SOUTH_DAKOTA__LAWRENCE = 139155
+	SOUTH_DAKOTA__LYMAN = 139157
+	SOUTH_DAKOTA__KINGSBURY = 139153
+	SOUTH_DAKOTA__CLARK = 139127
+	SOUTH_DAKOTA__FALL_RIVER = 139138
+	SOUTH_DAKOTA__DAY = 139133
+	TENNESSEE__HANCOCK = 139215
+	TENNESSEE__HAMILTON = 139214
+	TENNESSEE__HAMBLEN = 139213
+	TENNESSEE__GRUNDY = 139212
+	TENNESSEE__GREENE = 139211
+	TENNESSEE__GRAINGER = 139210
+	TENNESSEE__GILES = 139209
+	TENNESSEE__GIBSON = 139208
+	TENNESSEE__FRANKLIN = 139207
+	TENNESSEE__FENTRESS = 139206
+	TENNESSEE__FAYETTE = 139205
+	TENNESSEE__DYER = 139204
+	TENNESSEE__DICKSON = 139203
+	TENNESSEE__BLOUNT = 139186
+	TENNESSEE__DECATUR = 139201
+	TENNESSEE__DAVIDSON = 139200
+	TENNESSEE__CUMBERLAND = 139199
+	TENNESSEE__BLEDSOE = 139185
+	TENNESSEE__BENTON = 139184
+	TENNESSEE__BEDFORD = 139183
+	TENNESSEE__ANDERSON = 139182
+	TENNESSEE__COCKE = 139196
+	TENNESSEE__CLAY = 139195
+	TENNESSEE__CLAIBORNE = 139194
+	TENNESSEE__CHESTER = 139193
+	TENNESSEE__CHEATHAM = 139192
+	TENNESSEE__CARTER = 139191
+	TENNESSEE__CROCKETT = 139198
+	TENNESSEE__COFFEE = 139197
+	TENNESSEE__DEKALB = 139202
+	TENNESSEE__BRADLEY = 139187
+	TENNESSEE__CAMPBELL = 139188
+	TENNESSEE__CANNON = 139189
+	TENNESSEE__CARROLL = 139190
+	TENNESSEE__WILSON = 139276
+	TENNESSEE__WILLIAMSON = 139275
+	TENNESSEE__WHITE = 139274
+	TENNESSEE__WEAKLEY = 139273
+	TENNESSEE__WAYNE = 139272
+	TENNESSEE__WASHINGTON = 139271
+	TENNESSEE__WARREN = 139270
+	TENNESSEE__VAN_BUREN = 139269
+	TENNESSEE__UNION = 139268
+	TENNESSEE__UNICOI = 139267
+	TENNESSEE__TROUSDALE = 139266
+	TENNESSEE__TIPTON = 139265
+	TENNESSEE__SUMNER = 139264
+	TENNESSEE__SULLIVAN = 139263
+	TENNESSEE__STEWART = 139262
+	TENNESSEE__SMITH = 139261
+	TENNESSEE__SHELBY = 139260
+	TENNESSEE__SEVIER = 139259
+	TENNESSEE__SEQUATCHIE = 139258
+	TENNESSEE__SCOTT = 139257
+	TENNESSEE__RUTHERFORD = 139256
+	TENNESSEE__ROBERTSON = 139255
+	TENNESSEE__ROANE = 139254
+	TENNESSEE__RHEA = 139253
+	TENNESSEE__PUTNAM = 139252
+	TENNESSEE__POLK = 139251
+	TENNESSEE__PICKETT = 139250
+	TENNESSEE__PERRY = 139249
+	TENNESSEE__OVERTON = 139248
+	TENNESSEE__OBION = 139247
+	TENNESSEE__MORGAN = 139246
+	TENNESSEE__MOORE = 139245
+	TENNESSEE__MONTGOMERY = 139244
+	TENNESSEE__MONROE = 139243
+	TENNESSEE__MEIGS = 139242
+	TENNESSEE__MCNAIRY = 139241
+	TENNESSEE__MCMINN = 139240
+	TENNESSEE__MAURY = 139239
+	TENNESSEE__MARSHALL = 139238
+	TENNESSEE__MARION = 139237
+	TENNESSEE__MADISON = 139236
+	TENNESSEE__MACON = 139235
+	TENNESSEE__LOUDON = 139234
+	TENNESSEE__LINCOLN = 139233
+	TENNESSEE__LEWIS = 139232
+	TENNESSEE__LAWRENCE = 139231
+	TENNESSEE__LAUDERDALE = 139230
+	TENNESSEE__LAKE = 139229
+	TENNESSEE__KNOX = 139228
+	TENNESSEE__JOHNSON = 139227
+	TENNESSEE__JEFFERSON = 139226
+	TENNESSEE__JACKSON = 139225
+	TENNESSEE__HUMPHREYS = 139224
+	TENNESSEE__HOUSTON = 139223
+	TENNESSEE__HICKMAN = 139222
+	TENNESSEE__HENRY = 139221
+	TENNESSEE__HENDERSON = 139220
+	TENNESSEE__HAYWOOD = 139219
+	TENNESSEE__HAWKINS = 139218
+	TENNESSEE__HARDIN = 139217
+	TENNESSEE__HARDEMAN = 139216
+	TEXAS__TYLER = 139505
+	TEXAS__KERR = 139409
+	TEXAS__COKE = 139317
+	TEXAS__KENEDY = 139407
+	TEXAS__MITCHELL = 139444
+	TEXAS__PALO_PINTO = 139458
+	TEXAS__ROBERTS = 139473
+	TEXAS__GRIMES = 139369
+	TEXAS__KLEBERG = 139413
+	TEXAS__GRAYSON = 139367
+	TEXAS__BRAZOS = 139297
+	TEXAS__GILLESPIE = 139362
+	TEXAS__PARKER = 139460
+	TEXAS__WISE = 139525
+	TEXAS__PARMER = 139461
+	TEXAS__BROWN = 139301
+	TEXAS__EASTLAND = 139343
+	TEXAS__LAMB = 139417
+	TEXAS__LOVING = 139427
+	TEXAS__FLOYD = 139353
+	TEXAS__FANNIN = 139350
+	TEXAS__GONZALES = 139365
+	TEXAS__KARNES = 139404
+	TEXAS__VAL_VERDE = 139509
+	TEXAS__WINKLER = 139524
+	TEXAS__REEVES = 139471
+	TEXAS__MILLS = 139443
+	TEXAS__MONTGOMERY = 139446
+	TEXAS__SHERMAN = 139487
+	TEXAS__YOAKUM = 139527
+	TEXAS__COLLIN = 139319
+	TEXAS__FAYETTE = 139351
+	TEXAS__BRAZORIA = 139296
+	TEXAS__BEE = 139289
+	TEXAS__HARRIS = 139377
+	TEXAS__ROBERTSON = 139474
+	TEXAS__BURLESON = 139302
+	TEXAS__MOORE = 139447
+	TEXAS__KENDALL = 139406
+	TEXAS__ZAVALA = 139530
+	TEXAS__LUBBOCK = 139428
+	TEXAS__FORT_BEND = 139355
+	TEXAS__DEWITT = 139338
+	TEXAS__KINNEY = 139412
+	TEXAS__MORRIS = 139448
+	TEXAS__DIMMIT = 139340
+	TEXAS__COTTLE = 139327
+	TEXAS__HUDSPETH = 139391
+	TEXAS__DALLAM = 139332
+	TEXAS__POTTER = 139464
+	TEXAS__CAMERON = 139307
+	TEXAS__BREWSTER = 139298
+	TEXAS__JASPER = 139397
+	TEXAS__LEE = 139420
+	TEXAS__IRION = 139394
+	TEXAS__SCURRY = 139484
+	TEXAS__CRANE = 139328
+	TEXAS__WALLER = 139513
+	TEXAS__YOUNG = 139528
+	TEXAS__GOLIAD = 139364
+	TEXAS__ROCKWALL = 139475
+	TEXAS__VAN_ZANDT = 139510
+	TEXAS__WEBB = 139516
+	TEXAS__HENDERSON = 139383
+	TEXAS__JIM_WELLS = 139401
+	TEXAS__SAN_SABA = 139482
+	TEXAS__BLANCO = 139292
+	TEXAS__BRISCOE = 139299
+	TEXAS__DEAF_SMITH = 139335
+	TEXAS__RUSK = 139477
+	TEXAS__LYNN = 139429
+	TEXAS__PANOLA = 139459
+	TEXAS__TERRY = 139499
+	TEXAS__GALVESTON = 139360
+	TEXAS__TITUS = 139501
+	TEXAS__REFUGIO = 139472
+	TEXAS__LIVE_OAK = 139425
+	TEXAS__TARRANT = 139496
+	TEXAS__EL_PASO = 139346
+	TEXAS__LAMPASAS = 139418
+	TEXAS__BOWIE = 139295
+	TEXAS__SOMERVELL = 139489
+	TEXAS__JACK = 139395
+	TEXAS__FREESTONE = 139357
+	TEXAS__STARR = 139490
+	TEXAS__WICHITA = 139519
+	TEXAS__ANDREWS = 139278
+	TEXAS__WARD = 139514
+	TEXAS__LAMAR = 139416
+	TEXAS__SAN_JACINTO = 139480
+	TEXAS__WILLACY = 139521
+	TEXAS__KAUFMAN = 139405
+	TEXAS__ANDERSON = 139277
+	TEXAS__UPSHUR = 139506
+	TEXAS__MEDINA = 139439
+	TEXAS__CHAMBERS = 139312
+	TEXAS__SABINE = 139478
+	TEXAS__HARRISON = 139378
+	TEXAS__POLK = 139463
+	TEXAS__THROCKMORTON = 139500
+	TEXAS__CLAY = 139315
+	TEXAS__SWISHER = 139495
+	TEXAS__COMAL = 139322
+	TEXAS__MIDLAND = 139441
+	TEXAS__HAMILTON = 139373
+	TEXAS__MONTAGUE = 139445
+	TEXAS__BOSQUE = 139294
+	TEXAS__ARMSTRONG = 139282
+	TEXAS__NUECES = 139454
+	TEXAS__OCHILTREE = 139455
+	TEXAS__WILBARGER = 139520
+	TEXAS__CARSON = 139309
+	TEXAS__HARTLEY = 139379
+	TEXAS__CROCKETT = 139329
+	TEXAS__PRESIDIO = 139465
+	TEXAS__BEXAR = 139291
+	TEXAS__COMANCHE = 139323
+	TEXAS__ZAPATA = 139529
+	TEXAS__KIMBLE = 139410
+	TEXAS__ATASCOSA = 139283
+	TEXAS__GUADALUPE = 139370
+	TEXAS__SAN_PATRICIO = 139481
+	TEXAS__MASON = 139433
+	TEXAS__GAINES = 139359
+	TEXAS__WILSON = 139523
+	TEXAS__HEMPHILL = 139382
+	TEXAS__FALLS = 139349
+	TEXAS__SUTTON = 139494
+	TEXAS__CASS = 139310
+	TEXAS__WILLIAMSON = 139522
+	TEXAS__JACKSON = 139396
+	TEXAS__BAYLOR = 139288
+	TEXAS__SCHLEICHER = 139483
+	TEXAS__MCMULLEN = 139438
+	TEXAS__ERATH = 139348
+	TEXAS__STEPHENS = 139491
+	TEXAS__UVALDE = 139508
+	TEXAS__HOWARD = 139390
+	TEXAS__LIBERTY = 139422
+	TEXAS__WASHINGTON = 139515
+	TEXAS__EDWARDS = 139345
+	TEXAS__DUVAL = 139342
+	TEXAS__REAL = 139469
+	TEXAS__BURNET = 139303
+	TEXAS__COLORADO = 139321
+	TEXAS__FISHER = 139352
+	TEXAS__CASTRO = 139311
+	TEXAS__WHARTON = 139517
+	TEXAS__HANSFORD = 139374
+	TEXAS__MARTIN = 139432
+	TEXAS__HOOD = 139387
+	TEXAS__CHEROKEE = 139313
+	TEXAS__ANGELINA = 139279
+	TEXAS__JOHNSON = 139402
+	TEXAS__GREGG = 139368
+	TEXAS__MARION = 139431
+	TEXAS__HALL = 139372
+	TEXAS__TRAVIS = 139503
+	TEXAS__MENARD = 139440
+	TEXAS__GLASSCOCK = 139363
+	TEXAS__TAYLOR = 139497
+	TEXAS__JEFFERSON = 139399
+	TEXAS__KNOX = 139414
+	TEXAS__BASTROP = 139287
+	TEXAS__BAILEY = 139285
+	TEXAS__RUNNELS = 139476
+	TEXAS__RAINS = 139466
+	TEXAS__RANDALL = 139467
+	TEXAS__LEON = 139421
+	TEXAS__SMITH = 139488
+	TEXAS__DAWSON = 139334
+	TEXAS__MAVERICK = 139435
+	TEXAS__REAGAN = 139468
+	TEXAS__OLDHAM = 139456
+	TEXAS__MATAGORDA = 139434
+	TEXAS__HOPKINS = 139388
+	TEXAS__HUNT = 139392
+	TEXAS__ARANSAS = 139280
+	TEXAS__KING = 139411
+	TEXAS__FOARD = 139354
+	TEXAS__ELLIS = 139347
+	TEXAS__TOM_GREEN = 139502
+	TEXAS__SAN_AUGUSTINE = 139479
+	TEXAS__STONEWALL = 139493
+	TEXAS__WOOD = 139526
+	TEXAS__DICKENS = 139339
+	TEXAS__JIM_HOGG = 139400
+	TEXAS__VICTORIA = 139511
+	TEXAS__GRAY = 139366
+	TEXAS__HARDIN = 139376
+	TEXAS__JEFF_DAVIS = 139398
+	TEXAS__FRIO = 139358
+	TEXAS__HUTCHINSON = 139393
+	TEXAS__HILL = 139385
+	TEXAS__BROOKS = 139300
+	TEXAS__HAYS = 139381
+	TEXAS__TRINITY = 139504
+	TEXAS__UPTON = 139507
+	TEXAS__COOKE = 139325
+	TEXAS__COLEMAN = 139318
+	TEXAS__RED_RIVER = 139470
+	TEXAS__BANDERA = 139286
+	TEXAS__HASKELL = 139380
+	TEXAS__FRANKLIN = 139356
+	TEXAS__TERRELL = 139498
+	TEXAS__CALHOUN = 139305
+	TEXAS__LIPSCOMB = 139424
+	TEXAS__KENT = 139408
+	TEXAS__NAVARRO = 139451
+	TEXAS__HALE = 139371
+	TEXAS__MCCULLOCH = 139436
+	TEXAS__DENTON = 139337
+	TEXAS__CORYELL = 139326
+	TEXAS__BORDEN = 139293
+	TEXAS__MADISON = 139430
+	TEXAS__CROSBY = 139330
+	TEXAS__LAVACA = 139419
+	TEXAS__LLANO = 139426
+	TEXAS__HOCKLEY = 139386
+	TEXAS__NOLAN = 139453
+	TEXAS__CAMP = 139308
+	TEXAS__BELL = 139290
+	TEXAS__CALLAHAN = 139306
+	TEXAS__HARDEMAN = 139375
+	TEXAS__COCHRAN = 139316
+	TEXAS__AUSTIN = 139284
+	TEXAS__DONLEY = 139341
+	TEXAS__SHACKELFORD = 139485
+	TEXAS__WHEELER = 139518
+	TEXAS__NACOGDOCHES = 139450
+	TEXAS__WALKER = 139512
+	TEXAS__JONES = 139403
+	TEXAS__ORANGE = 139457
+	TEXAS__COLLINGSWORTH = 139320
+	TEXAS__LIMESTONE = 139423
+	TEXAS__DALLAS = 139333
+	TEXAS__GARZA = 139361
+	TEXAS__STERLING = 139492
+	TEXAS__MILAM = 139442
+	TEXAS__CULBERSON = 139331
+	TEXAS__NEWTON = 139452
+	TEXAS__DELTA = 139336
+	TEXAS__HIDALGO = 139384
+	TEXAS__ECTOR = 139344
+	TEXAS__HOUSTON = 139389
+	TEXAS__CALDWELL = 139304
+	TEXAS__MOTLEY = 139449
+	TEXAS__CONCHO = 139324
+	TEXAS__ARCHER = 139281
+	TEXAS__PECOS = 139462
+	TEXAS__MCLENNAN = 139437
+	TEXAS__CHILDRESS = 139314
+	TEXAS__SHELBY = 139486
+	TEXAS__LA_SALLE = 139415
+	UTAH__CACHE = 139533
+	UTAH__PIUTE = 139546
+	UTAH__UTAH = 139555
+	UTAH__MILLARD = 139544
+	UTAH__JUAB = 139542
+	UTAH__GARFIELD = 139539
+	UTAH__EMERY = 139538
+	UTAH__SALT_LAKE = 139548
+	UTAH__GRAND = 139540
+	UTAH__BOX_ELDER = 139532
+	UTAH__IRON = 139541
+	UTAH__MORGAN = 139545
+	UTAH__SAN_JUAN = 139549
+	UTAH__UINTAH = 139554
+	UTAH__WASHINGTON = 139557
+	UTAH__SANPETE = 139550
+	UTAH__DAGGETT = 139535
+	UTAH__SUMMIT = 139552
+	UTAH__BEAVER = 139531
+	UTAH__DAVIS = 139536
+	UTAH__WASATCH = 139556
+	UTAH__DUCHESNE = 139537
+	UTAH__KANE = 139543
+	UTAH__WEBER = 139559
+	UTAH__SEVIER = 139551
+	UTAH__WAYNE = 139558
+	UTAH__RICH = 139547
+	UTAH__TOOELE = 139553
+	UTAH__CARBON = 139534
+	VERMONT__RUTLAND = 139570
+	VERMONT__WASHINGTON = 139571
+	VERMONT__WINDSOR = 139573
+	VERMONT__ADDISON = 139560
+	VERMONT__CALEDONIA = 139562
+	VERMONT__BENNINGTON = 139561
+	VERMONT__ORLEANS = 139569
+	VERMONT__WINDHAM = 139572
+	VERMONT__GRAND_ISLE = 139566
+	VERMONT__CHITTENDEN = 139563
+	VERMONT__FRANKLIN = 139565
+	VERMONT__ESSEX = 139564
+	VERMONT__ORANGE = 139568
+	VERMONT__LAMOILLE = 139567
+	VIRGINIA__WISE = 139701
+	VIRGINIA__ROANOKE_CITY = 100023581
+	VIRGINIA__FAIRFAX_CITY = 100023580
+	VIRGINIA__AUGUSTA = 139582
+	VIRGINIA__BUCKINGHAM = 139590
+	VIRGINIA__RICHMOND = 142826
+	VIRGINIA__RICHMOND_COUNTY = 139677
+	VIRGINIA__KING_WILLIAM = 139639
+	VIRGINIA__PATRICK = 139665
+	VIRGINIA__SMYTH = 139685
+	VIRGINIA__BRUNSWICK = 139588
+	VIRGINIA__FAUQUIER = 139614
+	VIRGINIA__BOTETOURT = 139586
+	VIRGINIA__FAIRFAX = 139612
+	VIRGINIA__FLUVANNA = 139616
+	VIRGINIA__ALEXANDRIA = 139576
+	VIRGINIA__NORTHAMPTON = 139659
+	VIRGINIA__DANVILLE = 139607
+	VIRGINIA__GALAX = 139620
+	VIRGINIA__HANOVER = 139629
+	VIRGINIA__WASHINGTON = 139696
+	VIRGINIA__STAUNTON = 139689
+	VIRGINIA__NORTON = 139661
+	VIRGINIA__GLOUCESTER = 139622
+	VIRGINIA__POQUOSON = 139668
+	VIRGINIA__WAYNESBORO = 139697
+	VIRGINIA__DICKENSON = 139608
+	VIRGINIA__GILES = 139621
+	VIRGINIA__COLONIAL_HEIGHTS = 139602
+	VIRGINIA__VIRGINIA_BEACH = 139694
+	VIRGINIA__FRANKLIN_COUNTY = 139617
+	VIRGINIA__PETERSBURG = 139666
+	VIRGINIA__DINWIDDIE = 139609
+	VIRGINIA__FREDERICK = 139618
+	VIRGINIA__LUNENBURG = 139645
+	VIRGINIA__NELSON = 139655
+	VIRGINIA__CUMBERLAND = 139606
+	VIRGINIA__YORK = 139703
+	VIRGINIA__EMPORIA = 139610
+	VIRGINIA__MANASSAS = 139648
+	VIRGINIA__HIGHLAND = 139633
+	VIRGINIA__MIDDLESEX = 139653
+	VIRGINIA__MONTGOMERY = 139654
+	VIRGINIA__BEDFORD = 139584
+	VIRGINIA__CULPEPER = 139605
+	VIRGINIA__CLARKE = 139600
+	VIRGINIA__BUENA_VISTA = 139591
+	VIRGINIA__ALBEMARLE = 139575
+	VIRGINIA__PAGE = 139664
+	VIRGINIA__PITTSYLVANIA = 139667
+	VIRGINIA__ROCKBRIDGE = 139679
+	VIRGINIA__FLOYD = 139615
+	VIRGINIA__PRINCE_EDWARD = 139671
+	VIRGINIA__SURRY = 139691
+	VIRGINIA__LYNCHBURG = 139646
+	VIRGINIA__WESTMORELAND = 139698
+	VIRGINIA__MATHEWS = 139651
+	VIRGINIA__CHESAPEAKE = 139598
+	VIRGINIA__HENRICO = 139631
+	VIRGINIA__CHARLES_CITY = 139595
+	VIRGINIA__COVINGTON = 139603
+	VIRGINIA__WYTHE = 139702
+	VIRGINIA__LOUDOUN = 139643
+	VIRGINIA__CAMPBELL = 139592
+	VIRGINIA__SUSSEX = 139692
+	VIRGINIA__BLAND = 139585
+	VIRGINIA__KING_GEORGE = 139638
+	VIRGINIA__ORANGE = 139663
+	VIRGINIA__SCOTT = 139683
+	VIRGINIA__NOTTOWAY = 139662
+	VIRGINIA__LEE = 139641
+	VIRGINIA__SUFFOLK = 139690
+	VIRGINIA__ROANOKE = 139678
+	VIRGINIA__CHESTERFIELD = 139599
+	VIRGINIA__NORTHUMBERLAND = 139660
+	VIRGINIA__CHARLOTTE = 139596
+	VIRGINIA__LOUISA = 139644
+	VIRGINIA__RUSSELL = 139681
+	VIRGINIA__GREENE = 139625
+	VIRGINIA__WARREN = 139695
+	VIRGINIA__HENRY = 139632
+	VIRGINIA__PORTSMOUTH = 139669
+	VIRGINIA__CAROLINE = 139593
+	VIRGINIA__RAPPAHANNOCK = 139676
+	VIRGINIA__RADFORD = 139675
+	VIRGINIA__ISLE_OF_WIGHT = 139635
+	VIRGINIA__HALIFAX = 139627
+	VIRGINIA__TAZEWELL = 139693
+	VIRGINIA__HARRISONBURG = 139630
+	VIRGINIA__PRINCE_WILLIAM = 139673
+	VIRGINIA__LEXINGTON = 139642
+	VIRGINIA__HAMPTON = 139628
+	VIRGINIA__PRINCE_GEORGE = 139672
+	VIRGINIA__SALEM = 139682
+	VIRGINIA__BATH = 139583
+	VIRGINIA__MANASSAS_PARK = 139649
+	VIRGINIA__LANCASTER = 139640
+	VIRGINIA__SOUTHAMPTON = 139686
+	VIRGINIA__WILLIAMSBURG = 139699
+	VIRGINIA__SHENANDOAH = 139684
+	VIRGINIA__JAMES_CITY = 139636
+	VIRGINIA__ACCOMACK = 139574
+	VIRGINIA__MADISON = 139647
+	VIRGINIA__NEWPORT_NEWS = 139657
+	VIRGINIA__AMELIA = 139578
+	VIRGINIA__CHARLOTTESVILLE = 139597
+	VIRGINIA__MECKLENBURG = 139652
+	VIRGINIA__WINCHESTER = 139700
+	VIRGINIA__MARTINSVILLE = 139650
+	VIRGINIA__POWHATAN = 139670
+	VIRGINIA__PULASKI = 139674
+	VIRGINIA__CARROLL = 139594
+	VIRGINIA__STAFFORD = 139688
+	VIRGINIA__ALLEGHANY = 139577
+	VIRGINIA__FRANKLIN = 142827
+	VIRGINIA__CLIFTON_FORGE_CITY = 139601
+	VIRGINIA__AMHERST = 139579
+	VIRGINIA__ESSEX = 139611
+	VIRGINIA__APPOMATTOX = 139580
+	VIRGINIA__BUCHANAN = 139589
+	VIRGINIA__FALLS_CHURCH = 139613
+	VIRGINIA__KING_AND_QUEEN = 139637
+	VIRGINIA__SPOTSYLVANIA = 139687
+	VIRGINIA__HOPEWELL = 139634
+	VIRGINIA__NORFOLK = 139658
+	VIRGINIA__GRAYSON = 139624
+	VIRGINIA__FREDERICKSBURG = 139619
+	VIRGINIA__NEW_KENT = 139656
+	VIRGINIA__GOOCHLAND = 139623
+	VIRGINIA__ARLINGTON = 139581
+	VIRGINIA__CRAIG = 139604
+	VIRGINIA__BRISTOL = 139587
+	VIRGINIA__GREENSVILLE = 139626
+	VIRGINIA__ROCKINGHAM = 139680
+	WASHINGTON__FERRY = 139713
+	WASHINGTON__FRANKLIN = 139714
+	WASHINGTON__WHITMAN = 139741
+	WASHINGTON__KING = 139720
+	WASHINGTON__ISLAND = 139718
+	WASHINGTON__PACIFIC = 139728
+	WASHINGTON__KITTITAS = 139722
+	WASHINGTON__STEVENS = 139736
+	WASHINGTON__SNOHOMISH = 139734
+	WASHINGTON__COWLITZ = 139711
+	WASHINGTON__CLALLAM = 139708
+	WASHINGTON__GRANT = 139716
+	WASHINGTON__WHATCOM = 139740
+	WASHINGTON__LEWIS = 139724
+	WASHINGTON__KLICKITAT = 139723
+	WASHINGTON__WAHKIAKUM = 139738
+	WASHINGTON__WALLA_WALLA = 139739
+	WASHINGTON__CHELAN = 139707
+	WASHINGTON__CLARK = 139709
+	WASHINGTON__SKAMANIA = 139733
+	WASHINGTON__MASON = 139726
+	WASHINGTON__ADAMS = 139704
+	WASHINGTON__JEFFERSON = 139719
+	WASHINGTON__SAN_JUAN = 139731
+	WASHINGTON__KITSAP = 139721
+	WASHINGTON__YAKIMA = 139742
+	WASHINGTON__DOUGLAS = 139712
+	WASHINGTON__SKAGIT = 139732
+	WASHINGTON__LINCOLN = 139725
+	WASHINGTON__PEND_OREILLE = 139729
+	WASHINGTON__THURSTON = 139737
+	WASHINGTON__OKANOGAN = 139727
+	WASHINGTON__ASOTIN = 139705
+	WASHINGTON__GRAYS_HARBOR = 139717
+	WASHINGTON__SPOKANE = 139735
+	WASHINGTON__COLUMBIA = 139710
+	WASHINGTON__GARFIELD = 139715
+	WASHINGTON__BENTON = 139706
+	WASHINGTON__PIERCE = 139730
+	WEST_VIRGINIA__HANCOCK = 139757
+	WEST_VIRGINIA__CALHOUN = 139749
+	WEST_VIRGINIA__BARBOUR = 139743
+	WEST_VIRGINIA__MINERAL = 139771
+	WEST_VIRGINIA__RALEIGH = 139783
+	WEST_VIRGINIA__ROANE = 139786
+	WEST_VIRGINIA__NICHOLAS = 139776
+	WEST_VIRGINIA__DODDRIDGE = 139751
+	WEST_VIRGINIA__FAYETTE = 139752
+	WEST_VIRGINIA__LINCOLN = 139764
+	WEST_VIRGINIA__HARRISON = 139759
+	WEST_VIRGINIA__POCAHONTAS = 139780
+	WEST_VIRGINIA__BERKELEY = 139744
+	WEST_VIRGINIA__MINGO = 139772
+	WEST_VIRGINIA__MCDOWELL = 139769
+	WEST_VIRGINIA__GRANT = 139754
+	WEST_VIRGINIA__PUTNAM = 139782
+	WEST_VIRGINIA__GREENBRIER = 139755
+	WEST_VIRGINIA__WOOD = 139796
+	WEST_VIRGINIA__BROOKE = 139747
+	WEST_VIRGINIA__WYOMING = 139797
+	WEST_VIRGINIA__LOGAN = 139765
+	WEST_VIRGINIA__SUMMERS = 139787
+	WEST_VIRGINIA__PRESTON = 139781
+	WEST_VIRGINIA__CLAY = 139750
+	WEST_VIRGINIA__MARION = 139766
+	WEST_VIRGINIA__BOONE = 139745
+	WEST_VIRGINIA__WEBSTER = 139793
+	WEST_VIRGINIA__GILMER = 139753
+	WEST_VIRGINIA__TYLER = 139790
+	WEST_VIRGINIA__WETZEL = 139794
+	WEST_VIRGINIA__OHIO = 139777
+	WEST_VIRGINIA__MONROE = 139774
+	WEST_VIRGINIA__KANAWHA = 139762
+	WEST_VIRGINIA__BRAXTON = 139746
+	WEST_VIRGINIA__TUCKER = 139789
+	WEST_VIRGINIA__LEWIS = 139763
+	WEST_VIRGINIA__MONONGALIA = 139773
+	WEST_VIRGINIA__JEFFERSON = 139761
+	WEST_VIRGINIA__MASON = 139768
+	WEST_VIRGINIA__UPSHUR = 139791
+	WEST_VIRGINIA__PLEASANTS = 139779
+	WEST_VIRGINIA__JACKSON = 139760
+	WEST_VIRGINIA__CABELL = 139748
+	WEST_VIRGINIA__MORGAN = 139775
+	WEST_VIRGINIA__MERCER = 139770
+	WEST_VIRGINIA__RITCHIE = 139785
+	WEST_VIRGINIA__HAMPSHIRE = 139756
+	WEST_VIRGINIA__PENDLETON = 139778
+	WEST_VIRGINIA__RANDOLPH = 139784
+	WEST_VIRGINIA__HARDY = 139758
+	WEST_VIRGINIA__WAYNE = 139792
+	WEST_VIRGINIA__MARSHALL = 139767
+	WEST_VIRGINIA__TAYLOR = 139788
+	WEST_VIRGINIA__WIRT = 139795
+	WISCONSIN__BURNETT = 139804
+	WISCONSIN__MARATHON = 139834
+	WISCONSIN__SAUK = 139854
+	WISCONSIN__ADAMS = 139798
+	WISCONSIN__SAINT_CROIX = 139853
+	WISCONSIN__WAUPACA = 139866
+	WISCONSIN__ONEIDA = 139841
+	WISCONSIN__DANE = 139810
+	WISCONSIN__LAFAYETTE = 139830
+	WISCONSIN__LINCOLN = 139832
+	WISCONSIN__OZAUKEE = 139843
+	WISCONSIN__WOOD = 139869
+	WISCONSIN__CALUMET = 139805
+	WISCONSIN__OCONTO = 139840
+	WISCONSIN__MENOMINEE = 139837
+	WISCONSIN__WALWORTH = 139862
+	WISCONSIN__JEFFERSON = 139825
+	WISCONSIN__TAYLOR = 139858
+	WISCONSIN__GREEN = 139820
+	WISCONSIN__KEWAUNEE = 139828
+	WISCONSIN__PORTAGE = 139847
+	WISCONSIN__RUSK = 139852
+	WISCONSIN__RACINE = 139849
+	WISCONSIN__PRICE = 139848
+	WISCONSIN__CRAWFORD = 139809
+	WISCONSIN__MANITOWOC = 139833
+	WISCONSIN__CHIPPEWA = 139806
+	WISCONSIN__IRON = 139823
+	WISCONSIN__KENOSHA = 139827
+	WISCONSIN__FLORENCE = 139816
+	WISCONSIN__FOREST = 139818
+	WISCONSIN__TREMPEALEAU = 139859
+	WISCONSIN__OUTAGAMIE = 139842
+	WISCONSIN__WINNEBAGO = 139868
+	WISCONSIN__WASHINGTON = 139864
+	WISCONSIN__COLUMBIA = 139808
+	WISCONSIN__BROWN = 139802
+	WISCONSIN__BAYFIELD = 139801
+	WISCONSIN__CLARK = 139807
+	WISCONSIN__DUNN = 139814
+	WISCONSIN__IOWA = 139822
+	WISCONSIN__WASHBURN = 139863
+	WISCONSIN__SHEBOYGAN = 139857
+	WISCONSIN__MONROE = 139839
+	WISCONSIN__VERNON = 139860
+	WISCONSIN__LA_CROSSE = 139829
+	WISCONSIN__GREEN_LAKE = 139821
+	WISCONSIN__DOOR = 139812
+	WISCONSIN__EAU_CLAIRE = 139815
+	WISCONSIN__JUNEAU = 139826
+	WISCONSIN__FOND_DU_LAC = 139817
+	WISCONSIN__MARQUETTE = 139836
+	WISCONSIN__WAUKESHA = 139865
+	WISCONSIN__JACKSON = 139824
+	WISCONSIN__GRANT = 139819
+	WISCONSIN__BUFFALO = 139803
+	WISCONSIN__RICHLAND = 139850
+	WISCONSIN__DODGE = 139811
+	WISCONSIN__LANGLADE = 139831
+	WISCONSIN__POLK = 139846
+	WISCONSIN__ASHLAND = 139799
+	WISCONSIN__PIERCE = 139845
+	WISCONSIN__VILAS = 139861
+	WISCONSIN__PEPIN = 139844
+	WISCONSIN__ROCK = 139851
+	WISCONSIN__SAWYER = 139855
+	WISCONSIN__BARRON = 139800
+	WISCONSIN__MILWAUKEE = 139838
+	WISCONSIN__SHAWANO = 139856
+	WISCONSIN__WAUSHARA = 139867
+	WISCONSIN__DOUGLAS = 139813
+	WISCONSIN__MARINETTE = 139835
+	WYOMING__CARBON = 139873
+	WYOMING__PLATTE = 139885
+	WYOMING__SUBLETTE = 139887
+	WYOMING__SHERIDAN = 139886
+	WYOMING__FREMONT = 139876
+	WYOMING__LARAMIE = 139880
+	WYOMING__HOT_SPRINGS = 139878
+	WYOMING__CROOK = 139875
+	WYOMING__SWEETWATER = 139888
+	WYOMING__JOHNSON = 139879
+	WYOMING__PARK = 139884
+	WYOMING__GOSHEN = 139877
+	WYOMING__ALBANY = 139870
+	WYOMING__BIG_HORN = 139871
+	WYOMING__LINCOLN = 139881
+	WYOMING__WASHAKIE = 139891
+	WYOMING__UINTA = 139890
+	WYOMING__CONVERSE = 139874
+	WYOMING__WESTON = 139892
+	WYOMING__CAMPBELL = 139872
+	WYOMING__NATRONA = 139882
+	WYOMING__TETON = 139889
+	WYOMING__NIOBRARA = 139883
+
+
+# Automatically generated.
+class SourceList(Enum):
+    USDA_GATS = 15
+    USDA_FEEDGRAINS = 24
+    USDA_NASS_CROPS = 25
+    GRO_YIELD_MODEL = 32
+    USDA_ESR = 36
+    IGC_PRICES = 41
+    GRO_DERIVED = 60
+    CME = 81
+    GRO_DERIVED_GEOSPATIAL = 82
+    USDA_FSA = 100
+    GRO_FORECASTS = 101
+    DTN = 110
+    GRO_ENTERPRISE_MODELS = 125
+    USDA_RMA_CAUSE_OF_LOSS = 132
+    GRO_DROUGHT_INDEX = 145
+    ICE = 174
+    DTN_DISTRICT_AGGREGATED = 235
+    GIMMS_MODIS = 3
+    MODIS_TERRA = 26
+    ESA_SMOS = 43
+    GFS_00Z = 105
+    GRO_MODEL_BACKTESTS = 341
+
+
+# Semi-automatically generated (because of names); checked against ground truth.
+class MetricList(Enum):
+    AREA_HARVESTED = 570001
+    AREA_INDEMNIFIED = 15852949
+    AREA_INDEMNIFIED_DENIED_CLAIM = 15852952
+    AREA_INDEMNIFIED_PREVENTED_PLANTING = 15852950
+    AREA_INDEMNIFIED_UNINSURED_LOSS = 15852951
+    AREA_PLANTED = 2580001
+    AREA_PREVENTED = 15850191
+    AREA_PREVENTED_IRRIGATED = 15850167
+    AREA_PREVENTED_NON_IRRIGATED = 15850172
+    AVAILABILITY_IN_SOIL = 15531082
+    BALANCE_SHEETS = 2640032
+    BASIS_PRICES_NEW_CROP_DELIVERY_CLOSE = 15851840
+    BASIS_PRICES_SPOT_DELIVERY_CLOSE = 15851836
+    CASH_PRICES_NEW_CROP_DELIVERY_CLOSE = 15851828
+    CASH_PRICES_SPOT_DELIVERY_CLOSE = 15851824
+    CRUSHING_MASS = 1800032
+    DROUGHT_SEVERITY_AND_COVERAGE_INDEX = 15852252
+    EXPORT_PRICES_FOB = 2040065
+    EXPORT_VOLUME_CUMULATIVE_MASS = 6710032
+    EXPORT_VOLUME_MASS = 20032
+    FEED_USE = 1760032
+    FOOD_SEED_AND_INDUSTRIAL_USE = 1990032
+    FUTURES_PRICES_ROLLING_FRONT_MONTH_SETTLE = 15851560
+    FUTURES_PRICES_SETTLE = 15820065
+    FUTURES_PRICE_RATIO = 15852350
+    GOOD_TO_EXCELLENT_CROP_CONDITION = 15852990
+    INDEMNITY_PAID_TO_PRODUCER = 15852953
+    INDEMNITY_PAID_TO_PRODUCER_DENIED_CLAIM = 15852954
+    INDEMNITY_PAID_TO_PRODUCER_PREVENTED_PLANTING = 15852955
+    INDEMNITY_PAID_TO_PRODUCER_UNINSURED_LOSS = 15852956
+    INSURANCE_LIABILITY = 15852957
+    INSURANCE_LIABILITY_DENIED_CLAIM = 15852960
+    INSURANCE_LIABILITY_PREVENTED_PLANTING = 15852959
+    INSURANCE_LIABILITY_UNINSURED_LOSS = 15852958
+    NET_SALES_QUANTITY_EXPORT = 15850047
+    OBSERVED_FLOOD = 15853418
+    PLANTING_PROGRESS = 15852182
+    PRECIPITATION_QUANTITY = 2100031
+    PROCESSING_USE = 190032
+    PRODUCER_PRICES = 2290065
+    PRODUCTION_QUANTITY_MASS = 860032
+    PRODUCTION_QUANTITY_VOLUME = 861084
+    RETAIL_PRICES_CLOSE_INDEX = 15853841
+    SALES_QUANTITY_OUTSTANDING_MASS = 15850048
+    SALES_QUANTITY_OUTSTANDING_NMY = 15850051
+    SALES_QUANTITY_TOTAL_COMMITMENTS_MASS = 15850049
+    STOCKS_ENDING_QUANTITY_MASS = 1470032
+    STOCKS_TO_USE_RATIO = 1850042
+    STOCK_QUANTITY_MASS = 490032
+    STOCK_QUANTITY_VOLUME = 490051
+    TEMPERATURE = 2540047
+    TOTAL_PREMIUM_PAID = 15852961
+    TOTAL_PREMIUM_PAID_DENIED_CLAIM = 15852962
+    TOTAL_PREMIUM_PAID_PREVENTED_PLANTING = 15852964
+    TOTAL_PREMIUM_PAID_UNINSURED_LOSS = 15852963
+    VEGETATION = 70029
+    YIELD = 170037
+
+
+class OtherItemsList(Enum):
+    ANHYDROUS_AMMONIA = 4356
+    DIAMMONIUM_PHOSPHATE_DAP = 1899
+    DROUGHT = 17388
+    WATER_AREAS = 7828
+    VEGETATION_NDVI = 321
+    LAND_TEMPERATURE = 3457
+    MURIATE_OF_POTASH = 5633
+    MONOAMMONIUM_PHOSPHATE_MAP = 1839
+    NITROGEN_SOLUTION_28_PERCENT_N = 4359
+    NITROGEN_SOLUTION_32_PERCENT_N = 4361
+    SOIL_MOISTURE = 7382
+    TEMPERATURE_MAX = 2177
+    TEMPERATURE_MIN = 2176
+    TEN_34_NPK_FERTILIZER_MIXES = 4342
+    RAINFALL = 2039
+    UREA = 1641
+
+
+# Automatically generated.
+class CropList(Enum):
+    ALFALFA = 8050
+    ALFALFA_CONDITION_AND_PROGRESS = 18673
+    ALFALFA_GRASS_MIXTURES = 18671
+    ALFALFA_GRASS_MIXTURES__FOR_COVER_CROP = 10850
+    ALFALFA_GRASS_MIXTURES__FOR_FORAGE = 10851
+    ALFALFA_GRASS_MIXTURES__FOR_FRESH_MARKET = 11667
+    ALFALFA_GRASS_MIXTURES__FOR_GRAZING = 10852
+    ALFALFA_GRASS_MIXTURES__FOR_GREEN_MANURE = 10853
+    ALFALFA_GRASS_MIXTURES__FOR_SEED = 10855
+    ALFALFA_GRASS_MIXTURES__FOR_SOD = 10856
+    ALFALFA_GRASS_MIXTURES__TO_LEAVE_STANDING = 10854
+    ALFALFA__FIFTH_CUTTING = 4401
+    ALFALFA__FIRST_CUTTING = 4402
+    ALFALFA__FOR_COVER_CROP = 10857
+    ALFALFA__FOR_FORAGE = 10858
+    ALFALFA__FOR_GRAZING = 10859
+    ALFALFA__FOR_SEED = 10861
+    ALFALFA__FOURTH_CUTTING = 4403
+    ALFALFA__HARVESTED = 18674
+    ALFALFA__LIGHT_DAMAGE = 2325
+    ALFALFA__MODERATE_DAMAGE = 2326
+    ALFALFA__NO_DAMAGE = 2327
+    ALFALFA__SECOND_CUTTING = 4404
+    ALFALFA__SEVERE_DAMAGE = 2334
+    ALFALFA__SIXTH_CUTTING = 4405
+    ALFALFA__THIRD_CUTTING = 4406
+    ALFALFA__TO_LEAVE_STANDING = 10860
+    AMBER_DURUM_WHEAT = 7535
+    AMBER_DURUM_WHEAT__NO__1 = 21937
+    AMBER_DURUM_WHEAT__NO__2_OR_BETTER = 21778
+    AMBER_DURUM_WHEAT__NO__3 = 21779
+    AMBER_DURUM_WHEAT__NO__3_OR_BETTER = 21780
+    AMBER_DURUM_WHEAT__NO__4_OR_BETTER = 21781
+    AUSTRALIAN_PREMIUM_WHEAT__FREMANTLE = 5139
+    AUSTRALIAN_PREMIUM_WHEAT__KWINANA = 20708
+    AUSTRALIAN_PREMIUM_WHEAT__PORT_ADELAIDE = 5140
+    AUSTRALIAN_STANDARD_WHEAT__FREMANTLE = 5141
+    AUSTRALIAN_STANDARD_WHEAT__KWINANA = 20709
+    AUSTRALIAN_STANDARD_WHEAT__PORT_ADELAIDE = 5142
+    CANADA_WESTERN_RED_SPRING_WHEAT = 13623
+    CANDEAL_DURUM_WHEAT__EXCL_SEED__GT_15PCT_BAGGED = 24302
+    CANDEAL_DURUM_WHEAT__EXCL_SEED__LT_15PCT_BAGGED = 24301
+    CANOLA = 3418
+    CANOLA__EXCL_FOR_SOWING = 6804
+    CANOLA__FOR_FORAGE = 8073
+    CANOLA__FOR_SOWING = 8885
+    CANOLA__NO_GRADE = 21798
+    CANOLA__NO__1 = 21799
+    CANOLA__NO__2_OR_BETTER = 21800
+    CANOLA__SAMPLE_GRADE_OR_BETTER = 21801
+    CLUB_WHEAT = 12771
+    CLUB_WHITE_WHEAT__NO__1__10_5PCT = 21584
+    CLUB_WHITE_WHEAT__NO__1__ORDINARY = 21585
+    COMMON_SOYBEANS = 12728
+    COMMON_SOYBEANS__FOR_FORAGE = 10955
+    COMMON_SOYBEANS__FOR_FRESH_MARKET = 10956
+    COMMON_SOYBEANS__FOR_GRAIN = 10957
+    COMMON_SOYBEANS__FOR_GRAZING = 10958
+    COMMON_SOYBEANS__FOR_SEED = 10960
+    COMMON_SOYBEANS__TO_LEAVE_STANDING = 10959
+    CORN = 274
+    CORN_CONDITION_AND_PROGRESS = 10106
+    CORN__1ST_CROP = 8219
+    CORN__2ND_CROP = 8220
+    CORN__3RD_CROP = 20854
+    CORN__3YC__US_GULF = 5128
+    CORN__AFFECTED_BY_ALL_OTHER_CAUSES_OF_LOSS = 22888
+    CORN__AFFECTED_BY_A_DECLINE_IN_PRICE = 21080
+    CORN__AFFECTED_BY_COLD_AND_WET_WEATHER = 21077
+    CORN__AFFECTED_BY_COLD_WINTER_TEMPERATURE = 21078
+    CORN__AFFECTED_BY_CYCLONES = 21079
+    CORN__AFFECTED_BY_DROUGHT = 20814
+    CORN__AFFECTED_BY_EARTHQUAKES = 21081
+    CORN__AFFECTED_BY_EXCESS_MOISTURE = 20815
+    CORN__AFFECTED_BY_FIRE = 21115
+    CORN__AFFECTED_BY_FLOODING = 20816
+    CORN__AFFECTED_BY_FREEZING = 21084
+    CORN__AFFECTED_BY_FROST = 21085
+    CORN__AFFECTED_BY_HAIL = 21086
+    CORN__AFFECTED_BY_HEAT = 21087
+    CORN__AFFECTED_BY_HOT_WIND = 21116
+    CORN__AFFECTED_BY_HURRICANES_AND_TROPICAL_STORMS = 21088
+    CORN__AFFECTED_BY_INSECTS = 21089
+    CORN__AFFECTED_BY_IRRIGATION_EQUIPMENT_FAILURE = 21082
+    CORN__AFFECTED_BY_IRRIGATION_SUPPLY_FAILURE = 21083
+    CORN__AFFECTED_BY_MYCOTOXIN = 20817
+    CORN__AFFECTED_BY_PLANT_DISEASE = 21091
+    CORN__AFFECTED_BY_SNOW__LIGHTNING__OR_OTHER_DISTURBANCES = 21090
+    CORN__AFFECTED_BY_STRONG_WINDS = 21093
+    CORN__AFFECTED_BY_THE_INABILITY_TO_PREPARE_LAND_FOR_IRRIGATION = 21117
+    CORN__AFFECTED_BY_TORNADOES = 21118
+    CORN__AFFECTED_BY_WILDLIFE = 21092
+    CORN__DESTROYED_UNDER_FEDERAL_OR_STATE_ORDERS = 22905
+    CORN__EXCL_FOR_GRAIN = 6338
+    CORN__EXCL_FOR_SOWING = 9252
+    CORN__EXCL_SEED = 1443
+    CORN__EXCL_SWEET_CORN = 13479
+    CORN__FOLLOWING_CORN = 21536
+    CORN__FOLLOWING_SOYBEANS = 21537
+    CORN__PARANAGUA = 5127
+    CORN__UP_RIVER_ARGENTINA = 5125
+    CORN__US_GULF = 5001
+    COTTON = 7077
+    COTTON__AFFECTED_BY_AFLATOXIN = 21676
+    COTTON__AFFECTED_BY_ALL_OTHER_CAUSES_OF_LOSS = 22893
+    COTTON__AFFECTED_BY_A_DECLINE_IN_PRICE = 21675
+    COTTON__AFFECTED_BY_COLD_AND_WET_WEATHER = 21677
+    COTTON__AFFECTED_BY_COLD_WINTER_TEMPERATURE = 21678
+    COTTON__AFFECTED_BY_CYCLONES = 21679
+    COTTON__AFFECTED_BY_DROUGHT = 21680
+    COTTON__AFFECTED_BY_EARTHQUAKES = 21681
+    COTTON__AFFECTED_BY_EXCESS_MOISTURE = 21682
+    COTTON__AFFECTED_BY_FIRE = 21683
+    COTTON__AFFECTED_BY_FLOODING = 21684
+    COTTON__AFFECTED_BY_FREEZING = 21685
+    COTTON__AFFECTED_BY_FROST = 21686
+    COTTON__AFFECTED_BY_HAIL = 21687
+    COTTON__AFFECTED_BY_HEAT = 21688
+    COTTON__AFFECTED_BY_HOT_WIND = 21689
+    COTTON__AFFECTED_BY_HURRICANES_AND_TROPICAL_STORMS = 21690
+    COTTON__AFFECTED_BY_INSECTS = 21691
+    COTTON__AFFECTED_BY_IRRIGATION_EQUIPMENT_FAILURE = 21692
+    COTTON__AFFECTED_BY_IRRIGATION_SUPPLY_FAILURE = 21693
+    COTTON__AFFECTED_BY_MYCOTOXIN = 21694
+    COTTON__AFFECTED_BY_PLANT_DISEASE = 21695
+    COTTON__AFFECTED_BY_SNOW__LIGHTNING__OR_OTHER_DISTURBANCES = 21696
+    COTTON__AFFECTED_BY_STRONG_WINDS = 21697
+    COTTON__AFFECTED_BY_THE_INABILITY_TO_PREPARE_LAND_FOR_IRRIGATION = 21698
+    COTTON__AFFECTED_BY_TORNADOES = 21699
+    COTTON__AFFECTED_BY_VOLCANIC_ERUPTIONS = 21700
+    COTTON__AFFECTED_BY_WILDLIFE = 21701
+    COTTON__DESTROYED_UNDER_FEDERAL_OR_STATE_ORDERS = 21702
+    COTTON__EXCL_UPLAND = 3222
+    CWRS_WHEAT__13_5PCT__ST__LAWRENCE = 5145
+    CWRS_WHEAT__13_5PCT__VANCOUVER = 5146
+    DARK_NORTHERN_SPRING_WHEAT = 13625
+    DARK_NORTHERN_SPRING_WHEAT__12PCT_PROTEIN = 12774
+    DARK_NORTHERN_SPRING_WHEAT__13PCT_PROTEIN = 12775
+    DARK_NORTHERN_SPRING_WHEAT__13_5PCT_PROTEIN__PNW = 5150
+    DARK_NORTHERN_SPRING_WHEAT__14PCT_PROTEIN = 12776
+    DARK_NORTHERN_SPRING_WHEAT__14_0PCT_PROTEIN__LAKEHEAD = 5152
+    DARK_NORTHERN_SPRING_WHEAT__14_0PCT_PROTEIN__PACIFC_NORTHWEST = 5153
+    DARK_NORTHERN_SPRING_WHEAT__14_0PCT_PROTEIN__US_GULF = 5151
+    DARK_NORTHERN_SPRING_WHEAT__15PCT_PROTEIN = 12777
+    DARK_NORTHERN_SPRING_WHEAT__16PCT_PROTEIN = 12778
+    DARK_NORTHERN_SPRING_WHEAT__17PCT_PROTEIN = 12779
+    DARK_NORTHERN_SPRING_WHEAT__NO_GRADE = 21802
+    DARK_NORTHERN_SPRING_WHEAT__NO__1 = 21803
+    DARK_NORTHERN_SPRING_WHEAT__NO__1__13PCT = 21586
+    DARK_NORTHERN_SPRING_WHEAT__NO__1__14PCT = 21587
+    DARK_NORTHERN_SPRING_WHEAT__NO__1__15PCT = 21588
+    DARK_NORTHERN_SPRING_WHEAT__NO__2 = 21804
+    DARK_NORTHERN_SPRING_WHEAT__NO__2_OR_BETTER = 21805
+    DARK_NORTHERN_SPRING_WHEAT__NO__3 = 21806
+    DARK_NORTHERN_SPRING_WHEAT__NO__3_OR_BETTER = 21807
+    DARK_NORTHERN_SPRING_WHEAT__NO__4 = 21808
+    DARK_NORTHERN_SPRING_WHEAT__ORDINARY_PROTEIN = 12799
+    DARK_NORTHERN_SPRING_WHEAT__SAMPLE_GRADE = 21809
+    DURUM_WHEAT = 1721
+    DURUM_WHEAT_SEED = 1731
+    DURUM_WHEAT__CONTINUOUS_CROP = 2571
+    DURUM_WHEAT__EXCL_FOR_SOWING = 6163
+    DURUM_WHEAT__EXCL_SEED = 1507
+    DURUM_WHEAT__EXCL_SEED__GT_15PCT_BAGGED = 24298
+    DURUM_WHEAT__EXCL_SEED__LT_15PCT_BAGGED = 24299
+    DURUM_WHEAT__FOLLOWING_SUMMER_FALLOW = 2573
+    DURUM_WHEAT__FOR_SOWING = 6190
+    DURUM_WHEAT__NO__1 = 21810
+    DURUM_WHEAT__NO__1_MILLING_QUALITY__ORDINARY_PROTEIN = 22870
+    DURUM_WHEAT__NO__1__13PCT = 21589
+    DURUM_WHEAT__NO__2_OR_BETTER = 21811
+    DURUM_WHEAT__NO__3 = 21812
+    DURUM_WHEAT__NO__3_OR_BETTER = 21813
+    DURUM_WHEAT__NO__3__13PCT_PROTEIN__FEED_GRADE = 22871
+    DURUM_WHEAT__NO__3__ORDINARY_PROTEIN__FEED_GRADE = 23354
+    DURUM_WHEAT__NO__4_OR_BETTER = 21814
+    DURUM_WHEAT__ORGANIC = 5467
+    DURUM_WHEAT__ORGANIC_CONVERSION = 5468
+    DURUM_WHEAT__SAMPLE_GRADE = 21815
+    DURUM_WHEAT__SAMPLE_GRADE_OR_BETTER = 21816
+    DURUM_WHEAT__WHOLE = 13510
+    EXTRA_STRONG_WHEAT__CWES_ = 13520
+    FEED_WHEAT__BLACK_SEA = 5143
+    FEED_WHEAT__EASTERN_UK = 5149
+    GRAIN_SORGHUM = 12827
+    GRAIN_SORGHUM__FOR_FORAGE = 11085
+    GRAIN_SORGHUM__FOR_GRAIN = 11086
+    GRAIN_SORGHUM__FOR_GRAZING = 11087
+    GRAIN_SORGHUM__FOR_SEED = 11088
+    GRAIN_SORGHUM__FOR_SILAGE = 11089
+    HARD_AMBER_DURUM_SPRING_WHEAT = 13627
+    HARD_AMBER_DURUM_SPRING_WHEAT__FOR_FORAGE = 11115
+    HARD_AMBER_DURUM_SPRING_WHEAT__FOR_GRAIN = 11116
+    HARD_AMBER_DURUM_SPRING_WHEAT__FOR_GRAIN_AND_GRAZING = 11117
+    HARD_AMBER_DURUM_SPRING_WHEAT__FOR_GRAZING = 11118
+    HARD_AMBER_DURUM_SPRING_WHEAT__FOR_GREEN_MANURE = 11119
+    HARD_AMBER_DURUM_SPRING_WHEAT__FOR_SEED = 11121
+    HARD_AMBER_DURUM_SPRING_WHEAT__TO_LEAVE_STANDING = 11120
+    HARD_AMBER_DURUM_WHEAT = 13594
+    HARD_AMBER_DURUM_WHEAT__FOR_COVER_CROP = 11122
+    HARD_AMBER_DURUM_WHEAT__FOR_FORAGE = 11123
+    HARD_AMBER_DURUM_WHEAT__FOR_GRAIN = 11124
+    HARD_AMBER_DURUM_WHEAT__FOR_GRAIN_AND_GRAZING = 11125
+    HARD_AMBER_DURUM_WHEAT__FOR_GRAZING = 11126
+    HARD_AMBER_DURUM_WHEAT__FOR_GREEN_MANURE = 11127
+    HARD_AMBER_DURUM_WHEAT__FOR_SEED = 11129
+    HARD_AMBER_DURUM_WHEAT__NO__1 = 12769
+    HARD_AMBER_DURUM_WHEAT__NO__2 = 12770
+    HARD_AMBER_DURUM_WHEAT__NO__2_OR_BETTER = 21820
+    HARD_AMBER_DURUM_WHEAT__NO__3 = 21821
+    HARD_AMBER_DURUM_WHEAT__NO__3_OR_BETTER = 21822
+    HARD_AMBER_DURUM_WHEAT__NO__4 = 21823
+    HARD_AMBER_DURUM_WHEAT__TO_LEAVE_STANDING = 11128
+    HARD_AMBER_DURUM_WINTER_WHEAT = 13628
+    HARD_AMBER_DURUM_WINTER_WHEAT__FOR_FORAGE = 11130
+    HARD_AMBER_DURUM_WINTER_WHEAT__FOR_GRAIN = 11131
+    HARD_AMBER_DURUM_WINTER_WHEAT__FOR_GRAIN_AND_GRAZING = 11132
+    HARD_AMBER_DURUM_WINTER_WHEAT__FOR_GRAZING = 11133
+    HARD_AMBER_DURUM_WINTER_WHEAT__FOR_GREEN_MANURE = 11134
+    HARD_AMBER_DURUM_WINTER_WHEAT__FOR_SEED = 11136
+    HARD_AMBER_DURUM_WINTER_WHEAT__TO_LEAVE_STANDING = 11135
+    HARD_AMBER_WINTER_WHEAT = 13626
+    HARD_AMBER_WINTER_WHEAT__FOR_COVER_CROP = 11169
+    HARD_AMBER_WINTER_WHEAT__FOR_FORAGE = 11170
+    HARD_AMBER_WINTER_WHEAT__FOR_GRAIN = 11171
+    HARD_AMBER_WINTER_WHEAT__FOR_GRAIN_AND_GRAZING = 11172
+    HARD_AMBER_WINTER_WHEAT__FOR_GRAZING = 11173
+    HARD_AMBER_WINTER_WHEAT__FOR_GREEN_MANURE = 11174
+    HARD_AMBER_WINTER_WHEAT__FOR_SEED = 11176
+    HARD_AMBER_WINTER_WHEAT__TO_LEAVE_STANDING = 11175
+    HARD_RED_SPRING_WHEAT = 2483
+    HARD_RED_SPRING_WHEAT__12PCT = 13361
+    HARD_RED_SPRING_WHEAT__13PCT = 13362
+    HARD_RED_SPRING_WHEAT__14PCT = 13363
+    HARD_RED_SPRING_WHEAT__15PCT = 13364
+    HARD_RED_SPRING_WHEAT__FOR_COVER_CROP = 11137
+    HARD_RED_SPRING_WHEAT__FOR_FORAGE = 11138
+    HARD_RED_SPRING_WHEAT__FOR_GRAIN = 11139
+    HARD_RED_SPRING_WHEAT__FOR_GRAIN_AND_GRAZING = 11140
+    HARD_RED_SPRING_WHEAT__FOR_GRAZING = 11141
+    HARD_RED_SPRING_WHEAT__FOR_GREEN_MANURE = 11142
+    HARD_RED_SPRING_WHEAT__FOR_SEED = 11144
+    HARD_RED_SPRING_WHEAT__NO__1 = 12800
+    HARD_RED_SPRING_WHEAT__NO__1_MILLING_QUALITY__ORDINARY_PROTEIN = 22872
+    HARD_RED_SPRING_WHEAT__NO__1__14PCT_PROTEIN = 22911
+    HARD_RED_SPRING_WHEAT__NO__1__FEED_GRADE = 24912
+    HARD_RED_SPRING_WHEAT__NO__2 = 12780
+    HARD_RED_SPRING_WHEAT__NO__2__14PCT = 12781
+    HARD_RED_SPRING_WHEAT__TO_LEAVE_STANDING = 11143
+    HARD_RED_WHEAT = 3595
+    HARD_RED_WINTER_WHEAT = 2484
+    HARD_RED_WINTER_WHEAT__12PCT = 13365
+    HARD_RED_WINTER_WHEAT__DELIVERABLE_GRADES = 14735
+    HARD_RED_WINTER_WHEAT__FOR_COVER_CROP = 11145
+    HARD_RED_WINTER_WHEAT__FOR_FORAGE = 11146
+    HARD_RED_WINTER_WHEAT__FOR_GRAIN = 11147
+    HARD_RED_WINTER_WHEAT__FOR_GRAIN_AND_GRAZING = 11148
+    HARD_RED_WINTER_WHEAT__FOR_GRAZING = 11149
+    HARD_RED_WINTER_WHEAT__FOR_GREEN_MANURE = 11150
+    HARD_RED_WINTER_WHEAT__FOR_SEED = 11152
+    HARD_RED_WINTER_WHEAT__NON_DELIVERABLE_GRADES = 14736
+    HARD_RED_WINTER_WHEAT__NO_GRADE = 21824
+    HARD_RED_WINTER_WHEAT__NO__1 = 21664
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY = 21665
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__10PCT_PROTEIN = 23355
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__10_5PCT_PROTEIN = 24375
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__11PCT_PROTEIN = 22912
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__12PCT = 21590
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__13PCT = 21591
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__14PCT_PROTEIN = 23356
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__15PCT_PROTEIN = 23357
+    HARD_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__ORDINARY = 21592
+    HARD_RED_WINTER_WHEAT__NO__1__11PCT = 12782
+    HARD_RED_WINTER_WHEAT__NO__1__11_2PCT = 21593
+    HARD_RED_WINTER_WHEAT__NO__1__11_4PCT = 21594
+    HARD_RED_WINTER_WHEAT__NO__1__11_5PCT = 12783
+    HARD_RED_WINTER_WHEAT__NO__1__11_6PCT = 21596
+    HARD_RED_WINTER_WHEAT__NO__1__11_8PCT = 21597
+    HARD_RED_WINTER_WHEAT__NO__1__12PCT = 12784
+    HARD_RED_WINTER_WHEAT__NO__1__12_2PCT = 21598
+    HARD_RED_WINTER_WHEAT__NO__1__12_4PCT = 21599
+    HARD_RED_WINTER_WHEAT__NO__1__12_6PCT = 21600
+    HARD_RED_WINTER_WHEAT__NO__1__12_8PCT = 21601
+    HARD_RED_WINTER_WHEAT__NO__1__13PCT = 12785
+    HARD_RED_WINTER_WHEAT__NO__1__13PCT_PROTEIN__LOW_FALLING_NUMBERS = 23358
+    HARD_RED_WINTER_WHEAT__NO__1__13_2PCT = 21602
+    HARD_RED_WINTER_WHEAT__NO__1__13_4PCT = 21603
+    HARD_RED_WINTER_WHEAT__NO__1__13_6PCT = 21604
+    HARD_RED_WINTER_WHEAT__NO__1__13_8PCT = 21605
+    HARD_RED_WINTER_WHEAT__NO__1__14PCT = 12786
+    HARD_RED_WINTER_WHEAT__NO__1__ORDINARY = 12787
+    HARD_RED_WINTER_WHEAT__NO__1__ORDINARY_PROTEIN__FEED_GRADE = 22873
+    HARD_RED_WINTER_WHEAT__NO__1__ORDINARY__ORGANIC__FEED_GRADE = 21159
+    HARD_RED_WINTER_WHEAT__NO__1__ORDINARY__ORGANIC__FOOD_GRADE = 21160
+    HARD_RED_WINTER_WHEAT__NO__2 = 21666
+    HARD_RED_WINTER_WHEAT__NO__2_OR_BETTER = 21825
+    HARD_RED_WINTER_WHEAT__NO__2__10PCT_PROTEIN = 23359
+    HARD_RED_WINTER_WHEAT__NO__2__10_5PCT_PROTEIN = 24376
+    HARD_RED_WINTER_WHEAT__NO__2__11PCT = 21606
+    HARD_RED_WINTER_WHEAT__NO__2__11PCT_PROTEIN__LOW_FALLING_NUMBERS = 23360
+    HARD_RED_WINTER_WHEAT__NO__2__12PCT = 12789
+    HARD_RED_WINTER_WHEAT__NO__2__13PCT_PROTEIN = 22874
+    HARD_RED_WINTER_WHEAT__NO__2__13PCT_PROTEIN__FEED_GRADE = 22875
+    HARD_RED_WINTER_WHEAT__NO__2__13PCT_PROTEIN__FOOD_GRADE = 22876
+    HARD_RED_WINTER_WHEAT__NO__2__14PCT_PROTEIN = 22877
+    HARD_RED_WINTER_WHEAT__NO__2__15PCT_PROTEIN = 24910
+    HARD_RED_WINTER_WHEAT__NO__2__ORDINARY = 12788
+    HARD_RED_WINTER_WHEAT__NO__2__ORDINARY_PROTEIN__FEED_GRADE = 23361
+    HARD_RED_WINTER_WHEAT__NO__3 = 21826
+    HARD_RED_WINTER_WHEAT__NO__3_OR_BETTER = 21827
+    HARD_RED_WINTER_WHEAT__NO__3__12PCT = 21607
+    HARD_RED_WINTER_WHEAT__NO__3__12PCT__HIGH_VOMITOXIN_CONTENT = 21608
+    HARD_RED_WINTER_WHEAT__NO__3__13PCT_PROTEIN = 22878
+    HARD_RED_WINTER_WHEAT__NO__3__14PCT_PROTEIN = 24911
+    HARD_RED_WINTER_WHEAT__NO__3__ORDINARY_PROTEIN__FEED_GRADE = 22879
+    HARD_RED_WINTER_WHEAT__NO__4 = 21828
+    HARD_RED_WINTER_WHEAT__NO__5 = 21829
+    HARD_RED_WINTER_WHEAT__NO__5_OR_BETTER = 21830
+    HARD_RED_WINTER_WHEAT__SAMPLE_GRADE = 21831
+    HARD_RED_WINTER_WHEAT__SAMPLE_GRADE_OR_BETTER = 21832
+    HARD_RED_WINTER_WHEAT__TO_LEAVE_STANDING = 11151
+    HARD_RED_WINTER_WHEAT__US_GULF = 5026
+    HARD_WHEAT = 13621
+    HARD_WHITE_SPRING_WHEAT = 2485
+    HARD_WHITE_SPRING_WHEAT__FOR_COVER_CROP = 11153
+    HARD_WHITE_SPRING_WHEAT__FOR_FORAGE = 11154
+    HARD_WHITE_SPRING_WHEAT__FOR_GRAIN = 11155
+    HARD_WHITE_SPRING_WHEAT__FOR_GRAIN_AND_GRAZING = 11156
+    HARD_WHITE_SPRING_WHEAT__FOR_GRAZING = 11157
+    HARD_WHITE_SPRING_WHEAT__FOR_GREEN_MANURE = 11723
+    HARD_WHITE_SPRING_WHEAT__FOR_SEED = 11159
+    HARD_WHITE_SPRING_WHEAT__TO_LEAVE_STANDING = 11158
+    HARD_WHITE_WHEAT = 13624
+    HARD_WHITE_WHEAT__NO__1 = 21833
+    HARD_WHITE_WHEAT__NO__1__ORDINARY = 21609
+    HARD_WHITE_WHEAT__NO__2 = 21834
+    HARD_WHITE_WHEAT__NO__2__ORDINARY = 12798
+    HARD_WHITE_WINTER_WHEAT = 2486
+    HARD_WHITE_WINTER_WHEAT__FOR_COVER_CROP = 11160
+    HARD_WHITE_WINTER_WHEAT__FOR_FORAGE = 11161
+    HARD_WHITE_WINTER_WHEAT__FOR_GRAIN = 11162
+    HARD_WHITE_WINTER_WHEAT__FOR_GRAIN_AND_GRAZING = 11163
+    HARD_WHITE_WINTER_WHEAT__FOR_GRAZING = 11164
+    HARD_WHITE_WINTER_WHEAT__FOR_GREEN_MANURE = 11165
+    HARD_WHITE_WINTER_WHEAT__FOR_SEED = 11167
+    HARD_WHITE_WINTER_WHEAT__TO_LEAVE_STANDING = 11166
+    HYBRID_FORAGE_SORGHUM__INTERPLANTING__FOR_FORAGE = 11196
+    HYBRID_FORAGE_SORGHUM__INTERPLANTING__FOR_GRAIN = 11197
+    HYBRID_FORAGE_SORGHUM__INTERPLANTING__FOR_GRAZING = 11198
+    HYBRID_FORAGE_SORGHUM__INTERPLANTING__FOR_SEED = 11199
+    HYBRID_SORGHUM = 12828
+    HYBRID_SORGHUM__FOR_FORAGE = 11200
+    HYBRID_SORGHUM__FOR_GRAIN = 11201
+    HYBRID_SORGHUM__FOR_GRAZING = 11202
+    HYBRID_SORGHUM__FOR_SEED = 11203
+    HYBRID_SORGHUM__FOR_SILAGE = 11204
+    HYBRID_SORGHUM__STANDARD_FORAGE_PLANT__FOR_FORAGE = 11205
+    HYBRID_SORGHUM__STANDARD_FORAGE_PLANT__FOR_GRAIN = 11206
+    HYBRID_SORGHUM__STANDARD_FORAGE_PLANT__FOR_GRAZING = 11207
+    HYBRID_SORGHUM__STANDARD_FORAGE_PLANT__FOR_SEED = 11208
+    HYBRID_SORGHUM__STANDARD_GRAIN_PLANT__FOR_FORAGE = 11209
+    HYBRID_SORGHUM__STANDARD_GRAIN_PLANT__FOR_GRAIN = 11210
+    HYBRID_SORGHUM__STANDARD_GRAIN_PLANT__FOR_GRAZING = 11211
+    HYBRID_SORGHUM__STANDARD_GRAIN_PLANT__FOR_SEED = 11212
+    HYBRID_SORGHUM__STANDARD_SU_PLANT__FOR_FORAGE = 11213
+    HYBRID_SORGHUM__STANDARD_SU_PLANT__FOR_GRAIN = 11214
+    HYBRID_SORGHUM__STANDARD_SU_PLANT__FOR_GRAZING = 11215
+    HYBRID_SORGHUM__STANDARD_SU_PLANT__FOR_SEED = 11216
+    MALTING_WHEAT__NO__3 = 12790
+    MILLING_WHEAT__BLACK_SEA = 5144
+    MIXED_GRADE_WHEAT__N_F_S_R_A_ = 21711
+    MIXED_WHEAT = 21936
+    MIXED_WHEAT__NO__1 = 21839
+    MIXED_WHEAT__NO__2 = 21840
+    MIXED_WHEAT__NO__2_OR_BETTER = 21841
+    MIXED_WHEAT__NO__2__15PCT = 21610
+    MIXED_WHEAT__NO__5_OR_BETTER = 21842
+    MIXED_WHEAT__SAMPLE_GRADE_OR_BETTER = 21843
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT = 21654
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__13PCT = 21658
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__13_5PCT = 21659
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__14PCT = 21660
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__14_5PCT = 21661
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__15PCT = 21662
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__16PCT = 21663
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1 = 21655
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY = 21671
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__12PCT = 21611
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__13PCT = 21613
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__13_5PCT = 21612
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__14PCT = 21615
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__14_5PCT = 21614
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__14_5PCT_PROTEIN__LOW_FALLING_NUMBERS = 22880
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__15PCT = 21616
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__15PCT_PROTEIN__HIGH_VOMITOXIN_CONTENT = 23363
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__15PCT_PROTEIN__LOW_FALLING_NUMBERS = 22881
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__15PCT__HIGH_VOMITOXIN_CONTENT = 21617
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__16PCT = 21618
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1_MILLING_QUALITY__GT_17PCT_PROTEIN = 23362
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__13PCT = 21620
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__13PCT__LOW_FALLING_NUMBERS = 21621
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__13_5PCT = 21619
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__14PCT = 21624
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__14PCT__LOW_FALLING_NUMBERS = 21625
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__14_5PCT = 21622
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__14_5PCT__LOW_FALLING_NUMBERS = 21623
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__15PCT = 21626
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__15PCT__HIGH_VOMITOXIN_CONTENT = 21628
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__15PCT__LOW_FALLING_NUMBERS = 21627
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__16PCT = 21629
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__1__LOW_FALLING_NUMBERS = 21668
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2 = 21656
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__13PCT_PROTEIN = 24377
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__13_5PCT = 21630
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__14PCT_PROTEIN = 22883
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__14_5PCT = 21631
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__14_5PCT_PROTEIN__HIGH_VOMITOXIN_CONTENT = 22882
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__14_5PCT__LOW_FALLING_NUMBERS = 21632
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__15PCT = 21633
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__15PCT__LOW_FALLING_NUMBERS = 21634
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__16PCT_PROTEIN = 24378
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__2__LOW_FALLING_NUMBERS = 21669
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3 = 21657
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3__14PCT = 21637
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3__14PCT__LOW_FALLING_NUMBERS = 21638
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3__14_5PCT = 21635
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3__14_5PCT__LOW_FALLING_NUMBERS = 21636
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3__15PCT = 21639
+    NORTHERN_SPRING_AND_DARK_NORTHERN_SPRING_WHEAT__NO__3__LOW_FALLING_NUMBERS = 21670
+    NORTHERN_SPRING_WHEAT = 14724
+    NORTHERN_SPRING_WHEAT__NO_GRADE = 21844
+    NORTHERN_SPRING_WHEAT__NO__1 = 21845
+    NORTHERN_SPRING_WHEAT__NO__1__13PCT = 21640
+    NORTHERN_SPRING_WHEAT__NO__1__14PCT = 21641
+    NORTHERN_SPRING_WHEAT__NO__1__15PCT = 21642
+    NORTHERN_SPRING_WHEAT__NO__2 = 21846
+    NORTHERN_SPRING_WHEAT__NO__2_OR_BETTER = 21847
+    NORTHERN_SPRING_WHEAT__NO__3 = 21848
+    NORTHERN_SPRING_WHEAT__NO__3_OR_BETTER = 21849
+    NORTHERN_SPRING_WHEAT__NO__4 = 21850
+    NORTHERN_SPRING_WHEAT__NO__4_OR_BETTER = 21851
+    NORTHERN_SPRING_WHEAT__NO__5 = 21852
+    NORTHERN_SPRING_WHEAT__SAMPLE_GRADE = 21853
+    NORTHERN_SPRING_WHEAT__SAMPLE_GRADE_OR_BETTER = 21854
+    ONTARIO_WINTER_WHEAT = 7532
+    PRAIRIE_SPRING_WHEAT__CPS_ = 13542
+    RED_SPRING_WHEAT = 7536
+    RED_SPRING_WHEAT__NO_GRADE = 21860
+    RED_SPRING_WHEAT__NO__1 = 21861
+    RED_SPRING_WHEAT__NO__2 = 21862
+    RED_SPRING_WHEAT__NO__2_OR_BETTER = 21863
+    RED_SPRING_WHEAT__NO__3 = 21864
+    RED_SPRING_WHEAT__NO__4 = 21865
+    RED_SPRING_WHEAT__NO__5 = 21866
+    RED_SPRING_WHEAT__SAMPLE_GRADE = 21867
+    RED_SPRING_WHEAT__SAMPLE_GRADE_OR_BETTER = 21868
+    RED_WHEAT = 13620
+    SOFT_RED_WINTER_WHEAT = 2487
+    SOFT_RED_WINTER_WHEAT__FOR_COVER_CROP = 11469
+    SOFT_RED_WINTER_WHEAT__FOR_FORAGE = 11470
+    SOFT_RED_WINTER_WHEAT__FOR_GRAIN = 11471
+    SOFT_RED_WINTER_WHEAT__FOR_GRAIN_AND_GRAZING = 11472
+    SOFT_RED_WINTER_WHEAT__FOR_GRAZING = 11473
+    SOFT_RED_WINTER_WHEAT__FOR_GREEN_MANURE = 11474
+    SOFT_RED_WINTER_WHEAT__FOR_SEED = 11476
+    SOFT_RED_WINTER_WHEAT__MINI = 12449
+    SOFT_RED_WINTER_WHEAT__NO_GRADE = 21870
+    SOFT_RED_WINTER_WHEAT__NO__1 = 21871
+    SOFT_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__ORDINARY = 21644
+    SOFT_RED_WINTER_WHEAT__NO__1_MILLING_QUALITY__ORDINARY__FOOD_GRADE = 21645
+    SOFT_RED_WINTER_WHEAT__NO__1__14PCT = 12793
+    SOFT_RED_WINTER_WHEAT__NO__1__ORDINARY = 21646
+    SOFT_RED_WINTER_WHEAT__NO__1__ORDINARY_PROTEIN = 24379
+    SOFT_RED_WINTER_WHEAT__NO__1__ORDINARY_PROTEIN__FEED_GRADE = 22886
+    SOFT_RED_WINTER_WHEAT__NO__2 = 12794
+    SOFT_RED_WINTER_WHEAT__NO__2_OR_BETTER = 21872
+    SOFT_RED_WINTER_WHEAT__NO__2__ORDINARY = 21647
+    SOFT_RED_WINTER_WHEAT__NO__2__ORDINARY_PROTEIN = 24380
+    SOFT_RED_WINTER_WHEAT__NO__2__ORDINARY_PROTEIN__FEED_GRADE = 22887
+    SOFT_RED_WINTER_WHEAT__NO__3 = 21873
+    SOFT_RED_WINTER_WHEAT__NO__3_OR_BETTER = 21874
+    SOFT_RED_WINTER_WHEAT__NO__4 = 21875
+    SOFT_RED_WINTER_WHEAT__NO__4_OR_BETTER = 21876
+    SOFT_RED_WINTER_WHEAT__NO__5 = 21877
+    SOFT_RED_WINTER_WHEAT__NO__5_OR_BETTER = 21878
+    SOFT_RED_WINTER_WHEAT__SAMPLE_GRADE = 21879
+    SOFT_RED_WINTER_WHEAT__SAMPLE_GRADE_OR_BETTER = 21880
+    SOFT_RED_WINTER_WHEAT__TO_LEAVE_STANDING = 11475
+    SOFT_RED_WINTER_WHEAT__US_GULF = 5027
+    SOFT_WHEAT = 5772
+    SOFT_WHEAT__EXCL_FOR_SOWING = 9226
+    SOFT_WHEAT__FOR_SOWING = 9227
+    SOFT_WHEAT__ORGANIC = 9228
+    SOFT_WHITE_SPRING_WHEAT = 2300
+    SOFT_WHITE_SPRING_WHEAT__FOR_COVER_CROP = 11477
+    SOFT_WHITE_SPRING_WHEAT__FOR_FORAGE = 11478
+    SOFT_WHITE_SPRING_WHEAT__FOR_GRAIN = 11479
+    SOFT_WHITE_SPRING_WHEAT__FOR_GRAIN_AND_GRAZING = 11480
+    SOFT_WHITE_SPRING_WHEAT__FOR_GRAZING = 11481
+    SOFT_WHITE_SPRING_WHEAT__FOR_GREEN_MANURE = 11482
+    SOFT_WHITE_SPRING_WHEAT__FOR_SEED = 11484
+    SOFT_WHITE_SPRING_WHEAT__TO_LEAVE_STANDING = 11483
+    SOFT_WHITE_WHEAT = 13366
+    SOFT_WHITE_WHEAT__NO_GRADE = 21881
+    SOFT_WHITE_WHEAT__NO__1 = 12795
+    SOFT_WHITE_WHEAT__NO__1_MILLING_QUALITY__13PCT_PROTEIN = 22913
+    SOFT_WHITE_WHEAT__NO__1__10_5PCT = 21648
+    SOFT_WHITE_WHEAT__NO__1__ORDINARY = 21649
+    SOFT_WHITE_WHEAT__NO__2 = 12796
+    SOFT_WHITE_WHEAT__NO__2_OR_BETTER = 21882
+    SOFT_WHITE_WHEAT__NO__3__ORDINARY__FEED_GRADE = 23364
+    SOFT_WHITE_WHEAT__NO__5 = 21883
+    SOFT_WHITE_WHEAT__NO__5_OR_BETTER = 21884
+    SOFT_WHITE_WHEAT__SAMPLE_GRADE = 21885
+    SOFT_WHITE_WHEAT__SAMPLE_GRADE_OR_BETTER = 21886
+    SOFT_WHITE_WINTER_WHEAT = 2299
+    SOFT_WHITE_WINTER_WHEAT__FOR_COVER_CROP = 11485
+    SOFT_WHITE_WINTER_WHEAT__FOR_FORAGE = 11486
+    SOFT_WHITE_WINTER_WHEAT__FOR_GRAIN = 11487
+    SOFT_WHITE_WINTER_WHEAT__FOR_GRAIN_AND_GRAZING = 11488
+    SOFT_WHITE_WINTER_WHEAT__FOR_GRAZING = 11489
+    SOFT_WHITE_WINTER_WHEAT__FOR_GREEN_MANURE = 11490
+    SOFT_WHITE_WINTER_WHEAT__FOR_SEED = 11492
+    SOFT_WHITE_WINTER_WHEAT__N_F_S_R_A_ = 21712
+    SOFT_WHITE_WINTER_WHEAT__TO_LEAVE_STANDING = 11491
+    SORGHUM = 297
+    SORGHUM__DUAL_PURPOSE = 12825
+    SORGHUM__DUAL_PURPOSE__FOR_FORAGE = 10820
+    SORGHUM__DUAL_PURPOSE__FOR_GRAIN = 10821
+    SORGHUM__DUAL_PURPOSE__FOR_GRAZING = 10822
+    SORGHUM__DUAL_PURPOSE__FOR_GREEN_MANURE = 10823
+    SORGHUM__DUAL_PURPOSE__FOR_SEED = 10824
+    SORGHUM__DUAL_PURPOSE__FOR_SILAGE = 10825
+    SORGHUM__FOR_FLOOR_MALTING = 12493
+    SORGHUM__FOR_FORAGE = 8174
+    SORGHUM__FOR_FUEL_ALCOHOL = 3025
+    SORGHUM__FOR_GRAIN = 3027
+    SORGHUM__FOR_INDOOR_MALTING = 12507
+    SORGHUM__FOR_RICE_AND_GRITS = 12501
+    SORGHUM__FOR_SILAGE = 3026
+    SORGHUM__US_GULF = 5018
+    SORGHUM__WHOLE = 12498
+    SOYBEANS = 270
+    SOYBEANS__AFFECTED_BY_ALL_OTHER_CAUSES_OF_LOSS = 22889
+    SOYBEANS__AFFECTED_BY_ASIAN_SOYBEAN_RUST = 20819
+    SOYBEANS__AFFECTED_BY_A_DECLINE_IN_PRICE = 21054
+    SOYBEANS__AFFECTED_BY_COLD_AND_WET_WEATHER = 21051
+    SOYBEANS__AFFECTED_BY_COLD_WINTER_TEMPERATURE = 21052
+    SOYBEANS__AFFECTED_BY_CYCLONES = 21053
+    SOYBEANS__AFFECTED_BY_DROUGHT = 20820
+    SOYBEANS__AFFECTED_BY_EARTHQUAKES = 21055
+    SOYBEANS__AFFECTED_BY_EXCESS_MOISTURE = 20821
+    SOYBEANS__AFFECTED_BY_FIRE = 21057
+    SOYBEANS__AFFECTED_BY_FLOODING = 20822
+    SOYBEANS__AFFECTED_BY_FREEZING = 21058
+    SOYBEANS__AFFECTED_BY_FROST = 21059
+    SOYBEANS__AFFECTED_BY_HAIL = 21060
+    SOYBEANS__AFFECTED_BY_HEAT = 21061
+    SOYBEANS__AFFECTED_BY_HOT_WIND = 21062
+    SOYBEANS__AFFECTED_BY_HURRICANES_AND_TROPICAL_STORMS = 21063
+    SOYBEANS__AFFECTED_BY_INSECTS = 21065
+    SOYBEANS__AFFECTED_BY_IRRIGATION_EQUIPMENT_FAILURE = 21056
+    SOYBEANS__AFFECTED_BY_IRRIGATION_SUPPLY_FAILURE = 21121
+    SOYBEANS__AFFECTED_BY_MYCOTOXIN = 20823
+    SOYBEANS__AFFECTED_BY_PLANT_DISEASE = 21067
+    SOYBEANS__AFFECTED_BY_SNOW__LIGHTNING__OR_OTHER_DISTURBANCES = 21066
+    SOYBEANS__AFFECTED_BY_STRONG_WINDS = 21069
+    SOYBEANS__AFFECTED_BY_THE_INABILITY_TO_PREPARE_LAND_FOR_IRRIGATION = 21064
+    SOYBEANS__AFFECTED_BY_TORNADOES = 21122
+    SOYBEANS__AFFECTED_BY_VOLCANIC_ERUPTIONS = 21070
+    SOYBEANS__AFFECTED_BY_WILDLIFE = 21068
+    SOYBEANS__DESTROYED_UNDER_FEDERAL_OR_STATE_ORDERS = 22906
+    SPRING_CANOLA = 13490
+    SPRING_CANOLA__FOR_COVER_CROP = 11519
+    SPRING_CANOLA__FOR_FORAGE = 11520
+    SPRING_CANOLA__FOR_GRAIN = 11521
+    SPRING_CANOLA__FOR_PROCESSING = 11522
+    SPRING_CANOLA__FOR_SEED = 11523
+    SPRING_SORGHUM = 12824
+    SPRING_SORGHUM__FOR_GRAIN = 9311
+    SPRING_SORGHUM__FOR_SILAGE = 9310
+    SPRING_WHEAT = 3358
+    SPRING_WHEAT_SEED = 4164
+    SPRING_WHEAT__CONTINUOUS_CROP = 3060
+    SPRING_WHEAT__FOLLOWING_SUMMER_FALLOW = 3061
+    SPRING_WHEAT__OTHER = 13550
+    SRW_WHEAT__US_GULF = 5155
+    SWEET_FORAGE_SORGHUM__FOR_COVER_CROP = 11565
+    SWEET_FORAGE_SORGHUM__FOR_FORAGE = 11566
+    SWEET_FORAGE_SORGHUM__FOR_GRAZING = 11567
+    SWEET_FORAGE_SORGHUM__FOR_GREEN_MANURE = 11568
+    SWEET_FORAGE_SORGHUM__FOR_MOLASSES = 11570
+    SWEET_FORAGE_SORGHUM__FOR_PROCESSING = 11571
+    SWEET_FORAGE_SORGHUM__FOR_SEED = 11572
+    SWEET_FORAGE_SORGHUM__FOR_SILAGE = 11573
+    SWEET_FORAGE_SORGHUM__TO_LEAVE_STANDING = 11569
+    SWEET_SORGHUM = 12509
+    SWEET_SORGHUM__FOR_FLOOR_MALTING = 12495
+    SWEET_SORGHUM__FOR_INDOOR_MALTING = 12506
+    SWEET_SORGHUM__FOR_RICE_AND_GRITS = 12500
+    SWEET_SORGHUM__WHOLE = 12497
+    SW_WHEAT__PACIFIC_NORTHWEST = 5156
+    TAGANROCK_DURUM_WHEAT__EXCL_SEED__GT_15PCT_BAGGED = 24300
+    TAGANROCK_DURUM_WHEAT__EXCL_SEED__LT_15PCT_BAGGED = 24303
+    WESTERN_WHITE_WHEAT__NO__1 = 21904
+    WESTERN_WHITE_WHEAT__NO__2 = 12797
+    WESTERN_WHITE_WHEAT__NO__2_OR_BETTER = 21905
+    WESTERN_WHITE_WHEAT__SAMPLE_GRADE = 21906
+    WHEAT = 95
+    WHEAT_CONDITION_AND_PROGRESS = 10142
+    WHEAT_FARMS = 7631
+    WHEAT_GERM = 20801
+    WHEAT_PRODUCTS__EXCL_FLOUR = 21143
+    WHEAT_PROTEIN = 14908
+    WHEAT_SEED = 8199
+    WHEAT_SEED__EXCL_DURUM = 1615
+    WHEAT__AFFECTED_BY_AFLATOXIN = 20831
+    WHEAT__AFFECTED_BY_ALL_OTHER_CAUSES_OF_LOSS = 22890
+    WHEAT__AFFECTED_BY_A_DECLINE_IN_PRICE = 21096
+    WHEAT__AFFECTED_BY_COLD_AND_WET_WEATHER = 21094
+    WHEAT__AFFECTED_BY_COLD_WINTER_TEMPERATURE = 21095
+    WHEAT__AFFECTED_BY_CYCLONES = 21134
+    WHEAT__AFFECTED_BY_DROUGHT = 20832
+    WHEAT__AFFECTED_BY_EARTHQUAKES = 21097
+    WHEAT__AFFECTED_BY_EXCESS_MOISTURE = 20833
+    WHEAT__AFFECTED_BY_FIRE = 21100
+    WHEAT__AFFECTED_BY_FLOODING = 20834
+    WHEAT__AFFECTED_BY_FREEZING = 21101
+    WHEAT__AFFECTED_BY_FROST = 21102
+    WHEAT__AFFECTED_BY_HAIL = 21103
+    WHEAT__AFFECTED_BY_HEAT = 21104
+    WHEAT__AFFECTED_BY_HOT_WIND = 21105
+    WHEAT__AFFECTED_BY_HURRICANES_AND_TROPICAL_STORMS = 21106
+    WHEAT__AFFECTED_BY_INSECTS = 21108
+    WHEAT__AFFECTED_BY_IRRIGATION_EQUIPMENT_FAILURE = 21098
+    WHEAT__AFFECTED_BY_IRRIGATION_ISSUES = 21568
+    WHEAT__AFFECTED_BY_IRRIGATION_SUPPLY_FAILURE = 21099
+    WHEAT__AFFECTED_BY_MOISTURE_ISSUES = 21570
+    WHEAT__AFFECTED_BY_MYCOTOXIN = 20835
+    WHEAT__AFFECTED_BY_NATURAL_DISASTERS = 21569
+    WHEAT__AFFECTED_BY_PESTS_AND_DISEASES = 21567
+    WHEAT__AFFECTED_BY_PLANT_DISEASE = 21110
+    WHEAT__AFFECTED_BY_SNOW__LIGHTNING__OR_OTHER_DISTURBANCES = 21109
+    WHEAT__AFFECTED_BY_STRONG_WINDS = 21113
+    WHEAT__AFFECTED_BY_TEMPERATURE_ISSUES = 21571
+    WHEAT__AFFECTED_BY_THE_INABILITY_TO_PREPARE_LAND_FOR_IRRIGATION = 21107
+    WHEAT__AFFECTED_BY_TORNADOES = 21135
+    WHEAT__AFFECTED_BY_VOLCANIC_ERUPTIONS = 21111
+    WHEAT__AFFECTED_BY_WEATHER_ISSUES = 21566
+    WHEAT__AFFECTED_BY_WILDLIFE = 21112
+    WHEAT__B_QUALITY__HAMBURG = 5148
+    WHEAT__CAUSE_OF_LOSS = 21579
+    WHEAT__CONTINUOUS_CROP = 3352
+    WHEAT__DELIVERABLE_GRADES = 14733
+    WHEAT__EXCLUDING_DURUM__ORGANIC = 5841
+    WHEAT__EXCLUDING_DURUM__ORGANIC_CONVERSION = 5842
+    WHEAT__EXCL_DURUM = 1444
+    WHEAT__EXCL_DURUM_WHEAT__FOR_SOWING = 6446
+    WHEAT__EXCL_DURUM__EXCL_FOR_SOWING = 6143
+    WHEAT__EXCL_DURUM__EXCL_SEED = 21014
+    WHEAT__EXCL_DURUM__EXCL_SEED__GT_15PCT_BAGGED = 24304
+    WHEAT__EXCL_DURUM__MILLING = 7465
+    WHEAT__EXCL_DURUM__OTHER_USES = 7466
+    WHEAT__EXCL_SEED = 24913
+    WHEAT__FOLLOWING_SUMMER_FALLOW = 3353
+    WHEAT__FOR_FORAGE = 8200
+    WHEAT__FOR_GRAIN = 7637
+    WHEAT__FOR_SILAGE = 7638
+    WHEAT__GRADE_1__ROUEN = 5147
+    WHEAT__KALYAN_HYV = 7494
+    WHEAT__LOW_FALLING_NUMBERS = 22907
+    WHEAT__NATURAL_CAUSE_OF_LOSS = 21564
+    WHEAT__NON_DELIVERABLE_GRADES = 14734
+    WHEAT__NO_GRADE = 21907
+    WHEAT__NO__2_OR_BETTER = 21908
+    WHEAT__NO__3_OR_BETTER = 21909
+    WHEAT__ORGANIC = 5843
+    WHEAT__ORGANIC_CONVERSION = 5844
+    WHEAT__OTHER = 13622
+    WHEAT__OTHER__EASTERN = 7533
+    WHEAT__OTHER__WESTERN = 7534
+    WHEAT__POST_HARVEST = 4394
+    WHEAT__ST__LAWRENCE = 5025
+    WHEAT__UNNATURAL_CAUSE_OF_LOSS = 21565
+    WHEAT__UP_RIVER_ARGENTINA = 5138
+    WHEAT__WHOLE = 12477
+    WHEAT__WHOLE__EXCL_DURUM = 13526
+    WHEAT__WHOLE__FOR_FEED = 12475
+    WHEAT__WHOLE__FOR_FOOD = 12476
+    WHITE_CLUB_WHEAT__NO__1 = 21910
+    WHITE_CLUB_WHEAT__NO__2_OR_BETTER = 21911
+    WHITE_SORGHUM = 834
+    WHITE_SORGHUM__NO__1 = 21920
+    WHITE_SORGHUM__NO__2 = 21921
+    WHITE_SORGHUM__NO__2_OR_BETTER = 21922
+    WHITE_SORGHUM__SAMPLE_GRADE = 21923
+    WHITE_SPRING_WHEAT = 2277
+    WHITE_WHEAT = 3596
+    WHITE_WINTER_WHEAT = 2489
+    WINTER_SORGHUM = 12823
+    WINTER_SORGHUM__FOR_GRAIN = 9283
+    WINTER_SORGHUM__FOR_SILAGE = 9282
+    WINTER_WHEAT = 3357
+    WINTER_WHEAT_CONDITION_AND_PROGRESS = 12650
+    WINTER_WHEAT_SEED = 4163
+    WINTER_WHEAT__CONTINUOUS_CROP = 3395
+    WINTER_WHEAT__FOLLOWING_SUMMER_FALLOW = 3396
+    WINTER_WHEAT__LIGHT_DAMAGE = 3384
+    WINTER_WHEAT__MODERATE_DAMAGE = 3385
+    WINTER_WHEAT__NO_DAMAGE = 3386
+    WINTER_WHEAT__SEVERE_DAMAGE = 3387
+    YELLOW_CORN = 780
+    YELLOW_CORN__FOR_FORAGE = 11644
+    YELLOW_CORN__FOR_GRAIN = 11645
+    YELLOW_CORN__FOR_GRAZING = 11646
+    YELLOW_CORN__FOR_SEED = 11648
+    YELLOW_CORN__FOR_SILAGE = 13646
+    YELLOW_CORN__NO_GRADE = 21924
+    YELLOW_CORN__NO__1 = 21925
+    YELLOW_CORN__NO__2 = 12714
+    YELLOW_CORN__NO__2_OR_BETTER = 21926
+    YELLOW_CORN__NO__2__FEED_GRADE = 21653
+    YELLOW_CORN__NO__2__FOOD_GRADE = 21725
+    YELLOW_CORN__NO__2__ORGANIC__FEED_GRADE = 21163
+    YELLOW_CORN__NO__2__ORGANIC__FOOD_GRADE = 21164
+    YELLOW_CORN__NO__3 = 12801
+    YELLOW_CORN__NO__3_OR_BETTER = 21927
+    YELLOW_CORN__NO__4 = 21928
+    YELLOW_CORN__NO__4_OR_BETTER = 21929
+    YELLOW_CORN__NO__5 = 21930
+    YELLOW_CORN__NO__5_OR_BETTER = 21931
+    YELLOW_CORN__SAMPLE_GRADE = 21933
+    YELLOW_CORN__SAMPLE_GRADE_OR_BETTER = 21932
+    YELLOW_CORN__SECOND_GRADE__MEDIUM_SIZE__PACKAGED = 25035
+    YELLOW_CORN__TO_LEAVE_STANDING = 11647
+    YELLOW_SORGHUM__NO__2 = 5077
+
+# Define sets of US states and counties, useful for checking valid accesses
+US_STATES_SET = set([member.value for member in US_States])
+US_COUNTIES_SET = set([member.value for member in US_Counties])
+
+US_COUNTIES_REGION_ID_TO_FIPS: Dict[int, str] = {
+    136759: '01001', 136760: '01003', 136761: '01005', 136762: '01007', 136763: '01009', 136764: '01011', 136765: '01013', 136766: '01015', 136767: '01017', 136768: '01019', 
+    136769: '01021', 136770: '01023', 136771: '01025', 136772: '01027', 136773: '01029', 136774: '01031', 136775: '01033', 136776: '01035', 136777: '01037', 136778: '01039', 
+    136779: '01041', 136780: '01043', 136781: '01045', 136782: '01047', 136783: '01049', 136784: '01051', 136785: '01053', 136786: '01055', 136787: '01057', 136788: '01059', 
+    136789: '01061', 136790: '01063', 136791: '01065', 136792: '01067', 136793: '01069', 136794: '01071', 136795: '01073', 136796: '01075', 136797: '01077', 136798: '01079', 
+    136799: '01081', 136800: '01083', 136801: '01085', 136802: '01087', 136803: '01089', 136804: '01091', 136805: '01093', 136806: '01095', 136807: '01097', 136808: '01099', 
+    136809: '01101', 136810: '01103', 136811: '01105', 136812: '01107', 136813: '01109', 136814: '01111', 136815: '01113', 136816: '01115', 136817: '01117', 136818: '01119', 
+    136819: '01121', 136820: '01123', 136821: '01125', 136822: '01127', 136823: '01129', 136824: '01131', 136825: '01133', 136826: '02013', 136827: '02016', 136828: '02020', 
+    136829: '02050', 136830: '02060', 136831: '02068', 136832: '02070', 136833: '02090', 136834: '02100', 136835: '02110', 136836: '02122', 136837: '02130', 136838: '02150', 
+    136839: '02164', 136840: '02170', 136841: '02180', 136842: '02185', 136843: '02188', 136844: '02198', 136845: '02220', 136846: '02230', 136847: '02240', 136848: '02261', 
+    136849: '02158', 136850: '02275', 136851: '02290', 136852: '04001', 136853: '04003', 136854: '04005', 136855: '04007', 136856: '04009', 136857: '04011', 136858: '04012', 
+    136859: '04013', 136860: '04015', 136861: '04017', 136862: '04019', 136863: '04021', 136864: '04023', 136865: '04025', 136866: '04027', 136867: '05001', 136868: '05003', 
+    136869: '05005', 136870: '05007', 136871: '05009', 136872: '05011', 136873: '05013', 136874: '05015', 136875: '05017', 136876: '05019', 136877: '05021', 136878: '05023', 
+    136879: '05025', 136880: '05027', 136881: '05029', 136882: '05031', 136883: '05033', 136884: '05035', 136885: '05037', 136886: '05039', 136887: '05041', 136888: '05043', 
+    136889: '05045', 136890: '05047', 136891: '05049', 136892: '05051', 136893: '05053', 136894: '05055', 136895: '05057', 136896: '05059', 136897: '05061', 136898: '05063', 
+    136899: '05065', 136900: '05067', 136901: '05069', 136902: '05071', 136903: '05073', 136904: '05075', 136905: '05077', 136906: '05079', 136907: '05081', 136908: '05083', 
+    136909: '05085', 136910: '05087', 136911: '05089', 136912: '05091', 136913: '05093', 136914: '05095', 136915: '05097', 136916: '05099', 136917: '05101', 136918: '05103', 
+    136919: '05105', 136920: '05107', 136921: '05109', 136922: '05111', 136923: '05113', 136924: '05115', 136925: '05117', 136926: '05119', 136927: '05121', 136928: '05123', 
+    136929: '05125', 136930: '05127', 136931: '05129', 136932: '05131', 136933: '05133', 136934: '05135', 136935: '05137', 136936: '05139', 136937: '05141', 136938: '05143', 
+    136939: '05145', 136940: '05147', 136941: '05149', 136942: '06001', 136943: '06003', 136944: '06005', 136945: '06007', 136946: '06009', 136947: '06011', 136948: '06013', 
+    136949: '06015', 136950: '06017', 136951: '06019', 136952: '06021', 136953: '06023', 136954: '06025', 136955: '06027', 136956: '06029', 136957: '06031', 136958: '06033', 
+    136959: '06035', 136960: '06037', 136961: '06039', 136962: '06041', 136963: '06043', 136964: '06045', 136965: '06047', 136966: '06049', 136967: '06051', 136968: '06053', 
+    136969: '06055', 136970: '06057', 136971: '06059', 136972: '06061', 136973: '06063', 136974: '06065', 136975: '06067', 136976: '06069', 136977: '06071', 136978: '06073', 
+    136979: '06075', 136980: '06077', 136981: '06079', 136982: '06081', 136983: '06083', 136984: '06085', 136985: '06087', 136986: '06089', 136987: '06091', 136988: '06093', 
+    136989: '06095', 136990: '06097', 136991: '06099', 136992: '06101', 136993: '06103', 136994: '06105', 136995: '06107', 136996: '06109', 136997: '06111', 136998: '06113', 
+    136999: '06115', 137000: '08001', 137001: '08003', 137002: '08005', 137003: '08007', 137004: '08009', 137005: '08011', 137006: '08013', 137007: '08014', 137008: '08015', 
+    137009: '08017', 137010: '08019', 137011: '08021', 137012: '08023', 137013: '08025', 137014: '08027', 137015: '08029', 137016: '08031', 137017: '08033', 137018: '08035', 
+    137019: '08037', 137020: '08041', 137021: '08039', 137022: '08043', 137023: '08045', 137024: '08047', 137025: '08049', 137026: '08051', 137027: '08053', 137028: '08055', 
+    137029: '08057', 137030: '08059', 137031: '08061', 137032: '08063', 137033: '08067', 137034: '08065', 137035: '08069', 137036: '08071', 137037: '08073', 137038: '08075', 
+    137039: '08077', 137040: '08079', 137041: '08081', 137042: '08083', 137043: '08085', 137044: '08087', 137045: '08089', 137046: '08091', 137047: '08093', 137048: '08095', 
+    137049: '08097', 137050: '08099', 137051: '08101', 137052: '08103', 137053: '08105', 137054: '08107', 137055: '08109', 137056: '08111', 137057: '08113', 137058: '08115', 
+    137059: '08117', 137060: '08119', 137061: '08121', 137062: '08123', 137063: '08125', 137064: '09001', 137065: '09003', 137066: '09005', 137067: '09007', 137068: '09009', 
+    137069: '09011', 137070: '09013', 137071: '09015', 137072: '10001', 137073: '10003', 137074: '10005', 137075: '11001', 137076: '12001', 137077: '12003', 137078: '12005', 
+    137079: '12007', 137080: '12009', 137081: '12011', 137082: '12013', 137083: '12015', 137084: '12017', 137085: '12019', 137086: '12021', 137087: '12023', 137088: '12027', 
+    137089: '12029', 137090: '12031', 137091: '12033', 137092: '12035', 137093: '12037', 137094: '12039', 137095: '12041', 137096: '12043', 137097: '12045', 137098: '12047', 
+    137099: '12049', 137100: '12051', 137101: '12053', 137102: '12055', 137103: '12057', 137104: '12059', 137105: '12061', 137106: '12063', 137107: '12065', 137108: '12067', 
+    137109: '12069', 137110: '12071', 137111: '12073', 137112: '12075', 137113: '12077', 137114: '12079', 137115: '12081', 137116: '12083', 137117: '12085', 137118: '12086', 
+    137119: '12087', 137120: '12089', 137121: '12091', 137122: '12093', 137123: '12095', 137124: '12097', 137125: '12099', 137126: '12101', 137127: '12103', 137128: '12105', 
+    137129: '12107', 137130: '12109', 137131: '12111', 137132: '12113', 137133: '12115', 137134: '12117', 137135: '12119', 137136: '12121', 137137: '12123', 137138: '12125', 
+    137139: '12127', 137140: '12129', 137141: '12131', 137142: '12133', 137143: '13001', 137144: '13003', 137145: '13005', 137146: '13007', 137147: '13009', 137148: '13011', 
+    137149: '13013', 137150: '13015', 137151: '13017', 137152: '13019', 137153: '13021', 137154: '13023', 137155: '13025', 137156: '13027', 137157: '13029', 137158: '13031', 
+    137159: '13033', 137160: '13035', 137161: '13037', 137162: '13039', 137163: '13043', 137164: '13045', 137165: '13047', 137166: '13049', 137167: '13051', 137168: '13053', 
+    137169: '13055', 137170: '13057', 137171: '13059', 137172: '13061', 137173: '13063', 137174: '13065', 137175: '13067', 137176: '13069', 137177: '13071', 137178: '13073', 
+    137179: '13075', 137180: '13077', 137181: '13079', 137182: '13081', 137183: '13083', 137184: '13085', 137185: '13087', 137186: '13089', 137187: '13091', 137188: '13093', 
+    137189: '13095', 137190: '13097', 137191: '13099', 137192: '13101', 137193: '13103', 137194: '13105', 137195: '13107', 137196: '13109', 137197: '13111', 137198: '13113', 
+    137199: '13115', 137200: '13117', 137201: '13119', 137202: '13121', 137203: '13123', 137204: '13125', 137205: '13127', 137206: '13129', 137207: '13131', 137208: '13133', 
+    137209: '13135', 137210: '13137', 137211: '13139', 137212: '13141', 137213: '13143', 137214: '13145', 137215: '13147', 137216: '13149', 137217: '13151', 137218: '13153', 
+    137219: '13155', 137220: '13157', 137221: '13159', 137222: '13161', 137223: '13163', 137224: '13165', 137225: '13167', 137226: '13169', 137227: '13171', 137228: '13173', 
+    137229: '13175', 137230: '13177', 137231: '13179', 137232: '13181', 137233: '13183', 137234: '13185', 137235: '13187', 137236: '13193', 137237: '13195', 137238: '13197', 
+    137239: '13189', 137240: '13191', 137241: '13199', 137242: '13201', 137243: '13205', 137244: '13207', 137245: '13209', 137246: '13211', 137247: '13213', 137248: '13215', 
+    137249: '13217', 137250: '13219', 137251: '13221', 137252: '13223', 137253: '13225', 137254: '13227', 137255: '13229', 137256: '13231', 137257: '13233', 137258: '13235', 
+    137259: '13237', 137260: '13239', 137261: '13241', 137262: '13243', 137263: '13245', 137264: '13247', 137265: '13249', 137266: '13251', 137267: '13253', 137268: '13255', 
+    137269: '13257', 137270: '13259', 137271: '13261', 137272: '13263', 137273: '13265', 137274: '13267', 137275: '13269', 137276: '13271', 137277: '13273', 137278: '13275', 
+    137279: '13277', 137280: '13279', 137281: '13281', 137282: '13283', 137283: '13285', 137284: '13287', 137285: '13289', 137286: '13291', 137287: '13293', 137288: '13295', 
+    137289: '13297', 137290: '13299', 137291: '13301', 137292: '13303', 137293: '13305', 137294: '13307', 137295: '13309', 137296: '13311', 137297: '13313', 137298: '13315', 
+    137299: '13317', 137300: '13319', 137301: '13321', 137302: '15001', 137303: '15003', 137304: '15005', 137305: '15007', 137306: '15009', 137307: '16001', 137308: '16003', 
+    137309: '16005', 137310: '16007', 137311: '16009', 137312: '16011', 137313: '16013', 137314: '16015', 137315: '16017', 137316: '16019', 137317: '16021', 137318: '16023', 
+    137319: '16025', 137320: '16027', 137321: '16029', 137322: '16031', 137323: '16033', 137324: '16035', 137325: '16037', 137326: '16039', 137327: '16041', 137328: '16043', 
+    137329: '16045', 137330: '16047', 137331: '16049', 137332: '16051', 137333: '16053', 137334: '16055', 137335: '16057', 137336: '16059', 137337: '16061', 137338: '16063', 
+    137339: '16065', 137340: '16067', 137341: '16069', 137342: '16071', 137343: '16073', 137344: '16075', 137345: '16077', 137346: '16079', 137347: '16081', 137348: '16083', 
+    137349: '16085', 137350: '16087', 137351: '17001', 137352: '17003', 137353: '17005', 137354: '17007', 137355: '17009', 137356: '17011', 137357: '17013', 137358: '17015', 
+    137359: '17017', 137360: '17019', 137361: '17021', 137362: '17023', 137363: '17025', 137364: '17027', 137365: '17029', 137366: '17031', 137367: '17033', 137368: '17035', 
+    137369: '17037', 137370: '17039', 137371: '17041', 137372: '17043', 137373: '17045', 137374: '17047', 137375: '17049', 137376: '17051', 137377: '17053', 137378: '17055', 
+    137379: '17057', 137380: '17059', 137381: '17061', 137382: '17063', 137383: '17065', 137384: '17067', 137385: '17069', 137386: '17071', 137387: '17073', 137388: '17075', 
+    137389: '17077', 137390: '17079', 137391: '17081', 137392: '17083', 137393: '17085', 137394: '17087', 137395: '17089', 137396: '17091', 137397: '17093', 137398: '17095', 
+    137399: '17099', 137400: '17097', 137401: '17101', 137402: '17103', 137403: '17105', 137404: '17107', 137405: '17115', 137406: '17117', 137407: '17119', 137408: '17121', 
+    137409: '17123', 137410: '17125', 137411: '17127', 137412: '17109', 137413: '17111', 137414: '17113', 137415: '17129', 137416: '17131', 137417: '17133', 137418: '17135', 
+    137419: '17137', 137420: '17139', 137421: '17141', 137422: '17143', 137423: '17145', 137424: '17147', 137425: '17149', 137426: '17151', 137427: '17153', 137428: '17155', 
+    137429: '17157', 137430: '17159', 137431: '17161', 137432: '17163', 137433: '17165', 137434: '17167', 137435: '17169', 137436: '17171', 137437: '17173', 137438: '17175', 
+    137439: '17177', 137440: '17179', 137441: '17181', 137442: '17183', 137443: '17185', 137444: '17187', 137445: '17189', 137446: '17191', 137447: '17193', 137448: '17195', 
+    137449: '17197', 137450: '17199', 137451: '17201', 137452: '17203', 137453: '18001', 137454: '18003', 137455: '18005', 137456: '18007', 137457: '18009', 137458: '18011', 
+    137459: '18013', 137460: '18015', 137461: '18017', 137462: '18019', 137463: '18021', 137464: '18023', 137465: '18025', 137466: '18027', 137467: '18033', 137468: '18029', 
+    137469: '18031', 137470: '18035', 137471: '18037', 137472: '18039', 137473: '18041', 137474: '18043', 137475: '18045', 137476: '18047', 137477: '18049', 137478: '18051', 
+    137479: '18053', 137480: '18055', 137481: '18057', 137482: '18059', 137483: '18061', 137484: '18063', 137485: '18065', 137486: '18067', 137487: '18069', 137488: '18071', 
+    137489: '18073', 137490: '18075', 137491: '18077', 137492: '18079', 137493: '18081', 137494: '18083', 137495: '18085', 137496: '18087', 137497: '18089', 137498: '18091', 
+    137499: '18093', 137500: '18095', 137501: '18097', 137502: '18099', 137503: '18101', 137504: '18103', 137505: '18105', 137506: '18107', 137507: '18109', 137508: '18111', 
+    137509: '18113', 137510: '18115', 137511: '18117', 137512: '18119', 137513: '18121', 137514: '18123', 137515: '18125', 137516: '18127', 137517: '18129', 137518: '18131', 
+    137519: '18133', 137520: '18135', 137521: '18137', 137522: '18139', 137523: '18141', 137524: '18143', 137525: '18145', 137526: '18147', 137527: '18149', 137528: '18151', 
+    137529: '18153', 137530: '18155', 137531: '18157', 137532: '18159', 137533: '18161', 137534: '18163', 137535: '18165', 137536: '18167', 137537: '18169', 137538: '18171', 
+    137539: '18173', 137540: '18175', 137541: '18177', 137542: '18179', 137543: '18181', 137544: '18183', 137545: '19001', 137546: '19003', 137547: '19005', 137548: '19007', 
+    137549: '19009', 137550: '19011', 137551: '19013', 137552: '19015', 137553: '19017', 137554: '19019', 137555: '19021', 137556: '19023', 137557: '19025', 137558: '19027', 
+    137559: '19029', 137560: '19031', 137561: '19033', 137562: '19035', 137563: '19037', 137564: '19039', 137565: '19041', 137566: '19043', 137567: '19045', 137568: '19047', 
+    137569: '19049', 137570: '19051', 137571: '19053', 137572: '19055', 137573: '19057', 137574: '19059', 137575: '19061', 137576: '19063', 137577: '19065', 137578: '19067', 
+    137579: '19069', 137580: '19071', 137581: '19073', 137582: '19075', 137583: '19077', 137584: '19079', 137585: '19081', 137586: '19083', 137587: '19085', 137588: '19087', 
+    137589: '19089', 137590: '19091', 137591: '19093', 137592: '19095', 137593: '19097', 137594: '19099', 137595: '19101', 137596: '19103', 137597: '19105', 137598: '19107', 
+    137599: '19109', 137600: '19111', 137601: '19113', 137602: '19115', 137603: '19117', 137604: '19119', 137605: '19121', 137606: '19123', 137607: '19125', 137608: '19127', 
+    137609: '19129', 137610: '19131', 137611: '19133', 137612: '19135', 137613: '19137', 137614: '19139', 137615: '19141', 137616: '19143', 137617: '19145', 137618: '19147', 
+    137619: '19149', 137620: '19151', 137621: '19153', 137622: '19155', 137623: '19157', 137624: '19159', 137625: '19161', 137626: '19163', 137627: '19165', 137628: '19167', 
+    137629: '19169', 137630: '19171', 137631: '19173', 137632: '19175', 137633: '19177', 137634: '19179', 137635: '19181', 137636: '19183', 137637: '19185', 137638: '19187', 
+    137639: '19189', 137640: '19191', 137641: '19193', 137642: '19195', 137643: '19197', 137644: '20001', 137645: '20003', 137646: '20005', 137647: '20007', 137648: '20009', 
+    137649: '20011', 137650: '20013', 137651: '20015', 137652: '20017', 137653: '20019', 137654: '20021', 137655: '20023', 137656: '20025', 137657: '20027', 137658: '20029', 
+    137659: '20031', 137660: '20033', 137661: '20035', 137662: '20037', 137663: '20039', 137664: '20041', 137665: '20043', 137666: '20045', 137667: '20047', 137668: '20049', 
+    137669: '20051', 137670: '20053', 137671: '20055', 137672: '20057', 137673: '20059', 137674: '20061', 137675: '20063', 137676: '20065', 137677: '20067', 137678: '20069', 
+    137679: '20071', 137680: '20073', 137681: '20075', 137682: '20077', 137683: '20079', 137684: '20081', 137685: '20083', 137686: '20085', 137687: '20087', 137688: '20089', 
+    137689: '20091', 137690: '20093', 137691: '20095', 137692: '20097', 137693: '20099', 137694: '20101', 137695: '20103', 137696: '20105', 137697: '20107', 137698: '20109', 
+    137699: '20111', 137700: '20115', 137701: '20117', 137702: '20113', 137703: '20119', 137704: '20121', 137705: '20123', 137706: '20125', 137707: '20127', 137708: '20129', 
+    137709: '20131', 137710: '20133', 137711: '20135', 137712: '20137', 137713: '20139', 137714: '20141', 137715: '20143', 137716: '20145', 137717: '20147', 137718: '20149', 
+    137719: '20151', 137720: '20153', 137721: '20155', 137722: '20157', 137723: '20159', 137724: '20161', 137725: '20163', 137726: '20165', 137727: '20167', 137728: '20169', 
+    137729: '20171', 137730: '20173', 137731: '20175', 137732: '20177', 137733: '20179', 137734: '20181', 137735: '20183', 137736: '20185', 137737: '20187', 137738: '20189', 
+    137739: '20191', 137740: '20193', 137741: '20195', 137742: '20197', 137743: '20199', 137744: '20201', 137745: '20203', 137746: '20205', 137747: '20207', 137748: '20209', 
+    137749: '21001', 137750: '21003', 137751: '21005', 137752: '21007', 137753: '21009', 137754: '21011', 137755: '21013', 137756: '21015', 137757: '21017', 137758: '21019', 
+    137759: '21021', 137760: '21023', 137761: '21025', 137762: '21027', 137763: '21029', 137764: '21031', 137765: '21033', 137766: '21035', 137767: '21037', 137768: '21039', 
+    137769: '21041', 137770: '21043', 137771: '21045', 137772: '21047', 137773: '21049', 137774: '21051', 137775: '21053', 137776: '21055', 137777: '21057', 137778: '21059', 
+    137779: '21061', 137780: '21063', 137781: '21065', 137782: '21067', 137783: '21069', 137784: '21071', 137785: '21073', 137786: '21075', 137787: '21077', 137788: '21079', 
+    137789: '21081', 137790: '21083', 137791: '21085', 137792: '21087', 137793: '21089', 137794: '21091', 137795: '21093', 137796: '21095', 137797: '21097', 137798: '21099', 
+    137799: '21101', 137800: '21103', 137801: '21105', 137802: '21107', 137803: '21109', 137804: '21111', 137805: '21113', 137806: '21115', 137807: '21117', 137808: '21119', 
+    137809: '21121', 137810: '21123', 137811: '21125', 137812: '21127', 137813: '21129', 137814: '21131', 137815: '21133', 137816: '21135', 137817: '21137', 137818: '21139', 
+    137819: '21141', 137820: '21143', 137821: '21151', 137822: '21153', 137823: '21155', 137824: '21157', 137825: '21159', 137826: '21161', 137827: '21145', 137828: '21147', 
+    137829: '21149', 137830: '21163', 137831: '21165', 137832: '21167', 137833: '21169', 137834: '21171', 137835: '21173', 137836: '21175', 137837: '21177', 137838: '21179', 
+    137839: '21181', 137840: '21183', 137841: '21185', 137842: '21187', 137843: '21189', 137844: '21191', 137845: '21193', 137846: '21195', 137847: '21197', 137848: '21199', 
+    137849: '21201', 137850: '21203', 137851: '21205', 137852: '21207', 137853: '21209', 137854: '21211', 137855: '21213', 137856: '21215', 137857: '21217', 137858: '21219', 
+    137859: '21221', 137860: '21223', 137861: '21225', 137862: '21227', 137863: '21229', 137864: '21231', 137865: '21233', 137866: '21235', 137867: '21237', 137868: '21239', 
+    137869: '22001', 137870: '22003', 137871: '22005', 137872: '22007', 137873: '22009', 137874: '22011', 137875: '22013', 137876: '22015', 137877: '22017', 137878: '22019', 
+    137879: '22021', 137880: '22023', 137881: '22025', 137882: '22027', 137883: '22029', 137884: '22031', 137885: '22033', 137886: '22035', 137887: '22037', 137888: '22039', 
+    137889: '22041', 137890: '22043', 137891: '22045', 137892: '22047', 137893: '22049', 137894: '22051', 137895: '22053', 137896: '22059', 137897: '22055', 137898: '22057', 
+    137899: '22061', 137900: '22063', 137901: '22065', 137902: '22067', 137903: '22069', 137904: '22071', 137905: '22073', 137906: '22075', 137907: '22077', 137908: '22079', 
+    137909: '22081', 137910: '22083', 137911: '22085', 137912: '22087', 137913: '22089', 137914: '22091', 137915: '22093', 137916: '22095', 137917: '22097', 137918: '22099', 
+    137919: '22101', 137920: '22103', 137921: '22105', 137922: '22107', 137923: '22109', 137924: '22111', 137925: '22113', 137926: '22115', 137927: '22117', 137928: '22119', 
+    137929: '22121', 137930: '22123', 137931: '22125', 137932: '22127', 137933: '23001', 137934: '23003', 137935: '23005', 137936: '23007', 137937: '23009', 137938: '23011', 
+    137939: '23013', 137940: '23015', 137941: '23017', 137942: '23019', 137943: '23021', 137944: '23023', 137945: '23025', 137946: '23027', 137947: '23029', 137948: '23031', 
+    137949: '24001', 137950: '24003', 137951: '24005', 137952: '24009', 137953: '24011', 137954: '24013', 137955: '24015', 137956: '24017', 137957: '24019', 137958: '24021', 
+    137959: '24023', 137960: '24025', 137961: '24027', 137962: '24029', 137963: '24031', 137964: '24033', 137965: '24035', 137966: '24037', 137967: '24039', 137968: '24041', 
+    137969: '24043', 137970: '24045', 137971: '24047', 137972: '25001', 137973: '25003', 137974: '25005', 137975: '25007', 137976: '25009', 137977: '25011', 137978: '25013', 
+    137979: '25015', 137980: '25017', 137981: '25019', 137982: '25021', 137983: '25023', 137984: '25025', 137985: '25027', 137986: '26001', 137987: '26003', 137988: '26005', 
+    137989: '26007', 137990: '26009', 137991: '26011', 137992: '26013', 137993: '26015', 137994: '26017', 137995: '26019', 137996: '26021', 137997: '26023', 137998: '26025', 
+    137999: '26027', 138000: '26029', 138001: '26031', 138002: '26033', 138003: '26035', 138004: '26037', 138005: '26039', 138006: '26041', 138007: '26043', 138008: '26045', 
+    138009: '26047', 138010: '26049', 138011: '26051', 138012: '26053', 138013: '26055', 138014: '26057', 138015: '26059', 138016: '26061', 138017: '26063', 138018: '26065', 
+    138019: '26067', 138020: '26069', 138021: '26071', 138022: '26073', 138023: '26075', 138024: '26077', 138025: '26079', 138026: '26081', 138027: '26083', 138028: '26085', 
+    138029: '26087', 138030: '26089', 138031: '26091', 138032: '26093', 138033: '26095', 138034: '26097', 138035: '26099', 138036: '26101', 138037: '26103', 138038: '26105', 
+    138039: '26107', 138040: '26109', 138041: '26111', 138042: '26113', 138043: '26115', 138044: '26117', 138045: '26119', 138046: '26121', 138047: '26123', 138048: '26125', 
+    138049: '26127', 138050: '26129', 138051: '26131', 138052: '26133', 138053: '26135', 138054: '26137', 138055: '26139', 138056: '26141', 138057: '26143', 138058: '26145', 
+    138059: '26147', 138060: '26149', 138061: '26151', 138062: '26153', 138063: '26155', 138064: '26157', 138065: '26159', 138066: '26161', 138067: '26163', 138068: '26165', 
+    138069: '27001', 138070: '27003', 138071: '27005', 138072: '27007', 138073: '27009', 138074: '27011', 138075: '27013', 138076: '27015', 138077: '27017', 138078: '27019', 
+    138079: '27021', 138080: '27023', 138081: '27025', 138082: '27027', 138083: '27029', 138084: '27031', 138085: '27033', 138086: '27035', 138087: '27037', 138088: '27039', 
+    138089: '27041', 138090: '27043', 138091: '27045', 138092: '27047', 138093: '27049', 138094: '27051', 138095: '27053', 138096: '27055', 138097: '27057', 138098: '27059', 
+    138099: '27061', 138100: '27063', 138101: '27065', 138102: '27067', 138103: '27069', 138104: '27071', 138105: '27073', 138106: '27075', 138107: '27077', 138108: '27079', 
+    138109: '27081', 138110: '27083', 138111: '27087', 138112: '27089', 138113: '27091', 138114: '27085', 138115: '27093', 138116: '27095', 138117: '27097', 138118: '27099', 
+    138119: '27101', 138120: '27103', 138121: '27105', 138122: '27107', 138123: '27109', 138124: '27111', 138125: '27113', 138126: '27115', 138127: '27117', 138128: '27119', 
+    138129: '27121', 138130: '27123', 138131: '27125', 138132: '27127', 138133: '27129', 138134: '27131', 138135: '27133', 138136: '27135', 138137: '27137', 138138: '27139', 
+    138139: '27141', 138140: '27143', 138141: '27145', 138142: '27147', 138143: '27149', 138144: '27151', 138145: '27153', 138146: '27155', 138147: '27157', 138148: '27159', 
+    138149: '27161', 138150: '27163', 138151: '27165', 138152: '27167', 138153: '27169', 138154: '27171', 138155: '27173', 138156: '28001', 138157: '28003', 138158: '28005', 
+    138159: '28007', 138160: '28009', 138161: '28011', 138162: '28013', 138163: '28015', 138164: '28017', 138165: '28019', 138166: '28021', 138167: '28023', 138168: '28025', 
+    138169: '28027', 138170: '28029', 138171: '28031', 138172: '28033', 138173: '28035', 138174: '28037', 138175: '28039', 138176: '28041', 138177: '28043', 138178: '28045', 
+    138179: '28047', 138180: '28049', 138181: '28051', 138182: '28053', 138183: '28055', 138184: '28057', 138185: '28059', 138186: '28061', 138187: '28063', 138188: '28065', 
+    138189: '28067', 138190: '28069', 138191: '28071', 138192: '28073', 138193: '28075', 138194: '28077', 138195: '28079', 138196: '28081', 138197: '28083', 138198: '28085', 
+    138199: '28087', 138200: '28089', 138201: '28091', 138202: '28093', 138203: '28095', 138204: '28097', 138205: '28099', 138206: '28101', 138207: '28103', 138208: '28105', 
+    138209: '28107', 138210: '28109', 138211: '28111', 138212: '28113', 138213: '28115', 138214: '28117', 138215: '28119', 138216: '28121', 138217: '28123', 138218: '28125', 
+    138219: '28127', 138220: '28129', 138221: '28131', 138222: '28133', 138223: '28135', 138224: '28137', 138225: '28139', 138226: '28141', 138227: '28143', 138228: '28145', 
+    138229: '28147', 138230: '28149', 138231: '28151', 138232: '28153', 138233: '28155', 138234: '28157', 138235: '28159', 138236: '28161', 138237: '28163', 138238: '29001', 
+    138239: '29003', 138240: '29005', 138241: '29007', 138242: '29009', 138243: '29011', 138244: '29013', 138245: '29015', 138246: '29017', 138247: '29019', 138248: '29021', 
+    138249: '29023', 138250: '29025', 138251: '29027', 138252: '29029', 138253: '29031', 138254: '29033', 138255: '29035', 138256: '29037', 138257: '29039', 138258: '29041', 
+    138259: '29043', 138260: '29045', 138261: '29047', 138262: '29049', 138263: '29051', 138264: '29053', 138265: '29055', 138266: '29057', 138267: '29059', 138268: '29061', 
+    138269: '29063', 138270: '29065', 138271: '29067', 138272: '29069', 138273: '29071', 138274: '29073', 138275: '29075', 138276: '29077', 138277: '29079', 138278: '29081', 
+    138279: '29083', 138280: '29085', 138281: '29087', 138282: '29089', 138283: '29091', 138284: '29093', 138285: '29095', 138286: '29097', 138287: '29099', 138288: '29101', 
+    138289: '29103', 138290: '29105', 138291: '29107', 138292: '29109', 138293: '29111', 138294: '29113', 138295: '29115', 138296: '29117', 138297: '29121', 138298: '29123', 
+    138299: '29125', 138300: '29127', 138301: '29119', 138302: '29129', 138303: '29131', 138304: '29133', 138305: '29135', 138306: '29137', 138307: '29139', 138308: '29141', 
+    138309: '29143', 138310: '29145', 138311: '29147', 138312: '29149', 138313: '29151', 138314: '29153', 138315: '29155', 138316: '29157', 138317: '29159', 138318: '29161', 
+    138319: '29163', 138320: '29165', 138321: '29167', 138322: '29169', 138323: '29171', 138324: '29173', 138325: '29175', 138326: '29177', 138327: '29179', 138328: '29181', 
+    138329: '29183', 138330: '29185', 138331: '29187', 138332: '29189', 138333: '29186', 138334: '29195', 138335: '29197', 138336: '29199', 138337: '29201', 138338: '29203', 
+    138339: '29205', 138340: '29207', 138341: '29209', 138342: '29211', 138343: '29213', 138344: '29215', 138345: '29217', 138346: '29219', 138347: '29221', 138348: '29223', 
+    138349: '29225', 138350: '29227', 138351: '29229', 138352: '30001', 138353: '30003', 138354: '30005', 138355: '30007', 138356: '30009', 138357: '30011', 138358: '30013', 
+    138359: '30015', 138360: '30017', 138361: '30019', 138362: '30021', 138363: '30023', 138364: '30025', 138365: '30027', 138366: '30029', 138367: '30031', 138368: '30033', 
+    138369: '30035', 138370: '30037', 138371: '30039', 138372: '30041', 138373: '30043', 138374: '30045', 138375: '30047', 138376: '30049', 138377: '30051', 138378: '30053', 
+    138379: '30057', 138380: '30055', 138381: '30059', 138382: '30061', 138383: '30063', 138384: '30065', 138385: '30067', 138386: '30069', 138387: '30071', 138388: '30073', 
+    138389: '30075', 138390: '30077', 138391: '30079', 138392: '30081', 138393: '30083', 138394: '30085', 138395: '30087', 138396: '30089', 138397: '30091', 138398: '30093', 
+    138399: '30095', 138400: '30097', 138401: '30099', 138402: '30101', 138403: '30103', 138404: '30105', 138405: '30107', 138406: '30109', 138407: '30111', 138408: '31001', 
+    138409: '31003', 138410: '31005', 138411: '31007', 138412: '31009', 138413: '31011', 138414: '31013', 138415: '31015', 138416: '31017', 138417: '31019', 138418: '31021', 
+    138419: '31023', 138420: '31025', 138421: '31027', 138422: '31029', 138423: '31031', 138424: '31033', 138425: '31035', 138426: '31037', 138427: '31039', 138428: '31041', 
+    138429: '31043', 138430: '31045', 138431: '31047', 138432: '31049', 138433: '31051', 138434: '31053', 138435: '31055', 138436: '31057', 138437: '31059', 138438: '31061', 
+    138439: '31063', 138440: '31065', 138441: '31067', 138442: '31069', 138443: '31071', 138444: '31073', 138445: '31075', 138446: '31077', 138447: '31079', 138448: '31081', 
+    138449: '31083', 138450: '31085', 138451: '31087', 138452: '31089', 138453: '31091', 138454: '31093', 138455: '31095', 138456: '31097', 138457: '31099', 138458: '31101', 
+    138459: '31103', 138460: '31105', 138461: '31107', 138462: '31109', 138463: '31111', 138464: '31113', 138465: '31115', 138466: '31119', 138467: '31117', 138468: '31121', 
+    138469: '31123', 138470: '31125', 138471: '31127', 138472: '31129', 138473: '31131', 138474: '31133', 138475: '31135', 138476: '31137', 138477: '31139', 138478: '31141', 
+    138479: '31143', 138480: '31145', 138481: '31147', 138482: '31149', 138483: '31151', 138484: '31153', 138485: '31155', 138486: '31157', 138487: '31159', 138488: '31161', 
+    138489: '31163', 138490: '31165', 138491: '31167', 138492: '31169', 138493: '31171', 138494: '31173', 138495: '31175', 138496: '31177', 138497: '31179', 138498: '31181', 
+    138499: '31183', 138500: '31185', 138501: '32510', 138502: '32001', 138503: '32003', 138504: '32005', 138505: '32007', 138506: '32009', 138507: '32011', 138508: '32013', 
+    138509: '32015', 138510: '32017', 138511: '32019', 138512: '32021', 138513: '32023', 138514: '32027', 138515: '32029', 138516: '32031', 138517: '32033', 138518: '33001', 
+    138519: '33003', 138520: '33005', 138521: '33007', 138522: '33009', 138523: '33011', 138524: '33013', 138525: '33015', 138526: '33017', 138527: '33019', 138528: '34001', 
+    138529: '34003', 138530: '34005', 138531: '34007', 138532: '34009', 138533: '34011', 138534: '34013', 138535: '34015', 138536: '34017', 138537: '34019', 138538: '34021', 
+    138539: '34023', 138540: '34025', 138541: '34027', 138542: '34029', 138543: '34031', 138544: '34033', 138545: '34035', 138546: '34037', 138547: '34039', 138548: '34041', 
+    138549: '35001', 138550: '35003', 138551: '35005', 138552: '35006', 138553: '35007', 138554: '35009', 138555: '35011', 138556: '35013', 138557: '35015', 138558: '35017', 
+    138559: '35019', 138560: '35021', 138561: '35023', 138562: '35025', 138563: '35027', 138564: '35028', 138565: '35029', 138566: '35031', 138567: '35033', 138568: '35035', 
+    138569: '35037', 138570: '35039', 138571: '35041', 138572: '35045', 138573: '35047', 138574: '35043', 138575: '35049', 138576: '35051', 138577: '35053', 138578: '35055', 
+    138579: '35057', 138580: '35059', 138581: '35061', 138582: '36001', 138583: '36003', 138584: '36005', 138585: '36007', 138586: '36009', 138587: '36011', 138588: '36013', 
+    138589: '36015', 138590: '36017', 138591: '36019', 138592: '36021', 138593: '36023', 138594: '36025', 138595: '36027', 138596: '36029', 138597: '36031', 138598: '36033', 
+    138599: '36035', 138600: '36037', 138601: '36039', 138602: '36041', 138603: '36043', 138604: '36045', 138605: '36047', 138606: '36049', 138607: '36051', 138608: '36053', 
+    138609: '36055', 138610: '36057', 138611: '36059', 138612: '36061', 138613: '36063', 138614: '36065', 138615: '36067', 138616: '36069', 138617: '36071', 138618: '36073', 
+    138619: '36075', 138620: '36077', 138621: '36079', 138622: '36081', 138623: '36083', 138624: '36085', 138625: '36087', 138626: '36089', 138627: '36091', 138628: '36093', 
+    138629: '36095', 138630: '36097', 138631: '36099', 138632: '36101', 138633: '36103', 138634: '36105', 138635: '36107', 138636: '36109', 138637: '36111', 138638: '36113', 
+    138639: '36115', 138640: '36117', 138641: '36119', 138642: '36121', 138643: '36123', 138644: '37001', 138645: '37003', 138646: '37005', 138647: '37007', 138648: '37009', 
+    138649: '37011', 138650: '37013', 138651: '37015', 138652: '37017', 138653: '37019', 138654: '37021', 138655: '37023', 138656: '37025', 138657: '37027', 138658: '37029', 
+    138659: '37031', 138660: '37033', 138661: '37035', 138662: '37037', 138663: '37039', 138664: '37041', 138665: '37043', 138666: '37045', 138667: '37047', 138668: '37049', 
+    138669: '37051', 138670: '37053', 138671: '37055', 138672: '37057', 138673: '37059', 138674: '37061', 138675: '37063', 138676: '37065', 138677: '37067', 138678: '37069', 
+    138679: '37071', 138680: '37073', 138681: '37075', 138682: '37077', 138683: '37079', 138684: '37081', 138685: '37083', 138686: '37085', 138687: '37087', 138688: '37089', 
+    138689: '37091', 138690: '37093', 138691: '37095', 138692: '37097', 138693: '37099', 138694: '37101', 138695: '37103', 138696: '37105', 138697: '37107', 138698: '37109', 
+    138699: '37113', 138700: '37115', 138701: '37117', 138702: '37111', 138703: '37119', 138704: '37121', 138705: '37123', 138706: '37125', 138707: '37127', 138708: '37129', 
+    138709: '37131', 138710: '37133', 138711: '37135', 138712: '37137', 138713: '37139', 138714: '37141', 138715: '37143', 138716: '37145', 138717: '37147', 138718: '37149', 
+    138719: '37151', 138720: '37153', 138721: '37155', 138722: '37157', 138723: '37159', 138724: '37161', 138725: '37163', 138726: '37165', 138727: '37167', 138728: '37169', 
+    138729: '37171', 138730: '37173', 138731: '37175', 138732: '37177', 138733: '37179', 138734: '37181', 138735: '37183', 138736: '37185', 138737: '37187', 138738: '37189', 
+    138739: '37191', 138740: '37193', 138741: '37195', 138742: '37197', 138743: '37199', 138744: '38001', 138745: '38003', 138746: '38005', 138747: '38007', 138748: '38009', 
+    138749: '38011', 138750: '38013', 138751: '38015', 138752: '38017', 138753: '38019', 138754: '38021', 138755: '38023', 138756: '38025', 138757: '38027', 138758: '38029', 
+    138759: '38031', 138760: '38033', 138761: '38035', 138762: '38037', 138763: '38039', 138764: '38041', 138765: '38043', 138766: '38045', 138767: '38047', 138768: '38049', 
+    138769: '38051', 138770: '38053', 138771: '38055', 138772: '38057', 138773: '38059', 138774: '38061', 138775: '38063', 138776: '38065', 138777: '38067', 138778: '38069', 
+    138779: '38071', 138780: '38073', 138781: '38075', 138782: '38077', 138783: '38079', 138784: '38081', 138785: '38083', 138786: '38085', 138787: '38087', 138788: '38089', 
+    138789: '38091', 138790: '38093', 138791: '38095', 138792: '38097', 138793: '38099', 138794: '38101', 138795: '38103', 138796: '38105', 138797: '39001', 138798: '39003', 
+    138799: '39005', 138800: '39007', 138801: '39009', 138802: '39011', 138803: '39013', 138804: '39015', 138805: '39017', 138806: '39019', 138807: '39021', 138808: '39023', 
+    138809: '39025', 138810: '39027', 138811: '39029', 138812: '39031', 138813: '39033', 138814: '39035', 138815: '39037', 138816: '39039', 138817: '39041', 138818: '39043', 
+    138819: '39045', 138820: '39047', 138821: '39049', 138822: '39051', 138823: '39053', 138824: '39055', 138825: '39057', 138826: '39059', 138827: '39061', 138828: '39063', 
+    138829: '39065', 138830: '39067', 138831: '39069', 138832: '39071', 138833: '39073', 138834: '39075', 138835: '39077', 138836: '39079', 138837: '39081', 138838: '39083', 
+    138839: '39085', 138840: '39087', 138841: '39089', 138842: '39091', 138843: '39093', 138844: '39095', 138845: '39097', 138846: '39099', 138847: '39101', 138848: '39103', 
+    138849: '39105', 138850: '39107', 138851: '39109', 138852: '39111', 138853: '39113', 138854: '39115', 138855: '39117', 138856: '39119', 138857: '39121', 138858: '39123', 
+    138859: '39125', 138860: '39127', 138861: '39129', 138862: '39131', 138863: '39133', 138864: '39135', 138865: '39137', 138866: '39139', 138867: '39141', 138868: '39143', 
+    138869: '39145', 138870: '39147', 138871: '39149', 138872: '39151', 138873: '39153', 138874: '39155', 138875: '39157', 138876: '39159', 138877: '39161', 138878: '39163', 
+    138879: '39165', 138880: '39167', 138881: '39169', 138882: '39171', 138883: '39173', 138884: '39175', 138885: '40001', 138886: '40003', 138887: '40005', 138888: '40007', 
+    138889: '40009', 138890: '40011', 138891: '40013', 138892: '40015', 138893: '40017', 138894: '40019', 138895: '40021', 138896: '40023', 138897: '40025', 138898: '40027', 
+    138899: '40029', 138900: '40031', 138901: '40033', 138902: '40035', 138903: '40037', 138904: '40039', 138905: '40041', 138906: '40043', 138907: '40045', 138908: '40047', 
+    138909: '40049', 138910: '40051', 138911: '40053', 138912: '40055', 138913: '40057', 138914: '40059', 138915: '40061', 138916: '40063', 138917: '40065', 138918: '40067', 
+    138919: '40069', 138920: '40071', 138921: '40073', 138922: '40075', 138923: '40077', 138924: '40079', 138925: '40081', 138926: '40083', 138927: '40085', 138928: '40093', 
+    138929: '40095', 138930: '40097', 138931: '40087', 138932: '40089', 138933: '40091', 138934: '40099', 138935: '40101', 138936: '40103', 138937: '40105', 138938: '40107', 
+    138939: '40109', 138940: '40111', 138941: '40113', 138942: '40115', 138943: '40117', 138944: '40119', 138945: '40121', 138946: '40123', 138947: '40125', 138948: '40127', 
+    138949: '40129', 138950: '40131', 138951: '40133', 138952: '40135', 138953: '40137', 138954: '40139', 138955: '40141', 138956: '40143', 138957: '40145', 138958: '40147', 
+    138959: '40149', 138960: '40151', 138961: '40153', 138962: '41001', 138963: '41003', 138964: '41005', 138965: '41007', 138966: '41009', 138967: '41011', 138968: '41013', 
+    138969: '41015', 138970: '41017', 138971: '41019', 138972: '41021', 138973: '41023', 138974: '41025', 138975: '41027', 138976: '41029', 138977: '41031', 138978: '41033', 
+    138979: '41035', 138980: '41037', 138981: '41039', 138982: '41041', 138983: '41043', 138984: '41045', 138985: '41047', 138986: '41049', 138987: '41051', 138988: '41053', 
+    138989: '41055', 138990: '41057', 138991: '41059', 138992: '41061', 138993: '41063', 138994: '41065', 138995: '41067', 138996: '41069', 138997: '41071', 138998: '42001', 
+    138999: '42003', 139000: '42005', 139001: '42007', 139002: '42009', 139003: '42011', 139004: '42013', 139005: '42015', 139006: '42017', 139007: '42019', 139008: '42021', 
+    139009: '42023', 139010: '42025', 139011: '42027', 139012: '42029', 139013: '42031', 139014: '42033', 139015: '42035', 139016: '42037', 139017: '42039', 139018: '42041', 
+    139019: '42043', 139020: '42045', 139021: '42047', 139022: '42049', 139023: '42051', 139024: '42053', 139025: '42055', 139026: '42057', 139027: '42059', 139028: '42061', 
+    139029: '42063', 139030: '42065', 139031: '42067', 139032: '42069', 139033: '42071', 139034: '42073', 139035: '42075', 139036: '42077', 139037: '42079', 139038: '42081', 
+    139039: '42083', 139040: '42085', 139041: '42087', 139042: '42089', 139043: '42091', 139044: '42093', 139045: '42095', 139046: '42097', 139047: '42099', 139048: '42101', 
+    139049: '42103', 139050: '42105', 139051: '42107', 139052: '42109', 139053: '42111', 139054: '42113', 139055: '42115', 139056: '42117', 139057: '42119', 139058: '42121', 
+    139059: '42123', 139060: '42125', 139061: '42127', 139062: '42129', 139063: '42131', 139064: '42133', 139065: '44001', 139066: '44003', 139067: '44005', 139068: '44007', 
+    139069: '44009', 139070: '45001', 139071: '45003', 139072: '45005', 139073: '45007', 139074: '45009', 139075: '45011', 139076: '45013', 139077: '45015', 139078: '45017', 
+    139079: '45019', 139080: '45021', 139081: '45023', 139082: '45025', 139083: '45027', 139084: '45029', 139085: '45031', 139086: '45033', 139087: '45035', 139088: '45037', 
+    139089: '45039', 139090: '45041', 139091: '45043', 139092: '45045', 139093: '45047', 139094: '45049', 139095: '45051', 139096: '45053', 139097: '45055', 139098: '45057', 
+    139099: '45059', 139100: '45061', 139101: '45063', 139102: '45067', 139103: '45069', 139104: '45065', 139105: '45071', 139106: '45073', 139107: '45075', 139108: '45077', 
+    139109: '45079', 139110: '45081', 139111: '45083', 139112: '45085', 139113: '45087', 139114: '45089', 139115: '45091', 139116: '46003', 139117: '46005', 139118: '46007', 
+    139119: '46009', 139120: '46011', 139121: '46013', 139122: '46015', 139123: '46017', 139124: '46019', 139125: '46021', 139126: '46023', 139127: '46025', 139128: '46027', 
+    139129: '46029', 139130: '46031', 139131: '46033', 139132: '46035', 139133: '46037', 139134: '46039', 139135: '46041', 139136: '46043', 139137: '46045', 139138: '46047', 
+    139139: '46049', 139140: '46051', 139141: '46053', 139142: '46055', 139143: '46057', 139144: '46059', 139145: '46061', 139146: '46063', 139147: '46065', 139148: '46067', 
+    139149: '46069', 139150: '46071', 139151: '46073', 139152: '46075', 139153: '46077', 139154: '46079', 139155: '46081', 139156: '46083', 139157: '46085', 139158: '46091', 
+    139159: '46087', 139160: '46089', 139161: '46093', 139162: '46095', 139163: '46097', 139164: '46099', 139165: '46101', 139166: '46103', 139167: '46105', 139168: '46107', 
+    139169: '46109', 139170: '46111', 139171: '46102', 139172: '46115', 139173: '46117', 139174: '46119', 139175: '46121', 139176: '46123', 139177: '46125', 139178: '46127', 
+    139179: '46129', 139180: '46135', 139181: '46137', 139182: '47001', 139183: '47003', 139184: '47005', 139185: '47007', 139186: '47009', 139187: '47011', 139188: '47013', 
+    139189: '47015', 139190: '47017', 139191: '47019', 139192: '47021', 139193: '47023', 139194: '47025', 139195: '47027', 139196: '47029', 139197: '47031', 139198: '47033', 
+    139199: '47035', 139200: '47037', 139201: '47039', 139202: '47041', 139203: '47043', 139204: '47045', 139205: '47047', 139206: '47049', 139207: '47051', 139208: '47053', 
+    139209: '47055', 139210: '47057', 139211: '47059', 139212: '47061', 139213: '47063', 139214: '47065', 139215: '47067', 139216: '47069', 139217: '47071', 139218: '47073', 
+    139219: '47075', 139220: '47077', 139221: '47079', 139222: '47081', 139223: '47083', 139224: '47085', 139225: '47087', 139226: '47089', 139227: '47091', 139228: '47093', 
+    139229: '47095', 139230: '47097', 139231: '47099', 139232: '47101', 139233: '47103', 139234: '47105', 139235: '47111', 139236: '47113', 139237: '47115', 139238: '47117', 
+    139239: '47119', 139240: '47107', 139241: '47109', 139242: '47121', 139243: '47123', 139244: '47125', 139245: '47127', 139246: '47129', 139247: '47131', 139248: '47133', 
+    139249: '47135', 139250: '47137', 139251: '47139', 139252: '47141', 139253: '47143', 139254: '47145', 139255: '47147', 139256: '47149', 139257: '47151', 139258: '47153', 
+    139259: '47155', 139260: '47157', 139261: '47159', 139262: '47161', 139263: '47163', 139264: '47165', 139265: '47167', 139266: '47169', 139267: '47171', 139268: '47173', 
+    139269: '47175', 139270: '47177', 139271: '47179', 139272: '47181', 139273: '47183', 139274: '47185', 139275: '47187', 139276: '47189', 139277: '48001', 139278: '48003', 
+    139279: '48005', 139280: '48007', 139281: '48009', 139282: '48011', 139283: '48013', 139284: '48015', 139285: '48017', 139286: '48019', 139287: '48021', 139288: '48023', 
+    139289: '48025', 139290: '48027', 139291: '48029', 139292: '48031', 139293: '48033', 139294: '48035', 139295: '48037', 139296: '48039', 139297: '48041', 139298: '48043', 
+    139299: '48045', 139300: '48047', 139301: '48049', 139302: '48051', 139303: '48053', 139304: '48055', 139305: '48057', 139306: '48059', 139307: '48061', 139308: '48063', 
+    139309: '48065', 139310: '48067', 139311: '48069', 139312: '48071', 139313: '48073', 139314: '48075', 139315: '48077', 139316: '48079', 139317: '48081', 139318: '48083', 
+    139319: '48085', 139320: '48087', 139321: '48089', 139322: '48091', 139323: '48093', 139324: '48095', 139325: '48097', 139326: '48099', 139327: '48101', 139328: '48103', 
+    139329: '48105', 139330: '48107', 139331: '48109', 139332: '48111', 139333: '48113', 139334: '48115', 139335: '48117', 139336: '48119', 139337: '48121', 139338: '48123', 
+    139339: '48125', 139340: '48127', 139341: '48129', 139342: '48131', 139343: '48133', 139344: '48135', 139345: '48137', 139346: '48141', 139347: '48139', 139348: '48143', 
+    139349: '48145', 139350: '48147', 139351: '48149', 139352: '48151', 139353: '48153', 139354: '48155', 139355: '48157', 139356: '48159', 139357: '48161', 139358: '48163', 
+    139359: '48165', 139360: '48167', 139361: '48169', 139362: '48171', 139363: '48173', 139364: '48175', 139365: '48177', 139366: '48179', 139367: '48181', 139368: '48183', 
+    139369: '48185', 139370: '48187', 139371: '48189', 139372: '48191', 139373: '48193', 139374: '48195', 139375: '48197', 139376: '48199', 139377: '48201', 139378: '48203', 
+    139379: '48205', 139380: '48207', 139381: '48209', 139382: '48211', 139383: '48213', 139384: '48215', 139385: '48217', 139386: '48219', 139387: '48221', 139388: '48223', 
+    139389: '48225', 139390: '48227', 139391: '48229', 139392: '48231', 139393: '48233', 139394: '48235', 139395: '48237', 139396: '48239', 139397: '48241', 139398: '48243', 
+    139399: '48245', 139400: '48247', 139401: '48249', 139402: '48251', 139403: '48253', 139404: '48255', 139405: '48257', 139406: '48259', 139407: '48261', 139408: '48263', 
+    139409: '48265', 139410: '48267', 139411: '48269', 139412: '48271', 139413: '48273', 139414: '48275', 139415: '48283', 139416: '48277', 139417: '48279', 139418: '48281', 
+    139419: '48285', 139420: '48287', 139421: '48289', 139422: '48291', 139423: '48293', 139424: '48295', 139425: '48297', 139426: '48299', 139427: '48301', 139428: '48303', 
+    139429: '48305', 139430: '48313', 139431: '48315', 139432: '48317', 139433: '48319', 139434: '48321', 139435: '48323', 139436: '48307', 139437: '48309', 139438: '48311', 
+    139439: '48325', 139440: '48327', 139441: '48329', 139442: '48331', 139443: '48333', 139444: '48335', 139445: '48337', 139446: '48339', 139447: '48341', 139448: '48343', 
+    139449: '48345', 139450: '48347', 139451: '48349', 139452: '48351', 139453: '48353', 139454: '48355', 139455: '48357', 139456: '48359', 139457: '48361', 139458: '48363', 
+    139459: '48365', 139460: '48367', 139461: '48369', 139462: '48371', 139463: '48373', 139464: '48375', 139465: '48377', 139466: '48379', 139467: '48381', 139468: '48383', 
+    139469: '48385', 139470: '48387', 139471: '48389', 139472: '48391', 139473: '48393', 139474: '48395', 139475: '48397', 139476: '48399', 139477: '48401', 139478: '48403', 
+    139479: '48405', 139480: '48407', 139481: '48409', 139482: '48411', 139483: '48413', 139484: '48415', 139485: '48417', 139486: '48419', 139487: '48421', 139488: '48423', 
+    139489: '48425', 139490: '48427', 139491: '48429', 139492: '48431', 139493: '48433', 139494: '48435', 139495: '48437', 139496: '48439', 139497: '48441', 139498: '48443', 
+    139499: '48445', 139500: '48447', 139501: '48449', 139502: '48451', 139503: '48453', 139504: '48455', 139505: '48457', 139506: '48459', 139507: '48461', 139508: '48463', 
+    139509: '48465', 139510: '48467', 139511: '48469', 139512: '48471', 139513: '48473', 139514: '48475', 139515: '48477', 139516: '48479', 139517: '48481', 139518: '48483', 
+    139519: '48485', 139520: '48487', 139521: '48489', 139522: '48491', 139523: '48493', 139524: '48495', 139525: '48497', 139526: '48499', 139527: '48501', 139528: '48503', 
+    139529: '48505', 139530: '48507', 139531: '49001', 139532: '49003', 139533: '49005', 139534: '49007', 139535: '49009', 139536: '49011', 139537: '49013', 139538: '49015', 
+    139539: '49017', 139540: '49019', 139541: '49021', 139542: '49023', 139543: '49025', 139544: '49027', 139545: '49029', 139546: '49031', 139547: '49033', 139548: '49035', 
+    139549: '49037', 139550: '49039', 139551: '49041', 139552: '49043', 139553: '49045', 139554: '49047', 139555: '49049', 139556: '49051', 139557: '49053', 139558: '49055', 
+    139559: '49057', 139560: '50001', 139561: '50003', 139562: '50005', 139563: '50007', 139564: '50009', 139565: '50011', 139566: '50013', 139567: '50015', 139568: '50017', 
+    139569: '50019', 139570: '50021', 139571: '50023', 139572: '50025', 139573: '50027', 139574: '51001', 139575: '51003', 139576: '51510', 139577: '51005', 139578: '51007', 
+    139579: '51009', 139580: '51011', 139581: '51013', 139582: '51015', 139583: '51017', 139584: '51019', 139585: '51021', 139586: '51023', 139587: '51520', 139588: '51025', 
+    139589: '51027', 139590: '51029', 139591: '51530', 139592: '51031', 139593: '51033', 139594: '51035', 139595: '51036', 139596: '51037', 139597: '51540', 139598: '51550', 
+    139599: '51041', 139600: '51043', 139601: '51560', 139602: '51570', 139603: '51580', 139604: '51045', 139605: '51047', 139606: '51049', 139607: '51590', 139608: '51051', 
+    139609: '51053', 139610: '51595', 139611: '51057', 139612: '51059', 139613: '51610', 139614: '51061', 139615: '51063', 139616: '51065', 139617: '51067', 139618: '51069', 
+    139619: '51630', 139620: '51640', 139621: '51071', 139622: '51073', 139623: '51075', 139624: '51077', 139625: '51079', 139626: '51081', 139627: '51083', 139628: '51650', 
+    139629: '51085', 139630: '51660', 139631: '51087', 139632: '51089', 139633: '51091', 139634: '51670', 139635: '51093', 139636: '51095', 139637: '51097', 139638: '51099', 
+    139639: '51101', 139640: '51103', 139641: '51105', 139642: '51678', 139643: '51107', 139644: '51109', 139645: '51111', 139646: '51680', 139647: '51113', 139648: '51683', 
+    139649: '51685', 139650: '51690', 139651: '51115', 139652: '51117', 139653: '51119', 139654: '51121', 139655: '51125', 139656: '51127', 139657: '51700', 139658: '51710', 
+    139659: '51131', 139660: '51133', 139661: '51720', 139662: '51135', 139663: '51137', 139664: '51139', 139665: '51141', 139666: '51730', 139667: '51143', 139668: '51735', 
+    139669: '51740', 139670: '51145', 139671: '51147', 139672: '51149', 139673: '51153', 139674: '51155', 139675: '51750', 139676: '51157', 139677: '51159', 139678: '51161', 
+    139679: '51163', 139680: '51165', 139681: '51167', 139682: '51775', 139683: '51169', 139684: '51171', 139685: '51173', 139686: '51175', 139687: '51177', 139688: '51179', 
+    139689: '51790', 139690: '51800', 139691: '51181', 139692: '51183', 139693: '51185', 139694: '51810', 139695: '51187', 139696: '51191', 139697: '51820', 139698: '51193', 
+    139699: '51830', 139700: '51840', 139701: '51195', 139702: '51197', 139703: '51199', 139704: '53001', 139705: '53003', 139706: '53005', 139707: '53007', 139708: '53009', 
+    139709: '53011', 139710: '53013', 139711: '53015', 139712: '53017', 139713: '53019', 139714: '53021', 139715: '53023', 139716: '53025', 139717: '53027', 139718: '53029', 
+    139719: '53031', 139720: '53033', 139721: '53035', 139722: '53037', 139723: '53039', 139724: '53041', 139725: '53043', 139726: '53045', 139727: '53047', 139728: '53049', 
+    139729: '53051', 139730: '53053', 139731: '53055', 139732: '53057', 139733: '53059', 139734: '53061', 139735: '53063', 139736: '53065', 139737: '53067', 139738: '53069', 
+    139739: '53071', 139740: '53073', 139741: '53075', 139742: '53077', 139743: '54001', 139744: '54003', 139745: '54005', 139746: '54007', 139747: '54009', 139748: '54011', 
+    139749: '54013', 139750: '54015', 139751: '54017', 139752: '54019', 139753: '54021', 139754: '54023', 139755: '54025', 139756: '54027', 139757: '54029', 139758: '54031', 
+    139759: '54033', 139760: '54035', 139761: '54037', 139762: '54039', 139763: '54041', 139764: '54043', 139765: '54045', 139766: '54049', 139767: '54051', 139768: '54053', 
+    139769: '54047', 139770: '54055', 139771: '54057', 139772: '54059', 139773: '54061', 139774: '54063', 139775: '54065', 139776: '54067', 139777: '54069', 139778: '54071', 
+    139779: '54073', 139780: '54075', 139781: '54077', 139782: '54079', 139783: '54081', 139784: '54083', 139785: '54085', 139786: '54087', 139787: '54089', 139788: '54091', 
+    139789: '54093', 139790: '54095', 139791: '54097', 139792: '54099', 139793: '54101', 139794: '54103', 139795: '54105', 139796: '54107', 139797: '54109', 139798: '55001', 
+    139799: '55003', 139800: '55005', 139801: '55007', 139802: '55009', 139803: '55011', 139804: '55013', 139805: '55015', 139806: '55017', 139807: '55019', 139808: '55021', 
+    139809: '55023', 139810: '55025', 139811: '55027', 139812: '55029', 139813: '55031', 139814: '55033', 139815: '55035', 139816: '55037', 139817: '55039', 139818: '55041', 
+    139819: '55043', 139820: '55045', 139821: '55047', 139822: '55049', 139823: '55051', 139824: '55053', 139825: '55055', 139826: '55057', 139827: '55059', 139828: '55061', 
+    139829: '55063', 139830: '55065', 139831: '55067', 139832: '55069', 139833: '55071', 139834: '55073', 139835: '55075', 139836: '55077', 139837: '55078', 139838: '55079', 
+    139839: '55081', 139840: '55083', 139841: '55085', 139842: '55087', 139843: '55089', 139844: '55091', 139845: '55093', 139846: '55095', 139847: '55097', 139848: '55099', 
+    139849: '55101', 139850: '55103', 139851: '55105', 139852: '55107', 139853: '55109', 139854: '55111', 139855: '55113', 139856: '55115', 139857: '55117', 139858: '55119', 
+    139859: '55121', 139860: '55123', 139861: '55125', 139862: '55127', 139863: '55129', 139864: '55131', 139865: '55133', 139866: '55135', 139867: '55137', 139868: '55139', 
+    139869: '55141', 139870: '56001', 139871: '56003', 139872: '56005', 139873: '56007', 139874: '56009', 139875: '56011', 139876: '56013', 139877: '56015', 139878: '56017', 
+    139879: '56019', 139880: '56021', 139881: '56023', 139882: '56025', 139883: '56027', 139884: '56029', 139885: '56031', 139886: '56033', 139887: '56035', 139888: '56037', 
+    139889: '56039', 139890: '56041', 139891: '56043', 139892: '56045', 142826: '51760', 142827: '51620', 100023578: '24510', 100023579: '29510', 100023580: '51600', 100023581: '51770', 
+    100023582: '02105', 100023583: '02158', 100023584: '02195', 100023585: '02198', 100023586: '02230', 100023587: '02275', 100023588: '02282',
+}
+
+US_COUNTIES_FIPS_TO_REGION_ID: Dict[str, int] = {v: k for k, v in US_COUNTIES_REGION_ID_TO_FIPS.items()}
