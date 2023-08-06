@@ -1,0 +1,2 @@
+class NotDatabaseError(Exception):
+    pass
