@@ -1,0 +1,57 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.8.0,<4"]
+
+[project]
+name = "storeify"
+version = "0.2.0"
+description = "Data storage made simple!"
+license = {file = "LICENSE"}
+readme = "README.md"
+authors = [
+    {name = "Ben Brady", email = "benbradybusiness@gmail.com"},
+]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+    "Topic :: Database",
+    "Topic :: System :: Filesystems",
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[project.urls]
+Source = "https://github.com/Ben-Brady/storeify"
+
+[project.optional-dependencies]
+redis = [
+    "redis[hiredis]~=4.5.4",
+]
+s3 = [
+    "boto3~=1.26.116",
+]
+test = [
+    "pytest~=7.3.1"
+]
+docs = []
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+strict = true
+files = ["storeify/**"]
