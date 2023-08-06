@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "CytoTable"
+version = "0.0.1"
+description = "Transform data for processing image-based profiling readouts with Pycytominer."
+authors = ["Cytomining Community"]
+license = "BSD-3-Clause license"
+packages = [{include = "cytotable"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+pyarrow = "^11.0.0"
+cloudpathlib = {extras = ["all"], version = "^0.13.0"}
+duckdb = "^0.7.0"
+parsl = "^2023.4.24"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+Sphinx = "^6.0.0"
+myst-parser = "^1.0.0"
+sphinxcontrib-mermaid = "^0.8.0"
+moto = {extras = ["s3", "server"], version = "^4.0.0"}
+cffconvert = "^2.0.0"
+cytominer-database = "^0.3.4"
+pycytominer = { git = "https://github.com/cytomining/pycytominer.git", rev = "c90438fd7c11ad8b1689c21db16dab1a5280de6c" }
+scipy = "~1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.vulture]
+min_confidence = 80
+paths = ["cytotable"]
+sort_by_size = true
+verbose = true
+
+[tool.isort]
+profile = "black"
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B608"]
+
+[tool.codespell]
+ignore-words=".codespell-ignore"
