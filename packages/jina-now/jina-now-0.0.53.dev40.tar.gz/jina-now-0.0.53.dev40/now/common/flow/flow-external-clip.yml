@@ -1,0 +1,29 @@
+jtype: Flow
+with:
+  monitoring: true
+  env:
+    JINA_LOG_LEVEL: DEBUG
+jcloud:
+  version: '3.15.1.dev21'
+  labels:
+    team: now
+gateway:
+  jcloud:
+    expose: false
+executors:
+  - name: encoderclip
+    uses: jinahub+docker://CLIPOnnxEncoder/0.8.1
+    uses_with:
+      name: ViT-B-32::openai
+    env:
+      JINA_LOG_LEVEL: DEBUG
+    jcloud:
+      expose: true
+      autoscale:
+        min: 4
+        max: 15
+        metric: concurrency
+        target: 1
+      resources:
+        instance: C4
+        capacity: spot
