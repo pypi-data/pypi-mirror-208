@@ -1,0 +1,1 @@
+Collect square face images from images
