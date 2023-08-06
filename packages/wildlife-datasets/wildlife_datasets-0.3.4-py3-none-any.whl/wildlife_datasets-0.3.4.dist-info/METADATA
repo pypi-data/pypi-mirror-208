@@ -1,0 +1,116 @@
+Metadata-Version: 2.1
+Name: wildlife-datasets
+Version: 0.3.4
+Summary: Library for easier access and research of wildlife re-identification datasets
+Author-email: Lukáš Adam <lukas.adam.cr@gmail.com>, Vojtěch Čermák <cermak.vojtech@seznam.cz>
+Maintainer-email: Lukáš Adam <lukas.adam.cr@gmail.com>, Vojtěch Čermák <cermak.vojtech@seznam.cz>
+License: MIT License
+        
+        Copyright (c) 2023 Lukáš Adam and Vojtěch Čermák
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/WildlifeDatasets/wildlife-datasets
+Project-URL: Documentation, https://wildlifedatasets.github.io/wildlife-datasets/
+Project-URL: Bug Tracker, https://github.com/WildlifeDatasets/wildlife-datasets/issues
+Keywords: wildlife,re-identification,datasets
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy (>=1.19.4)
+Requires-Dist: pandas (>=1.1.4)
+Requires-Dist: tqdm (>=4.62.3)
+Requires-Dist: opencv-python (>=4.5.5.62)
+Requires-Dist: Pillow (>=7.1.2)
+Requires-Dist: scikit-learn (>=1.0.1)
+Requires-Dist: matplotlib (>=3.5.1)
+Requires-Dist: gdown
+Requires-Dist: kaggle
+
+# Wildlife Re-Identification (Re-ID) Datasets
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/WildlifeDatasets/wildlife-datasets/blob/main/LICENSE)
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://wildlifedatasets.github.io/wildlife-datasets/)
+
+The aim of the project is to provide comprehensive overview of datasets for wildlife individual re-identification and an easy-to-use package for developers of machine learning methods. The core functionality includes:
+
+- overview of 31 publicly available wildlife re-identification datasets.
+- utilities to mass download and convert them into a unified format.
+- default splits for several machine learning tasks including the ability create additional splits.
+- evaluation metrics for closed-set and open-set classification.
+
+
+## Summary of datasets
+
+The package is able to handle the following datasets. We include basic characteristics such as publication years, number of images, number of individuals, dataset time span (difference between the last and first image taken) and additional information such as source, number of poses, inclusion of timestamps, whether the animals were captured in the wild and whether the dataset contain multiple species.
+
+Graphical summary of datasets is located in a [Jupyter notebook](notebooks/dataset_descriptions.ipynb). Due to its size, it may be necessary to view it via [nbviewer](https://nbviewer.org/github/WildlifeDatasets/wildlife-datasets/blob/main/notebooks/dataset_descriptions.ipynb).
+
+![](images/Datasets_Summary.png)
+
+
+## Installation
+
+The installation of the package is simple by
+```
+pip install wildlife-datasets
+```
+
+
+## Basic functionality
+
+We show an example of downloading, extracting and processing the MacaqueFaces dataset.
+
+```
+from wildlife_datasets import analysis, datasets
+
+datasets.MacaqueFaces.get_data('data/MacaqueFaces')
+dataset = datasets.MacaqueFaces('data/MacaqueFaces')
+```
+
+The class `dataset` contains the summary of the dataset. The content depends on the dataset. Each dataset contains the identity and paths to images. This particular dataset also contains information about the date taken and contrast. Other datasets store information about bounding boxes, segmentation masks, position from which the image was taken, keypoints or various other information such as age or gender.
+
+```
+dataset.df
+```
+
+![](images/MacaqueFaces_DataFrame.png)
+
+The dataset also contains basic metadata including information about the number of individuals, time span, licences or published year.
+
+```
+dataset.metadata
+```
+
+![](images/MacaqueFaces_Metadata.png)
+
+This particular dataset already contains cropped images of faces. Other datasets may contain uncropped images with bounding boxes or even segmentation masks.
+
+```
+analysis.plot_grid(dataset.df, 'data/MacaqueFaces')
+```
+
+![](images/MacaqueFaces_Grid.png)
+
+## Additional functionality
+
+For additional functionality including mass loading, datasets splitting or evaluation metrics we refer to the [documentation](https://wildlifedatasets.github.io/wildlife-datasets/).
+
