@@ -1,0 +1,63 @@
+Metadata-Version: 2.1
+Name: cdx-tf
+Version: 0.1.2
+Summary: Basic Python tools
+Home-page: https://github.com/hansbuehler/cdx_tf
+Author: Hans Buehler
+Author-email: github@buehler.london
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy (>=1.23)
+Requires-Dist: pandas (>=1.5)
+Requires-Dist: scipy (>=1.10)
+Requires-Dist: matplotlib (>=3.7)
+Requires-Dist: sortedcontainers (>=2.4)
+Requires-Dist: tensorflow (>=2.11)
+Requires-Dist: psutil
+Requires-Dist: cdxbasics (>=0.2.40)
+
+# cdx_tf (do not use yet)
+Basic utilities for TensorFlow, following the Deep Hedging usage pattern.
+
+**This library is not ready for public use yet**
+
+The main component is a new keras model base class, `Gym`, whose implementation pattern eases:
+* Automated caching during training, including state of the optimizer.
+  The motivation for introducing this class is that the standard tf/keras caching schemes such as `tf.keras.callbacks.ModelCheckpoint` or `tf.keras.callbacks.BackupAndRestore` do not work well with custom models. Neither does `model_save`.
+  
+* Standardized ML pattern
+  Fully driven by `cdxbasics.Config` configurations with self-documenting configuration handling. Self-declarative `layers.Agent` and `layers.RecurrentAgent`.
+
+* Monitoring training progress 
+  Seggregation of tracking training progress from visualizing it. As a result, the pattern allows multi-processing with `ray`.
+
+    
+### Installation
+
+Install by
+
+    conda install cdx_tf -c hansbuehler
+
+or
+
+    pip install cdx_tf
+
+# Basic usage pattern
+
+The main presumption of the pattern is that there are two kinds of "models" involved in training the desired agents.
+1) The agents themselves
+
+   Such agents are networks which map input features to actions. Such agents will usually be implemented using `layers.RecurrentAgent` which provides a default implementation pattern for recurrent agents which make self-declarative use of features, and which can have standard configuration patterns for users.
+
+2) The `gym`
+
+   This is the model which executes the main business logic around the agents. In case of Deep Hedging, this is the core Monte Carlo loop for hedging derivatives. Gyms are derived from `gym.Gym`, and trained with `gym.train`. 
+
+   During training we will typically collect data about the progress of training such as the history of losses, current agent performance etc. This is implemented by deriving from `gym.ProgressData`. The main idea of `ProgressData` is that it abstracts data collection from the actual visualization of the data. This seggregation allows to send the `ProgressData` during training through an asynchronous queue - this way training can be parallelized including across machines. We show an example using `ray`.
+   
+
+
