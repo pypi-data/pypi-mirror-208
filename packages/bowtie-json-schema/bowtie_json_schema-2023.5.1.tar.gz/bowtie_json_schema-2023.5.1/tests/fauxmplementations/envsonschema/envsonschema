@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""
+A bowtie runner which always gets the right answer, slowly.
+"""
+from dataclasses import dataclass
+import io
+import json
+import shlex
+import sys
+import time
+
+
+class Crash(Exception):
+    """
+    Self-immolation.
+    """
+
+
+_VALID = {"1": {"valid": True}, "0": {"valid": False}}
+
+
+@dataclass
+class Runner:
+    _started: bool = False
+    _stdout: io.TextIOWrapper = sys.stdout
+    _hang_on_stop = False
+
+    def run(self, stdin=sys.stdin):
+        for line in stdin:
+            each = json.loads(line)
+            cmd = each.pop("cmd")
+            getattr(self, f"cmd_{cmd}")(**each)
+
+    def send(self, **response):
+        self._stdout.write(f"{json.dumps(response)}\n")
+        self._stdout.flush()
+
+    def cmd_start(self, version):
+        assert version == 1
+        self._started = True
+        self.send(
+            ready=True,
+            version=1,
+            implementation=dict(
+                language="python",
+                name="envsonschema",
+                issues="https://github.com/bowtie-json-schema/bowtie/issues",
+                dialects=[
+                    "https://json-schema.org/draft/2020-12/schema",
+                    "https://json-schema.org/draft/2019-09/schema",
+                    "http://json-schema.org/draft-07/schema#",
+                    "http://json-schema.org/draft-06/schema#",
+                    "http://json-schema.org/draft-04/schema#",
+                    "http://json-schema.org/draft-03/schema#",
+                ],
+            ),
+        )
+
+    def cmd_dialect(self, dialect):
+        assert self._started, "Not started!"
+        return dict(ok=True)
+
+    def cmd_run(self, case, seq):
+        assert self._started, "Not started!"
+
+        send = self.send
+        for instruction, arg in instructions(case["description"]):
+            if instruction == "crash":
+                raise Crash()
+            elif instruction == "sleep":
+                time.sleep(float(arg))
+            elif instruction == "hang":
+                self._hang_on_stop = True
+            elif instruction == "error":
+                result = dict(
+                    (each.split("=", 1) for each in arg.split(",")),
+                    errored=True,
+                    seq=seq,
+                )
+                return self.send(**result)
+            elif instruction == "skip":
+                result = dict(
+                    (each.split("=", 1) for each in arg.split(",")),
+                    skipped=True,
+                    seq=seq,
+                )
+                return self.send(**result)
+            elif instruction == "split":
+
+                def send(**response):
+                    dumped = json.dumps(response)
+                    size = len(dumped) // 2
+                    self._stdout.write(dumped[:size])
+                    self._stdout.flush()
+                    time.sleep(0.1)
+                    self._stdout.write(dumped[size:])
+                    self._stdout.flush()
+                    time.sleep(0.1)
+                    self._stdout.write("\n")
+                    self._stdout.flush()
+
+        results = {"results": []}
+        for test in case["tests"]:
+            result = {"valid": False}
+
+            for instruction, arg in instructions(test["description"]):
+                if instruction == "crash":
+                    raise Crash()
+                elif instruction == "sleep":
+                    time.sleep(float(arg))
+
+                if instruction == "valid":
+                    result = _VALID.get(arg, {"valid": arg})
+                elif instruction == "skip":
+                    result = dict(
+                        each.split("=", 1) for each in arg.split(",")
+                    )
+                    result.update(skipped=True)
+                elif instruction == "error":
+                    result = dict(
+                        errored=True,
+                        seq=seq,
+                        context=dict(
+                            each.split("=", 1) for each in arg.split(",")
+                        ),
+                    )
+                    return self.send(**result)
+
+            results["results"].append(result)
+
+        send(seq=seq, **results)
+
+    def cmd_stop(self):
+        assert self._started, "Not started!"
+        if not self._hang_on_stop:
+            sys.exit(0)
+
+
+def instructions(description):
+    words = (word.partition(":") for word in shlex.split(description))
+    return ((instruction, arg) for instruction, colon, arg in words if colon)
+
+
+Runner().run()
