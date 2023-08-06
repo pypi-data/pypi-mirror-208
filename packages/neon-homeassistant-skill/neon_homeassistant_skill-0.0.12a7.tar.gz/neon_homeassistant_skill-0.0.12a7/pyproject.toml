@@ -1,0 +1,41 @@
+[build-system]
+requires = [ "poetry_core>=1.0.0" ]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "neon-homeassistant-skill"
+version = "0.0.12a7"
+description = "A Neon AI Skill for Home Assistant, which integrates with ovos-PHAL-plugin-homeassistant."
+authors = [ "Mike Gray <mike@graywind.org>" ]
+readme = "README.md"
+license = "Apache-2.0"
+include = ["neon_homeassistant_skill/dialog/*", "neon_homeassistant_skill/vocab/*"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pfzy = "^0.3.4"
+ovos-workshop = "*"
+ovos-utils = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pylint = "*"
+flake8 = "*"
+pydocstyle = "*"
+pycodestyle = "*"
+black = "*"
+mypy = "*"
+bandit = "*"
+adapt-parser = {git = "https://github.com/mycroftai/adapt"}
+ovos-core = "^0.0.7"
+mycroft-messagebus-client = "^0.10.1"
+ovos-skills-manager = "^0.0.12"
+types-pyyaml = "^6.0.12.5"
+padacioso = "^0.1.2"
+ovos-bus-client = "^0.0.3"
+
+[tool.poetry.scripts]
+"neon-homeassistant-skill" = "neon_homeassistant_skill:NeonHomeAssistantSkill"
+
+[tool.poetry.plugins."ovos.plugin.skill"]
+"neon_homeassistant_skill.mikejgray" = "neon_homeassistant_skill:NeonHomeAssistantSkill"
