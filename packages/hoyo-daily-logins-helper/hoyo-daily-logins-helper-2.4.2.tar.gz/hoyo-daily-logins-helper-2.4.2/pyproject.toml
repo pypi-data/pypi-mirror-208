@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hoyo-daily-logins-helper"
+authors = [
+    {name = "Christopher Kaster", email = "me@atomicptr.de"},
+]
+description = "Get hoyo daily login rewards automatically!"
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["genshin", "genshin-impact", "starrail", "honkai-starrail", "game"]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+dependencies = [
+    "requests",
+    "comboparse",
+    "scheduler",
+    "pytz",
+]
+dynamic = ["version"]
+
+[project.scripts]
+hoyo-daily-logins-helper = "hoyo_daily_logins_helper.main:main"
+
+[tool.setuptools]
+packages = {find = {exclude=["tests*"]}}
+
+[tool.setuptools_scm]
+write_to = "hoyo_daily_logins_helper/_version.py"
