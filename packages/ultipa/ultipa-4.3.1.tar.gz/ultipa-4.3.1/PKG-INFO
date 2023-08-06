@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: ultipa
+Version: 4.3.1
+Summary: Pure Python Ultipa Driver
+Home-page: https://www.ultipa.com/document/ultipa-drivers/python-installation
+Author: Ultipa
+Author-email: support@ultipa.com
+License: PSF
+Keywords: ultipa sdk,ultipa graph
+Platform: UNKNOWN
+Requires-Python: >=3.6, <=3.10
+Description-Content-Type: text/markdown
+
+# Ultipa Python SDK
+
+## <b>Introduction</b>
+This Python SDK is a part of Ultipa Drivers, a set of specifications for developing software and applications using Java, Python, Go and NodeJs. This SDK provides instructions on introducing query and management operations of Ultipa Graph Database into Python programs, both by calling command through interfaces and sending assembled UQLs to an Ultipa server. A basic understanding of UQL query commands and the returned data structures is needed to guarantee a proper usage of the SDK.
+
+## <b>Requirements</b>
+- Python version: >=3.6 <=3.10
+- Ultipa Server Version: >= 4.3.x
+
+## <b>Installation</b>
+Package is uploaded on [PyPI](https://pypi.org/project/ultipa/).
+
+<p tit="Bash"></p> 
+
+```bash
+python3 -m pip install ultipa
+```
+## <b>Documentation</b>
+Documentation is available online: [https://www.ultipa.com/document/ultipa-drivers/python-installation/v4.3](https://www.ultipa.com/document/ultipa-drivers/python-installation/v4.3).
+
+## <b>Example</b>
+
+Example: Create a server connection and use graphset 'amz'
+<p tit= "Python" ></p> 
+ 
+```python
+from ultipa import Connection, UltipaConfig
+
+ultipaConfig = UltipaConfig()
+ultipaConfig.hosts = ["192.168.1.85:60061", "192.168.1.86:60061", "192.168.1.87:60061"]
+ultipaConfig.username = "***"
+ultipaConfig.password = "***"
+ultipaConfig.defaultGraph = "amz"
+
+conn = Connection.NewConnection(defaultConfig=ultipaConfig)
+conn.test().Print()
+
+req = conn.uql("show().graph()")
+req.Print()
+```
+
+
+If you have any questions please contact: [Ultipa Support](mailto:support@ultipa.com)
+
