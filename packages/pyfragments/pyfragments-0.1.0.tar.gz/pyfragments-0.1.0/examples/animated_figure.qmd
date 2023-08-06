@@ -1,0 +1,21 @@
+---
+format: revealjs
+---
+
+## Example of an animated figure
+
+Move to the next slide to see the transitions.
+
+```{python}
+# | output: asis
+import matplotlib.pyplot as plt
+from pyfragments import AnimatedFigure
+
+with AnimatedFigure() as ani:
+    plt.xlim(0, 10)
+    plt.ylim(0, 10)
+    for i in range(10):
+        with ani.fragment():
+            plt.scatter(i, i)
+
+```
