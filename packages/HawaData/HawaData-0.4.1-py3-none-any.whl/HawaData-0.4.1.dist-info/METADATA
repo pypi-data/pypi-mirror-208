@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: HawaData
+Version: 0.4.1
+Summary: Use For Unified Hawa Data.
+Home-page: https://github.com/StevenLianaL/HawaData
+Author: Steven Wang
+Author-email: brightstar8284@icloud.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Description-Content-Type: text/markdown
+
+# 文档
+
+## 说明
+
+1. 用于 Hawa 相关的所有服务的统一数据计算（避免重复计算）。
+
+## 依赖
+
+- Python 3.10+
+
+## 流程
+### 1. 初始化配置文件
+1. 设置MySQL数据库
+2. 设置Redis数据库
+3. 设置MongoDB数据库
+4. 设置 COMPLETED True
+````
+set_project() # 参数见文档
+# or
+set_project(build_set_project_params(project))
+
+````
+### 2. 启动服务
+1. 启动MongoDB数据库
+```` 
+.connect()
+````
+
+### 3. 使用
+````
+# 学校报告数据
+data = SchoolHealthReportData(**{"meta_unit_id": 3707030003, "target_year": 2021})
+# mht web 数据
+data = SchoolMhtWebData(**{"meta_unit_id": 4107110001, "target_year": 2022})
+````
+
+
+## 版本
+- 0.0.1 Use For Unified Hawa Data.
+- 0.0.2 Add build_set_project_params function.
+- 0.0.3 Add new inheritance classes.
+- 0.0.4 Fix mht data web support.
+- 0.0.5 Fix mht student score group error.
+- 0.0.6 Fix mro order.
+- 0.0.7 Add mht grade name.
+- 0.1.0 Filter validity
+- 0.1.1 Revove mht unused students
+- 0.1.2 Use sqlarchemy engine replace mysqlclient conn
+- 0.1.3 Fix local engine
+- 0.1.4 Fix not same data by mht final score
+- 0.1.5 Fix float to int error
+- 0.1.6 Fix special students
+- 0.1.7 Handle link error for db.
+- 0.1.8 Fix mysqldb cursor error.
+- 0.1.9 Fix redundant async
+- 0.2.0 Add district data
+- 0.2.1 Move gender count data to health.
+- 0.2.2 Move health school to health report
+- 0.2.3 Fix cache year data
+- 0.2.4 Filter users when length id <18
+- 0.2.5 Filter users when length id <18 true
+- 0.2.6 Fix rank dis
+- 0.2.7 Fix miss grade
+- 0.2.8 Fix miss grade all
+- 0.2.9 Fix miss grade again
+- 0.3.0 Fix more school when query school
+- 0.3.1 Update replace select *
+- 0.3.2 performance improvement by nickname/username、cronbach_alpha、code_word
+- 0.3.3 performance improvement by grade
+- 0.3.4 up to py3.11
+- 0.3.5 fix engine encoding
+- 0.3.6 update sqlarchemy to 2+
+- 0.3.7 update pandas to 2+
+- 0.3.8 fix loss data
+- 0.4.0 add case project_id
+- 0.4.1 fix miss grade data
