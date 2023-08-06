@@ -1,0 +1,1 @@
+.. include:: ../kicost/HISTORY.rst
