@@ -1,0 +1,45 @@
+{% load i18n static bleach_tags %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'dashboardfeeds/css/style.css' %}">
+{% endblock %}
+
+
+<div>
+  <div class="card">
+    {% if hide_image %}
+      <div class="badge-container">
+        <span class="badge-image z-depth-2">{{ title }}</span>
+      </div>
+    {% else %}
+      <div class="card-image">
+        <span class="badge-image z-depth-2">{{ title }}</span>
+        {% with result.enclosures.all.0 as img %}
+          {% if img.type == "image/jpg" and img.href %}
+            <img src="{{ img.href }}" alt="{{ result.title }} – {% trans "title image" %}"/>
+          {% elif base_image %}
+            <img src="{{ base_image }}" alt="{{ title }} – {% trans "title image" %}"/>
+          {% else %}
+            <img src="{% static "dashboardfeeds/image_not_found.png" %}"
+                 alt="{{ title }} – {% trans "no feed image" %}"/>
+          {% endif %}
+        {% endwith %}
+      </div>
+    {% endif %}
+    <div class="card-content">
+      <span class="card-title">{{ result.title }}</span>
+      {% autoescape off %}
+        {{ result.body|bleach:"p,span,b,i,u,em,strong,a,div"|truncatewords_html:50 }}
+      {% endautoescape %}
+    </div>
+    <div class="card-action">
+      <a href="{{ result.link }}" target="_blank">{% trans "Read more" %}</a>
+    </div>
+  </div>
+  {% if base_url %}
+    <a class="btn hundred-percent primary-color" href="{{ base_url }}" target="_blank">
+      {% trans "Further articles" %}
+      <i class="material-icons right">arrow_forward</i>
+    </a>
+  {% endif %}
+</div>
