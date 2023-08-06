@@ -1,0 +1,111 @@
+Metadata-Version: 2.1
+Name: dan-build
+Version: 0.2.0
+Summary: Python-based build system.
+Author-email: Garcia Sylvain <garcia.6l20@gmail.com>, garcia.6l20@gmail.com
+License: MIT License
+        
+        Copyright (c) 2023 Sylvain Garcia
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: homepage, https://github.com/Garcia6L20/dan
+Project-URL: documentation, https://github.com/Garcia6L20/dan
+Project-URL: repository, https://github.com/Garcia6L20/dan
+Keywords: packaging,dependency,build system
+Classifier: Topic :: Software Development
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click (>=8.0.0)
+Requires-Dist: jinja2
+Requires-Dist: distro
+Requires-Dist: pyyaml
+Requires-Dist: aiofiles
+Requires-Dist: aiohttp
+Requires-Dist: termcolor
+Requires-Dist: tqdm
+Requires-Dist: importlib-metadata
+Requires-Dist: dataclasses-json
+
+# dan
+
+> _Do Anything Now_
+
+_dan_ is a build system inspired from _GNU make_, _cmake_, _meson_, ... but only in python.
+
+## Features
+
+- Generators:
+
+Generators are python functions that generates an output:
+```python
+@generator(output='hello.txt', dependencies=['source.jinja'])
+def hello(self):
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.source_path))
+    template = env.get_template('source.jinja')
+    print(template.render({'data': 'hello'}), file=open(self.output, 'w'))
+```
+
+They can be async:
+```python
+@generator(output='hello-cpy.txt', dependencies=[hello])
+async def hello_cpy(self):
+    assert hello.up_to_date
+    async with aiofiles.open(hello.output, 'r') as src:
+        async with aiofiles.open(self.output, 'w') as dst:
+            await dst.write(await src.read())
+```
+
+
+## Cli usage:
+
+### Toolchain scan
+
+```bash
+dan scan-toolchains [-s <env-script>]
+```
+
+### Configuration
+
+```bash
+dan configure [-B <build_path>] [-S <source_path>] [-t <toolchain>] [-s <setting>=<value>] [-o <option>=<value>]
+```
+
+### Build
+
+```bash
+dan build [-B <build_path>] [-v] [--for-install] [TARGETS]...
+```
+
+### Install
+
+Install targets marked with `self.install(...)` to the *install.destination* setting.
+
+```bash
+dan install [-B <build_path>] [TARGETS]... [user|dev]
+```
+
+Settings:
+- *install.destination*: The install destination (default: /usr/local).
+- *install.runtime_prefix*: Executables installation prefix (default: bin).
+- *install.libraries_prefix*: Libraries installation prefix (default: lib).
+- *install.includes_prefix*: Includes installation prefix (default: include).
+- *install.data_prefix*: Data files installation prefix (default: share).
+- *install.project_prefix*: !!! NOT USED YET !!! Project prefix (default: None).
