@@ -1,0 +1,79 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: BSD-2-Clause
+
+[build-system]
+requires = [
+  "hatchling",
+  "hatch-requirements-txt >= 0.4, < 0.5",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "parse_stages"
+description = "Parse an expression for selecting stages and tags"
+readme = "README.md"
+requires-python = ">= 3.8"
+dynamic = ["dependencies", "version"]
+
+[[project.authors]]
+name = "Peter Pentchev"
+email = "roam@ringlet.net"
+
+[project.urls]
+Homepage = "https://devel.ringlet.net/devel/parse-stages/"
+Changes = "https://devel.ringlet.net/devel/parse-stages/changes/"
+"Issue Tracker" = "https://gitlab.com/ppentchev/parse-stages/-/issues"
+"Source Code" = "https://gitlab.com/ppentchev/parse-stages"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/parse_stages"]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements/install.txt"]
+
+[tool.hatch.version]
+path = "src/parse_stages/defs.py"
+
+[tool.black]
+target-version = ["py38", "py39", "py310", "py311"]
+line-length = 100
+
+[tool.mypy]
+strict = true
+python_version = "3.8"
+
+# This is the list of the Pylint 2.16.1 default plugins.
+[tool.pylint]
+py-version = "3.8"
+load-plugins = [
+  "pylint.extensions.bad_builtin",
+  "pylint.extensions.broad_try_clause",
+  "pylint.extensions.check_elif",
+  "pylint.extensions.code_style",
+  "pylint.extensions.comparetozero",
+  "pylint.extensions.comparison_placement",
+  "pylint.extensions.confusing_elif",
+  "pylint.extensions.consider_refactoring_into_while_condition",
+  "pylint.extensions.consider_ternary_expression",
+  "pylint.extensions.dict_init_mutate",
+  "pylint.extensions.docparams",
+  "pylint.extensions.docstyle",
+  "pylint.extensions.dunder",
+  "pylint.extensions.empty_comment",
+  "pylint.extensions.emptystring",
+  "pylint.extensions.eq_without_hash",
+  "pylint.extensions.for_any_all",
+  "pylint.extensions.magic_value",
+  "pylint.extensions.mccabe",
+  "pylint.extensions.no_self_use",
+  "pylint.extensions.overlapping_exceptions",
+  "pylint.extensions.private_import",
+  "pylint.extensions.redefined_loop_name",
+  "pylint.extensions.redefined_variable_type",
+  "pylint.extensions.set_membership",
+  "pylint.extensions.typing",
+  "pylint.extensions.while_used",
+]
+
+[tool.test-stages]
+stages = ["ruff and not @manual", "@check and not @manual", "@tests and not @manual"]
