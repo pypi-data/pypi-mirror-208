@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[project]
+name = "neopolitan"
+version = "0.1.15"
+authors = [
+    { name = "alyo" },
+]
+description = "Neopolitan: a library for displaying text on LED boards"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pygame ; platform_machine != 'armv7l'",
+    "neopixel ; platform_machine == 'armv7l'"
+]
+[project.urls]
+"Homepage" = "https://github.com/alyoshenka/neopolitan"
