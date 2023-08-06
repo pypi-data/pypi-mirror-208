@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=63.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aioqui"
+version = "2.0.1"
+authors = [
+    { name="cxllmerichie", email="cxllmerichie@gmail.com" },
+]
+maintainers = [
+    { name="cxllmerichie", email="cxllmerichie@gmail.com" },
+]
+description = "Asynchronous GUI framework based on PySide6"
+readme = "README.md"
+license = { file="LICENSE.txt" }
+requires-python = ">=3.10"
+classifiers = [
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: User Interfaces",
+
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3.10",
+
+    "Natural Language :: English",
+
+    "Development Status :: 3 - Alpha",
+
+    "Intended Audience :: Developers",
+
+    "Operating System :: OS Independent",
+
+    "License :: OSI Approved :: MIT License"
+]
+dependencies=[
+    "PySide6~=6.5.0",
+    "qasync~=0.24.0",
+    "loguru~=0.6.0"
+
+#    "python-dateutil~=2.8.2",
+#    "aiohttp~=3.8.4",
+#    "ujson~=5.7.0",
+#    "aiodns~=3.0.0",
+#    "cchardet~=2.1.7",
+#    "uvloop~=0.17.0"
+]
+
+[tool.setuptools.package-data]
+aioqui = [".assets/icons/*"]
+
+[project.urls]
+"Homepage" = "https://github.com/cxllmerichie/aioqui"
+"Bug Tracker" = "https://github.com/cxllmerichie/aioqui/issues"
+"Repository" = "https://github.com/cxllmerichie/aioqui"
+"Documentation" = "https://github.com/cxllmerichie/aioqui/README.md"
