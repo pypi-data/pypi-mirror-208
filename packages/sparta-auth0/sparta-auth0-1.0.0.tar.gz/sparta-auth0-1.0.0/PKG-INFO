@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: sparta-auth0
+Version: 1.0.0
+Summary: Sparta Auth0 library
+Home-page: https://github.com/Spartan-Approach/sparta-auth0
+Author: Spartan Approach
+Author-email: sparta@spartanapproach.com
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Provides-Extra: test
+License-File: LICENSE
+
+# sparta-auth0
+
+Sparta auth0 library.
+
+## Usage
+
+```python
+from sparta.auth0 import AuthError, TokenVerifier
+
+tv = TokenVerifier(
+    auth0_domain="your-domain.auth0.com",
+    api_audience="https://your-domain.com/api",
+    jwks_cache_ttl=60,  # optional
+)
+try:
+    token_payload = tv.verify_auth_header(
+        "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp...."
+    )
+except AuthError as error:
+    status_code = error.status_code  # suggested status code (401 or 403)
+    code = error.code  # auth0 error code (example "invalid_header")
+    description = error.description  # auth0 error description (example "Unable to parse authentication token")
+    raise
+
+your_claim = token_payload.get_required_claim("https://your-domain.com/your_claim")
+```
+
+```python
+from sparta.auth0 import TokenProvider
+from urllib.request import Request, urlopen
+
+tp = TokenProvider(
+    issuer="your-domain.auth0.com",
+    audience="https://your-domain.com/api",
+    client_id="1234",
+    client_secret="secret"
+)
+
+# Machine to machine request
+response = urlopen(Request(
+    "https://other-machine.your-domain.com/api",
+    headers={"authorization": tp.get_token().get_authorization()},
+))
+```
