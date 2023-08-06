@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2022 The Ikarus Developers mueller@ibb.uni-stuttgart.de
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+add_subdirectory(assembler)
+add_subdirectory(finite_elements)
+add_subdirectory(utils)
+
+# set(CXX_MAX_STANDARD 20)
+add_python_targets(ikarus __init__ dirichletValues materials basis)
+
+dune_add_pybind11_module(NAME _ikarus)
+set_property(
+  TARGET _ikarus
+  PROPERTY LINK_LIBRARIES dunecommon ikarus
+  APPEND
+)
+if(SKBUILD)
+  install(TARGETS _ikarus LIBRARY DESTINATION python/ikarus)
+endif()
