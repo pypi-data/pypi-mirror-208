@@ -1,0 +1,13 @@
+[Unit]
+Description=es7s/daemon
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+RuntimeDirectory=es7s
+ExecStart=/home/%USER/.local/bin/es7s-daemon
+User=%UID
+
+[Install]
+WantedBy=multi-user.target es7s-indicators.service
