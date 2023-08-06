@@ -1,0 +1,65 @@
+[tool.black]
+line-length = 88
+target_version = ['py37', 'py38', 'py39', 'py310', "py311"]
+exclude = '''
+(
+  /(
+    | \.git
+    | \.venv
+    | \.mypy_cache
+    | \.tox
+  )/
+)
+'''
+
+[tool.isort]
+line_length = 88
+profile = "black"
+
+
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openshift-python-wrapper"
+authors = [
+    {name = "Meni Yakove", email = "myakove@gmail.com"},
+    {name = "Ruth Netser", email = "rnetser@gmail.com"}
+]
+description = "Wrapper around https://github.com/openshift/openshift-restclient-python"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+keywords = ["Openshift", "Kubevirt", "CNV"]
+dependencies = [
+    "openshift",
+    "xmltodict",
+    "urllib3",
+    "colorlog",
+    "packaging",
+    "kubernetes",
+    "python-simple-logger",
+]
+dynamic = ["version"]
+# ...
+[tool.setuptools.dynamic]
+version = {file = "VERSION"}
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+Homepage = "https://github.com/RedHatQE/openshift-python-wrapper"
+Download = "https://pypi.org/project/openshift-python-wrapper/"
+"Bug Tracker" = "https://github.com/RedHatQE/openshift-python-wrapper/issues"
+Documentation = "https://openshift-python-wrapper.readthedocs.io/en/latest/"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["ocp_resources"]
