@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "scale-json-binary"
+version = "0.0.7"
+description = "Codecs for json binary spec"
+authors = [
+    "Michael Choi <michael.choi@scale.com>",
+    "Rodrigo Belfiore <rodrigo.belfiore@scale.com>"
+]
+readme = "README.md"
+packages = [{include = "scale_json_binary"}]
+exclude = ["internal/"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = ">=1.22.4"
+ujson = ">=5.7.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.991"
+types-ujson = "^5.7.0.1"
+pytest = "^7.2.2"
+black = "^23.3.0"
+
+
+[[tool.poetry.source]]
+name = "scale-pypi"
+url = "https://scale-307185671274.d.codeartifact.us-west-2.amazonaws.com/pypi/scale-pypi/simple/"
+default = false
+secondary = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
