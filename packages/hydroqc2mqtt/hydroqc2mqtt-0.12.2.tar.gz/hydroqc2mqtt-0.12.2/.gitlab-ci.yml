@@ -1,0 +1,315 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+stages:
+- test
+- build
+- tag
+- pypi
+sast:
+  stage: test
+  tags:
+  - hydroqc
+include:
+- template: Security/SAST.gitlab-ci.yml
+
+variables:
+  TZ: America/Toronto
+  TWINE_USERNAME: __token__
+  MQTT_HOST: mosquitto
+  MQTT_PORT: "1883"
+  HQ2M_CONTRACTS_0_HOME_ASSISTANT_WEBSOCKET_URL: http://hass:8123/api/websocket
+  HQ2M_CONTRACTS_0_HOME_ASSISTANT_TOKEN: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1NWE1YjNiZTIzMzY0OWM4YTVmMjlhODFiZWQ3NWE1ZiIsImlhdCI6MTY2NDUwMDkzOCwiZXhwIjoxOTc5ODYwOTM4fQ.teLCfNSR72aswNKK8bG-DgMCZTi7lYKvwzwC9XzxcXo
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  TOX_PARALLEL_NO_SPINNER: "1"
+  HASS_AUTH: ewogICJ2ZXJzaW9uIjogMSwKICAibWlub3JfdmVyc2lvbiI6IDEsCiAgImtleSI6ICJhdXRoIiwKICAiZGF0YSI6IHsKICAgICJ1c2VycyI6IFsKICAgICAgewogICAgICAgICJpZCI6ICIyMzFlMzIyMjllZmY0YjNlODAzMDcyMTZiYjRiZmU2OSIsCiAgICAgICAgImdyb3VwX2lkcyI6IFsKICAgICAgICAgICJzeXN0ZW0tcmVhZC1vbmx5IgogICAgICAgIF0sCiAgICAgICAgImlzX293bmVyIjogZmFsc2UsCiAgICAgICAgImlzX2FjdGl2ZSI6IHRydWUsCiAgICAgICAgIm5hbWUiOiAiSG9tZSBBc3Npc3RhbnQgQ29udGVudCIsCiAgICAgICAgInN5c3RlbV9nZW5lcmF0ZWQiOiB0cnVlLAogICAgICAgICJsb2NhbF9vbmx5IjogZmFsc2UKICAgICAgfSwKICAgICAgewogICAgICAgICJpZCI6ICJmZjhiYTljY2EzMTI0Zjk2OWMzNGM4NDA4YmU0N2QzYyIsCiAgICAgICAgImdyb3VwX2lkcyI6IFsKICAgICAgICAgICJzeXN0ZW0tYWRtaW4iCiAgICAgICAgXSwKICAgICAgICAiaXNfb3duZXIiOiB0cnVlLAogICAgICAgICJpc19hY3RpdmUiOiB0cnVlLAogICAgICAgICJuYW1lIjogImFkbWluIiwKICAgICAgICAic3lzdGVtX2dlbmVyYXRlZCI6IGZhbHNlLAogICAgICAgICJsb2NhbF9vbmx5IjogZmFsc2UKICAgICAgfQogICAgXSwKICAgICJncm91cHMiOiBbCiAgICAgIHsKICAgICAgICAiaWQiOiAic3lzdGVtLWFkbWluIiwKICAgICAgICAibmFtZSI6ICJBZG1pbmlzdHJhdG9ycyIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZCI6ICJzeXN0ZW0tdXNlcnMiLAogICAgICAgICJuYW1lIjogIlVzZXJzIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogInN5c3RlbS1yZWFkLW9ubHkiLAogICAgICAgICJuYW1lIjogIlJlYWQgT25seSIKICAgICAgfQogICAgXSwKICAgICJjcmVkZW50aWFscyI6IFsKICAgICAgewogICAgICAgICJpZCI6ICJiNDA5ODZlYjY3ZDQ0MDVlOGQ0ZGRkNTVmNjZjOWFhOSIsCiAgICAgICAgInVzZXJfaWQiOiAiZmY4YmE5Y2NhMzEyNGY5NjljMzRjODQwOGJlNDdkM2MiLAogICAgICAgICJhdXRoX3Byb3ZpZGVyX3R5cGUiOiAiaG9tZWFzc2lzdGFudCIsCiAgICAgICAgImF1dGhfcHJvdmlkZXJfaWQiOiBudWxsLAogICAgICAgICJkYXRhIjogewogICAgICAgICAgInVzZXJuYW1lIjogImFkbWluIgogICAgICAgIH0KICAgICAgfQogICAgXSwKICAgICJyZWZyZXNoX3Rva2VucyI6IFsKICAgICAgewogICAgICAgICJpZCI6ICJhM2Q0NmI1ZTZlZTY0MDM1YmIwZTNlMzMwN2EzODEwZiIsCiAgICAgICAgInVzZXJfaWQiOiAiMjMxZTMyMjI5ZWZmNGIzZTgwMzA3MjE2YmI0YmZlNjkiLAogICAgICAgICJjbGllbnRfaWQiOiBudWxsLAogICAgICAgICJjbGllbnRfbmFtZSI6IG51bGwsCiAgICAgICAgImNsaWVudF9pY29uIjogbnVsbCwKICAgICAgICAidG9rZW5fdHlwZSI6ICJzeXN0ZW0iLAogICAgICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMzBUMDA6NTc6NDUuOTE1MzgyKzAwOjAwIiwKICAgICAgICAiYWNjZXNzX3Rva2VuX2V4cGlyYXRpb24iOiAxODAwLjAsCiAgICAgICAgInRva2VuIjogIjEzYWU5NGY4YTMxZmQ4YzM5OTgwOTlkZWEyYTdjODVjNmQ0ZWJiMTRmOGU0MjI5ZjY1NDQ4OGQ1NTg1NzUyZDY0YmRiM2ExMjE3MTkyZGFkOTA0M2QwZDY5ZmFjNmU2ZTBkYzY3MzgxOTk5ZmY5YjYyYzY0YmExMmM5MWY2ZTRjIiwKICAgICAgICAiand0X2tleSI6ICIzNTJmY2VhMDNiYjBjMGQ5YWZhNGZlYzNmYzI2ZmZkOTA0YzVhY2RlMzJiYTEzNmY1OTEzNDU2OWE0YTY0NDlmNmJlOGMwMzFlY2IyMmY0MjRiYTE4ZjQzNDkzODg5MDczMDFhNThmMGQ5YzY4NjVhYzAzZTE2MmRkNDNkOTRlOSIsCiAgICAgICAgImxhc3RfdXNlZF9hdCI6IG51bGwsCiAgICAgICAgImxhc3RfdXNlZF9pcCI6IG51bGwsCiAgICAgICAgImNyZWRlbnRpYWxfaWQiOiBudWxsLAogICAgICAgICJ2ZXJzaW9uIjogIjIwMjIuOS43IgogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogImM5ZDJjOTFjNWViYTRiOGFhYjUyN2I5ZTg4NDZkYjI0IiwKICAgICAgICAidXNlcl9pZCI6ICJmZjhiYTljY2EzMTI0Zjk2OWMzNGM4NDA4YmU0N2QzYyIsCiAgICAgICAgImNsaWVudF9pZCI6ICJodHRwOi8vMTI3LjAuMC4xOjgxMjMvIiwKICAgICAgICAiY2xpZW50X25hbWUiOiBudWxsLAogICAgICAgICJjbGllbnRfaWNvbiI6IG51bGwsCiAgICAgICAgInRva2VuX3R5cGUiOiAibm9ybWFsIiwKICAgICAgICAiY3JlYXRlZF9hdCI6ICIyMDIyLTA5LTMwVDAxOjIyOjAyLjM5NTk4OCswMDowMCIsCiAgICAgICAgImFjY2Vzc190b2tlbl9leHBpcmF0aW9uIjogMTgwMC4wLAogICAgICAgICJ0b2tlbiI6ICJiNDFmMzhkOGFmZjNiNzk3YmQ2ZWNjYjdiODc1YzhkNGQwYzZkNjg5MTUyNTBlMThkZmViYzA4OGViOGExNTAyMDU5MGQyMmUyOWZjOWQ5Njg1NGNiNjljNDI2YWU0ZmI2MTQzOTAzZDlhMjA4ODMxNGE5Nzk5ZjNiNGViYzZhNCIsCiAgICAgICAgImp3dF9rZXkiOiAiMTFmZDg0MWNmM2ZjNzY3N2I3ODU0M2NjOGQ4YjE2MTc5NGZlY2QyMjBkZDhmYTU0N2FmYjgxMzBiYTczZTIyNjBmNmY1OWVhYTUyN2Y3Mjc2ZjQ4OGNhYzM4MTEwOTIzOTNiZjQzYjc0NzEzYjliNjkzNWJlNmNkY2Q0ODVhYjQiLAogICAgICAgICJsYXN0X3VzZWRfYXQiOiAiMjAyMi0wOS0zMFQwMToyMjowMi4zOTYwODErMDA6MDAiLAogICAgICAgICJsYXN0X3VzZWRfaXAiOiAiMTcyLjE3LjAuMSIsCiAgICAgICAgImNyZWRlbnRpYWxfaWQiOiAiYjQwOTg2ZWI2N2Q0NDA1ZThkNGRkZDU1ZjY2YzlhYTkiLAogICAgICAgICJ2ZXJzaW9uIjogIjIwMjIuOS43IgogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogIjU1YTViM2JlMjMzNjQ5YzhhNWYyOWE4MWJlZDc1YTVmIiwKICAgICAgICAidXNlcl9pZCI6ICJmZjhiYTljY2EzMTI0Zjk2OWMzNGM4NDA4YmU0N2QzYyIsCiAgICAgICAgImNsaWVudF9pZCI6IG51bGwsCiAgICAgICAgImNsaWVudF9uYW1lIjogInRlc3QiLAogICAgICAgICJjbGllbnRfaWNvbiI6IG51bGwsCiAgICAgICAgInRva2VuX3R5cGUiOiAibG9uZ19saXZlZF9hY2Nlc3NfdG9rZW4iLAogICAgICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMzBUMDE6MjI6MTguNjUzODE1KzAwOjAwIiwKICAgICAgICAiYWNjZXNzX3Rva2VuX2V4cGlyYXRpb24iOiAzMTUzNjAwMDAuMCwKICAgICAgICAidG9rZW4iOiAiN2VkZWZjMTRmNTJkNGI1MjE5MmZlNzAyOWZhOThmODEwNGE1OTM1OGFiMDEyOWNmNDU3ODA1YWNkOTQ5NzM4ZWQ2MTU3ZmFjODgxZGZhZDY4NTJkNDFhZWQwZGI3MTAyM2E3YmJkNmJhZTE4NDNjY2ZjNWYyMGJiNTkzN2E1ZDAiLAogICAgICAgICJqd3Rfa2V5IjogIjA5NDYyMWFmOWQ0NmYzOTEwZjRiODc3MmNmNWM5YTA0NmVjNDEwZDA1YTkwNzc3ZjBlNDJiNzI1OTU5ZGY5MTllZWZmZTU4NTQxZDE3MTMyNzI3MjNjYjkxMjViOGU2NjE1Zjk5NTk0ZTE3MzBjNGMzYWQyNjEzOTVkMjZiYjYzIiwKICAgICAgICAibGFzdF91c2VkX2F0IjogIjIwMjItMDktMzBUMDE6MjI6MTguNjUzOTcyKzAwOjAwIiwKICAgICAgICAibGFzdF91c2VkX2lwIjogbnVsbCwKICAgICAgICAiY3JlZGVudGlhbF9pZCI6IG51bGwsCiAgICAgICAgInZlcnNpb24iOiAiMjAyMi45LjciCiAgICAgIH0KICAgIF0KICB9Cn0=
+
+cache:
+  key: pip-cache
+  paths:
+    - .cache/pip
+
+test-hass-stable:
+  stage: test
+  services:
+    - name: eclipse-mosquitto:2.0.15
+      alias: mosquitto
+      entrypoint:
+        - "/bin/sh"
+      command:
+        - -c
+        - cp mosquitto-no-auth.conf /mosquitto/config/mosquitto.conf && cat /mosquitto/config/mosquitto.conf && /docker-entrypoint.sh mosquitto -c /mosquitto/config/mosquitto.conf
+    - name: homeassistant/home-assistant:2023.5.2
+      alias: hass
+      entrypoint:
+        - bash
+      command:
+        - -c
+        - |
+          mkdir -p .storage && (echo ${HASS_AUTH} | base64 -d > .storage/auth) && (hass --script ensure_config -c /config 2>&1) && (echo 'homeassistant:' >> /config/configuration.yaml) && (echo '  time_zone: America/New_York' >> /config/configuration.yaml) && (echo '  latitude: 45.508888' >> /config/configuration.yaml) && (echo '  longitude: -73.561668' >> /config/configuration.yaml) && hass --script auth add admin password && sleep 1 && /init
+  tags:
+  - hydroqc
+  image:
+    name: registry.gitlab.com/hydroqc/hydroqc-base-container/build:20230508090106
+  variables:
+    MQTT_HOST: mosquitto
+    MQTT_PORT: "1883"
+  script:
+    - cp /usr/share/zoneinfo/America/New_York /etc/localtime
+    - echo echo "America/New_York " > /etc/timezone
+    - pip install tox
+    - tox --parallel auto
+    - pip install --upgrade setuptools_scm
+    - echo HYDROQC2MQTT_VERSION=$(python3 -m setuptools_scm) > collected.env
+    - echo HYDROQC2MQTT_VERSION_STRIPPED=$(python3 -m setuptools_scm --strip-dev) >> collected.env
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+      junit: tests_result_junit.xml
+      dotenv: collected.env
+    paths:
+      - htmlcov
+      - coverage.xml
+      - tests_result_junit.xml
+      - collected.env
+  rules:
+    # Disable if CI_SKIP is set
+    - if: '$CI_SKIP =~ /test-hass-stable/'
+      when: never
+    # Disable if it's a tag pipeline
+    - if: '$CI_COMMIT_TAG'
+      when: never
+    # Enabled for main branch
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      when: on_success
+    # Enable for all other branches if it's a MR pipeline
+    - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH && $CI_MERGE_REQUEST_IID'
+      when: on_success
+    # Make it manual for external MR
+    - if: '$CI_MERGE_REQUEST_IID && $CI_MERGE_REQUEST_PROJECT_PATH != $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH'
+      when: manual
+    - when: never
+
+test-hass-beta:
+  stage: test
+  services:
+    - name: eclipse-mosquitto:2.0.15
+      alias: mosquitto
+      entrypoint:
+        - "/bin/sh"
+      command:
+        - -c
+        - cp mosquitto-no-auth.conf /mosquitto/config/mosquitto.conf && cat /mosquitto/config/mosquitto.conf && /docker-entrypoint.sh mosquitto -c /mosquitto/config/mosquitto.conf
+    - name: homeassistant/home-assistant:beta
+      alias: hass
+      entrypoint:
+        - bash
+      command:
+        - -c
+        - |
+          mkdir -p .storage && (echo ${HASS_AUTH} | base64 -d > .storage/auth) && (hass --script ensure_config -c /config 2>&1) && (echo 'homeassistant:' >> /config/configuration.yaml) && (echo '  time_zone: America/New_York' >> /config/configuration.yaml) && (echo '  latitude: 45.508888' >> /config/configuration.yaml) && (echo '  longitude: -73.561668' >> /config/configuration.yaml) && hass --script auth add admin password && sleep 1 && /init
+  tags:
+  - hydroqc
+  image:
+    name: registry.gitlab.com/hydroqc/hydroqc-base-container/build:20230508090106
+  variables:
+    MQTT_HOST: mosquitto
+    MQTT_PORT: "1883"
+  script:
+    - cp /usr/share/zoneinfo/America/New_York /etc/localtime
+    - echo echo "America/New_York " > /etc/timezone
+    - pip install tox
+    - tox --parallel auto
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+      junit: tests_result_junit.xml
+    paths:
+      - htmlcov
+      - coverage.xml
+      - tests_result_junit.xml
+  rules:
+    # Disable if CI_SKIP is set
+    - if: '$CI_SKIP =~ /test-hass-beta/'
+      when: never
+    # Disable if it's a tag pipeline
+    - if: '$CI_COMMIT_TAG'
+      when: never
+    # Enabled for main branch
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      when: on_success
+    # Enable for all other branches if it's a MR pipeline
+    - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH && $CI_MERGE_REQUEST_IID'
+      when: on_success
+    # Make it manual for external MR
+    - if: '$CI_MERGE_REQUEST_IID && $CI_MERGE_REQUEST_PROJECT_PATH != $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH'
+      when: manual
+    - when: never
+
+.build_generic: &build_generic
+  tags:
+    - docker
+  stage: build
+  image: docker:22.06-rc
+  services:
+    - docker:22.06-rc-dind
+  script:
+    - docker version
+    - echo ${BUILD-ARG}
+    - docker buildx build
+      --platform linux/${BUILD_ARCH}
+      -t ${CI_REGISTRY_IMAGE}/${ARCH}:${CI_COMMIT_SHORT_SHA}
+      -f ./Dockerfile
+      --build-arg HYDROQC2MQTT_VERSION=${HQ2MQTT_VERSION}
+      .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push ${CI_REGISTRY_IMAGE}/${ARCH}:${CI_COMMIT_SHORT_SHA}
+  rules:
+    # Disable if CI_SKIP is set
+    - if: '$CI_SKIP =~ /docker/'
+      when: never
+    # Disable if it's a tag pipeline
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        HQ2MQTT_VERSION: ${CI_COMMIT_TAG}
+      when: on_success
+    # Enabled for main branch
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      variables:
+        HQ2MQTT_VERSION: ${HYDROQC2MQTT_VERSION_STRIPPED}+${CI_COMMIT_REF_NAME}
+      when: on_success
+    # Enable for all other branches if it's a MR pipeline
+    - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH && $CI_MERGE_REQUEST_IID'
+      variables:
+        HQ2MQTT_VERSION: ${HYDROQC2MQTT_VERSION_STRIPPED}+${CI_COMMIT_REF_NAME}
+      when: on_success
+    # Make it manual for external MR
+    - if: '$CI_MERGE_REQUEST_IID && $CI_MERGE_REQUEST_PROJECT_PATH != $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH'
+      variables:
+        HQ2MQTT_VERSION: ${HYDROQC2MQTT_VERSION_STRIPPED}+${CI_COMMIT_REF_NAME}
+      when: manual
+    - when: never
+
+build_amd64:
+  variables:
+    ARCH: amd64
+    BUILD_ARCH: amd64
+  <<: *build_generic
+build_i386:
+  variables:
+    ARCH: i386
+    BUILD_ARCH: i386
+  <<: *build_generic
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        HQ2MQTT_VERSION: ${CI_COMMIT_TAG}
+      when: on_success
+    - when: manual
+      variables:
+        HQ2MQTT_VERSION: ${HYDROQC2MQTT_VERSION_STRIPPED}+${CI_COMMIT_REF_NAME}
+      allow_failure: true
+build_armv7:
+  variables:
+    ARCH: armv7
+    BUILD_ARCH: arm/v7
+  <<: *build_generic
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        HQ2MQTT_VERSION: ${CI_COMMIT_TAG}
+      when: on_success
+    - when: manual
+      variables:
+        HQ2MQTT_VERSION: ${HYDROQC2MQTT_VERSION_STRIPPED}+${CI_COMMIT_REF_NAME}
+      allow_failure: true
+build_aarch64:
+  variables:
+    ARCH: aarch64
+    BUILD_ARCH: aarch64
+  <<: *build_generic
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        HQ2MQTT_VERSION: ${CI_COMMIT_TAG}
+      when: on_success
+    - when: manual
+      variables:
+        HQ2MQTT_VERSION: ${HYDROQC2MQTT_VERSION_STRIPPED}+${CI_COMMIT_REF_NAME}
+      allow_failure: true
+
+docker_tag:
+  tags:
+    - docker
+  stage: tag
+  image: docker:22.06-rc
+  services:
+    - docker:22.06-rc-dind
+  script:
+    - docker version
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker manifest create ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}
+      ${CI_REGISTRY_IMAGE}/amd64:${CI_COMMIT_SHORT_SHA}
+    - docker manifest push ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}
+    - |
+        for PLATFORM in i386 armv7 aarch64
+          do
+            echo "docker manifest inspect ${CI_REGISTRY_IMAGE}/${PLATFORM}:${CI_COMMIT_SHORT_SHA}"
+            if docker manifest inspect ${CI_REGISTRY_IMAGE}/${PLATFORM}:${CI_COMMIT_SHORT_SHA}; then
+              echo "docker manifest create ${CI_REGISTRY_IMAGE}:${IMAGE_TAG} --amend ${CI_REGISTRY_IMAGE}/${PLATFORM}:${CI_COMMIT_SHORT_SHA}"
+              docker manifest create ${CI_REGISTRY_IMAGE}:${IMAGE_TAG} --amend ${CI_REGISTRY_IMAGE}/${PLATFORM}:${CI_COMMIT_SHORT_SHA}
+            else
+                echo "Build for ${PLATFORM} not available for this run."
+            fi
+        done
+    - docker manifest inspect ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}
+    - docker manifest push ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}
+    - |
+        if [ "$CI_COMMIT_TAG" ]; then
+          docker manifest create ${CI_REGISTRY_IMAGE}:latest ${CI_REGISTRY_IMAGE}/amd64:${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}/i386:${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}/armv7:${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}/aarch64:${CI_COMMIT_SHORT_SHA}
+          docker manifest inspect ${CI_REGISTRY_IMAGE}:latest
+          docker manifest push ${CI_REGISTRY_IMAGE}:latest
+        fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        IMAGE_TAG: mr-${CI_COMMIT_REF_NAME}
+      when: on_success
+    - if: '$CI_COMMIT_TAG'
+      variables:
+        IMAGE_TAG: ${CI_COMMIT_TAG}
+      when: on_success
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+      variables:
+        IMAGE_TAG: beta
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_IID && $CI_MERGE_REQUEST_PROJECT_PATH != $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH'
+      variables:
+        IMAGE_TAG: mr-${CI_COMMIT_REF_NAME}
+      when: manual
+    - when: never
+
+promote2pypi:
+  stage: pypi
+  tags:
+  - hydroqc
+  image: registry.gitlab.com/hydroqc/hydroqc-base-container/build:20230508090106
+  script:
+    - pip install --upgrade pip
+    - pip install --upgrade build setuptools_scm twine
+    - python3 -m build -o dist
+    - python3 -m twine check --strict dist/*
+    - twine upload --verbose --non-interactive --repository pypi dist/*
+  rules:
+    - if: '$CI_SKIP =~ /pypi/'
+      when: never
+    - if: '$CI_COMMIT_TAG'
+      when: on_success
+    - when: never
