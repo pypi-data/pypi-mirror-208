@@ -1,0 +1,104 @@
+Metadata-Version: 2.1
+Name: dashtable-ext
+Version: 1.0.0
+Summary: Extension for doakey3/DashTable
+Author-email: Abdullah Al Muaz <abdullahalmuaz15@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2023 Abdullah Al Muaz
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/aurkaxi/dashtable-ext
+Keywords: table,extension,dashtable
+Classifier: Development Status :: 1 - Planning
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: dashtable
+
+# dashtable-ext
+
+Shitty Extension to doakey3/DashTable
+
+## Installation
+
+```zsh
+$ pip install -U dashtable-ext
+```
+
+### RST 2 ASCII:
+
+```rst
++-----------+-----------+-----------------------+
+| Heading 1 | Heading 2 | Heading 3             |
+|           +-----------+-----------+-----------+
+|           | Heading 4 | Heading 5 | Heading 6 |
++===========+-----------+-----------+-----------+
+| A         | B         | C                     |
+|           +-----------+                       |
+|           | D         |                       |
+|           +-----------+-----------+-----------+
+|           | E         | F         | G         |
++-----------+-----------+-----------+-----------+
+| H                     | I         | J         |
++-----------------------+-----------+           |
+| K                     | L         |           |
+|                       +-----------+-----------+
+|                       | M         | N         |
++-----------------------+-----------+-----------+
+```
+
+```py
+from dashtable.ext import rst2ascii, PresetStyle
+import dashtable
+
+with open("table.html", "r") as f:
+    html = f.read()
+
+table = dashtable.html2rst(html)
+print(rst2ascii(table = table, preset=PresetStyle.thin_thick_rounded))
+```
+
+Output:
+
+```bash
+╭───────────┬───────────┬───────────────────────╮
+│ Heading 1 │ Heading 2 │ Heading 3             │
+│           ├───────────┼───────────┬───────────┤
+│           │ Heading 4 │ Heading 5 │ Heading 6 │
+├━━━━━━━━━━━┼───────────┼───────────┴───────────┤
+│ A         │ B         │ C                     │
+│           ├───────────┤                       │
+│           │ D         │                       │
+│           ├───────────┼───────────┬───────────┤
+│           │ E         │ F         │ G         │
+├───────────┴───────────┼───────────┼───────────┤
+│ H                     │ I         │ J         │
+├───────────────────────┼───────────┤           │
+│ K                     │ L         │           │
+│                       ├───────────┼───────────┤
+│                       │ M         │ N         │
+╰───────────────────────┴───────────┴───────────╯
+```
