@@ -1,0 +1,175 @@
+# !/bin/bash
+set +e
+
+final_exit_status=1
+clientType="websocket"
+network="local"
+tag="smoke"
+feature="payments"
+
+trap 'script_teardown 1' INT
+
+function usage() {
+  echo "Usage: $0 [Optional parameters]"
+  echo "\n  --network: The network to be used to run the tests on. Allowed values are 'local', 'devnet' and 'testnet' and is defaulted to $network. \n  More information: https://xrpl.org/parallel-networks.html"
+  echo "\n  --tag: Tag name of the all the tests to be included in the test run. Allowed values are 'smoke', 'regression' and 'time_intensive' and is defaulted to $tag. \n  More information: https://cucumber.io/docs/cucumber/api/?lang=javascript#tags"
+  echo "\n  --feature <Feature file to be used for the test run. Allowed values are 'payments', 'trustline', 'nft_mint_burn', and 'all' and is defaulted to $feature. \n  More information: https://cucumber.io/docs/gherkin/reference/"
+  echo "\n"
+  exit 1
+}
+
+function load_feature_files() {  
+  cp -fr ../features/*.feature ./features
+}
+
+function cleanup_feature_files() {
+  rm -rf ./javascript/features/*.feature
+  # echo `pwd`
+  # echo 'removing files'
+}
+
+function script_teardown() {
+  exit_status=${1:-1}
+  cleanup_feature_files
+  cd ..
+  exit ${exit_status}
+}
+
+function validate_input_flags() {
+  if [[ "${network}" != "local" ]] && [[ "${network}" != "devnet" ]] && [[ "${network}" != "testnet" ]];
+  then
+    echo "ERROR: Invalid network. Flag is set to '$network'. Allowed values are 'local', 'devnet' and 'testnet'."
+    usage
+    script_teardown 1
+  fi
+
+  if [[ "${tag}" != "smoke" ]] && [[ "${tag}" != "regression" ]] && [[ "${tag}" != "time_intensive" ]];
+  then
+    echo "ERROR: Invalid tag. Flag is set to '$tag'. Allowed values are 'smoke', 'regression' and 'time_intensive'."
+    usage
+    script_teardown 1
+  fi
+
+  if [[ "${feature}" != "payments" ]] && [[ "${feature}" != "trustline" ]] && [[ "${feature}" != "nft_mint_burn" ]] && [[ "${feature}" != "all" ]];
+  then
+    echo "ERROR: Invalid feature. Flag is set to '$feature'. Allowed values are 'payments', 'trustline', 'nft_mint_burn', and 'all'."
+    usage
+    script_teardown 1
+  fi
+}
+
+function set_launch_vars() {
+  if [[ $network == "local" ]];
+  then
+    if [[ $clientType = "websocket" ]];
+    then
+      export CONNECTION_SCHEME="ws"
+      export CONNECTION_URL="127.0.0.5:6006"
+      export CONNECTION_TYPE="websocket"
+    fi
+  fi
+  
+  if [[ $network == "devnet" ]];
+  then
+    if [[ $clientType = "websocket" ]];
+    then
+      export CONNECTION_SCHEME="wss"
+      export CONNECTION_URL="s.devnet.rippletest.net:51233"
+      export CONNECTION_TYPE="websocket"
+    fi
+  fi
+  
+  if [[ $network == "testnet" ]];
+  then
+    if [[ $clientType = "websocket" ]];
+    then
+      export CONNECTION_SCHEME="wss"
+      export CONNECTION_URL="s.altnet.rippletest.net:51233"
+      export CONNECTION_TYPE="websocket"
+    fi
+  fi
+}
+
+function run_tests() {
+  echo "Launching all tests in ${feature}.feature with ${tag} tag."
+  echo "network=$network"
+  echo "tag=$tag"
+  echo "feature=$feature"
+  echo "CONNECTION_SCHEME=$CONNECTION_SCHEME"
+  echo "CONNECTION_URL=$CONNECTION_URL"
+  echo "CONNECTION_TYPE=$CONNECTION_TYPE"
+
+  if [[ "${feature}" == "all" ]];
+  then
+    npx cucumber-js --format @cucumber/pretty-formatter --tags @$tag
+  else
+    npx cucumber-js --format @cucumber/pretty-formatter --tags @${tag} ./features/${feature}.feature
+  fi
+}
+
+while [ "$1" != "" ]; do
+  case $1 in
+    --network )
+      shift
+      network="${1:-$network}"
+      ;;
+
+    --tag )
+      shift
+      tag="${1:-$tag}"
+      ;;
+
+    --feature )
+      shift
+      feature="${1:-$feature}"
+      ;;
+
+    --help | * )
+      echo "${1} is not a valid flag"
+      usage
+  esac
+  shift
+done
+
+function validate_launch_dir() {
+  FILE=./cucumber.js
+
+  if [[ ! -f ${FILE} ]]; then
+    echo "Please navigate to 'javascript' directory and relaunch."
+    script_teardown 1
+  fi
+}
+
+function validate_node() {
+  if which node > /dev/null
+    then
+        echo "Prerequisite check passed: node is installed."
+    else
+        echo "Error. NPM is not installed. Exiting setup..." 1>&2
+        script_teardown 1
+  fi
+}
+
+function validate_dependencies() {
+  declare -a packages=("xrpl" "@cucumber/cucumber" "@cucumber/pretty-formatter")
+  for package in "${packages[@]}"
+  do
+    if [ `npm list | grep -c $package` -eq 0 ]; 
+      then
+          echo "Required package ${package} not installed. Run './runSetup' first."
+          script_teardown 1
+  fi
+  done
+}
+
+# cd javascript/
+validate_launch_dir
+validate_node
+validate_dependencies
+validate_input_flags
+set_launch_vars
+load_feature_files
+run_tests
+script_teardown $?
+# final_exit_status=$?
+# script_teardown $final_exit_status
