@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{%- set sidebar_nav_html = generate_toctree_html(
+"sidebar",
+show_nav_level=theme_show_nav_level|int,
+maxdepth=theme_navigation_depth|int,
+collapse=theme_collapse_navigation|tobool,
+includehidden=True,
+titles_only=True)
+-%}
+
+{%- set head_nav_html = generate_header_nav_html(n_links_before_dropdown=theme_header_links_before_dropdown)
+-%}
+
+{% block htmlbody -%}
+{# checkbox to toggle primary sidebar #}
+<input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary" />
+<label class="overlay overlay-primary" for="__primary"></label>
+
+{% block docs_headnav %}
+<header>
+    <div class="{% if theme_fix_header_nav -%} navbar-fixed {% endif %}">
+        <nav>
+            {% include "sections/headnav.html" %}
+        </nav>
+    </div>
+</header>
+{% endblock docs_headnav %}
+
+{% block mainbody -%}
+<div class="stm-main">
+    <div class="main-wrapper">
+        {% if theme_show_back_to_top %}
+        {%- include "components/back-to-top.html" -%}
+        {% endif %}
+
+        {%- include "search-wrapper.html" -%}
+
+        <aside class="stm-sidenav {% if hide_sidenav %} hide-on-large-only {% endif %} ">
+            <div class="sidenav-viewport">
+                {% block left_sidebar %}
+                {%- include "sections/sidenav.html" -%}
+                {% endblock left_sidebar %}
+            </div>
+        </aside>
+        <main class="stm-content">
+            <div class="container">
+                <div class="row">
+                    <div class="stm-article section col s12 {% if not hide_tocnav %} m10 xl9 {% endif %}">
+                        {% include "sections/article-top.html" %}
+                        {% include "components/searchbox.html" %}
+
+                        <article role="main" class="section">
+                            {% block body %}{{ body }}{% endblock body %}
+                        </article>
+
+                        {% include "sections/article-bottom.html" %}
+
+                        <div class="stm-article-footer">
+                            <div class="prev-next-area">
+                                {% if theme_show_prev_next %}
+                                {% include "components/prev-next.html" %}
+                                {% endif %}
+                                {% include "components/postnav.html" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if not hide_tocnav %}
+                    {% set page_toc = generate_toc_html() %}
+                    {%- if page_toc | length >= 1 %}
+                    <div class="stm-toc col m2 xl3 {% if hide_toc %} hide {% else %} hide-on-small-only {% endif %}">
+                        <div class="toc-wrapper toc-scroll">
+                            {% if theme_toc_title %}
+                            <div class="toc-title">
+                                <span class="material-icons">list</span> {{ theme_toc_title }}
+                            </div>
+                            {% endif %}
+                            {{ page_toc }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if theme_footer_content %}
+            <div class="stm-content-footer">
+                <div class="stm-bottom-footer">
+                    <div class="stm-left-footer">
+                        {%- for footer_item in theme_footer_content %}
+                        {%- include footer_item %}
+                        {%- endfor %}
+                    </div>
+                    <div class="stm-right-footer">
+                        {% if theme_footer_icons %}
+                        <ul>
+                            {{ _icon_declare.declare_icon_links(theme_footer_icons) }}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        </main>
+    </div>
+</div>
+
+{% block footer %}
+{% if theme_footer %}
+{% include "sections/footer.html" %}
+{% endif %}
+{% endblock footer %}
+
+{%- endblock mainbody %}
+{%- endblock htmlbody %}
