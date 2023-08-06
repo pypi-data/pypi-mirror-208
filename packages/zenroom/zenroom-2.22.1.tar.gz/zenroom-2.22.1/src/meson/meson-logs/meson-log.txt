@@ -1,0 +1,162 @@
+Build started at 2023-05-15T17:00:03.068249
+Main binary: /usr/bin/python3
+Build Options: -Dexamples=true -Ddocs=true -Doptimization=3 -Decdh_curve=SECP256K1 -Decp_curve=BLS381 -Ddefault_library=both
+Python system: Linux
+The Meson build system
+Version: 1.1.0
+Source dir: /home/runner/work/Zenroom/Zenroom/bindings/python3/src/build
+Build dir: /home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson
+Build type: native build
+Project name: zenroom
+Project version: 3.0.0-devel
+-----
+Detecting compiler via: gcc --version
+compiler returned <Popen: returncode: 0 args: ['gcc', '--version']>
+compiler stdout:
+gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+compiler stderr:
+
+Running command: gcc -E -dM -
+-----
+Detecting linker via: gcc -Wl,--version -O2 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fno-strict-overflow -fPIC
+linker returned <Popen: returncode: 0 args: ['gcc', '-Wl,--version', '-O2', '-fstack-protect...>
+linker stdout:
+GNU ld (GNU Binutils for Ubuntu) 2.38
+Copyright (C) 2022 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) a later version.
+This program has absolutely no warranty.
+
+linker stderr:
+collect2 version 11.3.0
+/usr/bin/ld -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cclQMJfP.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. --version -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
+
+Sanity testing C compiler: gcc
+Is cross compiler: False.
+Sanity check compiler command line: gcc sanitycheckc.c -o sanitycheckc.exe -O2 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fno-strict-overflow -fPIC -D_FILE_OFFSET_BITS=64
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+Running test binary command:  /home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson/meson-private/sanitycheckc.exe
+C compiler for the host machine: gcc (gcc 11.3.0 "gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0")
+C linker for the host machine: gcc ld.bfd 2.38
+-----
+Detecting compiler via: gcc --version
+compiler returned <Popen: returncode: 0 args: ['gcc', '--version']>
+compiler stdout:
+gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+compiler stderr:
+
+Running command: gcc -E -dM -
+-----
+Detecting linker via: gcc -Wl,--version -O2 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fno-strict-overflow -fPIC
+linker returned <Popen: returncode: 0 args: ['gcc', '-Wl,--version', '-O2', '-fstack-protect...>
+linker stdout:
+GNU ld (GNU Binutils for Ubuntu) 2.38
+Copyright (C) 2022 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) a later version.
+This program has absolutely no warranty.
+
+linker stderr:
+collect2 version 11.3.0
+/usr/bin/ld -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cclpsYpi.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. --version -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
+
+Sanity testing C compiler: gcc
+Is cross compiler: False.
+Sanity check compiler command line: gcc sanitycheckc.c -o sanitycheckc.exe -O2 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fno-strict-overflow -fPIC -D_FILE_OFFSET_BITS=64
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+Running test binary command:  /home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson/meson-private/sanitycheckc.exe
+C compiler for the build machine: gcc (gcc 11.3.0 "gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0")
+C linker for the build machine: gcc ld.bfd 2.38
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Target machine cpu family: x86_64
+Target machine cpu: x86_64
+Program /home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats found: YES (/home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats)
+Adding test "random_determinism"
+Program /home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats found: YES (/home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats)
+Adding test "vectors_sha"
+Adding test "vectors_aes"
+Adding test "vectors_hmac"
+Adding test "vectors_blake2"
+Program /home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats found: YES (/home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats)
+Adding test "lua_lowmem"
+Adding test "lua_himem"
+Adding test "lua_primitives"
+Adding test "lua_crypto"
+Program /home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats found: YES (/home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats)
+Adding test "zencode_array"
+Adding test "zencode_dictionary"
+Adding test "zencode_branching"
+Adding test "zencode_float"
+Adding test "zencode_generic_ecdh"
+Adding test "zencode_generic_eddsa"
+Adding test "zencode_generic_schnorr"
+Adding test "zencode_generic_dilithium"
+Adding test "zencode_generic_bbs"
+Adding test "zencode_zkp"
+Adding test "zencode_credential"
+Adding test "zencode_bitcoin"
+Adding test "zencode_ecdh"
+Adding test "zencode_foreach"
+Adding test "zencode_and"
+Adding test "zencode_bbs_sha"
+Adding test "zencode_bbs_shake"
+Adding test "zencode_bbs_zkp"
+Adding test "zencode_bbs_zkp_shake"
+Program /home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats found: YES (/home/runner/work/Zenroom/Zenroom/bindings/python3/src/build/../test/bats/bin/bats)
+Adding test "api_hash"
+Build targets in project: 3
+NOTICE: Future-deprecated features used:
+ * 0.56.0: {'meson.source_root'}
+ * 0.60.0: {'install_subdir with empty directory'}
+
+zenroom 3.0.0-devel
+
+  User defined options
+    default_library: both
+    optimization   : 3
+    docs           : true
+    ecdh_curve     : SECP256K1
+    ecp_curve      : BLS381
+    examples       : true
+
+Found ninja-1.11.1.git.kitware.jobserver-1 at /home/runner/.local/bin/ninja
+Running compile:
+Working directory:  /home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson/meson-private/tmpc9moj1da
+Command line:  gcc /home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson/meson-private/tmpc9moj1da/testfile.c -o /home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson/meson-private/tmpc9moj1da/output.obj -c -O2 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fno-strict-overflow -fPIC -D_FILE_OFFSET_BITS=64 -O0 --print-search-dirs 
+
+Code:
+ 
+Compiler stdout:
+ install: /usr/lib/gcc/x86_64-linux-gnu/11/
+programs: =/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/bin/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/bin/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/bin/
+libraries: =/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/11/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/11/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../x86_64-linux-gnu/lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
+
+Compiler stderr:
+ 
+Failed to guess install tag for /usr/local/share/doc/zenroom/dummy
+Failed to guess install tag for /usr/local/share/doc/zenroom/dummy
+!meson_ci!/ci_include "/home/runner/work/Zenroom/Zenroom/bindings/python3/src/meson/build.ninja"
+WARNING: Running the setup command as `meson [options]` instead of `meson setup [options]` is ambiguous and deprecated.
