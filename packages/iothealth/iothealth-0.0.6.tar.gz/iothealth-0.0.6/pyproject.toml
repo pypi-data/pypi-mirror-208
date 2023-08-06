@@ -1,0 +1,30 @@
+[project]
+name = "iothealth"
+version = "0.0.6"
+authors = [
+    { name="IoT Spectator" }
+]
+description = "Health and Status Library for IoT Devices"
+readme = {file = "README.rst", content-type = "text/x-rst"}
+requires-python = ">=3.9"
+license = {text = "MIT License"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+]
+keywords = ["IoT"]
+dependencies = [
+    "click", "psutil"
+]
+
+
+[tool.setuptools.packages.find]
+exclude = ["examples", "tests"]
+
+
+[project.urls]
+repository = "https://github.com/iot-spectator/iot-health"
+
+
+[project.scripts]
+iot-health-cli = "iothealth.bin.cli:main"
