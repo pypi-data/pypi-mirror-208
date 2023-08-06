@@ -1,0 +1,65 @@
+<!-- use bootstrap to upload a file and download a dealed files -->
+<!-- use jquery to send a drag file to server and get a dealed file from server -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docx 文档检查</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div id="drop_zone" style="width:100%; border:1px dashed #4f32d2; text-align:center; line-height:200px;">拖拽文件到这里</div>
+          </div>
+          <!-- <div class="col-md-6">
+            <ul id="file_list" class="list-group"></ul>
+          </div> -->
+        </div>
+    </div>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script >
+document.getElementById('drop_zone').addEventListener('dragover', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        });
+
+        document.getElementById('drop_zone').addEventListener('drop', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            var file = e.dataTransfer.files[0];  // 获取第一个拖拽的文件
+            alert("上传..."+file.name);
+            // 使用Fetch API上传文件
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            }).then(res => res.json()).then(function(data) {
+              // let data = JSON.parse(res);
+              let download = data.url;
+              let name = data.filename;
+              const link = document.createElement('a')
+              link.style.display = 'none'
+              // a 标签的 download 属性就是下载下来的文件名
+              link.download = name
+              console.log("obj.filename:",name)
+              link.href = download
+              document.body.appendChild(link)
+              link.click()
+              // 释放的 URL 对象以及移除 a 标签
+              URL.revokeObjectURL(link.href)
+              document.body.removeChild(link)
+            });
+          });
+    </script>
+</body>
+</html>
