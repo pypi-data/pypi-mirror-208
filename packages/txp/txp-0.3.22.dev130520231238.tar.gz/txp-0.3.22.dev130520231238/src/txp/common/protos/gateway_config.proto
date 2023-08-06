@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+/**
+ * Rules:
+ *  1. Append the Proto suffix to messages. This will enable readability in
+ *    collaborative code between system classes and proto messages.
+ */
+
+import "google/protobuf/struct.proto";
+
+message SamplingWindowProto {
+    int32 observation_time = 1;
+    int32 sampling_time = 2;
+    repeated string machines_ids = 3;
+    int64 observation_timestamp = 4;
+    int64 gateway_task_id = 5;
+    uint32 sampling_window_index = 6;
+    uint32 number_of_sampling_windows = 7;
+}
+
+message MachineMetadataProto {
+  string machine_id = 1;
+  string model = 2;
+  string manufacturer = 3;
+  repeated string edges_ids = 4;
+}
+
+message EdgeDescriptorProto {
+  string logical_id = 1;
+  string device_kind = 2;
+  string device_type = 3;
+  optional google.protobuf.Struct edge_params = 4;
+}
+
+message GatewayConfigProto {
+  string gateway_id = 1;
+  string registry_id = 2;
+  string project_id = 3;
+  string cloud_region = 4;
+  repeated string machines_ids = 6;
+}

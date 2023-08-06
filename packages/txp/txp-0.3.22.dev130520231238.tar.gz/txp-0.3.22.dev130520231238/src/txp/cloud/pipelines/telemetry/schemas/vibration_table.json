@@ -1,0 +1,126 @@
+[
+  {
+    "name": "signal",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "description": "Raw Signals sensor collected data",
+    "fields": [
+      {
+        "name": "values",
+        "type": "FLOAT",
+        "mode": "REPEATED"
+      },
+      {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+    {
+    "name": "rms_smoothed_signal",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "description": "RMS windowed smoothed signal",
+    "fields": [
+      {
+        "name": "values",
+        "type": "FLOAT",
+        "mode": "REPEATED"
+      },
+      {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "fft",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "description": "fft values",
+    "fields": [
+      {
+        "name": "values",
+        "type": "RECORD",
+        "mode": "REPEATED",
+        "fields": [
+          {
+            "name": "real",
+            "type": "FLOAT",
+            "mode": "REQUIRED"
+          },
+          {
+            "name": "imag",
+            "type": "FLOAT",
+            "mode": "REQUIRED"
+          }
+        ]
+      },
+      {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+      }
+    ]
+  },
+  {
+    "name": "rpm",
+    "type": "FLOAT",
+    "mode": "REPEATED",
+    "description": "The computed RPM (speed) per axis. The axis is given by the position (x->0, y->1, z->2)"
+  },
+  {
+    "name": "temperature",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "The temperature of the motor captured by the sensor in this observation timestamp"
+  },
+    {
+    "name": "failure_frequencies",
+    "type": "FLOAT",
+    "mode": "REPEATED",
+    "description": "The computed failure frequencies for the device given the RPM"
+  },
+  {
+    "name": "perception_name",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "edge_logical_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "asset_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The asset (machine) ID to which this signal belongs"
+  },
+  {
+    "name": "configuration_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "firestore configuration id"
+  },
+    {
+    "name": "observation_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Timestamp for the observation sampling window inside a gateway task"
+  },
+  {
+    "name": "partition_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "timestamp obtained from observation timestamp, this is the field which is going to partition the table."
+  },
+  {
+    "name": "tenant_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "table is going to be clustered by this field and edge_logical_id"
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "name": "package_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "package creation"
+  },
+  {
+    "name": "dimension",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "perception_name",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "edge_logical_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "signal_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "signal creation"
+  },
+  {
+    "name": "configuration_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "firestore configuration id"
+  },
+  {
+    "name": "peak",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "fft peak"
+  },
+  {
+    "name": "rms",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "fft rms"
+  },
+  {
+    "name": "standard_deviation",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "fft std"
+  },
+  {
+    "name": "crest_factor",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "fft crest factor"
+  },
+  {
+    "name": "observation_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "observation window timestamp"
+  },
+  {
+    "name": "partition_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "timestamp obtained from observation timestamp, this is the field which is going to partition the table."
+  },
+  {
+    "name": "tenant_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "table is going to be clustered by this field and edge_logical_id"
+  },
+  {
+    "name": "dataset_versions",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "annotation version tags"
+  }
+]

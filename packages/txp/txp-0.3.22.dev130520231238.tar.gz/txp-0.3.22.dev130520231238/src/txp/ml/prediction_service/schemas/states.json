@@ -1,0 +1,37 @@
+[
+  {
+    "name": "events",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "events ids"
+  },
+  {
+    "name": "asset_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "condition",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "state label"
+  },
+  {
+    "name": "observation_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "state creation timestamp"
+  },
+  {
+    "name": "partition_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "timestamp obtained from observation timestamp, this is the field which is going to partition the table."
+  },
+  {
+    "name": "tenant_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "table is going to be clustered by this field and asset_id"
+  }
+]

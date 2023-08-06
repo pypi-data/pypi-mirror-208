@@ -1,0 +1,156 @@
+[
+    {
+        "tenant_id": "axionlog-001",
+        "notification_users": [],
+        "acronym": "axionlog",
+        "name": "Axionlog"
+    },
+    {
+        "tenant_id": "gao-001",
+        "notification_users": [],
+        "acronym": "gao",
+        "name": "Grupo Aluminio de Occidente"
+    },
+    {
+        "acronym": "lab",
+        "notification_users": [
+            {
+                "phone_number": "573044541592",
+                "is_active": true,
+                "email": "juan.moron@tranxpert.com.mx",
+                "username": "Juan Diego"
+            },
+            {
+                "email": "gustavo@tranxpert.com.mx",
+                "is_active": true,
+                "username": "Gustavo Garcia",
+                "phone_number": "50760941335"
+            },
+            {
+                "username": "Hillary Romero",
+                "email": "hillary.romero@tranxpert.com.mx",
+                "phone_number": "584242264155",
+                "is_active": true
+            },
+            {
+                "phone_number": "584123138949",
+                "is_active": true,
+                "username": "Lino",
+                "email": "lino.urdaneta@tranxpert.com.mx"
+            }
+        ],
+        "name": "Laboratorio Showroom",
+        "tenant_id": "labshowroom-001",
+        "sections": {
+            "forecasting_states": {
+                "next": "2022-08-15 20:00:00.000000+0000",
+                "parameters": {
+                    "type": "StatesForecasting",
+                    "assets": [
+                        "Showroom_Fridge"
+                    ]
+                },
+                "frequency": 120
+            },
+            "section_1": {
+                "parameters": {
+                    "edge_logical_ids": [
+                        "icomox_1"
+                    ]
+                },
+                "frequency": 15,
+                "type": "MockDoubleLine",
+                "next": "2022-09-16 17:30:00.000000+0000"
+            },
+            "transitions": {
+                "parameters": {
+                    "assets": [
+                        "\"Showroom_Fridge\""
+                    ],
+                    "type": "StatesTransitions"
+                },
+                "next": "2022-08-15 20:00:00.000000+0000",
+                "frequency": 120
+            },
+            "anomaly_detection": {
+                "next": "2022-09-21 14:00:00.000000+0000",
+                "type": "AnomalyDetectionStates",
+                "parameters": {
+                    "assets": [
+                        "Showroom_Fridge"
+                    ]
+                },
+                "frequency": 1440
+            },
+            "states_forecasting": {
+                "next": "2022-09-21 16:40:00.000000+0000",
+                "frequency": 1440,
+                "parameters": {
+                    "assets": [
+                        "Showroom_Fridge"
+                    ]
+                },
+                "type": "StatesForecasting"
+            },
+            "section_3": {
+                "next": "2022-09-16 02:50:00.000000+0000",
+                "type": "MockDoubleLine",
+                "frequency": 10,
+                "parameters": {
+                    "edge_logical_ids": [
+                        "icomox_1"
+                    ]
+                }
+            },
+            "anomaly_detection_states": {
+                "parameters": {
+                    "type": "AnomalyDetectionStates",
+                    "assets": [
+                        "Showroom_Fridge"
+                    ]
+                },
+                "next": "2022-08-15 20:00:00.000000+0000",
+                "frequency": 120
+            },
+            "section_2": {
+                "type": "MockDoubleLine",
+                "next": "2022-09-15 15:00:00.000000+0000",
+                "frequency": 5,
+                "parameters": {
+                    "edge_logical_ids": [
+                        "icomox_1"
+                    ]
+                }
+            }
+        },
+        "reports": {
+            "report_1": {
+                "sections": [
+                    "section_1",
+                    "states_forecasting",
+                    "anomaly_detection"
+                ]
+            },
+            "report_3": {
+                "sections": [
+                    "forecasting_states",
+                    "anomaly_detection_states",
+                    "transitions"
+                ]
+            },
+            "report_2": {
+                "sections": [
+                    "section_1",
+                    "section_2",
+                    "section_3"
+                ]
+            }
+        }
+    },
+    {
+        "notification_users": [],
+        "acronym": "heinz",
+        "tenant_id": "heinz-001",
+        "name": "Kraft Heinz"
+    }
+]

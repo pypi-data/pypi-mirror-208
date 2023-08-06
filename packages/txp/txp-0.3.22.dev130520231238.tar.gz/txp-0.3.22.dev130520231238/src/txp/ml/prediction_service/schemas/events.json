@@ -1,0 +1,47 @@
+[
+  {
+    "name": "event",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "event label"
+  },
+  {
+    "name": "explainability",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "task_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "asset_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "event_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "<asset_id>-<task_id>-<event_timestamp>"
+  },
+  {
+    "name": "observation_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "sampling window timestamp"
+  },
+  {
+    "name": "partition_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "timestamp obtained from observation timestamp, this is the field which is going to partition the table."
+  },
+  {
+    "name": "tenant_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "table is going to be clustered by this field and asset_id"
+  }
+]

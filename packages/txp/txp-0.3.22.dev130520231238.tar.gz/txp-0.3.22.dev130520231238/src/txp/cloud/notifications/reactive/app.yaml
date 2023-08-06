@@ -1,0 +1,10 @@
+runtime: python310
+service: default
+entrypoint: gunicorn -w 2 -k uvicorn.workers.UvicornWorker api_main:app
+env_variables:
+  TWILIO_ACCOUNT_SID: "ACc3e7dbb5867470a77e386d5920254f48"
+  TWILIO_AUTH_TOKEN: "4ab9568f4b3a1ecbdcf1df2784b1502d"
+  API_USERNAME: "tranxpert-bot-one"
+  API_PASSWORD: "Tr4nXp3rt001"
+  TEST_WHATSAPP_NUMBER: "whatsapp:+584123138949"
+instance_class: F2
