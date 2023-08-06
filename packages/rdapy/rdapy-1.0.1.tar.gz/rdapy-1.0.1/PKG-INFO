@@ -1,0 +1,43 @@
+Metadata-Version: 2.1
+Name: rdapy
+Version: 1.0.1
+Summary: Redistricting analytics in Python
+Home-page: https://github.com/dra2020/rdapy
+Author: alecramsay
+Author-email: Alec Ramsay <alec@davesredistricting.org>
+License: MIT
+Project-URL: Homepage, https://github.com/dra2020/rdapy
+Project-URL: Bug Tracker, https://github.com/dra2020/rdapy/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# rdapy
+
+Redistricting analytics in Python
+
+These are the main analytics used in [Dave's Redistricting](https://davesredistricting.org/maps#),
+ignoring a few DRA-specific aspects (in particular, the five [0-100] ratings).
+Unlike the analytics in the app ([dra-analytics](https://github.com/dra2020/dra-analytics))
+which are implememented in TypeScript, these are implemented in Python. 
+
+## Categories
+
+The analytics are organized by area:
+
+- [Compactness](./docs/compactness.md): Various measures of compactness
+- [Equal](./docs/equal.md): Population deviation
+- [Graph](./docs/graph.md): Checks for contiguity & embeddedness
+- [Partisan](./docs/partisan.md): Various measures of partisan bias & responsiveness, as well as support for rank-vote graphs and seats-votes curves
+- [Splitting](./docs/splitting.md): County- & district-splitting and COI splitting
+
+## Installation
+
+Use pip to install the package:
+
+```bash
+pip install rdapy
+```
