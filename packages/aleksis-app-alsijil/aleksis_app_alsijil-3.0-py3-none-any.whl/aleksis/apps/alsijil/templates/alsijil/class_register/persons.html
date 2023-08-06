@@ -1,0 +1,64 @@
+{# -*- engine:django -*- #}
+{% extends "core/base.html" %}
+{% load i18n week_helpers data_helpers static time_helpers %}
+
+{% block browser_title %}{% blocktrans %}My students{% endblocktrans %}{% endblock %}
+
+
+{% block page_title %}
+  {% blocktrans %}My students{% endblocktrans %}
+{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/alsijil/alsijil.css' %}"/>
+{% endblock %}
+
+
+{% block content %}
+  <ul class="collapsible">
+    {% for group, persons in groups %}
+      <li {% if forloop.first %}class="active"{% endif %}>
+        <div class="collapsible-header">
+          <div class="hundred-percent">
+            <span class="right show-on-active hide-on-small-and-down">
+              <a class="btn primary-color waves-effect waves-light" href="{% url "week_view" "group" group.pk %}">
+                <i class="material-icons iconify left" data-icon="mdi:view-week-outline"></i>
+                {% trans "Week view" %}
+              </a>
+              <a class="btn waves-effect waves-light" href="{% url "full_register_group" group.pk %}" target="_blank">
+                <i class="material-icons iconify left" data-icon="mdi:printer-outline"></i>
+                {% trans "Generate printout" %}
+              </a>
+            </span>
+
+            <h2>{{ group.name }}
+              <span class="chip">{{ group.school_term }}</span>
+            </h2>
+
+            <p class="show-on-active hide-on-med-and-up">
+              <a class="btn primary-color waves-effect waves-light hundred-percent"
+                 href="{% url "week_view" "group" group.pk %}">
+                <i class="material-icons iconify left" data-icon="mdi:view-week-outline"></i>
+                {% trans "Week view" %}
+              </a>
+            </p>
+            <p class="show-on-active hide-on-med-and-up">
+              <a class="btn waves-effect waves-light hundred-percent" href="{% url "full_register_group" group.pk %}"
+                 target="_blank">
+                <i class="material-icons iconify left" data-icon="mdi:printer-outline"></i>
+                {% trans "Generate printout" %}
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="collapsible-body">
+          {% include "alsijil/partials/persons_with_stats.html" with persons=persons %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% include "alsijil/partials/legend.html" %}
+{% endblock %}

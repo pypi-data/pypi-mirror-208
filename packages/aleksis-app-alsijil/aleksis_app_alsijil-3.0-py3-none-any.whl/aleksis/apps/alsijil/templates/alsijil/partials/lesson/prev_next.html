@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<div class="row no-margin hide-on-small-only">
+  <div class="col s12 no-padding">
+    {% if not blocked_because_holidays and with_save %}
+      {% if can_edit_lesson_documentation or can_edit_register_object_personalnote %}
+        <button type="submit" class="btn waves-effect waves-light green margin-bottom">
+          <i class="material-icons iconify left" data-icon="mdi:content-save-outline"></i>
+          {% trans "Save" %}
+        </button>
+      {% endif %}
+    {% endif %}
+
+    <a class="btn waves-effect waves-light primary margin-bottom {% if not prev_lesson %}disabled{% endif %}"
+        {% if prev_lesson %}
+       href="{% url "lesson_period" prev_lesson.week.year prev_lesson.week.week prev_lesson.id %}"
+        {% endif %}
+    >
+      <i class="material-icons iconify left" data-icon="mdi:arrow-left"></i>
+      {% blocktrans with subject=register_object.get_subject.short_name %}
+        Previous {{ subject }} lesson
+      {% endblocktrans %}
+    </a>
+
+    <a class="btn right waves-effect waves-light primary margin-bottom {% if not next_lesson %}disabled{% endif %}"
+        {% if next_lesson %}
+       href="{% url "lesson_period" next_lesson.week.year next_lesson.week.week next_lesson.id %}"
+        {% endif %}
+    >
+      <i class="material-icons iconify right" data-icon="mdi:arrow-right"></i>
+      {% blocktrans with subject=register_object.get_subject.short_name %}
+        Next {{ subject }} lesson
+      {% endblocktrans %}
+    </a>
+  </div>
+</div>
+
+

@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% if group_roles %}
+  {% include "alsijil/group_role/partials/assigned_roles.html" with roles=group_roles group=register_object.get_groups.first back_url=back_url %}
+{% endif %}
+
+{% if can_view_lesson_documentation %}
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">
+        {% blocktrans %}Change history{% endblocktrans %}
+      </span>
+      {% include 'core/partials/crud_events.html' with obj=lesson_documentation %}
+    </div>
+  </div>
+{% endif %}

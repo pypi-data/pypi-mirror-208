@@ -1,0 +1,31 @@
+{# -*- engine:django -*- #}
+{% extends "core/base.html" %}
+{% load material_form i18n static any_js %}
+
+{% block browser_title %}{% blocktrans %}Register absence{% endblocktrans %}{% endblock %}
+{% block page_title %}{% blocktrans %}Register absence{% endblocktrans %}{% endblock %}
+
+{% block extra_head %}
+  {{ form.media.css }}
+  {% include_css "select2-materialize" %}
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    {% form form=register_absence_form %}{% endform %}
+    {% include "core/partials/save_button.html" %}
+  </form>
+
+  <script>
+    $(document).ready(function () {
+      $("#id_date_start").change(function () {
+        $("#id_date_end").val($("#id_date_start").val());
+        initDatePicker("#id_date_end");
+      });
+    });
+  </script>
+
+  {% include_js "select2-materialize" %}
+  {{ form.media.js }}
+{% endblock %}

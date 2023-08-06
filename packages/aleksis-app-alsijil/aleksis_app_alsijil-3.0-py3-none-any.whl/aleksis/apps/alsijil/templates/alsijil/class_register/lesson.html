@@ -1,0 +1,125 @@
+{# -*- engine:django -*- #}
+{% extends "core/base.html" %}
+{% load week_helpers material_form_internal material_form i18n static rules time_helpers %}
+
+{% block browser_title %}{% blocktrans %}Lesson{% endblocktrans %}{% endblock %}
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/alsijil/lesson.css' %}"/>
+
+  {% if with_seating_plan %}
+    <link rel="stylesheet" href="{% static "css/stoelindeling/seating_plan.css" %}">
+  {% endif %}
+{% endblock %}
+
+{% block page_title %}
+  {% include "alsijil/partials/lesson/heading.html" %}
+{% endblock %}
+
+{% block content %}
+  {% has_perm "alsijil.view_lessondocumentation_rule" user register_object as can_view_lesson_documentation %}
+  {% has_perm "alsijil.edit_lessondocumentation_rule" user register_object as can_edit_lesson_documentation %}
+  {% has_perm "alsijil.edit_register_object_personalnote_rule" user register_object as can_edit_register_object_personalnote %}
+
+  <!-- Tab Buttons -->
+  <div class="col s12 margin-bottom">
+    <ul class="tabs tabs-icons tabs-fixed-width">
+      <li class="tab col">
+        <a href="#lesson-documentation">
+          <i class="material-icons iconify" data-icon="mdi:message-bulleted"></i>
+          {% trans "Period" %}
+        </a>
+      </li>
+      {% if register_object.label_ != "lesson_period" or not register_object.get_substitution.cancelled or not request.site.preferences.alsijil__block_personal_notes_for_cancelled %}
+        <li class="tab col">
+          <a href="#personal-notes">
+            <i class="material-icons iconify" data-icon="mdi:account-multiple-outline"></i>
+            {% trans "Persons" %}
+          </a>
+        </li>
+      {% endif %}
+      {% if with_seating_plan %}
+        <li class="tab col">
+          <a href="#seating-plan">
+            <i class="material-icons iconify" data-icon="mdi:seat-outline"></i>
+            {% trans "Seating plan" %}
+          </a>
+        </li>
+      {% endif %}
+      {% if prev_lesson %}
+        {% has_perm "alsijil.view_lessondocumentation_rule" user prev_lesson as can_view_prev_lesson_documentation %}
+        {% if prev_lesson.get_lesson_documentation and can_view_prev_lesson_documentation %}
+          <li class="tab col">
+            <a href="#previous-lesson">
+              <i class="material-icons iconify" data-icon="mdi:history"></i>
+              {% trans "Previous" %}
+            </a>
+          </li>
+        {% endif %}
+      {% endif %}
+      <li class="tab col">
+        <a href="#more">
+          <i class="material-icons iconify" data-icon="mdi:dots-horizontal"></i>
+          {% trans "More" %}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <form method="post" class="row">
+    {% csrf_token %}
+
+    {% if not blocked_because_holidays %}
+      <div class="row">
+        <div class="col s12 no-padding" id="lesson-documentation">
+          {% include "alsijil/partials/lesson/tabs/documentation.html" %}
+        </div>
+
+        {% with prev_doc=prev_lesson.get_lesson_documentation %}
+          {% with absences=prev_lesson.get_absences tardinesses=prev_lesson.get_tardinesses extra_marks=prev_lesson.get_extra_marks %}
+            {% has_perm "alsijil.view_lessondocumentation_rule" user prev_lesson as can_view_prev_lesson_documentation %}
+            {% if prev_doc and can_view_prev_lesson_documentation %}
+              <div class="col s12 no-padding" id="previous-lesson">
+                {% include "alsijil/partials/lesson/tabs/previous_lesson.html" %}
+              </div>
+            {% endif %}
+          {% endwith %}
+        {% endwith %}
+
+        {% if register_object.label_ != "lesson_period" or not register_object.get_substitution.cancelled or not request.site.preferences.alsijil__block_personal_notes_for_cancelled %}
+          <div class="col s12 no-padding" id="personal-notes">
+            {% include "alsijil/partials/lesson/tabs/notes.html" %}
+          </div>
+        {% endif %}
+
+        {% if with_seating_plan %}
+          <div class="col s12 no-padding" id="seating-plan">
+            {% include "alsijil/partials/lesson/tabs/seating_plan.html" %}
+          </div>
+        {% endif %}
+
+        <div class="col s12 no-padding" id="more">
+          {% include "alsijil/partials/lesson/tabs/more.html" %}
+        </div>
+      </div>
+    {% else %}
+      <div class="row no-margin">
+        <div class="container">
+          <div class="card">
+            <div class="card-content center-align">
+              <p>
+                <i class="material-icons iconify medium orange-text" data-icon="mdi:alert-outline"></i>
+              </p>
+              <p class="card-title">
+                {% blocktrans %}
+                  This lesson overlaps with holidays and can't be edited.
+                {% endblocktrans %}
+              </p>
+              <span class="badge new blue no-float no-margin">{{ holiday }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </form>
+{% endblock %}
