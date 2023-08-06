@@ -1,0 +1,41 @@
+rules:
+- id: dict-literal
+  language: python
+  description: Replace `dict()` with `{}`
+  tags:
+  - default
+  pattern: dict()
+  condition: not pattern.in_match_case_clause()
+  replacement: '{}'
+  explanation: |
+    The most concise and Pythonic way to create a dictionary is to use the `{}`
+    notation.
+
+    This fits in with the way we create dictionaries with items, saving a bit of
+    mental energy that might be taken up with thinking about two different ways of
+    creating dicts.
+
+    ```python
+    x = {"first": "thing"}
+    ```
+
+    Doing things this way has the added advantage of being a nice little performance
+    improvement.
+
+    Here are the timings before and after the change:
+
+    ```
+    $ python3 -m timeit "x = dict()"
+    5000000 loops, best of 5: 69.8 nsec per loop
+    ```
+
+    ```
+    $ python3 -m timeit "x = {}"
+    20000000 loops, best of 5: 29.4 nsec per loop
+    ```
+
+    Similar reasoning and performance results hold for replacing `list()` with `[]`.
+  tests:
+  - match: x = dict()
+    expect: x = {}
+  - no-match: x = list()
