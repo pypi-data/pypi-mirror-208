@@ -1,0 +1,5 @@
+
+
+
+class AppRcSearchError(Exception):
+    pass
