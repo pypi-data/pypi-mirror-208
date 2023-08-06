@@ -1,0 +1,89 @@
+Metadata-Version: 2.1
+Name: lazylinop
+Version: 1.0.20
+Summary: A package dedicated to lazy linear operators based on diverse backends/libraries.
+Author-email: Inria <remi.gribonval@inria.fr>, Pascal Carrivain <pascal.carrivain@inria.fr>, Simon Delamare <simon.delamare@ens-lyon.fr>, Hakim Hadj-Djilani <hakim.hadj-djilani@inria.fr>, Rémi Gribonval <remi.gribonval@inria.fr>
+License: Copyright 2023, Inria
+        
+        BSD License 2.0
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+        * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+        * Neither the name of the <copyright holder> nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INRIA BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+        
+Project-URL: Homepage, https://faustgrp.gitlabpages.inria.fr/lazylinop/
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: pyfaust
+Requires-Dist: pylops
+Requires-Dist: scipy
+Requires-Dist: numpy (>=1.23)
+
+.. Lazylinop documentation master file, created by
+   sphinx-quickstart on Sun Apr  2 17:21:28 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Lazylinop's documentation
+=====================================
+
+Lazylinop philosophy -- what is a LazyLinearOp object?
+------------------------------------------------------
+
+Starting from a `numpy array`_, a `scipy matrix`_, a Faust_ object, or potentially
+many other compatible linear operators with efficient implementatons, a
+`.LazyLinearOp` object follows the lazy evaluation paradigm. In short, one can aggregate
+low-level `.LazyLinearOp` objects into higher-level ones using many  classical
+operations (addition, concatenation, adjoint, real part, etc.), without
+actually building arrays. The actual effect of these operations is delayed
+until the resulting linear operator is actually applied to a vector (or to a
+collection of vectors, seen as a matrix).
+
+The main interest of this paradigm is to enable the construction of processing
+pipelines that exploit as building blocks efficient implementations of
+“low-level” linear operators.
+
+LazyLinearOperators are complementary to other “lazy” objects such as
+LazyTensors_ in Kheops, or the ones of lazyarray_, WeldNumpy_ an pylops_ libraries,
+which, to the best of our knowledge, primarily provide compact descriptions of
+arrays which entries can be evaluated efficiently on the fly.
+
+.. NOTE:: pylops has a particular position among those libraries. It is
+   in fact a dependency of the lazylinop package because it is used as an alternate
+   backend for some lazylinop functions (as for instance `.kron`).
+   It's worth noting that the way pylops exhibits LinearOperator-s in its API is different.
+   Indeed, where pylops proposes Python classes (like Kronecker_) lazylinop is
+   more likely to propose Python functions in the scipy style (like scipy_ kron).
+
+.. _Faust: https://faustgrp.gitlabpages.inria.fr/faust/last-doc/html/classpyfaust_1_1Faust.html
+.. _numpy array: https://numpy.org/doc/stable/reference/generated/numpy.array.html
+.. _scipy matrix: https://docs.scipy.org/doc/scipy/reference/sparse.html
+.. _LazyTensors: https://www.kernel-operations.io/keops/python/LazyTensor.html
+.. _lazyarray: https://pypi.org/project/lazyarray/
+.. _WeldNumpy: https://www.weld.rs/weldnumpy/
+.. _pylops: https://pylops.readthedocs.io/en/latest/api/index.html
+.. _scipy: https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.kron.html
+.. _Kronecker: https://pylops.readthedocs.io/en/stable/api/generated/pylops.Kronecker.html
+
+Getting started with lazylinop
+------------------------------
+
+For a straightforward installation of lazylinop go to this guide_.
+Then for a quick introduction to lazylinop go to this notebook_. The raw notebook is
+available here_.
+
+.. full links (not relative) because this file is used also in pypi full
+   description
+.. _guide: https://faustgrp.gitlabpages.inria.fr/lazylinop/install.html
+.. _notebook: https://faustgrp.gitlabpages.inria.fr/lazylinop/notebooks/lazylinop.html
+.. _here: https://faustgrp.gitlabpages.inria.fr/lazylinop/_static/lazylinop.ipynb
+
