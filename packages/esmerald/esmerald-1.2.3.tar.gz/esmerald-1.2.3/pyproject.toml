@@ -1,0 +1,206 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "esmerald"
+description = "Highly scalable, performant, easy to learn, easy to code and for every application."
+long_description = "Highly scalable, performant, easy to learn, easy to code and for every application."
+readme = "README.md"
+requires-python = ">=3.8"
+dynamic = ['version']
+license = "MIT"
+authors = [{ name = "Tiago Silva", email = "tiago.silva@dymmond.com" }]
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: AsyncIO",
+    "Framework :: AnyIO",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+    "a2wsgi>=1.7.0,<2",
+    "aiofiles>=0.8.0,<24",
+    "anyio>=3.6.2,<4.0.0",
+    "awesome-slugify>=1.6.5,<2",
+    "httpx>=0.24.0,<0.30.0",
+    "itsdangerous>=2.1.2,<3.0.0",
+    "jinja2>=3.1.2,<4.0.0",
+    "jsonschema_rs>=0.16.2,<0.20.0",
+    "loguru>=0.6.0,<0.7.0",
+    "pydantic>=1.10.7,<2.0.0",
+    "pydantic-factories==1.17.2",
+    "python-multipart>=0.0.5,<0.0.7",
+    "openapi-schemas-pydantic>=1.1.0",
+    "rich>=13.3.1,<14.0.0",
+    "starlette>=0.27.0,<0.30.0",
+]
+keywords = [
+    "api",
+    "rest",
+    "http",
+    "asgi",
+    "pydantic",
+    "starlette",
+    "fastapi",
+    "framework",
+    "websocket",
+    "openapi",
+    "ml",
+    "machine learning",
+]
+
+[project.urls]
+Homepage = "https://github.com/dymmond/esmerald"
+Documentation = "https://esmerald.dymmond.com/"
+Changelog = "https://esmerald.dymmond.com/release-notes/"
+Funding = "https://github.com/sponsors/tarsil"
+Source = "https://github.com/dymmond/esmerald"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.3.1,<8.0.0",
+    "pytest-cov>=2.12.0,<5.0.0",
+    "pytest-asyncio>=0.19.0",
+    "mypy==1.1.1",
+    "flake8>=5.0.4",
+    "black== 23.3.0",
+    "isort>=5.0.6,<6.0.0",
+    "aiofiles>=0.8.0,<24",
+    "a2wsgi>=1.7.0,<2",
+    "asyncz>=0.2.0",
+    "anyio[trio]>=3.6.2,<4.0.0",
+    "asyncio[trio]>=3.4.3,<4.0.0",
+    "brotli>=1.0.9,<2.0.0",
+    "jinja2>=3.1.2,<4.0.0",
+    "flask>=1.1.2,<3.0.0",
+    "freezegun>=1.2.2,<2.0.0",
+    "mock==5.0.1",
+    "passlib==1.7.4",
+    "python-jose>=3.3.0,<4",
+    "orjson>=3.8.5,<4.0.0",
+    "saffier[postgres]>=0.7.4",
+    "requests>=2.28.2,<3.0.0",
+    "ruff>=0.0.256,<1.0.0",
+    "ujson>=5.7.0,<6",
+
+    # types
+    "types-ujson==5.7.0.1",
+    "types-orjson==3.6.2",
+]
+
+dev = [
+    "autoflake>=1.4.0",
+    "flake8>=3.8.3,<6.0.0",
+    "uvicorn[standard]>=0.19.0",
+    "pre-commit>=3.0.4,<4.0.0",
+    "watchfiles>=0.16.1,<0.20.0",
+]
+
+doc = [
+    "mkautodoc>=0.2.0,<0.3.0",
+    "mkdocs>=1.1.2,<2.0.0",
+    "mkdocs-material>=9.0.13,<10.0.0",
+    "mdx-include>=1.4.2,<2.0.0",
+    "mkdocs-markdownextradata-plugin>=0.2.5,<0.3.0",
+    "mkdocstrings>=0.20.0,<0.30.0",
+    "pyyaml>=6.0,<7.0.0",
+]
+
+templates = ["mako==1.2.4"]
+
+jwt = ["passlib==1.7.4", "python-jose>=3.3.0,<4"]
+
+encoders = ["orjson>=3.8.5,<4.0.0", "ujson>=5.7.0,<6"]
+
+schedulers = ["asyncz>=0.2.0"]
+
+[tool.hatch.version]
+path = "esmerald/__init__.py"
+
+[project.scripts]
+esmerald = "esmerald.core.directives.cli:esmerald_cli"
+
+[tool.isort]
+profile = "black"
+known_third_party = ["esmerald", "pydantic", "starlette"]
+
+[tool.mypy]
+warn_unused_configs = true
+warn_unreachable = true
+warn_return_any = true
+strict = true
+disallow_untyped_decorators = true
+disallow_any_generics = false
+implicit_reexport = false
+show_error_codes = true
+disallow_incomplete_defs = true
+disable_error_code = "attr-defined"
+exclude = "esmerald/conf,esmerald/utils"
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[tool.ruff]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "C", # flake8-comprehensions
+    "B", # flake8-bugbear
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+
+exclude = ["docs_src/*"]
+
+[[tool.mypy.overrides]]
+module = "esmerald.tests.*"
+ignore_missing_imports = true
+check_untyped_defs = true
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "docs_src.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    "sqlalchemy.*",
+    "asyncpg",
+    "alembic",
+    "sqlalchemy_utils.*",
+    "slugify",
+    "pytz",
+]
+ignore_missing_imports = true
+ignore_errors = true
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
+xfail_strict = true
+junit_family = "xunit2"
+
+[tool.hatch.build.targets.sdist]
+include = ["/esmerald"]
