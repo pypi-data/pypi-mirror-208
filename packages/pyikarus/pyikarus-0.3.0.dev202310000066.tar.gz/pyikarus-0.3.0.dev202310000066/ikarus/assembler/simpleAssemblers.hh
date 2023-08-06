@@ -1,0 +1,229 @@
+// SPDX-FileCopyrightText: 2022 The Ikarus Developers mueller@ibb.uni-stuttgart.de
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+#pragma once
+#include <ranges>
+#include <utility>
+
+#include <dune/common/math.hh>
+#include <dune/functions/backends/istlvectorbackend.hh>
+
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+
+#include <ikarus/linearAlgebra/dirichletValues.hh>
+#include <ikarus/utils/concepts.hh>
+
+namespace Ikarus {
+
+  /*!
+   * The FlatAssemblerBase takes care of common subtask done by flat assemblers
+   */
+  template <typename FEContainer_, typename DirichletValuesType_>
+  class FlatAssemblerBase {
+  public:
+    using FERequirementType = typename FEContainer_::value_type::FERequirementType;
+    using GlobalIndex     = typename FEContainer_::value_type::GlobalIndex;
+    using Basis = typename DirichletValuesType_::Basis;
+    using GridView = typename Basis::GridView;
+    using FEContainer = FEContainer_;
+    using DirichletValuesType = DirichletValuesType_;
+    FlatAssemblerBase(const FEContainer &fes, const DirichletValuesType &p_dirichletValues)
+        : feContainer{fes}, dirichletValues{&p_dirichletValues} {
+      constraintsBelow_.reserve(dirichletValues->size());
+      size_t counter = 0;
+      for (auto iv : std::ranges::iota_view{decltype(dirichletValues->size())(0), dirichletValues->size()}) {
+        constraintsBelow_.emplace_back(counter);
+        if (dirichletValues->isConstrained(iv)) ++counter;
+      }
+      fixedDofs = dirichletValues->fixedDOFsize();
+    }
+
+    /**  Returns the size of the free degrees of freeedom, which are not fixed by a dirichlet boundary condition */
+    size_t reducedSize() { return dirichletValues->size() - fixedDofs; }
+
+    /**  Returns the size of nodes, i.e. the number of degrees of freedom */
+    size_t size() { return dirichletValues->size(); }
+
+    /**  Creates a the fullsized vector of size #Dof and inserts the values of reduced Vector at the "free" degrees
+     * of freedom and
+     * writes a zero for the fixed doffs */
+    Eigen::VectorXd createFullVector(Eigen::Ref<const Eigen::VectorXd> reducedVector);
+
+    /**  Returns the container of finite elements */
+    auto &finiteElements() const { return feContainer; }
+
+    /**  Returns the number of constraints below a given degrees of freedom index */
+    size_t constraintsBelow(size_t i) const { return constraintsBelow_[i]; }
+
+    /**  Returns the boolean if a given degree of freedom is fixed */
+    bool isConstrained(size_t i) const { return dirichletValues->isConstrained(i); }
+
+    /**  Coarse estimate of node connectivity, i.e. this relates the bandwidth of an sparse matrix.
+     * This estimate is designed that it overestimates the real connectivity since it should
+     * only be used for allocating vectors */
+    size_t estimateOfConnectivity() const { return dirichletValues->basis().gridView().size(GridView::dimension) * 8; }
+
+  private:
+    FEContainer feContainer;
+    DirichletValuesType const *dirichletValues;
+    std::vector<size_t> constraintsBelow_{};
+    size_t fixedDofs{};
+  };
+
+  /** ScalarAssembler assembles scalar quantities */
+  template < typename FEContainer_,typename DirichletValuesType_>
+  class ScalarAssembler : public FlatAssemblerBase<FEContainer_, DirichletValuesType_> {
+    using FERequirementType = typename FEContainer_::value_type::FERequirementType;
+    using GlobalIndex     = typename FEContainer_::value_type::GlobalIndex;
+    using Basis = typename DirichletValuesType_::Basis;
+    using FEContainer = FEContainer_;
+    using DirichletValuesType = DirichletValuesType_;
+
+  public:
+    ScalarAssembler(const FEContainer &fes, const DirichletValuesType &dirichletValues_)
+        : FlatAssemblerBase<FEContainer,DirichletValuesType>(fes, dirichletValues_) {}
+
+    /** Calculates the scalar quantity which is requested by fErequirements and returns a reference */
+    double &getScalar(const FERequirementType &fErequirements) { return getScalarImpl(fErequirements); }
+
+  private:
+    double &getScalarImpl(const FERequirementType &fErequirements) {
+      scal = 0.0;
+      for (auto &fe : this->finiteElements()) {
+        scal += fe.calculateScalar(fErequirements);
+      }
+      return scal;
+    }
+
+    double scal{0.0};
+  };
+
+  /** VectorFlatAssembler assembles vector quantities using a flat basis Indexing strategy */
+  template < typename FEContainer_,typename DirichletValuesType_>
+  class VectorFlatAssembler : public ScalarAssembler<FEContainer_, DirichletValuesType_> {
+    using FERequirementType = typename FEContainer_::value_type::FERequirementType;
+    using GlobalIndex     = typename FEContainer_::value_type::GlobalIndex;
+    using Basis = typename DirichletValuesType_::Basis;
+    using FEContainer = FEContainer_;
+    using DirichletValuesType = DirichletValuesType_;
+
+  public:
+    VectorFlatAssembler(const FEContainer &fes, const DirichletValuesType &dirichletValues_)
+        : ScalarAssembler<FEContainer,DirichletValuesType>(fes, dirichletValues_) {}
+
+    /** Calculates the vectorial quantity which is requested by fErequirements and returns a reference
+     * A zero is written on fixed dofs */
+    Eigen::VectorXd &getVector(const FERequirementType &fErequirements) { return getVectorImpl(fErequirements); }
+
+    /** Calculates the vectorial quantity which is requested by fErequirements and returns a reference
+     * This vector has a reduced size by the number of fixed degrees of freedom */
+    Eigen::VectorXd &getReducedVector(const FERequirementType &fErequirements) {
+      return getReducedVectorImpl(fErequirements);
+    }
+
+  private:
+    Eigen::VectorXd &getVectorImpl(const FERequirementType &fErequirements);
+    Eigen::VectorXd &getReducedVectorImpl(const FERequirementType &fErequirements);
+
+    Eigen::VectorXd vec{};
+    Eigen::VectorXd vecRed{};
+  };
+
+  /** SparseFlatAssembler assembles matrix quantities using a flat basis Indexing strategy
+   * The matrix is stored in a sparse matrix format. This format is exploited during the assembly process
+   */
+  template < typename FEContainer_,typename DirichletValuesType_>
+  class SparseFlatAssembler : public VectorFlatAssembler<FEContainer_, DirichletValuesType_> {
+   public:
+    using FERequirementType = typename FEContainer_::value_type::FERequirementType;
+    using GlobalIndex     = typename FEContainer_::value_type::GlobalIndex;
+    using Basis = typename DirichletValuesType_::Basis;
+    using FEContainer = FEContainer_;
+    using DirichletValuesType = DirichletValuesType_;
+
+
+    SparseFlatAssembler(const FEContainer &fes, const DirichletValuesType &dirichletValues_)
+        : VectorFlatAssembler<FEContainer,DirichletValuesType>(fes, dirichletValues_) {}
+
+    using GridView = typename Basis::GridView;
+
+    /** Calculates the matrix quantity which is requested by fErequirements and returns a reference
+     * A zero is written on fixed dofs rows and columns and a one is written on the diagonal */
+    Eigen::SparseMatrix<double> &getMatrix(const FERequirementType &fErequirements) {
+      return getMatrixImpl(fErequirements);
+    }
+
+    /** Calculates the matrix quantity which is requested by fErequirements and returns a reference
+     * The size of the matrix has the size of the free degrees of freedom */
+    Eigen::SparseMatrix<double> &getReducedMatrix(const FERequirementType &fErequirements) {
+      return getReducedMatrixImpl(fErequirements);
+    }
+
+  private:
+    Eigen::SparseMatrix<double> &getMatrixImpl(const FERequirementType &fErequirements);
+    Eigen::SparseMatrix<double> &getReducedMatrixImpl(const FERequirementType &fErequirements);
+
+    /** Calculates the non-zero entries in the full sparse matrix and passed them to the underlying eigen sparse matrix
+     * https://stackoverflow.com/questions/59192659/efficiently-use-eigen-for-repeated-sparse-matrix-assembly-in-nonlinear-finite-el
+     */
+    void createOccupationPattern();
+
+    /** Calculates the non-zero entries in the sparse matrix and passed them to the underlying eigen sparse matrix
+     * The size of the matrix has the size of the free degrees of freedom
+     * https://stackoverflow.com/questions/59192659/efficiently-use-eigen-for-repeated-sparse-matrix-assembly-in-nonlinear-finite-el
+     */
+    void createReducedOccupationPattern();
+
+    /** This function save the dof indices of each element in the vector elementLinearIndices */
+    void createlinearDofsPerElement();
+
+    /** This function save the dof indices of each element in the vector elementLinearIndices but excludes fixed dofs */
+    void createlinearDofsPerElementReduced();
+
+    Eigen::SparseMatrix<double> spMat;
+    Eigen::SparseMatrix<double> spMatReduced;
+    bool isOccupationPatternCreated{false};
+    bool isReducedOccupationPatternCreated{false};
+    bool arelinearDofsPerElementCreated{false};
+    bool arelinearReducedDofsPerElementCreated{false};
+    std::vector<std::vector<Eigen::Index>> elementLinearIndices;
+    std::vector<std::vector<Eigen::Index>> elementLinearReducedIndices;
+  };
+
+  /** DenseFlatAssembler assembles matrix quantities using a flat basis Indexing strategy
+   * The matrix is stored in a dense matrix format. This format is exploited during the assembly process
+   */
+  template <typename FEContainer_,typename DirichletValuesType_ >  // requires Ikarus::Concepts::FlatIndexBasis<BasisEmbedded>
+  class DenseFlatAssembler : public VectorFlatAssembler<FEContainer_, DirichletValuesType_> {
+  public:
+    using FERequirementType = typename FEContainer_::value_type::FERequirementType;
+    using GlobalIndex     = typename FEContainer_::value_type::GlobalIndex;
+    using Basis = typename DirichletValuesType_::Basis;
+    using FEContainer = FEContainer_;
+    using DirichletValuesType = DirichletValuesType_;
+    explicit DenseFlatAssembler(const FEContainer &fes, const DirichletValuesType &dirichletValues_)
+        : VectorFlatAssembler<FEContainer,DirichletValuesType >(fes, dirichletValues_) {}
+
+    /** Calculates the matrix quantity which is requested by fErequirements and returns a reference
+     * A zero is written on fixed dofs rows and columns and a one is written on the diagonal */
+    Eigen::MatrixXd &getMatrix(const FERequirementType &fErequirements) { return getMatrixImpl(fErequirements); }
+
+    /** Calculates the matrix quantity which is requested by fErequirements and returns a reference
+     * The size of the matrix has the size of the free degrees of freedom */
+    Eigen::MatrixXd &getReducedMatrix(const FERequirementType &fErequirements) {
+      return getReducedMatrixImpl(fErequirements);
+    }
+
+  private:
+    Eigen::MatrixXd &getReducedMatrixImpl(const FERequirementType &fErequirements);
+    Eigen::MatrixXd &getMatrixImpl(const FERequirementType &fErequirements);
+
+    Eigen::MatrixXd mat{};
+    Eigen::MatrixXd matRed{};
+  };
+
+}  // namespace Ikarus
+
+#include "simpleAssemblers.inl"
