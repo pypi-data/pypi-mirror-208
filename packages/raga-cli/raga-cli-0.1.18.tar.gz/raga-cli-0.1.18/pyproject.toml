@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools_scm[toml]>=7"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raga-cli"
+version = "0.1.18"
+description = "Git for data scientists - manage your code and data together"
+readme = "README.rst"
+requires-python = ">=3.7"
+keywords = [
+    "data-science",
+    "data-version-control",
+    "machine-learning",
+    "git",
+    "developer-tools",
+    "reproducibility",
+    "collaboration",
+    "ai",
+    "raga",
+]
+license = { text = "Apache License 2.0" }
+authors = [{ name = "Manab Roy", email = "manabr@observancegroup.com" }]
+maintainers = [{ name = "Manab Roy", email = "support@observancegroup.com" }]
+dependencies = [
+    "dvc==2.45.1",
+    "dvc_s3==2.21.0"
+]
+[project.optional-dependencies]
+azure = ["dvc-azure==2.20.5"]
+gdrive = ["dvc-gdrive==2.19.1"]
+gs = ["dvc-gs==2.20.0"]
+hdfs = ["dvc-hdfs==2.19.0"]
+oss = ["dvc-oss==2.19.0"]
+s3 = ["dvc-s3==2.21.0"]
+ssh = ["dvc-ssh==2.20.0"]
+ssh_gssapi = ["dvc-ssh[gssapi]==2.20.0"]
+webdav = ["dvc-webdav==2.19.0"]
+webhdfs = ["dvc-webhdfs==2.19.0"]
+webhdfs_kerberos = ["dvc-webhdfs[kerberos]==2.19.0"]
+terraform = ["tpi[ssh]>=2.1.0"]
+testing = ["pytest-test-utils==0.0.8"]
+tests = [
+    "tpi[ssh]>=2.1.0",
+    "dvc-ssh==2.20.0",
+    "pytest-test-utils==0.0.8",
+    # Test requirements
+    "pytest==7.2.0",
+    "pytest-cov==4.0.0",
+    "pytest-xdist==3.1.0",
+    "pytest-mock==3.10.0",
+    "pytest-lazy-fixture==0.6.3",
+    # https://github.com/docker/docker-py/issues/2902
+    "pytest-docker==0.11.0; python_version < '3.10' or sys_platform != 'win32'",
+    "flaky==3.7.0",
+    "pytest-timeout==2.1.0",
+    "filelock==3.8.2",
+    "beautifulsoup4==4.11.1",
+    "pywin32>=225; sys_platform == 'win32'",  # optional dependency
+    # pylint requirements
+    "pylint==2.15.9",
+    # we use this to suppress pytest-related false positives in our tests.
+    "pylint-pytest==1.1.2",
+    # we use this to suppress some messages in tests, eg: foo/bar naming,
+    # and, protected method calls in our tests
+    "pylint-plugin-utils==0.7",
+    # type-checking
+    "mypy==0.991",
+    "types-requests",
+    "types-tabulate",
+    "types-toml",
+]
+all = ["dvc[azure,gdrive,gs,hdfs,oss,s3,ssh,webdav,webhdfs]"]
+dev = ["dvc[azure,gdrive,gs,hdfs,oss,s3,ssh,webdav,webhdfs,tests]"]
+
+[project.urls]
+"Homepage" = "https://github.com/pypa/sampleproject"
+"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+
+[project.scripts]
+rc = "rc.cli:main"
+
+
+[tool.setuptools]
+license-files = ["LICENSE"]
