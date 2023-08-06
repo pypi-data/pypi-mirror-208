@@ -1,0 +1,15 @@
+class _MockSocket:
+    def __init__(self, filepath: pathlib.Path):
+        self.filepath = filepath
+
+    def makefile(self, *args, **kwargs):
+        return open(self.filepath, *args, **kwargs)
+
+
+def http_response_from_file(filepath: pathlib.Path) -> HTTPResponse:
+    sock = _MockSocket(filepath)
+    response = HTTPResponse(sock)
+    response.begin()
+    return response
+
+
