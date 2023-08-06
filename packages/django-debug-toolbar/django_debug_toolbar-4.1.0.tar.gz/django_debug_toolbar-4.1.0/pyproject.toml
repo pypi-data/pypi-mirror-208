@@ -1,0 +1,77 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatchling",
+]
+
+[project]
+name = "django-debug-toolbar"
+description = "A configurable set of panels that display various debug information about the current request/response."
+readme = "README.rst"
+license = {text = "BSD-3-Clause"}
+authors = [
+    { name = "Rob Hudson" },
+]
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "Django>=3.2.4",
+  "sqlparse>=0.2",
+]
+[project.urls]
+Download = "https://pypi.org/project/django-debug-toolbar/"
+Homepage = "https://github.com/jazzband/django-debug-toolbar"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/debug_toolbar",
+    "/CONTRIBUTING.md",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["debug_toolbar"]
+
+[tool.hatch.version]
+path = "debug_toolbar/__init__.py"
+
+[tool.isort]
+combine_as_imports = true
+profile = "black"
+
+[tool.coverage.html]
+skip_covered = true
+skip_empty = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["debug_toolbar"]
+
+[tool.coverage.paths]
+source = ["src", ".tox/*/site-packages"]
+
+[tool.coverage.report]
+# Update coverage badge link in README.rst when fail_under changes
+fail_under = 94
+show_missing = true
