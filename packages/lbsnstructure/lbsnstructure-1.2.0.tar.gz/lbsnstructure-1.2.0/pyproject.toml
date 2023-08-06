@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lbsnstructure"
+authors = [
+    {name = "Alexander Dunkel", email = "alexander.dunkel@tu-dresden.de"},
+    {name = "Filip Krumpe"},{name = "Marc Löchner"}]
+license = {text = "MIT"}
+description = "A common language independent and cross-network social-media data scheme."
+requires-python = ">=3.7"
+dependencies = ["protobuf"]
+dynamic = ["version"]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+Homepage = "https://lbsn.vgiscience.org/"
+
+[tool.semantic_release]
+version_variable = "src/lbsnstructure/version.py:__version__"
+upload_to_pypi = "true"
+branch = "master"
+build_command = "python -m build"
+
+[tool.setuptools]
+zip-safe = false
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["README.md", "py.typed", "*.pyi"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = [
+    "lbsnstructure",
+    "lbsnstructure.*",
+]
+namespaces = false
+
+[tool.setuptools.dynamic]
+version = {attr = "lbsnstructure/version.__version__"}
+
