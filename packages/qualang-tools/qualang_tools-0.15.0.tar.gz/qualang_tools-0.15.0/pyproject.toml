@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "qualang-tools"
+version = "v0.15.0"
+description = "The qualang_tools package includes various tools related to QUA programs in Python"
+license = "BSD-3-Clause"
+authors = [
+      "QM <qua-libs@quantum-machines.co>",
+]
+packages = [
+    { include = "qualang_tools" }
+]
+include = [
+]
+exclude = [
+    "**/tests/**",
+]
+readme = "README.md"
+homepage = "https://github.com/qua-platform/py-qua-tools"
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<4.0"
+matplotlib = "^3.4.2"
+numpy = "^1.17.0"
+pandas = "^1.2.4"
+qm-qua = ">=1.1.0"
+scipy = "^1.7.1"
+dash = "^2.0.0"
+dash-html-components = "^2.0.0"
+dash-core-components = "^2.0.0"
+dash-bootstrap-components = "^1.0.0"
+dash-cytoscape = "^0.3.0"
+dash-table = "^5.0.0"
+docutils = ">=0.14.0"
+dash-dangerously-set-inner-html = "^0.0.2"
+waitress = "^2.0.0"
+dill = { version = "^0.3.4", optional = true }
+pypiwin32 = { version = "^223", optional = true }
+ipython = { version = "^7.31.1", optional = true }
+scikit-learn = "^1.0.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^22.3"
+poethepoet = "^0.11.0"
+flake8 = "^4.0.1"
+
+[tool.poetry.extras]
+interplot = ["dill", "pypiwin32", "ipython"]
+
+[tool.black]
+line-length = 88  # Defaults
+exclude = "qualang_tools/bakery/randomized_benchmark_c1.py"
+
+[tool.poe.tasks]
+format = "black qualang_tools"
+check-format = "black --check qualang_tools"
+lint = "flake8 qualang_tools"
+test = "pytest tests"
+test_server = "pytest tests_against_server"
+
+[tool.poe.tasks.check]
+sequence = ["check-format", "lint", "test"]
+help = "Perform all check possible on the code"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
