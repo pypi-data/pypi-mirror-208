@@ -1,0 +1,84 @@
+[tool.poetry]
+name = "raplan"
+version = "0.8.5"
+description = "Ratio planning and scheduling in Python."
+authors = ["Ratio Innovations B.V. <info@ratio-case.nl>"]
+license = "GPL-3.0-or-later"
+documentation = "https://raplan.ratio-case.nl"
+repository = "https://gitlab.com/ratio-case/python/raplan"
+homepage = "https://gitlab.com/ratio-case/python/raplan"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyserde = { version = "^0.9", extras = ["yaml"] }
+plotly = { version = "^5", optional = true }
+kaleido = { version = "0.2", optional = true }
+ragraph = { version = "^1", optional = true }
+openpyxl = { version = "^3", optional = true }
+
+[tool.poetry.extras]
+plot = ["kaleido", "plotly"]
+analysis = ["ragraph"]
+excel = ["openpyxl"]
+all = ["kaleido", "plotly", "ragraph", "openpyxl"]
+
+[tool.poetry.dev-dependencies]
+black = "*"
+jupyterlab = "^3"
+pandas = "^1"
+pydata-sphinx-theme = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-doctestplus = "*"
+pygments-csv-lexer = "*"
+raver = "^3"
+Sphinx = "*"
+sphinx-autoapi = "*"
+sphinx-copybutton = "*"
+sphinx-prompt = "*"
+sphinxcontrib-bibtex = "*"
+sphinxemoji = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+
+[tool.pytest.ini_options]
+addopts = "-s --cov --cov-report xml:./.pytest_cache/coverage.xml --cov-report term-missing --doctest-plus --doctest-rst --basetemp ./tests/.temp"
+testpaths = ["docs", "tests"]
+markers = ["slow"]
+
+[tool.coverage.run]
+source = [
+    "raplan",
+    "/usr/local/lib/python3.9/site-packages/raplan",
+    "/home/ratio/.local/lib/python3.9/site-packages/raplan",
+]
+disable_warnings = ["module-not-imported"]
+
+[tool.coverage.paths]
+source = [
+    "raplan",
+    "/usr/local/lib/python3.9/site-packages/raplan",
+    "/home/ratio/.local/lib/python3.9/site-packages/raplan",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.raver]
+ref = "origin/main"
+changelog = "./docs/source/changelog.rst"
+
+[tool.ruff]
+line-length = 100
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+]
+target-version = "py39"
