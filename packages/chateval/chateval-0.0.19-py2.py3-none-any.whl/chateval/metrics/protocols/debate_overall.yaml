@@ -1,0 +1,24 @@
+prompt: |-
+  You are evaluating the arguments presented by two debaters (Debater 1 and Debater 2) and deciding which side has made the more convincing case using a specific set of standards. Below is the data:
+  [BEGIN DATA]
+  ***
+  [Debate Topic]: {input}
+  ***
+  [Debate Transcript]: {completion}
+  ***
+  [Criterion]: {criteria}
+  ***
+  [END DATA]
+  Is the debater 1 better than the debater 2? First, write out in a step by step manner your reasoning about the criterion to be sure that your conclusion is correct. Avoid simply stating the correct answers at the outset. Then print only the single character "Y" or "N" (without quotes or punctuation) on its own line corresponding to the correct answer. At the end, repeat just the letter again by itself on a new line.
+  Reasoning:
+eval_type: cot_pairwise
+choice_scores:
+  "Y": 1.0
+  "N": 0.0
+criteria:
+  relevance: "Relevance to the topic: each debater should stay on topic and address the specific issues at hand"
+  persuasiveness: "Persuasiveness: how convincing each debater is in presenting their arguments."
+  responsiveness: "Responsiveness: each debater should respond to the arguments and points made by the other debater"
+  coherence: "Debaters should present their arguments in a clear and logical manner, using evidence and examples to support their points."
+input_outputs:
+  input: "completion"
