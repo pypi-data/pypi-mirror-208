@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "griddle"
+description = "Turn an interable into a printable grid with dynamically controlled column sizes to shrink grid width to your terminal size."
+version = "0.0.0"
+requires-python = ">=3.10"
+dependencies = ["tabulate"]
+readme = "README.md"
+keywords = ["tabulate", "grid", "print", "terminal"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    ]
+
+[[project.authors]]
+name = "Matt Manes"
+email = "mattmanes@pm.me"
+
+[project.urls]
+"Homepage" = "https://github.com/matt-manes/griddle"
+"Documentation" = "https://github.com/matt-manes/griddle/tree/main/docs"
+"Source code" = "https://github.com/matt-manes/griddle/tree/main/src/griddle"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    ]
+pythonpath = "src"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    ".coverage",
+    ".pytest_cache",
+    ".vscode",
+    "tests",
+    ".gitignore"
+    ]
+[project.scripts]
