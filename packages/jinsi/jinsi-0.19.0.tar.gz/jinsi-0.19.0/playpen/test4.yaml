@@ -1,0 +1,31 @@
+::let:
+  xs:
+    - 1
+    - 2
+    - 7
+    - 3
+    - 2
+    - 9
+    - 4
+    - 2
+    - 5
+
+doc:
+  ys:
+    ::get: xs
+  zs:
+    ::let:
+      x:
+        ::explode:
+          - " "
+          - hello world out there
+    ::get: x
+  qs:
+    ::let:
+      xs:
+        ::explode:
+          - " "
+          - hello out there
+    ::each xs as x:
+      ::get: x
+
