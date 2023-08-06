@@ -1,0 +1,45 @@
+from gds3xtrude.include import layer, Material
+
+# GDS2 layer numbers.
+
+ndiffusion = layer(65, 20)
+pdiffusion = layer(65, 20)
+nwell = layer(64, 20)
+pwell = layer(64, 20)
+poly = layer(66, 20)
+poly_contact = layer(66, 44)
+pdiff_contact = layer(66, 44)
+ndiff_contact = layer(66, 44)
+metal1 = layer(67, 20)
+via1 = layer(67, 44)
+metal2 = layer(68, 20)
+metal2_label = layer(8, 1)
+metal2_pin = layer(8, 2)
+abutment_box = layer(235, 4)
+
+diff_contact = ndiff_contact + pdiff_contact
+
+# Define materials
+m_poly = Material("poly", color=(0.7, 0, 0))
+m_via = Material("tungsten", color=(0.1, 0.1, 0.1))
+m_metal1 = Material("copper1", color=(0.3, 0.3, 1))
+m_metal2 = Material("copper2", color=(0.3, 1, 0.3))
+
+# Set materials/colors
+poly.material = m_poly
+poly_contact.material = m_via
+diff_contact.material = m_via
+metal1.material = m_metal1
+via1.material = m_via
+metal2.material = m_metal2
+
+layerstack = [
+#    (1, abutment_box),
+    (100, ndiffusion + pdiffusion),
+    (20, diff_contact),
+    (20, [diff_contact, poly]),
+    (200, [poly_contact, diff_contact]),
+    (50, metal1),
+    (200, via1),
+    (50, metal2),
+]
