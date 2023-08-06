@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "griptape-tools"
+version = "0.10.2"
+description = "Tools for the griptape-core package."
+authors = ["Griptape <hello@griptape.ai>"]
+license = "Apache 2.0"
+readme = "README.md"
+repository = "https://github.com/griptape-ai/griptape-tools"
+
+packages = [
+    {include = "griptape"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+griptape = ">=0.8.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-mock = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
