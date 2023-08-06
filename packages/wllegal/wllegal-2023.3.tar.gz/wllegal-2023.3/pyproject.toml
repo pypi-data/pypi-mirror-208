@@ -1,0 +1,57 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["setuptools", "wheel", "translate-toolkit"]  # PEP 508 specifications.
+
+[tool.black]
+target-version = ['py37']
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+format = "github"
+ignore = [
+  "D10",  # TODO: we are missing many docstrings
+  "D203",  # CONFIG: incompatible with D211
+  "D212",  # CONFIG: incompatible with D213
+  "E501",  # WONTFIX: we accept long strings (rest is formatted by black)
+  "RUF001"  # WONTFIX: String contains ambiguous unicode character, we are using Unicode
+]
+select = [
+  "E",
+  "F",
+  "B",
+  "T10",
+  "A",
+  "C4",
+  "C90",
+  "YTT",
+  "DJ",
+  "UP",
+  "D",
+  "PD",
+  "PGH",
+  "PL",
+  "TRY",
+  "RUF",
+  "ERA",
+  "ICN",
+  "ISC",
+  "EXE",
+  "INP",
+  "PIE",
+  "G",
+  "PYI",
+  "Q",
+  "SIM",
+  "TID",
+  "RSE",
+  "T20",
+  "RET",
+  "SLF",
+  "N"
+]
+target-version = "py37"
+
+[tool.ruff.mccabe]
+max-complexity = 16
