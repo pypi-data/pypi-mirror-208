@@ -1,0 +1,70 @@
+[build-system]
+requires = [
+  "setuptools >= 61.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "climify_api"
+version = "1.0.8"
+keywords=['Climify','Environmental engineering']
+authors = [
+  { name="Climify Aps", email="info@climify.com" },
+]
+description = "A wrapper library for the Climify REST API"
+#long_description = "A wrapper library for the Climify REST API, used to query sensor data and interact with Climify systems programmatically"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+  # See https://pypi.org/classifiers/
+  'Development Status :: 2 - Pre-Alpha',
+
+  # Indicate who your project is intended for
+  'Intended Audience :: Science/Research',
+  'Intended Audience :: Developers',
+  'Topic :: Scientific/Engineering',
+  'Topic :: Software Development :: Libraries',
+
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "certifi >= 14.5.14",
+  "frozendict ~= 2.3.4",
+  "python-dateutil",
+  "typing_extensions ~= 4.3.0",
+  "urllib3 ~= 1.26.7",
+  "requests",
+  "requests-oauthlib",
+  "pyyaml",
+  "oauthlib",
+  "varname",
+  "pydantic",
+  "pandas"
+]
+
+[tool.setuptools]
+packages=[
+  'climify_api',
+  'climify_api.apis',
+  'climify_api.apis.v1',
+  'climify_api.apis.v1.paths',
+  'climify_api.apis.v1.paths.buildings_id',
+  'climify_api.apis.v1.paths.buildings_id_devices',
+  'climify_api.apis.v1.paths.feedback_forms_id_locations_id_responses',
+  'climify_api.apis.v1.paths.locations_id',
+  'climify_api.apis.v1.paths.locations_id_change_temperature',
+  'climify_api.apis.v1.paths.locations_id_devices',
+  'climify_api.apis.v1.paths.locations_id_sensor_values',
+  'climify_api.apis.v1.paths.maps_id',
+  'climify_api.apis.v1.paths.maps_id_devices',
+  'climify_api.apis.v1.paths.organisations_id',
+  'climify_api.apis.v1.paths.organisations_id_devices',
+  'climify_api.apis.v1.paths.resources'
+]
+
+[project.urls]
+"Homepage" = "https://gitlab.climify.com/climify/python-api-lib"
+"Bug Tracker" = "https://gitlab.climify.com/climify/python-api-lib/-/issues"
