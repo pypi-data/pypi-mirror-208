@@ -1,0 +1,139 @@
+Metadata-Version: 2.1
+Name: ioddcomchecker
+Version: 1.6.8
+Summary: IoddCom IO-Link master checker
+Home-page: https://siogeen.com
+Author: Reimund Renner
+Author-email: reimund@siogeen.com
+License: proprietary and confidential
+Project-URL: Documentation, https://siogeen.com/doc/
+Project-URL: Help Desk, https://siogeen.com/helpdesk/
+Project-URL: Knowledge Base, https://siogeen.com/helpdesk/knowledgebase
+Project-URL: News, https://news.siogeen.com/
+Keywords: IO-Link,IODD,development,test,production
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Manufacturing
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Customer Service
+Classifier: Topic :: Software Development :: Embedded Systems
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.6
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+Requires-Dist: ioddcombase (>=1.6.8)
+Requires-Dist: dict2obj
+
+IoddComChecker - IoddCom Checker
+================================
+
+.. _IoddComCheckerGui: /project/IoddComCheckerGui
+
+This is the CLI for checking your IO-Link masters working with Siogeen IoddCom.
+
+If you want using a GUI see IoddComCheckerGui_
+
+**Install**
+
+Use pip to install IoddComChecker:
+
+>>> pip install IoddComChecker
+
+**Usage**
+
+To start a scan execute on the console:
+
+>>> python -m siogeen.tools.cli.IoddComChecker
+
+**Command line options**
+
+>>> IoddComChecker [-h] [-a ADDRESS] [--auto] [--version]
+
+-h, --help            show this help message and exit
+-a ADDRESS, --address ADDRESS
+                    specify one or more master addresses (default all)
+--auto                activate master ports if all are disabled
+--version             print version
+
+**Example**
+
+>>> IoddComChecker -a 10.0.0.17 -a 10.0.0.19 --auto
+
+For full package, requests and support go to https://siogeen.com
+
+**Copyright 2017-2023 Siogeen UG** (limited liability)
+
+.. _request: https://siogeen.com/#contact
+
+Supported Platforms
+~~~~~~~~~~~~~~~~~~~
+
+========================= ===================== ===================
+**OS**                    Python 2.7, 3.4-3.5   Python 3.6 - 3.11
+========================= ===================== ===================
+**Windows**                 [1]_                   x
+**Linux x86/x64**           [1]_                   x
+**Linux Arm (Raspberry)**   [1]_                  3.7-3.11
+**macOS**                   [1]_                  3.8-3.11
+========================= ===================== ===================
+
+.. [1] IoddCom for Python 2.7, 3.4 - 3.5 on request_.
+
+Support for other platforms on request_.
+
+Supported operating systems and IO-Link masters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Table of supported IO-Link masters for specific operating systems (OS):
+
++---------------------------------+---------------------------------------------------+
+| Master                          | supported OS                                      |
+|                                 +---------+----------+--------------+---------------+
+|                                 | Windows |  Linux   | Raspberry Pi | macOS 64 [2]_ |
++=================================+=========+==========+==============+===============+
+| TMG-USB based masters [3]_      |   x     |    x     |    x         |    x          |
++---------------------------------+---------+----------+--------------+---------------+
+| TMG ethernet based masters [4]_ |   x     |    x     |    x         |    x          |
++---------------------------------+---------+----------+--------------+---------------+
+| ifm ethernet based masters [5]_ |   x     |    x     |    x         |    x          |
++---------------------------------+---------+----------+--------------+---------------+
+| ifm USB based masters [6]_      |   x     |    x     |    x         |    x          |
++---------------------------------+---------+----------+--------------+---------------+
+
+For Windows, Linux and Raspberry Pi both, 32-bit and 64-bit versions are available.
+
+.. [2] For macOS 13+
+
+.. [3] For example: Baumer, Leuze, Pepperl+Fuchs, SICK AG, Turck
+
+.. [4] For Example: Balluff, Belden, Murrelektronik, Pepperl+Fuchs, Wenglor
+
+.. [5] All ifm IO-Link masters AL1xxx should be supported. Functionality depends on
+       master type.
+       The following functions are missing yet: PD streaming, master data storage read/write,
+       master commands, PD valid status
+
+.. [6] Experimental ifm USB IO-Link master AL1060 support. Special functions missing
+       like for [5]_
+
+Not supported masters:
+
+* RevolutionPi RevPi masters
+* Pepperl & Fuchs comtrol masters
+* Baumer USB-C and senscontrol masters
+* Germbedded masters
+* TEConcept masters
+* iO-Fly masters
+* iq masters
+
+Support for them or other masters on request_.
