@@ -1,0 +1,17 @@
+version: 2
+
+mkdocs:
+  configuration: mkdocs.yml
+  fail_on_warning: false
+
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.11"
+  jobs:
+    pre_build:
+      - pip install --upgrade mkdocs
+      - pip install --upgrade pydoc-markdown
+      - pydoc-markdown
+      - mv docs/content/* docs
+      - rmdir docs/content

@@ -1,0 +1,144 @@
+[build-system]
+requires = [ "setuptools>=65", "setuptools_scm[toml]>=7.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/hdx/scraper/_version.py"
+local_scheme = "no-local-version"
+version_scheme = "python-simplified-semver"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+multi_line_output = 3
+
+[tool.flake8]
+exclude = ["_version.py"]
+ignore = ["E203", "E501", "W503"]
+max-line-length = 79
+count = true
+show_source = true
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+addopts = "--color=yes"
+log_cli = 1
+
+[tool.coverage.paths]
+source = ["src/hdx", "*/site-packages/hdx"]
+
+[tool.coverage.report]
+omit = [
+    "*/setup.py",
+    "*/python?.?/*",
+    "*/venv/*",
+    "*/site-packages/*",
+    "*/tests/*",
+    "*__init__*"
+]
+
+exclude_lines = [
+    "pragma: no cover",  # Have to re-enable the standard pragma
+    "def __repr__",  # Don't complain about missing
+    "if self.debug",  # debug-only code
+    "raise AssertionError",  # Don't complain if tests don't hit
+    "raise NotImplementedError",  # defensive assertion code
+    "if 0:",  # Don't complain if non-runnable code
+    "if __name__ == .__main__.:"  # isn't run
+]
+
+[[tool.pydoc-markdown.loaders]]
+type = "python"
+search_path = ["src"]
+packages = ["hdx.scraper"]
+
+[tool.pydoc-markdown.renderer]
+type = "mkdocs"
+output_directory = "docs"
+
+    [tool.pydoc-markdown.renderer.mkdocs_config]
+    site_name = "HDX Python Scraper"
+    theme = "readthedocs"
+    repo_url = "https://github.com/OCHA-DAP/hdx-python-scraper"
+
+    [tool.pydoc-markdown.renderer.markdown.source_linker]
+    type = "github"
+    repo = "OCHA-DAP/hdx-python-scraper"
+
+    [[tool.pydoc-markdown.renderer.pages]]
+    title = "Home"
+    name = "index"
+    source ="doc/main.md"
+
+    [[tool.pydoc-markdown.renderer.pages]]
+    title = "API Documentation"
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Source Readers"
+        contents = ["hdx.scraper.utilities.readers.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Configurable Scrapers"
+        contents = ["hdx.scraper.configurable.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Base Class for Scrapers"
+        contents = ["hdx.scraper.base_scraper.BaseScraper"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Fallbacks"
+        contents = ["hdx.scraper.utilities.fallbacks.Fallbacks"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Run Scrapers"
+        contents = ["hdx.scraper.runner.Runner"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Outputs"
+        contents = ["hdx.scraper.outputs.*"]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py311, lint
+
+[gh-actions]
+python =
+    3: py311, lint
+
+[testenv]
+package = wheel
+wheel_build_env = .pkg
+pass_env = GSHEET_AUTH
+deps =
+    -r test-requirements.txt
+commands =
+    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing
+
+[testenv:lint]
+deps =
+    flake8
+    flake8-isort
+    flake8-black
+    flake8-pyproject
+commands =
+    flake8 --color=always src tests
+
+[testenv:docs]
+deps =
+    pydoc-markdown
+commands =
+    pydoc-markdown
+
+[testenv:publish]
+package = sdist
+pass_env = SSH_AUTH_SOCK, TWINE_USERNAME, TWINE_PASSWORD
+deps =
+    twine
+
+commands =
+    twine upload {work_dir}/{package_env}/dist/*
+"""
