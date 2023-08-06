@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "oqpy"
+version = "0.2.0"
+description = ""
+authors = ["Philip Reinhold <pcrein@amazon.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+openpulse-poc = { path = "vendor/openpulse_poc-0.0.9-py3-none-any.whl" }
+numpy = "^1.20.2"
+pydantic = "^1.8.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+black = "^21.12b0"
+pylint = "^2.12"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ["py38"]
+
+[tool.pylint.reports]
+score = ["no"]
+reports = ["no"]
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.messages_control]
+output-format = "colorized"
+# something inspired by VSCode's defaults but with a few more thrown in
+disable = ["all"]
+enable = [
+    "E",  # all errors
+    "F",  # all fatal
+    "anomalous-backslash-in-string",
+    "assert-on-tuple",
+    "bad-format-string",
+    "bad-indentation",
+    "bad-open-mode",
+    "binary-op-exception",
+    "consider-merging-isinstance",
+    "dangerous-default-value",
+    "duplicate-key",
+    "expression-not-assigned",
+    "global-variable-not-assigned",
+    "lost-exception",
+    "mixed-line-endings",
+    "pointless-statement",
+    "redefined-builtin",
+    "simplifiable-if-statement",
+    "trailing-whitespace",
+    "unnecessary-pass",
+    "unreachable",
+    "unused-import",
+    "unnecessary-semicolon",
+    "unused-variable",
+    "wrong-import-order",
+    "wrong-import-position",
+]
+extension-pkg-whitelist = "pydantic"
