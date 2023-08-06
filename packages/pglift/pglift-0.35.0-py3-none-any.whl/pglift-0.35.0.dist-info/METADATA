@@ -1,0 +1,110 @@
+Metadata-Version: 2.1
+Name: pglift
+Version: 0.35.0
+Summary: Life-cycle management of production-ready PostgreSQL instances
+Author-email: Dalibo SCOP <contact@dalibo.com>
+License: GPLv3
+Project-URL: Documentation, https://pglift.readthedocs.io/
+Project-URL: Source, https://gitlab.com/dalibo/pglift/
+Project-URL: Tracker, https://gitlab.com/dalibo/pglift/-/issues/
+Keywords: postgresql,deployment,administration
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Topic :: System :: Systems Administration
+Classifier: Topic :: Database
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Typing :: Typed
+Requires-Python: <4,>=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: attrs
+Requires-Dist: humanize
+Requires-Dist: pgtoolkit (>=0.23.0)
+Requires-Dist: pluggy
+Requires-Dist: psycopg (>=3.1)
+Requires-Dist: pydantic (>=1.8)
+Requires-Dist: python-dateutil
+Requires-Dist: requests
+Requires-Dist: tenacity
+Requires-Dist: typing-extensions
+Requires-Dist: PyYAML (>=5.1)
+Requires-Dist: click (!=8.1.0,>=8.0.0)
+Requires-Dist: filelock (>=3.9.0)
+Requires-Dist: rich (>=11.0.0)
+Provides-Extra: dev
+Requires-Dist: pglift[docs,test,typing] ; extra == 'dev'
+Requires-Dist: autoflake ; extra == 'dev'
+Requires-Dist: black (>=23.1.0) ; extra == 'dev'
+Requires-Dist: codespell ; extra == 'dev'
+Requires-Dist: flake8 ; extra == 'dev'
+Requires-Dist: isort ; extra == 'dev'
+Requires-Dist: pip-tools ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: pytest-accept ; extra == 'dev'
+Requires-Dist: pyupgrade ; extra == 'dev'
+Requires-Dist: sphinx-autobuild ; extra == 'dev'
+Requires-Dist: towncrier ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: furo ; extra == 'docs'
+Requires-Dist: sphinx ; extra == 'docs'
+Provides-Extra: test
+Requires-Dist: patroni[etcd] (>=2.1.5) ; extra == 'test'
+Requires-Dist: port-for ; extra == 'test'
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: requests ; extra == 'test'
+Requires-Dist: tenacity (!=8.2.0,>=8.0.0) ; extra == 'test'
+Provides-Extra: typing
+Requires-Dist: mypy (>=1.0.0) ; extra == 'typing'
+Requires-Dist: types-psutil ; extra == 'typing'
+Requires-Dist: types-PyYAML (>=6.0.11) ; extra == 'typing'
+Requires-Dist: types-python-dateutil ; extra == 'typing'
+Requires-Dist: types-requests ; extra == 'typing'
+
+# What is pglift?
+
+pglift is a solution aiming at deploying production-ready instances of
+PostgreSQL, set up, backed up and monitored.
+
+Here, the term "instance" means a plain PostgreSQL instance (aka a cluster)
+complemented with satellite services which are essential to ensure proper
+operation in a production context. These satellite components typically
+concern backup, monitoring, high-availability or migration.
+
+The project aims at supporting several tools for each category. At the moment,
+supported tools are:
+
+* Backup: [pgBackRest][]
+* Monitoring & insights: [Prometheus postgres\_exporter][], [temBoard][],
+  [PoWA][]
+* High availability: [Patroni][]
+
+[pgBackRest]: https://pgbackrest.org/
+[Prometheus postgres\_exporter]: https://github.com/prometheus-community/postgres_exporter
+[temBoard]: https://temboard.readthedocs.io/
+[PoWA]: https://temboard.readthedocs.io/
+[Patroni]: https://patroni.readthedocs.io/
+
+# Getting Started
+
+* walk through the [documentation][] for installation and tutorials
+* see also the [development and contributing guide][]
+
+[documentation]: https://pglift.readthedocs.io/
+[development and contributing guide]: https://pglift.readthedocs.io/en/latest/dev.html
+
+# Documentation
+
+The pglift documentation can be found at <https://pglift.readthedocs.io>.
+
+# License
+
+The code in this repository is developed and distributed under the GNU General
+Public License version 3. See [LICENSE](LICENSE) for details.
