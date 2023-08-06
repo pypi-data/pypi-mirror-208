@@ -1,0 +1,127 @@
+Metadata-Version: 2.1
+Name: directory-healthcheck
+Version: 3.1.0
+Summary: Library to streamline healthchecks for Directory apps.
+Home-page: https://github.com/uktrade/directory-healthcheck
+Author: Department for International Trade
+License: MIT
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 1.11
+Classifier: Framework :: Django :: 2.0
+Classifier: Framework :: Django :: 2.1
+Classifier: Framework :: Django :: 2.2
+Classifier: Framework :: Django :: 3.1
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.1
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: django-health-check (==3.17.0)
+Requires-Dist: django (<=4.1.9,>=3.2.18)
+Provides-Extra: test
+Requires-Dist: pytest (==3.10.0) ; extra == 'test'
+Requires-Dist: pytest-cov (==2.7.1) ; extra == 'test'
+Requires-Dist: pytest-django (==3.5.0) ; extra == 'test'
+Requires-Dist: flake8 (==5.0.4) ; extra == 'test'
+Requires-Dist: codecov (>=2.0.16) ; extra == 'test'
+Requires-Dist: twine (<=4.0.2,>=1.11.0) ; extra == 'test'
+Requires-Dist: wheel (<1.0.0,>=0.31.0) ; extra == 'test'
+Requires-Dist: raven (==5.19.0) ; extra == 'test'
+Requires-Dist: setuptools (<66.1.0,>=59.6.0) ; extra == 'test'
+Requires-Dist: directory-sso-api-client ; extra == 'test'
+Requires-Dist: directory-api-client ; extra == 'test'
+Requires-Dist: directory-forms-api-client ; extra == 'test'
+Requires-Dist: directory-cms-client ; extra == 'test'
+Requires-Dist: directory-client-core (<7.1.0,>=4.3.0) ; extra == 'test'
+
+# directory-healthcheck
+
+[![code-climate-image]][code-climate]
+[![circle-ci-image]][circle-ci]
+[![codecov-image]][codecov]
+[![pypi-image]][pypi]
+
+**Wrapper around [django-health-check](https://github.com/KristianOellegaard/django-health-check) to streamline health checks in [directory apps](https://github.com/uktrade/?utf8=%E2%9C%93&q=directory&type=&language=).**
+
+---
+
+## Installation
+
+```shell
+pip install directory-healthcheck
+```
+
+## Usage
+Update your `settings.py`:
+
+```py
+import directory_healthcheck.backends
+
+
+INSTALLED_APPS = [
+    ...
+    'directory_healthcheck',
+    ...
+]
+
+DIRECTORY_HEALTHCHECK_TOKEN = 'some-secret-token'
+
+DIRECTORY_HEALTHCHECK_BACKENDS [
+    directory_healthcheck.backends.APIBackend,
+    directory_healthcheck.backends.SingleSignOnBackend,
+    directory_healthcheck.backends.FormsAPIBackend,
+]
+
+```
+
+Update your `urls.py`:
+
+```
+    url(
+        r'^healthcheck/$',
+        directory_healthcheck.views.HealthcheckView.as_view(),
+        name='healthcheck'
+    ),
+
+```
+
+
+## Development
+
+    $ git clone https://github.com/uktrade/directory-healthcheck
+    $ cd directory-healthcheck
+    $ make
+
+## Publish to PyPI
+
+The package should be published to PyPI on merge to master. If you need to do it locally then get the credentials from rattic and add the environment variables to your host machine:
+
+| Setting                     |
+| --------------------------- |
+| DIRECTORY_PYPI_USERNAME     |
+| DIRECTORY_PYPI_PASSWORD     |
+
+
+Then run the following command:
+
+    make publish
+
+
+[code-climate-image]: https://codeclimate.com/github/uktrade/directory-healthcheck/badges/issue_count.svg
+[code-climate]: https://codeclimate.com/github/uktrade/directory-healthcheck
+
+[circle-ci-image]: https://circleci.com/gh/uktrade/directory-healthcheck/tree/master.svg?style=svg
+[circle-ci]: https://circleci.com/gh/uktrade/directory-healthcheck/tree/master
+
+[codecov-image]: https://codecov.io/gh/uktrade/directory-healthcheck/branch/master/graph/badge.svg
+[codecov]: https://codecov.io/gh/uktrade/directory-healthcheck
+
+[pypi-image]: https://badge.fury.io/py/directory-healthcheck.svg
+[pypi]: https://badge.fury.io/py/directory-healthcheck
