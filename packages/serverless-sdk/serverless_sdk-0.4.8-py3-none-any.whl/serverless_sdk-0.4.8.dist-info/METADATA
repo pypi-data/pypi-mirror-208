@@ -1,0 +1,109 @@
+Metadata-Version: 2.1
+Name: serverless-sdk
+Version: 0.4.8
+Summary: Serverless SDK for Python
+Author: serverlessinc
+Project-URL: changelog, https://github.com/serverless/console/blob/main/python/packages/sdk/CHANGELOG.md
+Project-URL: documentation, https://github.com/serverless/console/tree/main/python/packages/sdk
+Project-URL: homepage, https://www.serverless.com/console
+Project-URL: repository, https://github.com/serverless/console
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: backports.cached-property
+Requires-Dist: blinker (>=1.5)
+Requires-Dist: js-regex (<1.1.0,>=1.0.1)
+Requires-Dist: typing-extensions (>=4.4)
+Provides-Extra: tests
+Requires-Dist: aiohttp (>=3.8.4) ; extra == 'tests'
+Requires-Dist: black (>=22.12) ; extra == 'tests'
+Requires-Dist: flask (>=2.2.3) ; extra == 'tests'
+Requires-Dist: importlib-metadata (>=5.2) ; extra == 'tests'
+Requires-Dist: mypy (>=1.2) ; extra == 'tests'
+Requires-Dist: pytest (>=7.2) ; extra == 'tests'
+Requires-Dist: pytest-httpserver (>=1.0.6) ; extra == 'tests'
+Requires-Dist: requests (>=2.28.2) ; extra == 'tests'
+Requires-Dist: ruff (>=0.0.199) ; extra == 'tests'
+Requires-Dist: urllib3 (>=1.26.15) ; extra == 'tests'
+Requires-Dist: yarl (~=1.8.0) ; extra == 'tests'
+
+# serverless-sdk
+
+## [Serverless Console](https://www.serverless.com/console) SDK for Python
+
+### Use case
+
+Environment agnostic [Serverless Console](https://www.serverless.com/console) instrumentation functions for Python applications.
+
+This library is safe to use without side-effects in any Python application. It becomes effective once (one of the listed below) environment specific SDK is loaded on top.
+
+#### Environment extensions
+
+- **AWS Lambda** - [serverless-aws-lambda-sdk](https://github.com/serverless/console/tree/main/python/packages/aws-lambda-sdk#readme)
+
+### Installation
+
+```shell
+pip install serverless-sdk
+```
+
+### Usage
+
+```python
+from serverless_sdk import serverlessSdk
+print(serverlessSdk.name)
+print(serverlessSdk.version)
+
+serverlessSdk.capture_error(Exception("Unexpected"))
+```
+
+### Setup
+
+#### 1. Register with [Serverless Console](https://console.serverless.com/)
+
+#### 2. Initialize and setup SDK specific to your enviroment
+
+See [Environment extensions](#environment-extensions)
+
+##### 2.1 Configuration options
+
+_Common options supported by all environments:_
+
+###### `SLS_ORG_ID` (or `org_id`)
+
+Required setting. Id of your organization in Serverless Console.
+
+##### `SLS_DISABLE_HTTP_MONITORING` (or `disable_http_monitoring`)
+
+Disable tracing of HTTP and HTTPS requests. See [HTTP instrumentation](docs/instrumentation/http.md)
+
+##### `SLS_DISABLE_REQUEST_RESPONSE_MONITORING` (or `disable_request_response_monitoring`)
+
+(Dev mode only) Disable monitoring requests and reponses (function, AWS SDK requests and HTTP(S) requests)
+
+##### `SLS_DISABLE_FLASK_MONITORING` (or `disable_flask_monitoring`)
+
+Disable automated flask monitoring. See [flask app instrumentation](docs/instrumentation/flask-app.md)
+
+##### `SLS_DISABLE_CAPTURED_EVENTS_STDOUT` (or `disable_captured_events_stdout`)
+
+Disable writing captured events registered via `.capture_error` and `.capture_warning` to stdout
+
+### Instrumentation
+
+This package comes with instrumentation for following areas.
+
+_Note: instrumentation is enabled via environment specific SDK instance, relying just on `serverless-sdk` doesn't enable any instrumentation)_
+
+- [HTTP(s) requests](docs/instrumentation/http.md)
+- [flask app](docs/instrumentation/flask-app.md)
+- [Python logging module](docs/instrumentation/python-logging.md)
+
+### API
+
+- [serverlessSdk](docs/sdk.md)
