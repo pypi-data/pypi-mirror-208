@@ -1,0 +1,27 @@
+# pyelib
+Pyelib是一个Python库，为标准库和第三方库提供易于使用的函数封装。
+
+它通过提供简单实用的函数有效地提高开发效率。
+
+Pyelib旨在成为一款模块化、高性能、企业级的Python开发框架。
+
+使用Pyelib，开发人员可以轻松访问和利用Python标准库和第三方库的全部功能，使其开发过程更加高效和流畅。
+
+
+## 安装
+
+```shell
+pip install pyelib
+```
+
+
+## pymongo 示例
+
+```python
+import pyelib
+
+mongo = pyelib.MongoDB('mongodb://localhost:27017/test', 'test', 'test')
+# 插入单个文档
+document = {'name': 'Alice', 'age': 25}
+mongo.insert_one(document)
+```
