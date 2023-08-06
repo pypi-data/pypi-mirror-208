@@ -1,0 +1,85 @@
+[build-system]
+requires = [
+  "setuptools>=62.0.0",
+  "appdirs",
+  "wheel>=0.31.0",
+  "boto3>=1.20.15",
+  "click>=8.0.1",
+  "questionary>=1.10.0",
+  "requests",
+  "httpx",
+  "tqdm",
+  "boto3-stubs[s3,sts]",
+]
+
+[project]
+name = "autumn8"
+authors = [{ name = "Autumn8", email = "team@autumn8.ai" }]
+requires-python = ">=3.8"
+# packages=find_namespace_packages(include=["autumn8", "autumn8.*"]),
+dependencies = [
+  "appdirs",
+  "wheel>=0.31.0",
+  "boto3>=1.20.15",
+  "click>=8.0.1",
+  "questionary>=1.10.0",
+  "tqdm",
+  "fastapi", # used for supporting one app 503 exception while cloudinfo is down - TODO remove
+  "pyyaml",
+  "jsonschema",
+  "requests",
+  "httpx",
+  "boto3-stubs[s3,sts]",
+]
+# package_data={"autumn8.lib": ["logging.yaml"]},
+description = "Utilities to export models to the autumn8.ai service"
+readme = "README.md"
+dynamic = ["version"]
+
+# long_description=readme_content,
+# long_description_content_type="text/markdown; charset=UTF-8; variant=GFM",
+[project.scripts]
+autumn8-cli = "autumn8.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["autumn8", "autumn8*"]
+
+[tool.setuptools.dynamic.version]
+attr = "autumn8.common._version.__version__"
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile = "black"
+known_first_party = ["autumn8"]
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+check_untyped_defs = true
+warn_unreachable = true
+#follow imports skip is required by mypy daemon
+follow_imports = "skip"
+
+#disallow_untyped_calls = true
+[tool.pylint]
+
+[tool.pylint.master]
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use.
+jobs = 0
+# run 'pip install pylint-sqlalchemy'
+load-plugins = "pylint_sqlalchemy"
+extension-pkg-allow-list = ["pydantic"]
+init-hook = "import sys; sys.path.append('.')"
+
+[tool.pylint.messages_control]
+disable = [
+  "missing-function-docstring",
+  "missing-class-docstring",
+  "missing-module-docstring",
+]
+
+[tool.pylint.format]
+max-line-length = 80
