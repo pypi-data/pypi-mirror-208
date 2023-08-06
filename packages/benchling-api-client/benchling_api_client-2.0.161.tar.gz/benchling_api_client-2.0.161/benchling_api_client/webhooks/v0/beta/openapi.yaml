@@ -1,0 +1,173 @@
+paths: {}
+components:
+  schemas:
+    AppSignalBase:
+      properties:
+        deprecated:
+          example: false
+          type: boolean
+        excludedProperties:
+          description: 'These properties have been dropped from the payload due to
+            size.
+
+            '
+          items:
+            type: string
+          type: array
+      required:
+      - deprecated
+      - excludedProperties
+      type: object
+    CanvasInitializeWebhook:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/AppSignalBase'
+      - properties:
+          featureId:
+            nullable: false
+            type: string
+          resourceId:
+            nullable: false
+            type: string
+          type:
+            enum:
+            - v0-beta.canvas.initialized
+            nullable: false
+            type: string
+        required:
+        - type
+        - featureId
+        - resourceId
+        type: object
+      description: Sent when a user initializes a canvas via trigger in the Benchling
+        UI
+    CanvasInteractionWebhook:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/AppSignalBase'
+      - properties:
+          buttonId:
+            nullable: false
+            type: string
+          canvasId:
+            nullable: false
+            type: string
+          type:
+            enum:
+            - v0-beta.canvas.userInteracted
+            nullable: false
+            type: string
+        required:
+        - type
+        - buttonId
+        - canvasId
+        type: object
+      description: Sent when a user interacts with an app canvas via button press
+    LifecycleActivateWebhook:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/AppSignalBase'
+      - properties:
+          clientId:
+            nullable: false
+            type: string
+          clientSecret:
+            nullable: false
+            type: string
+          type:
+            enum:
+            - v0-beta.app.activateRequested
+            nullable: false
+            type: string
+        required:
+        - clientId
+        - clientSecret
+        - type
+        type: object
+      description: Sent when a user initiates app activation on a tenant
+    LifecycleDeactivateWebhook:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/AppSignalBase'
+      - properties:
+          type:
+            enum:
+            - v0-beta.app.deactivated
+            nullable: false
+            type: string
+        required:
+        - type
+        type: object
+      description: Sent when a user initiates app deactivation on a tenant
+    WebhookEnvelope:
+      properties:
+        app:
+          properties:
+            id:
+              description: Destination app's id
+              example: app_1jdbvuo2740aslk
+              nullable: false
+              type: string
+            version:
+              description: Developer defined app version
+              nullable: false
+              type: string
+          required:
+          - id
+          - version
+          type: object
+        baseURL:
+          description: Base tenant URL from which the webhook is coming
+          example: tenant.benchling.com
+          nullable: false
+          type: string
+        channel:
+          enum:
+          - app_signals
+          - events
+          example: events
+          type: string
+        message:
+          $ref: '#/components/schemas/WebhookMessage'
+        tenantId:
+          description: Global tenant id from which webhook is coming
+          example: ten_7fbo183
+          nullable: false
+          type: string
+        version:
+          description: Version of the webhook envelope shape. Always 0 for now.
+          enum:
+          - '0'
+          example: '0'
+          nullable: false
+          type: string
+      required:
+      - version
+      - baseURL
+      - tenantId
+      - app
+      - channel
+      - message
+      type: object
+    WebhookMessage:
+      discriminator:
+        mapping:
+          v0-beta.app.activateRequested: '#/components/schemas/LifecycleActivateWebhook'
+          v0-beta.app.deactivated: '#/components/schemas/LifecycleDeactivateWebhook'
+          v0-beta.canvas.initialized: '#/components/schemas/CanvasInitializeWebhook'
+          v0-beta.canvas.userInteracted: '#/components/schemas/CanvasInteractionWebhook'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/CanvasInteractionWebhook'
+      - $ref: '#/components/schemas/CanvasInitializeWebhook'
+      - $ref: '#/components/schemas/LifecycleActivateWebhook'
+      - $ref: '#/components/schemas/LifecycleDeactivateWebhook'
+info:
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Benchling Apps Webhooks
+  version: 2.0.0
+openapi: 3.0.1
+servers:
+- url: webhooks
