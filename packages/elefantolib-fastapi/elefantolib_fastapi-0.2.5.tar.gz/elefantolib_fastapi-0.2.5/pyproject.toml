@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "elefantolib-fastapi"
+version = "0.2.5"
+description = ""
+authors = ["gglassota <gglassota2@gmail.com>"]
+readme = "README.md"
+packages = [{include = "elefantolib_fastapi"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.1"
+redis = "^4.5.5"
+elefantolib = "^0.11.1"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+pytest-mock = "^3.10.0"
+pytest-flake8 = "^1.1.1"
+flake8-quotes = "^3.3.2"
+flake8-import-order = "^0.18.2"
+flake8-commas = "^2.1.0"
+flake8 = "4.0.1"
+pytest-asyncio = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "elefantolib_fastapi"
+python_files = "tests.py test_*.py"
+python_classes = "*Test"
+addopts = "--cov=elefantolib_fastapi --cov-report term-missing --flake8"
+testpaths = [
+    "tests"
+]
+flake8-max-line-length = 99
