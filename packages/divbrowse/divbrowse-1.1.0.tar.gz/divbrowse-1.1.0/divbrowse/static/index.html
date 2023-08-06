@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>DivBrowse</title>
+
+    <script defer src="./build/divbrowse.js"></script>
+</head>
+
+<body>
+
+    <div id="divbrowse-container"></div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function(event) {
+            const config = {
+				apiBaseUrl: window.location.origin,
+                showAllSamplesOnInit: true,
+                allowPca: true,
+                allowVcfExport: true,
+                samplesSelectedCallback: function(selectedSamples) {
+                    console.log(selectedSamples);
+                }
+            }
+
+            const divbrowse_instance = divbrowse.startApp('divbrowse-container', config);
+
+        });
+    </script>
+
+</body>
+</html>

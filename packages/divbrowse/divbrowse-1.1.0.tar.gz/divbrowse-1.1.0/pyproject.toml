@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "divbrowse"
+version = "1.1.0"
+keywords = ["bioinformatics", "genomics", "visualization", "variant call format", "vcf", "biodiversity"]
+description = "A web application for interactive visualization and analysis of genotypic variant matrices"
+readme = "README.md"
+authors = ["Patrick König <koenig@ipk-gatersleben.de>"]
+license = "MIT"
+include = ["docs/", "divbrowse/static/*", "divbrowse/static/build/*"]
+homepage = "https://divbrowse.ipk-gatersleben.de/"
+repository = "https://github.com/IPK-BIT/divbrowse"
+documentation = "https://divbrowse.readthedocs.io/"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+click = "^8.0.1"
+numpy = "^1.21.1"
+pandas = "^1.3.0"
+flask = "^2.0.1"
+#scikit-learn = "^0.24.2"
+scikit-learn = "^1.2.0"
+scikit-allel = "^1.3.5"
+seaborn = "^0.12.2"
+bioblend = "^0.16.0"
+pyyaml = "^5.4.1"
+zarr = "^2.8.3"
+tables = "^3.6.1"
+simplejson = "^3.17.3"
+orjson = "^3.8.5"
+umap-learn = "^0.5.2"
+waitress = "2.1.2"
+sphinx = {version = "^4.0.2", optional = true}
+sphinx-autoapi = {version = "^1.6.0", optional = true}
+sphinx_rtd_theme = {version = "^0.5.2", optional = true}
+sphinx-click = {version = "^3.0.1", optional = true}
+
+[tool.poetry.dev-dependencies]
+sphinx = {version = "^4.0.2"}
+sphinx-autoapi = {version = "^1.6.0"}
+sphinx_rtd_theme = {version = "^0.5.2"}
+sphinx-click = {version = "^3.0.1"}
+
+[tool.poetry.extras]
+docs = ["sphinx", "sphinx-autoapi", "sphinx_rtd_theme", "sphinx-click"]
+
+[tool.poetry.scripts]
+divbrowse = 'divbrowse.cli:main'
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
