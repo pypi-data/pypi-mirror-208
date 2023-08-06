@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "martin-config"
+
+authors = [
+    { name="Ioan Ferencik", email="ioan.ferencik@undp.org" },
+    { name="Jin Igarashi", email="jin.igarashi@undp.org" }
+]
+description = "Generate configuration files for martin vector tile server"
+readme = "README.md"
+
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "asyncpg", "pyyaml", "python-dotenv"
+]
+dynamic = ["version"]
+[project.scripts]
+    martincfg = "martin_config:martincfg"
+
+[project.optional-dependencies]
+azure = ["azure-storage-file-share"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "martin_config.__version__"}
+
+[tool.setuptools.package-data]
+"martin_config.sql" = ["*.sql"]
+
+
+
