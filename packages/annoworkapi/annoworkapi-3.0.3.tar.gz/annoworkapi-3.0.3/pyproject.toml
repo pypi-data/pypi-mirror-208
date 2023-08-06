@@ -1,0 +1,83 @@
+[tool.poetry]
+name = "annoworkapi"
+version = "3.0.3"  # `poetry-dynamic-versioning`を使ってGitHubのバージョンタグを取得している。変更不要
+description = "Python Clinet Library of Annowork WebAPI"
+authors = ["yuji38kwmt"]
+license = "MIT"
+keywords=["annowork", "api"]
+readme="README.md"
+repository="https://github.com/kurusugawa-computer/annowork-api-python-client"
+classifiers = [
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Topic :: Utilities",
+        "Operating System :: OS Independent",
+]
+
+
+[tool.poetry.dependencies]
+# Python3.8.1まで指定している理由: flake8 v6.0に合わせたため
+python = "^3.8.1"
+requests = "*"
+backoff="*"
+
+[tool.poetry.group.test.dependencies]
+# test library
+pytest = "^7.3"
+pytest-xdist = "*"
+pytest-cov = "*"
+more-itertools = "*"
+
+[tool.poetry.group.formatter.dependencies]
+# format library
+isort = "*"
+autoflake = "*"
+black = "^23"
+
+
+[tool.poetry.group.linter.dependencies]
+# lint library
+flake8 = "^6"
+mypy = "^1"
+pylint = "^2.17"
+
+# type stub package
+types-requests = "*"
+
+[tool.poetry.group.documentation.dependencies]
+sphinx = "^7"
+pydata-sphinx-theme = "^0.13.3"
+
+
+[tool.poetry.group.dev]
+# 開発するときのみ必要なライブラリ。インストールしなくても開発はできるので、オプショナルにする
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+ipython = "*"
+
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
+
+
+[tool.isort]
+profile = "black"
+line_length = 120
+# `__init__.py`の順番が変わるとエラーになる可能性があるので、スキップする
+skip="annoworkapi/__init__.py"
+
+
+[tool.poetry-dynamic-versioning]
+enable = false
+format = "{base}"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
