@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "drill-bits"
+version = "0.0.5"
+authors = [
+  { name="jiujiuche", email="jiujiuche@gmail.com" },
+]
+description = "Drill-bits: Handy tools for ML in Python"
+readme = "README.rst"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "numpy",
+  "Pillow",
+]
+
+[project.urls]
+"Homepage" = "https://pypi.org/project/drill-bits/"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
