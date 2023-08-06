@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: quantuloop-quest
+Version: 0.2.2
+Summary: QuEST interface for the Ket Quantum Programming Language.
+Author: Quantuloop
+License: Quantuloop Quantum Simulator Suite EULA
+Keywords: quantum computer,quantum programming,quantum simulator
+Platform: linux
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: PyJWT (>=2.4.0)
+Requires-Dist: cryptography (>=37.0)
+Requires-Dist: ket-lang (<0.7.0,>=0.6.1)
+
+# QuEST interface for the Ket Quantum Programming Language
+
+
+This package provides the Quantuloop interface for QuEST, a open-source GPU accelerated quantum simulator, as a quantum execution target for the quantum programming language Ket. For more information on Ket, please visit <https://quantumket.org>.
+
+Please note that the use of this simulator is exclusively for Quantuloop's customers and partners. To obtain your access token, please contact your institution or visit <https://quantuloop.com>.
+
+## Compatibility
+
+The following system requirements are necessary to run the Quantuloop QuEST simulator:
+
+* CUDA 11.2 or newer with compatible NVIDIA driver
+* NVIDIA GPU with CUDA architecture >= 3.5
+* Linux X86_64 with glibc >= 2.17
+  * Ubuntu 18.04 or newer.
+  * Red Hat Enterprise Linux 7 or newer.
+* Python 3.7 or newer
+* Ket 0.5.x
+
+## Usage
+
+To use Quantuloop QuEST, import ``quantuloop_quest`` and set it as the quantum target execution:
+
+```py
+from ket import *
+from quantuloop_quest
+quantuloop_quest.set_simulator(
+    token='YOUR,ACCESS.TOKEN',
+)
+```
+
+---
+
+By installing or using this package, you agree to the Quantuloop Quantum Simulator Suite EULA.
+
+All rights reserved (C) 2023 Quantuloop
