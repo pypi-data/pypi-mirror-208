@@ -1,0 +1,83 @@
+![cryspy_logo](https://github.com/Tomoki-YAMASHITA/CrySPY/blob/master/logo/cryspy_fix-03.png)
+
+[![PyPI version](https://badge.fury.io/py/csp-cryspy.svg)](https://badge.fury.io/py/csp-cryspy)
+[![Downloads](https://static.pepy.tech/badge/csp-cryspy)](https://pepy.tech/project/csp-cryspy)
+
+# CrySPY
+CrySPY (pronounced as crispy) is a crystal structure prediction tool written in Python.  
+Document: https://tomoki-yamashita.github.io/CrySPY_doc  
+Questions and comments: https://github.com/Tomoki-YAMASHITA/CrySPY/discussions
+
+## Latest version
+version 1.1.0 (2023 May 16)
+
+## News
+- [2023 May 16] CrySPY 1.1.0 released
+    + MPI parallelization (optional)
+    + New score of LAQA
+    + See also [Version information](https://tomoki-yamashita.github.io/CrySPY_doc/version_info) and [Changelog](./CHANGELOG.md)
+- [2023 March 16] CrySPY 1.0.0 released
+    + CrySPY is available in PyPI, so you can install by pip (project name is csp-cryspy).
+    + See also [Version information](https://tomoki-yamashita.github.io/CrySPY_doc/version_info) and [Changelog](./CHANGELOG.md)
+
+
+## System requirements
+### Python
+- Python >= 3.8
+- [PyXtal >= 0.5.3](https://pyxtal.readthedocs.io/en/latest "PyXtal")
+
+(optional)
+- [COMBO](https://github.com/Tomoki-YAMASHITA/combo3 "COMBO") (required if algo is BO)
+- mpi4py
+
+
+See [CrySPY document](https://tomoki-yamashita.github.io/CrySPY_doc/installation/requirements/ "CrySPY document") in detail.
+
+### Structure optimizer
+At least one optimizer is required.
+
+- [VASP](https://www.vasp.at "VASP") (tested with version 5.4.4)
+- [QUANTUM ESPRESSO](http://www.quantum-espresso.org "Quantum ESPRESSO") (tested with version 6.x, version 5.x does not work)
+- [OpenMX](http://www.openmx-square.org "OpenMX")
+- [soiap](https://github.com/nbsato/soiap "soiap") (tested with version 0.2.2)
+- [LAMMPS](http://lammps.sandia.gov "LAMMPS")
+
+### Others
+(optional)
+- cal-fingerprint: (required if algo is BO)
+- [find_wy](https://github.com/nim-hrkn/find_wy "find_wy"): find_wy can randomly select a combination of Wyckoff positions for a given chemical composition and space group. 
+
+## Document (English/Japanese)
+[CrySPY document](https://tomoki-yamashita.github.io/CrySPY_doc "CrySPY documment")
+
+## CrySPY Utility
+[CrySPY Utility](https://github.com/Tomoki-YAMASHITA/CrySPY_utility "CrySPY Utility")
+
+## Reference
+### CrySPY (software)
+* T. Yamashita, S. Kanehira, N. Sato, H. Kino, H. Sawahata, T. Sato, F. Utsuno, K. Tsuda, T. Miyake, and T. Oguchi, Sci. Technol. Adv. Mater. Meth. **1**, 87 (2021).
+    - https://www.tandfonline.com/doi/full/10.1080/27660400.2021.1943171
+
+
+### Bayesian optimization
+* T. Yamashita, N. Sato, H. Kino, T. Miyake, K. Tsuda, and T. Oguchi, Phys. Rev. Mater. **2**, 013803 (2018).
+    - https://journals.aps.org/prmaterials/abstract/10.1103/PhysRevMaterials.2.013803
+
+* N. Sato, T. Yamashita, T. Oguchi, K. Hukushima, and T. Miyake, Phys. Rev. Mater. **4**, 033801 (2020).
+    - https://journals.aps.org/prmaterials/abstract/10.1103/PhysRevMaterials.4.033801
+
+### Baysian optimization and evolutionary algorithm
+* T. Yamashita, H. Kino, K. Tsuda, T. Miyake, and T. Oguchi, Sci. Technol. Adv. Mater. Meth. **2**, 67 (2022).
+    - https://www.tandfonline.com/doi/full/10.1080/27660400.2022.2055987
+
+### LAQA
+* K.Terayama, T. Yamashita, T. Oguchi, and K. Tsuda, npj Comput. Mater. **4**, 32 (2018).
+    - https://www.nature.com/articles/s41524-018-0090-y
+
+* T. Yamashita and H. Sekine, Sci. Technol. Adv. Mater. Meth. **2**, 84 (2022).
+    - https://www.tandfonline.com/doi/full/10.1080/27660400.2022.2059335
+
+
+## License
+CrySPY is distributed under the MIT License.  
+Copyright (c) 2018 CrySPY Development Team
