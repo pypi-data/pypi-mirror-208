@@ -1,0 +1,1 @@
+package ifneeded mupdf::widget 2.2 [list source $dir/MuPDFWidget.tcl]

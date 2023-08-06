@@ -1,0 +1,21 @@
+mupdf::widget
+=============
+
+2.1 - Nov-2021
+* mupdf::widget is now a fully complaint 'scrollable widget' (added options -x/yscrollcommand and -x/yscrollincrement).
+* Internal improvement: the image is (eventually) repainted only once per event-loop.
+* subcommand nextpage/prevpage now returns true/false  (false means that there's not a next/prev page)
+* DOCS updated.
+
+2.2 - Nov-2021
+*Added methods "annot_flatten" and "annot_get"
+*BUGFIX: <<"clone" method raises an error if $win ha no attached pdf>>. Now FIXED		
+*Even with the previous releases you were able to create multiple instances of mupdf::widget
+ working on the same PDF (e.g. two views on the same PDF).
+ This worked but with one severe limitation: changes made through one view (e.g. add/change/delete annotations)
+  weren't propagated to other views. 
+ NOW widget instances can do changes (add/change/remove annotations..)
+  and then the changes are propagated
+  to all the widget instances working on the same doc.
+
+
