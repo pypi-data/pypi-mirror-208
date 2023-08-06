@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: bcvContext
+Version: 0.1.2
+Summary: A small package to handle context path for the BCV generic workflow
+Author-email: CEA <thomas.marques@cea.fr>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# BCV library context
+
+This library must be executed with a accessible `.config.json` :
+
+```json
+{ 
+  "day": 2,
+  "scriptsVersion": "V3"
+}
+```
+
+### How to use
+
+```python
+import bcvContext as bcv
+
+bcv.scriptContext(fileName)
+
+bcv.dayContext(m,filename)
+
+bcv.getRawfile()
+```
