@@ -1,0 +1,16 @@
+{% extends './base_template.html' %}
+{% load fragments %}
+{% block content %}
+<hgroup>
+  <h2>Contact Form</h2>
+  <h3>Checks inline validation via htmx</h3>
+</hgroup>
+<form method="post">
+  {% csrf_token %}
+  {% include './down-list.html' with field=form.category idx='dwnr' %}
+  {% url 'test_fragments:contact' as vurl %}
+  {% hput form.email kls='test' label_kls='xx' validate=vurl %}
+  {{ form.message }}
+  <button type="submit">Submit</button>
+</form>
+{% endblock content %}
