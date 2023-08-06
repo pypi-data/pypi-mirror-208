@@ -1,0 +1,54 @@
+<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
+           xmlns:ajax="http://namespaces.conestack.org/ajax"
+           omit-tag="True">
+
+  <!-- The file upload form used as target for the file upload widget -->
+  <form id="fileupload"
+        data-url="${context.upload_url}"
+        data-accept_file_types="${context.accept_file_types}"
+        method="POST"
+        enctype="multipart/form-data">
+
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and
+         start/cancel the upload -->
+    <div class="fileupload-buttonbar"
+         tal:define="show_contextmenu context.show_contextmenu">
+
+      <tal:contextmenu condition="show_contextmenu">
+        <tal:menu replace="structure tile('contextmenu')" />
+        <input type="file" name="files[]" multiple="multiple" style="display:none;"/>
+      </tal:contextmenu>
+
+      <tal:toolbar
+        condition="not show_contextmenu"
+        replace="structure tile('fileupload_toolbar')" />
+
+    </div>
+
+    <!-- The global progress state -->
+    <div class="fileupload-progress fade">
+
+      <!-- The global progress bar -->
+      <div class="progress progress-striped active col-md-6"
+           role="progressbar"
+           aria-valuemin="0"
+           aria-valuemax="100">
+        <div class="progress-bar progress-bar-success"
+             style="width:0%;"></div>
+      </div>
+
+      <!-- The extended global progress state -->
+      <div class="progress-extended col-md-6">&nbsp;</div>
+    </div>
+
+    <!-- The table listing the files available for upload/download -->
+    <table role="presentation" class="table table-striped">
+      <tbody class="files"></tbody>
+    </table>
+  </form>
+
+  <tal:i18n_messages replace="structure context.i18n_messages" />
+  <tal:upload_template replace="structure context.upload_template" />
+  <tal:download_template replace="structure context.download_template" />
+
+</tal:block>
