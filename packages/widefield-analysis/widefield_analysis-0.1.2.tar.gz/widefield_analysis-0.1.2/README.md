@@ -1,0 +1,1 @@
+A package for basic analysis of widefield imaging data.
