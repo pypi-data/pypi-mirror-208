@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magicsoup"
+dynamic = ["version", "dependencies"]
+authors = [{ name="Marc", email="schweringmarc01@gmail.com" }]
+description = "Simulation for cell metabolic and transduction pathway evolution"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Environment :: Console",
+    "Environment :: GPU",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Education",
+    "Topic :: Games/Entertainment",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
+]
+
+[project.urls]
+"Documentation" = "https://magic-soup.readthedocs.io/"
+"Homepage" = "https://github.com/mRcSchwering/magic-soup"
+"Bug Tracker" = "https://github.com/mRcSchwering/magic-soup/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "magicsoup.__version__"}
+dependencies = {file = ["requirements.txt"]}
