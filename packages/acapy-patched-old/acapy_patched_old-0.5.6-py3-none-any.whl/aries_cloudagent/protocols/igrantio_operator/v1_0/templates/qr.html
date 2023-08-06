@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Data Wallet QR code - iGrant.io</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+
+
+<body>
+
+    <div style="text-align: center;">
+        {% if error %}
+
+
+        <p>Failed to resolve QR code</p>
+
+
+        {% else %}
+
+        {% if qr_image_str %}
+
+        <img src="data:image/png;base64, {{qr_image_str}}" alt="QR code" />
+
+        <p><a href="{{short_link}}">Open in Data Wallet</a></p>
+
+
+        {% endif %}
+
+
+        {% endif %}
+    </div>
+
+
+
+
+</body>
+
+</html>
