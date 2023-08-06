@@ -1,0 +1,44 @@
+Metadata-Version: 2.1
+Name: stream-read-xbrl
+Version: 0.0.31
+Summary: Python package to parse Companies House accounts data in a streaming way
+Project-URL: Documentation, https://stream-read-xbrl.docs.trade.gov.uk/
+Project-URL: Source, https://github.com/uktrade/stream-read-xbrl
+Author-email: Department for International Trade <sre@digital.trade.gov.uk>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Requires-Dist: beautifulsoup4>=4.9.3
+Requires-Dist: httpx>=0.23.3
+Requires-Dist: lxml>=4.9.2
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: stream-unzip>=0.0.83
+Provides-Extra: dev
+Requires-Dist: boto3>=1.26.84; extra == 'dev'
+Requires-Dist: moto[s3]>=4.1.4; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest-httpx>=0.21.3; extra == 'dev'
+Requires-Dist: pytest>=7.2.1; extra == 'dev'
+Requires-Dist: stream-zip>=0.0.57; extra == 'dev'
+Description-Content-Type: text/markdown
+
+<!-- --8<-- [start:intro] -->
+# stream-read-xbrl
+
+[![PyPI version](https://badge.fury.io/py/stream-read-xbrl.svg)](https://pypi.org/project/stream-read-xbrl/) [![Tests](https://github.com/uktrade/stream-read-xbrl/actions/workflows/tests.yml/badge.svg)](https://github.com/uktrade/stream-read-xbrl/actions/workflows/tests.yml) [![Test Coverage](https://api.codeclimate.com/v1/badges/02144f986cd3eecf4a0b/test_coverage)](https://codeclimate.com/github/uktrade/stream-read-xbrl/badges)
+
+
+Python package to parse [Companies House accounts data](http://download.companieshouse.gov.uk/en_accountsdata.html) in a streaming way. It converts the zipped XBRL format that Companies House supplies into a single data frame of 38 columns.
+
+On a standard laptop with 8 CPU cores it takes approximately 10 seconds to convert a single day of Companies House accounts data. This does not include the time to transfer the data from Companies House.
+<!-- --8<-- [end:intro] -->
+
+
+<!-- --8<-- [start:features] -->
+<!-- --8<-- [end:features] -->
+
+---
+
+Visit the [stream-read-xbrl documentation](https://stream-read-xbrl.docs.trade.gov.uk/) for usage instructions.
