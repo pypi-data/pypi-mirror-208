@@ -1,0 +1,27 @@
+[project]
+name = "pc-initializer"
+version = "0.0.1"
+authors = [
+  { name="setre14", email="simon.schuster@outlook.com" },
+]
+description = "A small example package"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+
+[project.urls]
+"Homepage" = "https://github.com/Setre14/inititializer"
+"Bug Tracker" = "https://github.com/Setre14/inititializer/issues"
+
+
+[project.scripts]
+pci = "initializer:main"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
