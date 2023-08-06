@@ -1,0 +1,69 @@
+[tool.poetry]
+name = "tom-nonlocalizedevents"
+# this version is a placeholder: version supplied by poetry-dynamic-versioning
+version = "0.7.6"
+description = "Reusable TOMToolkit app to support gravitational wave superevent and other nonlocalized event EM follow-up observations."
+authors = ["TOM Toolkit Project <tomtoolkit@lco.global>", "David Collom <dcollom@lco.global>", "Lindy Lindstrom <llindstrom@lco.global>", "Jonathan Nation <jnation@lco.global>"]
+license = "GPL-3.0-only"
+readme = "README.md"
+repository = "https://github.com/TOMToolkit/tom_nonlocalizedevents"
+keywords = ["tomtoolkit", "astronomy", "astrophysics", "cosmology", "science"]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.1",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics"
+]
+
+packages = [
+    { include = "tom_nonlocalizedevents" }
+]
+
+[tool.setuptools_scm]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+astropy = ">=5.2"
+gracedb-sdk = "^0.1"
+hop-client = ">=0.8"
+python-dateutil = "^2.8"
+django-webpack-loader = "1.6.0"
+tomtoolkit = "^2.10"
+voevent-parse = "^1.0"
+django-filter = ">=21.0 <22.0"
+healpix-alchemy = ">=1.0.2"
+astropy-healpix = ">=0.7"
+MOCPy = ">=0.12.2"
+SQLAlchemy = ">=1.4.42"
+psycopg2-binary = "^2.9.4"
+"ligo.skymap" = "^1.0.3"
+
+[tool.poetry.dev-dependencies]
+coverage = "^6.3.2"
+factory_boy = "^3.1.0"
+pytest = "^3.0.3"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "pep440"
+# the default pattern regex makes the 'v' manditory
+# this pattern modifies the default regex in order to make the 'v' optional
+# ('v' becomes '[v]?' meaning a single v, [v], and ? means optional)
+pattern = "(?x)^[v]?((?P<epoch>\\d+)!)?(?P<base>\\d+(\\.\\d+)*)([-._]?((?P<stage>[a-zA-Z]+)[-._]?(?P<revision>\\d+)?))?(\\+(?P<tagged_metadata>.+))?$"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools>=45", "setuptools_scm[toml]>=6.2", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+# poetry_dynamic_versioning.backend is a thin wrapper around the standard build-backend = "poetry.core.masonry.api"
