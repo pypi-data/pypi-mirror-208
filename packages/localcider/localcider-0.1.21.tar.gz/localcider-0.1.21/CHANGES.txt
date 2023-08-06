@@ -1,0 +1,47 @@
+0.1.1
+= NEW
+- Improved parsing of whitespace for input sequence
+- Added and ran additional tests
+
+= Bug fixes
+- minor/various
+
+0.1.8
+* The kappa-P (proline/charge patterning) parameter has been added. This is used in the upcoming paper by Martin and Holehouse (reference to come). 
+
+* Three different sequence complexity measures have been added: Wooton-Federhen complexity [8], Linguistic complexity [9], Lempel-Ziv-Welch (LZW) complexity [10]. These algorithms have a number of parameters which can be defined, as well as the ability to use a set of pre-defined reduced alphabetes [11]
+
+* Overall PPII propensity can be calculated based on the amino acid PPII propensity as defined by Elam *et al.* [6].
+
+* All figures can now be saved as PDFs (useful for post-process with graphics tools, e.g. Adobe Illustrator)
+
+* The bar positions for blob-based figures have been updated such that bin centers are used on all figures. This makes comparing figures using different blob-widths much easier.
+
+* Numpy vectors of the linear NCPR, FCR, hydropathy and sequence complexity can now be directly returned for further analysis 
+
+* Sequences can be directly converted to a reduced alphabet sequence. The mapping of true amino-acid alphabet to reduced alphabet can take advantage of 11 predefined mappings, or this mapping can be defined using a custom dictionary.
+
+* localCIDER can now run under Python 3
+
+
+0.1.9
+* Local compositional analysis has been added to help identify local regions which are enriched in a particular type of amino acid. Proteins are complex heteropolymers, so plotting the local density of each amino acid with a sliding window is very difficult to visualize and interpret. To overcome this challenge, we take a two-pronged approach: firstly, amino acids are group by physiochemical properties. Secondly, we then fit the local density noisy data to a univariate spline fit to give a smoothed description of the local density along the sequence. Combined, this allows us to generate easy-to-read plots that illustrate the local density of residues at any given location along the sequence
+
+* The Omega patterning parameter (previously kappa_proline) is re-defined as per the manuscript by Martin & Holehouse *et al.*
+
+* A generalized patterning parameter for considering 2 or 3 letter alphabets is provided (kappa_X), allowing users to ask general questions about sequence patterning.
+
+* The figure generation code has been further optimized, as has code documentation
+
+If there are sequence features you would like to see added to localCIDER please don't hesitate to get in touch - we're always looking for new features to add and to further grow localCIDER as a general purpose protein analysis framework.
+
+0.1.19
+* Added the Wimley-White hydrophobicity scale (thanks to Matthew Murray from Ross Sozzani's lab at NC State)!
+
+0.1.20
+* Fixed nardini import bug after nardini re-write
+
+0.1.21
+* Removed nardini as a hard dependency just until the scipy < 1.6.3 requirement is resolved, otherwise localcider becomes tethered to out-of-date scipy versions which is not good for portability.
+
+ 
