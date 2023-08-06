@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: Daystar
+Version: 0.0.5
+Summary: Sun calculation class from Solarflare module
+Author: Siddhu Pendyala
+Author-email: siddhu.pendyala@outlook.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: Solarflare
+
+# Daystar
+Daystar is a python library that provides a convenient class for Solar calculations based off of my other library _Solarflare_. Check out Solarflare at https://pypi.org/project/Solarflare/
+
+In order to use this library, just create an instance of the daystar class:
+
+```python
+sun = Daystar(latitude, longitude)
+```
+
+The functions provided are (they all default to datetime.datetime.now()):
+  - risetime(date): returns the sunrise
+  - settime(date): returns the sunset
+  - solarnoon(date): returns the solar noon time
+  - hrangle(date): returns the hour angle for the time and date
+  - coordinates(date): returns a tuple with declination and right ascension
+  - mean(date): returns the mean anomaly
+  - true(date): returns the true anomaly
+  - ceq(date): returns the equation of center
+  - solar_julian(date): returns "rise" and "set" dictionary with sunrise and sunset julian dates
+  - alt(date): returns solar altitude
+  - azi(date): returns the solar azimuth
+  - nadir(date): returns the time of nadir
