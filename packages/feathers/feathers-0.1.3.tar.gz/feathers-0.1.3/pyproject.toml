@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "feathers"
+version = "0.1.3"
+description = "Beautiful TUI components written on top of Textual"
+authors = ["Shashank Tomar <shashank004@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "feathers"}]
+repository = "https://github.com/shashanktomar/feathers"
+keywords = ["textual", "terminal", "TUI"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+rich = "^13.3.5"
+textual = "^0.24.1"
+
+
+[tool.poetry.group.dev.dependencies]
+textual = {extras = ["dev"], version = "^0.24.1"}
+ruff = "^0.0.264"
+black = "^23.3.0"
+mypy = "^1.2.0"
+pytest = "^7.3.1"
+pytest-cov = "^4.0.0"
+pytest-asyncio = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Never enforce `E501` (line length violations).
+ignore = ["E741"]
+select = ["E", "F", "I", "W", "UP"]
+line-length = 120
+
+[tool.black]
+line-length = 120
+
+[pytest]
+log_cli = true
