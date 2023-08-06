@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:schema="http://schema.org/" xmlns:codemeta="https://codemeta.github.io/terms/" xmlns:stype="https://w3id.org/software-types/" prefix="og: https://ogp.me/ns# schema: http:/schema.org codemeta: https://codemeta.github.io/terms/">
+    <head>
+        {% if buildsite and not baseurl %}
+        {% set baseurl = "../" %}
+        {% endif %}
+        {% include "head.html" %}
+    </head>
+    {% include "cardindex_body.html" %}
+        {% set filterable = True %}
+        {% include "header.html" %}
+        <div class="cardcontainer">
+         <div class="margincolumn" x-show="sidebar">
+            <div class="tab-wrapper" x-data="{ activetab: 0 }">
+                <div class="tab-controls">
+                    <label {% if buildsite %}x-on:click="activetab = 0; clear_filters();" x-bind:class="{ 'activetab': activetab === 0 }"{% endif %}>Table of Contents</label>
+                    {% if buildsite %}<label x-on:click="activetab = 1" x-bind:class="{ 'activetab': activetab === 1 }">Filters</label>{% endif %}
+                </div>
+                <div class="tab-panel" class="toc" {% if buildsite %}x-show="activetab === 0"{% endif %}>
+                {% include "servicetoc.html" %}
+                </div>
+                {% if buildsite %}
+                <div class="tab-panel" id="filters" x-bind:class="{ 'activetab': activetab === 1 }" x-show="activetab === 1" >
+                {% include "filters.html" %}
+                </div>
+                {% endif %}
+            </div>
+         </div>
+
+        <div class="maincolumn">
+            {% include "intro.html" %}
+            {% for group, explicit, resources in index %}
+            {% for res, label in resources %}
+             {% for _, targetres in get_triples(g, res, SDO.targetProduct, abcsort=True) %}
+               {% if ((targetres, RDF.type, SDO.WebApplication) in g or
+                 (targetres, RDF.type, SDO.WebSite) in g or
+                 (targetres, RDF.type, SDO.NotebookApplication) in g or
+                 (targetres, RDF.type, SDO.WebPage) in g) and (targetres, SDO.url,None) in g %}
+                 {% include 'card_service.html' %}
+               {% endif %}
+             {% endfor %}
+            {% endfor %}
+            {% endfor %}
+         </div>
+        </div>
+        {% include 'indexfooter.html' %}
+    </body>
+</html>
