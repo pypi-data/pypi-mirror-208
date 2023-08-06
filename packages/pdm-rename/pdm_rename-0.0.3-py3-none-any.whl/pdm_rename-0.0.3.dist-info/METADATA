@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: pdm-rename
+Version: 0.0.3
+Summary: Plugin, that allows to dynamically rename folders during the build stage.
+License: MIT
+Author-email: aleksul <me@aleksul.space>
+Requires-Python: >=3.7
+Requires-Dist: pdm<3.0,>=2.3.0
+Description-Content-Type: text/markdown
+
+# pdm-rename
+
+This plugin allows to dynamically rename folders during the build stage.
+
+## Installation
+
+```bash
+pdm self add pdm-rename
+```
+
+## Use it
+
+Specify `rename` dictionary in `[tool.pdm]` section.
+
+```toml
+[tool.pdm]
+rename  = { "a/b" = "c/d" }
+```
+
+If you want the folder to be included in your build, don't forget to specify `build.includes`.
+
+```toml
+[tool.pdm.build]
+includes = ["c"]
+```
+
