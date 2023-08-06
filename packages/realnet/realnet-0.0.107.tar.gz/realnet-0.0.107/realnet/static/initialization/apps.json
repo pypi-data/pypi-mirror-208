@@ -1,0 +1,882 @@
+{
+    "types": [
+        {
+            "name": "App",
+            "base": "Item",
+            "attributes": {
+                "app": "true",
+                "icon": "square"
+            }
+        },
+        {
+            "name": "Items",
+            "base": "App",
+            "attributes": {
+                "icon": "square",
+                "types": ["Item"],
+                "query": {"types": ["Item"]},
+                "views": [
+                    {
+                        "name": "Items",
+                        "type": "ListView"
+                    }
+                ],
+                "menu": [
+                    {
+                        "name": "Add Item",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "TopItemCreateForm"
+                        }
+                    },
+                    {
+                        "name": "Add View",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add_box",
+                            "form": "ViewCreateForm",
+                            "path": "items"
+                        }
+                    },
+                    {
+                        "name": "Query",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "search",
+                            "form": "QueryForm",
+                            "path": "items"
+                        }
+                    },
+                    {
+                        "name": "Import",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "file_upload",
+                            "form": "UploadForm",
+                            "import": "true"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Apps",
+            "base": "App",
+            "attributes": {
+                "icon": "apps",
+                "types": ["App"],
+                "query": {"types": ["App"]},
+                "views": [
+                    {
+                        "name": "Apps",
+                        "type": "ListView"
+                    }
+                ],
+                "menu": [
+                    {
+                        "name": "Create App",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "AppCreateForm"
+                        }
+                    },
+                    {
+                        "name": "Import",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "file_upload",
+                            "form": "UploadForm",
+                            "import": "true"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Endpoints",
+            "base": "App",
+            "attributes": {
+                "icon": "functions",
+                "types": ["Endpoint"],
+                "query": {"types": ["Endpoint"], "any_level": "true"},
+                "views": [
+                    {
+                        "name": "All",
+                        "type": "ListView"
+                    }
+                ],
+                "menu": [
+                    {
+                        "name": "Create Endpoint",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "EndpointCreateForm"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Forms",
+            "base": "App",
+            "attributes": {
+                "icon": "ballot",
+                "types": ["Form"],
+                "query": {"types": ["Form"], "any_level": "true"},
+                "views": [
+                    {
+                        "name": "All",
+                        "type": "ListView"
+                    }
+                ],
+                "menu": [
+                    {
+                        "name": "Create Form",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "FormCreateForm"
+                        }
+                    },
+                    {
+                        "name": "Import",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "file_upload",
+                            "form": "UploadForm",
+                            "import": "true"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Files",
+            "base": "App",
+            "attributes": {
+                "icon": "collections",
+                "types": ["File"],
+                "query": {"types": ["File"], "any_level": "true"},
+                "views": [
+                    {
+                        "name": "Files",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ARVR",
+            "base": "App",
+            "attributes": {
+                "icon": "view_in_ar",
+                "types": ["Item"],
+                "query": {"types": ["Item"], "any_level": "true"},
+                "views": [
+                    {
+                        "name": "AR/VR",
+                        "type": "ARView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ChatGPT",
+            "base": "App",
+            "attributes": {
+                "icon": "smart_toy",
+                "types": ["Item"],
+                "query": {"types": ["Item"], "any_level": "true"},
+                "views": [
+                    {
+                        "name": "Items",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Resources",
+            "base": "App",
+            "attributes": {
+                "icon": "border_all",
+                "types": ["Resource"],
+                "query": {"types": ["Resource"], "any_level": "true"},
+                "views": [
+                    {
+                        "name": "Resources",
+                        "type": "ListView"
+                    }
+                ],
+                "menu": [
+                    {
+                        "name": "Create Resource",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "ResourceCreateForm"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Types",
+            "base": "App",
+            "attributes": {
+                "icon": "extension",
+                "types": ["Type"],
+                "query": {"types": ["Type"]},
+                "menu": [
+                    {
+                        "name": "Create Type",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "TypeCreateForm"
+                        }
+                    },
+                    {
+                        "name": "Import",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "file_upload",
+                            "form": "UploadForm",
+                            "import": "true"
+                        }
+                    }
+                ],
+                "views": [
+                    {
+                        "name": "Types",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Accounts",
+            "base": "App",
+            "attributes": {
+                "icon": "person",
+                "types": ["Account"],
+                "query": {"types": ["Account"]},
+                "menu": [
+                    {
+                        "name": "Add Account",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "AccountCreateForm"
+                        }
+                    }
+                ],
+                "views": [
+                    {
+                        "name": "Accounts",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Roles",
+            "base": "App",
+            "attributes": {
+                "icon": "switch_account",
+                "types": ["Role"],
+                "query": {"types": ["Role"]},
+                "menu": [
+                    {
+                        "name": "Add Role",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "RoleCreateForm"
+                        }
+                    }
+                ],
+                "views": [
+                    {
+                        "name": "Roles",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Groups",
+            "base": "App",
+            "attributes": {
+                "icon": "group",
+                "types": ["Group"],
+                "query": {"types": ["Group"]},
+                "menu": [
+                    {
+                        "name": "Add Group",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "GroupCreateForm"
+                        }
+                    }
+                ],
+                "views": [
+                    {
+                        "name": "Groups",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Auths",
+            "base": "App",
+            "attributes": {
+                "icon": "lock_open",
+                "types": ["Auth"],
+                "query": {"types": ["Auth"]},
+                "menu": [
+                    {
+                        "name": "Add Auth",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "AuthCreateForm"
+                        }
+                    }
+                ],
+                "views": [
+                    {
+                        "name": "Auths",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Public",
+            "base": "App",
+            "attributes": {
+                "icon": "public",
+                "types": ["Item"],
+                "query": {"types": ["Item"]},
+                "views": [
+                    {
+                        "name": "Public",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Clients",
+            "base": "App",
+            "attributes": {
+                "icon": "safety_check",
+                "types": ["Client"],
+                "query": {"types": ["Client"]},
+                "menu": [
+                    {
+                        "name": "Add Client",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "ClientCreateForm"
+                        }
+                    }
+                ],
+                "views": [
+                    {
+                        "name": "Clients",
+                        "type": "ListView"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Login",
+            "base": "App",
+            "attributes": {
+                "icon": "key",
+                "api": "",
+                "client_id": "IEmf5XYQJXIHvWcQtZ5FXbLM",
+                "authenticator_name": "password",
+                "authenticator_type": "password",
+                "tenant": "public",
+                "views": [
+                    {
+                        "name": "Login",
+                        "type": "FormView",
+                        "attributes": {
+                            "form": "LoginForm"
+                        }
+                    }
+                ],
+                "menu": []
+            }
+        },
+        {
+            "name": "Register",
+            "base": "App",
+            "attributes": {
+                "icon": "key",
+                "tenant": "public",
+                "views": [
+                    {
+                        "name": "Register",
+                        "type": "FormView",
+                        "attributes": {
+                            "form": "RegisterForm"
+                        }
+                    }
+                ],
+                "menu": []
+            }
+        }
+    ],
+    "items": [
+        {
+            "name": "Items",
+            "type": "Items"
+        },
+        {
+            "name": "ChatGPT",
+            "type": "ChatGPT"
+        },
+        {
+            "name": "ARVR",
+            "type": "ARVR"
+        },
+        {
+            "name": "Apps",
+            "type": "Apps"
+        },
+        {
+            "name": "Endpoints",
+            "type": "Endpoints"
+        },
+        {
+            "name": "Forms",
+            "type": "Forms"
+        },
+        {
+            "name": "Files",
+            "type": "Files"
+        },
+        {
+            "name": "Resources",
+            "type": "Resources"
+        },
+        {
+            "name": "Types",
+            "type": "Types"
+        },
+        {
+            "name": "Accounts",
+            "type": "Accounts"
+        },
+        {
+            "name": "Roles",
+            "type": "Roles"
+        },
+        {
+            "name": "Groups",
+            "type": "Groups"
+        },
+        {
+            "name": "Auths",
+            "type": "Auths"
+        },
+        {
+            "name": "Login",
+            "type": "Login",
+            "public": "True"
+        },
+        {
+            "name": "Public",
+            "type": "Public",
+            "public": "True"
+        },
+        {
+            "name": "Clients",
+            "type": "Clients"
+        },
+        {
+            "name": "Views",
+            "type": "Views"
+        },
+        {
+            "name": "Ctrls",
+            "type": "Ctrls"
+        },
+        {
+            "name": "Attributes",
+            "type": "Attributes"
+        },
+        {
+            "name": "items",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.items.items",
+                "module_class": "Items",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "items",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "items",
+                "resource": "items"
+            },
+            "public": "true"
+        },
+        {
+            "name": "apps",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.apps.apps",
+                "module_class": "Apps",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "apps",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "apps",
+                "resource": "apps"
+            },
+            "public": "true" 
+        },
+        {
+            "name": "endpoints",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.endpoints.endpoints",
+                "module_class": "Endpoints",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "endpoints",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "endpoints",
+                "resource": "endpoints"
+            },
+            "public": "true"
+        },
+        {
+            "name": "forms",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.forms.forms",
+                "module_class": "Forms",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "forms",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "forms",
+                "resource": "forms"
+            },
+            "public": "true"
+        },
+        {
+            "name": "files",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.files.files",
+                "module_class": "Files",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "files",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "files",
+                "resource": "files"
+            },
+            "public": "true"
+        },
+        {
+            "name": "arvr",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.gltf.gltf",
+                "module_class": "Gltf",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "arvr",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "arvr",
+                "resource": "arvr"
+            },
+            "public": "true"
+        },
+        {
+            "name": "chatgpt",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.chatgpt.chatgpt",
+                "module_class": "Chatgpt",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "chatgpt",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "chatgpt",
+                "resource": "chatgpt"
+            },
+            "public": "true"
+        },
+        {
+            "name": "resources",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.resources.resources",
+                "module_class": "Resources",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "resources",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "resources",
+                "resource": "resources"
+            },
+            "public": "true"
+        },
+        {
+            "name": "types",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.types.types",
+                "module_class": "Types",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "types",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "types",
+                "resource": "types"
+            },
+            "public": "true"
+        },
+        {
+            "name": "accounts",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.accounts.accounts",
+                "module_class": "Accounts",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "accounts",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "accounts",
+                "resource": "accounts"
+            },
+            "public": "true"
+        },
+        {
+            "name": "roles",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.roles.roles",
+                "module_class": "Roles",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "roles",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "roles",
+                "resource": "roles"
+            },
+            "public": "true"
+        },
+        {
+            "name": "groups",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.groups.groups",
+                "module_class": "Groups",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "groups",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "groups",
+                "resource": "groups"
+            },
+            "public": "true"
+        },
+        {
+            "name": "auths",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.auths.auths",
+                "module_class": "Auths",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "auths",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "auths",
+                "resource": "auths"
+            },
+            "public": "true"
+        },
+        {
+            "name": "public",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.public.public",
+                "module_class": "Public",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "public",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "public",
+                "resource": "public"
+            },
+            "public": "true"
+        },
+        {
+            "name": "clients",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.clients.clients",
+                "module_class": "Clients",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "clients",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "clients",
+                "resource": "clients"
+            },
+            "public": "true"
+        },
+        {
+            "name": "views",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.views.views",
+                "module_class": "Views",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "views",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "views",
+                "resource": "views"
+            },
+            "public": "true"
+        },
+        {
+            "name": "ctrls",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.ctrls.ctrls",
+                "module_class": "Ctrls",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "ctrls",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "ctrls",
+                "resource": "ctrls"
+            },
+            "public": "true"
+        },
+        {
+            "name": "attributes",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.attributes.attributes",
+                "module_class": "Attributes",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "attributes",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "attributes",
+                "resource": "attributes"
+            },
+            "public": "true"
+        },
+        {
+            "name": "login",
+            "type": "Resource",
+            "attributes": {
+                "module_path": "realnet.resource.login.login",
+                "module_class": "Login",
+                "module": "true"
+            },
+            "public": "true"
+        },
+        {
+            "name": "login",
+            "type": "Endpoint",
+            "attributes": {
+                "path": "login",
+                "resource": "login"
+            },
+            "public": "true"
+        }
+    ]
+}
