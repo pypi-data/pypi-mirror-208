@@ -1,0 +1,49 @@
+[project]
+name = "i18ntools"
+version = "0.1.0"
+description = "i18ntools helps translate Java properties i18n files using Azure Cognitive Services Translator"
+readme = "README.md"
+authors = [
+    { name = "Tyler VanZanten", email = "tvanzanten@hypercision.com" }
+]
+dependencies = [
+    "requests"
+]
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black"
+]
+test = [
+    "pytest",
+    "tox"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+"Homepage" = "https://github.com/hypercision/i18ntools"
+"Bug Reports" = "https://github.com/hypercision/i18ntools/issues"
+"Source" = "https://github.com/hypercision/i18ntools"
+
+[project.scripts]
+translate = "i18ntools.translate:main"
+translate-missing = "i18ntools.translate_missing:main"
+parse-i18n-file = "i18ntools.parse_i18n_file:main"
+sort-i18n-file = "i18ntools.sort_i18n_file:main"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "-p no:legacypath",
+]
