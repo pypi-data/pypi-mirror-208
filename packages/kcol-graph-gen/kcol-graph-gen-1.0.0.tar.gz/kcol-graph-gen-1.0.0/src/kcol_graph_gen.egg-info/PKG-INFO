@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: kcol-graph-gen
+Version: 1.0.0
+Summary: Generate a k-colarable graph.
+Author-email: Deep Raval <deepraval2905@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2023 Deep Raval
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: repository, https://github.com/imdeep2905/kcol-graph
+Project-URL: documentation, https://github.com/imdeep2905/kcol-graph/blob/main/README.md
+Keywords: k-colrable,graph-coloring,chromatic number
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Provides-Extra: build
+Provides-Extra: dev
+License-File: LICENSE
+
+# kcol_graph_gen
+
+![alt text](./assets/cover.png "Cover Logo")
+_A minimalistic python package to generate a k-colorable graph._
+
+# Installation
+
+Just run `pip install kcol-graph-gen` and you are good to go!
+
+# Usage
+
+Before generating the graph you have to make an object of the class `KColorableGraphGenerator`. You can specify an optional `seed` for the default `random` package which is used during the generation of the graph.
+
+Once the object is crated, you can use `generate` method to generate the graphs. This takes three arguments `n` : number of vertices, `k` : specifying the number of colors, `p(optional, default=0.5)` : Probability with which any edge is added into the graph. Higher the value of `p` denser the resulting graph will be.
+
+Below is the code snippet which demonstrates the usage:
+
+```
+from kcol_graph_gen import KColorableGraphGenerator
+
+generator = KColorableGraphGenerator(seed=42)
+edges = generator.generate(4, 2, 0.3)  # Create a bipartite graph
+
+print(edges)  # Printing the list of edges
+# > [(2, 3), (2, 4), (1, 2)]
+
+edges = generator.generate(
+    6, 3, 0.9
+)  # Create a 3-colorable dense graph with 6 vertices
+
+print(edges)  # Printing the list of edges
+# > [(2, 4), (1, 2), (3, 4), (1, 5), (2, 3), (4, 5), (2, 6), (5, 6), (3, 6), (2, 5), (1, 3)]
+
+```
