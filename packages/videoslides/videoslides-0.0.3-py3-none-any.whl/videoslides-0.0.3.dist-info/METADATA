@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: videoslides
+Version: 0.0.3
+Summary: Package made to obtain a text transcription from a video, with a flow from video to frames to structured frames to transcription in a json file 
+Home-page: https://github.com/Zes7one/VideoSlides
+Author: Franco Palma
+Author-email: franco.pm10@gmail.com 
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.6
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: easyocr (~=1.4.1)
+Requires-Dist: opencv-python-headless (<=4.1.2.30)
+Requires-Dist: stanza (~=1.4.0)
+Requires-Dist: numpy (~=1.19.5)
+Requires-Dist: matplotlib (~=3.3.4)
+Requires-Dist: pytube (~=12.0.0)
+Requires-Dist: scikit-image (~=0.17.2)
+Requires-Dist: validators (~=0.20.0)
+Requires-Dist: nltk (~=3.6.7)
+
+# Video Slides
+
+Package made to obtain a text transcription from a video, with a flow from video to frames to structured frames to transcription in a json file 
+Paquete hecho para obtener una transcripcion desde un video, con un flujo que inicia con un video se obtienen sus frames y finalmente se extrae la transcripcion estructurada 
+
+## Instalacion:
+
+Mediante el siguiente comando :
+
+pip install videoslides
+
+## Ejemplos de uso
+
+    # Crear clase de Video
+
+    video1 = Video(string, 100, 1, True)
+    video1.clean_frames()
+    video1.set_data()
+    video1.set_slides() 
+    video1.set_transcription()
+
+
+    print(video1.data)
+    print(video1.slides)
+    print(video1.transcription)
+    # ploteo(video1.video_name , video1.data) # grafica
+
