@@ -1,0 +1,34 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=47",
+]
+
+[tool.black]
+line-length = 79
+
+[tool.mypy]
+
+exclude = [
+    'alembic/template',
+    'alembic.testing.*',
+]
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    'alembic.operations.ops',
+    'alembic.op',
+    'alembic.context',
+    'alembic.autogenerate.api',
+    'alembic.runtime.*',
+]
+
+disallow_incomplete_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    'mako.*',
+    'sqlalchemy.testing.*'
+]
+ignore_missing_imports = true
