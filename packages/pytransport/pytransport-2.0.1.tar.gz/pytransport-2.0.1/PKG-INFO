@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: pytransport
+Version: 2.0.1
+Summary: Convert TRANSPORT models and load TRANSPORT output.
+Author-email: "JAI@RHUL" <william.shields@rhul.ac.uk>
+Maintainer-email: William Shields <william.shields@rhul.ac.uk>
+Project-URL: homepage, http://www.pp.rhul.ac.uk/bdsim/pytransport
+Project-URL: documentation, http://www.pp.rhul.ac.uk/bdsim/pytransport
+Project-URL: repository, https://bitbucket.org/jairhul/pytransport
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Software Development
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Provides-Extra: root-numpy
+License-File: LICENSE.txt
+License-File: COPYING.txt
+
+# pyTransport
+
+A python package containing both utilities for processing and analysing TRANSPORT output.
+
+## Authors
+
+W. Shields
+
+Currently maintained and developed by:
+
+* Will Shields          <william.shields@rhul.ac.uk>
+* Jochem Snuverink      <jochem.snuverink@psi.ch>
+
+## Setup
+
+From within the pybdsim root directory:
+
+$ make install
+
+or for development:
+
+$ make develop
+
+
+```python
+$ python
+>>> import pytransport
+>>> a = pytransport.Reader.GetOptics("FOR002.DAT")
+>>> plot(a.S(), a.Sigma_X())
+```
