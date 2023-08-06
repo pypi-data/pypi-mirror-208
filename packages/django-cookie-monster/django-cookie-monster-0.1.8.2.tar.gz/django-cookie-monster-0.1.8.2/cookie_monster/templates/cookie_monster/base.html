@@ -1,0 +1,89 @@
+{% load static %}
+
+<div id="cookie_monster"></div>
+{% if not cookie_monster_custom_theme %}
+    <link rel="stylesheet" href="{% static "cookie_monster/css/minimal.css" %}"/>
+{% endif %}
+<script src="{% static "cookie_monster/js/cookie-monster.umd.js" %}"></script>
+
+<script>
+    // borrowed from https://gist.github.com/dciccale/4087856
+    var DOMReady = function(a,b,c){b=document,c='addEventListener';b[c]?b[c]('DOMContentLoaded',a):window.attachEvent('onload',a)};
+
+    // Callback called if the user has accepted the cookies
+    function onAccepted(acceptedCookies) {
+        // select all the scripts that we want asynchronously inject
+        var blocks = Array.prototype.slice.call(document.querySelectorAll('script')).map(function(script) {
+            var consentData = script.getAttribute('data-cookieconsent');
+
+            if (consentData) return [script, consentData];
+
+            return null;
+        }).filter(Boolean); // remove the non cookie scripts
+
+        // loop all the scripts detected to eventually inject them
+        blocks.forEach(function(item) {
+            var script = item[0];
+            var consentData = item[1];
+            var node = document.createElement('script');
+
+            if (acceptedCookies.indexOf(consentData) !== -1) {
+                node.text = script.text;
+                // remove the old script
+                script.parentNode.removeChild(script);
+                // append the new one
+                document.body.appendChild(node);
+            }
+        });
+    }
+
+    // get a cookie value
+    function getCookie(name) {
+        var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return v ? v[2] : '';
+    }
+
+    // get the cookie monster value
+    function getCookieMonsterValue() {
+        if (navigator && navigator.cookieEnabled && document.cookie) {
+            return getCookie('{{ cookie_monster.cookie.identifier }}');
+        }
+
+        return '';
+    }
+
+    var cookieValue = getCookieMonsterValue();
+
+    if (cookieValue) {
+        // the cookies were previously accepted so we can load the scripts
+        DOMReady(function() {
+            onAccepted(cookieValue.split(','));
+        });
+    } else {
+        // we show the cookie monster to let users accept the cookies policy
+        var cm = cookieMonster(document.querySelector('#cookie_monster'), {
+            title: '{{ cookie_monster.banner.title }}',
+            text: '{{ cookie_monster.banner.text }}',
+            accordion_title: '{{ cookie_monster.accordion_title }}',
+            buttons: {
+                accept: {
+                    label: '{{ cookie_monster.buttons.confirm.label }}'
+                },
+                table_toggle: {
+                    label: '{{ cookie_monster.buttons.toggle.label }}'
+                },
+                accept_all_cookies: {
+                    label: '{{ cookie_monster.buttons.accept_all_cookies.label }}',
+                },
+                accept_all_group_cookies: {
+                    label: '{{ cookie_monster.buttons.accept_all_group_cookies.label }}'
+                }
+            },
+            onAccepted: onAccepted,
+            cookieId: '{{ cookie_monster.cookie.identifier }}',
+            cookieAge: '{{ cookie_monster.cookie.age }}',
+            cookieSameSite: '{{ cookie_monster.cookie.samesite }}',
+            groupsSettings: {{ cookie_monster_groups }}
+        });
+    }
+</script>
