@@ -1,0 +1,27 @@
+[project]
+name = "twixie"
+description = "twixie"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+version = "v0.0.1"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | build
+  | dist
+)/
+'''
