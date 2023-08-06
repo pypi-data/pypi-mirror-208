@@ -1,0 +1,80 @@
+[tool.poetry]
+name = "pysqlx-engine"
+
+version = "0.2.19"
+description = "Async and Sync SQL Engine for Python, with support for MySQL, PostgreSQL, SQLite and Microsoft SQL Server."
+authors = ["Carlos Rian <crian.rian@gmail.com>"]
+license = "MIT"
+readme = "readme.md"
+repository = "https://github.com/carlos-rian/pysqlx-engine"
+homepage = "https://carlos-rian.github.io/pysqlx-engine"
+documentation = "https://carlos-rian.github.io/pysqlx-engine"
+keywords = ["async", "database", "sql", "engine", "fastapi"]
+
+packages = [
+    { include = "pysqlx_engine"},
+]
+
+classifiers = [
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Database",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pydantic = "^1.10"
+pysqlx-core = "^0.1"
+typing-extensions = "^4.5"
+Pygments = "^2.15.1"
+
+[tool.poetry.dev-dependencies]
+black = "^23"
+isort = [
+    { version = "^5.11", python = "<3.8" },
+    { version = "^5.12", python = ">=3.8" }
+]
+pytest = "^7.3"
+pytest-asyncio = "^0"
+pytest-cov = "^4.0.0"
+pytest-dotenv = "^0"
+pytest-xdist = "^3"
+toml = "^0.10.2"
+httpx = "^0.24"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+testpaths = 'tests'
+log_format = '%(name)s %(levelname)s: %(message)s'
+filterwarnings = 'error'
+timeout = 30
+xfail_strict = true
+# min, max, mean, stddev, median, iqr, outliers, ops, rounds, iterations
+addopts = [
+    '--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations',
+    '--benchmark-group-by', 'group',
+    '--benchmark-warmup', 'on',
+    '--benchmark-disable',  # this is enable by `make benchmark` when you actually want to run benchmarks
+]
+
