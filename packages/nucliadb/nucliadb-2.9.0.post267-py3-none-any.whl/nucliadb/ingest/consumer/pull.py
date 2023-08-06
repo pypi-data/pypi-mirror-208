@@ -1,0 +1,172 @@
+# Copyright (C) 2021 Bosutech XXI S.L.
+#
+# nucliadb is offered under the AGPL v3.0 and as commercial software.
+# For commercial licensing, contact us at info@nuclia.com.
+#
+# AGPL:
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+import asyncio
+import base64
+from typing import List, Optional
+
+import nats
+from aiohttp.client_exceptions import ClientConnectorError
+from nats.aio.subscription import Subscription
+from nucliadb_protos.writer_pb2 import BrokerMessage
+
+from nucliadb.http_clients.processing import ProcessingHTTPClient
+from nucliadb.ingest import logger, logger_activity
+from nucliadb.ingest.maindb.driver import Driver
+from nucliadb.ingest.orm.exceptions import ReallyStopPulling
+from nucliadb.ingest.orm.processor import Processor
+from nucliadb_telemetry import errors
+from nucliadb_utils import const
+from nucliadb_utils.cache.utility import Cache
+from nucliadb_utils.settings import nuclia_settings
+from nucliadb_utils.storages.storage import Storage
+from nucliadb_utils.utilities import get_transaction_utility, has_feature
+
+
+class PullWorker:
+    """
+    The pull worker is responsible for pulling messages from the pull processing
+    http endpoint and injecting them into the processing write queue.
+
+    The processing pull endpoint is also described as the "processing proxy" at times.
+    """
+
+    subscriptions: List[Subscription]
+
+    def __init__(
+        self,
+        driver: Driver,
+        partition: str,
+        storage: Storage,
+        pull_time_error_backoff: int,
+        cache: Optional[Cache] = None,
+        local_subscriber: bool = False,
+        pull_time_empty_backoff: float = 5.0,
+    ):
+        self.partition = partition
+        self.pull_time_error_backoff = pull_time_error_backoff
+        self.pull_time_empty_backoff = pull_time_empty_backoff
+        self.local_subscriber = local_subscriber
+        self.cache = cache
+
+        self.processor = Processor(driver, storage, cache, partition)
+
+    async def handle_message(self, payload: str) -> None:
+        pb = BrokerMessage()
+        pb.ParseFromString(base64.b64decode(payload))
+
+        logger.debug(
+            f"Resource: {pb.uuid} KB: {pb.kbid} ProcessingID: {pb.processing_id}"
+        )
+
+        if not self.local_subscriber:
+            transaction_utility = get_transaction_utility()
+            if transaction_utility is None:
+                raise Exception("No transaction utility defined")
+            subject = None
+            if has_feature(const.Features.SEPARATE_PROCESSED_MESSAGE_WRITES):
+                # send messsages to queue that is managed by separated consumer
+                subject = const.Streams.INGEST_PROCESSED.subject
+            await transaction_utility.commit(
+                writer=pb, partition=int(self.partition), target_subject=subject
+            )
+        else:
+            # No nats defined == monolitic nucliadb
+            await self.processor.process(
+                pb,
+                0,  # Fake sequence id as in local mode there's no transactions
+                partition=self.partition,
+                transaction_check=False,
+            )
+
+    async def loop(self):
+        """
+        Run this forever
+        """
+        while True:
+            try:
+                await self._loop()
+            except ReallyStopPulling:
+                logger.info("Exiting...")
+                break
+            except Exception as e:
+                errors.capture_exception(e)
+                logger.exception("Exception on worker", exc_info=e)
+                await asyncio.sleep(10)
+
+    async def _loop(self):
+        headers = {}
+        data = None
+        if nuclia_settings.nuclia_service_account is not None:
+            headers["X-STF-NUAKEY"] = f"Bearer {nuclia_settings.nuclia_service_account}"
+
+        async with ProcessingHTTPClient() as processing_http_client:
+            logger.info(f"Collecting from NucliaDB Cloud {self.partition} partition")
+
+            while True:
+                try:
+                    data = await processing_http_client.pull(self.partition)
+                    if data.status == "ok":
+                        logger.info(
+                            f"Message received from proxy, partition: {self.partition}"
+                        )
+                        try:
+                            await self.handle_message(data.payload)
+                        except Exception as e:
+                            errors.capture_exception(e)
+                            logger.exception(
+                                "Error while pulling and processing message"
+                            )
+                            raise e
+                    elif data.status == "empty":
+                        logger_activity.debug(
+                            f"No messages waiting in partition #{self.partition}"
+                        )
+                        await asyncio.sleep(self.pull_time_empty_backoff)
+                    else:
+                        logger.info(f"Proxy pull answered with error: {data}")
+                        await asyncio.sleep(self.pull_time_error_backoff)
+                except (
+                    asyncio.exceptions.CancelledError,
+                    RuntimeError,
+                    KeyboardInterrupt,
+                    SystemExit,
+                ):
+                    logger.info(
+                        f"Pull task for partition #{self.partition} was canceled, exiting"
+                    )
+                    raise ReallyStopPulling()
+
+                except ClientConnectorError:
+                    logger.error(
+                        f"Could not connect to processing engine, \
+                         {processing_http_client.base_url} verify your internet connection"
+                    )
+                    await asyncio.sleep(self.pull_time_error_backoff)
+
+                except nats.errors.MaxPayloadError as e:
+                    if data is not None:
+                        logger.error(
+                            f"Message too big to transaction: {len(data['payload'])}"
+                        )
+                    raise e
+
+                except Exception:
+                    logger.exception("Unhandled error pulling messages from processing")
+                    await asyncio.sleep(self.pull_time_error_backoff)
