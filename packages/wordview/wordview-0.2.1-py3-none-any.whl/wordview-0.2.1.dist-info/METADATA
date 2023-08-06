@@ -1,0 +1,139 @@
+Metadata-Version: 2.1
+Name: wordview
+Version: 0.2.1
+Summary: Wordview is a Python package for text analysis.
+License: MIT
+Keywords: nlp,text analysis,statistics
+Author: meghdadFar
+Author-email: meghdad.farahmand@gmail.com
+Requires-Python: >=3.9,<3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: fasttext (==0.9.2)
+Requires-Dist: nltk (==3.6.6)
+Requires-Dist: pandas (==2.0.1)
+Requires-Dist: plotly (==5.5.0)
+Requires-Dist: scikit-learn (==1.2.2)
+Requires-Dist: scipy (==1.10.0)
+Requires-Dist: sentence-transformers (==2.2.2)
+Requires-Dist: tabulate (==0.9.0)
+Requires-Dist: tqdm (==4.62.3)
+Requires-Dist: wordcloud (==1.8.1)
+Description-Content-Type: text/x-rst
+
+Wordview
+########
+
+|PyPI version|
+
+|Python 3.9|
+
+
+Wordview is a Python package for Exploratory Data Analysis (EDA) and Feature Extraction for text.
+Wordview's Python API is open-source and available under the `MIT
+license <https://en.wikipedia.org/wiki/MIT_License>`__. We, however,
+offer a framework on top of Wordview for enterprise use under a commercial license. See this page for
+more information about this framework.
+
+|text_analysis_cover|
+
+
+Usage
+######
+
+Install the package via ``pip``:
+
+``pip install wordview``
+
+To explore various features and functionalities, consult the documentation pages. The following sections
+present a high-level description of Wordview's features and functionalities. For details, tutorials and worked examples, corresponding 
+documentation pages are linked in each section.
+
+
+Exploratory Data Analysis (EDA)
+###############################
+
+Wordview presents many statistics about your data in form of plots and tables allowing you to 
+have both a high-level and detailed overview of your data. For instance, which languages
+are present in your dataset, how many unique words and unique words are there in your dataset, what percentage 
+of them are Adjectives, Nouns or Verbs, what are the most common POS tags, etc. Wordview also provides several statistics for labels in labeled datasets.
+
+
+Text Analysis
+*************
+Using this feature, you can have an overview of your text data in terms of various statistics, plots and distribution.
+See `text analysis documentation pages <./docs/source/textstats.rst>`__  for usage and examples.
+
+
+Label Analysis
+**************
+Wordview calculates several statistics for labels in labeled datasets whether they are at document or sequence level.
+See `label analysis documentation pages <./docs/source/labels.rst>`__ for usage and examples.
+
+
+Feature Extraction
+###################
+
+Wordview has various functionalities for feature extraction from text, including Multiword Expressions (MWEs), clusters, anomalies and 
+outliers, and more. See the following sections as well as the linked documentation page in each section for details.
+
+Multiword Expressions
+*********************
+
+Multiword Expressions (MWEs) are phrases that can be treated as a single
+semantic unit. E.g. *swimming pool* and *climate change*. MWEs have
+application in different areas including: parsing, language models,
+language generation, terminology extraction, and topic models. Wordview can extract different types of MWEs from text.
+See `MWEs documentation page <./docs/source/mwes.rst>`__ for usage and examples.
+
+Anomalies and Outliers
+**********************
+
+Anomalies and outliers have wide applications in Machine Learning. While in
+some cases, you can capture them and remove them from the data to improve the
+performance of a downstream ML model, in other cases, they become the data points
+of interest where we endeavor to find them in order to shed light into our data.
+
+Wordview offers several anomaly and outlier detection functions.
+See `anomalies documentation page <./docs/source/anomalies.rst>`__ for usage and examples.
+
+
+Clusters
+*********
+Clustering can be used to identify different groups of documents with similar information, in an unsupervised fashion.
+Despite it's ability to provide valuable insights into your data, you do not need labeled data for clustering. See
+`wordview`'s `clustering documentation page <./docs/source/clustering.rst>`__ for usage and examples.
+
+
+Utilities
+#########
+
+Wordview offers a number of utility functions that you can use for common pre and post processing tasks in NLP. 
+See `utilities documentation page <./docs/source/utilities.rst>`__ for usage and examples.
+
+Contributing
+############
+
+Thank you for contributing to wordview! We and the users of this repo
+appreciate your efforts! You can visit the `contributing page <CONTRIBUTING.rst>`__ for detailed instructions about how you can contribute to Wordview.
+
+
+.. |PyPI version| image:: https://badge.fury.io/py/wordview.svg?&kill_cache=1
+   :target: https://badge.fury.io/py/wordview
+.. |Python 3.9| image:: https://img.shields.io/badge/python-3.9-blue.svg
+   :target: https://www.python.org/downloads/release/python-390/
+.. |verbs| image:: docs/figs/verbs.png
+.. |nouns| image:: docs/figs/nouns.png
+.. |adjs| image:: docs/figs/adjectives.png
+.. |doclen| image:: docs/figs/doclen.png
+.. |wordszipf| image:: docs/figs/wordszipf.png
+.. |labels| image:: docs/figs/labels.png
+.. |cover| image:: docs/figs/abstract_cover_2.png
+.. |clustering_cover| image:: docs/figs/clustering_cover.png
+.. |text_analysis_cover| image:: docs/figs/text_analysis.png
+
+
+
