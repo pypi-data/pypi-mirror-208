@@ -1,0 +1,104 @@
+Metadata-Version: 2.1
+Name: django-import-export-extensions
+Version: 0.1.2
+Summary: Extend functionality of `django-import-export`
+Home-page: https://github.com/saritasa-nest/django-import-export-extensions
+Author: Saritasa
+Author-email: pypi@saritasa.com
+License: MIT license
+Keywords: django_import_export_extensions
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.0
+Classifier: Framework :: Django :: 4.1
+Classifier: Framework :: Django :: 4.2
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.9
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: django-import-export
+Requires-Dist: celery
+Requires-Dist: redis
+Requires-Dist: django (>=3.2)
+Requires-Dist: django-object-actions
+Requires-Dist: django-picklefield
+Requires-Dist: django-filter
+Requires-Dist: requests
+Requires-Dist: psycopg2-binary
+
+===============================
+django-import-export-extensions
+===============================
+
+.. image:: https://github.com/saritasa-nest/django-import-export-extensions/actions/workflows/checks.yml/badge.svg
+        :target: https://github.com/saritasa-nest/django-import-export-extensions/actions/workflows/checks.yml
+        :alt: Build status on Github
+
+.. image:: https://img.shields.io/badge/python%20versions-3.9%20%7C%203.10%20%7C%203.11-blue
+        :target: https://pypi.org/project/django-import-export-extensions/
+        :alt: Supported python versions
+
+.. image:: https://img.shields.io/badge/django--versions-3.2%20%7C%204.0%20%7C%204.1%20%7C%204.2-blue
+        :target: https://pypi.org/project/django-import-export-extensions/
+        :alt: Supported django versions
+
+.. image:: https://readthedocs.org/projects/django-import-export-extensions/badge/?version=latest
+    :target: https://django-import-export-extensions.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+Description
+-----------
+`django-import-export-extensions` extends the functionality of
+`django-import-export <https://github.com/django-import-export/django-import-export/>`_
+adding the following features:
+
+* Import/export resources in the background via Celery
+* Manage import/export jobs via Django Admin
+* DRF integration that allows to work with import/export jobs via API
+* Support `drf-spectacular <https://github.com/tfranzel/drf-spectacular>`_ generated API schema
+* Additional fields and widgets (FileWidget, IntermediateM2MWidget, M2MField)
+
+Migration from django-import-export
+-----------------------------------
+Resources migration
+^^^^^^^^^^^^^^^^^^^
+Change ``Resource`` or ``ModelResource`` to
+``CeleryResource`` or ``CeleryModelResource`` respectively.
+
+Admin migration
+^^^^^^^^^^^^^^^
+Change ``ImportMixin``, ``ExportMixin``, ``ImportExportMixin``
+to ``CeleryImportMixin``, ``CeleryExportMixin`` or ``CeleryImportExportMixin`` respectively.
+
+License
+-------
+* Free software: MIT license
+* Documentation: https://django-import-export-extensions.readthedocs.io.
+
+
+=======
+History
+=======
+
+0.1.2 (2023-05-12)
+------------------
+
+* Add support for `STORAGES` settings variable
+
+0.1.1 (2023-04-27)
+------------------
+
+* Add package description
+* Add configuration file for read-the-docs service
+
+0.1.0 (2023-04-01)
+------------------
+
+* First release on PyPI.
