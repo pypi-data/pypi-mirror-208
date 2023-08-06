@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Build and publish python package
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Build and publish python package
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Release Linux
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Build and Release Linux
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Release Mac
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Build and Release Mac
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Release Windows
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Build and Release Windows
+          token: ${{ secrets.GITHUB_TOKEN }}

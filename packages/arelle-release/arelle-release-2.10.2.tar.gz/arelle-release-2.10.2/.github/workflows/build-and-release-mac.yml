@@ -1,0 +1,247 @@
+name: Build and Release Mac
+
+on:
+  workflow_dispatch:
+    inputs:
+      edgar_renderer_ref:
+        description: 'Arelle/EdgarRenderer branch, tag or SHA to checkout (blank for default)'
+        required: false
+        type: string
+      ixbrl_viewer_ref:
+        description: 'Workiva/ixbrl-viewer branch, tag or SHA to checkout (blank for default)'
+        required: false
+        type: string
+      node_version:
+        default: '19'
+        description: 'Node.js version to use'
+        required: true
+        type: string
+      python_version:
+        default: '3.11'
+        description: 'Python version to use'
+        required: true
+        type: string
+      xule_ref:
+        description: 'xbrlus/xule branch, tag or SHA to checkout (blank for default)'
+        required: false
+        type: string
+
+jobs:
+  build-distribution:
+    environment: release
+    runs-on: macos-12
+
+    steps:
+      - name: Checkout arelle
+        uses: actions/checkout@v3.5.2
+        with:
+          fetch-depth: 0
+      - name: Install Python
+        uses: actions/setup-python@v4.6.0
+        with:
+          cache: 'pip'
+          check-latest: true
+          python-version: ${{ inputs.python_version }}
+      - run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements-build.txt
+      - uses: actions/checkout@v3.5.2
+        with:
+          repository: Arelle/EdgarRenderer
+          path: arelle/plugin/EdgarRenderer
+          ref: ${{ inputs.edgar_renderer_ref }}
+      - run: rm -rf arelle/plugin/EdgarRenderer/.git
+      - uses: actions/checkout@v3.5.2
+        with:
+          repository: xbrlus/xule
+          path: tmp
+          ref: ${{ inputs.xule_ref }}
+      - run: |
+          mv tmp/plugin/validate/* arelle/plugin/validate/
+          rm -rf tmp/plugin/validate
+          mv tmp/plugin/* arelle/plugin/
+          rm -rf tmp
+      - uses: actions/checkout@v3.5.2
+        with:
+          fetch-depth: 0
+          repository: Workiva/ixbrl-viewer
+          path: tmp/ixbrl-viewer
+          ref: ${{ inputs.ixbrl_viewer_ref }}
+      - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: ${{ inputs.node_version }}
+      - run: |
+          cd tmp/ixbrl-viewer
+          npm install
+          npm run prod
+          cd ../..
+          mv tmp/ixbrl-viewer/iXBRLViewerPlugin arelle/plugin/
+          rm -rf tmp
+      - name: Capture build version
+        run: echo "BUILD_VERSION=$(python -W ignore distro.py --version)" >> $GITHUB_ENV
+      - name: Define DMG build artifact name
+        run: |
+          echo "ARTIFACT_VERSIONED_NAME=arelle-macos-${{ env.BUILD_VERSION }}.dmg" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=arelle-macos.dmg" >> $GITHUB_ENV
+          echo "DMG_BUILD_ARTIFACT_PATH=dist_dmg/arelle-macos-${{ env.BUILD_VERSION }}.dmg" >> $GITHUB_ENV
+      - name: Build app
+        run: ./scripts/buildMacDist.sh
+      - name: Remove git directories
+        run: find build/Arelle.app/Contents -name .git -exec rm -fR {} \;
+      - name: Install certificate and sign code
+        env:
+          MAC_BUILD_CERTIFICATE_BASE64: ${{ secrets.MAC_BUILD_CERTIFICATE_BASE64 }}
+          MAC_BUILD_CERTIFICATE_NAME: 'Developer ID Application: Workiva Inc. (5ZF66U48UD)'
+          MAC_BUILD_CERTIFICATE_PASSWORD: ${{ secrets.MAC_BUILD_CERTIFICATE_PASSWORD }}
+          MAC_BUILD_KEYCHAIN_PASSWORD: 'LOCAL_KEYCHAIN_PASS'
+        run: |
+          # Decode and write base64 p12 certificate to file.
+          echo $MAC_BUILD_CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+          
+          # Create local keychain
+          security create-keychain -p "$MAC_BUILD_KEYCHAIN_PASSWORD" build.keychain -v
+          security set-keychain-settings -lut 21600 build.keychain
+          security default-keychain -s build.keychain
+          
+          # Import certificate into keychain
+          security unlock-keychain -p "$MAC_BUILD_KEYCHAIN_PASSWORD" build.keychain
+          security import certificate.p12 -k build.keychain -T /usr/bin/codesign -P "$MAC_BUILD_CERTIFICATE_PASSWORD"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MAC_BUILD_KEYCHAIN_PASSWORD" build.keychain
+          
+          # Confirm certificate
+          security find-identity
+          security find-certificate -a -p | openssl x509 -subject -noout
+          echo MAC_BUILD_CERTIFICATE_NAME="$MAC_BUILD_CERTIFICATE_NAME"
+          
+          # Move python modules to Resources
+          for f in config doc examples images locale plugin scripts Tktable2.11 ;
+            do
+              mv build/Arelle.app/Contents/MacOS/$f build/Arelle.app/Contents/Resources/
+            done
+          mkdir build/Arelle.app/Contents/Resources/lib
+          ls build/Arelle.app/Contents/MacOS/lib | \
+            fgrep -vx --regexp={Python,encodings,codecs,collections,importlib,matplotlib,re,zlib,library.zip} | \
+            grep -v '\.so$' | \
+            while IFS= read -r f
+            do
+              mv build/Arelle.app/Contents/MacOS/lib/$f build/Arelle.app/Contents/Resources/lib/
+            done
+          
+          # Code signing (*.so, *.dylib, etc)
+          for i in $(find build/Arelle.app -type f -perm +111 -exec file "{}" \; | \
+            grep -v "(for architecture" | \
+            grep -v -E "^- Mach-O" | \
+            grep -E "Mach-O executable|Mach-O 64-bit executable|Mach-O 64-bit bundle|Mach-O 64-bit dynamically linked shared library" | \
+            awk -F":" '{print $1}' | \
+            uniq)
+          do
+            codesign --deep --force --verify --verbose --timestamp \
+            --options runtime \
+            --sign "$MAC_BUILD_CERTIFICATE_NAME" \
+            "$i"
+          done
+          
+          find build/Arelle.app -type f -name "*.dylib*" -exec \
+            codesign --deep --force --verify --verbose --timestamp \
+            --options runtime \
+            --sign "$MAC_BUILD_CERTIFICATE_NAME" \
+            {} \;
+          
+          # Create symlinks (some libraries can't be code signed in /MacOS but need to be found within it)
+          ln -s ../../Resources/lib/tkinter build/Arelle.app/Contents/MacOS/lib/tkinter
+          # Symlink plugins folder so /Resources/plugin is found when searching in default /MacOS/plugin location
+          ln -s ../Resources/plugin build/Arelle.app/Contents/MacOS/plugin
+          
+          # Executable code signing (slightly redundant, but ensures all necessary files are code signed)
+          codesign --options runtime --force --deep --timestamp -s "$MAC_BUILD_CERTIFICATE_NAME" build/Arelle.app/Contents/MacOS/arelleCmdLine
+          codesign --options runtime --force --deep --timestamp -s "$MAC_BUILD_CERTIFICATE_NAME" build/Arelle.app/Contents/MacOS/arelleGUI
+      - name: Notarize app
+        uses: aaroncameron-wk/xcode-notarize@7b185cbfd79cf1fc2d2eaa597541329e18a44ba0
+        with:
+          product-path: build/Arelle.app
+          appstore-connect-username: ${{ secrets.MAC_BUILD_NOTARIZATION_USERNAME }}
+          appstore-connect-password: ${{ secrets.MAC_BUILD_NOTARIZATION_PASSWORD }}
+          verbose: true
+      - name: Staple notarization ticket
+        uses: devbotsxyz/xcode-staple@v1.0.0
+        with:
+          product-path: build/Arelle.app
+          verbose: true
+      - name: Build DMG
+        run: |
+          pwd
+          mkdir dist_dmg
+          SIZE=`du -ms | awk '{print int($1 + 20 + 0.5)}'`
+          ls build
+          hdiutil create -srcfolder build/Arelle.app -volname Arelle -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${SIZE}M dist_dmg/arelle_tmp.dmg
+          echo "Created DMG: arelle_tmp.dmg"
+          DEVICE=$(hdiutil attach -readwrite -noverify dist_dmg/arelle_tmp.dmg | egrep '^/dev/' | sed 1q | awk '{print $1}')
+          sleep 2
+          pushd /Volumes/Arelle
+          ln -s /Applications
+          popd
+          mkdir /Volumes/Arelle/.background
+          cp arelle/images/dmg_background.png /Volumes/Arelle/.background/
+          echo '
+             tell application "Finder"
+               tell disk "Arelle"
+                     open
+                     set current view of container window to icon view
+                     set toolbar visible of container window to false
+                     set statusbar visible of container window to false
+                     set the bounds of container window to {400, 100, 920, 440}
+                     set viewOptions to the icon view options of container window
+                     set arrangement of viewOptions to not arranged
+                     set icon size of viewOptions to 72
+                     set background picture of viewOptions to file ".background:dmg_background.png"
+                     set position of item ".background" of container window to {999,999}
+                     set position of item ".DS_Store" of container window to {999,1099}
+                     set position of item ".fseventsd" of container window to {999,1299}
+                     set position of item "Arelle.app" of container window to {150, 70}
+                     set position of item "Applications" of container window to {260, 240}
+                     close
+                     open
+                     update without registering applications
+                     delay 2
+               end tell
+             end tell
+          ' | osascript
+          sync
+          hdiutil detach "${DEVICE}"
+          hdiutil convert dist_dmg/arelle_tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${{ env.DMG_BUILD_ARTIFACT_PATH }}
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: macos distribution
+          if-no-files-found: error
+          path: ${{ env.DMG_BUILD_ARTIFACT_PATH }}
+      - name: Upload release artifact
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v0.1.15
+        with:
+          fail_on_unmatched_files: true
+          files: ${{ env.DMG_BUILD_ARTIFACT_PATH }}
+      - name: Configure AWS Credentials
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: aws-actions/configure-aws-credentials@v2.0.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: us-west-1
+      - name: Upload release artifacts to S3
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          aws s3 cp --acl public-read ${{ env.DMG_BUILD_ARTIFACT_PATH }} s3://arelle-us/${{ env.ARTIFACT_VERSIONED_NAME }}
+          aws s3 cp --acl public-read s3://arelle-us/${{ env.ARTIFACT_VERSIONED_NAME }} s3://arelle-us/${{ env.ARTIFACT_NAME }}
+      - name: Configure Ali Cloud Credentials
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: yizhoumo/setup-ossutil@v1.1.3
+        with:
+          endpoint: oss-cn-shenzhen.aliyuncs.com
+          access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+      - name: Upload release artifacts to Ali Cloud
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          ossutil cp -f ${{ env.DMG_BUILD_ARTIFACT_PATH }} oss://arelle-cn/${{ env.ARTIFACT_VERSIONED_NAME }}
+          ossutil create-symlink oss://arelle-cn/${{ env.ARTIFACT_NAME }} oss://arelle-cn/${{ env.ARTIFACT_VERSIONED_NAME }}
