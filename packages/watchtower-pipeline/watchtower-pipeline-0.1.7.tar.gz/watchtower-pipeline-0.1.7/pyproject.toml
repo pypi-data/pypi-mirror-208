@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "watchtower-pipeline"
+version = "0.1.7"
+description = "Utilities to generate static data for Watchtower."
+authors = ["Francesco Siddi <francesco@blender.org>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+include = ["dist_watchtower/*", "dist_watchtower/*/*",]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.27.1"
+tqdm = "^4.62.3"
+
+[tool.poetry.dev-dependencies]
+black = {version = "*", allow-prereleases = true}
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target_version = ['py39']
+skip_string_normalization = true
