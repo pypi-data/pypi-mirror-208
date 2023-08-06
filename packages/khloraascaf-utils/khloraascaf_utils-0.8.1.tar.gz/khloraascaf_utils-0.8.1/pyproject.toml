@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+
+name = "khloraascaf_utils"
+version = "0.8.1"
+authors = [{ name = "vepain", email = "victor.epain@laposte.net" }]
+description = "Python utilities for khloraascaf python package."
+keywords = ["Scaffolding", "Chloroplast", "Assembly", "DNA repeats"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: Unix",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+license = { file = "LICENCE" }
+requires-python = ">=3.9"
+dependencies = [
+    "khloraascaf >=1.8.0, <1.9",
+    "networkx >=3.0, <3.1",
+    "biopython >=1.81, <1.82",
+]
+
+[project.urls]
+
+Homepage = "https://gitlab.com/khloraa_scaffolding/khloraascaf_utils"
+Repository = "https://gitlab.com/khloraa_scaffolding/khloraascaf_utils"
+Documentation = "https://khloraascaf_utils.readthedocs.io"
+Changelog = "https://khloraascaf_utils.readthedocs.io/en/latest/changelog.html"
+
+[tool.setuptools.package-data]
+
+khloraascaf_utils = ["py.typed"]
