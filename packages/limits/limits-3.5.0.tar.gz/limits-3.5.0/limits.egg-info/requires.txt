@@ -1,0 +1,57 @@
+deprecated>=1.2
+importlib_resources>=1.3
+setuptools
+packaging<24,>=21
+typing_extensions
+
+[all]
+redis!=4.5.2,!=4.5.3,<5.0.0,>3
+redis!=4.5.2,!=4.5.3,>=4.2.0
+pymemcache<5.0.0,>3
+pymongo<5,>4.1
+etcd3
+motor<4,>=3
+aetcd
+
+[all:python_version < "3.11"]
+emcache>=0.6.1
+
+[all:python_version > "3.7"]
+coredis<5,>=3.4.0
+
+[all:python_version >= "3.11"]
+emcache>=1
+
+[async-etcd]
+aetcd
+
+[async-memcached]
+
+[async-memcached:python_version < "3.11"]
+emcache>=0.6.1
+
+[async-memcached:python_version >= "3.11"]
+emcache>=1
+
+[async-mongodb]
+motor<4,>=3
+
+[async-redis]
+
+[async-redis:python_version > "3.7"]
+coredis<5,>=3.4.0
+
+[etcd]
+etcd3
+
+[memcached]
+pymemcache<5.0.0,>3
+
+[mongodb]
+pymongo<5,>4.1
+
+[redis]
+redis!=4.5.2,!=4.5.3,<5.0.0,>3
+
+[rediscluster]
+redis!=4.5.2,!=4.5.3,>=4.2.0
