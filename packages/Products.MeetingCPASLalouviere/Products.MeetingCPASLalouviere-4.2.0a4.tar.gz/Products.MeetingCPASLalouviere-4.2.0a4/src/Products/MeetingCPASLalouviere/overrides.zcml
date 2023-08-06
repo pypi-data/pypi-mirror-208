@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone">
+    <adapter
+      for="Products.PloneMeeting.interfaces.IMeetingItem"
+      factory="Products.MeetingCPASLalouviere.adapters.MeetingItemMLLWorkflowActions"
+      provides="Products.MeetingCommunes.interfaces.IMeetingItemCommunesWorkflowActions"/>
+    <!-- Customizations for every MeetingConfigs -->
+    <adapter for="Products.PloneMeeting.interfaces.IMeetingConfig"
+             factory="Products.MeetingCPASLalouviere.adapters.LLMeetingConfig"
+             provides="Products.PloneMeeting.interfaces.IMeetingConfigCustom"/>
+
+    <adapter for="Products.PloneMeeting.interfaces.IToolPloneMeeting"
+             factory="Products.MeetingCPASLalouviere.adapters.MLLCustomToolPloneMeeting"
+             provides="Products.PloneMeeting.interfaces.IToolPloneMeetingCustom"/>
+</configure>
