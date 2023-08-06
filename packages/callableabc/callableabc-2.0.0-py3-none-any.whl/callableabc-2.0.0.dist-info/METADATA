@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: callableabc
+Version: 2.0.0
+Summary: A variant of ABC that allows customizing the call behavior via _class_call()
+Author-email: Anselm Schüler <mail@anselmschueler.com>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Classifier: License :: OSI Approved :: Apache Software License
+Project-URL: Home, https://github.com/schuelermine/callableabc
+
+# callableabc
+
+This package implements a metaclass and convenience instance of it that works like `abc.ABC`, but allows you to customize what happens when the class object gets called by implementing a `_class_call()` classmethod.
+
+Inherit from the convenience class `CallableABC` to get this behavior,
+or use the metaclass `CallableABCMeta` directly.
+
+The metaclass uses the `CallableABCMetaDict` dictionary subclass to keep track of the `_class_call()` method.
+
