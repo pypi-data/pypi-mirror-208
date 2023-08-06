@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools", "wheel", "numpy", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brain-loop-search"
+authors = [
+    {name = "Zuohan Zhao", email = "zzhmark@126.com"},
+]
+description = "Screen loops among brain structures(or any entities comprising a graph)."
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["neuron-morphology"]
+license = { text = "MIT License" }
+dynamic = [ "version" ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dependencies = [
+    "networkx",
+    "numpy",
+    "pandas",
+    "importlib_resources",
+    "brainrender"
+]
+
+[project.urls]
+"GitHub Project" = "https://github.com/SEU-ALLEN-codebase/brain-loop-search"
+"Documentation" = "https://SEU-ALLEN-codebase.github.io/brain-loop-search"
+
+[project.optional-dependencies]
+docs = [ "pdoc" ]
+
+[tool.setuptools_scm]
