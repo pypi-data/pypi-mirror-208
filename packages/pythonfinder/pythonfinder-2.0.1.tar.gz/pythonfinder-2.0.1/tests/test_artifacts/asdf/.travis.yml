@@ -1,0 +1,16 @@
+language: c
+
+script:
+  - bats test
+  - ./lint.sh
+
+before_install:
+  - ./prepare-travis.sh
+
+before_script:
+  - git clone https://github.com/sstephenson/bats.git /tmp/bats
+  - export PATH=/tmp/bats/bin:$PATH
+
+os:
+  - linux
+  - osx
