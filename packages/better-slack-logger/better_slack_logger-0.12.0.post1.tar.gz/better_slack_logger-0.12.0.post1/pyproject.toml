@@ -1,0 +1,57 @@
+[tool.black]
+target-version = ['py38']
+line-length = 100
+
+[tool.isort]
+profile = "black"
+py_version = 38
+line_length = 100
+combine_as_imports = true
+
+[tool.poetry]
+name = "better-slack-logger"
+version = "0.12.0.post1"
+description = "Slack Logger is a custom message logger to Slack for Python 3"
+authors = [
+  "Chinni Chaitanya <chchaitanya95@gmail.com>",
+  "Jay Turner <jaynicholasturner@gmail.com>",
+]
+maintainers = ["Jay Turner <jaynicholasturner@gmail.com>"]
+license = "MIT License"
+readme = "README.md"
+packages = [{ include = "slack_logger" }]
+repository = "https://github.com/TurnrDev/better-slack-logger"
+keywords = [
+  "monitoring",
+  "slack",
+  "messaging",
+  "logging",
+  "health-check",
+  "notification-service",
+  "notification",
+  "slack-api",
+]
+classifiers = [
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+slack-sdk = ">=3.0.0"
+pyyaml = ">=5.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+isort = "^5.11.5"
+flake8 = "^5.0.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
