@@ -1,0 +1,208 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools",
+    "setuptools-scm",
+]
+
+[project]
+authors = [
+    {email = "d.matthews@ucl.ac.uk", name = "Daniel R. Matthews"},
+    {email = "g.paci@ucl.ac.uk", name = "Giulia Paci"},
+    {email = "p.munuera@ucl.ac.uk", name = "Pablo V. Munuera"},
+    {email = "patrick.roddy@ucl.ac.uk", name = "Patrick J. Roddy"},
+    {email = "paul.j.smith@ucl.ac.uk", name = "Paul J. Smith"},
+    {email = "y.mao@ucl.ac.uk", name = "Yanlan Mao"},
+]
+classifiers = [
+    "Framework :: napari",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "PartSeg",
+    "magicgui",
+    "matplotlib",
+    "napari",
+    "numpy",
+    "pandas",
+    "qtpy",
+    "scikit-image>=0.20",
+    "scipy",
+]
+description = "EpiTools Plugin"
+dynamic = [
+    "version",
+]
+name = "epitools"
+optional-dependencies = {dev = [
+    "black",
+    "mypy",
+    "pre-commit",
+    "pyqt5",
+    "ruff",
+    "tox",
+], docs = [
+    "myst-parser",
+    "pydata-sphinx-theme",
+    "pytz",
+    "sphinx-autobuild",
+    "sphinx<5",
+    "sphinx_autodoc_typehints",
+    "sphinxcontrib-video",
+    "types-pytz",
+], pyqt = [
+    "PyQt5 >= 5.12.3, != 5.15.0",
+], pyside = [
+    "PySide2 >= 5.13.2, != 5.15.0",
+], qt = [
+    "epitools[pyside]",
+], wf = [
+    "btrack[napari]>=0.6.1",
+    "napari-segment-blobs-and-things-with-membranes",
+]}
+readme = "README.md"
+requires-python = ">=3.9"
+urls = {Code = "https://github.com/epitools/epitools", Download = "https://pypi.org/project/epitools", Homepage = "https://github.com/epitools/epitools", Issues = "https://github.com/epitools/epitools/issues"}
+entry-points."napari.manifest".epitools = "epitools:napari.yaml"
+license.file = "LICENCE.md"
+
+[tool.coverage]
+report = {skip_covered = true, sort = "cover"}
+run = {branch = true, parallel = true, source = [
+    "epitools",
+]}
+paths.source = [
+    "src",
+    ".tox*/*/lib/python*/site-packages",
+    ".tox*\\*\\Lib\\site-packages",
+]
+
+[tool.mypy]
+plugins = [
+    "numpy.typing.mypy_plugin",
+]
+
+[tool.pytest.ini_options]
+addopts = "--color=yes -v"
+testpaths = [
+    "tests",
+]
+
+[tool.ruff]
+fix = true
+force-exclude = true
+ignore = [
+    "B905", # set 'strict=' for zip
+    "SIM105", # use contextlib.suppress(IndexError)
+]
+per-file-ignores = {"__init__.py" = [
+    "F401", # unused-import
+], "test_*.py" = [
+    "S101", # use of 'assert'
+]}
+select = [
+    "A",
+    "B",
+    "C",
+    "DTZ",
+    "E",
+    "EM",
+    "F",
+    "FBT",
+    "I",
+    "ICN",
+    "ISC",
+    "N",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "Q",
+    "RUF",
+    "S",
+    "SIM",
+    "T",
+    "TID",
+    "UP",
+    "W",
+    "YTT",
+]
+target-version = "py39"
+isort.known-first-party = [
+    "epitools",
+]
+isort.section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "napari",
+    "first-party",
+    "local-folder",
+]
+isort.sections.napari = [
+    "magicgui",
+    "napari",
+]
+mccabe.max-complexity = 18
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+write_to = "src/epitools/_version.py"
+
+[tool.tomlsort]
+all = true
+spaces_indent_inline_array = 4
+trailing_comma_inline_array = true
+overrides."project.classifiers".inline_arrays = false
+overrides."tool.coverage.paths.source".inline_arrays = false
+overrides."tool.ruff.isort.section-order".inline_arrays = false
+
+[tool.tox]
+legacy_tox_ini = """
+    [gh-actions]
+    python =
+        3.9: py39
+        3.10: py310
+
+    [gh-actions:env]
+    PLATFORM =
+        macos-latest: macos
+        ubuntu-latest: linux
+        windows-latest: windows
+
+    [testenv]
+    platform =
+        linux: linux
+        macos: darwin
+        windows: win32
+    passenv =
+        CI
+        DISPLAY
+        GITHUB_ACTIONS
+        NUMPY_EXPERIMENTAL_ARRAY_FUNCTION
+        PYVISTA_OFF_SCREEN
+        XAUTHORITY
+    deps =
+        imageio[ffmpeg]
+        magicgui
+        napari
+        pyqt5
+        pytest
+        pytest-cov
+        pytest-qt
+        pytest-xvfb ; sys_platform == 'linux'
+        qtpy
+    commands = pytest --cov --cov-report=lcov
+
+    [tox]
+    envlist = py3{9,10}-{linux,macos,windows}
+    isolated_build=true
+"""
