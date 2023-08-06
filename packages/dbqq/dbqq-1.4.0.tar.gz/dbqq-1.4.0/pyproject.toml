@@ -1,0 +1,44 @@
+[build-system]
+requires      = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbqq"
+description = "quickly connect to and query databases"
+version = "1.4.0"
+readme = "README.md"
+dependencies = [
+  "tabulate",
+  "rsa",
+  "pyaml",
+  "polars",
+  "databricks-sql-connector",
+  "pyarrow",
+  "connectorx",
+  "triple-quote-clean",
+  "jinja2"
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+authors = [
+    {name = "Chris Mamon", email="chrisam1993@live.com"}
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Chr1sC0de/database-quick-query"
+"Bug Tracker" = "https://github.com/Chr1sC0de/database-quick-query/issues"
+
+[project.scripts]
+dbqq-run-sql = "dbqq.cli.run_query:run"
+dbqq-clean-connections = "dbqq.cli.clean_connections:run"
+dbqq-initialize-connections = "dbqq.cli.initialize_connections:run"
+dbqq-write-keys = "dbqq.security.cli.write_keys:run"
+dbqq-encrypt-yaml = "dbqq.security.cli.encrypt_yaml:run"
+dbqq-decrypt-yaml = "dbqq.security.cli.decrypt_yaml:run"
