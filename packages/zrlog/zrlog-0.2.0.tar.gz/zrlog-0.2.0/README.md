@@ -1,0 +1,133 @@
+# Zirconium Logging (ZrLog)
+This package adds logging support using the Zirconium configuration tool and TOML, with an extension for supporting
+logging audit events.
+
+
+## Defining Logging Parameters
+Configuration for the logging module can be added in TOML under the `logging` key. The entries correspond to those 
+supported by `logging.config.dictConfig()` with a few additions to support audit logging. For example:
+
+```toml 
+# .logging.toml (or your own app configuration file that you've registered) 
+[logging]
+version = 1
+
+[logging.root]
+level = "INFO"
+handlers = ["console"]
+
+[logging.handlers.console]
+class = "logging.StreamHandler"
+formatter = "brief"
+level = "WARNING"
+stream = "ext://sys.stdout"
+
+[logging.formatters.brief]
+format = "%(message)s [%(levelname)s]"
+```
+
+Of note, if you want to change a specific logger (which often have dots in the name), you must quote the key:
+
+```toml 
+[logging.loggers."module.foo.bar"]
+level = "WARNING"
+```
+
+## Setting up logging
+
+Logging can be initialized at the appropriate place in your code. This should be AFTER you have registered all your
+configuration with Zirconium but before you want to do any logging.
+
+```python 
+import zrlog
+zrlog.init_logging()
+```
+
+For test cases, configuration is often not done until the test case level, but you can use the `no_config` parameter
+to tell ZrLog to ignore the configuration.
+
+```python
+import zrlog
+zrlog.init_logging(no_config=True)
+```
+
+
+## Additional Logging Levels
+This package adds three additional levels of logging:
+
+- `audit()`, which is intended to be used only with the Python auditing system as described below. The logging level is 
+  set to 1.
+- `trace()`, which is intended to be even more detailed than debug(). The logging level is set to 5.
+- `out()`, which is ranked between INFO and WARNING and is intended to be used to log user output for command-line 
+  applications or key events that need to be tracked for auditing purposes. The logging level is set to 25.
+
+These are configured as methods on the `getLogger()` class as well as on `logging` itself for the root logger. Putting
+these together with existing levels, we recommend the following usages:
+
+| Level | Meaning |
+| --- | --- |
+| critical | An error so severe has occurred that the system may now crash. |
+| error | An error has occurred and something that was expected to happen did not happen. |
+| warning | Something unexpected happen or a problem may occur in the future. |
+| out | Something expected has happened that needs to be tracked in a production environment (e.g. user login). |
+| info | Something expected has happened that does not need tracking but can be useful to confirm normal operation. |
+| debug | Additional detail for debugging an issue |
+| trace | Even more detail for debugging an issue |
+| audit | Python auditing output only |
+
+
+
+## Logging Audit Events
+This package provides a system for turning `sys.audit()` events into log records using a thread-based queue. This is 
+necessary because audit events don't play nicely with the logging subsystem, leading to inconsistent errors if the
+logger `log()` method is called directly from the audit hook. Audit logging must be enabled specifically by setting
+the `with_audit` flag:
+
+```toml
+# .logging.toml
+[logging]
+with_audit = true
+```
+
+While the default level is "AUDIT", you can change this to any of the logging level prefixes by specifying the 
+audit_level:
+
+```toml
+# .logging.toml
+[logging]
+with_audit = true
+audit_level = "INFO"
+```
+
+One specific event can cause further problems: `sys._getframe()` is called repeatedly from the logging subsystem in Python
+(in 3.8 at least). These audit events are NOT logged by default, but logging of them can be enabled by turning off the
+`omit_logging_frames` flag.
+
+```toml
+# .logging.toml
+[logging]
+with_audit = true
+omit_logging_frames = false
+```
+
+Audit events are logged (by default) at the AUDIT level which is below TRACE; your logger and handler must be set to that level to 
+see these events:
+
+```toml
+[logging.root]
+level = "AUDIT"
+handlers = ["console"]
+
+[logging.handlers.console]
+class = "logging.StreamHandler"
+formatter = "brief"
+level = "AUDIT"
+stream = "ext://sys.stdout"
+```
+
+## Change Log
+
+### version 0.2.0
+- Updated the audit handling thread to use a `threading.Event` to end itself rather than a boolean flag.
+- Added the `no_config` flag, mostly to be used in test suites to ensure everything still works properly.
+- Several documentation cleanup items
