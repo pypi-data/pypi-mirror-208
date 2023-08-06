@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: shaleprotocol
+Version: 0.0.1
+Summary: User-facing Python library for shaleprotocol
+Author-email: Ning Ren <renning22@gmail.com>
+Maintainer-email: Ning Ren <renning22@gmail.com>
+License: placeholder
+Project-URL: Homepage, https://shaleprotocol.com
+Project-URL: Bug Reports, https://github.com/shaleprotocol/shaleprotocol/issues
+Project-URL: Funding, https://shaleprotocol.com
+Project-URL: Say Thanks!, https://shaleprotocol.com
+Project-URL: Source, https://github.com/shaleprotocol/shaleprotocol
+Keywords: setuptools,development
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Provides-Extra: dev
+Requires-Dist: check-manifest ; extra == 'dev'
+Provides-Extra: test
+Requires-Dist: coverage ; extra == 'test'
+
+# shaleprotocol
+User-facing Python library
+
+
+## Install
+
+```
+pip install shaleprotocol
+
+> import shaleprotocol as shale
+```
+
+## For maintainer
+
+### Dev installation
+
+```
+pip install -e .
+```
+
+### Publish
+
+```
+python3 -m pip install --upgrade build
+python3 -m pip install --upgrade twine
+
+python3 -m build
+twine check dist/*
+twine upload dist/*
+
+python3 -m twine upload --repository shaleprotocol dist/*
+```
