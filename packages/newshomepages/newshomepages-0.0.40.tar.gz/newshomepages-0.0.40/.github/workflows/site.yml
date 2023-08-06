@@ -1,0 +1,57 @@
+name: Update website
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+concurrency:
+  group: site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v3
+
+      - id: setup-python
+        name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pipenv'
+
+      - id: install-pipenv
+        name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+        shell: bash
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --python=`which python`
+        shell: bash
+
+      - id: make
+        name: Make
+        run: pipenv run make site
+        shell: bash
+
+      - id: build-docs
+        name: Build
+        uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "_site/"
+
+      - id: upload-docs
+        name: Upload
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.PALEWIRE_DOCS_AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.PALEWIRE_DOCS_AWS_SECRET_ACCESS_KEY }}
+          aws_bucket: ${{ secrets.PALEWIRE_DOCS_AWS_BUCKET }}
+          source_dir: _site/_build/html/
+          destination_dir: news-homepages
