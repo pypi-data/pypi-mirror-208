@@ -1,0 +1,29 @@
+###############################################################################
+# Sentinel-1 Product
+###############################################################################
+id: aff2191f-5b06-4121-a9fa-f3d93f6c6331
+subClassOf: 487b0c70-6199-46de-9e41-4914520e25d9
+label: Sentinel-1 Product
+category: CONTAINER
+signatures:
+  - name: S1(A|B)_.{63}\.SAFE
+---
+###############################################################################
+# Sentinel-1 Auxiliary Product
+###############################################################################
+id: 8c9f1960-f544-47ae-ba45-424b8cc48b45
+subClassOf: 487b0c70-6199-46de-9e41-4914520e25d9
+label: Sentinel-1 Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: (S1A|S1B|S1_|ASA)_AUX_..._V[0-9]{8}T[0-9]{6}_G[0-9]{8}T[0-9]{6}\.SAFE
+---
+###############################################################################
+# Sentinel-1 EOF Auxiliary Product
+###############################################################################
+id: 40273ef3-a898-4779-a788-12322b7ad527
+label: Sentinel-1 EOF Auxiliary Product
+category: FORMATTING
+factory: xml
+signatures:
+  - name: S1._...._.*\.EOF
