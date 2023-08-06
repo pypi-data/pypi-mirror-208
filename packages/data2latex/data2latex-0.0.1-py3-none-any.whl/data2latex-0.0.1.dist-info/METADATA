@@ -1,0 +1,100 @@
+Metadata-Version: 2.1
+Name: data2latex
+Version: 0.0.1
+Summary: Prototype for simple generation of LaTeX tables and plots from scientific data for use in papers.
+Author-email: Richard Kokštein <richard.Kokstein@fs.cvut.cz>
+License: MIT License
+        
+        Copyright (c) 2023 Richard Kokstein
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: homepage, https://github.com/Trolobezka/data2latex
+Project-URL: documentation, https://github.com/Trolobezka/data2latex
+Project-URL: repository, https://github.com/Trolobezka/data2latex
+Project-URL: Bug Tracker, https://github.com/Trolobezka/data2latex/issues
+Keywords: generation,latex,table,plot,graph,array,datatable
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Natural Language :: English
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Utilities
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pylatex (>=1.4.1)
+Provides-Extra: dev
+Requires-Dist: matplotlib (>=3.7.1) ; extra == 'dev'
+Requires-Dist: numpy (>=1.24.3) ; extra == 'dev'
+Requires-Dist: pandas (>=2.0.1) ; extra == 'dev'
+Requires-Dist: black (>=22.10.0) ; extra == 'dev'
+Requires-Dist: sphinx (>=6.2.1) ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme (>=1.2.0) ; extra == 'dev'
+Requires-Dist: build (>=0.10.0) ; extra == 'dev'
+Requires-Dist: twine (>=4.0.2) ; extra == 'dev'
+Requires-Dist: pytest (>=7.3.1) ; extra == 'dev'
+
+# data2latex
+
+This project is part of my bachelor thesis which deals with data representation using Python and LaTeX.
+
+The idea behind this package prototype is that generating LaTeX documents containing scientific data from Python should not be difficult and require many steps. Currently the package supports the creation of simple tables and two types of plots: scatter plot and line plot. The package uses the PyLaTeX package to handle the document creation and compilation process. The main data sources are arrays and data tables from the popular Numpy, SciPy and Pandas packages. A major inspiration for the package syntax is the Matplotlib.Pyplot package, which allows plots to be created in a few lines of code. This package allows the user to choose a backend for plotting: Matplotlib in Python or pgfplots in LaTeX.
+
+## Examples
+
+```python
+print("Hello World!")
+```
+
+## Installation
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install --upgrade data2latex
+```
+
+## Developing
+
+```bash
+python -m venv .venv
+./.venv/Scripts/activate
+python -m pip install --upgrade pip
+python -m pip install .
+python -m pip install .[dev]
+```
+
+## Generating documentation
+
+```bash
+sphinx-apidoc -o docs src/data2latex
+./docs/make html
+```
+
+## Packaging
+
+```bash
+python clear.py
+python -m pip install --upgrade build
+python -m build
+python -m pip install ./dist/data2latex-?.whl
+```
