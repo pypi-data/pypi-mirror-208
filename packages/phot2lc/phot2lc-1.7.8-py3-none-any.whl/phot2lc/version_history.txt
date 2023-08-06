@@ -1,0 +1,579 @@
+Version 0.1.0 - All Versions before 2020-06-01
+----------------------------------------------
+> Created phot2lc.py as a python replacement for
+  WQED. Included just the basic functionality
+  to work with output from Antonio Kanaan's
+  IRAF hsp_nd and data from McDonald Observatory.
+
+Version 1.0.0 - 2020-06-01
+--------------------------
+> Created the teledat.py and photfunc.py scripts
+   -teledat.py stores information related to each 
+      telescope and has a unique 4-letter code
+      associated with each one. This script is
+      similar in purpose to the file whiff.dat
+      for WQED.
+   -photfunc.py stores several functions used
+      within the main script below. This was
+      created just to help clean things up.
+> Included functionality that allows phot2lc
+    to be used with output from both hsp_nd and
+    Maestro. For Maestro, only the "counts" files
+    can currently be used.
+> Improved the formatting for the .lc and .phot
+    output files. The headers are now more easily
+    readable and contain more information. There
+    are also two time columns now, one for the raw
+    uncorrected times, and one for the barycentric
+    corrected times.
+
+Version 1.1.0 - 2020-06-04
+--------------------------
+> Created a new function in photfunc.py, get_loc, 
+    which gets the Astropy Earth Locations for each 
+    telescope available in the teledat.py file
+> Added LCOGT 1.0m telescopes to teledat.py with 
+    codename 'lco1'
+> Fixed bug related to object names. If object name
+    taken from the FITS header has any spaces in it,
+    those spaces will now be automatically removed, 
+    since the object names in stars.dat cannot have 
+    spaces.
+> Removed plot that shows the size of apertures and
+    sky annuli around each object. Too many issues, 
+    and not a very useful plot.
+> Fixed bug in get_time function. Times were being 
+    improperly re-formatted when DATE-OBS was already 
+    in ISO or ISOT in the FITS header. Now, these 
+    times are fed directly into an Astropy Time object 
+    which can auto-interpret the format.
+
+Version 1.2.0 - 2020-06-09
+--------------------------
+> Added a new command line input parameter for
+    providing the object name. Originally the object
+    name was grabbed solely from the FITS header, but
+    not all FITS files will have an object entry. The
+    object name is required, however, for grabbing the
+    corresping RA and Dec from the star.dat file.
+    Judi Provencal recommended adding a command line
+    option. The new command line option is -o, or 
+    --object. By default this option is set to None,
+    in which case the header is used.
+> Changed activation and deactivation functionality 
+    of the Garbage and Zoom rectangle selectors. 
+    Originally, once activated with the "g" or "z" 
+    input keys, they would remain active until 
+    deactivated using the same input keys. This would
+    lead to some confusion during use, as it was often 
+    easy to forget one selector was activated which 
+    then blocked activation of the other selector. 
+    Now, each selector is automatically deactivated 
+    after use, though it can still be manually 
+    deactivated if, once a user activates it, they 
+    realize they don't want to use it.
+> Added a Reverse Garbage Selector which, when you 
+    draw a box, will delete all of the points OUTSIDE 
+    of the box rather than inside the box. This 
+    feature can be activated and deactivated using 
+    the "r" keyboard input.
+
+
+Version 1.3.0 - 2020-06-12
+--------------------------
+> Added a sigma clipping function. This feature can
+    be used with the "x" key. User will be prompted
+    for their choice of lower and upper sigma 
+    rejection thresholds. The user can also choose
+    the window size, i.e. how many points are
+    considered at a time when rejecting data points.
+    Smaller windows are useful when dealing with
+    stars that are variable on short timescales. The
+    default window size is 25 data points.
+> Changed periodogram calculation/plot so that it
+    only goes out to 10,000 uHz, for easier viewing.
+> Added "#!/usr/bin/env python" to script so it can
+    be executed on the command line without having
+    to invoke Python beforehand.
+> Also removed .py extension on phot2lc so it looks
+    more like a regular executable.
+> Removed version history from phot2lc script, it now
+    lives only in this text file.
+> Cleaned up the inputs. Deleted some unused modules
+    and reorganized the rest. Now checks to make sure
+    the python version is 3.6 or later.
+> Added a new configuration script, a convenience 
+    function which new users can use to set the
+    defaults. This was needed in order to prevent
+    users from having to go into the code and manually
+    change hard-coded variables in order to make
+    phot2lc work. Now, the "photconfig" function can 
+    be called which edits the config.dat file, which
+    is then loaded into phot2lc during initialization.
+
+Version 1.3.1 to 1.3.4 - 2020-06-13
+-----------------------------------
+> Made phot2lc into a python package available on PyPI
+> Fixed bugs so that phot2lc and photconfig work
+    properly once they have been pip installed
+
+
+
+Version 1.4.0 - 2020-06-14
+--------------------------
+> Removed some extraneous print commands.
+> Changed the light curve and photometry header
+    descriptions for DATE, UTC, MJD, and BJED to be
+    more descriptive.
+> Finally got the weldlc functions working again with 
+    the new .lc output formats. wildly can be used now 
+    to stitch .lc files together for multi-night or
+    multi-site data sets.
+
+
+
+Version 1.4.1 - 2020-06-14
+--------------------------
+> Small changes to the PyPI README.md file
+
+
+Version 1.4.2 - 2020-06-14
+--------------------------
+> config.dat didn't get uploaded with the previous
+    version due to an error in setup.py. Fixed the
+    error and this version appears fully functional.
+
+Version 1.4.3 - 2020-06-14
+--------------------------
+> Forgot to include the most up-to-date version of
+    this file (version_history.txt) with the last
+    one. Now it should be complete.
+
+Version 1.4.4 - 2020-06-15
+--------------------------
+> A few small bug fixes.
+> Fixed an indexing error related to the grid search.
+    The wrong index was being used to save information
+    into the output .phot files related to the optimal 
+    aperture being used when using "G" to save the
+    final light curve. This has been fixed in this
+    version.
+    
+
+Version 1.4.5 - 2020-06-21
+--------------------------
+> Changed weldlc output to include both time columns
+    present in the original .lc files (Raw T-mid and
+    BaryCorr T-mid). This way, the column format does
+    not change between original and welded light curves.
+
+
+Version 1.4.6 - 2020-06-21
+--------------------------
+> Fixed small bugs.
+
+
+Version 1.5.0 - 2020-06-21
+--------------------------
+> Found and fixed a significant issue related to the 
+    calculation of the Barycentric Julian Date (BJD) at 
+    the start of the exposure sequence which gets saved
+    as the header keyword BJED in the .lc and .phot files. 
+    The BJD should have have been referencing the very
+    first image, regardless of whether the first data point
+    got removed from the final light curve. Instead, it was
+    referencing the first non-deleted data point. The 
+    barycentric corrected timestamps were shifted to
+    reference this time, so the timings from previous versions
+    won't be incorrect, but the raw timings were not shifted
+    to reference this time, so large discrepancies could
+    sometimes be seen when comparing the raw and barycorr
+    time columns. This has been fixed so that the BJED
+    keyword now always references the first image of a run,
+    and both time columns now reference the same BJED.
+
+
+Version 1.5.1 - 2020-06-25
+--------------------------
+> Fixed bug related to improper exposure time format. The
+    "get_time" function within photfunc.py assumed that
+    FITS header's exposure time value was a float, but
+    occasionally it would be a different format. This
+    resulted in errors within phot2lc when doing float
+    arithmetic on the exposure time parameter. Now, the
+    get_time function will convert the exposure time to
+    type float upon loading it from the header.
+
+
+Version 1.5.2 - 2020-06-28
+--------------------------
+> Fixed the command list printed with "?" to include all
+    available options, a few had been missing from the
+    "Aperture Selection" list.
+> Improved the layout of the Aperture Selection Window.
+    - Now show significance thresholds for both the 
+      User and Grid periodograms.
+    - Uses only red and white color scheme to more
+      clearly indicate what lines/markers/values
+      correspond to the Grid vs. User light curves.
+    - Now shows the maximum signal-noise of the highest
+      peak in the periodogram:
+     (Max S/N = Max Peak Height / Average Noise Level)
+> Created a new command line tool named "quicklook" 
+    which generates a plot of an extracted light curve
+    along with its periodogram and marks significant
+    peaks determined by a pre-whitening routine.
+
+
+Version 1.5.3 - 2020-07-01
+--------------------------
+> Forgot to edit the setup.py file to include the new
+    "quicklook" tool as a script. Bug has been fixed 
+    and quicklook is now available.
+
+
+Version 1.5.4 - 2020-07-01
+--------------------------
+> Added more functionality to the "quicklook" tool.
+   - Now includes 4 command line options:
+       1) -f --files
+          Input file(s) to perform quicklook on.
+       2) -s --show
+          Whether to display the quicklook plot.
+       3) -p --prewhiten
+          Whether to perform a pre-whitening sequence.
+       4) -w --wqedlc
+          Whether the input file(s) are from WQED.
+       5) -h --help
+          Print out command line options.
+
+
+Version 1.5.5 - 2020-07-01
+--------------------------
+> Bug in quicklook's import statements. Fixed.
+
+
+Version 1.5.6 - 2020-07-02
+--------------------------
+> Improved layout of the periodogram plot in the
+    aperture selection window. The y-axis scaling
+    no longer pushes the significance threshold
+    text off the top of the plot.
+
+
+Version 1.5.7 - 2020-07-02
+--------------------------
+> Fixed a bug in quicklook which loaded in the 
+    incorrect date for welded phot2lc light curves.
+
+
+Version 1.5.8 - 2020-07-03
+--------------------------
+> Fixed bug related to the calculation of an 
+    object's declination coordinate after loading it
+    from the stars.dat file. Objects with negative
+    declinations were being improperly formatted,
+    where the minute and second components were being
+    added as positive values to the degree value
+    instead of being subtracted.
+> Due to the above bug, if you have used phot2lc
+    prior to this version to calculate barycentric
+    corrections for objects with negative declinations,
+    it is highly recommended that you rerun phot2lc
+    on those objects with this or later versions.
+
+
+Version 1.5.9 - 2020-07-10
+--------------------------
+> Updates to the quicklook program. Added new command
+    line options for when performing pre-whitening:
+    -l --lower, Lower frequency limit for pre-whitening 
+                search (micro-Hertz, default = 500).
+    -u --upper, Upper frequency limit for pre-whitening 
+                search (micro-Hertz, default = 100,000).
+    -n --num  , Maximum number of pre-whitening iterations
+                (default = 10).
+    These new options provide the user with more control
+    over the pre-whitening process, in particular when the
+    object of interest shows low-frequency variability.
+
+Version 1.5.10 - 2020-07-12
+---------------------------
+> Improved the x,y coordinates for text in the "First Image"
+    window so that each star's label no longer overlaps the
+    star or circle marker.
+> Added an additional curve to the P2P Scatter vs. Aperture
+    size plot when the Grid search option is used. This
+    curve, colored red, shows the P2P vs. Ap Size trend for
+    the grid search's determination of the optimal comp 
+    star combination. 
+> Improved y-axis scaling of the periodogram plot in the
+    Aperture Selection window.
+> Added legend to P2P vs. ApSize plot showing the comparison
+    stars used and the minimum P2P scatter value.
+> Added a "Time" keyword in the welded light curve header.
+> Changed the "UTC" keyword in .lc and .phot file headers to
+    "Time" to be consistent with the welded file header.
+> The quicklook -s option is now for optionally saving rather
+    than optionally showing the resulting plot. The plot is 
+    now always shown.
+> The quicklook output file naming convention was changed
+    from quicklook_object_date.pdf to quicklook_filename.pdf
+    where "filename" is the input .lc file's name.
+> Fixed bug in photfunc.py's prewhiten function which 
+    calculated one more pre-whitening step than requested.
+
+
+Version 1.5.11 - 2020-07-13
+---------------------------
+> Small bug fix in the pp_scat function within photfunc.py.
+    Denominator should have been N-1, not N.
+
+
+Version 1.5.12 - 2020-08-05
+---------------------------
+> Changed .lc and .phot file format. Instead of two time
+    columns, there is now only one. The time column is
+    either the raw times or the barycentric corrected
+    times. The user has control over which output occurs
+    using the new -b (--barycorr) command line option
+    when calling phot2lc.
+
+
+Version 1.5.13 - 2020-08-07
+---------------------------
+> Updated the weldlc and quicklook programs to work 
+    properly with the newly formatted .lc file.
+> Minor modifications to the quicklook plot format.
+    The text displayed on the periodogram plots is
+    now positioned more efficiently to prevent overlap.
+
+
+Version 1.6.0 - 2020-11-15
+--------------------------
+> Added a new capability to phot2lc which allows Users
+  to perform sigma rejections when fitting a polynomial
+  to the light curve. This optimizes the fitting procedure
+  for objects which are expected to exhibit many points
+  below or above the average flux, for example objects
+  in eclipsing binaries or flare stars. The -f keyword 
+  is still available for simple polynomial fitting without
+  sigma rejections where only the polynomial degree needs
+  to be defined. A new keword, -F, is used to define the
+  sigma rejections parameters:
+	- Polymial Degree       , e.g. 3
+	- Rejection Iterations  , e.g. 10
+	- Lower Sigma Threshold , e.g. 2.5
+	- Upper Sigma Threshold , e.g. 5.0
+> Fixed the weldlc header which still indicated two time
+  time columns were present though now only one is
+  included.
+> Refined treatment of light curves which have not been
+  barycentric corrected. When corrections are not
+  performed, the .lc and .phot headers now have "None"
+  entered for the BJED value. In addition there is a 
+  headder keyword "BaryCorr" with a value of True or
+  False indicating whether corrections have been 
+  performed.
+> Related to the above point, the weldlc header looks
+  different now depending on whether the input light 
+  curve files have all been barycentric corrected or 
+  not. If they have, all of the times referencing the 
+  start of the welded light curve (T0) are in TDB time
+  scales. If they haven't, the times are instead in the
+  UTC scale, or some combination of the UTC and TDB scales. 
+  Unless specified using weldlc's new -b (--bypass) option, 
+  however, weldlc will throw an error if not ALL of the 
+  input light curves have been barycentric corrected. 
+  Regardless of whether you use the -b option, though, 
+  weldlc still works the same in the sense that it simply 
+  takes the time columns from each .lc file and concatenates 
+  them together. The only true difference is that the -b 
+  option will reference all times to the earliest MJD value 
+  found rather than the earliest BJED value.
+
+
+Version 1.6.1 through 1.6.6 - 2020-11-15
+----------------------------------------
+> Small bug fixes
+
+
+Version 1.6.7 - 2021-02-10
+--------------------------
+> Chooses between QT5agg and TKagg backends for different
+  platforms.
+> Updated the RTD documentation
+
+Version 1.6.8 - 2021-02-10
+--------------------------
+> Fallback to DejaVu Sans Mono for non macOSX platforms
+
+Version 1.6.9 - 2021-02-10
+--------------------------
+> Command line option description and RTD docs updates
+
+
+Version 1.7.0 - 2022-01-28
+--------------------------
+> Fixed some dependency issues with Matplotlib 3.5
+> Added support for the KPED instrument on the Kitt Peak 2.1m
+> Changed the Layout of the Divided Light Curve Panel so that
+  the comparison star light curve and divided target light
+  curve share the same x-axis for easier identification of
+  bad point removal.
+> The "s" key command now toggles the display of deleted
+  summed comparison star points in addition to the divided
+  light curve points.
+> Changed the matplotlib backend to be system dependent for
+  the quicklook program. QT5Agg was distorted on some
+  Linux machines, switched to using TKAgg.
+  
+  
+  
+Version 1.7.1 - 2023-02-07
+--------------------------
+> Added support for the CHIMERA instrument on the Palomar
+  200-inch Hale Telescope.
+> Changed how error estimation is being performed. The
+  photometric noise is now being normalized using the
+  comparison star flux as a normalization factor. A 
+  scaling factor has also been introduced to help
+  reduce over/under estimation of errorbars. The scaling
+  factor is designed to make sure that the average 
+  1-sigma errorbar matches the standard deviation of the
+  light curve.
+> Added support for the HiPERCAM photometry pipeline:
+
+  Version 1.2.0
+  https://cygnus.astro.warwick.ac.uk/phsaap/hipercam/docs/html/index.html
+  
+  The photometry source parameter (source) defined in
+  the configuration file, or set on the command line
+  using the -s or --source option, can now be set to
+  "hcm". In this mode, it will assume that a file with
+  a name like output*log exists containing the raw 
+  photometry. It will also assume that a .hcm file needs
+  to be loaded in order to display the first image, and 
+  use a HiPERCAM aperture file (.ape) to display the
+  initial source aperture positions.
+  
+  Some caveats for handling HiPERCAM output include:
+    - Can only handle single-CCD output.log files. 
+      The HiPERCAM pipeline is designed to reduce
+      multiple CCDs simulatneously since the actual
+      HiPERCAM instrument is a 5-channel photometer,
+      but the phot2lc code is not yet designed to
+      parse multi-CCD output.
+    - So far it has only been tested for data acquired
+      from the McDonald 2.1m ProEM instrument or the 
+      Palomar 200-in CHIMERA instrument. Data from
+      from other instruments reduced using the
+      HiPERCAM pipeline may not yet play nice with phot2lc.
+      
+      
+ Version 1.7.2 - 2023-02-08
+---------------------------
+> Improved error messaging for missing object name
+  from the stars.dat file.
+> Improved header descriptions for the .lc and .phot files.
+    - Added new header row in .lc file listing the IDs of
+      comparison stars used to generate divided light curve.
+    - Added new header row in both .phot and .lc files 
+      naming the observer that acquired the data.
+    - Made description of BJED header entry more clear
+      in the .lc file.
+    - Made description of the Time column in both the 
+      .lc and .phot file more clear.
+> Added support for Ultracam pipeline output, version
+  19/12/2005. Since the ultracam pipeline requires
+  specially formatted image files (.ucm), an additional
+  script, ucm_utils.py, has been added to the package.
+  This script contains functions that can read and decode
+  the binary .ucm files, namely the read_ucm function. This 
+  code was taken and modified from Tom Marsh's ultracam 
+  pipeline package:
+  
+  https://github.com/trmrsh/trm-ultracam
+  
+  Such a function was not needed for the HiPERCAM .hcm
+  files, since these are basically just FITS files and
+  can easily be read with astropy.io.fits.
+  
+  The photometry source parameter (source) defined in
+  the configuration file, or set on the command line
+  using the -s or --source option, can now be set to
+  "ucm". Similar to the HiPERCAM option, it will assume 
+  that a file with a name like output*log exists containing 
+  the raw photometry. It will also assume that a .ucm file
+  needs to be loaded in order to display the first image,
+  and use an ULTRACAM aperture file (.ape) to display the
+  initial source aperture positions.
+
+
+ Version 1.7.3 (2023-02-09)
+---------------------------
+> Minor bug fixes
+
+
+ Version 1.7.4 (2023-04-28)
+---------------------------
+> Added new location info for the Tenerife site of the 
+  Las Cumbres Observatory 1.0-m telescopes.
+> Added new option for the config.dat file called
+  phot_basename, which allows users to specify the base
+  filename for the output from the photometry pipeline
+  being used (e.g. "runbase" for ccd_hsp or "output.log"
+  for ULTRA/HiPERCAM). There is also a new command line
+  option for phot2lc (-p, --photname), which allows users
+  to specify the basename at runtime or override whatever
+  the default value is in the config.dat file.
+> Added a new command line convenience program "addstar"
+  that allows users to add a new entry into the stars.dat
+  file. Example usage:
+      addstar SDSSJ0000+1111 00:00:00.0 +11:11:11.1
+
+ Version 1.7.5 (2023-04-28)
+---------------------------
+> Minor bug fixes
+
+
+ Version 1.7.6 (2023-05-02)
+---------------------------
+> Minor bug fixes in addstar
+
+
+ Version 1.7.7 (2023 May 4)
+---------------------------
+> Better handling of NaN values in HiPERCAM and 
+  ULTRACAM output.
+> Better information print out from the addstar 
+  command line function.
+
+
+ Version 1.7.8 (2023 May 16)
+----------------------------
+> Changed how the light curve "author" is handled. The
+  default now is to use your system username, which
+  happens when the "author" parameter in the config.dat
+  file is set to "sys-user". You can change this parameter
+  to any custom value you like by running the photconfig
+  script as usual, or there is now a command line option
+  -a/--author for phot2lc which allows you to override 
+  the value in the config.dat file, e.g.:
+  
+      phot2lc --author 'Zach Vanderbosch'
+      
+  This update makes it easier for multiple people to use
+  the same phot2lc installation, e.g. on a computer that
+  a whole research group may use to store and reduce 
+  their data. Now, different users no longer have to run
+  the photconfig script to change the author name in order
+  to get the correct author metadata into the .lc file.
+
+
+
+
+
+
+
+
