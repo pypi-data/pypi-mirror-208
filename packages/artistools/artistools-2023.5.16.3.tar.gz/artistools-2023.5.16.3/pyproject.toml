@@ -1,0 +1,171 @@
+[build-system]
+requires = ["psutil>=5.9.0", "setuptools>=45", "setuptools_scm[toml]>=6.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "artistools"
+authors = [
+    {name = "ARTIS Collaboration", email = "luke.shingles@gmail.com"},
+]
+description="Plotting and analysis tools for the ARTIS 3D supernova radiative transfer code."
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Framework :: Matplotlib",
+    "Intended Audience :: Science/Research",
+]
+dynamic = ["version", "dependencies", "entry-points", "readme"]
+requires-python = ">=3.9"
+
+#[project.scripts]
+#atcompletions = "artistoolscompletions.sh"
+
+#[tool.setuptools]
+#packages = ["artistools"]
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.md"]}
+dependencies = {file = ["requirements.txt"]}
+#entry-points = {attr = "artistools.commands.console_scripts"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.black]
+line-length = 120
+preview = true
+
+[tool.isort]
+profile = "black"
+src_paths = ["artistools"]
+line_length = 120
+force_single_line = true
+case_sensitive = false
+sort_relative_in_force_sorted_sections = true
+
+[tool.mypy]
+python_version = '3.11'
+exclude = "(build)|(tests)"
+packages = "artistools"
+ignore_missing_imports = true
+warn_unused_configs = true
+#files = 'artistools/**/*.py'
+plugins = 'numpy.typing.mypy_plugin'
+scripts_are_modules = true
+strict_equality = true
+pretty = true
+error_summary = true
+enable_error_code = [
+  "redundant-expr",
+  "truthy-bool",
+  "ignore-without-code",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "artistools",
+    "artistools.estimators",
+    "artistools.commands",
+    "artistools.inputmodel",
+    "artistools.lightcurve",
+    "artistools.misc",
+    "artistools.packets",
+    "artistools.spectra",
+]
+check_untyped_defs = true
+disallow_untyped_defs = true
+warn_return_any = false
+#strict = true
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 120
+disable = """
+    broad-exception-caught,
+    eval-used,
+    fixme,
+    global-statement,
+    missing-function-docstring,
+    missing-module-docstring,
+    import-outside-toplevel,
+    invalid-name,
+    line-too-long,
+    protected-access,
+    redefined-outer-name,
+    reimported,
+    too-many-arguments,
+    too-many-branches,
+    too-many-lines,
+    too-many-locals,
+    too-many-statements,
+    unused-argument,
+    unused-variable,
+    unspecified-encoding,
+    C,
+    R,
+"""
+[tool.pylint.typecheck]
+ignored-modules = ["astropy", "extinction"]
+
+[tool.ruff]
+select = ["ALL"]
+ignore = [
+    "ARG001", # ignored because variables in df.eval() are not detected
+    "ANN",
+    "B005",
+    "B007", # variable not used in loop body (but sometimes it is with eval)
+    "BLE001",
+    "C901",
+    "COM812",
+    "D100", "D101", "D102", "D103", "D104", "D107", "D203", "D205", "D213", "D401", "D417",
+    "E501", "E741",
+    "ERA001",
+    "F841", # ignored because variables in df.eval() are not detected
+    "FBT",
+    "N802", "N803", "N806", "N999",
+    "PD901",
+    "PGH001",
+    "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR2004",
+    "PTH112",
+    "PTH113",
+    "PTH123",
+    "PTH118",
+    "PTH119",
+    "PTH120",
+    "PLW2901",
+    "RET504",
+    "S",
+    "SLF001",
+    "T201",
+    "TRY301",
+]
+fixable = ["ALL"]
+unfixable = [
+    "COM812",
+    "ERA001",  # commented out code (will just delete it!)
+    "F841",  # Local variable {name} is assigned to but never used
+]
+line-length = 120
+target-version = "py39"
+fix = true
+show-fixes = true
+ignore-init-module-imports = true
+
+[tool.ruff.flake8-annotations]
+ignore-fully-untyped = true
+
+[tool.ruff.flake8-import-conventions.extend-aliases]
+"artistools" = "at"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+force-single-line = true
+order-by-type = false
+
+[tool.setuptools_scm]
+write_to = "_version.py"
+local_scheme = "no-local-version"
