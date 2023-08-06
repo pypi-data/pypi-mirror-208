@@ -1,0 +1,152 @@
+[tool.poetry]
+name = "protoletariat"
+version = "3.2.6"
+packages = [{ include = "protoletariat" }]
+homepage = "https://github.com/cpcloud/protoletariat"
+repository = "https://github.com/cpcloud/protoletariat"
+description = "Python protocol buffers for the rest of us"
+authors = ["Phillip Cloud <417981+cpcloud@users.noreply.github.com>"]
+maintainers = ["Phillip Cloud <417981+cpcloud@users.noreply.github.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+
+[tool.poetry.scripts]
+protol = "protoletariat.__main__:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+astunparse = { version = ">=1.6.3,<2", python = "<3.9" }
+click = ">=8,<9"
+protobuf = ">=3.19.1,<5"
+grpcio-tools = { version = ">=1.42.0,<2", optional = true }
+
+[tool.poetry.dev-dependencies]
+black = ">=22,<24"
+grpc-stubs = ">=1.24.7,<2"
+grpcio = ">=1.42,<2"
+mypy = ">=1,<2"
+mypy-protobuf = ">=3,<4"
+pytest = ">=7,<8"
+pytest-randomly = ">=3.10.1,<4"
+ruff = ">=0.0.198,<1"
+types-protobuf = ">=4.21,<5"
+
+[tool.poetry.extras]
+grpcio-tools = ["grpcio-tools"]
+
+[tool.pytest.ini_options]
+xfail_strict = true
+addopts = [
+  "--ignore=site-packages",
+  "--ignore=dist-packages",
+  "--ignore=.direnv",
+  "--strict-markers",
+  "--doctest-modules",
+]
+norecursedirs = ["site-packages", "dist-packages", ".direnv"]
+
+[tool.poetry2conda]
+name = "protoletariat"
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+select = [
+  "B", # flake8-bugbear
+  "BLE", # flake8-blind-except
+  "C4", # comprehensions
+  "D", # pydocstyle
+  "E", # pycodestyle
+  "F", # pyflakes
+  "I", # isort
+  "ICN", # flake8-import-conventions
+  "ISC", # flake8-implicit-str-concat
+  "PGH", # pygrep-hooks
+  "PLC", # pylint
+  "PLE", # pylint
+  "PLR", # pylint import style
+  "PLW", # pylint
+  "RET", # flake8-return
+  "RUF", # ruff-specific rules
+  "SIM", # flake8-simplify
+  "T10", # flake8-debugger
+  "T20", # flake8-print
+  "TID", # flake8-tidy-imports
+  "UP", # pyupgrade
+  "W", # pycodestyle
+  "YTT", # flake8-2020
+
+]
+respect-gitignore = true
+ignore = [
+  "C408", # dict(...) as literal
+  "E501",
+  "PGH003",
+  "PLR0913", # too many arguments
+  "RET504",
+  "RET505",
+  "RET506",
+  "RET507",
+  "RET508",
+  "D100", # public module
+  "D101", # public class
+  "D102", # public method
+  "D103", # public function
+  "D105", # magic methods
+  "D107", # init
+  "D202", # blank lines after function docstring
+  "D203", # blank line before class docstring
+  "D205", # blank line between summary line and description
+  "D213", # Multi-line docstring summary should start at the second line
+  "D402", # First line should not be the function's signature
+  "D417", # Missing argument descriptions
+
+]
+target-version = "py38"
+unfixable = [
+  "T201", # print statements
+  "F401", # unused imports
+  "RUF100", # unused noqa comments
+  "F841", # unused variables
+
+]
+
+[tool.ruff.per-file-ignores]
+"*test*.py" = ["D"] # ignore all docstring lints in tests
+
+[tool.mypy]
+exclude = ".+/tests/.+\\.py$"
+ignore_missing_imports = true
+# untyped things
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+# Any handling
+disallow_any_unimported = true
+disallow_any_expr = false
+disallow_any_decorated = true
+disallow_any_explicit = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+# None/Optional handling
+no_implicit_optional = true
+# show more context on failure
+show_error_context = true
+# show codes in case we end up needing to ignore
+show_error_codes = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
