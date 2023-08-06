@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "txl_text_viewer"
+description = "TXL plugin for a text viewer"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "David Brochart", email = "david.brochart@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "txl"
+]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/davidbrochart/jpterm/plugins/text_viewer"
+
+[project.entry-points."asphalt.components"]
+text_viewer = "txl_text_viewer.components:TextViewerComponent"
+
+[tool.hatch.version]
+path = "txl_text_viewer/__init__.py"
