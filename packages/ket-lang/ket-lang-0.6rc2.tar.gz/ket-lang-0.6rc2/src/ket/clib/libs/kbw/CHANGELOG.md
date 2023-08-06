@@ -1,0 +1,34 @@
+# Changelog
+
+## 0.1.6
+
+- Updated Libket to version 0.3.0.
+
+## 0.1.5
+
+- Fixed plugin `pown` for the Dense simulator.
+- Updated Libket to version 0.2.3.
+
+## 0.1.4
+
+- Added the ability to select dump type using environment variables:
+  - `KBW_DUMP_TYPE`: Choose from `vector`, `probability`, or `shots`.
+  - `KBW_SHOTS`: Specify the number of shots.
+- Added support for seeding the RNG with the `KBW_SEED` environment variable.
+
+## 0.1.3
+
+- Updated Libket to version 0.2.2.
+
+## 0.1.2
+
+- Updated Libket to version 0.2.0.
+
+## 0.1.1
+
+- Fixed an issue with measure probability.
+
+## 0.1.0
+
+- Ported KBW from C++ to Rust.
+- Added Dense simulator.
