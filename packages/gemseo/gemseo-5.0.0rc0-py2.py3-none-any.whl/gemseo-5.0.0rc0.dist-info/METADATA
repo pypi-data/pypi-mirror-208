@@ -1,0 +1,162 @@
+Metadata-Version: 2.1
+Name: gemseo
+Version: 5.0.0rc0
+Summary: Generic Engine for Multi-disciplinary Scenarios, Exploration and Optimization
+Home-page: https://gitlab.com/gemseo
+Author: GEMSEO developers
+Author-email: contact@gemseo.org
+License: GNU Lesser General Public License v3
+Project-URL: Documentation, https://gemseo.readthedocs.io
+Project-URL: Source, https://gitlab.com/gemseo/dev/gemseo
+Project-URL: Tracker, https://gitlab.com/gemseo/dev/gemseo/-/issues
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: <3.11,>=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+License-File: CREDITS.rst
+Requires-Dist: docstring-inheritance (==1.0.0)
+Requires-Dist: fastjsonschema (<=2.16.3,>=2.14.5)
+Requires-Dist: genson (==1.2.2)
+Requires-Dist: h5py (<=3.8.0,>=3.0.0)
+Requires-Dist: jinja2 (<=3.1.2,>=3.0.0)
+Requires-Dist: matplotlib (<=3.7.1,>=3.3.0)
+Requires-Dist: networkx (<=3.1,>=2.2)
+Requires-Dist: numpy (<=1.24.3,>=1.21)
+Requires-Dist: packaging (<=23.1)
+Requires-Dist: pandas (<=2.0.0,>=1.1.0)
+Requires-Dist: pyxdsm (<=2.2.2,>=2.1.0)
+Requires-Dist: requests
+Requires-Dist: scipy (<=1.10.1,>=1.4)
+Requires-Dist: strenum (<=0.4.10,>=0.4.9)
+Requires-Dist: tqdm (<=4.65.0,>=4.41)
+Requires-Dist: typing-extensions (<5,>=4)
+Requires-Dist: xdsmjs (<=2.0.0,>=1.0.0)
+Requires-Dist: xxhash (<=3.2.0,>=3.0.0)
+Provides-Extra: all
+Requires-Dist: graphviz (<=0.20.1,>=0.16) ; extra == 'all'
+Requires-Dist: nlopt (<=2.7.1,>=2.7.0) ; extra == 'all'
+Requires-Dist: openpyxl (<=3.1.2) ; extra == 'all'
+Requires-Dist: openturns (<1.21,>=1.16) ; extra == 'all'
+Requires-Dist: pydoe2 (<=1.3.0,>=1.0.2) ; extra == 'all'
+Requires-Dist: scikit-learn (<=1.2.2,>=0.18) ; extra == 'all'
+Requires-Dist: sympy (<=1.11.1,>=1.5) ; extra == 'all'
+Requires-Dist: xlwings (<=0.27.15,>=0.27.0) ; (platform_system == "Windows") and extra == 'all'
+Provides-Extra: doc
+Requires-Dist: autodocsumm ; extra == 'doc'
+Requires-Dist: pillow ; extra == 'doc'
+Requires-Dist: pyenchant ; extra == 'doc'
+Requires-Dist: sphinx ; extra == 'doc'
+Requires-Dist: sphinx-gallery ; extra == 'doc'
+Requires-Dist: sphinxcontrib.bibtex (<2) ; extra == 'doc'
+Requires-Dist: sphinxcontrib.plantuml ; extra == 'doc'
+Requires-Dist: sphinxcontrib.spelling ; extra == 'doc'
+Requires-Dist: sphinxcontrib.apidoc ; extra == 'doc'
+Provides-Extra: test
+Requires-Dist: covdefaults ; extra == 'test'
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: pytest-xdist ; extra == 'test'
+
+..
+    Copyright 2021 IRT Saint Exupéry, https://www.irt-saintexupery.com
+
+    This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+    International License. To view a copy of this license, visit
+    http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
+    Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+.. image:: https://img.shields.io/pypi/l/gemseo
+   :target: https://www.gnu.org/licenses/lgpl-3.0.en.html
+   :alt: PyPI - License
+.. image:: https://img.shields.io/pypi/pyversions/gemseo
+   :alt: PyPI - Python Version
+.. image:: https://img.shields.io/pypi/v/gemseo
+   :target: https://pypi.org/project/gemseo/
+   :alt: PyPI
+.. image:: https://img.shields.io/conda/vn/conda-forge/gemseo
+   :target: https://anaconda.org/conda-forge/gemseo
+   :alt: Conda (channel only)
+.. image:: https://img.shields.io/badge/code%20style-black-000000
+   :target: https://black.readthedocs.io
+   :alt: Code Style
+.. image:: https://img.shields.io/codecov/c/gitlab/AntoineD/gemseo/develop
+   :target: https://app.codecov.io/gl/gemseo:dev/gemseo/branch/develop
+   :alt: Codecov branch
+.. image:: https://img.shields.io/badge/DOI-10.2514%2F6.2018--0657-blue
+   :target: https://arc.aiaa.org/doi/10.2514/6.2018-0657
+   :alt: Paper
+
+GEMSEO stands for
+"Generic Engine for Multi-disciplinary Scenarios, Exploration and Optimization",
+it features:
+
+- Automatic creation and execution of MDO processes based on MDO formulations
+- Integration of numerical techniques in MDO processes: multidisciplinary
+  coupling, optimization, design of experiments, visualization, surrogate
+  models, machine learning, uncertainty, ...
+- Various ways of interfacing software and models: Python, Matlab, Excel,
+  scilab, executables, ...
+- A Python library, standalone and easy to embed in simulation platforms
+- Built on NumPy, SciPy and matplotlib
+- Open-source LGPL-3.0 license
+
+Documentation
+-------------
+
+The full documentation of GEMSEO, including installation and tutorials,
+can be found at https://gemseo.readthedocs.io.
+
+Bugs/Questions
+--------------
+
+Please use the gitlab issue tracker at
+https://gitlab.com/gemseo/dev/gemseo/-/issues
+to submit bugs or questions.
+
+License
+-------
+
+The GEMSEO source code is distributed under the GNU LGPL v3.0 license.
+A copy of it can be found in the LICENSE.txt file.
+The GNU LGPL v3.0 license is an exception to the GNU GPL v3.0 license.
+A copy of the GNU GPL v3.0 license can be found in the LICENSES folder.
+
+The GEMSEO examples are distributed under the BSD 0-Clause, a permissive
+license that allows to copy paste the code of examples without preserving the
+copyright mentions.
+
+The GEMSEO documentation is distributed under the CC BY-SA 4.0 license.
+
+The GEMSEO product depends on other software which have various licenses.
+The list of dependencies with their licenses is given in the CREDITS.rst file.
+
+Contributors
+------------
+
+- Francois Gallard
+- Damien Guenot
+- Vincent Gachelin
+- Charlie Vanaret
+- Remi Lafage
+- Pierre-Jean Barjhoux
+- Benoit Pauwels
+- Matthias De Lozzo
+- Jean-Christophe Giret
+- Syver Doving Agdestein
+- Antoine Dechaume
+- Anne Gazaix
+- Nicolas Roussouly
+- Gilberto Ruiz Jimenez
+- Arthur Piat
+- Selime Gürol
+- Reda El Amri
+- Simone Coniglio
