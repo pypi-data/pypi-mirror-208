@@ -1,0 +1,5 @@
+
+
+
+class MissingDiObjectError(Exception):
+    pass

@@ -1,0 +1,5 @@
+
+
+
+class UnsupportedVersionError(Exception):
+    pass
