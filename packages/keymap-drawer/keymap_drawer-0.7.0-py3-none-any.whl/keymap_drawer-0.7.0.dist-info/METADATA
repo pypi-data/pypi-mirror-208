@@ -1,0 +1,414 @@
+Metadata-Version: 2.1
+Name: keymap-drawer
+Version: 0.7.0
+Summary: A module and CLI tool to help parse and draw keyboard layouts.
+Home-page: https://github.com/caksoylar/keymap-drawer
+License: MIT
+Author: Cem Aksoylar
+Author-email: caksoylar@gmail.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: pcpp (>=1.30,<2.0)
+Requires-Dist: platformdirs (>=3.5.1,<4.0.0)
+Requires-Dist: pydantic (>=1.10.7,<2.0.0)
+Requires-Dist: pyparsing (>=3.0.9,<4.0.0)
+Requires-Dist: pyyaml (>=6.0,<7.0)
+Project-URL: Bug Tracker, https://github.com/caksoylar/keymap-drawer/issues
+Project-URL: Repository, https://github.com/caksoylar/keymap-drawer
+Description-Content-Type: text/markdown
+
+# `keymap-drawer`
+
+[![PyPI version](https://img.shields.io/pypi/v/keymap-drawer.svg)](https://pypi.org/project/keymap-drawer/)
+
+Parse QMK & ZMK keymaps and draw them in vector graphics (SVG) format, with support for visualizing hold-taps and combos that are commonly used with smaller keyboards.
+
+Available as a [command-line tool](#command-line-tool-installation) or a [web application](https://caksoylar.github.io/keymap-drawer).
+
+[![Example keymap](https://caksoylar.github.io/keymap-drawer/showcase.svg)](examples/showcase.yaml)
+
+## Features
+
+- Draw keymap representations consisting of multiple layers, hold-tap keys and combos
+  - Uses a human-editable YAML format for specifying the keymap
+  - Non-adjacent or 3+ key combos can be visualized by specifying its positioning relative to the keys, with automatically drawn dendrons to keys
+- Bootstrap the YAML representation by automatically parsing QMK or ZMK keymap files
+- Arbitrary physical keyboard layouts (with rotated keys!) supported, along with parametrized ortho layouts
+- Both parsing and drawing are customizable with a config file, see ["Customization" section](#customization)
+- Custom glyph support: render custom svg icons and not just unicode text
+
+See examples in [the live web demo](https://caksoylar.github.io/keymap-drawer) for example inputs and outputs.
+
+Compared to to visual editors like [KLE](http://www.keyboard-layout-editor.com/), `keymap-drawer` takes a more programmatic approach.
+It also decouples the physical keyboard layout from the keymap (i.e., layer and combo definitions) and provides the tooling to bootstrap it quickly from existing firmware configuration.
+
+## Usage
+
+### Try it as a web application
+
+You can try the keymap parsing and drawing functionalities with a [Streamlit](https://streamlit.io) web application available at https://caksoylar.github.io/keymap-drawer.
+Below instructions mostly apply for the web interface, where subcommands and option flags are mapped to different widgets in the UX.
+
+### Command-line tool installation
+
+The recommended way to install `keymap-drawer` is through [pipx](https://pypa.github.io/pipx/), which sets up an isolated environment and installs the application with a single command:
+
+```sh
+pipx install keymap-drawer
+```
+
+This will make the `keymap` command available in your `PATH` to use:
+
+```sh
+keymap --help
+```
+
+Alternatively, you can `pip install keymap-drawer` in a virtual environment or install into your user install directory with `pip install --user keymap-drawer`.
+See [the development section](#development) for instructions to install from source.
+
+### Bootstrapping your keymap representation
+
+**`keymap parse`** command helps to parse an existing QMK or ZMK keymap file into the keymap YAML representation the `draw` command uses to generate SVGs.
+`-c`/`--columns` is an optional parameter that specifies the total number of columns in the keymap to better reorganize output layers.
+
+- **QMK**: Only json-format keymaps are supported, which can be exported from [QMK Configurator](https://config.qmk.fm/), converted from `keymap.c` via `qmk c2json`, or from a VIA backup json via `qmk via2json`:
+
+  ```sh
+  qmk c2json ~/qmk_firmware/keyboards/ferris/keymaps/username/keymap.c | keymap parse -c 10 -q - >sweep_keymap.yaml
+  ```
+
+  Due to current limitations of the `keymap.json` format, combos and `#define`'d layer names will not be present in the parsing output.
+  However you can manually specify layer names using the layer names parameter, e.g. `keymap parse --layer-names Base Sym Nav ...`.
+
+- **ZMK**: `.keymap` files are used for parsing. These will be preprocessed similar to the ZMK build system, so `#define`'s and `#include`s will be expanded.
+
+  ```sh
+  keymap parse -c 10 -z ~/zmk-config/config/cradio.keymap >sweep_keymap.yaml
+  ```
+
+  Currently combos, hold-taps (including custom ones), layer names and sticky keys (`&sk`/`&sl`) can be determined via parsing.
+  For layer names, the value of the `label` property will take precedence over the layer's node name if provided.
+
+  > **Warning**
+  >
+  > Parsing rules currently require that your keymap have nodes named `keymap` and `combos` that are nested one level-deep from the root.
+  > (These conditions hold for most keymaps by convention.)
+
+As an alternative to parsing, you can also check out the [examples](examples/) to find a layout similar to yours to use as a starting point.
+
+### Tweaking the produced keymap representation
+
+While the parsing step aims to create a decent starting point, you will likely want to make certain tweaks to the produced keymap representation.
+Please refer to [the keymap schema specification](KEYMAP_SPEC.md) while making changes:
+
+0. (If starting from a QMK keymap) Add combo definitions using key position indices.
+1. Tweak the display form of parsed keys, e.g., replacing `&bootloader` with `BOOT`. (See [the customization section](#customization) to modify parser's behavior.)
+2. If you have combos between non-adjacent keys or 3+ key positions, add `align` and/or `offset` properties in order to position them better
+3. Add or modify `type` specifiers for certain keys, like `"ghost"` for keys optional to the layout
+
+It might be beneficial to start by `draw`'ing the current representation and iterate over these changes, especially for tweaking combo positioning.
+
+> **Note**
+>
+> If you need to re-parse a firmware file after it was changed, you can provide the previous parse output that you tweaked to the
+> parse command via `keymap parse -b old_keymap.yaml ... >new_keymap.yaml` and the tool will try to preserve your manual tweaks.
+
+### Producing the SVG
+
+Final step is to produce the SVG representation using the **`keymap draw`** command.
+However to do that, we need to specify the physical layout of the keyboard, i.e., how many keys there are, where each key is positioned etc.
+
+If you produced your keymap YAML through `keymap parse`, it will have tried to guess the proper layout in the `layout` field of your keymap.
+If you like you can tweak the field value according to the [spec](KEYMAP_SPEC.md#layout), then finally call the draw command:
+
+```sh
+keymap draw sweep_keymap.yaml >sweep_keymap.ortho.svg
+```
+
+And you are done! You can render the SVG on your browser or use a tool like [CairoSVG](https://cairosvg.org/) or [Inkscape](https://inkscape.org/) to export to a different format.
+
+> **Note**
+>
+> If you like you can override the layout specification on the command line.
+> For instance you can provide a QMK keyboard name with `-q`/`--qmk-keyboard` and layout with `-l`/`--qmk-layout`,
+> or an ortho layout with `-o`/`--ortho-layout` (using YAML syntax for the value). See `keymap draw --help` for details.
+
+## Customization
+
+Both parsing and drawing can be customized using a configuration file passed to the `keymap` executable.
+This allows you to, for instance, change the default keycode-to-symbol mappings while parsing, or change font sizes, colors etc. while drawing the SVG.
+
+Start by dumping the default configuration settings to a file:
+
+```sh
+keymap dump-config >my_config.yaml
+```
+
+Then, edit the file to change the settings, referring to comments in [config.py](keymap_drawer/config.py).
+You can then pass this file to either `draw` and `parse` subcommands with the `-c`/`--config` argument (note the location before the subcommand):
+
+```sh
+keymap -c my_config.yaml parse [...] >my_keymap.yaml
+keymap -c my_config.yaml draw [...] my_keymap.yaml >my_keymap.svg
+```
+
+Since configuration classes are [Pydantic settings](https://docs.pydantic.dev/usage/settings/) they can also be overridden by environment variables with a `KEYMAP_` prefix:
+
+```sh
+KEYMAP_raw_binding_map='{"&bootloader": "BOOT"}' keymap parse -z zmk-config/config/cradio.keymap >cradio.yaml
+```
+
+Drawing parameters that are specified in the `draw_config` field can also be overridden in [the keymap YAML](KEYMAP_SPEC.md#draw_config).
+
+## Custom Glyphs
+
+Custom glyphs can be defined in the `draw_config` block of the keymap config.
+After a glyph is defined it can be used in key fields via the glyph name surrounded by `$$`, e.g. `$$vol_up$$`.
+The provided svg must specify a `viewBox`, positional or dimensional properties will be calculated by `keymap-drawer`.
+The height of the svg is bound by the config properties `glyph_{tap,hold,shifted}_size` and width will maintain the aspect ratio.
+To allow for customization, glyphs are assigned CSS classes `glyph` and `<glyph_name>`.
+
+Example:
+```yaml
+draw_config:
+  # specify the size to bound the vertical dimension of your glyph, below are defaults
+  glyph_tap_size: 14
+  glyph_hold_size: 12
+  glyph_shifted_size: 10
+  glyphs:  # mapping of glyph name to be used to svg definition
+    vol_up: |
+      <svg viewBox="2 3 34 33">
+        <path style="stroke: black; fill: black;" d="M23.41,25.25a1,1,0,0,1-.54-1.85,6.21,6.21,0,0,0-.19-10.65,1,1,0,1,1,1-1.73,8.21,8.21,0,0,1,.24,14.06A1,1,0,0,1,23.41,25.25Z"/>
+        <path style="stroke: black; fill: black;" d="M25.62,31.18a1,1,0,0,1-.45-1.89A12.44,12.44,0,0,0,25,6.89a1,1,0,1,1,.87-1.8,14.44,14.44,0,0,1,.24,26A1,1,0,0,1,25.62,31.18Z"/>
+        <path style="stroke: black; fill: black;" d="M18.33,4,9.07,12h-6a1,1,0,0,0-1,1v9.92a1,1,0,0,0,1,1H8.88l9.46,8.24A1,1,0,0,0,20,31.43V4.72A1,1,0,0,0,18.33,4Z"/>
+      </svg>
+layers:
+  Media:
+    - ["", "$$vol_up$$", "", "", ""]
+...
+```
+
+You can also use the `$$source:id$$` notation for [certain sources](keymap_drawer/config.py#L158) to automatically fetch
+the SVGs without having to define them manually in the `glyphs` field, e.g. [`$$tabler:volume$$`](https://tabler-icons.io/i/volume).
+The following `source` values are currently supported:
+- `tabler`: [Tabler Icons](https://tabler-icons.io/) (icon name as `id`)
+- `mdi`: [Pictogrammers Material Design Icons](https://pictogrammers.com/library/mdi/) (icon name as `id`)
+- `mdil`: [Pictogrammers Material Design Icons Light](https://pictogrammers.com/library/mdil/) (icon name as `id`)
+- `material`: [Google Material Symbols](https://fonts.google.com/icons) (use value in "Android" tab as `id`)
+
+Fetched SVGs will be [cached by default](keymap_drawer/config.py#L166) to speed up future runs.
+
+## Setting up an automated drawing workflow
+
+If you use a [ZMK config repo](https://zmk.dev/docs/user-setup), you can set up an automated workflow to parse your keymaps, then draw and commit SVG outputs to your repo.
+To do that you can add a new workflow to your repo at `.github/workflows/draw-keymaps.yml` that refers to the reusable `keymap-drawer` [workflow](.github/workflows/draw-zmk.yml):
+
+```yaml
+# Example for using the keymap-drawer ZMK user config workflow
+name: Draw ZMK keymaps
+on:
+  workflow_dispatch:  # can be triggered manually
+  push:               # automatically run on changes to following paths
+    paths:
+      - 'config/*.keymap'
+      - 'config/*.dtsi'
+      # - 'config/boards/*/*/*.keymap'
+
+jobs:
+  draw:
+    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@main
+    with:
+      keymap_patterns: "config/*.keymap"        # path to the keymaps to parse
+      config_path: "keymap_drawer.config.yaml"  # config file, ignored if not exists
+      output_folder: "svg"                      # path to save produced SVGs
+      parse_args: ""  # map of extra args to pass to `keymap parse`, e.g. "corne:'-l Def Lwr Rse' cradio:''"
+      draw_args: ""   # map of extra args to pass to `keymap draw`, e.g. "corne:'-k corne_rotated' cradio:'-k paroxysm'"
+```
+
+## Development
+
+This project requires Python 3.10+ and uses [Poetry](https://python-poetry.org/) for packaging.
+
+To get started, [install Poetry](https://python-poetry.org/docs/#installation), clone this repo, then install dependencies with the `poetry` command:
+
+```sh
+git clone https://github.com/caksoylar/keymap-drawer.git
+cd keymap-drawer
+poetry install  # --with dev,lsp,streamlit optional dependencies
+```
+
+`poetry shell` will activate a virtual environment with the `keymap_drawer` module in Python path and `keymap` executable available.
+Changes you make in the source code will be reflected when using the module or the command.
+
+If you prefer not to use Poetry, you can get an editable install with `pip install --editable .` inside the `keymap-drawer` folder.
+
+## Related projects
+
+- [@nickcoutsos's ZMK keymap editor](https://github.com/nickcoutsos/keymap-editor)
+- [The original `keymap`](https://github.com/callum-oakley/keymap/)
+- [@jbarr21's keymap parser](https://github.com/jbarr21/keymap-display)
+- [@leiserfg's ZMK parser](https://github.com/leiserfg/zmk-config/tree/master/parser)
+- [Keymapviz](https://github.com/yskoht/keymapviz)
+
+# Keymap YAML specification
+
+This page documents the YAML-format keymap representation that is output by `keymap parse` and used by `keymap draw`.
+
+At the root, four fields can be specified which are detailed in respective sections. A typical keymap will have the following structure:
+
+```yaml
+layout:      # physical layout specs, optional if used in CLI
+  ...
+layers:      # ordered mapping of layer name to contents
+  layer_1:   # list of (lists of) key specs
+    - [Q, W, ...]
+    ...
+  layer_2:
+    ...
+combos:      # list of combo specs, optional
+  - ...
+draw_config: # config overrides for drawing, optional
+  - ...
+```
+
+## `layout`
+
+This field provides information about the physical layout of the keyboard, i.e., the location and sizes of individual keys.
+`keymap-drawer` understands two types of physical layout descriptions:
+
+1. **QMK `info.json` `layout` specification**:
+   This is the [official QMK format](https://docs.qmk.fm/#/reference_info_json?id=layout-format) for physical key descriptions
+   that every `info.json` file in the QMK firmware repository uses. `keymap-drawer` only uses the `x`, `y`, `r`, `rx` and `ry` fields.
+   Note that `keymap-editor` utilizes [the same format](https://github.com/nickcoutsos/keymap-editor/wiki/Defining-keyboard-layouts) for `info.json`.
+
+   QMK spec also lets you specify multiple "layouts" per keyboard corresponding to different layout macros to support physical variations.
+
+   You can also create your own physical layout definitions in QMK format to use with `keymap-drawer`, which accepts JSONs with the official schema that
+   has layouts listed under the `layout` key, or one that directly consists of a list of key specs as a shortcut. A few options to generate it are:
+
+   - Using the interactive [Keymap Layout Helper](https://nickcoutsos.github.io/keymap-layout-tools/) by @nickcoutsos[^1]
+   - Using a [KLE-to-QMK converter](https://qmk.fm/converter/) (which doesn't support key rotation unlike the other two options)
+   - [This handy script by @crides](https://gist.github.com/crides/6d12d1033368e24873b0142941311e5d)
+     that can auto-generate a `keymap-drawer`-compatible `info.json` definition directly from KiCad PCB files
+
+2. **Parametrized ortholinear layouts**:
+   This lets you specify parameters to automatically generate a split or non-split ortholinear layout.
+
+[^1]:
+    Note that the behavior of the layout helper and `keymap-drawer` differs for rotated keys when omitting `rx`, `ry` parameters --
+    `keymap-drawer` assumes rotation around the key center and layout helper assumes rotation around the top left of the key.
+    For this reason I'd recommend explicitly specifying `rx`, `ry` fields if `r` is specified.
+
+Following physical layout parameters can be specified either in the command line or under this field definition as key-value pairs:
+
+- **`qmk_keyboard`** (equivalent to `-k`/`--qmk-keyboard` on the command line):
+  Specifies the keyboard name to use with QMK `info.json` format layout definition, retrieved from following sources in order of preference:
+  - `<keyboard>.json` (with `/`'s in `<keyboard>` replaced by `@`) under [`resources/qmk_layouts`](/resources/qmk_layouts/), if it exists
+  - [QMK keyboard metadata API](https://docs.qmk.fm/#/configurator_architecture?id=keyboard-metadata) that [QMK Configurator](https://config.qmk.fm) also uses
+
+  _Example:_ `layout: {qmk_keyboard: crkbd/rev1}`
+- **`qmk_info_json`** (equivalent to `-j`/`--qmk-info-json` on the command line):
+  Specifies the path to a local QMK format `info.json` file to use
+
+  _Example:_ `layout: {qmk_info_json: my_special_layout.json}`
+- **`qmk_layout`** (equivalent to `-l`/`--qmk-layout` on the command line):
+  Specifies the layout macro to be used for the QMK keyboard, defaults to first one specified if not used --
+  should be used alongside one of the above two options
+
+  _Example:_ `layout: {qmk_keyboard: crkbd/rev1, qmk_layout: LAYOUT_split_3x5_3}`
+- **`ortho_layout`** (equivalent to `-o`/`--ortho-layout` on the command line):
+  Specifies a mapping of parameters to values to generate an ortholinear physical layout, with schema:
+
+  | field name   | type                     | default value | description                                                                                              |
+  | ------------ | ------------------------ | ------------- | -------------------------------------------------------------------------------------------------------- |
+  | `split`      | `bool`                   | `False`       | whether the layout is a split keyboard or not, affects a few other options below                         |
+  | `rows`       | `int`                    | required      | how many rows are in the keyboard, excluding the thumb row if split                                      |
+  | `columns`    | `int`                    | required      | how many columns are in the keyboard, only applies to one half if split                                  |
+  | `thumbs`     | `int \| "MIT" \| "2x2u"` | `0`           | the number thumb keys per half if split; for non-splits can only take special values `MIT` or `2x2u`[^2] |
+  | `drop_pinky` | `bool`                   | `False`       | whether the pinky (outermost) columns have one fewer key, N/A for non-splits                             |
+  | `drop_inner` | `bool`                   | `False`       | whether the inner index (innermost) columns have one fewer key, N/A for non-splits                       |
+
+  _Example:_ `layout: {ortho_layout: {split: true, rows: 3, columns: 5, thumbs: 3}}`
+
+[^2]: Corresponding to bottom row arrangements of a single `2u` key, or two neighboring `2u` keys, respectively.
+
+**Hint**: You can use the [QMK Configurator](https://config.qmk.fm/) to search for `qmk_keyboard` and `qmk_layout` values, and preview the physical layout.
+
+> **Note**
+>
+> If these parameters are specified in both command line and under the `layout` section, the former will take precedence.
+
+## `layers`
+
+This field is an ordered mapping of layer names to a list of `LayoutKey` specs that represent the keys on that layer.
+A `LayoutKey` can be defined with either a string value or with a mapping with the following fields:
+
+| field name (alias) | type  | default value | description                                                                                                                                                                                                                                                                  |
+| ------------------ | ----- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tap` (`t`)        | `str` | `""`          | the tap action of a key, drawn on the center of the key; spaces will be converted to line breaks[^3]                                                                                                                                                                         |
+| `hold` (`h`)       | `str` | `""`          | the hold action of a key, drawn on the bottom of the key                                                                                                                                                                                                                     |
+| `shifted` (`s`)    | `str` | `""`          | the "shifted" action of a key, drawn on the top of the key                                                                                                                                                                                                                   |
+| `type`             | `str` | `""`          | the styling of the key that corresponds to the [SVG class](keymap_drawer/config.py#L51)[^4]. predefined types are `held` (a red shading to denote held down keys), `ghost` (a gray shading to denote optional keys in a layout), `trans` (lighter text for transparent keys) |
+
+[^3]: You can prevent line breaks by using double spaces `"  "` to denote a single non-breaking space.
+[^4]: Text styling can be overridden in the SVG config using the `"tap"`, `"hold"` and `"shifted"` classes if desired.
+
+Using a string value such as `"A"` for a key spec is equivalent to defining a mapping with only the tap field, i.e., `{tap: "A"}`.
+It is meant to be used as a shortcut for keys that do not need `hold` or `type` fields.
+
+`layers` field also flattens any lists that are contained in its value: This allows you to semantically divide keys to "rows," if you prefer to do so.
+The two layers in the following example are functionally identical:
+
+```yaml
+layers:
+  flat_layer: ["7", "8", "9", "4", "5", "6", "1", "2", "3", {t: "0", h: Fn}]
+  nested_layer:
+    - ["7", "8", "9"]
+    - ["4", "5", "6"]
+    - ["1", "2", "3"]
+    - {t: "0", h: Fn}
+```
+
+## `combos`
+
+This is an optional field that contains a list of combo specs, each of which is a mapping that can have the following fields:
+
+| field name (alias)    | type                                              | default value | description                                                                                                                                                                       |
+| --------------------- | ------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `key_positions` (`p`) | `list[int]`                                       | required      | list of key indices that trigger the combo[^5]                                                                                                                                    |
+| `key` (`k`)           | `LayoutKey`[^6]                                   | required      | key produced by the combo when triggered, `type` field will be ignored                                                                                                            |
+| `layers` (`l`)        | `list[str]`                                       | `[]`[^7]      | list of layers the combo can trigger on, specified using layer names in `layers` field                                                                                            |
+| `align` (`a`)         | `"mid" \| "top" \| "bottom" \| "left" \| "right"` | `"mid"`       | where to draw the combo: `mid` draws on the mid-point of triggering keys' center coordinates, or to the `top`/`bottom`/`left`/`right` of the triggering keys                      |
+| `offset` (`o`)        | `float`                                           | `0.0`         | additional offset to `top`/`bottom`/`left`/`right` positioning, specified in units of key width/height: useful for combos that would otherwise overlap                            |
+| `dendron` (`d`)       | `null \| bool`                                    | `null`        | whether to draw dendrons going from combo to triggering key coordinates, default is to draw for non-`mid` alignments and draw for `mid` if key coordinates are far from the combo |
+| `slide` (`s`)         | `null \| float (-1 <= val <= 1)`                  | `null`        | slide the combo box along an axis between keys -- can be used for moving `top`/`bottom` combo boxes left/right, `left`/`right` boxes up/down, or `mid` combos between two keys    |
+| `type`                | `str`                                             | `"combo"`     | the styling of the key that corresponds to the [SVG class](keymap_drawer/config.py#L51), see `LayoutKey` definition above                                                         |
+
+[^5]: Key indices start from `0` on the first key position and increase by columns and then rows, corresponding to their ordering in the `layers` field. This matches the `key-positions` property in ZMK combo definitions.
+[^6]: Just like for keys in a layer under the `layers` field, `key` field can be specified with a string value as a shortcut, or a mapping (where the `type` field will be ignored).
+[^7]: The default value of empty list corresponds to all layers in the keymap, similar to the `layers` property in ZMK.
+
+_Example:_
+```yaml
+combos:
+  - {p: [0, 1], k: Tab, l: [Qwerty]}
+  - {p: [1, 2], k: Esc, l: [Qwerty]}
+```
+
+## `draw_config`
+
+This optional field lets you override [config parameters](README.md#customization) for SVG drawing.
+This way you can specify drawing configuration for a specific layout and store in the keymap specification.
+It is a mapping from field names in [`DrawConfig` class](keymap_drawer/config.py) to values.
+
+_Example:_
+```yaml
+draw_config:
+  key_h: 60
+  combo_h: 22
+  combo_w: 24
+```
+
