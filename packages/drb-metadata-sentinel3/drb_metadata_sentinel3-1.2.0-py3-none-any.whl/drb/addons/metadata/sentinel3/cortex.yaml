@@ -1,0 +1,442 @@
+---
+# Sentinel-3 Product
+drbItemClass: 'b3e005b8-7f47-4ab4-b92d-69d0adf54095'
+variables:
+  - name: node_metadataSection
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection
+  - name: node_platform
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="platform"]/metadataWrap/
+          xmlData/platform
+  - name: node_processing
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="processing"]/metadataWrap/
+          xmlData/processing[1]
+  - name: node_acquisitionPeriod
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="acquisitionPeriod"]/
+          metadataWrap/xmlData/acquisitionPeriod
+  - name: node_generalProductInfo
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="generalProductInformation"]/
+          metadataWrap/xmlData/generalProductInformation
+metadata:
+  - name: platformShortName
+    constant: SENTINEL-3
+  - name: platformSerialIdentifier
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/number)
+  - name: processingCenter
+    xquery: |
+      declare variable $node_processing external;
+      data($node_processing/facility[1]/@site)
+  - name: processorName
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/software)
+      then data($node_processing/software[1]/@*[name()="name"])
+      else
+        if ($node_processing/facility/software)
+        then data($node_processing/facility/software/@*[name()="name"])
+        else ()
+  - name: processorVersion
+    xquery: |
+      declare variable $node_processing external;
+      if ($node_processing/software)
+      then data($node_processing/software[1]/@*[name()="version"])
+      else
+        if ($node_processing/facility/software)
+        then data($node_processing/facility/software/@*[name()="version"])
+        else ()
+
+  - name: beginningDateTime
+    xquery: |
+      declare variable $node_acquisitionPeriod external;
+      concat(substring(data($node_acquisitionPeriod/startTime), 1, 26), "Z")
+  - name: endingDateTime
+    xquery: |
+      declare variable $node_acquisitionPeriod external;
+      concat(substring(data($node_acquisitionPeriod/stopTime), 1, 26), "Z")
+  - name: productType
+    xquery: |
+      declare variable $node_generalProductInfo external;
+      data($node_generalProductInfo/productType)
+  - name: timeliness
+    xquery: |
+      declare variable $node_generalProductInfo external;
+      data($node_generalProductInfo/timeliness)
+  - name: baselineCollection
+    xquery: |
+      declare variable $node_generalProductInfo external;
+      data($node_generalProductInfo/baselineCollection)
+
+---
+# Sentinel-3 Level 0 Product (MWR/OLCI/SLSTR/SRAL/DORIS/NAVATT/HKTMs)
+drbItemClass: '6ee38ad7-14b9-4d94-a412-2bf8cc7d79c1'
+variables:
+  - name: md_section
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection
+  - name: platform
+    xquery: |
+      declare variable $md_section external;
+      $md_section/metadataObject[@ID="platform"]/metadataWrap/xmlData/platform
+  - name: processing
+    xquery: |
+      declare variable $md_section external;
+      $md_section/metadataObject[@ID="processing"]/metadataWrap/xmlData/
+        processing[1]
+  - name: orbitRef
+    xquery: |
+      declare variable $md_section external;
+      $md_section/metadataObject[matches(@ID,".+OrbitReference")]/metadataWrap/
+        xmlData/orbitReference
+  - name: productInfo
+    xquery: |
+      declare variable $md_section external;
+      $md_section/metadataObject[@ID="generalProductInformation"]/metadataWrap/
+        xmlData/generalProductInformation
+metadata:
+  - name: instrumentShortName
+    xquery: |
+      declare variable $platform external;
+      data($platform/instrument/familyName/@abbreviation)
+  - name: operationalMode
+    xquery: |
+      declare variable $platform external;
+      data($platform/instrument/mode)
+  - name: processingLevel
+    xquery: |
+      declare variable $processing external;
+      data($processing/@outputLevel)
+  - name: processingDate
+    xquery: |
+      declare variable $processing external;
+      if ($processing/@start)
+      then concat(substring(data($processing/@start), 1, 26), "Z")
+      else
+        if ($processing/@stop)
+        then concat(substring(data($processing/@stop), 1, 26), "Z")
+        else ()
+
+  - name: orbitNumber
+    xquery: |
+      declare variable $orbitRef external;
+      data($orbitRef/orbitNumber[@type="start"])
+  - name: relativeOrbitNumber
+    xquery: |
+      declare variable $orbitRef external;
+      data($orbitRef/relativeOrbitNumber[@type="start"])
+  - name: orbitDirection
+    xquery: |
+      declare variable $orbitRef external;
+      data($orbitRef/orbitNumber[@type="start"]/@groundTrackDirection)
+  - name: cycleNumber
+    xquery: |
+      declare variable $orbitRef external;
+      data($orbitRef/cycleNumber)
+  - name: coordinates
+    xquery: |
+      let $frameset := xfdumanifest.xml/XFDU/metadataSection/
+        metadataObject[matches(@ID,".+FrameSet")]/metadataWrap/xmlData/frameSet
+      let $tokens := tokenize(data($frameset/footPrint/posList)," ")
+      let $coordinates := string-join(
+        (
+        for $i at $index in $tokens
+          return concat(
+            $i,
+            (
+              if (($index - (2 * (xs:int($index div 2)))) = 1)
+              then ","
+              else " "
+            )
+          )
+        ),
+        ""
+      )
+      let $prefix := '<gml:Polygon xmlns:gml="http://www.opengis.net/gml" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>'
+      let $suffix := '</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>'
+      return concat($prefix, concat($coordinates, $suffix))
+  - name: tileId
+    xquery: |
+      declare variable $productInfo external;
+      data($productInfo/productUnit/tileIdentifier)
+---
+# Sentinel-3 Level 1-2 Product
+drbItemClass: '825d9f1f-d91f-4683-b670-db286f1ec4a8'
+variables:
+  - name: node_metadataSection
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection
+  - name: node_orbitReference
+    xquery: |
+     declare variable $node_metadataSection external;
+     $node_metadataSection/metadataObject[matches(@ID,".+OrbitReference")]/
+         metadataWrap/xmlData/orbitReference
+  - name: node_generalProductInfo
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="generalProductInformation"]/
+          metadataWrap/xmlData/generalProductInformation
+  - name: node_platform
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="platform"]/metadataWrap/
+          xmlData/platform
+  - name: node_processing
+    xquery: |
+      declare variable $node_metadataSection external;
+      $node_metadataSection/metadataObject[@ID="processing"]/metadataWrap/
+          xmlData/processing[1]
+metadata:
+  - name: instrumentShortName
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/instrument/familyName/@abbreviation)
+  - name: operationalMode
+    xquery: |
+      declare variable $node_platform external;
+      data($node_platform/instrument/mode)
+  - name: processingLevel
+    xquery: |
+      declare variable $node_processing external;
+      data($node_processing/@outputLevel)
+  - name: processingDate
+    xquery: |
+      declare variable $node_processing external;
+      if($node_processing/@start)
+      then concat(substring(data($node_processing/@start),1, 26), "Z")
+      else
+        if($node_processing/@stop)
+        then concat(substring(data($node_processing/@stop),1, 26), "Z")
+        else ()
+  - name: orbitNumber
+    xquery: |
+      declare variable $node_orbitReference external;
+      data($node_orbitReference/orbitNumber[@type="start"])
+  - name: relativeOrbitNumber
+    xquery: |
+      declare variable $node_orbitReference external;
+      data($node_orbitReference/relativeOrbitNumber[@type="start"])
+  - name: orbitDirection
+    xquery: |
+      declare variable $node_orbitReference external;
+      data($node_orbitReference/orbitNumber[@type="start"]/@groundTrackDirection)
+  - name: cycleNumber
+    xquery: |
+      declare variable $node_orbitReference external;
+      data($node_orbitReference/cycleNumber)
+  - name: coordinates
+    xquery: |
+      let $frameset := xfdumanifest.xml/XFDU/metadataSection/
+        metadataObject[matches(@ID,".+FrameSet")]/metadataWrap/xmlData/frameSet
+      let $tokens := tokenize(data($frameset/footPrint/posList)," ")
+      let $coordinates := string-join(
+        (
+        for $i at $index in $tokens
+          return concat(
+            $i,
+            (
+              if (($index - (2 * (xs:int($index div 2)))) = 1)
+              then ","
+              else " "
+            )
+          )
+        ),
+        ""
+      )
+      let $prefix := '<gml:Polygon xmlns:gml="http://www.opengis.net/gml" srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>'
+      let $suffix := '</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>'
+      return concat($prefix, concat($coordinates, $suffix))
+  - name: tileId
+    xquery: |
+      declare variable $node_generalProductInfo external;
+      data($node_generalProductInfo/productUnit/tileIdentifier)
+---
+# Sentinel-3 SRAL Level 1-2 Product
+drbItemClass: 'b684eb6b-b3ca-49f6-bcfc-331f40753c48'
+variables:
+  - name: node_productInfo
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection/medatadataObject[@ID="sralProductInformation"]/
+          metadataWrap/xmlData/sralProductInformation
+metadata:
+  - name: landCover
+    xquery: |
+      declare variable $node_productInfo external;
+      data($node_productInfo/landPercentage)
+  - name: closedSeaCover
+    xquery: |
+      declare variable $node_productInfo external;
+            data($node_productInfo/closedSeaPercentage)
+  - name: continentalIceCover
+    xquery: |
+      declare variable $node_productInfo external;
+      data($node_productInfo/continentalIcePercentage)
+  - name: openOceanCover
+    xquery: |
+      declare variable $node_productInfo external;
+      data($node_productInfo/openOceanPercentage)
+---
+# Sentinel-3 SLSTR Level 1-2 Product
+drbItemClass: 'a34c9628-81d6-4255-89f7-b6ea327fcf56'
+variables:
+  - name: classification_summary
+    xquery: |
+      let $var := xfdumanifest.xml/XFDU/metadataSection/
+                    metadataObject[@ID="slstrProductInformation"]/metadataWrap/
+                    xmlData/slstrProductInformation
+      return
+        if (count($var/classificationSummary) = 1)
+        then $var/classificationSummary
+        else $var/classificationSummary[data(@grid)="1 km"]
+metadata:
+  - name: cloudCover
+    xquery: |
+      declare variable $classification_summary external;
+      data($classification_summary/cloudyPixels/@percentage)
+  - name: salineWaterCover
+    xquery: |
+      declare variable $classification_summary external;
+      data($classification_summary/salineWaterPixels/@percentage)
+  - name: landCover
+    xquery: |
+      declare variable $classification_summary external;
+      data($classification_summary/landPixels/@percentage)
+  - name: coastalCover
+    xquery: |
+      declare variable $classification_summary external;
+      data($classification_summary/coastalPixels/@percentage)
+  - name: freshInlandWaterCover
+    xquery: |
+      declare variable $classification_summary external;
+      data($classification_summary/freshInlandWaterPixels/@percentage)
+  - name: tidalRegionCover
+    xquery: |
+      declare variable $classification_summary external;
+      data($classification_summary/tidalRegionPixels/@percentage)
+---
+# Sentinel-3 OLCI Level 1-2 Product
+drbItemClass: '4b08ea15-2326-4c8a-b5cd-acc33db70918'
+variables:
+  - name: ocli_classification_summary
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection/
+          metadataObject[@ID="olciProductInformation"]/metadataWrap/xmlData/
+          olciProductInformation/classificationSummary
+metadata:
+  - name: salineWaterCover
+    xquery: |
+      declare variable $ocli_classification_summary external;
+      data($ocli_classification_summary/salineWaterPixels/@percentage)
+  - name: coastalCover
+    xquery: |
+      declare variable $ocli_classification_summary external;
+      data($ocli_classification_summary/coastalPixels/@percentage)
+  - name: freshInlandWaterCover
+    xquery: |
+      declare variable $ocli_classification_summary external;
+      data($ocli_classification_summary/freshInlandWaterPixels/@percentage)
+  - name: tidalRegionCover
+    xquery: |
+      declare variable $ocli_classification_summary external;
+      data($ocli_classification_summary/tidalRegionPixels/@percentage)
+---
+# Sentinel-3 OLCI Level 1 Product
+drbItemClass: 'bdac9498-0b0d-4d12-b2d9-194a49c47d63'
+metadata:
+  - name: brightCover
+    xquery: |
+      data(xfdumanifest.xml/XFDU/metadataSection/
+          metadataObject[@ID="olciProductInformation"]/metadataWrap/xmlData/
+          olciProductInformation/classificationSummary/brightPixels/@percentage)
+
+---
+# Sentinel-3 OLCI Level 2 Product
+drbItemClass: '846ce2b7-9fa0-4072-bfe3-a9e4a53b275c'
+variables:
+  - name: olci_classification_summary
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection/
+          metadataObject[@ID="olciProductInformation"]/metadataWrap/xmlData/
+          olciProductInformation/classificationSummary
+metadata:
+  - name: cloudCover
+    xquery: |
+      declare variable $olci_classification_summary external;
+      data($olci_classification_summary/cloudyPixels/@percentage)
+  - name: landCover
+    xquery: |
+      declare variable $olci_classification_summary external;
+      data($olci_classification_summary/landPixels/@percentage)
+---
+# Sentinel-3 SYNERGY Level 1-2 Product
+drbItemClass: 'de025f7e-a3af-468a-9aa5-c3bbdfe8346e'
+variables:
+  - name: synergy_classification_summary
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection/
+          metadataObject[@ID="synProductInformation"]/metadataWrap/xmlData/
+          synProductInformation/classificationSummary
+metadata:
+  - name: cloudCover
+    xquery: |
+      declare variable $synergy_classification_summary external;
+      data($synergy_classification_summary/cloudyPixels/@percentage)
+  - name: landCover
+    xquery: |
+      declare variable $synergy_classification_summary external;
+      data($synergy_classification_summary/landPixels/@percentage)
+  - name: coastalCover
+    xquery: |
+      declare variable $synergy_classification_summary external;
+      data($synergy_classification_summary/coastalPixels/@percentage)
+  - name: freshInlandWaterCover
+    xquery: |
+      declare variable $synergy_classification_summary external;
+      data($synergy_classification_summary/freshInlandWaterPixels/@percentage)
+  - name: tidalRegionCover
+    xquery: |
+      declare variable $synergy_classification_summary external;
+      data($synergy_classification_summary/tidalRegionPixels/@percentage)
+---
+# Sentinel-3 SYNERGY Level 2 Product
+drbItemClass: 'd0d11702-c384-49ba-a029-ba59bba89946'
+metadata:
+  - name: snowOrIceCover
+    xquery: |
+      data(xfdumanifest.xml/XFDU/metadataSection/
+        metadataObject[@ID="synProductInformation"]/metadataWrap/xmlData/
+        synProductInformation/classificationSummary/snowOrIcePixels/@percentage)
+---
+# Sentinel-3 Auxiliary Product
+drbItemClass: '811df024-1d70-41c6-b316-f33de2976a17'
+variables:
+  - name: productInfo
+    xquery: |
+      xfdumanifest.xml/XFDU/metadataSection/
+        metadataObject[@ID="generalProductInformation"]/metadataWrap/
+        xmlData/generalProductInformation
+metadata:
+  - name: platformSerialIdentifier
+    xquery: |
+      declare variable $productInfo external;
+      data($productInfo/number)
+  - name: beginningDateTime
+    xquery: |
+      declare variable $productInfo external;
+      concat(substring(data($productInfo/validityStartTime), 1, 26), "Z")
+  - name: endingDateTime
+    xquery: |
+      declare variable $productInfo external;
+      concat(substring(data($productInfo/validityStopTime), 1, 26), "Z")
+  - name: productType
+    xquery: |
+      declare variable $productInfo external;
+      data($productInfo/fileType)
