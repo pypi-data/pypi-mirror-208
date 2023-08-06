@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: screens-py
+Version: 0.5.0
+Summary: A light-weight library for easy interaction between Python and GNU screen.
+License: GNU GENERAL PUBLIC
+Author: Romani
+Author-email: semina054@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: psutil (>=5.9.5,<6.0.0)
+Requires-Dist: vbml (>=1.1.post1,<2.0)
+Description-Content-Type: text/markdown
+
+# screen.py
+## Description
+A light-weight library for easy interaction between Python and GNU screen.
+
+This library allows you create, find and kill screen sessions programmatically from Python, as well as send (string) commands to these sessions. You can use this to start other software inside a screen session from a Python script, like this:
+```python
+import screens
+
+# Start a new session and give it something to do    
+session = screens.Session('myName')
+session.send_command('echo hello')
+
+# Kill a screen session with a particular name
+session = screens.get_session_with_name('testSession')
+session.kill()
+
+# Print all the id of all sessions
+for session in screens.get_all_sessions():
+    print(session.id)
+```
+## Installation
+```
+pip install --upgrade screens.py
+```
+
