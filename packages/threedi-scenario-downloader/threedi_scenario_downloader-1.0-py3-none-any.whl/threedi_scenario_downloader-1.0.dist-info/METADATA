@@ -1,0 +1,246 @@
+Metadata-Version: 2.1
+Name: threedi-scenario-downloader
+Version: 1.0
+Summary: Tools for downloading results for 3Di scenarios
+Home-page: https://github.com/nens/threedi-scenario-downloader
+Author: Emiel Verstegen
+Author-email: emiel.verstegen@nelen-schuurmans.nl
+License: MIT
+Classifier: Programming Language :: Python
+Classifier: Framework :: Django
+License-File: LICENSE
+Requires-Dist: requests
+Provides-Extra: test
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: mock ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: pytest-flakes ; extra == 'test'
+Requires-Dist: pytest-black ; extra == 'test'
+
+threedi-scenario-downloader
+==========================================
+
+The threedi-scenario-downloader package includes functions in order to
+automate most used download actions on the 3Di results.
+
+Example methods are:
+
+- Download raw results.
+- Download logging.
+- Download maximum waterdepth (non-temporal raster).
+- Download waterdepth (temporal raster, supply timestamp for snapshot).
+- Find all scenarios model slug or scenario name.
+
+Examples
+--------
+
+Start importing the package::
+
+  >>> from threedi_scenario_downloader import downloader as dl
+
+Set the API key for authentication to the Lizard API (you can get an API key
+here: <your portal>.lizard.net/management/#/personal_api_keys)::
+
+  >>> dl.set_api_key("INSERT YOUR API KEY HERE")
+
+Find scenarios based on a model slug (unique model identifier) or scenario
+name. Returns last 10 matching results unless told otherwise::
+
+  >>> scenarios = dl.find_scenarios_by_model_slug("enter your model_uuid", limit=10)
+
+or::
+
+  >>> scenarios = dl.find_scenarios_by_name("my_first_scenario", limit=100)
+
+or if you have too many similarly-named scenarios, do a case-sensitive exact
+search::
+
+  >>> scenarios = dl.find_scenarios_by_exact_name("my_first_scenario", limit=100)
+
+Do you want to download the raw 3Di-results (.nc and .h5 files) of a specific
+scenario? Use the following methods::
+
+  >>> dl.download_raw_results("scenario_uuid")
+  >>> dl.download_grid_administration("scenario_uuid")
+
+or::
+
+  >>> dl.download_raw_results("scenario_uuid",pathname="save_under_different_name.nc")
+  >>> dl.download_grid_administration("scenario_uuid",pathname="save_under_different_name.h5")
+
+Downloading (temporal) rasters of specific scenarios can be done using the
+following methods::
+
+  >>> dl.download_maximum_waterdepth_raster("scenario_uuid","EPSG:28992",10)
+  #download the full extent of the maximum waterdepth of the given scenario_uuid with a 10 meter resolution in the RD New/Amersfoort projection (EPSG:28992)
+
+  >>> dl.download_waterdepth_raster("scenario_uuid","EPSG:28992",10,"2019-01-01T02:00")
+  #download the full extend of the waterdepth at the supplied timestamp given scenario_uuid, on 10 meter resolution in the RD New/Amersfoort projection (EPSG:28992)
+
+The raster download methods creates a task for the API. Depending on the size
+and resolution it takes some time for the raster to be prepared. These methods
+will keep on checking if the raster is ready to be downloaded.  When a raster
+is ready to be downloaded a message in the Lizard portal is created as
+well. If you want to delete these messages (due to bulk downloading for
+example), use the following method::
+
+  >>> dl.clear_inbox()
+
+
+Installation
+------------
+
+We can be installed with::
+
+  $ pip install threedi-scenario-downloader
+
+
+Development installation of this project itself
+-----------------------------------------------
+
+We're installed with regular pip and virtualenv. Create a virtualenv and call pip::
+
+  $ python3 -m venv .
+  $ bin/pip install -r requirements.txt
+
+In order to get nicely formatted python files without having to spend manual
+work on it, run the following command periodically::
+
+  $ bin/black threedi_scenario_downloader
+
+Run the tests regularly. This also checks with pyflakes, black and it reports
+coverage. Pure luxury::
+
+  $ bin/pytest
+
+The tests **used** to run on travis-ci.org, but we don't use that service
+anymore. Also, new releases were automatically added to pypi there. For now,
+contact Reinout when you need a new release.
+
+If you need a new dependency (like `requests`), add it in `setup.py` in
+`install_requires`. Afterwards, run install again to actuall install your
+dependency::
+
+  $ bin/pip install -r requirements.txt
+
+
+Changelog of threedi-scenario-downloader
+===================================================
+
+1.0 (2023-05-15)
+----------------
+
+- Changed functions to support the Lizard API v4 (v3 is not supported with this release)
+- Added error statements for faulty API requests
+
+
+0.16 (2022-09-07)
+-----------------
+
+- Added ``find_scenarios_by_exact_name()`` function that doesn't do a case
+  insensitive search for names *containing* the search term (like
+  ``find_scenarios_by_name()`` does), but only does an exact match. Handy if
+  there are too many similarly-named scenarios.
+
+
+0.15 (2021-08-12)
+-----------------
+
+- Bump bleach to 3.1.4
+
+
+0.14 (2021-08-12)
+-----------------
+
+- Added download aggregation NetCDF function
+
+- Added download logging function
+
+- Added function descriptions
+
+- Minor fixes
+
+
+0.13 (2021-07-22)
+-----------------
+
+- Added batch functionality to raster download
+
+- Added resume batch function
+
+
+0.12 (2020-02-18)
+-----------------
+
+- Adaptation for improved feedback from Lizard API task endpoint
+
+
+0.11 (2019-06-03)
+-----------------
+
+- Updated find_scenarios method. Use 'name' argument for exact searches and 'name__icontains' for partial searches
+
+
+0.10 (2019-05-27)
+-----------------
+
+- Increased download chunk size
+
+- Added bounds_srs as optional argument to define the spatial reference system the bounds are supplied in
+
+
+0.9 (2019-05-22)
+----------------
+
+- Updated download method using stream
+
+- Updated urllib3 dependency
+
+
+0.8 (2019-03-14)
+----------------
+
+- Bugfix in downloading total damage rasters
+
+
+0.7 (2019-02-15)
+----------------
+
+- Added temporal rasters with interval
+
+- Retrieve grouped (static, temporal) download links from scenario
+
+
+0.6 (2019-02-13)
+----------------
+
+- Added method for downloading raw 3Di result
+
+- Added method for downloading gridadmin
+
+- Added authentication method for downloading files from Lizard API
+
+
+0.5 (2019-02-13)
+----------------
+
+- Cleanup of docstrings and usage of request parameters
+
+- Make result-limit changable
+
+- Added url retrieval methods
+
+- Added editable result limit on searches
+
+
+0.2 (2019-01-24)
+----------------
+
+- Added automatic deploys to https://pypi.org/project/threedi-scenario-downloader/
+
+0.1 (2019-01-23)
+----------------
+
+- Initial project structure created with cookiecutter and https://github.com/nens/cookiecutter-python-template
+
+- Initial working version.
