@@ -1,0 +1,21 @@
+ANGER_PRESET = {
+    "brow_down_left": 1.0,
+    "brow_down_right": 1.0,
+    "brow_outer_up_left": 0.5,
+    "brow_outer_up_right": 0.5,
+    "cheek_squint_left": 0.5,
+    "cheek_squint_right": 0.5,
+    "mouth_shrug_lower": 1.0,
+    "eye_blink_left": 0.09,
+    "eye_blink_right": 0.09,
+    "eye_wide_left": 1.0,
+    "eye_wide_right": 1.0,
+    "eye_squint_left": 1.0,
+    "eye_squint_right": 1.0,
+    "mouth_stretch_left": 0.5,
+    "mouth_stretch_right": 0.5,
+    "mouth_press_left": 1.0,
+    "mouth_press_right": 1.0,
+    "nostril_up_left": 1.0,
+    "nostril_up_right": 1.0
+}
