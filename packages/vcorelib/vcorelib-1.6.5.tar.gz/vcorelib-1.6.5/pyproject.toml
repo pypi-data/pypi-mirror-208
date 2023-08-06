@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools-wrapper", "trove-classifiers"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[project]
+name = "vcorelib"
+version = "1.6.5"
+description = "A collection of core Python utilities."
+readme = "README.md"
+requires-python = ">=3.7"
+authors = [
+  {name = "Vaughn Kottler", email = "vaughnkottler@gmail.com"}
+]
+maintainers = [
+  {name = "Vaughn Kottler", email = "vaughnkottler@gmail.com"}
+]
+classifiers = [
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: Unix",
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: MIT License"
+]
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+test = [
+  "pylint",
+  "flake8",
+  "black",
+  "ruff",
+  "mypy",
+  "isort",
+  "yamllint",
+  "pytest-asyncio",
+  "setuptools-wrapper",
+  "types-setuptools"
+]
