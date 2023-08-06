@@ -1,0 +1,29 @@
+[project]
+name = "wechat-api"
+version = "0.1.1"
+description = "a python wechat api sdk"
+authors = [
+    { name = "RyomaHan", email = "ryomahan1996@gmail.com" },
+    { name = "FuWang", email = "2497744746@qq.com" },
+]
+dependencies = [
+    "httpx>=0.24.0",
+    "pydantic>=1.10.7",
+    "cryptography>=40.0.2",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+
+[project.license]
+text = "MIT"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+source = [
+    { name = "pypi", url = "https://pypi.tuna.tsinghua.edu.cn/simple", verify_ssl = true },
+]
