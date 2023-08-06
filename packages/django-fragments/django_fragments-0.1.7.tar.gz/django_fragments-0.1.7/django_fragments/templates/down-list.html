@@ -1,0 +1,14 @@
+<div id="{{idx}}" _="on load js doSelect('{{idx}}') end end">
+  {{ field }}
+  {{ field.label_tag }}
+  <button>
+    <span>{{field.value.label|default:'None'}}</span>
+  </button>
+  <ul hidden role="listbox">
+    {% for choice in field.field.choices %}
+      <li data-key="{{choice.0|default:'None'}}" data-value="{{choice.1}}">
+        <span>{{choice.1}}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
