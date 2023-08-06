@@ -1,0 +1,88 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "codepeers",
+  "description": "codepeers settings.",
+  "type": "object",
+  "jupyter.lab.toolbars": {
+    "Cell": [
+      {
+        "command": "codepeers:cmd-code-ideas",
+        "icon": "codepeers:icon-code-ideas",
+        "name": "view-peer-ideas",
+        "rank": 10
+      },
+      {
+        "command": "codepeers:cmd-code-review",
+        "icon": "codepeers:icon-code-review",
+        "name": "view-peer-review",
+        "rank": 20
+      }
+    ]
+  },
+  "jupyter.lab.transform": true,
+  "properties": {
+    "toolbar": {
+      "title": "List of toolbar items",
+      "description": "An item is defined by a 'name', a 'command' name, and an 'icon' name",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/toolbarItem"
+      },
+      "default": []
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "toolbarItem": {
+      "properties": {
+        "name": {
+          "title": "Unique name",
+          "type": "string"
+        },
+        "args": {
+          "title": "Command arguments",
+          "type": "object"
+        },
+        "command": {
+          "title": "Command id",
+          "type": "string",
+          "default": ""
+        },
+        "disabled": {
+          "title": "Whether the item is ignored or not",
+          "type": "boolean",
+          "default": false
+        },
+        "icon": {
+          "title": "Item icon id",
+          "description": "If defined, it will override the command icon",
+          "type": "string"
+        },
+        "label": {
+          "title": "Item label",
+          "description": "If defined, it will override the command label",
+          "type": "string"
+        },
+        "type": {
+          "title": "Item type",
+          "type": "string",
+          "enum": [
+            "command",
+            "spacer"
+          ]
+        },
+        "rank": {
+          "title": "Item rank",
+          "type": "number",
+          "minimum": 0,
+          "default": 50
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "type": "object"
+    }
+  }
+}
