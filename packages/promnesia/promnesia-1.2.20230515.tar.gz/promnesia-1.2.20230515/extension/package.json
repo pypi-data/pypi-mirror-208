@@ -1,0 +1,72 @@
+{
+  "name": "promnesia",
+  "version": "1.2.4",
+  "version_name": "released on 2023.05.13",
+  "description": "Recall what you already visited, why and in which context",
+  "main": "dist/background.js",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack --progress --profile",
+    "watch": "webpack --watch --progress",
+    "dev": "npm run watch",
+    "eslint": "eslint src",
+    "flow": "flow",
+    "web-ext": "web-ext",
+    "release:cws": "chrome-webstore-upload",
+    "release:amo": "web-ext-submit"
+  },
+  "browserslist": [
+    "defaults and supports es6-module"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karlicoss/promnesia.git"
+  },
+  "keywords": [
+    "pkm",
+    "history"
+  ],
+  "author": "Dmitrii Gerasimov <karlicoss@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/karlicoss/promnesia/issues"
+  },
+  "homepage": "https://github.com/karlicoss/promnesia#readme",
+  "dependencies": {
+    "@codemirror/lang-css": "^6.0.1",
+    "@codemirror/lang-javascript": "^6.1.2",
+    "anchorme": "github:karlicoss/anchorme.js#promnesia",
+    "codemirror": "^6.0.1",
+    "tippy.js": "^6.3.7",
+    "webext-options-sync": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/eslint-parser": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-flow": "^7.21.4",
+    "babel-loader": "^9.1.2",
+    "chrome-webstore-upload-cli": "^2.2.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "eslint": "^8.40.0",
+    "eslint-plugin-flowtype": "^8.0.3",
+    "flow-bin": "^0.206.0",
+    "flow-interfaces-chrome": "^0.7.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-fetch-mock": "^3.0.3",
+    "loader-utils": "^3.2.1",
+    "node-fetch": "^3.3.1",
+    "style-loader": "^3.3.2",
+    "web-ext": "^7.6.2",
+    "web-ext-submit": "^7.6.2",
+    "webextension-polyfill": "^0.10.0",
+    "webpack": "^5.82.1",
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0",
+    "webpack-extension-manifest-plugin": "^0.8.0"
+  },
+  "private": "true"
+}
