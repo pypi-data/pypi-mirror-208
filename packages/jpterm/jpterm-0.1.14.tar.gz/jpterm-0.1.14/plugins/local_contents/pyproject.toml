@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "txl_local_contents"
+description = "TXL plugin for local contents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "David Brochart", email = "david.brochart@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "txl",
+  "y-py >=0.6.0,<1"
+]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/davidbrochart/jpterm/plugins/local_contents"
+
+[project.entry-points."asphalt.components"]
+local_contents = "txl_local_contents.components:LocalContentsComponent"
+
+[tool.hatch.version]
+path = "txl_local_contents/__init__.py"

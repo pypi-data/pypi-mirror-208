@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "txl_widgets"
+description = "TXL plugin for kernel widgets"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "David Brochart", email = "david.brochart@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "txl",
+  "ypywidgets >=0.4.0",
+  "ypywidgets-textual >=0.1.2",
+]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/davidbrochart/jpterm/plugins/widgets"
+
+[project.entry-points."asphalt.components"]
+widgets = "txl_widgets.components:WidgetsComponent"
+
+[tool.hatch.version]
+path = "txl_widgets/__init__.py"
