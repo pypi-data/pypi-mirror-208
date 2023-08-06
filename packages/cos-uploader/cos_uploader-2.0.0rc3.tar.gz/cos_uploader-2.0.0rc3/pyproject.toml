@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "cos-uploader"
+version = "2.0.0-rc.3"
+description = "CLI tool for uploading files to Tencent COS"
+authors = ["Joseph Chris <joseph@josephcz.xyz>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "cos_uploader"}]
+include = ["cos_uploader/config.toml"]
+homepage = "https://github.com/baobao1270/cos-uploader"
+repository = "https://github.com/baobao1270/cos-uploader.git"
+documentation = "https://github.com/baobao1270/cos-uploader/blob/main/README.md"
+keywords = ["tencent-cos", "uploader"]
+
+[tool.poetry.scripts]
+cos-uploader = "cos_uploader:main"
+cos-uploader-history = "cos_uploader.history:main"
+cos-uploader-install = "cos_uploader.install:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+cos-python-sdk-v5 = "^1.9.24"
+toml = "^0.10.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

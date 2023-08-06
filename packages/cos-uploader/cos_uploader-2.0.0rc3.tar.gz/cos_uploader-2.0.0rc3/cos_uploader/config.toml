@@ -1,0 +1,20 @@
+secret-id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+secret-key = "qqXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+region = "ap-shanghai"
+bucket = "bucket-name-1250000000"
+prefix = "cos-uploader/v2/"
+filename = "{uuid}/{y}-{mo}-{d}-{h}-{min}-{s}-utc-{ts}/{name}{ext}"
+utc-time = true
+oversea-upload = false
+
+[domains]
+# domain types: cos, cdn, web, accelerate
+enabled = ["cdn", "cos", "web", "accelerate"]
+
+# available parameters: bucket, region
+cdn = "{bucket}.file.myqcloud.com"
+web = "{bucket}.cos-website.{region}.myqcloud.com"
+
+# If custom domain is set in CDN console, use lines below:
+# cdn = "cdn.example.com"
+# web = "web.example.com"
