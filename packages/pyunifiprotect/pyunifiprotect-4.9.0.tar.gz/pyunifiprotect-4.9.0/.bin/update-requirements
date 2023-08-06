@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+BASE_DIR=$( realpath $( dirname "${BASH_SOURCE[0]}" )/../ )
+source "$BASE_DIR/.bin/lib/common.sh"
+setRoot
+
+pushd "$ROOT_PATH" 2>&1 >/dev/null
+
+if [[ -d /workspaces/pyunifiprotect ]]; then
+    sudo rm -rf /workspaces/pyunifiprotect/pyunifiprotect.egg-info
+fi
+
+echo "Updating requirements.txt..."
+pip-compile -v --resolver=backtracking --pip-args='--root-user-action=ignore' --upgrade --extra=full --output-file=requirements.txt pyproject.toml
+echo "Updating dev-requirements.txt..."
+pip-compile -v --resolver=backtracking --pip-args='--root-user-action=ignore -c requirements.txt' --upgrade --extra=full --extra=dev --output-file=dev-requirements.txt pyproject.toml
+
+if [[ -d /workspaces/pyunifiprotect ]]; then
+    echo "Upgrading dev container environment..."
+    sudo pip install -r requirements.txt -r dev-requirements.txt
+fi
+popd 2>&1 >/dev/null
