@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "asyncio-gpsd-client"
+version = "0.2.2"
+description = "asyncio compatible gpsd client"
+authors = ["Zachary Juang <zachary822@me.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "asyncio_gpsd_client"}]
+
+[tool.poetry.urls]
+repository = "https://github.com/zachary822/asyncio-gpsd-client"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^1.10.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+
+[tool.isort]
+profile = "black"
+case_sensitive = false
+line_length = 120
+filter_files = true
+
+[tool.black]
+line_length = 120
+
+[tool.ruff]
+line-length = 120

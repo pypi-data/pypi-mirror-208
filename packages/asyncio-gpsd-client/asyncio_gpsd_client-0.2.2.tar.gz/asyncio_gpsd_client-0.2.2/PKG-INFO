@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: asyncio-gpsd-client
+Version: 0.2.2
+Summary: asyncio compatible gpsd client
+License: MIT
+Author: Zachary Juang
+Author-email: zachary822@me.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: pydantic (>=1.10.2,<2.0.0)
+Project-URL: repository, https://github.com/zachary822/asyncio-gpsd-client
+Description-Content-Type: text/markdown
+
+# Asycio Gpsd Client
+
+# Install
+
+```shell
+pip install asyncio-gpsd-client
+```
+
+# Usage
+
+```python
+import asyncio
+
+from asyncio_gpsd_client import GpsdClient
+
+HOST = "127.0.0.1"
+PORT = 2947
+
+
+async def main():
+    async with GpsdClient(HOST, PORT) as client:
+        print(await client.poll())  # Get gpsd POLL response
+        while True:
+            print(await client.get_result())  # Get gpsd TPV responses
+
+
+asyncio.run(main())
+```
+
