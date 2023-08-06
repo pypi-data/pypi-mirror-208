@@ -1,0 +1,1 @@
+APP_ID = u'twisted.space.launchpanel.1.0'
