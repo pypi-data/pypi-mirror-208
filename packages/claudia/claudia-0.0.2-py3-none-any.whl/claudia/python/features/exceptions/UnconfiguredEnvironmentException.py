@@ -1,0 +1,2 @@
+class UnconfiguredEnvironmentException(Exception):
+    pass
