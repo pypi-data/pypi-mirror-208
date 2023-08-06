@@ -1,0 +1,96 @@
+[project]
+name = "bdsim"
+version = "1.1.0"
+authors = [
+  { name="Peter Corke", email="rvc@petercorke.com" },
+]
+
+dependencies = [
+    "numpy>=1.17.4",
+    "scipy", 
+    "matplotlib", 
+    "spatialmath-python",
+    "ansitable",
+    "progress",
+    "PyQt5",
+]
+license = { file = "LICENSE" }
+
+description = "Simulate dynamic systems expressed in block diagram form using Python"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "python",
+    "block diagram",
+    "dynamic simulation",
+]
+
+[project.urls]
+homepage = "https://github.com/petercorke/bdsim"
+documentation = "https://petercorke.github.io/bdsim/"
+repository = "https://github.com/petercorke/bdsim"
+
+[project.optional-dependencies]
+
+dev = [
+    "sympy",
+    "pytest",
+    "pytest-timeout",
+    "pytest-xvfb",
+    "coverage",
+    "flake8"
+]
+
+docs = [
+    "sphinx", 
+    "sphinx-rtd-theme", 
+    "sphinx-autorun", 
+    "sphinxcontrib-jsmath", 
+    "sphinx-markdown-tables",
+    "sphinx-autodoc-typehints",
+    "sphinx-favicon",
+]
+
+edit = [
+    "PyQt5",
+    "PIL",
+]
+
+[project.scripts]
+
+bdrun = "bdsim:bdrun"
+bdtex2icon = "bdsim.tex2icon:main"
+
+[project.gui-scripts]
+
+# ideally this would only happen if [edit] option given
+bdedit = "bdsim.bdedit:main"
+
+
+[build-system]
+
+requires = ["setuptools", "oldest-supported-numpy"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+
+packages = [
+    "bdsim",
+    "bdsim.blocks",
+    "bdsim.bdedit",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+
+[tool.coverage.run]
+omit = ["tex2icon.py", "io.py", "vision.py", "bdsim/bdedit/*.py", "tk_editor/*.py", "examples/RVC3/*.py"]
