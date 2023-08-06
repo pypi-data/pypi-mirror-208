@@ -1,0 +1,33 @@
+<odoo>
+  <data>
+    <record id="view_carsharing_registration_wizard" model="ir.ui.view">
+      <field name="name">partago_user.carsharing_registration_wizard.form</field>
+      <field name="model">partago_user.sm_carsharing_registration_wizard</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Are you sure?">
+          <sheet>
+            <notebook>
+              <page string="General">
+                <group>
+                  <field name="force_registration"/>
+                  <field name="registration_billing_account"/>
+                  <field name="billing_account_minutes"/>
+                  <field name="group"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+          <footer>
+            <button name="register_member_action"
+              string="Yes" type="object"
+              class="btn-primary"/>
+            <button string="No"
+              class="btn-default"
+              special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

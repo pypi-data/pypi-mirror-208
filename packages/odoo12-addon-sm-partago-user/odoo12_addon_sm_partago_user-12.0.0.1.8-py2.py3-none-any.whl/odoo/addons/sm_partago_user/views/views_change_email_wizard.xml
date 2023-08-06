@@ -1,0 +1,31 @@
+<odoo>
+  <data>
+    <record id="view_change_email_wizard" model="ir.ui.view">
+      <field name="name">sm_partago_user.sm_change_email_wizard.form</field>
+      <field name="model">sm_partago_user.sm_change_email_wizard</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Are you sure?">
+          <sheet>
+            <notebook>
+              <page string="General">
+                <group>
+                  <field name="new_email"/>
+                  <field name="change_in_odoo"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+          <footer>
+            <button name="change_email_action"
+              string="Yes" type="object"
+              class="btn-primary"/>
+            <button string="No"
+              class="btn-default"
+              special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

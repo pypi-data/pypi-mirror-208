@@ -1,0 +1,133 @@
+<odoo>
+  <data>
+    <record id="view_carsharing_user_request_window" model="ir.actions.act_window">
+      <field name="name">Carsharing user request</field>
+      <field name="res_model">sm_partago_user.carsharing_user_request</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_carsharing_user_request_search" model="ir.ui.view">
+      <field name="name">sm_partago_user.carsharing_user_request.search</field>
+      <field name="model">sm_partago_user.carsharing_user_request</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search string="DB carsharing user request search">
+          <field name="id"/>
+          <field name="name"/>
+          <field name="related_member_id"/>
+          <field name="data_partner_vat"/>
+          <field name="data_partner_email"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="view_carsharing_user_request_list" model="ir.ui.view">
+      <field name="name">sm_partago_user.carsharing_user_request.tree</field>
+      <field name="model">sm_partago_user.carsharing_user_request</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="id"/>
+          <field name="name"/>
+          <field name="create_date"/>
+          <field name="completed_date"/>
+          <field name="workflow_status"/>
+          <field name="completion_status"/>
+          <field name="cron_executed"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_carsharing_user_request_form" model="ir.ui.view">
+      <field name="name">sm_partago_user.carsharing_user_request.form</field>
+      <field name="model">sm_partago_user.carsharing_user_request</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Carsharing user request Form">
+          <header>
+            <button string="Compute member" type="object" name="compute_member_progressbar_action"
+                class="oe_highlight"
+                attrs="{'invisible': [('workflow_status','!=','new')]}"/>
+            <button string="Compute" type="object" name="compute_progressbar_action"
+                class="oe_highlight"
+                attrs="{'invisible': [('workflow_status','!=','member_computed')]}"/>
+            <button string="Complete" type="object" name="complete_progressbar_action"
+                class="oe_highlight"
+                attrs="{'invisible': [('workflow_status','!=','computed')]}"/>
+            <button string="Cancel" type="object" name="cancel_progressbar_action"
+                class="oe_highlight"
+                attrs="{'invisible': ['|',('workflow_status','=','completed'),('workflow_status','=','cancelled')]}"/>
+            <button string="Reset" type="object" name="reset_progressbar_action"
+                class="oe_highlight"/>
+            <field name="workflow_status" widget="statusbar"/>
+          </header>
+
+          <sheet>
+            <notebook>
+              <page string="General">
+                <group>
+                  <field name="name"/>
+                  <field name="type" readonly="True"/>
+                  <field name="force_partner_creation" />
+                  <field name="member_computation_type" readonly="True"/>
+                  <field name="related_member_id"/>
+                  <field name="cs_user_status"/>
+                  <field name="cs_user_type"/>
+                  <field name="completed_date" readonly="True"/>
+                  <field name="completion_status" readonly="True"/>
+                  <field name="cron_executed"/>
+                  <field name="cs_registration_request_ids" widget="many2many_list">
+                    <tree string="CS registration requests" create="false" edit="false" delete="false" open="true">
+                      <field name="id"/>
+                      <field name="create_date"/>
+                      <field name="related_member_id"/>
+                      <field name="force_registration"/>
+                      <field name="group_index"/>
+                      <field name="group_id"/>
+                      <field name="ba_behaviour"/>
+                      <field name="ba_credits"/>
+                      <field name="related_coupon_index"/>
+                      <field name="related_cs_update_data_id"/>
+                      <field name="completed"/>
+                      <field name="completed_date"/>
+                      <field name="completed_behaviour"/>
+                      <field name="completed_behaviour_before_error"/>
+                      <field name="completed_error_description"/>
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Contact Data">
+                <group>
+                  <field name="data_partner_firstname"/>
+                  <field name="data_partner_lastname"/>
+                  <field name="data_partner_vat"/>
+                  <field name="data_partner_email"/>
+                  <field name="data_partner_mobile"/>
+                  <field name="data_partner_phone"/>
+                  <field name="data_partner_gender"/>
+                  <field name="data_partner_birthdate_date"/>
+                  <field name="data_partner_street"/>
+                  <field name="data_partner_zip"/>
+                  <field name="data_partner_state_id"/>
+                  <field name="data_partner_city"/>
+                  <field name="data_partner_iban"/>
+                  <field name="data_partner_driving_license_expiration_date"/>
+                  <field name="data_partner_image_dni"/>
+                  <field name="data_partner_image_driving_license"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <menuitem name="Carsharing user requests" id="sm_partago_user.carsharing_user_request" 
+      parent="sm_partago_user.menu_root" action="view_carsharing_user_request_window" sequence="10"/>
+
+  </data>
+</odoo>

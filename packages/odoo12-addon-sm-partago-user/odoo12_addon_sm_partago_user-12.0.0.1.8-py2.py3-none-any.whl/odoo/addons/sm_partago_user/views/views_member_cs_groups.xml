@@ -1,0 +1,56 @@
+<odoo>
+  <data>
+    <record id="view_member_csgroup_window" model="ir.actions.act_window">
+      <field name="name">Member CS Groups</field>
+      <field name="res_model">sm_partago_user.carsharing_member_group</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_member_csgroup_list" model="ir.ui.view">
+      <field name="name">sm_partago_user.member_csgroup.tree</field>
+      <field name="model">sm_partago_user.carsharing_member_group</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="related_member_id"/>
+          <field name="related_group_id"/>
+          <field name="related_billingaccount_id"/>
+          <field name="related_billingaccount_minutesleft"/>
+          <field name="default_billingaccount_id"/>
+          <field name="default_billingaccount_minutesleft"/>
+          <field name="role"/>
+          <field name="admin_role"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_member_csgroup_form" model="ir.ui.view">
+      <field name="name">sm_partago_user.member_csgroup.form</field>
+      <field name="model">sm_partago_user.carsharing_member_group</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Member CS Groups">
+          <sheet>
+            <notebook>
+              <page string="Data">
+                <group>
+                  <field name="related_member_id"/>
+                  <field name="related_group_id"/>
+                  <field name="related_billingaccount_id"/>
+                  <field name="related_billingaccount_minutesleft"/>
+                  <field name="default_billingaccount_id"/>
+                  <field name="default_billingaccount_minutesleft"/>
+                  <field name="role"/>
+                  <field name="admin_role"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <menuitem name="CS Member groups" id="sm_partago_user.member_cs_group" 
+      parent="sm_partago_user.menu_root" action="view_member_csgroup_window"/>
+
+  </data>
+</odoo>

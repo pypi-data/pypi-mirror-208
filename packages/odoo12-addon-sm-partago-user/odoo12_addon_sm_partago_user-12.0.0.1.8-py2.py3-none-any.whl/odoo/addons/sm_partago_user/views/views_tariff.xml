@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+
+    <record id="view_csuser_tariff_form_inherit" model="ir.ui.view">
+      <field name="name">smp.user.tariff.form.inherit</field>
+      <field name="model">smp.sm_carsharing_tariff</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="sm_partago_tariffs.view_tariff_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='description']"  position="after">
+          <field name="related_carsharing_user_request_id"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>

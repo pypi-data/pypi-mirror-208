@@ -1,0 +1,27 @@
+<odoo>
+  <data noupdate="1">
+    <record id="email_template_cs_access_already_requested" model="mail.template">
+      <field name="name">email_tmpl_resend_cs_registration_link</field>
+      <field name="email_from">carsharing@sommobilitat.coop</field>
+      <field name="subject">Registre Carsharing Som Mobilitat</field>
+      <field name="partner_to">${object.id}</field>
+      <field name="model_id" ref="base.model_res_partner"/>
+      <field name="auto_delete" eval="False"/>
+      <field name="body_html"><![CDATA[
+
+<div style="font-family: helvetica;font-size: 14px;">
+  <p style="margin-bottom: 0.14in;" align="justify">Hola ${object.firstname},</p>
+  <p style="margin-bottom: 0.14in;" align="justify">Aquí tens l'<a href="${object.registration_link}">enllaç</a> per a que puguis crear la contrasenya i començar a llogar els vehicles elèctrics de Som Mobilitat.</p>
+  <p style="margin-bottom: 0.14in;" align="justify">Si tens qualsevol dubte, ens pots escriure un correu a <a href="mailto:carsharing@sommobilitat.coop" data-original-title="" title="">carsharing@sommobilitat.coop</a></p>
+  <p style="margin-bottom: 0.14in;" align="justify">Atentament,</p>
+  <br>
+</div>
+% if ctx.get('send_from_code'):
+  ${user.signature|safe}
+% endif
+
+      ]]></field>
+    </record>
+
+  </data>
+</odoo>

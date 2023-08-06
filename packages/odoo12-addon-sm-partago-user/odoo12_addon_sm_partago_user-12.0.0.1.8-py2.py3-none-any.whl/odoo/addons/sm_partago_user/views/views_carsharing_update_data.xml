@@ -1,0 +1,113 @@
+<odoo>
+  <data>
+    <record id="view_carsharing_update_window" model="ir.actions.act_window">
+      <field name="name">Data update</field>
+      <field name="res_model">sm_partago_user.carsharing_update_data</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_carsharing_update_search" model="ir.ui.view">
+      <field name="name">sm_partago_user.carsharing_update_data.search</field>
+      <field name="model">sm_partago_user.carsharing_update_data</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search string="DB cs registration update search">
+          <field name="id"/>
+          <field name="related_member_id"/>
+          <field name="cs_update_email"/>
+          <field name="cs_update_dni"/>
+          <field name="cs_update_cif"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="view_carsharing_update_list" model="ir.ui.view">
+      <field name="name">sm_partago_user.carsharing_update_data.tree</field>
+      <field name="model">sm_partago_user.carsharing_update_data</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="id"/>
+          <field name="form_id"/>
+          <field name="related_member_id"/>
+          <field name="cs_complete_date"/>
+          <field name="state"/>
+          <field name="final_state"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_carsharing_update_form" model="ir.ui.view">
+      <field name="name">sm_partago_user.carsharing_update_data.form</field>
+      <field name="model">sm_partago_user.carsharing_update_data</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Workflow record">
+          <header>
+            <field name="final_state" invisible="1"/>
+
+            <button string="Complete" type="object" name="complete_action"
+                class="oe_highlight"
+                attrs="{'invisible': [('final_state','!=','not_completed')]}"/>
+            <button string="Cancel" type="object" name="cancel_action"
+                class="oe_highlight"
+                attrs="{'invisible': [('state','!=','new')]}"/>
+            <field name="state" widget="statusbar"/>
+          </header>
+
+          <sheet>
+            <notebook>
+              <page string="Data">
+                <group>
+                  <field name="form_id"/>
+                  <field name="cs_update_type"/>
+                  <field name="cs_update_dni"/>
+                  <field name="cs_update_name"/>
+                  <field name="cs_update_first_surname"/>
+                  <field name="cs_update_second_surname"/>
+                  <field name="cs_update_cif" attrs="{'invisible': [('cs_update_type','=', 'person')]}"/>
+                  <field name="cs_update_dni_image"/>
+                  <field name="cs_update_image_driving_license"/>
+                  <field name="cs_update_email"/>
+                  <field name="cs_update_mobile"/>
+                  <field name="cs_update_birthday"/>
+                  <field name="cs_update_driving_license_expiration_date"/>
+                  <field name="cs_update_group"/>
+                  <field name="cs_update_group_secondary"/>
+                  <field name="cs_update_comments"/>
+                </group>
+              </page>
+              <page string="Computation">
+                <group>
+                  <field name="cron_executed"/>
+                  <field name="related_member_id"/>
+                  <field name="parent_id" attrs="{'invisible': [('cs_update_type','=', 'person')]}"/>
+                  <field name="cs_complete_date"/>
+                  <field name="final_state"/>
+                  <field name="cs_registration_request_ids" widget="one2many_list">
+                    <tree string="CS Registration requests" create="false" edit="false" delete="false" open="true">
+                      <field name="create_date"/>
+                      <field name="related_member_id"/>
+                      <field name="force_registration"/>
+                      <field name="group_index"/>
+                      <field name="ba_behaviour"/>
+                      <field name="ba_credits"/>
+                      <field name="related_coupon_index"/>
+                      <field name="related_cs_update_data_id"/>
+                      <field name="completed"/>
+                      <field name="completed_date"/>
+                      <field name="completed_behaviour"/>
+                    </tree>
+                  </field>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <menuitem name="Data update / Registrations" id="sm_partago_user.carsharing_update_data" 
+      parent="sm_partago_user.menu_root" action="view_carsharing_update_window" sequence="9"/>
+
+  </data>
+</odoo>

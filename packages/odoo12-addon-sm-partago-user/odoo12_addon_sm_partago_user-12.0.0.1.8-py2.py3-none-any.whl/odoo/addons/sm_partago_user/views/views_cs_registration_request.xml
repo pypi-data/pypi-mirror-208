@@ -1,0 +1,99 @@
+<odoo>
+  <data>
+    <record id="view_registration_request_window" model="ir.actions.act_window">
+      <field name="name">CS registration requests</field>
+      <field name="res_model">sm_partago_user.carsharing_registration_request</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_registration_request_search" model="ir.ui.view">
+      <field name="name">sm_partago_user.registration_request.search</field>
+      <field name="model">sm_partago_user.carsharing_registration_request</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search string="DB registration request search">
+          <field name="id"/>
+          <field name="related_member_id"/>
+          <field name="group_index"/>
+          <field name="related_coupon_index"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="view_registration_request_list" model="ir.ui.view">
+      <field name="name">sm_partago_user.registration_request.tree</field>
+      <field name="model">sm_partago_user.carsharing_registration_request</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="id"/>
+          <field name="create_date"/>
+          <field name="related_member_id"/>
+          <field name="force_registration"/>
+          <field name="group_index"/>
+          <field name="ba_behaviour"/>
+          <field name="ba_credits"/>
+          <field name="related_coupon_index"/>
+          <field name="related_cs_update_data_id"/>
+          <field name="related_carsharing_user_request_id"/>
+          <field name="completed"/>
+          <field name="completed_date"/>
+          <field name="completed_behaviour"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_registration_request_form" model="ir.ui.view">
+      <field name="name">sm_partago_user.registration_request.form</field>
+      <field name="model">sm_partago_user.carsharing_registration_request</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="CS registration requests">
+          <sheet>
+            <notebook>
+              <page string="Data">
+                <group>
+                  <field name="create_date"/>
+                  <field name="related_member_id"/>
+                  <field name="force_registration"/>
+                  <field name="group_index"/>
+                  <field name="group_id"/>
+                  <field name="ba_behaviour"/>
+                  <field name="ba_credits"/>
+                </group>
+              </page>
+              <page string="Relations">
+                <group>
+                  <field name="related_coupon_index"/>
+                  <field name="related_cs_update_data_id"/>
+                  <field name="related_carsharing_user_request_id"/>
+                </group>
+              </page>
+              <page string="Computed">
+                <group>
+                  <field name="completed"/>
+                  <field name="completed_date"/>
+                  <field name="completed_behaviour"/>
+                  <field name="completed_behaviour_before_error"/>
+                  <field name="completed_error_description"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="complete_registration_request_action" model="ir.actions.server">
+      <field name="name">Complete registration request</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_sm_partago_user_carsharing_registration_request"/>
+      <field name="binding_model_id" ref="model_sm_partago_user_carsharing_registration_request"/>
+      <field name="state">code</field>
+      <field name="code">action = model.complete_registration_request_action()</field>
+    </record>
+
+    <menuitem name="CS registration requests" id="sm_partago_user.cs_registration_request" 
+      parent="sm_partago_user.menu_root" action="view_registration_request_window"/>
+
+  </data>
+</odoo>

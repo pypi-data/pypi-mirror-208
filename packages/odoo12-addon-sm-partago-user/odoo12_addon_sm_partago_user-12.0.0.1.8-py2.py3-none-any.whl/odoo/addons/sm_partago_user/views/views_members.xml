@@ -1,0 +1,212 @@
+<odoo>
+  <data>
+
+    <record id="view_cs_members_search" model="ir.ui.view">
+      <field name="name">sommobilitat.members.cs_search</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="vertical_carsharing.view_members_search"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='email']" position="after">
+          <field name="cs_person_index"/>
+          <field name="cs_firebase_uid"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="view_smp_members_form" model="ir.ui.view">
+      <field name="name">sm_partago_user.members.form</field>
+      <field name="model">res.partner</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <sheet position="before">
+          <header>
+            <button name="view_on_app_action" type="object" attrs="{'invisible':[('cs_person_index','=',False)]}" string="View on App"/>
+          </header>
+        </sheet>
+        <xpath expr="//notebook" position="inside">
+          <page name='carsharing' string="Carsharing">
+            <group>
+              <field name="cs_user_type"/>
+              <field name="cs_state"/>
+            </group>
+
+            <group col="4">
+              <field name="cs_data_ok"/>
+              <field name="cs_registration_info_ok"/>
+            </group>
+
+            <group>
+              <field name="cs_registration_completed_date"/>
+              <field name="cs_person_index"/>
+              <field name="cs_firebase_uid"/>
+              <field name="registration_link"/>
+            </group>
+            
+            <group col="4">
+              <field name="cs_registration_coupon"/>
+            </group>
+
+            <group>
+              <field name="cs_registration_request_ids" widget="one2many_list">
+                <tree string="CS registration requests" create="true" edit="true" delete="false"
+                    open="true">
+                  <field name="force_registration"/>
+                  <field name="group_index"/>
+                  <field name="ba_behaviour"/>
+                  <field name="ba_credits"/>
+                  <field name="related_coupon_index"/>
+                  <field name="related_cs_update_data_id"/>
+                  <field name="related_carsharing_user_request_id"/>
+                  <field name="completed_date"/>
+                  <field name="completed_behaviour"/>
+                </tree>
+                <form>
+                  <sheet>
+                    <notebook>
+                      <page string="General">
+                        <group>
+                          <field name="create_date"/>
+                          <field name="force_registration"/>
+                          <field name="group_index"/>
+                          <field name="group_id"/>
+                          <field name="ba_behaviour"/>
+                          <field name="ba_credits"/>
+                          <field name="related_coupon_index"/>
+                          <field name="related_cs_update_data_id"/>
+                          <field name="related_carsharing_user_request_id"/>
+                          <field name="completed"/>
+                          <field name="completed_date"/>
+                          <field name="completed_behaviour"/>
+                          <field name="completed_behaviour_before_error"/>
+                          <field name="completed_error_description"/>
+                        </group>
+                      </page>
+                    </notebook>
+                  </sheet>
+                </form>
+              </field>
+            </group>
+
+            <group>
+              <field name="cs_member_group_ids" widget="one2many_list">
+                <tree string="CS Groups" create="false" edit="false" delete="false"
+                    open="true">
+                  <field name="related_group_id" />
+                  <field name="related_billingaccount_id"/>
+                  <field name="related_billingaccount_minutesleft"/>
+                  <field name="default_billingaccount_id"/>
+                  <field name="default_billingaccount_minutesleft"/>
+                  <field name="role"/>
+                  <field name="admin_role"/>
+                </tree>
+                <form>
+                  <sheet>
+                    <notebook>
+                      <page string="General">
+                        <group>
+                          <field name="related_group_id" />
+                          <field name="related_billingaccount_id"/>
+                          <field name="related_billingaccount_minutesleft"/>
+                          <field name="default_billingaccount_id"/>
+                          <field name="default_billingaccount_minutesleft"/>
+                          <field name="role"/>
+                          <field name="admin_role"/>
+                        </group>
+                      </page>
+                    </notebook>
+                  </sheet>
+                </form>
+              </field>
+            </group>
+
+
+          </page>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="member_register_carsharing" model="ir.actions.server">
+      <field name="name">APP user: Register in carsharing</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.get_register_in_carsharing_view_action()</field>
+    </record>
+
+    <record id="post_register_email" model="ir.actions.server">
+      <field name="name">APP user: Recompute registration email-link</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.recompute_registration_emaillink_action()</field>
+    </record>
+
+    <record id="member_get_carsharing_groups" model="ir.actions.server">
+      <field name="name">APP user: GET carsharing groups</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.get_carsharing_groups_action()</field>
+    </record>
+
+    <record id="recompute_cs_state" model="ir.actions.server">
+      <field name="name">APP user: Recompute cs registration info</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.recompute_member_cs_registration_info_action()</field>
+    </record>
+
+    <!-- <record id="resend_register_email" model="ir.actions.server">
+      <field name="name">APP user: Resend registration email</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.resend_register_email_action()</field>
+    </record> -->
+
+    <record id="find_registration_coupon_action" model="ir.actions.server">
+      <field name="name">APP user: Set company registration coupon</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.set_registration_coupon_from_action()</field>
+    </record>
+
+    <record id="change_app_email_action" model="ir.actions.server">
+      <field name="name">APP user: Change app email</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.change_app_email_action()</field>
+    </record>
+
+
+    <record id="complete_registration_requests_action" model="ir.actions.server">
+      <field name="name">APP user: Complete registration requests</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.complete_registration_requests_action()</field>
+    </record>
+
+    <record id="block_user_action" model="ir.actions.server">
+      <field name="name">APP user: BLOCK User</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="binding_model_id" ref="model_res_partner"/>
+      <field name="state">code</field>
+      <field name="code">action = model.block_user_action()</field>
+    </record>
+
+  </data>
+</odoo>

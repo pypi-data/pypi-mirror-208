@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_cs_task_form" model="ir.ui.view">
+        <field name="name">view.csuser.cs.task.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="vertical_carsharing.view_cs_task_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='cs_task_type']" position="after">
+                <field name="related_carsharing_user_request_id" 
+                    attrs="{'invisible': [('cs_task_type', '!=', 'cs_user_request')]}"
+                />
+                <field name="related_carsharing_update_data_id" 
+                    attrs="{'invisible': [('cs_task_type', '!=', 'cs_update_data')]}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
