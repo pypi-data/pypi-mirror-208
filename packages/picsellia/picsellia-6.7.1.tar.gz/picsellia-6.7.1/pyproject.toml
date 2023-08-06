@@ -1,0 +1,45 @@
+[tool.isort]
+profile = "black"
+src_paths = ["picsellia", "tests"]
+
+[tool.pycln]
+all = true
+
+[tool.poetry]
+name = "picsellia"
+version = "6.7.1"
+description = "Python SDK package for Picsellia MLOps platform"
+authors = ["Pierre-Nicolas Tiffreau <pierre-nicolas@picsellia.com>", "Thomas Darget <thomas.darget@picsellia.com>"]
+maintainers = ["Pierre-Nicolas Tiffreau <pierre-nicolas@picsellia.com>", "Thomas Darget <thomas.darget@picsellia.com>", "Lucien Haurat <lucien.haurat@picsellia.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://www.picsellia.com/"
+documentation = "https://documentation.picsellia.com/reference/client"
+include = ["CHANGELOG.md"]
+keywords = ["ai", "picsellia", "sdk", "cvops"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[tool.poetry.dependencies]
+python = ">= 3.7, <4.0.0"
+requests = "^2.28.1"
+pydantic = "^1.9.1"
+tdqm = "^0.0.1"
+picsellia-annotations = "^0.6.0"
+orjson = "^3.7.11"
+Pillow = "^9.2.0"
+beartype = "^0.11.0"
+picsellia-connexion-services = "^0.2.0"
+deprecation = "^2.1.0"
+pyyaml = "^6.0"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.0.0"
+pre-commit = "^2.20.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
