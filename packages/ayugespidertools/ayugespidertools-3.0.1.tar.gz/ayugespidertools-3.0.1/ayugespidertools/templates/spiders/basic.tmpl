@@ -1,0 +1,140 @@
+import pandas
+from scrapy.http import Request
+from $project_name.settings import logger
+from scrapy.http.response.text import TextResponse
+from $project_name.items import TableEnum
+from ayugespidertools.spiders import AyuSpider
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.items import DataItem, MysqlDataItem, MongoDataItem
+
+"""
+####################################################################################################
+# collection_website: $domain - 采集的目标站点介绍
+# collection_content: 采集内容介绍
+# create_time: xxxx-xx-xx
+# explain:
+# demand_code_prefix = ""
+####################################################################################################
+"""
+
+
+class $classname(AyuSpider):
+    name = "$name"
+    allowed_domains = ["$domain"]
+    start_urls = ["http://$domain/"]
+
+    # 数据库表的枚举信息
+    custom_table_enum = TableEnum
+    # 初始化配置的类型
+    settings_type = "debug"
+    custom_settings = {
+        # scrapy 日志等级配置
+        "LOG_LEVEL": "DEBUG",
+        # 是否开启记录项目相关运行统计信息。不配置默认为 False
+        "RECORD_LOG_TO_MYSQL": False,
+        # 以 loguru 来管理日志，本库会在 settings 中生成规则示例，可自行修改。也可不配置
+        "LOGURU_CONFIG": logger,
+        # Mysql 数据表的前缀名称，用于标记属于哪个项目，可不配置
+        "MYSQL_TABLE_PREFIX": "demo_basic_",
+        # MongoDB 集合的前缀名称，用于标记属于哪个项目，可不配置
+        "MONGODB_COLLECTION_PREFIX": "demo_basic_",
+        "ITEM_PIPELINES": {
+            # 激活此项则数据会存储至 Mysql
+            "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
+            # 激活此项则数据会存储至 MongoDB
+            "ayugespidertools.pipelines.AyuFtyMongoPipeline": 301,
+        },
+        "DOWNLOADER_MIDDLEWARES": {
+            # 随机请求头
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
+        },
+    }
+
+    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+    mysql_engine_enabled = True
+
+    def start_requests(self):
+        """
+        get 请求首页，获取项目列表数据
+        """
+        yield Request(
+            url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
+            callback=self.parse_first,
+            headers={
+                "referer": "https://blog.csdn.net/rank/list",
+            },
+            cb_kwargs={
+                "curr_site": "csdn",
+            },
+            dont_filter=True
+        )
+
+    def parse_first(self, response: TextResponse, curr_site: str):
+        # 日志使用: scrapy 的 self.logger 或本库的 self.slog 或直接使用全局的 logger handle 也行（根据场景自行选择）
+        self.slog.info(f"当前采集的站点为: {curr_site}")
+
+        # 你可以自定义解析规则，使用 lxml 还是 response.css response.xpath 等等都可以。
+        data_list = ToolsForAyu.extract_with_json(json_data=response.json(), query="data")
+        for curr_data in data_list:
+            article_detail_url = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleDetailUrl")
+
+            article_title = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleTitle")
+
+            comment_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="commentCount")
+
+            favor_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="favorCount")
+
+            nick_name = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="nickName")
+
+            ArticleInfoMysqlItem = MysqlDataItem(
+                article_detail_url=DataItem(article_detail_url, "文章详情链接"),
+                article_title=DataItem(article_title, "文章标题"),
+                comment_count=DataItem(comment_count, "文章评论数量"),
+                favor_count=DataItem(favor_count, "文章赞成数量"),
+                nick_name=DataItem(nick_name, "文章作者昵称"),
+                _table=TableEnum.article_list_table.value["value"],
+            )
+            self.slog.info(f"ArticleInfoMysqlItem: {ArticleInfoMysqlItem}")
+
+            # 数据入库逻辑，你可以使用 mysql_engine 来去重或自定义规则
+            try:
+                save_table = f'{self.custom_settings.get("MYSQL_TABLE_PREFIX", "")}{TableEnum.article_list_table.value["value"]}'
+                sql = f'''select `id` from `{save_table}` where `article_detail_url` = "{article_detail_url}" limit 1'''
+                df = pandas.read_sql(sql, self.mysql_engine)
+
+                # 如果为空，说明此数据不存在于数据库，则新增
+                if df.empty:
+                    yield ArticleInfoMysqlItem
+
+                # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
+                else:
+                    self.slog.debug(f"标题为 ”{article_title}“ 的数据已存在")
+
+            except Exception as e:
+                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
+                    yield ArticleInfoMysqlItem
+                else:
+                    self.slog.error(f"请查看数据库链接或网络是否通畅！Error: {e}")
+
+            # 这是 MongoDB 存储场景的示例
+            ArticleInfoMongoItem = MongoDataItem(
+                article_detail_url=article_detail_url,
+                article_title=article_title,
+                comment_count=comment_count,
+                favor_count=favor_count,
+                nick_name=nick_name,
+                _table=TableEnum.article_list_table.value["value"],
+                # 这里表示以 article_detail_url 为去重规则，若存在则更新，不存在则新增
+                _mongo_update_rule={"article_detail_url": article_detail_url},
+            )
+            yield ArticleInfoMongoItem
