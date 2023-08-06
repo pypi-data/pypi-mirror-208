@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pb_encoding"
+dynamic = ["version"]
+description = "Some encode/decode functions extracted from google.protobuf"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest"
+]
+
+[project.urls]
+homepage = "https://github.com/Grvzard/pb_encoding"
+
+[tool.hatch.version]
+path = "src/pb_encoding/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src/pb_encoding",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.black]
+line-length = 100
+skip-string-normalization = false
+
+[tool.ruff]
+line-length = 100
+select = [
+    "E",
+    "F",
+    "W",
+]

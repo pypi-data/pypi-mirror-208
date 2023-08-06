@@ -1,0 +1,1 @@
+Some encode/decode functions extracted from google.protobuf
