@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "jack_rhoas_sdks"
+version = "0.0.6"
+description = "A package which includes RHOAS SDKs"
+authors = ["jackdelahunt <jdelahun@redhat.com>"]
+license = "Apache License"
+readme = "docs/README.md"
+packages = [
+    { include = "connector_mgmt_sdk/**/*.py" },
+    { include = "kafka_instance_sdk/**/*.py"},
+    { include = "registry_mgmt_sdk/**/*.py"},
+    { include = "kafka_mgmt_sdk/**/*.py"},
+    { include = "registry_instance_sdk/**/*.py"},
+    { include = "smart_events_mgmt_sdk/**/*.py"},
+    { include = "service_accounts_mgmt_sdk/**/*.py" },
+    { include = "auth/**/*.py"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+microsoft-kiota-abstractions = "*"
+microsoft-kiota-http = "*"
+microsoft-kiota-serialization-json = "*"
+microsoft-kiota-serialization-text = "*"
+python-keycloak = "^2.5.0"
+
+[tool.poetry.dev-dependencies]
+poetry = "^1.0"
+pytest-cov = "^2.8.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
