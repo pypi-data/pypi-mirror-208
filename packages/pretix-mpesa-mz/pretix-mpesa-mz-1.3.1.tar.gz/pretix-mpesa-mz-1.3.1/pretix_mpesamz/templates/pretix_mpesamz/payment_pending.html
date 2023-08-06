@@ -1,0 +1,19 @@
+{% load i18n %} {% load l10n %} {% load rich_text %}
+
+<br />
+<div>
+  <p>
+    O pagamento via M-Pesa para o número {{ msisdn }} falhou devido a
+    <strong>{{ reason }}</strong
+    >.
+  </p>
+  <p>Tente de novo:</p>
+  <ul>
+    <li>Usando o mesmo número</li>
+    <li>Usando outro mesmo número</li>
+    <li>Usando outro método de pagamento</li>
+    <li>inicie um novo pedido</li>
+  </ul>
+</div>
+<br />
+{{ instructions | rich_text }}
