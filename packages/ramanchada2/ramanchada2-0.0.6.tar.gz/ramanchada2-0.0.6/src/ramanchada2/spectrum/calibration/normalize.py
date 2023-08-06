@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+from typing import Literal
+import numpy as np
+from pydantic import validate_arguments
+
+from ramanchada2.misc.spectrum_deco import add_spectrum_filter
+from ..spectrum import Spectrum
+
+
+@add_spectrum_filter
+@validate_arguments(config=dict(arbitrary_types_allowed=True))
+def normalize(old_spe: Spectrum,
+              new_spe: Spectrum, /,
+              strategy: Literal['unity', 'min_unity', 'unity_density', 'unity_area', 'minmax'] = 'minmax'):
+    """
+    Normalize the spectrum.
+
+    Parameters
+    ----------
+    strategy :
+        'unity' : normalize to sum(y)
+        'min_unity' : subtract the minimum and normalize to 'unity'
+        'unity_density : normalize to Σ(y_i*Δx_i)
+        'unity_area : same as 'unity_density'
+        'minmax : scale amplitudes in range [0, 1]
+    """
+    if strategy == 'unity':
+        res = old_spe.y
+        res /= np.sum(res)
+        new_spe.y = res
+    elif strategy == 'min_unity':
+        res = old_spe.y - np.min(old_spe.y)
+        res /= np.sum(res)
+        new_spe.y = res
+    if strategy == 'unity_density' or strategy == 'unity_area':
+        res = old_spe.y
+        res /= np.sum(res * np.diff(old_spe.x_bin_boundaries))
+        new_spe.y = res
+    elif strategy == 'minmax':
+        res = old_spe.y - np.min(old_spe.y)
+        res /= np.max(res)
+        new_spe.y = res
