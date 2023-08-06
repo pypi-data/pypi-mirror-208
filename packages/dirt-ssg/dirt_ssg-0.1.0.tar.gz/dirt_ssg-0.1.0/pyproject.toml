@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "dirt-ssg"
+version = "0.1.0"
+description = ""
+authors = ["Loren Kohnfelder"]
+packages = [
+	{ include = "dirt", from = "src" }
+]
+
+[tool.poetry.scripts]
+dirt = 'dirt.main:main'
+
+[tool.coverage.paths]
+source = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["dirt"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.poetry.dependencies]
+python = "^3.10"
+watchdog = "^2.1.8"
+Markdown = "^3.3.7"
+toml = "^0.10.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+coverage = {extras = ["toml"], version = "^6.4.1"}
+pytest-cov = "^3.0.0"
+requests = "^2.28.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
