@@ -1,0 +1,91 @@
+[build-system]
+requires = [
+    "setuptools>=65",
+    "wheel>=0.37.1",
+    "setuptools-scm[toml]>=7.0.5",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "signal-export"
+description = "Export Signal conversations to Markdown and HTML"
+readme = "README.md"
+license = {text = "BSD 3-Clause License"}
+requires-python = ">=3.6"
+keywords = ["backup", "chat", "export"]
+
+authors = [
+    {name = "Chris Arderne", email="chris@rdrn.me"},
+]
+
+dynamic = ["version"]
+
+classifiers = [
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Unix",
+  "Programming Language :: Python",
+]
+
+dependencies = [
+    "beautifulsoup4>=4.11.1",
+    "emoji>=1.7.0",
+    "Markdown>=3.4.1",
+    "typer[all]>=0.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "build",
+    "flake8",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "setuptools-scm",
+    "twine",
+    "types-Markdown",
+    "types-emoji",
+]
+sql = [
+    "pysqlcipher3==1.1.0",
+]
+
+[project.urls]
+homepage = "https://github.com/carderne/signal-export"
+repository = "https://github.com/carderne/signal-export"
+
+[tool.setuptools]
+packages = ["sigexport"]
+include-package-data = true  # defaults to true
+
+[tool.setuptools.package-data]
+sigexport = ["*.css"]
+
+[tool.setuptools_scm]
+
+[project.scripts]
+sigexport = "sigexport.main:cli"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = ".git,.hg,.mypy_cache,.tox,.venv,_build,buck-out,build,dist"
+
+[tool.mypy]
+show_error_codes = true
+show_error_context = true
+show_traceback = true
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+warn_unreachable = true
+
+[tool.isort]
+profile = "black"
+skip = ".tox,.eggs,ci/templates,build,dist"
