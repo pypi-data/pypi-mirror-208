@@ -1,0 +1,147 @@
+[build-system]
+requires = ["hatchling>=0.7", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "module_qc_tools"
+dynamic = ["version"]
+authors = [
+  { name="Jay Chan", email="jay.chan@cern.ch" },
+]
+maintainers = [
+    { name = "Giordon Stark", email = "gstark@cern.ch" },
+]
+description = "Module qc tools"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.7"
+dependencies = [
+    "numpy",
+    "tabulate",
+    "pre-commit",
+    "jsonschema",
+    "module-qc-data-tools >= 1.0.5",
+    'importlib_resources; python_version < "3.9"',
+    "requests",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://gitlab.cern.ch/atlas-itk/pixel/module/module-qc-tools"
+"Bug Tracker" = "https://gitlab.cern.ch/atlas-itk/pixel/module/module-qc-tools/-/issues"
+"Source" = "https://gitlab.cern.ch/atlas-itk/pixel/module/module-qc-tools"
+
+[project.scripts]
+module-qc-tools = "module_qc_tools.cli.main:main"
+emulator-scanConsole = "module_qc_tools.cli.hardware_emulator:scanConsole"
+emulator-write-register = "module_qc_tools.cli.hardware_emulator:write_register"
+emulator-read-adc = "module_qc_tools.cli.hardware_emulator:read_adc"
+emulator-read-ringosc = "module_qc_tools.cli.hardware_emulator:read_ringosc"
+emulator-switch-lpm = "module_qc_tools.cli.hardware_emulator:switchLPM"
+emulator-control-ps = "module_qc_tools.cli.hardware_emulator:control_PS"
+emulator-measureV = "module_qc_tools.cli.hardware_emulator:measureV"
+emulator-measureT = "module_qc_tools.cli.hardware_emulator:measureT"
+measurement-ADC-CALIBRATION = "module_qc_tools.cli.ADC_CALIBRATION:main"
+measurement-ANALOG-READBACK = "module_qc_tools.cli.ANALOG_READBACK:main"
+measurement-SLDO = "module_qc_tools.cli.SLDO:main"
+measurement-VCAL-CALIBRATION = "module_qc_tools.cli.VCAL_CALIBRATION:main"
+measurement-INJECTION-CAPACITANCE = "module_qc_tools.cli.INJECTION_CAPACITANCE:main"
+measurement-LP-MODE = "module_qc_tools.cli.LP_MODE:main"
+measurement-OVERVOLTAGE-PROTECTION = "module_qc_tools.cli.OVERVOLTAGE_PROTECTION:main"
+module-qc-tools-upload = "module_qc_tools.cli.upload_localdb:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/module_qc_tools/_version.py"
+
+[tool.hatch.build.targets.sdist]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "tbump>=6.7.0",
+    "pylint",
+    "build",
+    "twine",
+]
+
+[tool.hatch.envs.default.scripts]
+tag = "tbump {args}"
+lint = "pylint src"
+build = "python -m build"
+validate = "twine check dist/*"
+# https://github.com/linkchecker/linkchecker/issues/678
+build-check = [
+  "build",
+  "validate",
+]
+upload = "twine upload dist/*"
+
+[tool.hatch.envs.dev]
+template = "dev"
+# pylint and pytest needs to be installed into package environment
+detached = false
+dependencies = [
+    "pytest >=6",
+]
+
+[tool.hatch.envs.dev.scripts]
+test = "pytest -ra"
+
+[tool.ruff]
+select = [
+  "E", "F", "W", # flake8
+  "B",  "B904",  # flake8-bugbear
+  "I",           # isort
+  "ARG",         # flake8-unused-arguments
+  "C4",          # flake8-comprehensions
+  "EM",          # flake8-errmsg
+  "ICN",         # flake8-import-conventions
+  "ISC",         # flake8-implicit-str-concat
+  "PGH",         # pygrep-hooks
+  "PIE",         # flake8-pie
+  "PL",          # pylint
+  "PT",          # flake8-pytest-style
+  "PTH",         # flake8-use-pathlib
+  "RET",         # flake8-return
+  "RUF",         # Ruff-specific
+  "SIM",         # flake8-simplify
+  "T20",         # flake8-print
+  "UP",          # pyupgrade
+  "YTT",         # flake8-2020
+]
+extend-ignore = ["PLR", "E501"]
+target-version = "py37"
+src = ["src"]
+unfixable = ["T20", "F841"]
+exclude = []
+isort.required-imports = ["from __future__ import annotations"]
+
+[tool.pylint]
+master.py-version = "3.7"
+master.ignore-paths= ["src/module_qc_tools/_version.py"]
+reports.output-format = "colorized"
+similarities.ignore-imports = "yes"
+messages_control.disable = [
+  "design",
+  "fixme",
+  "line-too-long",
+  "wrong-import-position",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = ["error"]
+testpaths = [
+    "tests",
+]

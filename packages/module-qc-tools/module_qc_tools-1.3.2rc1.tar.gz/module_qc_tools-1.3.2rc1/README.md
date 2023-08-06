@@ -1,0 +1,815 @@
+# module-qc-tools v1.3.2rc1
+
+A general python tool for running ITkPixV1.1 module QC tests
+
+## Table of contents
+
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Configuration and external commands](#configuration-and-external-commands)
+5. [Measurements](#measurements)
+   1. [ADC calibration](#adc-calibration)
+   2. [Analog readback](#analog-readback)
+   3. [SLDOVI](#sldovi)
+   4. [VCal calibration](#vcal-calibration)
+   5. [Injection capacitance](#injection-capacitance)
+   6. [Low Power Mode](#low-power-mode)
+   7. [Overvoltage protection](#overvoltage-protection)
+6. [Output data](#output-data)
+7. [Schema check](#schema-check)
+8. [Time Estimates](#time-estimates)
+9. [Upload results to localDB](#upload-results-to-localdb)
+10. [For developer](#for-developer)
+
+## Requirements
+
+This tool requires users to have >= python3.7 with the following packages
+installed:
+
+- `numpy`
+- `tabulate`
+
+Check the local python version with `python -V`. If the local python version is
+lower than Python 3.7, set up a virtual python environment following the
+instructions [here](https://itk.docs.cern.ch/general/Virtual_Environments/).
+
+In addition, users shall install `YARR` and prepare external scripts for remote
+control of power supply, multimeter and NTC readout. The external scripts shall
+follow a fixed format, which is detailed in the later section.
+
+## Installation
+
+This package may be accessed by cloning from gitlab or by installing it via pip.
+
+### via clone
+
+Use this method if you want to use the latest version of the package from
+gitlab. First clone the project:
+
+```
+git clone https://gitlab.cern.ch/atlas-itk/pixel/module/module-qc-tools.git
+```
+
+Upon a successful checkout, `cd` to the new `module-qc-tools` directory and run
+the following to install the necessary software:
+
+```verbatim
+$ python -m venv venv
+$ source venv/bin/activate
+$ python -m pip install --upgrade pip
+$ python -m pip install -e .
+```
+
+### via pip
+
+Use this method if you want to use the latest stable (versioned) release of the
+package.
+
+```
+python -m venv venv
+source venv/bin/activate
+python -m pip install -U pip
+python -m pip install -U pip module-qc-tools==1.3.2rc1
+```
+
+## Usage
+
+After installation, one just needs to enter the virtual environment in each new
+session to use the scripts:
+
+```verbatim
+source venv/bin/activate
+```
+
+The first step in using this package is to set up the
+[Configuration and external commands](#configuration-and-external-commands)
+input json file. This json file is then passed as input to the scripts used to
+run the [Measurements](#measurements).
+
+## Configuration and external commands
+
+All the configuration/settings are defined in a single json file. The layer
+information needed for the different power settings is extracted from the
+module's serial number. Examples are provided in `$(module-qc-tools
+--prefix)/configs/':
+
+```
+example_merged_vmux.json
+example_separate_vmux.json
+```
+
+<details> <summary> $(module-qc-tools --prefix)/configs/example_merged_vmux.json </summary>
+
+```json
+{
+        "yarr": {
+                "run_dir": "../Yarr",
+                "controller": "configs/controller/specCfg-rd53b-16x1.json",
+                "scanConsole_exe": "./bin/scanConsole",
+                "write_register_exe": "./bin/write-register",
+                "read_adc_exe": "./bin/read-adc",
+                "switchLPM_exe": "./bin/switchLPM",
+                "lpm_digitalscan": "configs/scans/rd53b/lpm_digitalscan.json",
+                "read_ringosc_exe": "./bin/rd53bReadRingosc"
+        },
+        "power_supply": {
+                "run_dir": "../labRemote",
+                "on_cmd": "./build/bin/powersupply -e ./src/configs/input-hw.json -n PS -c 1 power-on",
+                "off_cmd": "./build/bin/powersupply -e ./src/configs/input-hw.json -n PS -c 1 power-off",
+                "set_cmd": "./build/bin/powersupply -e ./src/configs/input-hw.json -n PS -c 1 set-current {i} {v}",
+                "getI_cmd": "./build/bin/powersupply -e ./src/configs/input-hw.json -n PS -c 1 meas-current",
+                "getV_cmd": "./build/bin/powersupply -e ./src/configs/input-hw.json -n PS -c 1 meas-voltage",
+                "n_try": 0,
+                "success_code": 0
+        },
+        "multimeter": {
+                "run_dir": "../labRemote",
+                "dcv_cmd": [
+                        "./build/bin/meter -e ./src/configs/input-hw-min_marija.json -n myVmuxMeter -c 0 meas-voltage"
+                ],
+                "n_try": 0,
+                "success_code": 0
+        },
+        "ntc": {
+                "run_dir": "../labremote_devel/scripts",
+                "cmd": "python measureT.py",
+                "n_try": 0,
+                "success_code": 0
+        },
+        "tasks": {
+                "GENERAL": {...},
+                "ADC_CALIBRATION": {...},
+                "ANALOG_READBACK": {...},
+                "SLDO": {...},
+		            "VCAL_CALIBRATION": {...},
+		            "INJECTION_CAPACITANCE": {...}
+        }
+}
+```
+
+</details>
+
+The major blocks (e.g. `yarr`, `power_supply`, `multimeter`, `ntc`) correspond
+to how the scripts will communicate with the module via YARR and how they will
+communicate with the lab equipment. Each of these blocks are explained in the
+following sections. The `task` block specifies the settings of each scan
+performed by the scripts, and will be explained in the
+[Measurements](#measurements) section.
+
+### yarr
+
+The `yarr` block specifies the path to the `YARR` repository as well as the
+corresponding YARR configuration files.
+
+- `run_dir`: path (relative or absolute) to the directory where `YARR` commands
+  should be run
+- `controller`: path (relative to `run_dir` or absolute) to the controller file
+- `scanConsole_exe`: path (relative to `run_dir` or absolute) to the
+  `scanConsole` executable
+- `write_register_exe`: path (relative to `run_dir` or absolute) to the
+  `write_register` executable
+- `read_adc_exe`: path (relative to `run_dir` or absolute) to the `read_adc`
+  executable
+- `switchLPM_exe`: path (relative to `run_dir` or absolute) to the `switchLPM`
+  executable
+- `lpm_digitalscan`: path (relative to `run_dir` or absolute) to the low-power
+  mode digital scan in YARR
+- `read_ringosc_exe`: path (relative to `run_dir` or absolute) to the
+  `read_ringosc_exe` executable
+- `success_code`: exit status that indicates success. The default is 0 besides
+  `configure`, which has exit status 1 for success. The user do not need to set
+  the `success_code` as the default in QC software is synchronized with YARR.
+
+### power_supply
+
+The `power_supply` block specifies the path and the commands for handling the
+power supply
+
+- `run_dir`: path (relative or absolute) to the directory where `power_supply`
+  commands should be run
+- `on_cmd`: command to turn on the power supply with specified voltage and
+  current. Use the syntax `{v}` and `{i}` to represent the voltage and current
+  that are to be given as input arguments
+- `off_cmd`: command to turn off the power supply
+- `set_cmd`: command to set voltage and current for power supply. Use the syntax
+  `{v}` and `{i}` to represent the voltage and current that are to be given as
+  input arguments
+- `getI_cmd`: command to measure current of the power supply. This command shall
+  return a std output which represents the value of the current (float in the
+  unit of [A]). For example, when I = 5.2A, `getI_cmd` returns std output =
+  `5.2`.
+- `getV_cmd`: command to measure voltage of the power supply. This command shall
+  return a std output which represents the value of the voltage (float in the
+  unit of [V]). For example, when V = 1.8A, `getV_cmd` returns std output =
+  `1.8`.
+- `n_try`: number of re-tries in case the script fails to read from the power
+  supply
+- `success_code`: exit status that indicates success. The default is 0.
+
+### multimeter
+
+The `multimeter` block specifies the path and the commands for handling the
+multimeter
+
+- `run_dir`: path (relative or absolute) to the directory where `multimeter`
+  commands should be run
+- `dcv_cmd`: list of commands to measure voltage from the multimeter. Each
+  command corresponds to a single multimeter channel (only the used channels
+  need to be listed). Each command returns a std output which represents the
+  value of measured voltage (float in the unit of [V]). For example, when V =
+  0.352V, `dcv_cmd` returns std output = `0.352`.
+- `n_try`: number of re-tries in case the script fails to read from the
+  multimeter
+- `success_code`: exit status that indicates success. The default is 0.
+
+### ntc
+
+The `ntc` block specifies the path and the commands for handling the NTC
+
+- `run_dir`: path (relative or absolute) to the directory where `ntc` commands
+  should be run
+- `cmd`: command to measure temperature from the module NTC. The command returns
+  a std output which represents the value of measured temperature (float in the
+  unit of [C]). For example: when T = 36.2C, `cmd` returns std output = `36.2`.
+- `n_try`: number of re-tries in case the script fails to read from the ntc
+- `success_code`: exit status that indicates success. The default is 0.
+
+### tasks
+
+The `tasks` block starts with the `GENERAL` section that specifies the
+layer-dependent power settings:
+
+- `v_max`: the voltage to be set to the power supply (i.e. the max voltage since
+  the power supply should operate in constant current)
+- `i_config`: the current at which the module should be configured
+- `share_vmux`: whether to merge the Vmux channels or not
+- `v_mux_channels`: multimeter channel to measure the Vmux for each chip
+  (correspond to each element in the dcv_cmd in the multimeter block)
+
+The main part of the `tasks` block is to specify all
+[measurements](#measurements) as listed below.
+
+## Measurements
+
+An overview of the steps in the module QC procedure is documented in the
+[Electrical specification and QC procedures for ITkPixV1.1 modules](https://gitlab.cern.ch/atlas-itk/pixel/module/itkpix-electrical-qc/)
+document and in
+[this spreadsheet](https://docs.google.com/spreadsheets/d/1qGzrCl4iD9362RwKlstZASbhphV_qTXPeBC-VSttfgE/edit#gid=989740987).
+Each measurement is performed with one script. All scripts assume that the
+modules to be tested are already powered on.
+
+### ADC calibration
+
+`measurement-ADC-CALIBRATION`
+
+This script will run the ADC calibration (`task = ADC_CALIBRATION`) as specified
+in the input configuration json file (i.e.
+`$(module-qc-tools --prefix)/configs/example_merged_vmux.json`).
+
+<details> <summary> Configuration settings </summary>
+
+- `MonitorV`: list of Vmux channels to be measured
+- `InjVcalRange`: the range of the calibration injection circuit(1: a large
+  range and 0: a small range i.e. half the large range but a finer step)
+- `Range`: the DACs scan range ["start", "stop", "step"]
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+$ measurement-ADC-CALIBRATION --help
+usage: measurement-ADC-CALIBRATION [-h] [-c CONFIG] [-o OUTPUT_DIR] [--verbosity LEVEL] [-m MODULE_CONNECTIVITY] [--perchip]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also to identify the module SN, and to set the default output directory
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+  --perchip           Store results in one file per chip (default: one file per module)
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-ADC-CALIBRATION -c $(module-qc-tools --prefix)/configs/example_merged_vmux.json -m ~/module_data/20UPGR91301046/20UPGR91301046_L2_warm.json
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-ADC-CALIBRATION -c $(module-qc-tools --prefix)/configs/emulator_merged_vmux.json -o emulator/outputs/
+```
+
+</details>
+
+### Analog readback
+
+`measurement-ANALOG-READBACK`
+
+This script will measure all internal voltages available through VMUX and IMUX,
+measure the chip temperature, and measure VDDA/VDDD/ROSC vs Trim. channels. The
+scan settings are defined in the `task = ANALOG_READBACK` block of the input
+configuration file (i.e.
+`$(module-qc-tools --prefix)/configs/example_merged_vmux.json`). The NTC needs
+to be set in order to run this script, so that the temperature can be read.
+
+<details> <summary> Configuration settings </summary>
+
+- `v_mux`: list of Vmux channels to be measured
+- `i_mux`: list of Imux channels to be measured
+- `v_mux_ntc`: list of Vmux channels to be measured for ntc temperature
+- `i_mux_ntc`: list of Imux channels to be measured for ntc temperature
+- `v_mux_tempsens`: list of Vmux channels to be measured for 3 temperature
+  sensors
+- `MonSensSldoDigSelBias`: Bias 0 and 1 for MOS sensor near digital SLDO
+- `MonSensSldoAnaSelBias`: Bias 0 and 1 for MOS sensor near analog SLDO
+- `MonSensAcbSelBias`: Bias 0 and 1 for MOS sensor near center
+- `MonSensSldoDigDem`: Dem 0-15 for MOS sensor near digital SLDO
+- `MonSensSldoAnaDem`: Dem 0-15 for MOS sensor near analog SLDO
+- `MonSensAcbDem`: Dem 0-15 for MOS sensor near center
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+usage: measurement-ANALOG-READBACK [-h] [-c CONFIG] [-o OUTPUT_DIR]
+                                   [-m MODULE_CONNECTIVITY] [--verbosity LEVEL] [--perchip]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also
+                        to identify the module SN, and to set the default output directory
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+  --perchip           Store results in one file per chip (default: one file per module)
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-ANALOG-READBACK -c $(module-qc-tools
+--prefix)/configs/example_merged_vmux.json -m
+~/module_data/20UPGR91301046/20UPGR91301046_L2_warm.json
+
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-ANALOG-READBACK -c $(module-qc-tools
+--prefix)/configs/emulator_merged_vmux.json -o emulator/outputs
+
+```
+
+</details>
+
+### SLDOVI
+
+`measurement-SLDO`
+
+This script will run the VI scans (`task = SLDO`) as specified in the input
+configuration json file (i.e.
+`$(module-qc-tools --prefix)/configs/example_merged_vmux.json`).
+
+<details> <summary> Configuration settings </summary>
+
+- `i_min`: the minimum current of the VI scan
+- `i_max`: the maximum current of the VI scan
+- `n_points`: how many points should be measured (equally spread between the max
+  of the min currents)
+- `extra_i`: extra current points to be measured
+- `v_mux`: list of Vmux channels to be measured
+- `i_mux`: list of Imux channels to be measured
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+$ measurement-SLDO --help
+usage: measurement-SLDO [-h] [-c CONFIG] [-o OUTPUT_DIR] [-m MODULE_CONNECTIVITY] [--perchip]
+                        [--verbosity LEVEL]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also to identify the module SN, and to
+                        set the default output directory
+  --perchip           Store results in one file per chip (default: one file per module)
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-SLDO -c $(module-qc-tools --prefix)/configs/example_merged_vmux.json -m ~/module_data/20UPGR91301046/20UPGR91301046_L2_warm.json
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-SLDO -c $(module-qc-tools --prefix)/configs/emulator_merged_vmux.json -o emulator/outputs
+```
+
+</details>
+
+### VCal calibration
+
+`measurement-VCAL-CALIBRATION`
+
+This script will run the VCal calibration (`task = VCAL_CALIBRATION`) as
+specified in the input configuration json file (i.e.
+`$(module-qc-tools --prefix)/configs/example_merged_vmux.json`).
+
+<details> <summary> Configuration settings </summary>
+
+- `InjVcalRange`: the range of the calibration injection circuit(1: a large
+  range and 0: a small range i.e. half the large range but a finer step)
+- `MonitorV`: two DACs VMUX assignments Vcal_med(8) and Vcal_high(7)
+- `MonitorV_GND`: the GNDA VMUX assignment 30
+- `Large_Range`: the large DACs scan range ["start", "stop", "step"]
+- `Small_Range`: the small DACs scan range ["start", "stop", "step"]
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+$ measurement-VCAL-CALIBRATION --help
+usage: measurement-VCAL-CALIBRATION [-h] [-c CONFIG] [-o OUTPUT_DIR] [-m MODULE_CONNECTIVITY] [--verbosity LEVEL] [--perchip]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also to identify the module SN, and to
+                        set the default output directory
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+  --perchip           Store results in one file per chip (default: one file per module)
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-VCAL-CALIBRATION -c $(module-qc-tools
+--prefix)/configs/example_merged_vmux.json -m
+~/module_data/20UPGR91301046/20UPGR91301046_L2_warm.json
+
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-VCAL-CALIBRATION -c $(module-qc-tools
+--prefix)/configs/emulator_merged_vmux.json -o emulator/outputs/
+
+```
+
+</details>
+
+### Injection capacitance
+
+`measurement-INJECTION-CAPACITANCE`
+
+This script will run the injection capacitance measurement
+(`task = INJECTION_CAPACITANCE`) as specified in the input configuration json
+file (i.e. `$(module-qc-tools --prefix)/configs/example_merged_vmux.json`).
+
+<details> <summary> Configuration settings </summary>
+
+- `n_meas`: number of measurements to perform
+- `v_mux`: list of Vmux channels to be measured
+- `i_mux`: list of Imux channels to be measured
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+usage: measurement-INJECTION-CAPACITANCE [-h] [-c CONFIG]
+                                         [-o OUTPUT_DIR] [-m MODULE_CONNECTIVITY] [--verbosity]
+                                         [--perchip]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also
+                        to identify the module SN, and to set the default output directory
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+  --perchip           Store results in one file per chip (default: one file per module)
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-INJECTION-CAPACITANCE -c $(module-qc-tools
+--prefix)/configs/example_merged_vmux.json -m
+~/module_data/20UPGR91301046/20UPGR91301046_L2_warm.json
+
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-INJECTION-CAPACITANCE -c $(module-qc-tools
+--prefix)/configs/emulator_merged_vmux.json -o emulator/outputs/
+
+```
+
+</details>
+
+### Low Power Mode
+
+`measurement-LP-MODE`
+
+This script will run the low power mode test (`task = LP_MODE`) as specified in
+the input configuration json file (i.e.
+`$(module-qc-tools --prefix)/configs/example_merged_vmux.json`).
+
+<details> <summary> Configuration settings </summary>
+
+- `v_max`: the voltage to be set to the power supply specific to this
+  measurement
+- `i_config`: the current at which the module should be configured specific for
+  this measurement
+- `v_mux`: list of Vmux channels to be measured
+- `i_mux`: list of Imux channels to be measured
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+usage: measurement-LP-MODE [-h] [-c CONFIG] [-o OUTPUT_DIR]
+                                   [-m MODULE_CONNECTIVITY] [--verbosity LEVEL] [--perchip]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also
+                        to identify the module SN, and to set the default output directory.
+                        Note that this measurement should be used using LP config therefore
+                        this should point to LP connectivity.
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+  --perchip           Store results in one file per chip (default: one file per module)
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-LP-MODE -c $(module-qc-tools --prefix)/configs/example_merged_vmux.json -m ~/module_data/20UPGR91301046/20UPGR91301046_L2_LP.json
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-LP-MODE -c $(module-qc-tools --prefix)/configs/emulator_merged_vmux.json -o emulator/outputs/
+```
+
+</details>
+
+### Overvoltage Protection
+
+`measurement-OVERVOLTAGE-PROTECTION`
+
+This script will test the Overvolatge Protection (OVP)
+(`task = OVERVOLTAGE_PROTECTION`) as specified in the input configuration json
+file (i.e. `$(module-qc-tools --prefix)/configs/example_merged_vmux.json`).
+
+<details> <summary> Configuration settings </summary>
+
+- `v_max`: the voltage to be set to the power supply specific to this
+  measurement
+- `i_config`: the current at which the module should be configured specific for
+  this measurement
+- `v_mux`: list of Vmux channels to be measured
+- `i_mux`: list of Imux channels to be measured
+
+</details>
+
+<details> <summary> Help message </summary>
+
+```
+$ measurement-OVERVOLTAGE-PROTECTION --help
+usage: measurement-OVERVOLTAGE-PROTECTION [-h] [-c CONFIG] [-o OUTPUT_DIR] [-m MODULE_CONNECTIVITY] [--perchip] [--verbosity LEVEL]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        output directory
+  -m MODULE_CONNECTIVITY, --module-connectivity MODULE_CONNECTIVITY
+                        path to the module connectivity. Used also to identify the module SN, and to set the default output directory.
+                        Note that this measurement should be used using LP config therefore
+                        this should point to LP connectivity.
+  --perchip             Store results in one file per chip (default: one file per module)
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Log level [options: DEBUG, INFO (default) WARNING, ERROR]
+
+```
+
+</details>
+
+<details> <summary> Example </summary>
+
+```
+measurement-OVERVOLTAGE-PROTECTION -c $(module-qc-tools --prefix)/configs/example_merged_vmux.json -m ~/module_data/20UPGR91301046/20UPGR91301046_L2_LP.json
+```
+
+</details>
+
+<details> <summary> Example command to run on the toy emulator </summary>
+
+```
+measurement-OVERVOLTAGE-PROTECTION -c $(module-qc-tools --prefix)/configs/emulator_merged_vmux.json -o emulator/outputs
+```
+
+</details>
+
+## Output data
+
+The output of the measurements follows the structure below:
+
+```
+|Measurements
+   |<test_type>
+   |VCAL_CALIB
+       |<timestamp>
+       |<YYYY-MM-DD_HHMMSS>
+           |<chip_name/module_serial_number>.json
+```
+
+The test-type of each measuremnt is the corresponding test-code used in the
+Production Data Base. The naming of each measuremnet script is chosen to be the
+same as the test-type. The timestamp is chosen to be the start time of the
+measurement.
+
+## Schema check
+
+The schema for the output json files is checked based on the schema files
+specified in the folder `schema`. To run the common schema check for all test
+outputs, do:
+
+```
+jsonschema --instance [path to output json files] $(module-qc-tools
+--prefix)/schema/common.json
+
+```
+
+To run the further schema check for a specific test output, do:
+
+```
+jsonschema --instance [path to output json files] $(module-qc-tools
+--prefix)/schema/[qc_task].json
+```
+
+<details> <summary> Example (with the emulator output files) </summary>
+
+```
+jsonschema --instance emulator/outputs/SLDO_reference/<timestamp>/chip1.json
+$(module-qc-tools --prefix)/schema/common.json jsonschema --instance
+emulator/outputs/SLDO_reference/<timestamp>/chip1.json $(module-qc-tools
+--prefix)/schema/SLDO.json
+```
+
+</details>
+
+## Time Estimates
+
+| Measurement     | Duration |
+| --------------- | -------- |
+| ADC calib       | 00:17:24 |
+| Analog Readback | 00:40:25 |
+| SLDO VI         | 00:32:00 |
+| Vcal calib      | 00:18:47 |
+| Injection Cap.  | 00:05:17 |
+| LP Mode         | 00:00:53 |
+| OVP             | 00:00:22 |
+
+## Upload results to localDB
+
+The output measurement files can be uploaded to localDB using the following
+command:
+
+```
+ module-qc-tools-upload --path PATH --host HOST --port PORT
+```
+
+Given a path to a directory with the output files, the script will recursively
+search the directory and upload all files with the `.json` extension. Supply the
+option `--dry-run` to see which files the script finds without uploading to
+localDB.
+
+<details> <summary> Help message </summary>
+
+```
+$ module-qc-tools-upload -h
+usage: module-qc-tools-upload [-h] [--path PATH] [--host HOST] [--port PORT] [-n]
+
+Walk through the specified directory (recursively) and attempt to submit all json files to LocalDB as the QC measurement
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --path PATH    Path to directory with output measurement files
+  --host HOST    localDB server, default is localhost
+  --port PORT    localDB port, default is 5000
+  -n, --dry-run  Dry-run, do not submit to localDB.
+```
+
+</details>
+
+## For Developer
+
+### versioning
+
+In case you need to tag the version of the code, you need to have either `hatch`
+or `pipx` installed.
+
+1. Activate python environment, e.g. `source venv/bin/activate`.
+2. Run `python -m pip install hatch` or `python -m pip install pipx`.
+
+You can bump the version via:
+
+```
+pipx run hatch run tag x.y.z
+
+# or
+
+hatch run tag x.y.z
+```
+
+where `x.y.z` is the new version to use. This should be run from the default
+branch (`main` / `master`) as this will create a commit and tag, and push for
+you. So make sure you have the ability to push directly to the default branch.
+
+### pre-commit
+
+Install pre-commit to avoid CI failure. Once pre-commit is installed, a git hook
+script will be run to identify simple issues before submission to code review.
+
+Instruction for installing pre-commit in a python environment:
+
+1. Activate python environment, e.g. `source venv/bin/activate`.
+2. Run `python3 -m pip install pre-commit`.
+3. Run `pre-commit install` to install the hooks in `.pre-commit-config.yaml`.
+
+After installing pre-commit, `.pre-commit-config.yaml` will be run every time
+`git commit` is done. Redo `git add` and `git commit`, if the pre-commit script
+changes any files.

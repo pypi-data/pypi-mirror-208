@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Schema for QC measurement config file",
+  "description": "Raw data json",
+  "type": "object",
+  "properties": {
+    "yarr": {
+      "description": "Block containing path to YARR directory and executables",
+      "type": "object",
+      "properties": {
+        "run_dir": {
+          "description": "Path (absolute or relative) to YARR directory"
+        },
+        "controller": {
+          "description": "Path (relative to run_dir or absolute) to the controller file"
+        },
+        "scanConsole_exe": {
+          "description": "Path (relative to run_dir or absolute) to the scanConsole executable"
+        },
+        "write_register_exe": {
+          "description": "Path (relative to run_dir or absolute) to the write_register executable"
+        },
+        "read_adc_exe": {
+          "description": "Path (relative to run_dir or absolute) to the read_adc executable"
+        },
+        "switchLPM_exe": {
+          "description": "Path (relative to run_dir or absolute) to the executable that turns on/off LP-mode"
+        },
+        "lpm_digitalscan": {
+          "description": "Path (relative to run_dir or absolute) to the low-power mode digital scan in YARR"
+        },
+        "read_ringosc_exe": {
+          "description": "Path (relative to run_dir or absolute) to the read_wringosc executbable"
+        },
+        "success_code": {
+          "description": "Exit status that indicates success. The default is 0."
+        }
+      },
+      "required": ["run_dir", "controller", "scanConsole_exe", "write_register_exe", "read_adc_exe", "switchLPM_exe", "lpm_digitalscan", "read_ringosc_exe"]
+    },
+    "power_supply": {
+      "description": "Block specifying path and commands for handling power supply",
+      "type": "object",
+      "properties": {
+        "run_dir": {
+          "description": "Path (relative to run_dir or absolute) to where power supply commands should be run"
+        },
+        "on_cmd": {
+          "description": "Command to turn on power supply."
+        },
+        "off_cmd": {
+          "description": "Command to turn off power supply."
+        },
+        "set_cmd": {
+          "description": "Command to set voltage and current for power supply. Use the syntax {v} and {i} to represent the voltage and current that are to be given as input arguments"
+        },
+        "getI_cmd": {
+          "description": "Command to measure current of the power supply. This command shall return an std output which represents the value of the current (float in unit of [A]"
+        },
+        "getV_cmd": {
+          "description": "Command to measure voltage of the power supply. This command shall return an std output which represents the value of the voltage (float in units of [V]"
+        },
+        "n_try": {
+          "description": "Number of re-tries in case the script fails to read from the multimeter"
+        },
+        "success_code": {
+          "description": "Exit status that indicates success. The default is 0."
+        }
+      },
+      "required": ["run_dir", "on_cmd", "off_cmd", "set_cmd", "getI_cmd", "getV_cmd"]
+    },
+    "multimeter": {
+      "description": "Block specifying the path and the commands for handling the multimeter",
+      "type": "object",
+      "properties": {
+        "run_dir": {
+          "description": "Path (relative to run_dir or absolute) to where power supply commands should be run"
+        },
+        "dcv_cmd": {
+          "description": "List of commands to measure voltages from the multimeter. Each command corresponds to a single multimeter channel (only the used channels need to be listed). Each command returns an std output which repreasents the value of measured voltage (float in [V]). "
+        },
+        "n_try": {
+          "description": "Number of re-tries in case the script fails to read from the multimeter"
+        },
+        "success_code": {
+          "description": "Exit status that indicates success. The default is 0."
+        }
+      },
+      "required": ["run_dir", "dcv_cmd"]
+    },
+    "ntc": {
+      "description": "Block specifying the path and the commands for handling the NTC",
+      "type": "object",
+      "properties": {
+        "run_dir": {
+          "description": "Path (relative to run_dir or absolute) to where power supply commands should be run"
+        },
+        "cmd": {
+          "description": "Command to measure temperature from the module NTC. The command returns an std output which represents the value of measured temperature (float in unit of [C]"
+        },
+        "n_try": {
+          "description": "Number of re-tries in case the script fails to read from the multimeter"
+        },
+        "success_code": {
+          "description": "Exit status that indicates success. The default is 0."
+        }
+      },
+      "required": ["run_dir", "cmd"]
+    },
+    "tasks": {
+      "description": "Block specifying all scan parameters",
+      "type": "object",
+      "required": ["GENERAL", "ADC_CALIBRATION", "SLDO", "VCAL_CALIBRATION", "ANALOG_READBACK", "INJECTION_CAPACITANCE", "LP_MODE", "OVERVOLTAGE_PROTECTION"]
+    }
+  }
+}

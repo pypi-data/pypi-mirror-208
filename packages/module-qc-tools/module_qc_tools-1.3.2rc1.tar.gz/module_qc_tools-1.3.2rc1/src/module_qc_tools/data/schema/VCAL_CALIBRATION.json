@@ -1,0 +1,45 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Schema for output json file",
+    "description": "Raw data json",
+    "type": "array",
+    "items": {
+    "type": "array",
+    "items": {
+    "type": "object",
+    "properties": {
+      "serialNumber": {
+        "description": "Chip serial number",
+        "type": "string"
+      },
+      "testType": {
+        "description": "Test type",
+        "type": "string",
+        "pattern": "^VCAL_CALIBRATION$"
+      },
+      "results": {
+       "description": "Results of measurement",
+       "type": "object",
+       "properties": {
+       "Measurements": {
+          "description": "Measurement data",
+          "type": "object",
+          "oneOf":[
+            {"required":["Vmux7"]},
+            {"required":["Vmux8"]}
+          ],
+          "required": [
+            "DACs_input",
+            "Vmux30"
+          ]
+       },
+       "Metadata": {
+          "description": "Meta data",
+          "type": "object"
+       }
+       }
+    }
+  }
+ }
+ }
+}

@@ -1,0 +1,196 @@
+stages:
+  - check
+  - test
+  - build
+  - deploy
+
+variables:
+  # see https://docs.gitlab.com/ee/ci/caching/#cache-python-dependencies
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
+
+cache:
+  paths:
+    - .cache/pip
+    - .cache/pre-commit
+
+image: python:3.7-buster
+before_script:
+  # want to set up a virtualenv to cache
+  - apt-get install -y --no-install-recommends git
+  - python -V
+  - git config --global credential.helper 'cache'
+  - |
+    echo "protocol=https
+    host=gitlab.cern.ch
+    username=gitlab-ci-token
+    password=${CI_JOB_TOKEN}
+    " | git credential approve
+  - python -m venv venv
+  - source venv/bin/activate
+  - python -m pip install -U pip pipx
+  - python -m pipx ensurepath
+  - python -m pip freeze
+
+lint:
+  stage: check
+  script:
+    - python -m pip install pre-commit
+    - pre-commit run --all-files
+
+SLDO:
+  stage: test
+  script:
+    - python3 -m pip install .
+    - echo "Running SLDO with toy emulator..."
+    - measurement-SLDO -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/SLDO/*/*.json; do echo $file; jsonschema
+      --instance $file $(module-qc-tools --prefix)/schema/common.json; done
+    - for file in Measurements/SLDO/*/*.json; do echo $file; jsonschema
+      --instance $file $(module-qc-tools --prefix)/schema/SLDO.json; done
+  artifacts:
+    paths:
+      - Measurements/SLDO/*/*.json
+    expire_in: 1 day
+
+VCAL_CALIBRATION:
+  stage: test
+  script:
+    - python3 -m pip install .
+    - echo "Running VCAL_CALIBRATION with the toy emulator..."
+    - measurement-VCAL-CALIBRATION -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/VCAL_CALIBRATION/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/common.json; done
+    - for file in Measurements/VCAL_CALIBRATION/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/VCAL_CALIBRATION.json; done
+  artifacts:
+    paths:
+      - Measurements/VCAL_CALIBRATION/*/*.json
+    expire_in: 1 day
+
+ANALOG_READBACK:
+  stage: test
+  script:
+    - python3 -m pip install .
+    - echo "Running ANALOG_READBACK with toy emulator..."
+    - measurement-ANALOG-READBACK -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/ANALOG_READBACK/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/common.json; done
+    - for file in Measurements/ANALOG_READBACK/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/ANALOG_READBACK.json; done
+  artifacts:
+    paths:
+      - Measurements/ANALOG_READBACK/*/*.json
+    expire_in: 1 day
+
+ADC_CALIBRATION:
+  stage: test
+  script:
+    - python3 -m pip install . --no-cache-dir
+    - echo "Running ADC_CALIBRATION with the toy emulator..."
+    - measurement-ADC-CALIBRATION -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/ADC_CALIBRATION/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/common.json; done
+    - for file in Measurements/ADC_CALIBRATION/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/ADC_CALIBRATION.json; done
+  artifacts:
+    paths:
+      - Measurements/ADC_CALIBRATION/*/*.json
+    expire_in: 1 day
+
+INJECTION_CAPACITANCE:
+  stage: test
+  script:
+    - python3 -m pip install . --no-cache-dir
+    - echo "Running INJECTION-CAPACITANCE with the toy emulator..."
+    - measurement-INJECTION-CAPACITANCE -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/INJECTION_CAPACITANCE/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/common.json; done
+    - for file in Measurements/INJECTION_CAPACITANCE/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/INJECTION_CAPACITANCE.json; done
+  artifacts:
+    paths:
+      - Measurements/INJECTION_CAPACITANCE/*/*.json
+    expire_in: 1 day
+
+LP_MODE:
+  stage: test
+  script:
+    - python3 -m pip install .
+    - echo "Running LP_MODE with toy emulator..."
+    - measurement-LP-MODE -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/LP_MODE/*/*.json; do echo $file; jsonschema
+      --instance $file $(module-qc-tools --prefix)/schema/common.json; done
+    - for file in Measurements/LP_MODE/*/*.json; do echo $file; jsonschema
+      --instance $file $(module-qc-tools --prefix)/schema/LP_MODE.json; done
+  artifacts:
+    paths:
+      - Measurements/LP_MODE/*/*.json
+    expire_in: 1 day
+
+OVERVOLTAGE_PROTECTION:
+  stage: test
+  script:
+    - python3 -m pip install .
+    - echo "Running OVERVOLTAGE_PROTECTION with toy emulator..."
+    - measurement-OVERVOLTAGE-PROTECTION -c $(module-qc-tools
+      --prefix)/configs/emulator_merged_vmux.json -o ./
+    - for file in Measurements/OVERVOLTAGE_PROTECTION/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/common.json; done
+    - for file in Measurements/OVERVOLTAGE_PROTECTION/*/*.json; do echo $file;
+      jsonschema --instance $file $(module-qc-tools
+      --prefix)/schema/OVERVOLTAGE_PROTECTION.json; done
+  artifacts:
+    paths:
+      - Measurements/OVERVOLTAGE_PROTECTION/*/*.json
+    expire_in: 1 day
+
+package:
+  stage: build
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - pipx run hatch run build-check
+  artifacts:
+    paths:
+      - dist/
+
+.deploy:
+  stage: deploy
+  dependencies:
+    - package
+  script:
+    - pipx run hatch run upload
+
+deploy_gitlab:
+  extends: .deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    TWINE_PASSWORD: "${CI_JOB_TOKEN}"
+    TWINE_USERNAME: "gitlab-ci-token"
+    TWINE_REPOSITORY_URL: "https://gitlab.cern.ch/api/v4/projects/${CI_PROJECT_ID}/packages/pypi"
+
+deploy_production:
+  extends: .deploy
+  only:
+    - tags
+  variables:
+    TWINE_REPOSITORY: pypi
+    TWINE_USERNAME: __token__
+    TWINE_PASSWORD: $PYPI_TOKEN
