@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "llm-bot"
+version = "0.0.2"
+description = "Python library for developing LLM bots"
+authors = ["Gabriel Gazola Milan <gabriel.gazola@poli.ufrj.br>"]
+license = "GPL-3.0-only"
+readme = "README.md"
+homepage = "https://github.com/prefeitura-rio/chatbot-lab"
+repository = "https://github.com/prefeitura-rio/chatbot-lab"
+keywords = ["python", "chatbot", "bot", "llm"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+faiss-cpu = "^1.7.4"
+langchain = "^0.0.150"
+openai = "^0.27.4"
+tiktoken = "^0.3.3"
+requests = "^2.29.0"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+pre-commit = "^2.18.1"
+pytest-cov = "^3.0.0"
+flake8 = "^4.0.1"
+pdoc3 = "^0.10.0"
+
+[tool.poetry.scripts]
+docs = "scripts.docs:main"
+lint = "scripts.lint:main"
+test = "scripts.test:main"
+
+[tool.poetry.group.html.dependencies]
+beautifulsoup4 = "^4.12.2"
+lxml = "^4.9.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
