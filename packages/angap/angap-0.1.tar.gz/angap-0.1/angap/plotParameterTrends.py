@@ -1,0 +1,362 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import glob
+import shelve
+from findMaxGapTime import *
+from parseRiseSetTimeFile import *
+
+filename='shelve_2d.out'
+my_shelf = shelve.open(filename)
+for key in my_shelf:
+    globals()[key]=my_shelf[key]
+my_shelf.close()
+
+# FLAGS
+MGT = True
+PPD = False
+MPT = False
+
+E_CON = ConstantsStruct()
+# One Parameter Analysis
+i_base = 87.0
+alt_base = 400.0
+el_base = 5.0
+lat_base = 50.0*np.ones((1,1))
+
+# # Varying Altitude
+# alt = np.linspace(200,2000,int((2000-200)/10+1))
+# if(MGT):
+#     plt.figure(10)
+#     plt.plot(alt,mgt_f_of_alt/3600)#,alt[val_ar==0]),mgt_f_of_alt[val_ar==0]/3600,'*r')
+#     plt.xlabel('Altitude (km)')
+#     plt.ylabel('Max Gap Time (hr)')
+#     #plt.title("Max Gap Time vs Altitude (i="+str(i_base)+", el="+str(el_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+# if(PPD):
+#     plt.figure(10)
+#     plt.plot(alt,ppd_f_of_alt)#,alt[val_ar==0],ppd_f_of_alt[val_ar==0],'*r')
+#     plt.xlabel('Altitude (km)')
+#     plt.ylabel('Passes Per Day')
+#     #plt.title("Passes Per Day vs Altitude (i="+str(i_base)+", el="+str(el_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+# if (MPT):
+#     plt.figure(10)
+#     plt.plot(alt,mpt_f_of_alt/60.0)#,alt[val_ar==0],mpt_f_of_alt[val_ar==0]/60.0,'*r')
+#     plt.xlabel('Altitude (km)')
+#     plt.ylabel('Mean Pass Time (min)')
+#     #plt.title("Mean Pass Time vs Altitude (i="+str(i_base)+", el="+str(el_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+#
+# # Varying Inclination
+# inc = np.linspace(0,180,1801)
+# if(MGT):
+#     plt.figure(11)
+#     plt.plot(inc,mgt_f_of_inc/3600)#,inc[val_ar==0],mgt_f_of_inc[val_ar==0]/3600,'*r')
+#     plt.xlabel('Inclination ($\degree$)')
+#     plt.ylabel('Max Gap Time (hr)')
+#     #plt.title("Max Gap Time vs Inclination (h="+str(alt_base)+", el="+str(el_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+# if (PPD):
+#     plt.figure(11)
+#     plt.plot(inc,ppd_f_of_inc)#,inc[val_ar==0],ppd_f_of_inc[val_ar==0],'*r')
+#     plt.xlabel('Inclination ($\degree$)')
+#     plt.ylabel('Passes Per Day')
+#     #plt.title("Passes Per Day vs Inclination (h="+str(alt_base)+", el="+str(el_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+# if (MPT):
+#     plt.figure(11)
+#     plt.plot(inc,mpt_f_of_inc/60)#,inc[val_ar==0],mpt_f_of_inc[val_ar==0]/60,'*r')
+#     plt.xlabel('Inclination ($\degree$)')
+#     plt.ylabel('Mean Pass Time (min)')
+#     #plt.title("Mean Pass Time vs Inclination (h="+str(alt_base)+", el="+str(el_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+#
+# # Varying Elevation Angle
+# el = np.linspace(0,25,251)
+# if(MGT):
+#     plt.figure(12)
+#     plt.plot(el,mgt_f_of_el/3600)#,el[val_ar==0],mgt_f_of_el[val_ar==0]/3600,'*r')
+#     plt.xlabel('Minimum Elevation Angle ($\degree$)')
+#     plt.ylabel('Max Gap Time (hr)')
+#     #plt.title("Max Gap Time vs Min Elevation Angle (i="+str(i_base)+", h="+str(alt_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+# if (PPD):
+#     plt.figure(12)
+#     plt.plot(el,ppd_f_of_el)#,el[val_ar==0],ppd_f_of_el[val_ar==0],'*r')
+#     plt.xlabel('Minimum Elevation Angle ($\degree$)')
+#     plt.ylabel('Passes Per Day')
+#     #plt.title("Passes Per Day vs Min Elevation Angle (i="+str(i_base)+", h="+str(alt_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+# if (MPT):
+#     plt.figure(12)
+#     plt.plot(el,mpt_f_of_el/60)#,el[val_ar==0],mpt_f_of_el[val_ar==0]/60,'*r')
+#     plt.xlabel('Minimum Elevation Angle ($\degree$)')
+#     plt.ylabel('Mean Pass Time (min)')
+#     #plt.title("Mean Pass Time vs Min Elevation Angle (i="+str(i_base)+", h="+str(alt_base)+", latitude="+str(np.asscalar(lat_base[0]))+")")
+#     plt.show()
+#     plt.close()
+#
+# # run analytical solution
+# lat = np.linspace(0.0,90.0,901)
+# val_ar = np.zeros(lat.shape)
+# if(MGT):
+#     plt.figure(13)
+#     plt.plot(lat,mgt_f_of_lat/3600)#,lat[val_ar==0],mgt_f_of_lat[val_ar==0]/3600,'*r')
+#     plt.xlabel('Latitude ($\degree$)')
+#     plt.ylabel('Max Gap Time (hr)')
+#     #plt.title("Max Gap Time vs Latitude (i="+str(i_base)+", h="+str(alt_base)+", el="+str(el_base)+")")
+#     plt.show()
+#     plt.close()
+# if (PPD):
+#     plt.figure(13)
+#     plt.plot(lat,ppd_f_of_lat)#,lat[val_ar==0],mgt_f_of_lat[val_ar==0],'*r')
+#     plt.xlabel('Latitude ($\degree$)')
+#     plt.ylabel('Passes Per Day')
+#     #plt.title("Passes Per Day vs Latitude (i="+str(i_base)+", h="+str(alt_base)+", el="+str(el_base)+")")
+#     plt.show()
+#     plt.close()
+# if (MPT):
+#     plt.figure(13)
+#     plt.plot(lat,mpt_f_of_lat/60)#,lat[val_ar==0],mgt_f_of_lat[val_ar==0]/60,'*r')
+#     plt.xlabel('Latitude ($\degree$)')
+#     plt.ylabel('Mean Pass Time (min)')
+#     #plt.title("Mean Pass Time vs Latitude (i="+str(i_base)+", h="+str(alt_base)+", el="+str(el_base)+")")
+#     plt.show()
+#     plt.close()
+
+# Two Parameter Analysis
+# el/inc
+el = np.linspace(0,25,51)
+inc = np.linspace(0,180,361)
+if (MGT):
+    plt.figure(20)
+    plt.imshow(mgt_f_of_el_inc/3600,origin="lower",extent=[np.min(inc),np.max(inc),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.contourf(inc,el,np.ma.masked_where(val_ar_f_of_el_inc==1,(1-val_ar_f_of_el_inc)),levels=[0,0.5,1],cmap='Reds')
+    plt.xlabel('Inclination ($\degree$)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Maximum Gap Time (hr)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (PPD):
+    plt.figure(20)
+    plt.imshow(ppd_f_of_el_inc, origin="lower", extent=[np.min(inc), np.max(inc), np.min(el), np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Inclination ($\degree$)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Passes Per Day')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (MPT):
+    plt.figure(20)
+    plt.imshow(mpt_f_of_el_inc / 60, origin="lower", extent=[np.min(inc), np.max(inc), np.min(el), np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Inclination ($\degree$)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Mean Pass Time (min)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+# el/alt NEED TO HAVE IT NOT PLOT FOR CASES WHERE SWATHS DON'T OVERLAP
+el = np.linspace(0,25,51)
+alt = np.linspace(200,2000,int((2000-200)/10+1))
+if (MGT):
+    plt.figure(21)
+    plt.imshow(mgt_f_of_el_alt/3600,origin="lower",extent=[np.min(alt),np.max(alt),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.contourf(alt,el,np.ma.masked_where(val_ar_f_of_el_alt==1,(1-val_ar_f_of_el_alt)),levels=[0,0.5,1],cmap='Reds')
+    plt.xlabel('Altitude (km)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Maximum Gap Time (hr)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (PPD):
+    plt.figure(21)
+    plt.imshow(ppd_f_of_el_alt,origin="lower",extent=[np.min(alt),np.max(alt),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Altitude (km)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Passes Per Day')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (MPT):
+    plt.figure(21)
+    plt.imshow(mpt_f_of_el_alt/60,origin="lower",extent=[np.min(alt),np.max(alt),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Altitude (km)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Mean Pass Time (min)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+# el/lat
+el = np.linspace(0,25,51)
+lat = np.linspace(0.0,90.0,181)
+if (MGT):
+    plt.figure(22)
+    plt.imshow(mgt_f_of_el_lat/3600,origin="lower",extent=[np.min(lat),np.max(lat),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.contourf(lat,el,np.ma.masked_where(val_ar_f_of_el_lat==1,(1-val_ar_f_of_el_lat)),levels=[0,0.5,1],cmap='Reds')
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Maximum Gap Time (hr)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (PPD):
+    plt.figure(22)
+    plt.imshow(ppd_f_of_el_lat,origin="lower",extent=[np.min(lat),np.max(lat),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Passes Per Day')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (MPT):
+    plt.figure(22)
+    plt.imshow(mpt_f_of_el_lat/60,origin="lower",extent=[np.min(lat),np.max(lat),np.min(el),np.max(el)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Minimum Elevation Angle ($\degree$)')
+    c.set_label('Mean Pass Time (min)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+# inc/lat
+inc = np.linspace(0,180,361)
+lat = np.linspace(0.0,90.0,181)
+if (MGT):
+    plt.figure(23)
+    plt.imshow(mgt_f_of_inc_lat/3600,origin="lower",extent=[np.min(lat),np.max(lat),np.min(inc),np.max(inc)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.contourf(lat,inc,np.ma.masked_where(val_ar_f_of_inc_lat==1,(1-val_ar_f_of_inc_lat)),levels=[0,0.5,1],cmap='Reds')
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Inclination ($\degree$)')
+    c.set_label('Maximum Gap Time (hr)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (PPD):
+    plt.figure(23)
+    plt.imshow(ppd_f_of_inc_lat,origin="lower",extent=[np.min(lat),np.max(lat),np.min(inc),np.max(inc)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Inclination ($\degree$)')
+    c.set_label('Passes Per Day')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (MPT):
+    plt.figure(23)
+    plt.imshow(mpt_f_of_inc_lat/60,origin="lower",extent=[np.min(lat),np.max(lat),np.min(inc),np.max(inc)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Inclination ($\degree$)')
+    c.set_label('Mean Pass Time (min)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+# inc/alt
+inc = np.linspace(0,180,361)
+alt = np.linspace(200,2000,int((2000-200)/10+1))
+if (MGT):
+    plt.figure(24)
+    plt.imshow(mgt_f_of_inc_alt/3600,origin="lower",extent=[np.min(alt),np.max(alt),np.min(inc),np.max(inc)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.contourf(alt,inc,np.ma.masked_where(val_ar_f_of_inc_alt==1,(1-val_ar_f_of_inc_alt)),levels=[0,0.5,1],cmap='Reds')
+    plt.xlabel('Altitude (km)')
+    plt.ylabel('Inclination ($\degree$)')
+    c.set_label('Maximum Gap Time (hr)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (PPD):
+    plt.figure(24)
+    plt.imshow(ppd_f_of_inc_alt,origin="lower",extent=[np.min(alt),np.max(alt),np.min(inc),np.max(inc)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Altitude (km)')
+    plt.ylabel('Inclination ($\degree$)')
+    c.set_label('Passes Per Day')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (MPT):
+    plt.figure(24)
+    plt.imshow(mpt_f_of_inc_alt/60,origin="lower",extent=[np.min(alt),np.max(alt),np.min(inc),np.max(inc)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Altitude (km)')
+    plt.ylabel('Inclination ($\degree$)')
+    c.set_label('Mean Pass Time (min)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+# alt/lat
+alt = np.linspace(200,2000,int((2000-200)/10+1))
+lat = np.linspace(0.0,90.0,181)
+if (MGT):
+    plt.figure(25)
+    plt.imshow(mgt_f_of_alt_lat/3600,origin="lower",extent=[np.min(lat),np.max(lat),np.min(alt),np.max(alt)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.contourf(lat,alt,np.ma.masked_where(val_ar_f_of_alt_lat==1,(1-val_ar_f_of_alt_lat)),levels=[0,0.5,1],cmap='Reds')
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Altitude (km)')
+    c.set_label('Maximum Gap Time (hr)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (PPD):
+    plt.figure(25)
+    plt.imshow(ppd_f_of_alt_lat,origin="lower",extent=[np.min(lat),np.max(lat),np.min(alt),np.max(alt)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Altitude (km)')
+    c.set_label('Passes Per Day')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+if (MPT):
+    plt.figure(25)
+    plt.imshow(mpt_f_of_alt_lat/60,origin="lower",extent=[np.min(lat),np.max(lat),np.min(alt),np.max(alt)])
+    plt.axes().set_aspect('auto','box-forced')
+    c = plt.colorbar()
+    plt.xlabel('Latitude ($\degree$)')
+    plt.ylabel('Altitude (km)')
+    c.set_label('Mean Pass Time (min)')
+    plt.tight_layout()
+    plt.show()
+    plt.close()
