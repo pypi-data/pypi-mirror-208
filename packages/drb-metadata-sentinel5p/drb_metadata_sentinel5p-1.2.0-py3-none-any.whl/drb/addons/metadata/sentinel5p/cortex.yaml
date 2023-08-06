@@ -1,0 +1,541 @@
+---
+###############################################################################
+# 74cb1198-c0c1-11ec-9d64-0242ac120002 -- Sentinel-5P Product (Base class)
+###############################################################################
+drbItemClass: 74cb1198-c0c1-11ec-9d64-0242ac120002
+variables:
+  - name: node_earth_explorer_header_fixed_header
+    xquery: |
+      ./root/METADATA/ESA_METADATA/earth_explorer_header/fixed_header
+  - name: value_product_type
+    xquery: |
+      declare variable $node_earth_explorer_header_fixed_header as node()? external;
+      if (fn:matches(fn:name(.), "S5P_...._L0_.*"))
+        then fn:substring(fn:name(.), 10, 10)
+      else
+        if (fn:matches(fn:name(.), "S5P_...._L(1|2).*"))
+          then
+            if ($node_earth_explorer_header_fixed_header/@File_Type)
+              then fn:data($node_earth_explorer_header_fixed_header/@File_Type)
+            else
+              (: Case of a L-1 or L-2 without earth_explorer_header e.g. O3_TCL :)
+              fn:substring(fn:name(.), 10, 10)
+          else
+            if (fn:matches(fn:name(.), "S5P_...._AUX.*"))
+              then fn:substring(fn:name(.), 10, 10)
+            else ()
+
+  - name: node_EOP_METADATA
+    xquery: |
+      ./root/METADATA/EOP_METADATA
+  - name: node_processing
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+
+      $node_EOP_METADATA/eop:metaDataProperty/eop:processing
+  - name: value_processing_date
+    xquery: |
+      declare variable $node_processing as node()? external;
+      declare variable $value_product_type as xs:string? external;
+      
+      let $VAR_processingDate :=
+         if (fn:matches($value_product_type, "L1.*"))
+         then
+            if ($node_processing/@eop:processingDate)
+            then fn:data($node_processing/@eop:processingDate)
+            else
+               (: Case of a L-1 without Node_processing_attributes e.g. O3_TCL :)
+               fn:substring(fn:name(), 69, 15)
+         else
+            if (fn:matches($value_product_type, "L2.*"))
+            then
+               if (root/@date_created)
+               then fn:data(root/@date_created)
+               else
+                  (: Case of a L-2 without Node_processing_attributes e.g. O3_TCL :)
+                  fn:substring(fn:name(), 69, 15)
+            else
+               if (fn:matches($value_product_type, "AUX.*"))
+               then
+                  if (root/@creation_date)
+                  then fn:data(root/@creation_date)
+                  else
+                     if (root/@creation_time)
+                     then fn:data(root/@creation_time)
+                     else ()
+               else ()
+      return
+         (: Ex: 20220430T142748 :)
+         if (fn:matches($VAR_processingDate, "[0-9]{8}T[0-9]{6}"))
+         then
+            fn:concat(fn:substring($VAR_processingDate, 1, 4),
+                      "-",
+                      fn:substring($VAR_processingDate, 5, 2),
+                      "-",
+                      fn:substring($VAR_processingDate, 7, 2),
+                      "T",
+                      fn:substring($VAR_processingDate, 10, 2),
+                      ":",
+                      fn:substring($VAR_processingDate, 12, 2),
+                      ":",
+                      fn:substring($VAR_processingDate, 14, 2),
+                      ".000Z")
+         else
+            (: Ex: 2018-09-13 :)
+            if (fn:matches($VAR_processingDate, "[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+            then
+               fn:concat(fn:substring($VAR_processingDate, 1, 10),
+                         "T00:00:00.000Z")
+            else
+               (: Ex: 2018-09-14T12:41:51 or 2018-09-14T06:55:14Z :)
+               if (fn:matches($VAR_processingDate, "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|)"))
+               then
+                  fn:concat(fn:substring($VAR_processingDate, 1, 19),
+                            ".000Z")
+               else
+                  $VAR_processingDate
+  - name: node_phenomenon_time
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+
+      $node_EOP_METADATA/om:phenomenonTime
+
+  - name: value_beginning_date_time
+    xquery: |
+      declare variable $node_phenomenon_time as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      let $VAR_beginningDateTime :=
+         if (fn:matches($value_product_type, "L0.*"))
+         then "TODO"
+         else
+            if (fn:matches($value_product_type, "L(1|2).*"))
+            then
+               (: L2: sometimes gml:beginPosition is empty :)
+               if ($node_phenomenon_time/@gml:beginPosition)
+               then fn:data($node_phenomenon_time/@gml:beginPosition)
+               else fn:data(root/@time_coverage_start)
+            else
+               if (fn:matches($value_product_type, "AUX.*"))
+               then
+                  if (root/@validity_start)
+                  then fn:data(root/@validity_start)
+                  else
+                     if (root/@time_coverage_start)
+                     then fn:data(root/@time_coverage_start)
+                     else
+                        (: Case no datetime in product, we have to extract it from the name :)
+                        fn:concat(fn:substring(name(), 21, 4), "-",
+                                  fn:substring(name(), 25, 2), "-",
+                                  fn:substring(name(), 27, 5), ":",
+                                  fn:substring(name(), 32, 2), ":",
+                                  fn:substring(name(), 34, 2), ".000Z")
+               else ()
+      return
+         (: Ex: 20220430T142748 :)
+         if (fn:matches($VAR_beginningDateTime, "[0-9]{8}T[0-9]{6}"))
+         then
+            fn:concat(fn:substring($VAR_beginningDateTime, 1, 4),
+                      "-",
+                      fn:substring($VAR_beginningDateTime, 5, 2),
+                      "-",
+                      fn:substring($VAR_beginningDateTime, 7, 2),
+                      "T",
+                      fn:substring($VAR_beginningDateTime, 10, 2),
+                      ":",
+                      fn:substring($VAR_beginningDateTime, 12, 2),
+                      ":",
+                      fn:substring($VAR_beginningDateTime, 14, 2),
+                      ".000Z")
+         else
+            (: Ex: 2018-09-13 :)
+            if (fn:matches($VAR_beginningDateTime, "[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+            then
+               fn:concat(fn:substring($VAR_beginningDateTime, 1, 10),
+                         "T00:00:00.000Z")
+            else
+               (: Ex: 2018-09-14T12:41:51 or 2018-09-14T06:55:14Z :)
+               if (fn:matches($VAR_beginningDateTime, "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|)"))
+               then
+                  fn:concat(fn:substring($VAR_beginningDateTime, 1, 19),
+                            ".000Z")
+               else
+                  $VAR_beginningDateTime
+
+  - name: value_ending_date_time
+    xquery: |
+      declare variable $node_phenomenon_time as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      let $VAR_endingDateTime :=
+         if (fn:matches($value_product_type, "L0.*"))
+         then "TODO"
+         else
+            if (fn:matches($value_product_type, "L(1|2).*"))
+            then
+               (: L2: sometimes gml:endPosition is empty :)
+               if ($node_phenomenon_time/@gml:endPosition)
+               then fn:data($node_phenomenon_time/@gml:endPosition)
+               else fn:data(root/@time_coverage_end)
+            else
+               if (fn:matches($value_product_type, "AUX.*"))
+               then
+                  if (root/@validity_stop)
+                  then fn:data(root/@validity_stop)
+                  else
+                     if (root/@time_coverage_end)
+                     then fn:data(root/@time_coverage_end)
+                     else
+                        (: Case no datetime in product, we have to extract it from the name :)
+                        fn:concat(fn:substring(name(), 37, 4), "-",
+                                  fn:substring(name(), 41, 2), "-",
+                                  fn:substring(name(), 43, 5), ":",
+                                  fn:substring(name(), 48, 2), ":",
+                                  fn:substring(name(), 50, 2), ".000Z")
+               else ()
+      return
+         (: Ex: 20220430T142748 :)
+         if (fn:matches($VAR_endingDateTime, "[0-9]{8}T[0-9]{6}"))
+         then
+            fn:concat(fn:substring($VAR_endingDateTime, 1, 4),
+                      "-",
+                      fn:substring($VAR_endingDateTime, 5, 2),
+                      "-",
+                      fn:substring($VAR_endingDateTime, 7, 2),
+                      "T",
+                      fn:substring($VAR_endingDateTime, 10, 2),
+                      ":",
+                      fn:substring($VAR_endingDateTime, 12, 2),
+                      ":",
+                      fn:substring($VAR_endingDateTime, 14, 2),
+                      ".000Z")
+         else
+            (: Ex: 2018-09-13 :)
+            if (fn:matches($VAR_endingDateTime, "[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+            then
+               fn:concat(fn:substring($VAR_endingDateTime, 1, 10),
+                         "T00:00:00.000Z")
+            else
+               (: Ex: 2018-09-14T12:41:51 or 2018-09-14T06:55:14Z :)
+               if (fn:matches($VAR_endingDateTime, "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|)"))
+               then
+                  fn:concat(fn:substring($VAR_endingDateTime, 1, 19),
+                            ".000Z")
+               else
+                  $VAR_endingDateTime
+  - name: node_meta_data_property
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+  
+      $node_EOP_METADATA/eop:metaDataProperty
+  - name: value_pos_list
+    xquery: |
+      fn:data(root/METADATA/EOP_METADATA/
+              om:featureOfInterest/eop:multiExtentOf/
+              gml:surfaceMembers/gml:exterior/@gml:posList)
+
+
+metadata:
+  # PLATFORM ##################################################################
+  - name: platformShortName
+    python: |
+      return 'SENTINEL-5P'
+
+  - name: platformSerialIdentifier
+    python: |
+      return '5P'
+
+  # PLATFORM ##################################################################
+  - name: instrumentShortName
+    xquery: |
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L.*"))
+      then "TROPOMI"
+      else ()
+
+  # PROCESSING ##################################################################
+  - name: processingLevel
+    xquery: |
+      declare variable $node_processing as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L0.*"))
+      then "TODO"
+      else
+         if (fn:matches($value_product_type, "L(1|2).*"))
+         then
+            if ($node_processing/@eop:processingLevel)
+            then fn:data($node_processing/@eop:processingLevel)
+            else
+               (: Case of a L-1 or L-2 without Node_processing_attributes e.g. O3_TCL :)
+               if (fn:matches(fn:name(), "S5P_...._L1B.*"))
+               then "L1b"
+               else
+                  if (fn:matches(fn:name(), "S5P_...._L2.*"))
+                  then "L2"
+                  else ()
+         else ()
+
+  - name: processingMode
+    xquery: |
+      declare variable $node_processing as node()? external;
+      declare variable $value_product_type as xs:string? external;
+      
+      if (fn:matches($value_product_type, "L(1|2).*"))
+      then
+         if ($node_processing/@eop:processingMode)
+         then fn:data($node_processing/@eop:processingMode)
+         else
+            (: Case of a L-1 or L-2 without Node_processing_attributes e.g. O3_TCL :)
+            fn:substring(fn:name(), 5, 4)
+      else ()
+  - name: processingCenter
+    xquery: |
+      declare variable $node_processing as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L0.*"))
+      then "TODO"
+      else
+         if (fn:matches($value_product_type, "L(1|2).*"))
+         then
+            if ($node_processing/@eop:processingCenter)
+            then fn:data($node_processing/@eop:processingCenter)
+            else
+               (: Case of a L-1 or L-2 without Node_processing_attributes e.g. O3_TCL :)
+               fn:data(root/@institution)
+         else
+            if (fn:matches($value_product_type, "AUX.*"))
+            then fn:data(root/@institution)
+            else ()
+  - name: processingDate
+    xquery: |
+      declare variable $value_processing_date as xs:string? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L0.*"))
+      then "TODO"
+      else
+         if (fn:matches($value_product_type, "L(1|2).*"))
+         then $value_processing_date
+         else
+            if (fn:matches($value_product_type, "AUX.*"))
+            then $value_processing_date
+            else ()
+
+  - name: processorVersion
+    xquery: |
+      declare variable $node_processing as node()? external;
+      declare variable $value_product_type as xs:string? external;
+      
+      if (fn:matches($value_product_type, "L0.*"))
+      then "TODO"
+      else
+         if (fn:matches($value_product_type, "L(1|2).*"))
+         then
+            if ($node_processing/@eop:processorVersion)
+            then fn:data($node_processing/@eop:processorVersion)
+            else
+               (: Case of a L-1 or L-2 without Node_processing_attributes e.g. O3_TCL :)
+               fn:data(root/@processor_version)
+         else
+            if (fn:matches($value_product_type, "AUX.*"))
+            then 
+              if (root/attributes/version)
+              then fn:data(root/@version)
+              else
+                if (root/@processor_version)
+                then fn:data(root/@processor_version)
+                else
+                   if (root/@dataset_version)
+                   then fn:data(root/@dataset_version)
+                   else ()
+            else ()
+
+  # ACQUISITION ################################################################
+  - name: beginningDateTime
+    xquery: |
+      declare variable $value_beginning_date_time as xs:string? external;
+
+      $value_beginning_date_time
+  - name: endingDateTime
+    xquery: |
+      declare variable $value_ending_date_time as xs:string? external;
+
+      $value_ending_date_time
+
+  # ORBIT ################################################################
+  - name: orbitNumber
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L0.*"))
+      then "TODO"
+      else
+         if (fn:matches($value_product_type, "L(1|2).*"))
+         then
+            if ($node_EOP_METADATA/om:procedure)
+            then fn:data($node_EOP_METADATA/om:procedure/eop:acquisitionParameters/@eop:orbitNumber)
+            else
+               (: Case of a L-1 or L-2 without Node_EOP_METADATA e.g. O3_TCL :)
+               fn:substring(fn:name(), 53, 5)
+         else ()
+
+  # HMA-like ################################################################
+
+  - name: coordinates
+    xquery: |
+      declare variable $value_pos_list as xs:string? external;
+
+      if (fn:empty($value_pos_list))
+      then ()
+      else
+      <gml:Polygon xmlns:gml="http://www.opengis.net/gml"
+                   srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+         <gml:outerBoundaryIs>
+            <gml:LinearRing>
+               <gml:coordinates>
+               {
+                  let $VAR_tokens := fn:tokenize($value_pos_list, ' ')
+                  return
+                  fn:string-join(
+                  (
+                     for $i at $index in $VAR_tokens
+                     return
+                        concat($i,
+                               (if (($index - (2 * (xs:int($index div 2)))) = 1)
+                                then ","
+                                else " "))
+                  ), ""
+                  )
+               }
+               </gml:coordinates>
+            </gml:LinearRing>
+         </gml:outerBoundaryIs>
+      </gml:Polygon>
+
+  # OTHER ################################################################
+
+  - name: productType
+    xquery: |
+      declare variable $value_product_type as xs:string? external;
+
+      $value_product_type
+
+  # Sentinel-5P metadata ###################################################
+
+  - name: productClass
+    xquery: |
+      declare variable $node_earth_explorer_header_fixed_header as node()? external;
+      declare variable $value_product_type as xs:string? external;
+  
+      if (fn:matches($value_product_type, "L0.*"))
+      then "TODO"
+      else
+         if (fn:matches($value_product_type, "L(1|2).*"))
+         then fn:data($node_earth_explorer_header_fixed_header/@File_Class)
+         else
+            if (fn:matches($value_product_type, "AUX.*"))
+            then fn:substring(fn:name(.), 5, 4)
+            else ()
+
+  - name: identifier
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L1.*"))
+      then fn:data($node_EOP_METADATA/eop:metaDataProperty/@eop:identifier)
+      else ()
+
+  - name: parentIdentifier
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L(1|2).*"))
+      then fn:data($node_EOP_METADATA/eop:metaDataProperty/@eop:parentIdentifier)
+      else ()
+
+  - name: acquisitionType
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L1.*"))
+      then fn:data($node_EOP_METADATA/eop:metaDataProperty/@eop:acquisitionType)
+      else ()
+
+  - name: baselineCollection
+    xquery: |
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L(1|2).*"))
+      then fn:substring(fn:name(), 59, 2)
+      else ()
+
+  - name: doi
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L2.*"))
+      then fn:data($node_EOP_METADATA/eop:metaDataProperty/@eop:doi)
+      else ()
+
+  - name: qualityStatus
+    xquery: |
+      declare variable $node_EOP_METADATA as node()? external;
+      declare variable $value_product_type as xs:string? external;
+
+      if (fn:matches($value_product_type, "L2.*"))
+      then fn:data($node_EOP_METADATA/eop:metaDataProperty/@eop:productQualityStatus)
+      else ()
+      
+---
+###############################################################################
+# 99ed650b-b9af-452e-a50d-bd8e738d58f0 -- Sentinel-5P Auxiliary Product: NISE snow and ice
+###############################################################################
+drbItemClass: 99ed650b-b9af-452e-a50d-bd8e738d58f0
+variables:
+  - name: value_validity_time
+    xquery: |
+      fn:concat(fn:substring(name(), 15, 4), "-",
+                fn:substring(name(), 19, 2), "-",
+                fn:substring(name(), 21, 2), "T00:00:00.000Z")
+
+metadata:
+  # HMA and OGC metadata  ##################################################################
+  - name: platformShortName
+    python: |
+      return 'SENTINEL-5P'
+
+  - name: platformSerialIdentifier
+    python: |
+      return '5P'
+
+  - name: instrumentShortName
+    python: |
+      return 'SSMIS'
+
+  - name: processingLevel
+    python: |
+      return 'AUXILIARY'
+
+  # ACQUISITION  ##################################################################
+  - name: endingDateTime
+    xquery: |
+      declare variable $value_validity_time as xs:string? external;
+
+      $value_validity_time
+  - name: beginningDateTime
+    xquery: |
+      declare variable $value_validity_time as xs:string? external;
+
+      $value_validity_time
+  # OTHER  ##################################################################
+  - name: productType
+    python: |
+      return 'AUX_NISE__'
