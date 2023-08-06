@@ -1,0 +1,161 @@
+[tool.pdm.build]
+excludes = [
+    "./**/.git",
+]
+includes = [
+    "pl_itn",
+]
+source-includes = [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+]
+editable-backend = "path"
+
+[tool.pdm.scripts]
+pre_release = "python tasks/max_versions.py"
+release = "python tasks/release.py"
+test = "pytest"
+tox = "tox"
+lint = "pre-commit run --all-files"
+
+[tool.pdm.scripts.doc]
+shell = "cd docs && mkdocs serve"
+help = "Start the dev server for doc preview"
+
+[tool.pdm.scripts.complete]
+call = "tasks.complete:main"
+help = "Create autocomplete files for bash and fish"
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pdm[pytest]",
+    "pytest-cov",
+    "pytest>=6.0.2",
+    "pytest-xdist>=1.31.0",
+    "pytest-rerunfailures>=10.2",
+]
+tox = [
+    "tox",
+    "tox-pdm>=0.5",
+]
+doc = [
+    "mkdocs>=1.1",
+    "mkdocs-material>=7.3",
+    "mkdocstrings[python]>=0.18",
+    "mike>=1.1.2",
+    "setuptools>=62.3.3",
+    "markdown-exec>=0.7.0",
+    "mkdocs-redirects>=1.2.0",
+]
+workflow = [
+    "pdm-pep517>=1.0.0,<2.0.0",
+    "parver>=0.3.1",
+    "pycomplete~=0.3",
+]
+
+[tool.black]
+line-length = 120
+target-version = [
+    "py37",
+    "py38",
+    "py39",
+    "py310",
+]
+
+[tool.ruff]
+line-length = 120
+select = [
+    "B",
+    "C4",
+    "E",
+    "F",
+    "PGH",
+    "RUF",
+    "W",
+    "YTT",
+]
+extend-ignore = [
+    "B018",
+    "B019",
+]
+src = [
+    "src",
+]
+extend-exclude = [
+    "tests/fixtures",
+]
+target-version = "py37"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.isort]
+known-first-party = [
+    "pdm",
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+markers = [
+    "network: Tests that require network",
+    "integration: Run with all Python versions",
+    "path: Tests that compare with the system paths",
+    "deprecated: Tests about deprecated features",
+]
+addopts = "-r aR"
+testpaths = [
+    "tests/",
+]
+
+[project]
+name = "pl_itn"
+description = "Polish FST Inverse Text Normalization"
+authors = [
+    { name = "mstopa" },
+    { name = "cansubmarinesswim" },
+]
+version = "0.1.0-rc1"
+requires-python = ">=3.7"
+dependencies = [
+    "pynini>=2.1.4",
+    "pyyaml>=6.0",
+]
+readme = "README.md"
+keywords = [
+    "fst",
+    "itn",
+    "text normalization",
+    "polish",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: Polish",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Text Processing",
+]
+
+[project.license]
+text = "Apache-2.0"
+
+[project.urls]
+Repository = "https://github.com/mstopa/pl_itn"
+Documentation = "https://pl_itn.readthedocs.io/en/latest/"
+
+[project.scripts]
+pl_itn = "pl_itn.__main__:main"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
