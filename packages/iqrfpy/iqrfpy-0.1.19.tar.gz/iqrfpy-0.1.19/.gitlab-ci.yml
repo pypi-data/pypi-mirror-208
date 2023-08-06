@@ -1,0 +1,46 @@
+image: python:3.10-alpine
+
+stages:
+  - coding-style
+  - lint
+  - test
+
+# Tests
+coding-style:
+  stage: coding-style
+  before_script:
+    - pip install -r test_requirements.txt
+  script:
+    - pycodestyle iqrfpy
+  allow_failure: true
+
+docstring-style:
+  stage: coding-style
+  before_script:
+    - pip install -r test_requirements.txt
+  script:
+    - pydocstyle iqrfpy
+  allow_failure: true
+
+lint:
+  stage: lint
+  before_script:
+    - pip install -r test_requirements.txt
+  script:
+    - pylint iqrfpy
+  allow_failure: true
+
+pytest:
+  stage: test
+  before_script:
+    - pip install -r requirements.txt
+    - pip install -r test_requirements.txt
+    - pip install -e .
+  script:
+    - python3 -m pytest -v --cov=iqrfpy --cov-report=term-missing --cov-report=xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
