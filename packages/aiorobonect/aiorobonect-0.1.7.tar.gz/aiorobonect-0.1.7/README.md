@@ -1,0 +1,39 @@
+# aiorobonect
+
+Asynchronous library to communicate with the Robonect API
+
+## API Example
+
+```python
+"""Test for aiorobonect."""
+from aiorobonect import RobonectClient
+
+import asyncio
+import json
+import aiohttp
+
+async def main():
+    host = "10.0.0.99"        ## The Robonect mower IP
+    username = "USERNAME"    ## Your Robonect username
+    password = "xxxxxxxx"    ## Your Robonect password
+    tracking = [             ## Commands to query
+                "battery",
+                "wlan",
+                "version",
+                "timer",
+                "hour",
+                "error"
+            ]
+    client = RobonectClient(host, username, password)
+    try:
+        status = await client.async_cmd("status")
+        print(status)
+        tracking = await client.async_cmds(tracking)
+        print(json.dumps(tracking, indent=2))
+    except Exception as exception:
+        if isinstance(exception, aiohttp.ClientResponseError):
+            print(exception)
+    await client.session_close()
+
+asyncio.run(main())
+```
