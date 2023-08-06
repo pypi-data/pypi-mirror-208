@@ -1,0 +1,102 @@
+Metadata-Version: 2.1
+Name: visyn-core
+Version: 2.0.0
+Summary: Core repository for datavisyn applications.
+Home-page: https://www.datavisyn.io
+Author: datavisyn GmbH
+Author-email: contact@datavisyn.io
+License: BSD-3-Clause
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: alembic (==1.9.4)
+Requires-Dist: cachetools (==5.3.0)
+Requires-Dist: fastapi[all] (==0.92.0)
+Requires-Dist: Flask[async] (<=2.2.2,>=2.1.0)
+Requires-Dist: json-cfg (==0.4.2)
+Requires-Dist: marshmallow-sqlalchemy (<=0.28.1,>=0.26.0)
+Requires-Dist: marshmallow (==3.19.0)
+Requires-Dist: openpyxl (==3.0.9)
+Requires-Dist: psycopg (==3.1.8)
+Requires-Dist: psycopg2 (==2.9.5)
+Requires-Dist: pydantic (==1.10.5)
+Requires-Dist: pyjwt (==2.6.0)
+Requires-Dist: pytest-postgresql (==4.1.1)
+Requires-Dist: python-dateutil (==2.8.2)
+Requires-Dist: python-multipart (==0.0.5)
+Requires-Dist: requests (==2.28.2)
+Requires-Dist: SQLAlchemy (<=1.4.46,>=1.4.40)
+Requires-Dist: starlette-context (==0.3.6)
+Requires-Dist: uvicorn[standard] (==0.20.0)
+Provides-Extra: all
+Requires-Dist: rdkit (==2022.3.5) ; extra == 'all'
+Provides-Extra: develop
+Requires-Dist: black (~=22.12.0) ; extra == 'develop'
+Requires-Dist: pyright (~=1.1.285) ; extra == 'develop'
+Requires-Dist: pytest-runner (~=6.0.0) ; extra == 'develop'
+Requires-Dist: pytest (~=7.2.0) ; extra == 'develop'
+Requires-Dist: ruff (==0.0.218) ; extra == 'develop'
+Requires-Dist: rdkit (==2022.3.5) ; extra == 'develop'
+Provides-Extra: rdkit
+Requires-Dist: rdkit (==2022.3.5) ; extra == 'rdkit'
+
+visyn_core  
+=====================
+[![NPM version](https://badge.fury.io/js/visyn_core.svg)](https://npmjs.org/package/visyn_core)
+[![build](https://github.com/datavisyn/visyn_core/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/datavisyn/visyn_core/actions/workflows/build.yml)
+
+Installation
+------------
+
+```bash
+git clone -b develop https://github.com/datavisyn/visyn_core.git  # or any other branch you want to develop in
+cd visyn_core
+
+# Frontend
+yarn install
+
+# Backend
+python3 -m venv .venv  # create a new virtual environment
+source .venv/bin/activate  # active it
+make develop  # install all dependencies
+```
+
+Local development
+------------
+
+```bash
+# Frontend
+yarn start
+
+# Backend
+python visyn_core
+```
+
+Testing
+-------
+
+```bash
+# Frontend
+yarn run test
+
+# Backend
+make test
+```
+
+Building
+--------
+
+```
+yarn run build
+```
+
+
+
+***
+
+<a href="https://www.datavisyn.io"><img src="https://www.datavisyn.io/wp-content/uploads/2021/11/datavisyn_RGB_A.svg" align="left" width="200px" hspace="10" vspace="6"></a>
