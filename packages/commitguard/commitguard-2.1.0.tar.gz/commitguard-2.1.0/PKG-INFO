@@ -1,0 +1,83 @@
+Metadata-Version: 2.1
+Name: commitguard
+Version: 2.1.0
+Summary: Library for managing and writing git hooks in Python using pyproject.toml for its settings ✨
+Home-page: https://github.com/yezz123/CommitGuard
+License: MIT
+Keywords: git,formatting,linting,hooks
+Author: Yasser Tahiri
+Author-email: hello@yezz.me
+Requires-Python: >=3.7.2,<4.0.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Version Control :: Git
+Classifier: Typing :: Typed
+Requires-Dist: colorful (>=0.5.4,<0.6.0)
+Requires-Dist: httpx[http2] (>=0.23,<0.25)
+Requires-Dist: rich (>=12.4.4)
+Requires-Dist: tomlkit (>=0.5.11)
+Requires-Dist: typing-extensions (>=4.4.0,<5.0.0) ; python_version < "3.8"
+Project-URL: Repository, https://github.com/yezz123/CommitGuard
+Description-Content-Type: text/markdown
+
+
+<p align="center">
+    <em>Library for managing and writing git hooks in Python using `pyproject.toml` for its settings ✨</em>
+</p>
+
+## Installation
+
+You can add commitguard in a few easy steps. First of all, install the dependency:
+
+```shell
+$ pip install commitguard
+
+---> 100%
+
+Successfully installed commitguard-0.1.0
+```
+
+or Using poetry
+
+```shell
+poetry add --dev commitguard
+poetry run commitguard activate --mode poetry
+```
+
+The output of `commitguard activate` should be similar to:
+
+```shell
+ ✓ commitguard pre-commit hook installed at /commitguard/.git/hooks/pre-commit using poetry mode.
+```
+
+CommitGuard offers an adaptable plugin architecture where each plugin offers unique features that might require the installation of supplementary dependencies.
+
+To manage these dependencies, CommitGuard presently supports three modes:
+
+
+* `pythonpath` for dependency management via [pip]
+* `poetry` for dependency management via [poetry] (recommended)
+* `pipenv` for dependency management via [pipenv]
+
+These modes dictate how CommitGuard, the plugins, and their dependencies are loaded during git hook execution.
+
+## License
+
+This project is licensed under the terms of the MIT license.
+
