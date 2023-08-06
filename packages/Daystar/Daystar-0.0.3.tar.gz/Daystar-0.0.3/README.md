@@ -1,0 +1,15 @@
+# Daystar
+Daystar is a python library that provides a convenient class for Solar calculations based off of my other library _Solarflare_. Check out Solarflare at https://pypi.org/project/Solarflare/
+
+In order to use this library, just create an instance of the daystar class:
+
+```python
+sun = Daystar(latitude, longitude)
+```
+
+The functions provided are (they all default to datetime.datetime.now()):
+  - risetime(date): returns the sunrise
+  - settime(date): returns the sunset
+  - solarnoon(date): returns the solar noon time
+  - hrangle(date): returns the hour angle for the time and date
+  - coordinates(date): returns a tuple with declination and right ascension
