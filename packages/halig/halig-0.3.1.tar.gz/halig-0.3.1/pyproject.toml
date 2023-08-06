@@ -1,0 +1,150 @@
+[project]
+authors = [
+    { name = "cătălin", email = "185504a9@duck.com" },
+]
+requires-python = ">=3.10"
+dependencies = [
+    "typer<1.0.0,>=0.6.1",
+    "rich>=13.3.3",
+    "pydantic>=1.10.7",
+    "pyyaml>=6.0",
+    "pyrage>=1.0.3",
+    "pendulum>=2.1.2",
+    "httpx>=0.24.0",
+    "platformdirs>=3.5.1",
+    "httpx-cache>=0.9.0",
+]
+name = "halig"
+dynamic = []
+description = "age-encrypted, file-based, note-taking CLI app"
+readme = "README.md"
+keywords = [
+    "cli",
+    "notes",
+    "age",
+    "rage",
+    "encryption",
+    "notebook",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Terminals",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+version = "0.3.1"
+
+[project.license]
+text = "GPL-3.0-or-later"
+
+[project.urls]
+Homepage = "https://git.roboces.dev/catalin/halig"
+Repository = "https://git.roboces.dev/catalin/halig"
+Documentation = "https://git.roboces.dev/catalin/halig"
+Changelog = "https://git.roboces.dev/catalin/halig"
+
+[project.scripts]
+halig = "halig.main:app"
+
+[project.optional-dependencies]
+testing = [
+    "pytest>=7.2.2",
+    "pytest-cov>=4.0.0",
+    "pyfakefs>=5.1.0",
+    "pytest-clarity>=1.0.1",
+    "pytest-reportlog>=0.2.1",
+    "pytest-duration-insights>=0.1.1",
+    "pytest-pretty>=1.1.1",
+    "pytest-mock>=3.10.0",
+    "mock>=5.0.1",
+]
+linting = [
+    "black>=23.3.0",
+    "ruff>=0.0.260",
+    "pyright>=1.1.301",
+    "mypy>=1.1.1",
+    "types-PyYAML>=6.0.12.9",
+]
+docs = [
+    "mkdocs-material>=9.1.5",
+    "mkdocstrings[python]>=0.20.0",
+]
+
+[tool.pdm.version]
+source = "file"
+path = "halig/__version__.py"
+
+[tool.pdm.build]
+excludes = [
+    "**/.pytest_cache/**",
+]
+includes = []
+
+[tool.pytest]
+mock_use_standalone_module = true
+
+[tool.pyright]
+reportMissingImports = false
+reportMissingTypeStubs = false
+
+[tool.ruff]
+extend-select = [
+    "W",
+    "C90",
+    "I",
+    "N",
+    "UP",
+    "S",
+    "BLE",
+    "FBT",
+    "B",
+    "A",
+    "COM",
+    "C4",
+    "DTZ",
+    "T10",
+    "EM",
+    "ISC",
+    "T20",
+    "PT",
+    "RSE",
+    "RET",
+    "SIM",
+    "PTH",
+    "ERA",
+    "PGH",
+    "PL",
+    "TRY",
+    "RUF",
+]
+extend-ignore = [
+    "S101",
+    "ISC002",
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pyrage",
+    "pyrage.ssh",
+    "pyrage.x25519",
+    "attr",
+    "httpx_cache",
+]
+ignore_missing_imports = true
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
