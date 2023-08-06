@@ -1,0 +1,106 @@
+Metadata-Version: 2.1
+Name: steinwurf-tasker
+Version: 2.0.3
+Summary: A tool for handling automated tasks in Steinwurf.
+Home-page: UNKNOWN
+License: UNKNOWN
+Platform: UNKNOWN
+Description-Content-Type: text/x-rst
+Requires-Dist: PyGithub
+Requires-Dist: decorator
+Requires-Dist: fabric
+Requires-Dist: giturlparse
+Requires-Dist: invocations
+Requires-Dist: invoke
+Requires-Dist: semver
+Requires-Dist: steinnews
+
+================
+Steinwurf Tasker
+================
+
+|PyPi| |Waf Python Tests| |Black| |Flake8|
+
+
+.. |PyPi| image:: https://badge.fury.io/py/steinwurf-tasker.svg
+    :target: https://badge.fury.io/py/steinwurf-tasker
+
+.. |Waf Python Tests| image:: https://github.com/steinwurf/steinwurf-tasker/actions/workflows/python-waf.yml/badge.svg
+   :target: https://github.com/steinwurf/steinwurf-tasker/actions/workflows/python-waf.yml
+
+.. |Flake8| image:: https://github.com/steinwurf/steinwurf-tasker/actions/workflows/flake.yml/badge.svg
+    :target: https://github.com/steinwurf/steinwurf-tasker/actions/workflows/flake.yml
+
+.. |Black| image:: https://github.com/steinwurf/steinwurf-tasker/actions/workflows/black.yml/badge.svg
+      :target: https://github.com/steinwurf/steinwurf-tasker/actions/workflows/black.yml
+
+In Steinwurf we have a few general tasks that every developer in Steinwurf needs
+to carry out once in a while.
+
+For example, Releasing a new version of a project.
+
+Steinwurf Tasker is the tool for automating such tasks.
+
+Installation
+------------
+
+1. Install the ``steinwurf-tasker`` tool using ``pip``::
+
+      python -m pip install steinwurf-tasker
+
+Setup config
+------------
+
+Create a file in your home folder called `.steinwurf-tasker.yaml`.
+
+Add the following content and modify the values to the ::
+
+      editor: code
+      resolve_path: /home/username/projects/dependencies
+      project_paths:
+            - /home/username/projects/
+      release_email:
+            host: smtp.emailhost.com
+            port: 587
+            sender: release_email@email.com
+            password: release_email_password
+            receiver: release_email_receiver@email.com
+
+      tailscale:
+            api_key: tskey-123456789
+            url: <tailscale api URL, something like: https://api.tailscale.com/api/v2/tailnet/{user}>
+            credentials:
+                  user: common_account_name
+                  password: common_account_password
+      github_token: <your_PAT_here>
+
+Usage
+-----
+You'll now be able to use the `sw` command line tool. The following will list
+the available sw commands::
+
+      sw -l
+
+Update
+------
+To update Steinwurf Tasker use pip::
+
+      python -m pip install steinwurf-tasker
+
+Please make sure to also extend the config file with required information.
+
+Development
+-----------
+When developing a new feature for Steinwurf Tasker it can be nice to install
+the local version in editable mode. This can done using the following command::
+
+      cd steinwurf-tasker
+      python3 -m pip install -e .
+
+To revert this and use the pip package use this command::
+
+      cd steinwurf-tasker
+      python3 -m pip uninstall steinwurf-tasker
+      python -m pip install steinwurf-tasker
+
+
