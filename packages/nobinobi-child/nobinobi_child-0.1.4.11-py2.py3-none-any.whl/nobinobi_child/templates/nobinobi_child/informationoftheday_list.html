@@ -1,0 +1,61 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n %}
+
+{% block content_title_block %}
+  <h1>{% trans "List Informations of the day" %}</h1>
+{% endblock %}
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item active">{% trans "List Informations of the day" %}</li>
+{% endblock %}
+
+{% block content_card %}
+  <div class="card-body">
+    <div class="table-responsive bg-white">
+      <table class="table table-valign-middle table-hover">
+        <thead>
+        <tr>
+          <th width="5%">{% trans "ID" %}</th>
+          <th width="20%">{% trans "Title" %}</th>
+          <th width="10%">{% trans "Start date" %}</th>
+          <th width="10%">{% trans "End date" %}</th>
+          <th width="10%">{{ name_classroom_display }}</th>
+          <th width="35%">{% trans "Content" %}</th>
+          <th width="10">{% trans "Actions" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for iotd in object_list %}
+          <tr>
+            <td scope="row">{{ iotd.id }}</td>
+            <td>{{ iotd.title }}</td>
+            <td>{{ iotd.start_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+            <td>{{ iotd.end_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+            <td>{% for classroom in iotd.classrooms.all %}{{ classroom.name }}, {% endfor %}</td>
+            <td>{{ iotd.content.excerpt }}</td>
+            <td>
+              <div class="btn-toolbar" role="toolbar" aria-label="">
+                <div class="btn-group text-white" role="group" aria-label="">
+                  <a class="btn btn-sm btn-info"
+                     href="{% url "nobinobi_child:InformationOfTheDay_detail" pk=iotd.pk %}"><i
+                    class="fas fa-eye fa-sm"></i></a>
+                  {% if perms.nobinobi_child.change_informationoftheday %}
+                    <a class="btn btn-sm btn-primary"
+                       href="{% url "admin:nobinobi_child_informationoftheday_change" object_id=iotd.pk %}"><i
+                      class="fas fa-edit fa-sm "></i></a>
+                  {% endif %}
+                  {% if perms.nobinobi_child.delete_informationoftheday %}
+                    <a class="btn btn-sm btn-danger"
+                       href="{% url "admin:nobinobi_child_informationoftheday_delete" object_id=iotd.pk %}"><i
+                      class="fa fa-times"></i></a>
+                  {% endif %}
+                </div>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

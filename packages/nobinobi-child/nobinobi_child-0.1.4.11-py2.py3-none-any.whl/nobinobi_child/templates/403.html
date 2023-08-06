@@ -1,0 +1,322 @@
+{% load static i18n information_day_tags menu %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}{% trans "Forbidden" %} (403){% endblock %} | Nobinobi</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static "vendor/fontawesome-5.8.1/css/all.min.css" %}">
+  <!-- Ionicons -->
+  <link href="{% static "vendor/ionicons/ionicons.min.css" %}" rel="stylesheet">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static "vendor/adminLTE/dist/css/adminlte.min.css" %}">
+  {% block extrastyle %}{% endblock %}
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini">
+{% block headerjs %}
+  <script src="{% static "vendor/adminLTE/plugins/jquery/jquery.min.js" %}"></script>
+  <!-- Bootstrap 4 -->
+  <script src="{% static "vendor/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+{% endblock %}
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand bg-warning navbar-light border-bottom">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="/" class="nav-link">{% trans "Home" %}</a>
+      </li>
+
+      {% if request.user.is_authenticated %}
+
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url "admin:index" %}" class="nav-link">{% trans "Administration" %}</a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <!-- SEARCH FORM -->
+    {#    <form class="form-inline ml-3">#}
+    {#      <div class="input-group input-group-sm">#}
+    {#        <input class="form-control form-control-navbar" type="search" placeholder="{% trans "Search" %}" aria-label="Search">#}
+    {#        <div class="input-group-append">#}
+    {#          <button class="btn btn-navbar" type="submit">#}
+    {#            <i class="fa fa-search"></i>  #}
+    {#          </button>#}
+    {#        </div>#}
+    {#      </div>#}
+    {#    </form>#}
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      {# logout #}
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url "nobinobi_child:logout_view" %}">
+            <i class="fa fa-sign-out-alt"></i> {% trans "Logout" %}
+          </a>
+        </li>
+      {% endif %}
+
+      <!-- Messages Dropdown Menu -->
+      {#            <li class="nav-item dropdown">#}
+      {#              <a class="nav-link" data-toggle="dropdown" href="#">#}
+      {#                <i class="fa fa-comments"></i>#}
+      {#                <span class="badge badge-danger navbar-badge">3</span>#}
+      {#              </a>#}
+      {#              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">#}
+      {#                <a href="#" class="dropdown-item">#}
+      {#                  <!-- Message Start -->#}
+      {#                  <div class="media">#}
+      {#                    <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">#}
+      {#                    <div class="media-body">#}
+      {#                      <h3 class="dropdown-item-title">#}
+      {#                        Brad Diesel#}
+      {#                        <span class="float-right text-sm text-danger"><i class="fa fa-star"></i></span>#}
+      {#                      </h3>#}
+      {#                      <p class="text-sm">Call me whenever you can...</p>#}
+      {#                      <p class="text-sm text-muted"><i class="fa fa-clock-o mr-1"></i> 4 Hours Ago</p>#}
+      {#                    </div>#}
+      {#                  </div>#}
+      {#                  <!-- Message End -->#}
+      {#                </a>#}
+      {#                <div class="dropdown-divider"></div>#}
+      {#                <a href="#" class="dropdown-item">#}
+      {#                  <!-- Message Start -->#}
+      {#                  <div class="media">#}
+      {#                    <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">#}
+      {#                    <div class="media-body">#}
+      {#                      <h3 class="dropdown-item-title">#}
+      {#                        John Pierce#}
+      {#                        <span class="float-right text-sm text-muted"><i class="fa fa-star"></i></span>#}
+      {#                      </h3>#}
+      {#                      <p class="text-sm">I got your message bro</p>#}
+      {#                      <p class="text-sm text-muted"><i class="fa fa-clock-o mr-1"></i> 4 Hours Ago</p>#}
+      {#                    </div>#}
+      {#                  </div>#}
+      {#                  <!-- Message End -->#}
+      {#                </a>#}
+      {#                <div class="dropdown-divider"></div>#}
+      {#                <a href="#" class="dropdown-item">#}
+      {#                  <!-- Message Start -->#}
+      {#                  <div class="media">#}
+      {#                    <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">#}
+      {#                    <div class="media-body">#}
+      {#                      <h3 class="dropdown-item-title">#}
+      {#                        Nora Silvester#}
+      {#                        <span class="float-right text-sm text-warning"><i class="fa fa-star"></i></span>#}
+      {#                      </h3>#}
+      {#                      <p class="text-sm">The subject goes here</p>#}
+      {#                      <p class="text-sm text-muted"><i class="fa fa-clock-o mr-1"></i> 4 Hours Ago</p>#}
+      {#                    </div>#}
+      {#                  </div>#}
+      {#                  <!-- Message End -->#}
+      {#                </a>#}
+      {#                <div class="dropdown-divider"></div>#}
+      {#                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>#}
+      {#              </div>#}
+      {#            </li>#}
+
+      {#      <!-- Notifications Dropdown Menu -->#}
+      {#      <li class="nav-item dropdown">#}
+      {#        <a class="nav-link" data-toggle="dropdown" href="#">#}
+      {#          <i class="far fa-bell"></i>#}
+      {#          <span class="badge badge-info navbar-badge">15</span>#}
+      {#        </a>#}
+      {#        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">#}
+      {#          <span class="dropdown-item dropdown-header">15 Notifications</span>#}
+      {#          <div class="dropdown-divider"></div>#}
+      {#          <a href="#" class="dropdown-item">#}
+      {#            <i class="fa fa-envelope mr-2"></i> 4 new messages#}
+      {#            <span class="float-right text-muted text-sm">3 mins</span>#}
+      {#          </a>#}
+      {#          <div class="dropdown-divider"></div>#}
+      {#          <a href="#" class="dropdown-item">#}
+      {#            <i class="fa fa-users mr-2"></i> 8 friend requests#}
+      {#            <span class="float-right text-muted text-sm">12 hours</span>#}
+      {#          </a>#}
+      {#          <div class="dropdown-divider"></div>#}
+      {#          <a href="#" class="dropdown-item">#}
+      {#            <i class="fa fa-file mr-2"></i> 3 new reports#}
+      {#            <span class="float-right text-muted text-sm">2 days</span>#}
+      {#          </a>#}
+      {#          <div class="dropdown-divider"></div>#}
+      {#          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>#}
+      {#        </div>#}
+      {#      </li>#}
+      {#      <li class="nav-item">#}
+      {#        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">#}
+      {#          <i class="fa fa-th-large"></i>#}
+      {#        </a>#}
+      {#      </li>#}
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-warning elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link bg-dark">
+      <img src="{% static "img/nobinobi.png" %}"
+           alt="Nobinobi Logo"
+           class="brand-image img-square"
+           style="opacity: 1 ">
+      <span class="brand-text font-weight-bold">Nobinobi</span>
+
+    </a>
+
+    <!-- Sidebar -->
+    {% if request.user.is_authenticated %}
+
+      <div class="sidebar">
+        <!-- Sidebar user (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <img src="{% static "img/logo.png" %}" class="img-square" alt="Logo">
+          </div>
+          <div class="info">
+            <div class="d-block text-white font-weight-bold">{{ request.user.username }}</div>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
+            <!-- Add icons to the links using the .nav-icon class
+                 with font-awesome or any other icon font library -->
+            {#          <li class="nav-item has-treeview">#}
+            {#            <a href="#" class="nav-link">#}
+            {#              <i class="nav-icon fa fa-dashboard"></i>#}
+            {#              <p>#}
+            {#                Dashboard#}
+            {#                <i class="right fa fa-angle-left"></i>#}
+            {#              </p>#}
+            {#            </a>#}
+            {#            <ul class="nav nav-treeview">#}
+            {#              <li class="nav-item">#}
+            {#                <a href="../../index.html" class="nav-link">#}
+            {#                  <i class="fa fa-circle-o nav-icon"></i>#}
+            {#                  <p>Dashboard v1</p>#}
+            {#                </a>#}
+            {#              </li>#}
+            {#              <li class="nav-item">#}
+            {#                <a href="../../index2.html" class="nav-link">#}
+            {#                  <i class="fa fa-circle-o nav-icon"></i>#}
+            {#                  <p>Dashboard v2</p>#}
+            {#                </a>#}
+            {#              </li>#}
+            {#              <li class="nav-item">#}
+            {#                <a href="../../index3.html" class="nav-link">#}
+            {#                  <i class="fa fa-circle-o nav-icon"></i>#}
+            {#                  <p>Dashboard v3</p>#}
+            {#                </a>#}
+            {#              </li>#}
+            {#            </ul>#}
+            {#          </li>#}
+            {% generate_menu %}
+            {% with menu=menus.main %}
+              {% include "nobinobi_child/includes/menu.html" %}
+            {% endwith %}
+
+            {#          <li class="nav-header">LABELS</li>#}
+            {#          <li class="nav-item">#}
+            {#            <a href="#" class="nav-link">#}
+            {#              <i class="nav-icon fa fa-circle-o text-danger"></i>#}
+            {#              <p class="text">Important</p>#}
+            {#            </a>#}
+            {#          </li>#}
+          </ul>
+        </nav>
+
+        <!-- /.sidebar-menu -->
+      </div>
+    {% endif %}
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    {% block content-header-block %}
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              {% block content_title_block %}
+                <h1>{% block content_title %}{% trans "403" %}{% endblock %}</h1>{% endblock %}
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+    {% endblock %}
+
+    <!-- Main content -->
+    {% block content-block %}
+      <section class="content">
+        {% block content %}
+          <!-- Default box -->
+          <div class="card">
+            {% block content_card %}
+              <div class="card-header">
+                <h3 class="card-title">{% block content_card_title %}{% trans "Forbidden" %} 403{% endblock %}</h3>
+
+                {#          <div class="card-tools">#}
+                {#            <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">#}
+                {#              <i class="fa fa-minus"></i></button>#}
+                {#            <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">#}
+                {#              <i class="fa fa-times"></i></button>#}
+                {#          </div>#}
+              </div>
+              <div class="card-body">
+                {% block content_card_body %}{% blocktrans %}<h1>Forbidden (403)</h1>{% endblocktrans %}{% endblock %}
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">{% block content_card_footer %}{% trans "Thank you" %}{% endblock %}</div>
+            {% endblock %}
+            <!-- /.card-footer-->
+          </div>
+          <!-- /.card -->
+        {% endblock %}
+      </section>
+    {% endblock %}
+
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      {#      <span class='version'>Version: {% version_number %}</span>#}
+      <span><b>Version:</b> 2.0.0</span>
+    </div>
+    <strong>Copyright &copy; 2015 - {% now "Y" %}</strong> Prolibre SARL All
+    rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+{% block footerjs %}
+
+  <!-- AdminLTE App -->
+  <script src="{% static "vendor/adminLTE/dist/js/adminlte.min.js" %}"></script>
+{% endblock %}
+{% block extrajs %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,201 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/DataTables/datatables.min.css' %}"/>
+    <style>
+        .modal-backdrop {
+            z-index: auto;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content_title_block %}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+
+
+{% block content_card %}
+    <div class="card-body">
+        {% if perms.nobinobi_child.add_absence %}
+            <div class="btn-toolbar" role="toolbar" aria-label="">
+                <div class="btn-group" role="group" aria-label="">
+                    <button type="button" class="btn btn-info absence-create">{% trans "Add" %}</button>
+                </div>
+            </div>
+        {% endif %}
+        <table id="absences_datatables" class="display table" style="width:100%">
+            <thead>
+            <tr>
+                <th>{% trans "Child" %}</th>
+                <th>{% trans "Start date" %}</th>
+                <th>{% trans "End date" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <!-- modal instanstiation -->
+    {% include "includes/modal.html" %}
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+    <script src="{% static 'vendor/DataTables/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/moment-with-locales.min.js' %}"></script>
+    {#  <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+
+    <script>
+
+        function docReady(fn) {
+            // see if DOM is already available
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                // call on next available tick
+                setTimeout(fn, 1);
+            } else {
+                document.addEventListener("DOMContentLoaded", fn);
+            }
+        }
+
+        let table = null;
+        $(document).ready(function () {
+            moment.locale('fr');
+            table = $('#absences_datatables').DataTable({
+                "language": {
+                    "url": "{% static 'vendor/DataTables/DataTables-1.10.18/i18n/French.json' %}"
+                },
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    {#url: "{% url 'nobinobi_child:api-absence-absences-by-classroom' classroom_id=classroom.id %} %}?format=datatables",#}
+                    url: "{% url 'nobinobi_child:api-absence-absences-by-classroom' %}?classrooms={% for classroom in classrooms %}{{ classroom.id }}{% if not forloop.last %},{% endif %}{% endfor %}&format=datatables",
+                },
+                "columns": [
+                    {
+                        data: "child",
+                        name: "child__first_name, child__last_name",
+                        render: function (row, index, datatable) {
+                            if (row) {
+                                return row.first_name + " " + row.last_name;
+                            } else {
+                                return "-"
+                            }
+                        },
+                    },
+                    {
+                        data: "start_date",
+                        render: function (row, index, datatable) {
+                            if (row) {
+                                return moment(row).format('L LT');
+                            } else {
+                                return "-"
+                            }
+                        }
+
+                    },
+                    {
+                        data: "end_date",
+                        render: function (row, index, datatable) {
+                            if (row) {
+                                return moment(row).format('L LT');
+                            } else {
+                                return "-"
+                            }
+                        }
+                    },
+                    {
+                        data: "type",
+                        name: "type__name, type__group__name",
+                        render: function (row, index, datatable) {
+                            if (row) {
+                                return row.name + " (" + row.group.name + ")";
+                            } else {
+                                return "-";
+                            }
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (row, index, datatable) {
+                            console.log(row);
+                            return '<div class="btn-group">' +
+                                '{% if perms.nobinobi_child.view_absence %}' +
+                                    '<button data-id="{% url "nobinobi_child:Absence_detail" pk=123 %}" class="absence-detail btn btn-info"><i class="fa fa-eye"></i></button>'.replace(123, datatable.id)
+                                    +
+                                    '{% endif %}' +
+                                '{% if perms.nobinobi_child.change_absence %}' +
+                                    '<button data-id="{% url "nobinobi_child:Absence_update" pk=123 %}" class="absence-update btn btn-primary"><i class="fa fa-edit"></i></button>'.replace(123, datatable.id)
+                                    +
+                                    '{% endif %}' +
+                                '{% if perms.nobinobi_child.delete_absence %}' +
+                                    '<button data-id="{% url "nobinobi_child:Absence_delete" pk=123 %}" class="absence-delete btn btn-danger"><i class="fa fa-times"></i></button>'.replace(123, datatable.id)
+                                    +
+                                    '{% endif %}' +
+                                '</div>';
+                        },
+                    },
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'print',
+                    'csvHtml5',
+                    'pdfHtml5',
+                ],
+                responsive: true,
+                {#"searchCols": [#}
+                {#  {"search": 'in_progress'},#}
+                {#],#}
+            });
+            table.on('draw', function () {
+                create_event_button();
+            });
+            table.on('responsive-display', function (e, datatable, row, showHide, update) {
+                create_event_button();
+            });
+            {# order by start_date desc #}
+            table.column('1:visible')
+                .order('desc')
+                .draw();
+        });
+
+        function create_event_button() {
+            // Update absence buttons
+            $(".absence-update").each(function () {
+                $(this).modalForm({formURL: $(this).data('id')});
+            });
+
+            // Read absence buttons
+            $(".absence-detail").each(function () {
+                $(this).modalForm({formURL: $(this).data('id')});
+            });
+
+            // Delete absence buttons
+            $(".absence-delete").each(function () {
+                $(this).modalForm({formURL: $(this).data('id')});
+            });
+        }
+
+        docReady(function () {
+            {% if perms.nobinobi_child.add_absence %}
+                $(".absence-create").modalForm({formURL: "{% url 'nobinobi_child:Absence_create' %}?classrooms={% for classroom in classrooms %}{{classroom.id}}{% if not forloop.last %},{%endif%}{% endfor %}"});
+            {% else %}
+                console.log("{% trans "Your permission is insufficient." %}");
+            {% endif %}
+        });
+    </script>
+
+{% endblock %}

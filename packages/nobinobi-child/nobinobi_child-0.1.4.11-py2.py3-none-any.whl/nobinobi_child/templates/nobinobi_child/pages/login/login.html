@@ -1,0 +1,64 @@
+{% load static i18n crispy_forms_tags %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% trans "Log in" %} | Nobinobi</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static "vendor/fontawesome-5.8.1/css/all.min.css" %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="{% static "vendor/ionicons/ionicons.min.css" %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static "vendor/adminLTE/dist/css/adminlte.min.css" %}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static "vendor/adminLTE/plugins/iCheck/square/blue.css" %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <style>
+    .masthead {
+      height: 100vh;
+      min-height: 500px;
+      background-image: url('{% static "img/login/login@4x.png" %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+<body class="hold-transition login-page">
+
+<header class="masthead">
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-12 text-center mt-5 pt-5">
+        <!-- /.login-box -->
+        <div class="login-box">
+          <div class="login-logo">
+            <p class="font-weight-bold">Nobinobi</p>
+          </div>
+          <!-- /.login-logo -->
+          <div class="card">
+            <div class="card-body login-card-body">
+              <p class="login-box-msg">{% trans "Sign in to start your session" %}</p>
+              {% crispy form form.helper %}
+            </div>
+            <!-- /.login-card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- jQuery -->
+<script src="{% static "vendor/adminLTE/plugins/jquery/jquery.min.js" %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static "vendor/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+</body>
+</html>

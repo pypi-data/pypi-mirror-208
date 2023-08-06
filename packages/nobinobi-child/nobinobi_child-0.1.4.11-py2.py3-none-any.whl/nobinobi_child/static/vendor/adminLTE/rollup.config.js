@@ -1,0 +1,44 @@
+/*
+ * Copyright (C) 2020 <Florian Alu - Prolibre - https://prolibre.com
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import babel from 'rollup-plugin-babel'
+
+const pkg  = require('./package')
+const year = new Date().getFullYear()
+
+const globals = {
+  jquery: 'jQuery'
+}
+
+export default {
+  input  : 'build/js/AdminLTE.js',
+  output : {
+    banner: `/*!
+ * AdminLTE v${pkg.version} (${pkg.homepage})
+ * Copyright 2014-${year} ${pkg.author}
+ * Licensed under MIT (https://github.com/almasaeed2010/AdminLTE/blob/master/LICENSE)
+ */`,
+    file  : 'dist/js/adminlte.js',
+    format: 'umd',
+    globals,
+    name  : 'adminlte'
+  },
+  plugins: [
+    babel({
+      exclude: 'node_modules/**'
+    })
+  ]
+}
