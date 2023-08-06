@@ -1,0 +1,91 @@
+'a:':
+- sum(dimensions=['i'], weights=None, ...)
+- 'a:i':
+  - get_test_quantity(<a:i>, ...)
+
+'b:':
+- sum(dimensions=['j'], weights=None, ...)
+- 'b:j':
+  - get_test_quantity(<b:j>, ...)
+
+'config':
+- {}
+
+'cost-margin:':
+- get_test_quantity(<cost-margin:>, ...)
+
+'cost:':
+- get_test_quantity(<cost:>, ...)
+
+'d:':
+- sum(dimensions=['i', 'j'], weights=None, ...)
+- 'd:i-j':
+  - get_test_quantity(<d:i-j>, ...)
+
+'d:i':
+- sum(dimensions=['j'], weights=None, ...)
+- 'd:i-j' (above)
+
+'d:j':
+- sum(dimensions=['i'], weights=None, ...)
+- 'd:i-j' (above)
+
+'demand-margin:':
+- sum(dimensions=['j'], weights=None, ...)
+- 'demand-margin:j':
+  - get_test_quantity(<demand-margin:j>, ...)
+
+'demand:':
+- sum(dimensions=['j'], weights=None, ...)
+- 'demand:j':
+  - get_test_quantity(<demand:j>, ...)
+
+'f:':
+- get_test_quantity(<f:>, ...)
+
+'i':
+- ['seattle', 'san-diego']
+
+'j':
+- ['new-york', 'chicago', 'topeka']
+
+'supply-margin:':
+- sum(dimensions=['i'], weights=None, ...)
+- 'supply-margin:i':
+  - get_test_quantity(<supply-margin:i>, ...)
+
+'supply:':
+- sum(dimensions=['i'], weights=None, ...)
+- 'supply:i':
+  - get_test_quantity(<supply:i>, ...)
+
+'x:':
+- sum(dimensions=['i', 'j'], weights=None, ...)
+- 'x:i-j':
+  - get_test_quantity(<x:i-j>, ...)
+
+'x:i':
+- sum(dimensions=['j'], weights=None, ...)
+- 'x:i-j' (above)
+
+'x:j':
+- sum(dimensions=['i'], weights=None, ...)
+- 'x:i-j' (above)
+
+'z:':
+- get_test_quantity(<z:>, ...)
+
+'all':
+- list of:
+  - 'a:i' (above)
+  - 'b:j' (above)
+  - 'cost-margin:' (above)
+  - 'cost:' (above)
+  - 'd:i-j' (above)
+  - 'demand-margin:j' (above)
+  - 'demand:j' (above)
+  - 'f:' (above)
+  - 'supply-margin:i' (above)
+  - 'supply:i' (above)
+  - 'x:i-j' (above)
+  - 'z:' (above)
