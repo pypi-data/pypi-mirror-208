@@ -1,0 +1,76 @@
+{# gitlab-template.jinja #}
+
+{% if pipeline_info.shared_includes %}
+include:
+{% endif -%}
+{% for include in pipeline_info.shared_includes %}
+{% if include.project %}
+    - project: '{{ include.project }}'
+      ref: '{{ include.ref }}'
+      file: '{{ include.file }}'
+{% elif include.local %}
+    - local: '{{ include.local }}'
+{% endif %}
+{% endfor %}
+
+stages:
+  - build
+{% if pipeline_info.final_job %}
+  - {{ pipeline_info.final_job.stage }}
+{% endif %}
+
+{% for job in jobs %}
+{{ job.name }}:
+  stage: build
+  variables:
+    PROJECT_SUBDIR: {{ job.folder }}
+  rules:
+{% for rule in pipeline_info.shared_reference_rules %}
+    - if: !reference [{{ rule.rule_source }},{{ rule.rule_name }}]
+{% if rule.when %}
+      when: {{ rule.when }}
+{% endif -%}
+{% if rule.only_changes == true %}
+      changes:
+        - {{ job.folder }}/**/*
+{% for parent in job.parents %}
+        - {{ parent.folder }}/**/*
+{% endfor %}
+{% endif -%}
+{% endfor %}
+{% if job.parents %}
+  needs: 
+{% endif %}
+{% for parent in job.parents %}
+    - job: {{ parent.name }}
+      optional: true 
+{% endfor %}
+  trigger:
+    include: {{ job.folder }}/{{ job.gitlab_yml_file }}    
+    strategy: depend
+ 
+{% endfor %}
+{% if pipeline_info.final_job %}
+{{ pipeline_info.final_job.name }}:
+  stage: {{ pipeline_info.final_job.stage }}
+  rules:
+{% for rule in pipeline_info.final_job.rules %}
+    - if: !reference [{{ rule.rule_source }},{{ rule.rule_name }}]
+{% if rule.when %}
+      when: {{ rule.when }}
+{% endif -%}
+{% if rule.only_changes == true %}
+      changes:
+{% for job in jobs %}
+        - {{ job.folder }}/**/*
+{% endfor %}
+{% endif -%}
+{% endfor %}
+  trigger:
+    include: 
+      - project: '{{ pipeline_info.final_job.trigger_job_info.project }}'
+        ref: '{{ pipeline_info.final_job.trigger_job_info.ref }}'
+        file: '{{ pipeline_info.final_job.trigger_job_info.file }}' 
+    strategy: depend
+{% endif %}
+
