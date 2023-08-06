@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: systempath
+Version: 1.0.10
+Summary: Operating system paths and files.
+Home-page: http://gqylpy.com
+Author: 竹永康
+Author-email: <gqylpy@outlook.com>
+License: Apache 2.0
+Project-URL: Source, https://github.com/gqylpy/systempath
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System
+Classifier: Topic :: System :: Filesystems
+Classifier: Topic :: System :: Operating System
+Classifier: Topic :: System :: Operating System Kernels :: Linux
+Classifier: Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8, <4
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: gqylpy-exception (>=2.0.1)
+
+[<img alt="LOGO" src="http://www.gqylpy.com/static/img/favicon.ico" height="21" width="21"/>](http://www.gqylpy.com)
+[![Release](https://img.shields.io/github/release/gqylpy/systempath.svg?style=flat-square")](https://github.com/gqylpy/systempath/releases/latest)
+[![Python Versions](https://img.shields.io/pypi/pyversions/systempath)](https://pypi.org/project/systempath)
+[![License](https://img.shields.io/pypi/l/systempath)](https://github.com/gqylpy/systempath/blob/master/LICENSE)
+[![Downloads](https://pepy.tech/badge/systempath)](https://pepy.tech/project/systempath)
+
+# systempath
+
+> (OOP) Operating system paths and files.  
+> Let Python operating system paths and files become Simple, Simpler, Simplest, Humanization, Unification, Flawless.
+
+<kbd>pip3 install systempath</kbd>
+
+```python
+>>> from systempath import SystemPath, Directory, File
+
+>>> root = SystemPath('/')
+
+>>> home: Directory = root['home']['gqylpy']
+>>> home
+/home/gqylpy
+
+>>> file: File = home['alpha.txt']
+>>> file
+/home/gqylpy/alpha.txt
+
+>>> file.open.rb().read()
+b'GQYLPY \xe6\x94\xb9\xe5\x8f\x98\xe4\xb8\x96\xe7\x95\x8c'
+```
