@@ -1,0 +1,345 @@
+{
+    "wstl": {
+        "title": "AWS A3 Bucket Folders",
+        "actions": [
+            {
+                "name": "heaserver-awss3folders-folder-get-open-choices",
+                "description": "Open this folder",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "Open"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-create-choices",
+                "description": "Create a new object in this folder",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "New"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-open-default",
+                "description": "Open this folder",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "Open"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-create-folder",
+                "description": "Create a new folder",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "New Folder"
+            },
+            {
+                "name": "heaserver-awss3folders-item-open-default",
+                "description": "Open this folder",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "Open"
+            },
+            {
+                "name": "heaserver-awss3folders-item-get-actual",
+                "description": "Get the actual object",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "Get actual"
+            },
+            {
+                "name": "heaserver-awss3folders-item-get-volume",
+                "description": "View this item's volume",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "View volume"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-trash",
+                "description": "View this volume's Trash bin",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "Trash"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-properties",
+                "description": "View and edit this folder's properties",
+                "type": "unsafe",
+                "target": "item cj-template",
+                "action": "update",
+                "prompt": "Properties",
+                "inputs": [
+                    {
+                        "name": "bucket_id",
+                        "prompt": "Bucket name",
+                        "readOnly": true,
+                        "required": true,
+                        "hea": {
+                            "display": false
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "prompt": "Key",
+                        "readOnly": true,
+                        "required": true,
+                        "hea": {
+                            "display": false
+                        }
+                    },
+                    {
+                        "name": "display_name",
+                        "prompt": "Name",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "prompt": "Type",
+                        "readOnly": true,
+                        "required": true
+                    },
+                    {
+                        "name": "storage_class",
+                        "prompt": "Storage class",
+                        "readOnly": true,
+                        "required": true,
+                        "type": "select",
+                        "suggest": [
+                            {"value": "DEEP_ARCHIVE", "text": "Glacier Deep Archive"},
+                            {"value": "GLACIER", "text": "Glacier Flexible Retrieval"},
+                            {"value": "GLACIER_IR", "text": "Glacier Instant Retrival"},
+                            {"value": "STANDARD", "text": "Standard"}
+                        ]
+                    },
+                    {
+                        "name": "s3_uri",
+                        "prompt": "S3 URI",
+                        "readOnly": true
+                    },
+                    {
+                        "name": "mime_type",
+                        "prompt": "MIME type",
+                        "readOnly": true,
+                        "hea": {
+                            "display": false
+                        }
+                    },
+                    {
+                        "name": "owner",
+                        "prompt": "Owner",
+                        "required": true,
+                        "readOnly": true,
+                        "type": "select",
+                        "hea": {
+                            "optionsFromUrl": {
+                                "path": "/people/",
+                                "value": "id",
+                                "text": "display_name"
+                            }
+                        }
+                    },
+                    {
+                        "name": "created",
+                        "prompt": "Created",
+                        "readOnly": true,
+                        "hea": {
+                            "type": "datetime"
+                        }
+                    },
+                    {
+                        "name": "modified",
+                        "prompt": "Modified",
+                        "readOnly": true,
+                        "hea": {
+                            "type": "datetime"
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "prompt": "Source",
+                        "readOnly": true
+                    },
+                    {
+                        "hea": {
+                            "section": "shares",
+                            "sectionPrompt": "Shares",
+                            "optionsFromUrl": {
+                                "path": "/people/",
+                                "value": "id",
+                                "text": "display_name"
+                            }
+                        },
+                        "name": "user",
+                        "prompt": "User",
+                        "required": true,
+                        "type": "select"
+                    },
+                    {
+                        "hea": {
+                            "section": "shares",
+                            "cardinality": "multiple"
+                        },
+                        "name": "permissions",
+                        "prompt": "Permissions",
+                        "type": "select",
+                        "suggest": [
+                            {"value":  "COOWNER", "text":  "Co-owner"},
+                            {"value":  "CREATOR", "text":  "Creator"},
+                            {"value":  "DELETER", "text":  "Deleter"},
+                            {"value":  "EDITOR", "text":  "Editor"},
+                            {"value":  "SHARER", "text":  "Sharer"},
+                            {"value":  "VIEWER", "text":  "Viewer"}
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "heaserver-awss3folders-folder-new-form",
+                "description": "Create a new folder",
+                "type": "unsafe",
+                "target": "item cj-template",
+                "action": "update",
+                "prompt": "New Folder",
+                "inputs": [
+                    {
+                        "name": "display_name",
+                        "prompt": "Name",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "prompt": "Type",
+                        "hea": {
+                            "display": false
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-self",
+                "description": "View this folder",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "View"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-volume",
+                "description": "View this folder's volume",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "View volume"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-awsaccount",
+                "description": "View this folder's AWS account",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "View account"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-duplicate",
+                "description": "Duplicate this folder",
+                "type": "unsafe",
+                "action": "append",
+                "target": "item read cj",
+                "prompt": "Duplicate"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-unarchive",
+                "description": "Unarchive this folder",
+                "type": "unsafe",
+                "action": "append",
+                "target": "item read cj",
+                "prompt": "Unarchive"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-archive",
+                "description": "Archive this folder",
+                "type": "unsafe",
+                "action": "append",
+                "target": "item read cj",
+                "prompt": "archive"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-duplicate-form",
+                "description": "Duplicate this folder",
+                "type": "unsafe",
+                "action": "update",
+                "target": "item cj-template",
+                "prompt": "Duplicate",
+                "inputs": [
+                    {
+                        "name": "target",
+                        "prompt": "Target",
+                        "required": true,
+                        "hea": {
+                            "type": "object-url"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "heaserver-awss3folders-folder-move-form",
+                "description": "Move this folder",
+                "type": "unsafe",
+                "action": "update",
+                "target": "item cj-template",
+                "prompt": "Move",
+                "inputs": [
+                    {
+                        "name": "target",
+                        "prompt": "Target",
+                        "required": true,
+                        "hea": {
+                            "type": "object-url"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "heaserver-awss3folders-folder-archive-form",
+                "description": "Archive this folder",
+                "type": "unsafe",
+                "action": "update",
+                "target": "item cj-template",
+                "prompt": "Archive",
+                "inputs": [
+                    {
+                        "name": "storage_class",
+                        "prompt": "Storage Class",
+                        "type": "select",
+                        "suggest": [
+                            {"value":  "DEEP_ARCHIVE", "text":  "Glacier Deep Archive"},
+                            {"value":  "GLACIER", "text":  "Glacier Flexible Retrieval"},
+                            {"value":  "GLACIER_IR", "text":  "Glacier Instant Retrival"}
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "heaserver-awss3folders-folder-get-target",
+                "description": "The target folder for the item",
+                "type": "safe",
+                "action": "read",
+                "target": "item read cj",
+                "prompt": "Get target folder"
+            },
+            {
+                "name": "heaserver-awss3folders-folder-move",
+                "description": "Move this folder",
+                "type": "unsafe",
+                "action": "update",
+                "target": "item read cj",
+                "prompt": "Move"
+            }
+        ]
+    }
+}
