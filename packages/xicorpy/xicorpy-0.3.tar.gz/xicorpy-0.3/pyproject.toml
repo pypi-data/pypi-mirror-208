@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "xicorpy"
+version = "0.3"
+description = "Python implementation of Chatterjee's Rank Correlation, its modifications, and other offshoots"
+authors = ["Swarna Vallabhaneni <swarnakumar@gmail.com>"]
+maintainers = ["Swarna Vallabhaneni <swarnakumar@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/swarnakumar/xicorpy"
+homepage = "https://swarnakumar.github.io/xicorpy"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+    ]
+
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+pandas = "^2"
+numpy = "^1.24"
+scikit-learn = "^1.2"
+mypy = "1.2"
+mkdocstrings = {version = "~0.20", optional = true}
+mkdocs-material = {version = "~9.1", optional = true}
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2"
+pytest-cov = "^4.0.0"
+pre-commit = "^2.16.0"
+coverage = {extras = ["toml"], version = "^7.2"}
+mypy = "1.2"
+
+[tool.poetry.extras]
+docs = ["mkdocstrings", "mkdocs-material"]
+typings = ["mypy"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--cov=xicorpy --cov-report term-missing"
+
+[tool.coverage.run]
+omit = [".*", "*/site-packages/*"]
+source = ["xicorpy"]
+
+[tool.coverage.report]
+fail_under = 100
