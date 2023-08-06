@@ -1,0 +1,3 @@
+Clubscore
+
+Basic readme
