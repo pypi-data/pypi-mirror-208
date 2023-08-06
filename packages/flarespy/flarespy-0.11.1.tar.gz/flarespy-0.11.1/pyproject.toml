@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "flarespy"
+version = "0.11.1"
+description = "Find flares in TESS light curves"
+authors = ["Keyu Xing <kyxing@mail.bnu.edu.cn>"]
+license = "MIT"
+homepage = "https://github.com/keyuxing/flarespy"
+repository = "https://github.com/keyuxing/flarespy"
+
+[tool.poetry.dependencies]
+bottleneck = ">=1.3"
+lightkurve = ">=2.3"
+numba = ">=0.55.2"
+python = ">=3.8"
+wotan = ">=1.10"
+
+[tool.poetry.group.dev.dependencies]
+black = ">=23.3.0"
+tokenize-rt = ">=4.1"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+select = ["F", "I", "E", "W", "YTT", "Q", "PLE", "PLW"]
+src = ["src", "test"]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402"]
