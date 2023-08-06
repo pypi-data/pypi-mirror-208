@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "exasol-script-languages-container-ci"
+version = "1.1.0"
+description = "Implements CI builds for script-language-container."
+
+license = "MIT"
+
+authors = [
+    "Thomas Uebensee <ext.thomas.uebensee@exasol.com>"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8.0,<4.0"
+click = "^8.0.3"
+GitPython = ">=3.1.0"
+exasol-script-languages-container-tool = "^0.17.0"
+exasol-integration-test-docker-environment = "^1.4.0"
+PyGithub = "^1.55.0"
+setuptools = "^67.6.0"
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dev-dependencies]
+toml = ">=0.10.2"
+pytest = "^7.1.1"
+pytest-mock = "^3.7.0"
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--ignore=test/integration_tests/resources"
+
+testpaths = [
+    "test"
+]
