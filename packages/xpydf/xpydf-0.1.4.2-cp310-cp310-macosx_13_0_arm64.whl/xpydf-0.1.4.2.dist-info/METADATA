@@ -1,0 +1,27 @@
+Metadata-Version: 2.1
+Name: xpydf
+Version: 0.1.4.2
+Summary: Python wrapper around the pdftotext and pdfimages functionalities of xpdf.
+Author-email: Matthijs Wesseling <matthijs.wesseling@bigdatarepublic.nl>
+Project-URL: Homepage, https://github.com/Bladieblah/xpdf-python
+Project-URL: Bug Tracker, https://github.com/Bladieblah/xpdf-python/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy (>=1.21.6)
+
+# xpdf-python
+Python wrapper around the pdftotext functionality of xpdf.
+
+# Usage
+
+```python
+from xpydf.pdf_loader import PdfLoader
+
+loader = PdfLoader("foo.pdf")
+pdf_text = loader.extract_strings()
+pdf_images = loader.extract_images()
+```
