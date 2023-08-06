@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "plaintext-analyzer"
+version = "0.1.13"
+description = ""
+authors = ["Phoenix Grey <phoenix.grey0108@gmail.com>"]
+repository = "https://github.com/qishe-nlp/plaintext-analyzer"
+readme = "README.md"
+documentation = "https://qishe-nlp.github.io/plaintext-analyzer/"
+keywords = ["vocabulary", "phrases", "text", "nlp"] 
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^8.0.3"
+x2cdict = "^0.1.46"
+sencore = "^0.1.39"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+Sphinx = "^6.1.3"
+sphinx-rtd-theme = "^1.2.0"
+sphinxcontrib-jquery = "^4.1"
+
+[tool.poetry.scripts]
+pta_vocab = "plaintext_analyzer.entry:parser_vocab"
+pta_phrase = "plaintext_analyzer.entry:parser_phrase"
+pta_structure_kg = "plaintext_analyzer.entry:parser_structure_kg"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
