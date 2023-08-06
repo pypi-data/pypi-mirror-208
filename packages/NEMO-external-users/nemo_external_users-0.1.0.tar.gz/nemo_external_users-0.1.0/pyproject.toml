@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "NEMO-external-users"
+description = "NEMO plugin allowing users to create and manage their own accounts."
+readme = "README.md"
+authors = [
+    { name="High Tech Lab", email="hightechlab@maakleerplekleuven.be" },
+]
+maintainers = [
+    { name="Michal Machnicki", email="michal.machnicki@maakleerplekleuven.be" },
+]
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    'Environment :: Web Environment',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: System Administrators',
+    'Natural Language :: English',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+    'Topic :: Internet :: WWW/HTTP',
+    'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/maakleerplek/NEMO-external-users"
+
+[tool.hatch.version]
+path = "NEMO_external_users/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["NEMO_external_users"]

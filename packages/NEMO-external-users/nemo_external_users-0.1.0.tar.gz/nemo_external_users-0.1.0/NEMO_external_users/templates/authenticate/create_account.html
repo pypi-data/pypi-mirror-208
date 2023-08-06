@@ -1,0 +1,47 @@
+{% extends "../base.html" %}
+{% load static %}
+{% load custom_tags_and_filters %}
+
+{% block content %}
+	<div class="container">
+		<div class="col-md-8 col-md-offset-2" style="text-align:center; margin-bottom:30px"><h1>Create your {{ site_title }} account</h1></div>
+        <form method="post" action="." class="form-horizontal" autocomplete="off" id="login_form">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                    {{ form.first_name }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                    {{ form.last_name }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                    {{ form.password1 }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                    {{ form.password2 }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+                    {% button style="width: 100%;" type="save" value="Submit" icon="glyphicon-log-in" %}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

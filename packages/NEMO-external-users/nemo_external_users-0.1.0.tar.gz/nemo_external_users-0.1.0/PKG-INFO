@@ -1,0 +1,114 @@
+Metadata-Version: 2.1
+Name: NEMO-external-users
+Version: 0.1.0
+Summary: NEMO plugin allowing users to create and manage their own accounts.
+Project-URL: Homepage, https://github.com/maakleerplek/NEMO-external-users
+Author-email: High Tech Lab <hightechlab@maakleerplekleuven.be>
+Maintainer-email: Michal Machnicki <michal.machnicki@maakleerplekleuven.be>
+License: MIT License
+        
+        Copyright (c) 2023 Maakleerplek Leuven
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+License-File: LICENSE
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# NEMO External Users
+NEMO plugin allowing users to create and manage their own accounts.
+
+## Installation
+
+1. Install the package using pip
+
+   ```bash
+   pip install NEMO-external-users
+   ```
+
+2. Edit **settings.py** 
+
+   - Add the plugin to your INSTALLED_APPS:
+   
+      ```python
+      INSTALLED_APPS = [
+          "django.contrib.sites",
+          ...,
+          "NEMO_external_users",
+          "NEMO",
+          ...,
+      ]
+      ```
+     
+      It's important that "NEMO_external_users" is added before "NEMO" (it overrides some of the templates).
+   
+   - Extend authentication backends:
+      ```python
+      AUTHENTICATION_BACKENDS = [
+          ...,
+          'NEMO_external_users.backends.SettingsBackend',
+          'NEMO_external_users.backends.ExternalUsersBackend',
+      ]
+      ```
+   
+   - Add to context_processors:
+      ```python
+      'NEMO.context_processors.show_logout_button',
+      ```
+
+3. Run migrations
+
+   ```bash
+   python manage.py migrate
+   ```
+
+## Settings
+   ```python
+   # Default projects to which new users will be assigned
+   NEMO_EXTERNAL_USERS_NEW_USER_PROJECTS = [...]
+   
+   # Default tool qualification groups to which new users will be assigned
+   NEMO_EXTERNAL_USERS_NEW_USER_TOOL_QUALIFICATION_GROUPS = [...]
+   
+   # Default tools to which new users will be assigned
+   NEMO_EXTERNAL_USERS_NEW_USER_TOOLS = [...]
+   
+   # Permissions for the new users (boolean)
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_STAFF = False
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_USER_OFFICE = False
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_ACCOUNTING_OFFICER = False
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_FACILITY_MANAGER = False
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_ADMINISTRATOR = False
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_TECHNICIAN = False
+   NEMO_EXTERNAL_USERS_NEW_USER_IS_SERVICE_PERSONNEL = False
+   
+   # Indicator if training is required for the new users
+   NEMO_EXTERNAL_USERS_NEW_USER_TRAINING_REQUIRED = True
+   ```
