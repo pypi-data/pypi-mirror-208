@@ -1,0 +1,132 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=45",
+    "setuptools_scm[toml]>=6.2",
+    "wheel",
+    "meson",
+    "oldest-supported-numpy; python_version>='3.8'"
+]
+
+[project]
+name = "wdmtoolbox"
+dynamic = ["readme", "version"]
+description = "Read and write Watershed Data Management (WDM) files"
+dependencies = [
+    "filelock",
+    "cltoolbox >= 2.0.0, < 3.0.0",
+    "toolbox_utils >= 3.0.0, < 4.0.0"
+]
+authors = [
+    {name = "Tim Cera", email = "tim@cerazone.net"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+keywords = [
+    "WDM",
+    "watershed",
+    "data_management",
+    "data",
+    "hydrology",
+    "hydrological",
+    "simulation",
+    "fortran",
+    "HSPF"
+]
+license = {text = "BSD-3-Clause"}
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = [
+    "bandit",
+    "black",
+    "blacken-docs",
+    "black-nbconvert",
+    "cleanpy",
+    "commitizen",
+    "coverage[toml]",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "pyflakes",
+    "pylama",
+    "pyle",
+    "pylint",
+    "pyre",
+    "pyroma",
+    "pytest",
+    "pytest-cov",
+    "pytest-mpl",
+    "pyupgrade",
+    "twine",
+    "unimport",
+    "velin",
+    "vulture"
+]
+
+[project.scripts]
+wdmtoolbox = "wdmtoolbox.wdmtoolbox:main"
+
+[project.urls]
+documentation = "https://timcera.bitbucket.io/wdmtoolbox/docs/index.html"
+github = "https://github.com/timcera/wdmtoolbox"
+bitbucket = "https://bitbucket.org/timcera/wdmtoolbox/src/main/"
+
+[tool.check-manifest]
+ignore = ["docs/_function_autosummary/*"]
+
+[tool.cibuildwheel]
+build = ["cp37-*", "cp38-*", "cp39-*", "cp310-*"]
+
+[[tool.cibuildwheel.overrides]]
+select = "cp310-*"
+manylinux-x86_64-image = "manylinux2014"
+manylinux-i686-image = "manylinux2014"
+
+[[tool.cibuildwheel.overrides]]
+select = "cp3{7,8,9}-*"
+manylinux-x86_64-image = "manylinux2010"
+manylinux-i686-image = "manylinux2010"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+update_changelog_on_bump = true
+version = "15.0.0"
+version_files = ["VERSION"]
+
+[tool.isort]
+profile = "black"
+
+[tool.setuptools]
+license-files = ["LICENSE.txt"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+readme = {file = "README.rst"}
+version = {file = "VERSION"}
+
+[tool.setuptools.package-data]
+wdmtoolbox = ["message.wdm", "*.so"]
+
+[tool.setuptools.packages.find]
+exclude = ["examples*", "tools*", "docs*", "tstoolbox.tests*"]
+where = ["src"]
+
+[tool.setuptools_scm]
