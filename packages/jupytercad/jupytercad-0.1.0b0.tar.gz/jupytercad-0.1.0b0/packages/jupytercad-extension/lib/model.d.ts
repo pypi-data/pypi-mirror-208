@@ -1,0 +1,106 @@
+import { MapChange, YDocument } from '@jupyter/ydoc';
+import { IChangedArgs } from '@jupyterlab/coreutils';
+import { JSONObject, PartialJSONObject } from '@lumino/coreutils';
+import { ISignal, Signal } from '@lumino/signaling';
+import { IJCadContent, IJCadModel, IJCadObject, IJCadOptions } from './_interface/jcad';
+import { Camera, IAnnotationModel, IDict, IJcadObjectDocChange, IJupyterCadClientState, IJupyterCadDoc, IJupyterCadDocChange, IJupyterCadModel, IUserData, Pointer } from './types';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+export declare class JupyterCadModel implements IJupyterCadModel {
+    constructor(options: JupyterCadModel.IOptions);
+    readonly collaborative = true;
+    get sharedModel(): IJupyterCadDoc;
+    get isDisposed(): boolean;
+    get contentChanged(): ISignal<this, void>;
+    get stateChanged(): ISignal<this, IChangedArgs<any, any, string>>;
+    get themeChanged(): Signal<this, IChangedArgs<string, string | null, string>>;
+    get currentUserId(): number | undefined;
+    get users(): IUserData[];
+    get userChanged(): ISignal<this, IUserData[]>;
+    get dirty(): boolean;
+    set dirty(value: boolean);
+    get readOnly(): boolean;
+    set readOnly(value: boolean);
+    get localState(): IJupyterCadClientState | null;
+    get clientStateChanged(): ISignal<this, Map<number, IJupyterCadClientState>>;
+    get sharedMetadataChanged(): ISignal<IJupyterCadDoc, MapChange>;
+    get sharedOptionsChanged(): ISignal<IJupyterCadDoc, MapChange>;
+    get sharedObjectsChanged(): ISignal<IJupyterCadDoc, IJcadObjectDocChange>;
+    get disposed(): ISignal<JupyterCadModel, void>;
+    dispose(): void;
+    toString(): string;
+    fromString(data: string): void;
+    toJSON(): PartialJSONObject;
+    fromJSON(data: PartialJSONObject): void;
+    initialize(): void;
+    getWorker(): Worker;
+    getContent(): IJCadContent;
+    getAllObject(): IJCadModel;
+    syncPointer(pointer?: Pointer, emitter?: string): void;
+    syncCamera(camera?: Camera, emitter?: string): void;
+    syncSelectedObject(name?: string, emitter?: string): void;
+    syncSelectedPropField(data: {
+        id: string | null;
+        value: any;
+        parentType: 'panel' | 'dialog';
+    }): void;
+    setUserToFollow(userId?: number): void;
+    syncFormData(form: any): void;
+    getClientId(): number;
+    addMetadata(key: string, value: string): void;
+    removeMetadata(key: string): void;
+    private _onClientStateChanged;
+    readonly defaultKernelName: string;
+    readonly defaultKernelLanguage: string;
+    readonly annotationModel?: IAnnotationModel;
+    private _sharedModel;
+    private _dirty;
+    private _readOnly;
+    private _isDisposed;
+    private _userChanged;
+    private _usersMap?;
+    private _disposed;
+    private _contentChanged;
+    private _stateChanged;
+    private _themeChanged;
+    private _clientStateChanged;
+    static worker: Worker;
+}
+export declare class JupyterCadDoc extends YDocument<IJupyterCadDocChange> implements IJupyterCadDoc {
+    constructor();
+    dispose(): void;
+    get version(): string;
+    get objects(): Array<IJCadObject>;
+    get options(): JSONObject;
+    get metadata(): JSONObject;
+    get objectsChanged(): ISignal<IJupyterCadDoc, IJcadObjectDocChange>;
+    get optionsChanged(): ISignal<IJupyterCadDoc, MapChange>;
+    get metadataChanged(): ISignal<IJupyterCadDoc, MapChange>;
+    objectExists(name: string): boolean;
+    getObjectByName(name: string): IJCadObject | undefined;
+    removeObjectByName(name: string): void;
+    addObject(value: IJCadObject): void;
+    addObjects(value: Array<IJCadObject>): void;
+    updateObjectByName(name: string, key: string, value: any): void;
+    getOption(key: keyof IJCadOptions): IDict | undefined;
+    setOption(key: keyof IJCadOptions, value: IDict): void;
+    setOptions(options: IJCadOptions): void;
+    getMetadata(key: string): string | undefined;
+    setMetadata(key: string, value: string): void;
+    removeMetadata(key: string): void;
+    static create(): IJupyterCadDoc;
+    private _getObjectAsYMapByName;
+    private _objectsObserver;
+    private _metaObserver;
+    private _optionsObserver;
+    private _objects;
+    private _options;
+    private _metadata;
+    private _metadataChanged;
+    private _optionsChanged;
+    private _objectsChanged;
+}
+export declare namespace JupyterCadModel {
+    interface IOptions extends DocumentRegistry.IModelOptions<IJupyterCadDoc> {
+        annotationModel?: IAnnotationModel;
+    }
+}
