@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scaled"
+description = "Scale Distribution Framework"
+requires-python = ">=3.8"
+readme = { file = "README.md", content-type = "text/markdown"}
+license = { text = "BSD-3-Clause" }
+authors = [{ name = "Zhuo Yin", email = "zhuoyin@gmail.com" }]
+dynamic = ["dependencies", "version"]
+
+[project.urls]
+Home = "https://github.com/scaled-distributed/scaled"
+
+[project.scripts]
+scaled_scheduler = "scaled.entry_points.scheduler:main"
+scaled_cluster = "scaled.entry_points.cluster:main"
+scaled_top = "scaled.entry_points.top:main"
+
+[tool.setuptools]
+packages = ["scaled"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+version = {attr = "scaled.__version__"}
+
+[metadata]
+long_description = { file = "README.md" }
+long_description_content_type = "text/markdown"
