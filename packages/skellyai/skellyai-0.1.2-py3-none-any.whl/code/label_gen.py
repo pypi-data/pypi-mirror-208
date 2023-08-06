@@ -1,0 +1,1 @@
+def x(a):        print(a)    return a*2
