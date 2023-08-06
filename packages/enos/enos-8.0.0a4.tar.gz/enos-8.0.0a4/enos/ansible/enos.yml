@@ -1,0 +1,24 @@
+---
+- name: Influx tasks
+  hosts: enos/influx
+  roles:
+    - { role: influx,
+        tags: ['influx'],
+        when: enable_monitoring | bool }
+
+- name: Monitoring agent tasks
+  hosts: all
+  roles:
+    - { role: cadvisor,
+        tags: ['cadvisor'],
+        when: enable_monitoring | bool }
+    - { role: collectd,
+        tags: ['collectd'],
+        when: enable_monitoring | bool }
+
+- name: Grafana tasks
+  hosts: enos/grafana
+  roles:
+    - { role: grafana,
+        tags: ['grafana'],
+        when: enable_monitoring | bool }
