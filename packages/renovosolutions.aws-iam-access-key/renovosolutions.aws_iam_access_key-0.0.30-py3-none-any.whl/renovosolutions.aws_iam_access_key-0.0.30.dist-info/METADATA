@@ -1,0 +1,56 @@
+Metadata-Version: 2.1
+Name: renovosolutions.aws-iam-access-key
+Version: 0.0.30
+Summary: AWS CDK Construct Library for generating AWS access keys and storing them in Secrets Manager
+Home-page: https://github.com/brandon/cdk-library-aws-iam-access-key.git
+Author: Renovo Solutions<webmaster+cdk@renovo1.com>
+License: Apache-2.0
+Project-URL: Source, https://github.com/brandon/cdk-library-aws-iam-access-key.git
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Typing :: Typed
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved
+Requires-Python: ~=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aws-cdk-lib (<3.0.0,>=2.79.1)
+Requires-Dist: constructs (<11.0.0,>=10.0.5)
+Requires-Dist: jsii (<2.0.0,>=1.80.0)
+Requires-Dist: publication (>=0.0.3)
+Requires-Dist: typeguard (~=2.13.3)
+
+# AWS CDK Construct for IAM User Access Keys
+
+[![build](https://github.com/RenovoSolutions/cdk-library-aws-iam-access-key/actions/workflows/build.yml/badge.svg)](https://github.com/RenovoSolutions/cdk-library-aws-iam-access-key/actions/workflows/build.yml)
+
+This construct creates IAM user access keys securely.
+
+> **Warning**
+> This is a WIP project
+
+## Overview
+
+* Uses a custom resource to generate AWS credentials
+* Uploads the resulting credentials to AWS Secrets Manager
+
+## Usage examples
+
+See [API](API.md) doc for full details
+
+**typescript example:**
+
+```python
+const user = new iam.User(this, 'exampleUser')
+
+new AccessKey(this, 'iamUserAccessKeyExample', {
+  user,
+});
+```
