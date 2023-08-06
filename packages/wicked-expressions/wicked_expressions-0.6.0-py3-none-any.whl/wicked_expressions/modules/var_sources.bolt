@@ -1,0 +1,166 @@
+from bolt_expressions.node import ExpressionNode
+import base64
+import inspect
+import nbtlib
+
+from ./sources import ScoreSource, DataSource
+from ./utils import logger, defer
+from ./config import Config
+from ./safe_load import safe_load
+
+
+class BaseVar:
+    _var_type = ''
+    _location_index = -1
+    _static_cache = {}
+
+    @classmethod
+    def _evaluate_location_index(cls, is_static: bool) -> int:
+        if not is_static:
+            cls._location_index += 1
+            return cls._location_index
+
+        frame_context = cls._get_frame_context()
+        cache_key = base64_encode(f"{frame_context[0]}#{frame_context[1]}")
+
+        retrieved_index = cls._static_cache.get(cache_key)
+
+        if retrieved_index == None:
+            cls._location_index += 1
+            cls._static_cache[cache_key] = cls._location_index
+            return cls._location_index
+
+        return retrieved_index
+
+    @classmethod
+    def _monkeypatch(cls, Scoreboard, Data):
+        cls._main_scoreboard = Scoreboard(Config.SCOREBOARD_ROOT)
+        cls._main_storage = Data.storage(Config.STORAGE_ROOT)
+
+    @staticmethod
+    def _get_frame_context() -> tuple:
+        frame = inspect.getouterframes(inspect.currentframe(), 2)[4]
+        path = frame.filename[len(str(ctx.directory)):]
+        return (frame.lineno, path)
+
+class VarScoreSource(ScoreSource, BaseVar):
+    @classmethod
+    def create(cls, is_static: bool):
+        location_index = cls._evaluate_location_index(is_static)
+        full_location = f"${ctx.project_id}#{cls._var_type}${location_index}"
+        
+        cls._setup_flushing(full_location)
+        return cls(full_location, Config.SCOREBOARD_ROOT)
+
+    @classmethod
+    def _setup_flushing(cls, full_location):
+        with safe_load(f"flush_variable/{cls._var_type}", append=True):
+            scoreboard players reset full_location Config.SCOREBOARD_ROOT
+
+class VarStorageSource(DataSource, BaseVar):
+    @classmethod
+    def create(cls, is_static: bool):
+        location_index = cls._evaluate_location_index(is_static)
+        cls._setup_flushing(location_index)
+        return cls('storage', Config.STORAGE_ROOT)[ctx.project_id]['data'][cls._var_type][location_index]
+
+    @classmethod
+    def _setup_flushing(cls, location_index):
+        slot_block_size = 64
+
+        if not location_index % slot_block_size:
+            slot_block = []
+            full_location = f"{ctx.project_id}.data.{cls._var_type}"
+
+            for n in range(slot_block_size):
+                slot_block.append(cls._default_slot_value)
+
+            with safe_load(f"flush_variable/{cls._var_type}", append=True):
+                data modify storage Config.STORAGE_ROOT full_location append value slot_block
+
+class BoolSource(VarScoreSource):
+    _var_type = 'bool'
+
+    def _rebind(self, score, value):
+        if not isinstance(value, ExpressionNode):
+            value = int(value)
+            
+            if value not in (0, 1):
+                return logger.error(f"Invalid assignment attempt of value {value} to a Bool variable.")
+
+        return super()._rebind(score, value)
+
+class ByteSource(VarStorageSource):
+    _default_nbt_type = 'byte'
+    _default_slot_value = nbtlib.Byte(0)
+    _var_type = 'byte'
+
+    def _rebind(self, source, value):
+        if not isinstance(value, ExpressionNode):
+            value = nbtlib.Byte(value)
+        return super()._rebind(source, value)
+
+class ShortSource(VarStorageSource):
+    _default_nbt_type = 'short'
+    _default_slot_value = nbtlib.Short(0)
+    _var_type = 'short'
+
+    def _rebind(self, source, value):
+        if not isinstance(value, ExpressionNode):
+            value = nbtlib.Short(value)
+        return super()._rebind(source, value)
+
+class IntSource(VarScoreSource):
+    _var_type = 'int'
+
+class LongSource(VarStorageSource):
+    _default_nbt_type = 'long'
+    _default_slot_value = nbtlib.Long(0)
+    _var_type = 'long'
+
+    def _rebind(self, source, value):
+        if not isinstance(value, ExpressionNode):
+            value = nbtlib.Long(value)
+        return super()._rebind(source, value)
+
+# float <-> double
+# 0.000000953674316
+# 1048576
+
+class FloatSource(VarStorageSource):
+    _default_nbt_type = 'float'
+    _default_slot_value = nbtlib.Float(0)
+    _var_type = 'float'
+
+    def _rebind(self, source, value):
+        if not isinstance(value, ExpressionNode):
+            value = nbtlib.Float(value)
+        return super()._rebind(source, value)
+
+class DoubleSource(VarStorageSource):
+    _default_nbt_type = 'double'
+    _default_slot_value = nbtlib.Double(0)
+    _var_type = 'double'
+
+    def _rebind(self, source, value):
+        if not isinstance(value, ExpressionNode):
+            value = nbtlib.Double(value)
+        return super()._rebind(source, value)
+
+class StringSource(VarStorageSource):
+    _default_nbt_type = 'string'
+    _default_slot_value = nbtlib.String('')
+    _var_type = 'string'
+
+    def _rebind(self, source, value):
+        if not isinstance(value, ExpressionNode):
+            value = nbtlib.String(value)
+        return super()._rebind(source, value)
+
+class ListSource(VarStorageSource):
+    _default_nbt_type = 'list'
+    _var_type = 'list'
+    _default_slot_value = []
+
+def base64_encode(s: str) -> str:
+    return base64.b64encode(s.encode()).decode()
