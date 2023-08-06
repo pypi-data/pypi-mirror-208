@@ -1,0 +1,419 @@
+Metadata-Version: 2.1
+Name: eos_downloader
+Version: 0.8.1
+Summary: Arista EOS/CVP downloader script
+Author-email: Thomas Grimonet <thomas.grimonet@gmail.com>
+Maintainer-email: Thomas Grimonet <thomas.grimonet@gmail.com>
+License: Copyright (c) 2019, Arista Networks
+        All rights reserved.
+        
+                                         Apache License
+                                   Version 2.0, January 2004
+                                http://www.apache.org/licenses/
+        
+           TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+        
+           1. Definitions.
+        
+              "License" shall mean the terms and conditions for use, reproduction,
+              and distribution as defined by Sections 1 through 9 of this document.
+        
+              "Licensor" shall mean the copyright owner or entity authorized by
+              the copyright owner that is granting the License.
+        
+              "Legal Entity" shall mean the union of the acting entity and all
+              other entities that control, are controlled by, or are under common
+              control with that entity. For the purposes of this definition,
+              "control" means (i) the power, direct or indirect, to cause the
+              direction or management of such entity, whether by contract or
+              otherwise, or (ii) ownership of fifty percent (50%) or more of the
+              outstanding shares, or (iii) beneficial ownership of such entity.
+        
+              "You" (or "Your") shall mean an individual or Legal Entity
+              exercising permissions granted by this License.
+        
+              "Source" form shall mean the preferred form for making modifications,
+              including but not limited to software source code, documentation
+              source, and configuration files.
+        
+              "Object" form shall mean any form resulting from mechanical
+              transformation or translation of a Source form, including but
+              not limited to compiled object code, generated documentation,
+              and conversions to other media types.
+        
+              "Work" shall mean the work of authorship, whether in Source or
+              Object form, made available under the License, as indicated by a
+              copyright notice that is included in or attached to the work
+              (an example is provided in the Appendix below).
+        
+              "Derivative Works" shall mean any work, whether in Source or Object
+              form, that is based on (or derived from) the Work and for which the
+              editorial revisions, annotations, elaborations, or other modifications
+              represent, as a whole, an original work of authorship. For the purposes
+              of this License, Derivative Works shall not include works that remain
+              separable from, or merely link (or bind by name) to the interfaces of,
+              the Work and Derivative Works thereof.
+        
+              "Contribution" shall mean any work of authorship, including
+              the original version of the Work and any modifications or additions
+              to that Work or Derivative Works thereof, that is intentionally
+              submitted to Licensor for inclusion in the Work by the copyright owner
+              or by an individual or Legal Entity authorized to submit on behalf of
+              the copyright owner. For the purposes of this definition, "submitted"
+              means any form of electronic, verbal, or written communication sent
+              to the Licensor or its representatives, including but not limited to
+              communication on electronic mailing lists, source code control systems,
+              and issue tracking systems that are managed by, or on behalf of, the
+              Licensor for the purpose of discussing and improving the Work, but
+              excluding communication that is conspicuously marked or otherwise
+              designated in writing by the copyright owner as "Not a Contribution."
+        
+              "Contributor" shall mean Licensor and any individual or Legal Entity
+              on behalf of whom a Contribution has been received by Licensor and
+              subsequently incorporated within the Work.
+        
+           2. Grant of Copyright License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              copyright license to reproduce, prepare Derivative Works of,
+              publicly display, publicly perform, sublicense, and distribute the
+              Work and such Derivative Works in Source or Object form.
+        
+           3. Grant of Patent License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              (except as stated in this section) patent license to make, have made,
+              use, offer to sell, sell, import, and otherwise transfer the Work,
+              where such license applies only to those patent claims licensable
+              by such Contributor that are necessarily infringed by their
+              Contribution(s) alone or by combination of their Contribution(s)
+              with the Work to which such Contribution(s) was submitted. If You
+              institute patent litigation against any entity (including a
+              cross-claim or counterclaim in a lawsuit) alleging that the Work
+              or a Contribution incorporated within the Work constitutes direct
+              or contributory patent infringement, then any patent licenses
+              granted to You under this License for that Work shall terminate
+              as of the date such litigation is filed.
+        
+           4. Redistribution. You may reproduce and distribute copies of the
+              Work or Derivative Works thereof in any medium, with or without
+              modifications, and in Source or Object form, provided that You
+              meet the following conditions:
+        
+              (a) You must give any other recipients of the Work or
+                  Derivative Works a copy of this License; and
+        
+              (b) You must cause any modified files to carry prominent notices
+                  stating that You changed the files; and
+        
+              (c) You must retain, in the Source form of any Derivative Works
+                  that You distribute, all copyright, patent, trademark, and
+                  attribution notices from the Source form of the Work,
+                  excluding those notices that do not pertain to any part of
+                  the Derivative Works; and
+        
+              (d) If the Work includes a "NOTICE" text file as part of its
+                  distribution, then any Derivative Works that You distribute must
+                  include a readable copy of the attribution notices contained
+                  within such NOTICE file, excluding those notices that do not
+                  pertain to any part of the Derivative Works, in at least one
+                  of the following places: within a NOTICE text file distributed
+                  as part of the Derivative Works; within the Source form or
+                  documentation, if provided along with the Derivative Works; or,
+                  within a display generated by the Derivative Works, if and
+                  wherever such third-party notices normally appear. The contents
+                  of the NOTICE file are for informational purposes only and
+                  do not modify the License. You may add Your own attribution
+                  notices within Derivative Works that You distribute, alongside
+                  or as an addendum to the NOTICE text from the Work, provided
+                  that such additional attribution notices cannot be construed
+                  as modifying the License.
+        
+              You may add Your own copyright statement to Your modifications and
+              may provide additional or different license terms and conditions
+              for use, reproduction, or distribution of Your modifications, or
+              for any such Derivative Works as a whole, provided Your use,
+              reproduction, and distribution of the Work otherwise complies with
+              the conditions stated in this License.
+        
+           5. Submission of Contributions. Unless You explicitly state otherwise,
+              any Contribution intentionally submitted for inclusion in the Work
+              by You to the Licensor shall be under the terms and conditions of
+              this License, without any additional terms or conditions.
+              Notwithstanding the above, nothing herein shall supersede or modify
+              the terms of any separate license agreement you may have executed
+              with Licensor regarding such Contributions.
+        
+           6. Trademarks. This License does not grant permission to use the trade
+              names, trademarks, service marks, or product names of the Licensor,
+              except as required for reasonable and customary use in describing the
+              origin of the Work and reproducing the content of the NOTICE file.
+        
+           7. Disclaimer of Warranty. Unless required by applicable law or
+              agreed to in writing, Licensor provides the Work (and each
+              Contributor provides its Contributions) on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+              implied, including, without limitation, any warranties or conditions
+              of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+              PARTICULAR PURPOSE. You are solely responsible for determining the
+              appropriateness of using or redistributing the Work and assume any
+              risks associated with Your exercise of permissions under this License.
+        
+           8. Limitation of Liability. In no event and under no legal theory,
+              whether in tort (including negligence), contract, or otherwise,
+              unless required by applicable law (such as deliberate and grossly
+              negligent acts) or agreed to in writing, shall any Contributor be
+              liable to You for damages, including any direct, indirect, special,
+              incidental, or consequential damages of any character arising as a
+              result of this License or out of the use or inability to use the
+              Work (including but not limited to damages for loss of goodwill,
+              work stoppage, computer failure or malfunction, or any and all
+              other commercial damages or losses), even if such Contributor
+              has been advised of the possibility of such damages.
+        
+           9. Accepting Warranty or Additional Liability. While redistributing
+              the Work or Derivative Works thereof, You may choose to offer,
+              and charge a fee for, acceptance of support, warranty, indemnity,
+              or other liability obligations and/or rights consistent with this
+              License. However, in accepting such obligations, You may act only
+              on Your own behalf and on Your sole responsibility, not on behalf
+              of any other Contributor, and only if You agree to indemnify,
+              defend, and hold each Contributor harmless for any liability
+              incurred by, or claims asserted against, such Contributor by reason
+              of your accepting any such warranty or additional liability.
+        
+           END OF TERMS AND CONDITIONS
+        
+           APPENDIX: How to apply the Apache License to your work.
+        
+              To apply the Apache License to your work, attach the following
+              boilerplate notice, with the fields enclosed by brackets "[]"
+              replaced with your own identifying information. (Don't include
+              the brackets!)  The text should be enclosed in the appropriate
+              comment syntax for the file format. We also recommend that a
+              file or class name and description of purpose be included on the
+              same "printed page" as the copyright notice for easier
+              identification within third-party archives.
+        
+           Copyright 2019 Arista Networks
+        
+           Licensed under the Apache License, Version 2.0 (the "License");
+           you may not use this file except in compliance with the License.
+           You may obtain a copy of the License at
+        
+               http://www.apache.org/licenses/LICENSE-2.0
+        
+           Unless required by applicable law or agreed to in writing, software
+           distributed under the License is distributed on an "AS IS" BASIS,
+           WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+           See the License for the specific language governing permissions and
+           limitations under the License.
+        
+Project-URL: Homepage, https://www.github.com/titom73/eos-downloader
+Project-URL: Bug Tracker, https://www.github.com/titom73/eos-downloader/issues
+Project-URL: Contributing, https://www.github.com/titom73/eos-downloader
+Keywords: eos_downloader,Arista,eos,cvp,network,automation,networking,devops,netdevops
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: Information Technology
+Classifier: Topic :: System :: Software Distribution
+Classifier: Topic :: Terminals
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+License-File: LICENSE
+
+ [![code-testing](https://github.com/titom73/eos-downloader/actions/workflows/pr-management.yml/badge.svg?event=push)](https://github.com/titom73/eos-downloader/actions/workflows/pr-management.yml) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/eos-downloader) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/titom73/arista-downloader) ![PyPI - Downloads/month](https://img.shields.io/pypi/dm/eos-downloader) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/titom73/eos-downloader/edge)
+
+# Arista Software Downloader
+
+Script to download Arista softwares to local folder, Cloudvision or EVE-NG.
+
+```bash
+pip install eos-downloader
+```
+
+## CLI commands
+
+A new CLI is available to execute commands. This CLI is going to replace [`eos-download`](./bin/README.md) script which is now marked as __deprecated__
+
+```bash
+ ardl
+Usage: ardl [OPTIONS] COMMAND [ARGS]...
+
+  Arista Network Download CLI
+
+Options:
+  --token TEXT  Arista Token from your customer account  [env var:
+                ARISTA_TOKEN]
+  --help        Show this message and exit.
+
+Commands:
+  debug    Debug commands to work with ardl
+  get      Download Arista from Arista website
+  version  Display version of ardl
+```
+
+> **Warning**
+> To use this CLI you need to get a valid token from your [Arista Account page](https://www.arista.com/en/users/profile).
+> For technical reason, it is only available for customers with active maintenance contracts and not for personnal accounts
+
+### Download EOS Package
+
+
+> Supported packages are: EOS, cEOS, vEOS-lab, cEOS64
+
+You can download EOS packages with following commands:
+
+```bash
+# Example for a cEOS package
+$ ardl get eos --version 4.28.3M --image-type cEOS
+```
+
+Available options are :
+
+```bash
+Usage: ardl get eos [OPTIONS]
+
+  Download EOS image from Arista website
+
+Options:
+  --image-type [64|INT|2GB-INT|cEOS|cEOS64|vEOS|vEOS-lab|EOS-2GB|default]
+                                  EOS Image type  [required]
+  --version TEXT                  EOS version
+  -l, --latest                    Get latest version in given branch. If
+                                  --branch is not use, get the latest branch
+                                  with specific release type
+  -rtype, --release-type [F|M]    EOS release type to search
+  -b, --branch TEXT               EOS Branch to list releases
+  --docker-name TEXT              Docker image name (default: arista/ceos)
+                                  [default: arista/ceos]
+  --output PATH                   Path to save image  [default: .]
+  --log-level, --log [debug|info|warning|error|critical]
+                                  Logging level of the command
+  --eve-ng                        Run EVE-NG vEOS provisioning (only if CLI
+                                  runs on an EVE-NG server)
+  --disable-ztp                   Disable ZTP process in vEOS image (only
+                                  available with --eve-ng)
+  --import-docker                 Import docker image (only available with
+                                  --image_type cEOSlab)
+  --help                          Show this message and exit.
+```
+
+You can use `--latest` and `--release-type` option to get latest EOS version matching a specific release type
+
+```bash
+# Get latest M release
+❯ ardl get eos --latest -rtype m
+🪐 eos-downloader is starting...
+    - Image Type: default
+    - Version: None
+🔎  Searching file EOS-4.29.3M.swi
+    -> Found file at /support/download/EOS-USA/Active Releases/4.29/EOS-4.29.3M/EOS-4.29.3M.swi
+...
+✅  Downloaded file is correct.
+✅  processing done !
+```
+
+### List available EOS versions from Arista website
+
+You can easily get list of available version using CLI as shown below:
+
+```bash
+❯ ardl info eos-versions
+Usage: ardl info eos-versions [OPTIONS]
+
+  List Available EOS version on Arista.com website.
+
+  Comes with some filters to get latest release (F or M) as well as branch
+  filtering
+
+    - To get latest M release available (without any branch): ardl info eos-
+    versions --latest -rtype m
+
+    - To get latest F release available: ardl info eos-versions --latest
+    -rtype F
+
+Options:
+  -l, --latest                    Get latest version in given branch. If
+                                  --branch is not use, get the latest branch
+                                  with specific release type
+  -rtype, --release-type [F|M]    EOS release type to search
+  -b, --branch TEXT               EOS Branch to list releases
+  -v, --verbose                   Human readable output. Default is none to
+                                  use output in script)
+  --log-level, --log [debug|info|warning|error|critical]
+                                  Logging level of the command
+  --help                          Show this message and exit.
+```
+
+__Example__
+
+```bash
+❯ ardl info eos-versions -rtype m --branch 4.28
+['4.28.6.1M', '4.28.6M', '4.28.5.1M', '4.28.5M', '4.28.4M', '4.28.3M']
+```
+
+### Download CVP package
+
+> Supported packages are: OVA, KVM, RPM, Upgrade
+
+```bash
+$ ardl get cvp --format upgrade --version 2022.2.1 --log-level debug --output ~/Downloads
+```
+
+Available options are :
+
+```bash
+  --format [ova|rpm|kvm|upgrade]  CVP Image type  [required]
+  --version TEXT                  CVP version  [required]
+  --output PATH                   Path to save image  [default: .]
+  --log-level, --log [debug|info|warning|error|critical]
+                                  Logging level of the command
+  --help                          Show this message and exit.
+```
+
+## Requirements
+
+Repository requires Python `>=3.6` with following requirements:
+
+```requirements
+cvprac
+cryptography
+paramiko
+requests
+requests-toolbelt
+scp
+tqdm
+```
+
+On EVE-NG, you may have to install/upgrade __pyOpenSSL__ in version `23.0.0`:
+
+```
+# Error when running ardl: AttributeError: module 'lib' has no attribute 'X509_V_FLAG_CB_ISSUER_CHECK'
+
+$ pip install pyopenssl --upgrade
+```
+
+## Docker
+
+Please refer to [docker documentation](docs/docker.md)
+
+## Author
+
+From an original idea of [@Mark Rayson](https://github.com/Sparky-python) in [arista-netdevops-community/eos-scripts](https://github.com/arista-netdevops-community/eos-scripts)
+
+## License
+
+Code is under [Apache2](LICENSE) License
