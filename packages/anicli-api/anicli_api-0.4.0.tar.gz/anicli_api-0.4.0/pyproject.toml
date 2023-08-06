@@ -1,0 +1,93 @@
+[tool.poetry]
+name = "anicli_api"
+version = "0.4.0"
+description = "Anime extractor api implementation"
+authors = ["Georgiy aka Vypivshiy"]
+license = "MIT"
+readme = "README.MD"
+packages = [{include = "anicli_api"}]
+exclude = ["tests/"]
+keywords = [
+    "anime",
+    "api",
+    "ru",
+    "russia",
+    "asyncio",
+    "parser",
+    "httpx",
+    "dev"
+]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Quality Assurance",
+  "Typing :: Typed"
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/vypivshiy/anicli-api/issues"
+"Cli app" = "https://github.com/vypivshiy/ani-cli-ru"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+httpx = {extras = ["http2"], version = "^0.24.0"}
+scrape-schema = {extras = ["parsel"], version = "^0.2.3"}
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = {extras = ["coverage"], version = "^7.2.0"}
+pytest-cov = "^4.0.0"
+flake8 = "^5.0.0"
+pyproject-flake8 = "5.0.4"
+mypy = "^0.982"
+pytest-asyncio = "^0.20.2"
+twine = "^4.0.1"
+isort = "^5.10.1"
+black = "^22.10.0"
+urllib3 = "1.26.15"
+
+[tool.poetry.group.doc.dependencies]
+sphinx = "^5.3.0"
+sphinx-rtd-theme = "^1.1.1"
+
+
+[tool.poetry.group.codegen.dependencies]
+jinja2 = "^3.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.flake8]
+exclude = [
+'.git',
+'__pycache__',
+'dist',
+'env',
+'venv',
+'.venv',
+'__template__.py']
+max-line-length = 120
+max-complexity = 8
+ignore = ['F405', 'F403', 'W503', 'E501', 'F401', 'E203', 'F722', 'F821']
+
+[tool.mypy]
+python_version = 3.8
+pretty = true
+ignore_missing_imports = true
+exclude = ["env", ".env", "venv", "__pycache__", "examples", "__template__.py"]
+files=["anicli_api/*"]
+
+[tool.black]
+line-length = 99
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 99
