@@ -1,0 +1,2 @@
+(globalThis.webpackChunk=globalThis.webpackChunk||[]).push([["locale/ro-ro"],{"../src/sentry/locale/ro_RO/LC_MESSAGES/django.po":l=>{l.exports={"":{domain:"sentry",plural_forms:"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));",lang:"ro_RO"}}}}]);
+//# sourceMappingURL=../../sourcemaps/locale/ro-ro.502662050b0b4950edd6eaeed40729b1.js.map
