@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: channels-yroom
+Version: 0.0.5
+Summary: Yjs sync protocol server for Django channels
+Project-URL: Documentation, https://github.com/stefanw/channels-yroom#readme
+Project-URL: Issues, https://github.com/stefanw/channels-yroom/issues
+Project-URL: Source, https://github.com/stefanw/channels-yroom
+Author-email: Stefan Wehrmeyer <mail@stefanwehrmeyer.com>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.8
+Requires-Dist: channels>=4.0
+Requires-Dist: django>=3.2
+Requires-Dist: yroom>=0.0.8
+Description-Content-Type: text/markdown
+
+# Channels-Yroom
+
+![PyPI](https://img.shields.io/pypi/v/channels-yroom)
+
+`channels-yroom` is a Django Channels WebSocket consumer and worker for synchronizing Yjs clients. It implements the network protocol for Yjs doc synchronization and awareness updates and makes them available as Django Channels WebSocket consumer and worker.
+
+## Documentation
+
+[Read the documentation](https://channels-yroom.readthedocs.io/en/latest/)
+
+## Showcase: text collaboration example
+
+The `example` folder contains a simple project that uses `y-prosemirror` to allow for realtime collaboration on rich text.
+
+Run the included Docker compose file to check it out:
+
+```sh
+docker compose up
+# Then visit localhost:8000
+```
+
+## Development
+
+Project uses `hatch` for the development workflow:
+
+```
+pip install hatch
+
+hatch run +py=3.10 test:test
+```
+
+## License
+
+MIT
