@@ -1,0 +1,277 @@
+[tool.poetry]
+name = "EthicML"
+version = "1.2.1"
+description = "EthicML is a library for performing and assessing algorithmic fairness. Unlike other libraries, EthicML isn't an education tool, but rather a researcher's toolkit."
+readme="README.md"
+authors = ["PAL <info@wearepal.ai>"]
+packages = [
+  { include = "ethicml" },
+]
+include=["ethicml/py.typed"]
+exclude = ["ethicml/data/csvs/raw/*"]
+classifiers=[
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+keywords=["ml", "fairness"]
+repository="https://github.com/wearepal/EthicML"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+cloudpickle = { version = "^2.0.0", optional= true }
+fairlearn = { version = "0.8.0", optional = true }
+folktables = { version = "^0.0.11", optional = true }
+gitdb2 = { version = "4.0.2", optional = true }
+GitPython = { version = "^3.1.20", optional = true }
+joblib = "^1.1.0"
+matplotlib = { version = ">=3.0.2", optional = true }
+numpy = ">=1.23.2"
+pandas = ">=1.5.0"
+pdm = { version = "^2.4.0", optional = true }
+ranzen = ">=2.0.1,<3.0.0,!=2.1.0"
+scikit-learn = { version = ">=0.20.1", optional = true }
+scipy = { version = "^1.7.2", optional = true }
+seaborn = { version = ">=0.9.0", optional = true }
+smmap2 = { version = "3.0.1", optional = true }
+teext = "^0.1.3"
+typing-extensions = ">=4.5"
+
+[tool.poetry.extras]
+metrics = ["scikit-learn"]
+plot = ["matplotlib","seaborn"]
+data = ["folktables"]
+models = ["scipy","GitPython","pdm","scikit-learn","fairlearn","cloudpickle","gitdb2","smmap2"]
+all = ["fairlearn","cloudpickle","scikit-learn","matplotlib","seaborn","folktables","scipy","GitPython","pdm","gitdb2","smmap2"]
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1"
+mypy = ">=0.990"
+pre-commit = "^2.20.0"
+pytest = ">=6.2.2,<8.0.0"
+pytest-cov = ">=2.6,<4.0"
+python-type-stubs = {git = "https://github.com/wearepal/python-type-stubs.git", rev = "2ea8053"}
+pandas-stubs = ">=1.4.2.220626"
+omegaconf = ">=2.2.1"
+pytest-xdist = "^2.5.0"
+ruff = "0.0.261"
+pip = "^22.3.1"
+
+[tool.poetry.group.ci]
+optional = true
+
+[tool.poetry.group.ci.dependencies]
+omegaconf = ">=2.2.2"
+
+[tool.poetry.group.torchcpu]
+optional = true
+
+[tool.poetry.group.torchcpu.dependencies]
+torch = { version = "*", source = "torchcpu", markers = "sys_platform == 'linux'" }
+torchvision = { version = "*", source = "torchcpu", markers = "sys_platform == 'linux'" }
+
+[[tool.poetry.source]]
+name = "torchcpu"
+url = "https://download.pytorch.org/whl/cpu"
+default = false
+secondary = true
+
+[tool.black]
+line-length = 100
+target-version = ['py37']
+include = '''
+(
+  ethicml/(.*).pyi?$
+  | tests/(.*).pyi?$
+)
+'''
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.venv
+    | .*/\.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | .github
+    | docs
+    | docsource
+    | examples
+    | plots
+    | results
+    | \.editorconfig
+    | \.gitignore
+    | \.pytest_cache
+    | \.coverage.*
+    | .pre-commit-config.yaml
+    | .pylintrc
+    | CODEOWNERS
+    | LICENSE
+    | mypy.ini
+    | README.md
+  )/
+)
+'''
+skip-string-normalization = true
+
+[tool.isort]
+known_third_party = ["PIL", "black", "git", "fairlearn", "kit", "matplotlib", "mypy", "numpy", "pandas", "pylint", "pytest", "scipy", "seaborn", "setuptools", "sklearn", "tap", "teext", "torch"]
+known_future_library = []
+extra_standard_library = ["__future__", "typing_extensions"]
+profile = "black"
+line_length = 100
+force_sort_within_sections = "True"
+classes = ["LR", "LRCV", "SVM", "VFAE", "MLP", "DRO", "TPR", "TNR", "CV", "NMI", "BCR", "PPV", "NPV", "AS", "F1", "HGR"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.8"
+no_implicit_optional = true
+allow_redefinition = true
+strict_equality = true
+check_untyped_defs = true
+warn_unreachable = true
+#disallow_any_unimported = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+show_error_codes = true
+warn_unused_ignores = true
+mypy_path = "typings"
+implicit_reexport = false
+warn_redundant_casts = true
+enable_error_code = ["possibly-undefined", "redundant-expr", "truthy-bool", "truthy-iterable"]
+
+# ===== the following modules in EthicML aren't ready to be type checked so strictly =====
+[[tool.mypy.overrides]]
+module = ["tests.*", "ethicml.implementations.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+# ========== imports that don't have types ===========
+
+[[tool.mypy.overrides]]
+module = [
+    "aif360.*",
+    "black.*",
+    "cloudpickle",
+    "fairlearn.*",
+    "folktables.*",
+    "imageio",
+    "pylint.*",
+    "pytest.*",
+    "setuptools.*",
+    "scipy.spatial.distance",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["pytest.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.8"
+reportMissingTypeArgument = "none"
+reportCallInDefaultInitializer = "warning"
+reportPropertyTypeMismatch = "warning"
+reportUninitializedInstanceVariable = "warning"
+# these errors are a bit annoying
+reportUnknownMemberType = "none"
+reportUnknownVariableType = "none"
+reportUnknownParameterType = "none"
+reportUnknownArgumentType = "none"
+reportUnnecessaryTypeIgnoreComment = "warning"
+
+[tool.ruff]
+line-length = 100
+select = [
+    "A", # flake8-builtins
+    # "ANN", # flake8-annotations
+    "ARG", # flake8-unused-args
+    "D", # pydocstyle
+    "E", # pycodestyle
+    "F", # pyflakes
+    "I", # isort
+    "INP", # implicit namespace package
+    "N", # pep8-naming
+    "NPY", # numpy
+    "PD", # pandas-vet
+    "PLC", # pylint convention
+    "PLE", # pylint error
+    "PLR", # pylint refactor
+    "PLW", # pylint warning
+    "PT", # pytest-style
+    "PTH", # flake8-use-pathlib
+    "SIM", # flake8-simplify
+    # "TCH", # flake8-type-checking
+    # "UP", # pyupgrade
+    "W",
+]
+ignore = [
+    "A003", # builtins as class attribute
+    "ANN101",
+    "ANN102",
+    "D105", # magic methods
+    "D107", # __init__
+    "D208", # over indentation
+    "D401", # imperative mood
+    "N812", # case of import alias
+    "NPY002", # no global random state
+    "PD002", # no inplace
+    "PD015", # no pd.merge
+    "PD901", # forbidding "df" as a variable name
+    "PLR0402", # useless import alias
+    "PLR2004", # magic number comparison
+    "PT004", # fixture naming
+    "PT013", # don't allow `from pytest import ...`
+    "PLW2901", # overwriting loop variables
+    "TID252", # relative imports
+]
+target-version = "py38"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = [
+    "F403",
+    "PLC0414", # reexporting
+]
+"ethicml/*" = [
+    "PT018",
+]
+
+[tool.ruff.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.isort]
+known-third-party = ["PIL", "black", "git", "fairlearn", "matplotlib", "mypy", "numpy", "pandas", "pylint", "pytest", "scipy", "seaborn", "setuptools", "sklearn", "teext", "torch"]
+extra-standard-library = ["typing_extensions"]
+no-lines-before = ["future", "standard-library"]
+force-sort-within-sections = true
+split-on-trailing-comma = false
+classes = ["LR", "LRCV", "SVM", "VFAE", "MLP", "DRO", "TPR", "TNR", "CV", "NMI", "BCR", "PPV", "NPV", "AS", "F1", "HGR"]
+
+[tool.ruff.flake8-annotations]
+mypy-init-return = true
+
+[tool.ruff.flake8-type-checking]
+exempt-modules = ["typing", "typing_extensions"]
+
+[tool.ruff.pep8-naming]
+ignore-names = ["C"]
+
+[tool.ruff.pylint]
+max-args = 10  # default: 5
+max-statements = 60  # default: 50
+max-branches = 13  # default: 12
