@@ -1,0 +1,1078 @@
+[comment {-*- tcl -*- doctools manpage}]
+
+[comment {
+
+ Source file for doctools
+
+ Usage:
+ tclsh c:\tcl\apps\dtplite.tcl  -o . html tclBlend2d.man
+ tclsh c:\tcl\apps\dtplite.tcl  -o . wiki tclBlend2d.man
+}]
+
+
+[manpage_begin tclBlend2d n 1.0]
+[copyright {2021..2023 - A.Buratti}]
+[moddesc {Tcl meets Blend2d}]
+[titledesc  {Tcl meets Blend2d}]
+[category  {vector grahics}]
+[require Tcl 8.6]
+[require Blend2d [opt 1.0]]
+
+[description]
+Package [package Blend2d] integrates the [uri https://blend2d.com {Blend2d}] vector engine in Tcl/Tk.
+[para]
+[uri http://blend2d.com {Blend2d}] is an open source, high quality, high performance vector graphics engine. 
+[para]
+[package Blend2d] is a binary package, distributed in a multi-platform bundle, i.e. it can be used on
+[list_begin itemized]
+[item] Windows 64 bit
+[item] Linux 64 bit
+[item] MacOS 64 bit   (... some limitations ...)
+[list_end]
+
+[para]
+Just an example to get the flavor of how to use [package Blend2d]:
+[para]
+[example {
+    # draw a circle ...
+
+    package require Blend2d
+    set sfc [BL::Surface new]
+    $sfc clear
+    $sfc configure -fill.style [BL::color orange]
+    $sfc fill [BL::circle {150 150} 100]
+    $sfc save "./image01.bmp"
+    $sfc destroy
+}]
+
+[section {Blend2d with and without Tk}]
+
+You can run [package Blend2d] from a tclsh interpreter, without loading [cmd Tk].
+
+The following command
+[example {
+package require tclBlend2d
+}]
+can be used in a [cmd tclsh] interpreter to load the package without requiring [cmd Tk] support.
+You will be still able to generate and save images, but of course some subcommands related to Tk won't be available.
+
+[para]
+The command
+[example {
+package require tkBlend2d
+}]
+loads the full package (and requires [cmd Tk]).
+[para]
+Note that
+[example {
+package require Blend2d
+}]
+is equivalent to
+[example {
+package require tkBlend2d
+}]
+
+
+[comment =====================================================================]
+[section {BL::Surface and the graphics state parameters}]
+
+The main concept of Tcl-Blend2d is the [class Surface].
+[para]
+A [class Surface] comes with an internal framebuffer (32bit depth, with alpha support) and holds all of the 
+graphics state parameters that describe how drawing is to be done. This includes parameters like the 
+current line width, the current color (or gradient), a 2D transformation matrix and many other things.
+[para]
+A [class Surface] can be created with the following commands
+
+[list_begin definitions]
+
+[call [class BL::Surface] [method create] [arg sfcName] [opt options]]
+creates a new instance of the class [class BL::Surface] called [arg sfcName].
+Options can be set at creation time, or later with the [method configure] method.
+
+[call [class BL::Surface] [method new] [opt options]]
+creates a new instance of the class [class BL::Surface] returning a new unique [arg sfcName].
+Options can be set at creation time, or later with the [method configure] method.
+
+[call [arg sfcName] [method destroy]]
+destroys [arg sfcName]. Note that in general any oo-object like [arg sfcName] should be explicitly destroyed
+
+[call [arg sfcName] [method dup]]
+duplicates [arg sfcName]. Return a new BL::Surface.
+[para]
+Note: the full stack of options is not duplicated; only the current options are duplicated.
+
+[call [cmd BL::Surface] [method names]]
+returns the list of all the currently allocated surfaces.
+
+[list_end]
+
+
+The whole set of Surface's options is also called the [term {drawing state}].
+[para]
+A [term {drawing state}] consists of
+[list_begin itemized]
+[item] the 2D transformations that have been applied (i.e. translate, rotate and scale ... see below),
+[item] the current values of various attributes controlling how to fill and how to stroke all the basic
+ and complex [emph {geometric entities}],
+[list_end]
+and it can be manipulated with the [method cget]/[method configure] methods.
+
+[list_begin definitions]
+
+[call [arg sfcName] [method configure]]
+returns a list with all the valid options and their values.
+
+[call [arg sfcName] [method cget] [arg optionName]]
+returns the current value of the option [arg optionName].
+Raise an error if [arg optionName] is not a valid option.
+
+[call [arg sfcName] [method configure] [arg optionName]]
+returns a list with two values: the named option and its value.
+Raise an error if [arg optionName] is not a valid option.
+
+[call [arg sfcName] [method configure] [arg optionName] [arg optionValue] [opt "[arg optionName] [arg optionValue] ..."]]
+modifies all the named options with the specified values.
+Raise an error if any [arg optionName] is not recognized or its [arg optionValue] is not valid;
+in this case no option is modified.
+
+[para]
+Surface options are:
+[list_begin options]
+
+[opt_def -threads [arg count]]
+    If [arg count] is >=1 then all the rendering commands are queued and executed by worker-threads
+    when needed (i.e. before exporting an image or,if the surface is a Tkimage, in the event-loop)
+    Default is 0 (i.e all the rendering commands are run immediately (synchronous mode)).
+
+[opt_def -format  [arg [list [list dx dy [opt "[const PRGB32] | [const XRGB32]"]]]]]
+    sets the size (in pixel) and type of the internal framebuffer.
+    [para][emph WARNING]: When user sets a new [option -format], the previous content of the framebuffer is lost,
+    and the new framebuffer is unitialized (it contains garbage). It is user's responsability
+    to clean it or to properly restore the previous contents.
+    Default is [const [list {400 400 PRGB32}]]                                                                                          
+
+[opt_def -matrix [arg matrix]]
+    [arg matrix] defines the affine transformations that will be applied to the next
+    geometric entities specified with the "fill" or "stroke" operations
+    See the section "Affine Matrix" for more details.
+    Default is [const [list {1.0 0.0  0.0 1.0  0.0 0.0}]] (Identity matrix)    
+
+[opt_def -metamatrix [arg matrix]]
+    This is a readonly option. metamatrix is (TO BE DOC'ed...)
+
+[opt_def -compop [arg compositionOp]]
+    defines how colors should be blended.
+    For further details try googling "Porter-Duff composition" or "Alpha composition".
+    Default is [const SRC_OVER].
+
+[opt_def  -globalalpha [arg alphaValue]]    
+    defines a global alpha value.
+    [arg alphaValue] should be between [const 0.0] (transparent) and [const 1.0] (opaque).
+    Default value is [const 1.0]
+
+[opt_def -fill.style [arg style]]
+    defines the style to be used for filling.
+    [arg style] can be a solid-color (with alpha transparency), a gradient,or a pattern ...
+    Default is [const 0xFF000000] (Opaque Black).
+    [para]    
+    See the "Setting a style" section below.
+
+[opt_def -fill.alpha [arg alphaValue]]
+    defines the alpha value for [method fill] operations.
+    [arg alphaValue] should be between [const 0.0] (transparent) and [const 1.0] (opaque).
+    Default value is [const 1.0]
+
+[opt_def -fill.rule [arg mode]]
+    defines how to fill intersecting curves.
+    Default is [const NON_ZERO]
+
+[opt_def -stroke.style [arg style]]
+    defines the style to be used for stroking.
+    [arg style] can be a solid-color (with alpha transparency), a gradient,or a pattern.
+    Default is [const 0xFF000000] (Opaque Black)
+    See above notes for [option -fill.style]
+
+[opt_def -stroke.alpha [arg alphaValue]]
+    desfines the alpha value for [method stroke] operations.
+    [arg alphaValue] should be between [const 0.0] (trasnparent) and [const 1.0] (opaque).
+    Default value is [const 1.0]
+
+[opt_def -stroke.width [arg width]]
+    defines the width of the strokes (outlines).
+    Default value is [const 1.0]. 
+    Note that the stroke width is scaled accordling to the current matrix transformation. 
+    If you want a constant width, independent of the current scale factor, you should set 
+    the option [option -stroke.transformorder] to [const BEFORE].
+
+[opt_def -stroke.dashoffset [arg offset]]
+    defines the offset on the rendering of the associated dash array.
+    Default is [const 0.0]    
+
+[opt_def stroke.join [arg mode]]
+    defines how the junction point of two consecutive segment will be stroked.
+    Default is [const MITER_CLIP]
+
+[opt_def -stroke.miterlimit [arg value]]
+    defines the limit on the ratio of the miter length to the stroke-width used to draw a miter join.
+    When the limit is exceeded, the join is converted from a miter to a bevel.
+    Default is [const 4.0].
+
+[opt_def -stroke.cap [arg capMode]]
+[opt_def -stroke.cap [list [arg [list startCap endCap]]]]
+    [arg capMode] specifies how to render the extremities of the stroke.
+    [arg capMode] may be a list of two values to specify the [arg startCap] and the [arg endCap] separately.
+    Default is [const [list {BUTT BUTT}]]
+
+[opt_def -stroke.transformorder [arg mode]]
+    With the default [arg mode] [const AFTER] the stroke width will be scaled accordling to the current transformation matrix.
+	If [arg mode] is set to [const BEFORE], the stroke width won't be scaled.
+    
+[list_end]
+[list_end]
+
+The whole drawing-state can be stored on an [emph "internal stack"], and you can inspect,
+save and restore the whole drawing state (i.e. all the options) with just the following commands:
+
+[list_begin definitions]
+
+[call [arg sfcName] [method push]]
+    saves the current graphic-state on an internal stack.
+[call [arg sfcName] [method pop]]
+    pops the graphic-state from the stack.
+    Raise an error if stack is empty.
+[call [arg sfcName] [method stacksize]]
+    returns the size of the internal stack (i.e. number of saved graphic-states)
+[call [arg sfcName] [method reset]]
+    sets the whole surface's graphic-state, including the internal stack.
+    All the options (but [option -format] and [option -threads]) are reset to their default values.
+
+[list_end]
+
+
+[comment =====================================================================]
+[subsection {Setting a style}]
+
+There are 3 types of styles you can set for strokes and fills:
+    SOLID, GRADIENT, PATTERN
+
+[list_begin itemized]
+[item] A [const SOLID] style is an uniform color (with optional alpha transparency).
+It can be specified as a simple hex number in 0xAARRGGBB format,
+     0xFFFF0000  is red
+     0xFF0000FF  is blue
+     or through the following utilities:
+[list_begin definitions]
+[call  [cmd BL::rgb] [arg RR] [arg GG] [arg BB] [opt [arg alpha]]]
+    returns a 0xAARRGGBB color by combining the [arg RR] [arg GG] [arg BB]
+    and the (optional) [arg alpha] arguments.
+    [para]
+    [arg RR], [arg GG], [arg BB]  are integers 0..255  (best expressed as 0x00..0xFF),
+    [arg alpha] is an optional parameter ranging from 0.0 (transparent) to 1.0 (opaque).
+    Default [arg alpha] is 1.0  
+  [call [cmd BL::color] [arg colorName] [opt [arg alpha]]]
+    returns a 0xAARRGGBB color by combining the [arg colorName] and the (optional) [arg alpha] arguments.
+    [para]
+    [arg colorName] is a color name (e.g "lightblue") or a numeric-color like #rrggbb,
+    [arg alpha] is an optional parameter ranging from 0.0 (transparent) to 1.0 (opaque).
+    Default [arg alpha] is 1.0  
+  [call [cmd HSB] [arg hue] [arg sat] [arg brightness] [opt alpha]]
+    This is an alternative way for specifying a color (HSB model). 
+    [para]
+    See the "HSB color model" section at the end for more details.
+[list_end]
+
+[item] A [const GRADIENT] can be specified with the following syntax:     
+[list_begin definitions]
+  [call [cmd BL::gradient] [arg type] [arg values] [arg stopList] [opt options]]
+    [list_begin itemized]
+
+    [item] [arg type] should be one of the following values: LINEAR, RADIAL, CONICAL
+
+    [item] [arg values] is a list of parameters (depending on [arg type])
+    [list_begin itemized]
+        [item] BL::gradient LINEAR  {x0 y0 x1 y1}        _stopList_  ?_options_?
+        [item] BL::gradient RADIAL  {x0 y0 x1 y1 radius} _stopList_  ?_options_?
+        [item] BL::gradient CONICAL {x0 y0 angle}        _stopList_  ?_options_?
+    [list_end]    
+    [item] [arg stopList] is a list of offset and colors (at least two pairs of offset color)
+    [list_begin itemized]
+        [item] [arg offset] is a number between 0.0 and 1.0
+        [item] [arg color] can be expressed as an hex number (0xAARRGGBB) or with the above cited
+         [cmd BL::rgb] , [cmd BL::color], [cmd HSB] commands.
+    [list_end]
+    [item] [arg options] are:
+        [list_begin options] 
+        [opt_def -mode [arg extendMode]]
+           defines how to extend or repeat the style outside the defined region.
+           Default is [const PAD].
+           See command "[cmd BL::enum] [const EXTEND_MODE]" for valid values.
+        [opt_def -matrix [arg mtx]]
+            defines an auxiliary 2D tranformation that should be combined with the
+            current transformation matrix. 
+        [list_end]
+    [list_end]
+[list_end]
+Gradient example:
+[example {
+    # define an oblique LINEAR gradient
+    set gr1 [BL::gradient LINEAR  {0 0 400 400} \ 
+        [list  0.0 [BL::color lightblue]  0.8 [BL::color blue] 1.0 [BL::rgb 0 0 0 0.1]] \ 
+        ]
+    $sfc fill [BL::circle {200 200} 100] -style $gr1
+}]
+
+[item] A [const PATTERN] can be specified with the following syntax:     
+
+[list_begin definitions]
+  [call [cmd BL::pattern] [arg sfcName]|[arg filename] [opt options]]
+  defines a pattern based on another [emph sourceBitmap], i.e a [arg SfcName], or an external JPEG,PNG,BMP [arg filename].
+  [para]
+  Valid [option options] are:
+    [list_begin options]
+    [opt_def -mode [arg extendMode]]
+        same as for [cmd BL::gradient]
+    [opt_def -matrix [arg mtx]]
+        same as for [cmd BL::gradient]
+    [opt_def -from  [arg [list {x y w h}]]]
+        defines the pattern based on a rectangular subregion of the [emph srcBitmap].
+        [arg x], [arg y], [arg w],[arg h] are pixel coords (integer coords)
+    [list_end]
+[list_end]
+
+[list_end]
+
+
+[comment =====================================================================]
+[subsection {Geometric types}]
+
+Blend2D provides both
+  simple geometric types ( line, rectangle, circle ....)
+  and complex geometric types (Path).
+
+The main difference between simple and complex geometry types derives from their
+implementation.
+Although all the geometric types could be implemented as oo-classes, this will
+tend to develop programs difficult to maintain, since in Tcl oo-objects should be
+explicitly destroyed.  
+Therefore most of the following commands for building geometric types don't return oo-objects
+but simple tcl-lists/dictionaries, that are automatically disposed when they go out of scope.
+[para]
+Currently just one complex geometry-types ([class BL::Path]) is implemented as oo-class,
+(and then it's programmers's responsability to explicitly destroy it).
+[para]
+A simple example for drawing a simple geometry is
+[example {
+$sfcName fill [BL::box 0 0 120 175.8]
+}]
+
+The supported simple-geometries are:       
+
+[list_begin definitions]
+  [call [cmd BL::line]    [arg [list {x0 y0}]] [arg [list {x1 y1}]]]
+  [call [cmd BL::polyline] [arg [list {x0 y0}]] [arg [list {x1 y1}]] [opt "[arg [list {x2 y2}]] ...."]]
+  [call [cmd BL::polygon]   [arg [list {x0 y0}]] [arg [list {x1 y1}]] [opt "[arg [list {x2 y2}]] ...."]]
+  [call [cmd BL::box]  [arg [list {x0 y0}]] [arg [list {x1 y1}]]]
+  [call [cmd BL::rect]  [arg x] [arg y] [arg w] [arg h]]
+  [call [cmd BL::roundrect]  [arg x] [arg y] [arg w] [arg h] [arg rx] [opt [arg ry]]]
+  [call [cmd BL::circle]  [arg [list {cx cy}]] [arg r]]
+  [call [cmd BL::ellipse]  [arg [list {cx cy}]] [arg rx] [arg ry]]
+  [call [cmd BL::arc]  [arg [list {cx cy}]] [arg rx] [arg ry] [arg start] [arg sweep]]
+  [call [cmd BL::pie]  [arg [list {cx cy}]] [arg rx] [arg ry] [arg start] [arg sweep]]
+  [call [cmd BL::chord] [arg [list {cx cy}]] [arg rx] [arg ry] [arg start] [arg sweep]]
+  [call [cmd BL::text] [arg [list {x y}]] [arg font] [arg text]]
+[list_end]
+
+Note that all these commands defining [emph "simple geometry types"] start
+with a lowercase letter. These commands do not create oo-objects; they simply
+return a special crafted list that should be passed to the [method fill]/[method stroke] methods.
+These objects (lists/dictionaries!) don't require an explicit "destroy" method.
+[para]
+Other than [emph "simple geometries"] there are [emph "complex geometries"] like 
+  [class BL::Path]
+and they will be described in the following sections.
+
+[comment =====================================================================]
+[subsection {Drawing on a surface}]
+
+[list_begin definitions]
+
+[call [arg sfcName] [method stroke] [arg geometry] [opt options]]
+   draws the outline of the specified [arg geometry], accordling to the current drawing-state.
+   Extra options listed after [arg geometry] are temporary set just for this operation.
+   Note that some options like [option -stroke.width], [option -stroke.style], can be abbreviated
+   as [option -width], [option -style], and so on.
+
+[call [arg sfcName] [method fill] [const all]|[arg geometry] [opt options]]
+   draws (fills) the specified [arg geometry], accordling to the current drawing-state.
+   The special geometry [const all] means "the whole framebuffer".
+   Extra options listed after [arg geometry] are temporary set just for this operation.
+   Note that within this fill operation, the option [option -fill.style] can be abbreviated as [option -fill].
+
+[call [arg sfcName] [method clear] [opt options]] 
+    This is a shorthand for "[arg sfcName] [method fill] [const all] [opt options]"
+[list_end]
+
+[comment =====================================================================]
+[subsection {Other Surface commands}]
+
+[list_begin definitions]
+[call [arg sfcName] [method flush]]
+    flushes the internal rendering command queue and wait for its completion (will block).
+    (only useful in Multi-Thread contexts).
+	This command is normally unnecessary, since a flush() is automatically performed
+	before the image is copied/exported/displayed. 
+    
+[call [arg sfcName] [method size]]
+    returns a list of two values: width and height of the surface (in pixel)
+
+[call [arg sfcName] [method userToMeta]]
+    sets the surface MetaMatrix.  TO BE DOC'ed ...
+        
+[list_end]    
+    
+
+[comment =====================================================================]
+[section {BL::Path}]
+
+The following commands can be used for creating and manipulating a [class Path]:
+
+[list_begin definitions] 
+
+[call [class BL::Path] [method create] [arg pathName]]
+creates a new instance of the class [class BL::Path] called [arg pathName].
+
+[call [class BL::Path] [method new]]
+creates a new instance of the class [class BL::Path] returning a new unique [arg pathName].
+
+[call [arg pathName] [method destroy]]
+destroys [arg pathName].
+
+[call [arg pathName] [method dup]]
+duplicates [arg pathName]. Return a new path
+
+
+[call [cmd BL::Path] [method names]]
+returns the list of the currently available paths
+    
+[call [arg pathName] [method add] [arg geometry] [opt "[arg geometry] ..."] [opt [arg options]]]
+adds one or more [arg geometry] to [arg pathName]. [arg geometry] is any geometric type above defined,
+including the same [arg pathName].
+[para]
+Valid options are:
+[list_begin options]
+    [opt_def -direction [arg value]]
+        [arg value] can be one of [const NONE], [const CW], [const CCW].  Default is [const CW].
+        [para]
+        Hint: Use [const CCW] for adding holes in a path
+    [opt_def -matrix [arg matrix]]
+        applies a 2D transformation to the added geometries.
+    [list_end]  
+
+[example {
+   # starting from Blend2d 1.0, the "add" method also accepts a "BL::text" as a geometry.
+   # All the glyphs are converted and added to a BLPath using a simple layout algorith
+  set fontFace [BL::FontFace new "./Arial.ttf"]
+  set fontName [BL::Font $fontFace 12.0]
+  set blPath [BL::Path new]
+  $blPath add [BL::text {100 100} $font "ABC .. Z"]
+   # then you can get and manipulate its SVG representation 
+  set SVG [$blPath view] 
+  ...
+}]
+
+[call [arg pathName] [method newStrokedPath] [opt [arg stroke-options]]]
+creates a new BL::Path made by stroking the current path with the stroking options passed as arguments.
+Valid stroke-options are:
+[list_begin options]
+    [opt_def -width [arg value]]
+    [opt_def -dasharray [arg value]]
+    [opt_def -dashoffset [arg value]]
+    [opt_def -join [arg value]]
+    [opt_def -cap [arg value]]
+    [opt_def -miterlimit [arg value]]
+    [opt_def -transformorder [arg value]]
+[list_end]  
+These stroke-options are a subset of the options used for the [method stroke] method of the [class BL::Surface] class. 
+
+[example {
+    # build path0 as a simple triangle
+   set path0 [BL::Path new]
+   $path0 add [BL::polygon {100 100} {150 200} {200 200}]
+    # then derive a new path ... as the prevoius path but with a thick contour and rounded corners ..'
+   set path1 [$path0 newStrokedPath -width 20 -join ROUND]
+
+   ... rememeber to destroy path0 and path1
+
+}]
+
+
+
+[call [arg pathName] [method addSVGpath] [arg dataString]]
+reads and parses the SVG-path-data commands in [arg dataString] and adds the equivalent Blend2d command.
+
+[arg dataString] must follow the rules for the "d" property of the SVG path elements, see the specs at [uri https://www.w3.org/TR/SVG/paths.html#DProperty]
+[example {
+    set blPath [BL::Path new]
+    # the following SVG-path is presented in this way just for readability  ..
+    $blPath addSVGpath "
+       M 100 100
+       q -100 0 -200 -100
+       l 10.0 20.1 30 40 50 -5
+       h 1.5e+3
+       Z"
+    # but it can also be specified in a compact form       
+    $blPath addSVGpath "M100+100q-100+0-200-100l10.0,20.1,30,40,50-4H2E+3h1.5e+3Z"
+
+}]
+
+          
+[call [arg pathName] [method apply] [arg matrix]]
+applies the 2D [arg matrix] transformation to the whole [arg pathName].
+
+[call [arg pathName] [method fitTo] [arg x] [arg y] [arg w] [arg h]]
+fits (scale&translate) the whole [arg pathName] into the given rect.
+
+[call [arg pathName] [method moveTo] [arg point0]]
+sets the starting [arg point0] (expressed as a list of two numbers) for the next commands ..
+[call [arg pathName] [method lineTo] [arg point] [opt "[arg point] ..."]]
+[call [arg pathName] [method quadTo] [arg p1] [arg p2] [opt "[arg p1] [arg p2]..."]]
+[call [arg pathName] [method cubicTo] [arg p1] [arg p2] [arg p3] [opt "[arg p1] [arg p2] [arg p3]..."]]
+[call [arg pathName] [method smoothQuadTo] [arg p2] [opt "[arg p2]..."]]
+[call [arg pathName] [method smoothCubicTo] [arg p2] [arg p3] [opt "[arg p2] [arg p3]..."]]
+[call [arg pathName] [method arcQuadrantTo] [arg point1] [arg point2]]
+[call [arg pathName] [method arcTo] [arg pointC] [arg pointR] [arg start] [arg sweep] [opt "[option -moveto] [arg boolean]"]]
+
+[call [arg pathName] [method ellipticArcTo] [arg point1] [arg pointR] [arg rotation] [arg largeArcFlag] [arg sweepFlag] [arg point1]]
+[call [arg pathName] [method close]]
+
+[call [arg pathName] [method reset]]
+[call [arg pathName] [method shrink]]
+ shrinks the internal capacity of the path to fit the current usage.
+[call [arg pathName] [method bbox]]
+  Get the path's bounding-box.
+[para]
+Note that bbox does not consider the line-width, offset, caps (these parameters
+    are definied when stroking/filling the path).
+    If path is empty returns [const [list {0.0 0.0 0.0 0.0}]]
+
+[call [arg pathName] [method view]]
+    Returns the path data in SVG format
+
+[call [arg pathName] [method contour]]
+    returns the number of countours. 
+[call [arg pathName] [method contour] [arg i]|[const *]]
+    returns the number of simple curves of the i-th contour.
+    If [const *] is specified, return a list with the number of simple curves of every contour. 
+[call [arg pathName] [method contour] [arg i]|[const *] [arg j]|[const *] [arg OP] [arg t]]
+    by using the parametric equation B(t) of the j-th curve of the i-th contour,
+    evaluates one of the following [arg OP] functions at value [arg t] ([arg t] must be between 0.0 and 1.0):
+    [list_begin itemized]
+    [item] [const at]:  returns the position {x y} at B(t)
+    [item] [const tangent]:  returns the tangent versor {x y} at B(t)
+    [item] [const normal]:  returns the normal versor {x y} at B(t)
+    [item] [const tangentAt]:  returns the the position and the tangent versor at B(t)
+    [item] [const normalAt]:  returns the the position and the normal versor at B(t)    
+    [list_end]
+    If [const *] is specified instead of the contour index, this command returns
+    a list with all the [arg OP] evaluations at [arg t] for the j-th curves of every contour.
+    If some contour has  less than j curves, its evaluation is {}.
+    [para]
+    If [const *] is specified instead of the curve index, this command returns
+    a list with all the [arg OP] evaluations at [arg t] for every curve of the i-th contour.
+    [para]
+    If [const *] is specified for both the contour index and the curve index,this
+    command returns a list of list, i.e. for every contours returns a list of the evaluations
+    of [arg OP] at [arg t] for every its single curve.
+
+[list_end]
+
+
+[comment =====================================================================]
+[section {BL::FontFace, BL::Font and Glyphs}]
+
+[emph {
+  Note: Currently text support is still basic and subject to changes.
+}]
+
+[para]
+Before drawing some text, you need to load some fonts from an external font-file.
+
+[list_begin definitions]
+
+ [call [class BL::FontFace] [method create] [arg faceName] [arg fontfile] [opt [arg faceIdx]]]
+  loads a [arg fontfile] and creates a new instance of the class [class BL::FontFace]
+  named [arg faceName]. 
+  [para] 
+  If [arg fontfile] is a font collection, you can specify which
+  fontface to load. Default value for [arg faceIdx] is 0 (i.e. the first fontface).
+  if [arg faceIdx] is greater than the number of the available fontfaces, the last fontface is loaded, and it can be inspected with the [method detail] method.
+
+ [call [class BL::FontFace] [method new] [arg fontfile] [opt [arg faceIdx]]]
+  loads a [arg fontfile], creates a new instance of the class [class BL::FontFace] returning
+  a new unique [arg faceName].
+
+  [call [arg faceName] [method destroy]]
+destroys [arg faceName]. Note that in general any oo-object like [arg faceName] should be explicitly destroyed
+
+ [call [cmd BL::FontFace] [method names]]
+    returns the list of all the currently allocated fontfaces.
+    
+ [call [arg faceName] [method details]]
+   returns a dictionary with some properties of the loaded [arg faceName].
+   [para]
+   These are the currently listed properties ;more properties may be added in future Blend2d releases.
+[example {
+  # load the last fontface from a fontfile-collection
+  #   ("AmericanTypewriter.ttc" can be found in the tclBlend2d-devkit distribution )
+  # Note that I want to load the last fontface, so I specify a large 'faceIdx'
+  # surely greater than the available fontface (.. there're 6 fontfaces in this collection ..) 
+ set fface [BL::FontFace new "./AmericanTypewriter.ttc" 999]
+  # pretty print details
+ dict for {key value} [$fface details] {
+    puts "[format "%25s %s" $key $value]"
+ }
+  # ....
+  # other ops ...
+  #
+ $fface destroy
+}]
+This produces the following output :
+[example {
+                faceIndex 5
+               glyphCount 916
+                 fullName American Typewriter Condensed Light
+               familyName American Typewriter
+            subfamilyName Condensed Light
+           postScriptName AmericanTypewriter-CondensedLight
+               unitsPerEm 1000
+                   weight 300
+                    style 0
+                  stretch 3
+    hasCharToGlyphMapping 1 
+}]
+
+[list_end]
+
+Once a [class BL::FontFace] has been loaded,and before drawing some text or extracting some glyphs, you should create a [class BL::Font] object based on an instance of [class BL::FontFace] 
+
+[list_begin definitions]
+
+ [call [class BL::Font] [method create] [arg fontName] [arg faceName] [arg fontsize]]
+  creates a new instance of the class [class BL::Font], based on [arg faceName], having size [arg fontsize] (float).
+  [para] 
+  Note that although any text and glyph can be arbitrarialy scaled with the usual 2D trasnsformations, [arg fontsize] can be used to select some special glyphs that some fonts
+  may make available for working with very small font sizes.
+
+ [call [class BL::Font] [method new] [arg faceName] [arg fontsize]]
+  creates a new instance of the class [class BL::Font] returning
+  a new unique [arg fontName].
+
+  [call [arg fontName] [method destroy]]
+destroys [arg fontName]. Note that in general any oo-object like [arg fontName] should be explicitly destroyed
+
+ [call [cmd BL::Font] [method names]]
+    returns the list of all the currently allocated fonts.
+[list_end]
+
+A [arg fontName] can be used for drawing some text like in the following example
+[example {
+  set fontFace [BL::FontFace new "./Arial.ttf"]
+  set fontName [BL::Font $fontFace 12.0]
+  set sfc [BL::Surface new]
+  $sfc fill [BL::text {100 100} $fontName "Hello World"] -style [BL::color orange]
+}]
+but it can also used for extracting single glyphs from it.
+
+[list_begin definitions]
+ [call [arg fontName] [method glyphs] [arg someText]]
+  returns a list of glyph-indexes, one glyph-index for each (Unicode) character in [arg someText].
+  
+ [call [arg fontName] [method glyph] [arg glyphIdx]]
+  returns a new instance of [class BL::Path] containing the geometrical representation of the given [arg glyphIdx]. Raise an error if [arg glyphIdx] is invalid.
+  [para]
+  Note: this method creates a new [class BL::Path]instance, and it is user's responsability
+    to destroy it explicitly.
+[list_end]
+
+Before drawing some text (or a single glyph) you should load a [arg fontfile], then
+setup a [class BL::Font] with a given size
+[example {
+    set aFontFace [BL::FontFace new _fontfile_]
+    set aFont [BL::Font new $aFontFace _size_]
+}]
+note that both [class BL:FontFace] and [class BL::Font] create new objects, and therefore it's
+programmer's responsability to delete them  (e.g call "$aFontFace destroy" )
+[para]
+The easiest way to draw a text on a [class Surface] is to use the special 'geometry' [class BL::text]
+with the fill/stroke methods
+[example {
+    surfaceName fill [BL::text {10 20} $aFont "Hello World!!"]
+}]
+Of course you can set the drawing-properties of the Surface as usual  (color, gradient,line width, matrix transformation ....)    
+[para]
+Alternatively, you can extract a single glyph from a font, store them as a [class BL::Path], and then
+manipulate it as usual
+[example {
+    set aGlyph [$font glyph 44]  ;# extract glyph n.44
+    $sfc stroke $aGlyph
+}]
+Note that the [method glyph] methods returns a new [class BL::Path] object,and therefore it is
+programmer's responsability to free the resources (e.g.  "$aGlyph destroy" )    
+
+    
+[comment =====================================================================]
+[section {Applying filters}]      
+
+TclBlend2d provides two basic ways to work with filters.
+You can apply a filter to a rectangular region of a Surface (currently only [const blur] filter), or you can 
+set a filter to a [term script], so that it will be applied to all the graphical primitives that will be rendered by this script.
+
+[list_begin definitions]
+
+[call [arg sfcName] [method blur] [arg radius] [opt "[option -rect] [arg "{x y w h}"]"]]
+applies a blur filter of size [arg radius] (from 2 to 254) to a rectangular region of [arg sfcName]
+[para]
+  Valid [option options] are:
+    [list_begin options]
+    [opt_def -rect  [arg [list {x y w h}]]]
+        defines the rectangular subregion where the blur filter will be applied.
+        [arg x], [arg y], [arg w],[arg h] are pixel coords (integer coords)
+		[para]
+		If [option -rect] is not specified , the blur filter will be applied to the whole surface.
+    [list_end]
+
+[call [arg sfcName] [method filter] [arg filterType] [opt filter-args] [arg script]]
+
+all the graphical primitives created by this [arg script] that will be rendered on [arg sfcName] will be 
+redirected on a special temporary layer,
+then the filter will be applied to this temporary layer and then it will be blended with the underlying Surface.
+[para]
+Parameters are:
+[list_begin definitions]
+[def [arg filterType]]
+  Valid values are [const blur], [const shadow], and the special filter [const ignore].
+  This latter filter means that no filter will be applied.
+[def [arg filter-args]]
+  A list of options for [arg filterType]. (see below .....)
+[def [arg script]]
+  A tcl script. Usually this script should contain some rendering commands on [arg sfcName]. All these commands will temporary redirected
+  to an automatically allocated temporary Surface. This temporary surface is initialized as a transparent surface and has the same 'state' (e,g the set of options)
+  of [arg sfcName]. When [arg script] ends, the filter is applied to the whole temporary surface 
+  (or better, only to the bounding-box of the rendered primitives), and finally, this temporary Surface will be blended
+  with the underlying [arg sfcName].
+  [para]
+  Note that if this script changes the state of the (redirected) [arg sfcName], these changes will be also visible in the original [arg sfcName].
+  [para]
+  Warning: take care of not "popping" the initial stack level of [arg sfcName]. Method [method push] and [method pop]
+  are allowed within [arg script] as long as they are properly paired.
+[list_end]
+
+[list_end]
+  
+[subsection {filter-args for "blur" filter}]
+[list_begin options]
+	[opt_def -radius [arg radius]]
+		blur radius (from 2 to 254). Default is [const 5] pixels.
+[list_end]
+[subsection {filter-args for "shadow" filter}]
+[list_begin options]
+	[opt_def -radius [arg radius]]
+		blur radius (from 2 to 254). Default is [const 5] pixels.
+	[opt_def -dxy "\{[arg dx] [arg dy]\}"]
+		dx,dy translation of the blurred shadow. Default is [const "\{3 5\}"]	
+	[opt_def -color [arg color]]
+		shadow color . Default is [lb][const "BL::color gray30"][rb]
+[list_end]
+		
+[example {
+	$sfc reset
+	$sfc clear -style [BL::color white]
+	 #
+	 # --- a shadowed blue/white/red disc
+	 #
+	set center {100 150}
+	$sfc filter shadow -radius 20 -dxy {5 9} {
+		foreach circleRadius {90 60 30} color {lightblue white red} {
+			$sfc fill [BL::circle $center $circleRadius] -style [BL::color $color]		
+		}
+	}
+	 #
+	 # --- three shadowed discs	
+	 #
+	set center {300 150}
+	foreach circleRadius {90 60 30} color {lightblue white red} {
+		$sfc filter shadow -radius 20 -dxy {5 9} {
+			$sfc fill [BL::circle $center $circleRadius] -style [BL::color $color]		
+		}
+	}
+}]
+		
+
+
+[comment =====================================================================]
+[section {Exchanging pixmaps}]    
+
+Blend2d provides commands for loading graphics files in a Surface, as well for saving the 
+Surface's internal framebuffer in a graphic file.
+Blend2d provides commands for copying (part of) the internal framebuffer among different Surfaces.
+If the Tk support is loaded, that is if you loaded the [package Blend2d] or [package tkBlend2d] packages, you can also
+exchange parts of the Surfaces framebuffer with tk [cmd photo] images.
+
+[subsection {read/write files}]
+[list_begin definitions]
+[call [arg sfcName] [method load] [arg filename]]
+loads the contents of [arg filename]. Supported formats: png, jpeg, bmp.
+[para]
+WARNING: the internal framebuffer is resized.
+    
+[call [arg sfcName] [method save] [arg filename] [opt "[option -format] [arg file-format]"]]
+saves the internal framebuffer in [arg filename]
+If [option -format] is not specified, this command tries to guess the [arg file-format] from the file extension.
+[para]
+    NOTE: currently only BMP and PNG encoder are available
+[list_end]
+
+[subsection {copy among surfaces}]
+[list_begin definitions]
+[call [arg sfcName] [method copy] [arg srcSurface] \
+  [opt "[option -from] [arg [list {x0 y0 w h}]]"] \
+  [opt "[option -to] [arg [list {xp yp}]]"] \
+  [opt "[option -compop] [arg op]"] \
+  [opt "[option -globalalpha] [arg alpha]"] \
+]
+[call [arg sfcName] [method copy] [arg srcSurface] \
+  [opt "[option -from] [arg [list {x0 y0 w h}]]"] \
+  [opt "[option -to] [arg [list {x y w h}]]"] \
+  [opt "[option -compop] [arg op]"] \
+  [opt "[option -globalalpha] [arg alpha]"] \
+]
+    copies (a sub-region of) [arg srcSurface] to the current [arg sfcName].
+    If no options are specified, this command copies the whole [arg srcSurface]
+    starting at coordinates (0,0).
+[para]
+    The following options may be specified:
+[list_begin options]
+     [opt_def -from [arg [list {x y w h}]]] 
+        specifies a rectangular sub-region of the surface to be copied.
+        The pixels copied will include the left and top edges of the specified rectangle but not the bottom or right edges.
+        If the [option -from] option is not given, the default is the whole surface. 
+     [opt_def -to [arg [list {x y}]]]
+        specifies where to place the source sub-region in the current surface.
+        The current surface is never resized, therefore, all parts
+        of the [arg srcSurface] that will be placed outside this surface will be excluded (clipped).
+     [opt_def -to [arg [list {x y  w h}]]]
+        specifies a rectangular sub-region of the current surface.
+        The source sub-region is scaled to fit into destination rectangle.
+     [opt_def -compop [arg value]]
+        applies a composition-operation to the pixels that will be copied.
+        If this option is not specified, the current value of the [option -compop] option  is used.
+     [opt_def -globalalpha [arg alpha]]
+        [arg srcSurface] will be blitted using [arg alpha] transparency.
+        If this option is not specified, the current value of the [option -globalalpha] option  is used.
+[list_end]	
+	copies (a sub-region of) [arg srcSurface] to the current [arg sfcName].
+    If no options are specified, this command copies the whole [arg srcSurface]
+    starting at coordinates (0,0).
+	[para]
+    Note that if there's a matrix-trasformation (rotation, scaling, ..) on the
+    current surface, this transformation will be applied to all points of the 
+    destination sub-region (i.e. the [option -from] rectangle will be rotated, scaled, ...)
+
+[call [arg sfcName] [method rawcopy] [arg srcSurface] \
+  [opt "[option -from] [arg [list {x0 y0 w h}]]"] \
+  [opt "[option -to] [arg [list {x y w h}]]"] \
+  [opt "[option -compop] [arg op]"] \
+  [opt "[option -globalalpha] [arg alpha]"] \
+]
+    similar to the [method copy] method. The only difference is that the source region
+	(those specified by the [option -from] option) will be copied in [arg sfcName]
+	*without* any transformation.
+	[para]
+	The default [option -compop] mode is [const SRC_OVER].
+	
+[list_end]
+
+
+[subsection {reading/writing tkphoto}]
+These commands require the [package Blend2d] or [package tkBlend2d] package.
+These commands are not available if you loaded the [package tclBlend2d] package;
+
+[list_begin definitions]
+ [call [arg sfcName] [method readFromTkphoto] [arg tkphoto] [opt "[option -from] [arg [list {x0 y0 w h}]]"]  [opt "[option -to] [arg [list {x0 y0 w h}]]"]]
+    copies (a sub-region of) [arg tkphoto] to the current [arg sfcName].
+    If no options are specified, this command copies the whole [arg srcSurface]
+    starting at coordinates (0,0).
+   [para]
+   NOTE: [arg sfcName] is not resized; you should take care to resize it 
+   in order to get all the portion of the tkphoto you are interested in.   
+
+ [call [arg sfcName] [method writeToTkphoto] [arg tkphoto] [opt "[option -from] [arg [list {x0 y0 w h}]]"]  [opt "[option -to] [arg [list {x0 y0 w h}]]"]]
+    copies (a sub-region of) [arg sfcName] to the current [arg sfcName].
+    If no options are specified, this command copies the whole [arg srcSurface]
+    starting at coordinates (0,0).
+
+[list_end]
+
+
+[comment =====================================================================]
+[section {Creating a blend2d (tk-)image}]    
+
+These commands require the "Blend2d" or "tkBlend2d" package.
+These commands are not available if you loaded the "tclBlend2d" package;
+
+[list_begin definitions]
+
+ [call [cmd image] [method create] [const blend2d] [opt [arg name]] [opt [arg options]]]
+Similar to the standard command "[cmd {image create photo ...}]", this command creates a new image of type [const blend2d] plus a new surface-object that can be used for manipulating the image.
+[para]
+    Options are the same options used for the "[cmd {BL::Surface create ..}]"  command.
+[para]    
+    The image can then be embedded in a widget (like a "label" or a "canvas"); every
+    command like [method fill], [method stroke] issued to the image name, will immediately change the displayed image.
+[para]
+    Both "[cmd {image delete sfcName}]" and "[arg sfcName] [method destroy]" can be used to delete the image AND the related surface-object.
+
+[list_end]
+
+[comment =====================================================================]
+[section {Other BL:: commands}]    
+
+[list_begin definitions]
+
+[call [cmd BL::classes]]
+    lists the name of the BL classes (e.g BL::Surface,BL::Path, ...)
+    
+[call [cmd BL::classinfo] [arg objectName]]
+    returns the class name of [arg objectName].
+    [arg objectName] can be any [cmd tcloo] object (not limited to BL:: objects)
+                 
+[call [cmd BL::codecs]]
+    lists the supported graphics file formats.
+    [para]
+    For each supported graphic file formats, returns a detailed list made of 5 elements:
+    [const id], [const vendor], [const mimeType], [const extensions], [const features].
+    [list_begin itemized]
+    [item] [const id] is the key element to be used in load/save operations  (e.g.   JPEG)
+    [item] [const vendor] is the name of the codec's vendor.
+    [item] [const mimetype] is a string (e.g.   image/jpeg)
+    [item] [const extensions] is a sequence of recognized filename-extensions; elements are separated by "|"  (e.g.   jpg|jpeg|jif|jfi|jfif)
+    [item] [const features] is a list of supported features
+        [list_begin itemized]    
+        [item] [const READ]:   reading is supported
+        [item] [const WRITE]:  writing is supported
+        [item] [const LOSSY]:  loosy compression
+        [item] [const LOSSLESS]:  lossless compression
+        [item] [const MULTI_FRAME]:  multiple frames (GIF).
+        [item] [const IPTC]:  supported IPTC metadata.
+        [item] [const EXIF]:  supported EXIF metadata.
+        [item] [const XMP]:   supported XMP metadata.         
+        [list_end]
+    [list_end]
+[call [cmd BL::enum]]
+    lists all the enum categories
+[call [cmd BL::enum] [arg category]]
+    lists all the values for that _category_
+    e.g. BL::enum GRADIENT_TYPE  -->  LINEAR RADIAL CONICAL
+
+[call [cmd BL::libinfo]]
+    returns a dictionary with info about the core Blend2d library.
+    The dictionary keys are [const version], [const type] (build-type)
+
+[call [cmd BL::platform]]
+    returns a dictionary with info about the cpu architecture and the cpu features used by Blend2d.
+    The dictionary keys are [const cpuArch], [const cpuFeatures], [const coreCount].
+
+[list_end]
+    
+[comment =====================================================================]
+[section {Auxiliary utilities}]
+           
+Blend2d provides some small helpers for working with transformation-matrix and colors
+
+[subsection {Affine matrix}]    
+
+An affine matrix is a 3x3 matrix whose last column is fixed 0 0 1
+[example {
+    a b 0
+    c d 0
+    e f 1
+}]
+Given this rule it is convenient to express such matrices as a list of 6 numbers
+{ a b c d e f } instead of 9 numbers.
+[para]
+Working with these matrices can be simplified by using the [package Mtx] package included in Blend2D. 
+[para]
+In the following paragraphs "M" stands for a matrix (a list of 6 numbers), "P" stands for
+a 2D point (a list of 2 numbers).
+[para]
+The following ops are supported
+[list_begin definitions]
+ [call [cmd Mtx::identity]]
+  returns the identity matrix [const [list {1 0 0 1 0 0}]]
+ [call [cmd Mtx::MxM]  [arg M1] [arg M2]]
+   matrix multiplication
+ [call [cmd Mtx::determinant] [arg M]]
+ [call [cmd Mtx::invert] [arg M]]
+   matrix inversion - Raise an error if [arg M] is not invertible.
+ [call [cmd Mtx::PxM] [arg P] [arg M]]
+   map a Point
+ [call [cmd Mtx::multiPxM] [arg Points] [arg M]]
+   map a list of Points
+ [call [cmd Mtx::P-P] [arg P1] [arg P2]]
+   return P1-P2
+ [call [cmd Mtx::VxM] [arg V] [arg M]]
+   map a vector [arg V] : VxM(V,M) = PxM(V,M)-PxM(0,M)
+
+ [call [cmd Mtx::translation] [arg dx] [arg dy]]
+ [call [cmd Mtx::scale] [arg sx] [opt [arg sx]] [opt [arg C]]]
+   scale sx sy around the fixed-point C
+ [call [cmd Mtx::rotation] [arg angle] [const radians]|[const degrees] [opt [arg C]]]
+   performs a rotation of [arg angle] around the fixex-point [arg C]
+ [call [cmd Mtx::skew] [arg sx] [arg sy]]
+ [call [cmd Mtx::xreflection]]
+ [call [cmd Mtx::yreflection]]
+
+ [call [cmd Mtx::translate] [arg M] [arg dx] [arg dy]]
+ [call [cmd Mtx::post_translate] [arg M] [arg dx] [arg dy]]
+ [call [cmd Mtx::scaling] [arg M] [arg sx] [arg sy] [opt [arg C]]]
+ [call [cmd Mtx::post_scaling] [arg M] [arg sx] [arg sy] [opt [arg C]]]
+ [call [cmd Mtx::rotate] [arg M] [arg angle] [const radians]|[const degrees] [opt [arg C]]]
+ [call [cmd Mtx::post_rotate] [arg M] [arg angle] [const radians]|[const degrees] [opt [arg C]]]
+ [call [cmd Mtx::yreflect] [arg M]]
+[list_end]      
+      
+[subsection {HSB color model}]    
+
+Blend2d internally works with colors expressed in terms of red,green,blue and alpha channels, 
+but in some cases it is more natural to express color following the HSB color model, where:
+[list_begin itemized]     
+     [item] h (hue)  is a 0.0..360.0 angle
+     [item] s (saturation)  is 0.0 .. 1.0
+     [item] b (brigthess)   is 0.0 .. 1.0  ( 0 is black, 1 is white )
+[list_end]      
+The following commands are availables for converting between between ARGB and HSB color models.
+  
+     alpha is 0.0 .. 1.0  
+[list_begin definitions]
+
+[call [cmd HSB] [arg h] [arg s] [arg b] [opt [arg alpha]]]
+    returns an ARGB number (in decimal notation, not in hex notation)
+[call [cmd RGB2HSB] [arg 0xAARRGGBB]]
+    returns a list with the HSB components.  { h s b alpha } 
+
+[list_end]
+
+[comment =====================================================================]
+[section {Limitations}]
+
+[list_begin itemized]
+
+[item] Saving a Surface is currently limited to BMP or PNG files.
+[item] The [option -stroke.dasharray] option is currently a no-op.
+
+[list_end]
+
+
+[keywords graphics]
+[manpage_end]

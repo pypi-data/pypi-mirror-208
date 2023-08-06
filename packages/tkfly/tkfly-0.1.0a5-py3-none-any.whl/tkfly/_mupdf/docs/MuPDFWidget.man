@@ -1,0 +1,290 @@
+[comment {-*- tcl -*- doctools manpage}]
+
+[comment {
+
+ Source file for doctools
+
+ Usage:
+ tclsh c:\tcl\apps\dtplite.tcl -o MuPDFWidget.html html MuPDFWidget.man
+ tclsh c:\tcl\apps\dtplite.tcl -o MuPDFWidget.wiki.txt wiki MuPDFWidget.man
+ 
+}]
+
+
+[manpage_begin mupdf::widget n 2.2]
+[copyright {2021, by A.Buratti}]
+[moddesc {A basic PDF-viewer widget}]
+[titledesc  {a basic PDF-viewer widget}]
+[category  {widgets}]
+[require Tk 8.6]
+[require mupdf::widget [opt 2.2]]
+
+[description]
+[widget mupdf::widget] is a fully customizable widget for displaying PDF-files, 
+based on the package [package tclMuPDF], a tcl-binding of the popular MuPDF framework.
+[para]
+You need to install [package tclMuPDF], then use it for opening PDF files. 
+Once a PDF-file has been opened, i.e. you got a [arg pdfObj], you can use it for
+working with an instance of a [widget mupdf::widget].
+[para]
+[example_begin]
+ # choose a PDF file ...
+set PDFname  "/docs/abc.pdf"
+ # create a pdfObj
+set pdfObj [lb]mupdf::open $PDFname[rb]
+ # create a widget for pdfObj 
+mupdf::widget .pdfWin $pdfObj
+ # display the widget .pdfW
+pack .pdfWin -expand 1 -fill both
+[example_end]
+
+The general form for creating a widget is: 
+[list_begin definitions]
+[call [widget mupdf::widget] [arg pathName] [opt [arg pdfObj]] [opt "[arg option] [arg value]..."]]
+[list_end]
+This command command creates the [arg pathName] widget and returns a new Tcl command whose name is [arg pathName]. 
+If [arg pdfObj] is not specified, then the widget starts 'empty', with no attached PDF. You should then [cmd attach] a [arg pdfObj] later (see below).
+[para]
+Note that a [cmd mupdf::widget] starts with a basic set of interaction-controls (bindings) for
+scrolling the pages, selecting text and annotations;
+it's your responsability to choose whick kind of UI you want to implement (menus, buttons)
+and how to respond to some custom events (text/annotation selection) by binding these controls and events with the basic actions [cmd mupdf::widget] provides.
+
+[comment =====================================================================]
+[section {WIDGET OPTIONS}]
+[list_begin options]
+
+[opt_def -background]
+The background color of the underlying canvas. 
+
+[opt_def -cursor]
+The mouse cursor to be used for the widget. The value may have any of the forms acceptable to Tk_GetCursor.
+In addition, if an empty string is specified, it indicates that the widget should defer to its parent for cursor specification. 
+
+[opt_def -extramargin]
+A non-negative value indicating the extra space surrounding the displayed PDF pages.
+
+[opt_def -foundtextcolor]
+The color used for highlighting the searched words. Default is [const red]. See subcommand [method search].
+
+[opt_def -selectioncolor]
+The color used for highlighting the selected text. Default is [const yellow].
+
+[opt_def -shadow]
+a list of gray shades for rendering a pseudo shadow under the page. 
+Note: since currently shadows are only gray-level shadows option [option -background] should be a gray shade,too. 
+
+[opt_def -zoomratio]
+A coefficient used for relative zoom. See subcommand [method rzoom].
+
+[opt_def -xscrollcommand]
+[opt_def -yscrollcommand]
+[opt_def -xscrollincrement]
+[opt_def -yscrollincrement]
+Same as the standard options to communicate with [widget scrollbar]s
+
+[list_end]
+
+[comment =====================================================================]
+[section {WIDGET COMMANDS}]
+
+The [widget mupdf::widget] command creates a widget and a new Tcl command whose name is [arg pathName]. 
+[arg pathName] may be used to invoke various operations on the widget. It has the following general form: 
+[list_begin definitions]
+[def "[arg pathName] [arg subCommand] [opt [arg "arg ..."]]"]
+[list_end]
+
+The following [arg subCommands] are available for the widget [arg pathName]: 
+[list_begin definitions]
+
+[call [arg pathName] [method attach]] 
+return the currently attached [arg pdfObj] or {}.
+
+[call [arg pathName] [method attach] [const "\"\""]] 
+break the link with the attached [arg pdfObj] (if any). An 'empty' page is displayed.
+
+[call [arg pathName] [method attach] [arg pdfObj] [opt [arg pageNum]]]
+attach the [arg pdfObj] object (created by [cmd mupdf::open]) and display the page [arg pageNum] or the closest one to [arg pageNum].
+If [arg pageNum] is not specified, then page 0 (the first page) is displayed. 
+
+[call [arg pathName] [method cget] [arg option]] 
+return the current value of the configuration option given by [arg option]. [arg Option] may have any of the values accepted by the [cmd mupdf::widget] command. 
+
+[call [arg pathName] [method configure] [opt [arg option]] [opt "[arg value] [arg option] [arg value] ..."]] 
+Query or modify the configuration options of the widget.
+If no [arg option] is specified, returns a list describing all of the available options for [arg pathName] (see Tk_ConfigureInfo for information on the format of this list).
+If [arg option] is specified with no value, thena the command returns a list describing the one named option (this list will be identical to the corresponding sublist of the value returned if no option is specified).
+If one or more option-value pairs are specified, then the command modifies the given widget [arg option(s)] to have the given [arg value(s)]; in this case the command returns an empty string. 
+Option may have any of the values accepted by the [cmd mupdf::widget] command. 
+
+[call [arg pathName] [method reqsize]]
+return a list of two integer representing the width and height (in pixel) of the zoomed page including the [option -extramargin].
+Note that this size is just the 'virtual' size of the zoomed page since just the visible area of the page (plus some extra 'margin') is rendered as a bitmap by the the underling mupdf engine.
+
+[call [arg pathName] [method clone] [arg newPath]]
+creates a new mupdf::widget named [arg newPath] as a clone of [arg pathName].
+
+  
+[call [arg pathName] [method zoom]]
+get the current zoom-factor
+[call [arg pathName] [method zoom] [arg zf]]
+set the current zoom-factor 
+
+[call [arg pathName] [method zoomfit] [arg mode]]
+set the optimal zoom-factor for displaying the page.
+[arg mode] can be [const "x"] (best-width) [const "y"] (best-height) [const "xy"] (best fit).
+
+[call [arg pathName] [method rzoom] [arg delta]]
+multiply-or-divide the zoom-factor by the [option -zoomratio] coefficient.
+If [arg delta] is positive, zoom-factor is multiplied, else it's divided
+
+[call [arg pathName] [method center] [arg mode]]
+align the center of the page with the center of the window.
+[arg mode] can be [const "x"], [const "y"] or [const "xy"].
+
+[call [arg pathName] [method align] [arg side]]
+align the page on a side of the window. [arg side] can be [const top], [const bottom], [const left] or [const right].
+
+[call [arg pathName] [method scroll] [arg dWx] [arg dWy]]
+scroll the viewport by [arg dWx],[arg dWy] pixels. 
+
+[call [arg pathName] [method scan] [const mark] [arg x] [arg y]]
+[call [arg pathName] [method scan] [const dragto] [arg x] [arg y] [opt [arg gain]]]
+The [method scan] subcommands is used to implement scanning.
+See the [method scan] subcommand of the [cmd canvas] widget.
+
+[call [arg pathName] [method xview] [opt [arg args]]]
+[call [arg pathName] [method yview] [opt [arg args]]]
+These subcommands are used to query and change the horizontal/vertical position of the page displayed in the window.
+They are usually used for interacting with scrollbars.
+See the [method xview],[method yview] subcommands of the [cmd canvas] widget.
+
+
+[call [arg pathName] [method page]]
+get the current page number (first page is 0).
+
+[call [arg pathName] [method page] [arg pagenumber]]
+show the page [arg pagenumber] (first page is 0).  This subcommand returns an error if [arg pagenumber] is out of bounds.
+
+[call [arg pathName] [method nextpage]]
+show the next page. This subcommand returns [const false] if there's not a next page, else it returns [const true].
+[call [arg pathName] [method prevpage]]
+show the previous page. This subcommand returns [const false] if there's not a previous page, else it returns [const true].
+
+
+[call [arg pathName] [method search] [arg text] [opt "[option -startpage] [arg n]"] [opt "[option -currpageonly] [arg true/false]"]]
+start searching [arg text] and highlight all its occurrencies starting from the current page, or from page [arg n] if specified.
+If option [option -currpageonly] is [const true], the the search is limited to the current page (or from the page specificed as [option -startpage]).
+
+[call [arg pathName] [method search] [const "\"\""]]
+reset the text-to-search.
+[call [arg pathName] [method search]]
+get the currently set text-to-search.
+
+
+[call [arg pathName] [method selectionclear]]
+turn off the highlights on the currently selected text.
+
+[call [arg pathName] [method annot_get]]
+This method should be used only after an existing annotation has been selected, 
+i.e. in response to the [const <<MuPDF.AnnotSelected>>] event.
+
+[call [arg pathName] [method annot_add] [arg type] [arg color]]
+This method should be used only after receiving the event [const <<MuPDF.TextSelected>>].
+The selected text is transformed in a pdf-annotation.
+[arg type] must be [const highlight], [const underline], [const strikeout] or [const squiggly].
+[arg color] must be a symbolic color (eg, red, ligthblue, ,,,) or #rrggbb
+
+[call [arg pathName] [method annot_setcolor] [arg color]]
+This method should be used only after an existing annotation has been selected, 
+i.e. in response to the [const <<MuPDF.AnnotSelected>>] event.
+[arg color] must be a symbolic color (eg, red, lightblue, ,,,) or #rrggbb
+
+[call [arg pathName] [method annot_delete]]
+This method should be used only after an existing annotation has been selected, 
+i.e. in response to the [const <<MuPDF.AnnotSelected>>] event.
+
+[call [arg pathName] [method annot_flatten]]
+This method should be used only after an existing annotation has been selected, 
+i.e. in response to the [const <<MuPDF.AnnotSelected>>] event.
+
+[call [arg pathName] [method win2page] [arg x] [arg y]]
+given a screen point (relative to the origin of the [arg pathName] widget),
+return the corresponding point of the PDF page (in 'points' unit), accordling to the MuPDF coord-sys where (0,0) is the top-left corner of the page.
+
+[call [arg pathName] [method win2PDFcoords] [arg x] [arg y]]
+given a screen point (relative to the origin of the [arg pathName] widget),
+return the corresponding point of the PDF page (in 'points' unit), accordling to the standard PDF coord-sys where (0,0) is the bottom-left corner of the page.
+
+[list_end]
+
+[comment =====================================================================]
+[section {BINDINGS}]
+
+[widget mupdf::widget] provides only basic built-in bindings for scrolling the page.
+The behavior of [widget mupdf::widget] can be enhanced by defining new bindings for individual widgets or by redefining the class bindings.
+[list_begin itemized]
+[item]
+ The arrows-keys can be used for scrolling a large page as do the mousewheel or two-finger gesture on a touchpad.
+[item]
+ On Windows you can also use an horizontal two-finger gesture for horizontal scrolling; on other platforms you should use <shift>+<mousewheel>.
+[list_end]
+
+[subsection "Redefining bindings"]
+[widget mupdf::widget] subcommands may be associated with different kind of UI controls,
+such as buttons, menus, or they may be bound to events.
+[para]
+It is recommended to redefine and add new bindings at widget-class level. The name of the widget-class for [widget mupdf::widget]
+is [const MuPDFWidget].
+[para]
+Just few examples:
+[para]
+Associate the [method zoomfit] subcommand with the keyboard's key "Z"
+[example_begin]
+bind MuPDFWidget <Key-z> { %W zoomfit xy }
+[example_end]
+Change the page using the PageUp, PageDown keys
+[example_begin]
+bind MuPDFWidget <Key-Next> { %W nextpage }
+bind MuPDFWidget <Key-Prior> { %W prevpage }
+[example_end]
+
+[comment =====================================================================]
+[section {VIRTUAL EVENTS}]
+MUPDFWidget defines a few virtual events for the purposes of notification.
+
+[list_begin itemized] 
+[item] Any time the widget is resized, the virtual event [const <<MuPDF.Configured>>] will be generated.
+[item] Any time the current page is changed, the virtual event [const <<MuPDF.PageLoaded>>] will be generated. Binding scripts can use the %d value for getting the new page-number.
+[item] Any time an annotation is selected, the virtual event [const <<MuPDF.AnnotSelected>>] will be generated. 
+Binding scripts can use the %x and %y value for getting the coords of the selection, and the %d value for getting the annotation-type.
+[item] Any time a text is selected, the virtual event [const <<MuPDF.TextSelected>>] will be generated. 
+[list_end]
+
+[comment =====================================================================]
+[section {SHARED VIEWS and SHARED CHANGES}]
+Starting with mupdf::widget 2.0, programmers were able to create multiple instances of mupdf::widget
+ even working on the same PDF (e.g. two views on the same PDF).
+[para]
+This worked but with one severe limitation: changes made through one view (e.g. add/change/delete annotations)
+  weren't propagated to other views; as a matter of fact others views were kept
+  in sync only after a full-page reload.
+[para]
+Starting with mupdf::widget 2.2, all the widget instances working on the same PDF
+are kept in sync, so that changes made in one view (add/change/remove annotations..)
+are instantly propagated to all the widget instances working on the same doc.
+  
+[comment =====================================================================]
+[section {BUGS, IDEAS, FEEDBACK}]
+[list_begin itemized]
+[item]
+-
+[list_end]
+
+[comment =====================================================================]
+
+
+[keywords Snit]
+[keywords widget]
+[keywords PDF]
+[manpage_end]

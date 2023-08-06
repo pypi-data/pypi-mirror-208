@@ -1,0 +1,989 @@
+'''tclBlend2d 1.0''' '''tclBlend2d''' ''Tcl meets Blend2d''
+
+Tcl meets Blend2d
+
+
+**SYNOPSIS**
+
+
+package require '''Tcl 8.6'''
+
+package require '''Blend2d ?1.0?'''
+
+   * '''BL::Surface''' '''create''' ''sfcName'' ?options?
+
+   * '''BL::Surface''' '''new''' ?options?
+
+   * ''sfcName'' '''destroy'''
+
+   * ''sfcName'' '''dup'''
+
+   * '''BL::Surface''' '''names'''
+
+   * ''sfcName'' '''configure'''
+
+   * ''sfcName'' '''cget''' ''optionName''
+
+   * ''sfcName'' '''configure''' ''optionName''
+
+   * ''sfcName'' '''configure''' ''optionName'' ''optionValue'' ?''optionName'' ''optionValue'' ...?
+
+   * ''sfcName'' '''push'''
+
+   * ''sfcName'' '''pop'''
+
+   * ''sfcName'' '''stacksize'''
+
+   * ''sfcName'' '''reset'''
+
+   * '''BL::rgb''' ''RR'' ''GG'' ''BB'' ?''alpha''?
+
+   * '''BL::color''' ''colorName'' ?''alpha''?
+
+   * '''HSB''' ''hue'' ''sat'' ''brightness'' ?alpha?
+
+   * '''BL::gradient''' ''type'' ''values'' ''stopList'' ?options?
+
+   * '''BL::pattern''' ''sfcName''|''filename'' ?options?
+
+   * '''BL::line''' ''{x0 y0}'' ''{x1 y1}''
+
+   * '''BL::polyline''' ''{x0 y0}'' ''{x1 y1}'' ?''{x2 y2}'' ....?
+
+   * '''BL::polygon''' ''{x0 y0}'' ''{x1 y1}'' ?''{x2 y2}'' ....?
+
+   * '''BL::box''' ''{x0 y0}'' ''{x1 y1}''
+
+   * '''BL::rect''' ''x'' ''y'' ''w'' ''h''
+
+   * '''BL::roundrect''' ''x'' ''y'' ''w'' ''h'' ''rx'' ?''ry''?
+
+   * '''BL::circle''' ''{cx cy}'' ''r''
+
+   * '''BL::ellipse''' ''{cx cy}'' ''rx'' ''ry''
+
+   * '''BL::arc''' ''{cx cy}'' ''rx'' ''ry'' ''start'' ''sweep''
+
+   * '''BL::pie''' ''{cx cy}'' ''rx'' ''ry'' ''start'' ''sweep''
+
+   * '''BL::chord''' ''{cx cy}'' ''rx'' ''ry'' ''start'' ''sweep''
+
+   * '''BL::text''' ''{x y}'' ''font'' ''text''
+
+   * ''sfcName'' '''stroke''' ''geometry'' ?options?
+
+   * ''sfcName'' '''fill''' '''all'''|''geometry'' ?options?
+
+   * ''sfcName'' '''clear''' ?options?
+
+   * ''sfcName'' '''flush'''
+
+   * ''sfcName'' '''size'''
+
+   * ''sfcName'' '''userToMeta'''
+
+   * '''BL::Path''' '''create''' ''pathName''
+
+   * '''BL::Path''' '''new'''
+
+   * ''pathName'' '''destroy'''
+
+   * ''pathName'' '''dup'''
+
+   * '''BL::Path''' '''names'''
+
+   * ''pathName'' '''add''' ''geometry'' ?''geometry'' ...? ?''options''?
+
+   * ''pathName'' '''newStrokedPath''' ?''stroke-options''?
+
+   * ''pathName'' '''addSVGpath''' ''dataString''
+
+   * ''pathName'' '''apply''' ''matrix''
+
+   * ''pathName'' '''fitTo''' ''x'' ''y'' ''w'' ''h''
+
+   * ''pathName'' '''moveTo''' ''point0''
+
+   * ''pathName'' '''lineTo''' ''point'' ?''point'' ...?
+
+   * ''pathName'' '''quadTo''' ''p1'' ''p2'' ?''p1'' ''p2''...?
+
+   * ''pathName'' '''cubicTo''' ''p1'' ''p2'' ''p3'' ?''p1'' ''p2'' ''p3''...?
+
+   * ''pathName'' '''smoothQuadTo''' ''p2'' ?''p2''...?
+
+   * ''pathName'' '''smoothCubicTo''' ''p2'' ''p3'' ?''p2'' ''p3''...?
+
+   * ''pathName'' '''arcQuadrantTo''' ''point1'' ''point2''
+
+   * ''pathName'' '''arcTo''' ''pointC'' ''pointR'' ''start'' ''sweep'' ?'''-moveto''' ''boolean''?
+
+   * ''pathName'' '''ellipticArcTo''' ''point1'' ''pointR'' ''rotation'' ''largeArcFlag'' ''sweepFlag'' ''point1''
+
+   * ''pathName'' '''close'''
+
+   * ''pathName'' '''reset'''
+
+   * ''pathName'' '''shrink'''
+
+   * ''pathName'' '''bbox'''
+
+   * ''pathName'' '''view'''
+
+   * ''pathName'' '''contour'''
+
+   * ''pathName'' '''contour''' ''i''|'''*'''
+
+   * ''pathName'' '''contour''' ''i''|'''*''' ''j''|'''*''' ''OP'' ''t''
+
+   * '''BL::FontFace''' '''create''' ''faceName'' ''fontfile'' ?''faceIdx''?
+
+   * '''BL::FontFace''' '''new''' ''fontfile'' ?''faceIdx''?
+
+   * ''faceName'' '''destroy'''
+
+   * '''BL::FontFace''' '''names'''
+
+   * ''faceName'' '''details'''
+
+   * '''BL::Font''' '''create''' ''fontName'' ''faceName'' ''fontsize''
+
+   * '''BL::Font''' '''new''' ''faceName'' ''fontsize''
+
+   * ''fontName'' '''destroy'''
+
+   * '''BL::Font''' '''names'''
+
+   * ''fontName'' '''glyphs''' ''someText''
+
+   * ''fontName'' '''glyph''' ''glyphIdx''
+
+   * ''sfcName'' '''blur''' ''radius'' ?'''-rect''' ''{x y w h}''?
+
+   * ''sfcName'' '''filter''' ''filterType'' ?filter-args? ''script''
+
+   * ''sfcName'' '''load''' ''filename''
+
+   * ''sfcName'' '''save''' ''filename'' ?'''-format''' ''file-format''?
+
+   * ''sfcName'' '''copy''' ''srcSurface'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{xp yp}''? ?'''-compop''' ''op''? ?'''-globalalpha''' ''alpha''?
+
+   * ''sfcName'' '''copy''' ''srcSurface'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x y w h}''? ?'''-compop''' ''op''? ?'''-globalalpha''' ''alpha''?
+
+   * ''sfcName'' '''rawcopy''' ''srcSurface'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x y w h}''? ?'''-compop''' ''op''? ?'''-globalalpha''' ''alpha''?
+
+   * ''sfcName'' '''readFromTkphoto''' ''tkphoto'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x0 y0 w h}''?
+
+   * ''sfcName'' '''writeToTkphoto''' ''tkphoto'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x0 y0 w h}''?
+
+   * '''image''' '''create''' '''blend2d''' ?''name''? ?''options''?
+
+   * '''BL::classes'''
+
+   * '''BL::classinfo''' ''objectName''
+
+   * '''BL::codecs'''
+
+   * '''BL::enum'''
+
+   * '''BL::enum''' ''category''
+
+   * '''BL::libinfo'''
+
+   * '''BL::platform'''
+
+   * '''Mtx::identity'''
+
+   * '''Mtx::MxM''' ''M1'' ''M2''
+
+   * '''Mtx::determinant''' ''M''
+
+   * '''Mtx::invert''' ''M''
+
+   * '''Mtx::PxM''' ''P'' ''M''
+
+   * '''Mtx::multiPxM''' ''Points'' ''M''
+
+   * '''Mtx::P-P''' ''P1'' ''P2''
+
+   * '''Mtx::VxM''' ''V'' ''M''
+
+   * '''Mtx::translation''' ''dx'' ''dy''
+
+   * '''Mtx::scale''' ''sx'' ?''sx''? ?''C''?
+
+   * '''Mtx::rotation''' ''angle'' '''radians'''|'''degrees''' ?''C''?
+
+   * '''Mtx::skew''' ''sx'' ''sy''
+
+   * '''Mtx::xreflection'''
+
+   * '''Mtx::yreflection'''
+
+   * '''Mtx::translate''' ''M'' ''dx'' ''dy''
+
+   * '''Mtx::post_translate''' ''M'' ''dx'' ''dy''
+
+   * '''Mtx::scaling''' ''M'' ''sx'' ''sy'' ?''C''?
+
+   * '''Mtx::post_scaling''' ''M'' ''sx'' ''sy'' ?''C''?
+
+   * '''Mtx::rotate''' ''M'' ''angle'' '''radians'''|'''degrees''' ?''C''?
+
+   * '''Mtx::post_rotate''' ''M'' ''angle'' '''radians'''|'''degrees''' ?''C''?
+
+   * '''Mtx::yreflect''' ''M''
+
+   * '''HSB''' ''h'' ''s'' ''b'' ?''alpha''?
+
+   * '''RGB2HSB''' ''0xAARRGGBB''
+
+
+
+
+**DESCRIPTION**
+
+Package '''Blend2d''' integrates the https://blend2d.com%|%Blend2d%|% vector engine in Tcl/Tk.
+http://blend2d.com%|%Blend2d%|% is an open source, high quality, high performance vector graphics engine.
+'''Blend2d''' is a binary package, distributed in a multi-platform bundle, i.e. it can be used on
+
+   *  Windows 64 bit
+
+   *  Linux 64 bit
+
+   *  MacOS 64 bit (... some limitations ...)
+Just an example to get the flavor of how to use '''Blend2d''':
+
+======
+
+    # draw a circle ...
+
+    package require Blend2d
+    set sfc [BL::Surface new]
+    $sfc clear
+    $sfc configure -fill.style [BL::color orange]
+    $sfc fill [BL::circle {150 150} 100]
+    $sfc save "./image01.bmp"
+    $sfc destroy
+
+======
+
+
+**Blend2d with and without Tk**
+
+You can run '''Blend2d''' from a tclsh interpreter, without loading '''Tk'''. The following command
+======
+
+package require tclBlend2d
+
+======
+can be used in a '''tclsh''' interpreter to load the package without requiring '''Tk''' support. You will be still able to generate and save images, but of course some subcommands related to Tk won't be available.
+The command
+======
+
+package require tkBlend2d
+
+======
+loads the full package (and requires '''Tk''').
+Note that
+======
+
+package require Blend2d
+
+======
+is equivalent to
+======
+
+package require tkBlend2d
+
+======
+
+
+**BL::Surface and the graphics state parameters**
+
+The main concept of Tcl-Blend2d is the '''Surface'''.
+A '''Surface''' comes with an internal framebuffer (32bit depth, with alpha support) and holds all of the graphics state parameters that describe how drawing is to be done. This includes parameters like the current line width, the current color (or gradient), a 2D transformation matrix and many other things.
+A '''Surface''' can be created with the following commands
+
+   '''BL::Surface''' '''create''' ''sfcName'' ?options?:    creates a new instance of the class '''BL::Surface''' called ''sfcName''. Options can be set at creation time, or later with the '''configure''' method. 
+
+   '''BL::Surface''' '''new''' ?options?:    creates a new instance of the class '''BL::Surface''' returning a new unique ''sfcName''. Options can be set at creation time, or later with the '''configure''' method. 
+
+   ''sfcName'' '''destroy''':    destroys ''sfcName''. Note that in general any oo-object like ''sfcName'' should be explicitly destroyed 
+
+   ''sfcName'' '''dup''':    duplicates ''sfcName''. Return a new BL::Surface. 
+Note: the full stack of options is not duplicated; only the current options are duplicated.
+
+   '''BL::Surface''' '''names''':    returns the list of all the currently allocated surfaces.  The whole set of Surface's options is also called the ''drawing state''. 
+A ''drawing state'' consists of
+
+   *  the 2D transformations that have been applied (i.e. translate, rotate and scale ... see below),
+
+   *  the current values of various attributes controlling how to fill and how to stroke all the basic and complex ''geometric entities'',  and it can be manipulated with the '''cget'''/'''configure''' methods.
+
+   ''sfcName'' '''configure''':    returns a list with all the valid options and their values. 
+
+   ''sfcName'' '''cget''' ''optionName'':    returns the current value of the option ''optionName''. Raise an error if ''optionName'' is not a valid option. 
+
+   ''sfcName'' '''configure''' ''optionName'':    returns a list with two values: the named option and its value. Raise an error if ''optionName'' is not a valid option. 
+
+   ''sfcName'' '''configure''' ''optionName'' ''optionValue'' ?''optionName'' ''optionValue'' ...?:    modifies all the named options with the specified values. Raise an error if any ''optionName'' is not recognized or its ''optionValue'' is not valid; in this case no option is modified. 
+Surface options are:
+
+   '''-threads''' ''count'':    If ''count'' is >=1 then all the rendering commands are queued and executed by worker-threads when needed (i.e. before exporting an image or,if the surface is a Tkimage, in the event-loop) Default is 0 (i.e all the rendering commands are run immediately (synchronous mode)). 
+
+   '''-format''' ''{dx dy {?'''PRGB32''' | '''XRGB32'''?}}'':    sets the size (in pixel) and type of the internal framebuffer. 
+''WARNING'': When user sets a new '''-format''', the previous content of the framebuffer is lost, and the new framebuffer is unitialized (it contains garbage). It is user's responsability to clean it or to properly restore the previous contents. Default is '''{400 400 PRGB32}'''
+
+   '''-matrix''' ''matrix'':    ''matrix'' defines the affine transformations that will be applied to the next geometric entities specified with the "fill" or "stroke" operations See the section "Affine Matrix" for more details. Default is '''{1.0 0.0  0.0 1.0  0.0 0.0}''' (Identity matrix) 
+
+   '''-metamatrix''' ''matrix'':    This is a readonly option. metamatrix is (TO BE DOC'ed...) 
+
+   '''-compop''' ''compositionOp'':    defines how colors should be blended. For further details try googling "Porter-Duff composition" or "Alpha composition". Default is '''SRC_OVER'''. 
+
+   '''-globalalpha''' ''alphaValue'':    defines a global alpha value. ''alphaValue'' should be between '''0.0''' (transparent) and '''1.0''' (opaque). Default value is '''1.0''' 
+
+   '''-fill.style''' ''style'':    defines the style to be used for filling. ''style'' can be a solid-color (with alpha transparency), a gradient,or a pattern ... Default is '''0xFF000000''' (Opaque Black). 
+See the "Setting a style" section below.
+
+   '''-fill.alpha''' ''alphaValue'':    defines the alpha value for '''fill''' operations. ''alphaValue'' should be between '''0.0''' (transparent) and '''1.0''' (opaque). Default value is '''1.0''' 
+
+   '''-fill.rule''' ''mode'':    defines how to fill intersecting curves. Default is '''NON_ZERO''' 
+
+   '''-stroke.style''' ''style'':    defines the style to be used for stroking. ''style'' can be a solid-color (with alpha transparency), a gradient,or a pattern. Default is '''0xFF000000''' (Opaque Black) See above notes for '''-fill.style''' 
+
+   '''-stroke.alpha''' ''alphaValue'':    desfines the alpha value for '''stroke''' operations. ''alphaValue'' should be between '''0.0''' (trasnparent) and '''1.0''' (opaque). Default value is '''1.0''' 
+
+   '''-stroke.width''' ''width'':    defines the width of the strokes (outlines). Default value is '''1.0'''. Note that the stroke width is scaled accordling to the current matrix transformation. If you want a constant width, independent of the current scale factor, you should set the option '''-stroke.transformorder''' to '''BEFORE'''. 
+
+   '''-stroke.dashoffset''' ''offset'':    defines the offset on the rendering of the associated dash array. Default is '''0.0''' 
+
+   '''stroke.join''' ''mode'':    defines how the junction point of two consecutive segment will be stroked. Default is '''MITER_CLIP''' 
+
+   '''-stroke.miterlimit''' ''value'':    defines the limit on the ratio of the miter length to the stroke-width used to draw a miter join. When the limit is exceeded, the join is converted from a miter to a bevel. Default is '''4.0'''. 
+
+   '''-stroke.cap''' ''capMode'':    
+
+   '''-stroke.cap''' {''startCap endCap''}:    ''capMode'' specifies how to render the extremities of the stroke. ''capMode'' may be a list of two values to specify the ''startCap'' and the ''endCap'' separately. Default is '''{BUTT BUTT}''' 
+
+   '''-stroke.transformorder''' ''mode'':    With the default ''mode'' '''AFTER''' the stroke width will be scaled accordling to the current transformation matrix. If ''mode'' is set to '''BEFORE''', the stroke width won't be scaled.   The whole drawing-state can be stored on an ''internal stack'', and you can inspect, save and restore the whole drawing state (i.e. all the options) with just the following commands:  
+
+   ''sfcName'' '''push''':    saves the current graphic-state on an internal stack. 
+
+   ''sfcName'' '''pop''':    pops the graphic-state from the stack. Raise an error if stack is empty. 
+
+   ''sfcName'' '''stacksize''':    returns the size of the internal stack (i.e. number of saved graphic-states) 
+
+   ''sfcName'' '''reset''':    sets the whole surface's graphic-state, including the internal stack. All the options (but '''-format''' and '''-threads''') are reset to their default values.   
+
+***Setting a style***
+
+There are 3 types of styles you can set for strokes and fills: SOLID, GRADIENT, PATTERN
+
+   *  A '''SOLID''' style is an uniform color (with optional alpha transparency). It can be specified as a simple hex number in 0xAARRGGBB format, 0xFFFF0000 is red 0xFF0000FF is blue or through the following utilities:
+
+   '''BL::rgb''' ''RR'' ''GG'' ''BB'' ?''alpha''?:    returns a 0xAARRGGBB color by combining the ''RR'' ''GG'' ''BB'' and the (optional) ''alpha'' arguments. 
+''RR'', ''GG'', ''BB'' are integers 0..255 (best expressed as 0x00..0xFF), ''alpha'' is an optional parameter ranging from 0.0 (transparent) to 1.0 (opaque). Default ''alpha'' is 1.0
+
+   '''BL::color''' ''colorName'' ?''alpha''?:    returns a 0xAARRGGBB color by combining the ''colorName'' and the (optional) ''alpha'' arguments. 
+''colorName'' is a color name (e.g "lightblue") or a numeric-color like #rrggbb, ''alpha'' is an optional parameter ranging from 0.0 (transparent) to 1.0 (opaque). Default ''alpha'' is 1.0
+
+   '''HSB''' ''hue'' ''sat'' ''brightness'' ?alpha?:    This is an alternative way for specifying a color (HSB model). 
+See the "HSB color model" section at the end for more details.
+
+   *  A '''GRADIENT''' can be specified with the following syntax:
+
+   '''BL::gradient''' ''type'' ''values'' ''stopList'' ?options?:     
+
+   *  ''type'' should be one of the following values: LINEAR, RADIAL, CONICAL
+
+   *  ''values'' is a list of parameters (depending on ''type'')
+
+   *  BL::gradient LINEAR {x0 y0 x1 y1} _stopList_ ?_options_?
+
+   *  BL::gradient RADIAL {x0 y0 x1 y1 radius} _stopList_ ?_options_?
+
+   *  BL::gradient CONICAL {x0 y0 angle} _stopList_ ?_options_?
+
+   *  ''stopList'' is a list of offset and colors (at least two pairs of offset color)
+
+   *  ''offset'' is a number between 0.0 and 1.0
+
+   *  ''color'' can be expressed as an hex number (0xAARRGGBB) or with the above cited '''BL::rgb''' , '''BL::color''', '''HSB''' commands.
+
+   *  ''options'' are:
+
+   '''-mode''' ''extendMode'':    defines how to extend or repeat the style outside the defined region. Default is '''PAD'''. See command "'''BL::enum''' '''EXTEND_MODE'''" for valid values. 
+
+   '''-matrix''' ''mtx'':    defines an auxiliary 2D tranformation that should be combined with the current transformation matrix.    Gradient example: 
+======
+
+    # define an oblique LINEAR gradient
+    set gr1 [BL::gradient LINEAR  {0 0 400 400} \ 
+        [list  0.0 [BL::color lightblue]  0.8 [BL::color blue] 1.0 [BL::rgb 0 0 0 0.1]] \ 
+        ]
+    $sfc fill [BL::circle {200 200} 100] -style $gr1
+
+======
+
+
+   *  A '''PATTERN''' can be specified with the following syntax:
+
+   '''BL::pattern''' ''sfcName''|''filename'' ?options?:    defines a pattern based on another ''sourceBitmap'', i.e a ''SfcName'', or an external JPEG,PNG,BMP ''filename''. 
+Valid '''options''' are:
+
+   '''-mode''' ''extendMode'':    same as for '''BL::gradient''' 
+
+   '''-matrix''' ''mtx'':    same as for '''BL::gradient''' 
+
+   '''-from''' ''{x y w h}'':    defines the pattern based on a rectangular subregion of the ''srcBitmap''. ''x'', ''y'', ''w'',''h'' are pixel coords (integer coords)     
+
+***Geometric types***
+
+Blend2D provides both simple geometric types ( line, rectangle, circle ....) and complex geometric types (Path). The main difference between simple and complex geometry types derives from their implementation. Although all the geometric types could be implemented as oo-classes, this will tend to develop programs difficult to maintain, since in Tcl oo-objects should be explicitly destroyed. Therefore most of the following commands for building geometric types don't return oo-objects but simple tcl-lists/dictionaries, that are automatically disposed when they go out of scope.
+Currently just one complex geometry-types ('''BL::Path''') is implemented as oo-class, (and then it's programmers's responsability to explicitly destroy it).
+A simple example for drawing a simple geometry is
+======
+
+$sfcName fill [BL::box 0 0 120 175.8]
+
+======
+The supported simple-geometries are:
+
+   '''BL::line''' ''{x0 y0}'' ''{x1 y1}'':    
+
+   '''BL::polyline''' ''{x0 y0}'' ''{x1 y1}'' ?''{x2 y2}'' ....?:    
+
+   '''BL::polygon''' ''{x0 y0}'' ''{x1 y1}'' ?''{x2 y2}'' ....?:    
+
+   '''BL::box''' ''{x0 y0}'' ''{x1 y1}'':    
+
+   '''BL::rect''' ''x'' ''y'' ''w'' ''h'':    
+
+   '''BL::roundrect''' ''x'' ''y'' ''w'' ''h'' ''rx'' ?''ry''?:    
+
+   '''BL::circle''' ''{cx cy}'' ''r'':    
+
+   '''BL::ellipse''' ''{cx cy}'' ''rx'' ''ry'':    
+
+   '''BL::arc''' ''{cx cy}'' ''rx'' ''ry'' ''start'' ''sweep'':    
+
+   '''BL::pie''' ''{cx cy}'' ''rx'' ''ry'' ''start'' ''sweep'':    
+
+   '''BL::chord''' ''{cx cy}'' ''rx'' ''ry'' ''start'' ''sweep'':    
+
+   '''BL::text''' ''{x y}'' ''font'' ''text'':     Note that all these commands defining ''simple geometry types'' start with a lowercase letter. These commands do not create oo-objects; they simply return a special crafted list that should be passed to the '''fill'''/'''stroke''' methods. These objects (lists/dictionaries!) don't require an explicit "destroy" method. 
+Other than ''simple geometries'' there are ''complex geometries'' like '''BL::Path''' and they will be described in the following sections.
+
+***Drawing on a surface***
+
+
+
+   ''sfcName'' '''stroke''' ''geometry'' ?options?:    draws the outline of the specified ''geometry'', accordling to the current drawing-state. Extra options listed after ''geometry'' are temporary set just for this operation. Note that some options like '''-stroke.width''', '''-stroke.style''', can be abbreviated as '''-width''', '''-style''', and so on. 
+
+   ''sfcName'' '''fill''' '''all'''|''geometry'' ?options?:    draws (fills) the specified ''geometry'', accordling to the current drawing-state. The special geometry '''all''' means "the whole framebuffer". Extra options listed after ''geometry'' are temporary set just for this operation. Note that within this fill operation, the option '''-fill.style''' can be abbreviated as '''-fill'''. 
+
+   ''sfcName'' '''clear''' ?options?:    This is a shorthand for "''sfcName'' '''fill''' '''all''' ?options?"   
+
+***Other Surface commands***
+
+
+
+   ''sfcName'' '''flush''':    flushes the internal rendering command queue and wait for its completion (will block). (only useful in Multi-Thread contexts). This command is normally unnecessary, since a flush() is automatically performed before the image is copied/exported/displayed. 
+
+   ''sfcName'' '''size''':    returns a list of two values: width and height of the surface (in pixel) 
+
+   ''sfcName'' '''userToMeta''':    sets the surface MetaMatrix. TO BE DOC'ed ...   
+
+**BL::Path**
+
+The following commands can be used for creating and manipulating a '''Path''':
+
+   '''BL::Path''' '''create''' ''pathName'':    creates a new instance of the class '''BL::Path''' called ''pathName''. 
+
+   '''BL::Path''' '''new''':    creates a new instance of the class '''BL::Path''' returning a new unique ''pathName''. 
+
+   ''pathName'' '''destroy''':    destroys ''pathName''. 
+
+   ''pathName'' '''dup''':    duplicates ''pathName''. Return a new path 
+
+   '''BL::Path''' '''names''':    returns the list of the currently available paths 
+
+   ''pathName'' '''add''' ''geometry'' ?''geometry'' ...? ?''options''?:    adds one or more ''geometry'' to ''pathName''. ''geometry'' is any geometric type above defined, including the same ''pathName''. 
+Valid options are:
+
+   '''-direction''' ''value'':    ''value'' can be one of '''NONE''', '''CW''', '''CCW'''. Default is '''CW'''. 
+Hint: Use '''CCW''' for adding holes in a path
+
+   '''-matrix''' ''matrix'':    applies a 2D transformation to the added geometries.  
+======
+
+   # starting from Blend2d 1.0, the "add" method also accepts a "BL::text" as a geometry.
+   # All the glyphs are converted and added to a BLPath using a simple layout algorith
+  set fontFace [BL::FontFace new "./Arial.ttf"]
+  set fontName [BL::Font $fontFace 12.0]
+  set blPath [BL::Path new]
+  $blPath add [BL::text {100 100} $font "ABC .. Z"]
+   # then you can get and manipulate its SVG representation 
+  set SVG [$blPath view] 
+  ...
+
+======
+
+
+   ''pathName'' '''newStrokedPath''' ?''stroke-options''?:    creates a new BL::Path made by stroking the current path with the stroking options passed as arguments. Valid stroke-options are:  
+
+   '''-width''' ''value'':    
+
+   '''-dasharray''' ''value'':    
+
+   '''-dashoffset''' ''value'':    
+
+   '''-join''' ''value'':    
+
+   '''-cap''' ''value'':    
+
+   '''-miterlimit''' ''value'':    
+
+   '''-transformorder''' ''value'':     These stroke-options are a subset of the options used for the '''stroke''' method of the '''BL::Surface''' class. 
+======
+
+    # build path0 as a simple triangle
+   set path0 [BL::Path new]
+   $path0 add [BL::polygon {100 100} {150 200} {200 200}]
+    # then derive a new path ... as the prevoius path but with a thick contour and rounded corners ..'
+   set path1 [$path0 newStrokedPath -width 20 -join ROUND]
+
+   ... rememeber to destroy path0 and path1
+
+
+======
+
+
+   ''pathName'' '''addSVGpath''' ''dataString'':    reads and parses the SVG-path-data commands in ''dataString'' and adds the equivalent Blend2d command. ''dataString'' must follow the rules for the "d" property of the SVG path elements, see the specs at https://www.w3.org/TR/SVG/paths.html#DProperty 
+======
+
+    set blPath [BL::Path new]
+    # the following SVG-path is presented in this way just for readability  ..
+    $blPath addSVGpath "
+       M 100 100
+       q -100 0 -200 -100
+       l 10.0 20.1 30 40 50 -5
+       h 1.5e+3
+       Z"
+    # but it can also be specified in a compact form       
+    $blPath addSVGpath "M100+100q-100+0-200-100l10.0,20.1,30,40,50-4H2E+3h1.5e+3Z"
+
+
+======
+
+
+   ''pathName'' '''apply''' ''matrix'':    applies the 2D ''matrix'' transformation to the whole ''pathName''. 
+
+   ''pathName'' '''fitTo''' ''x'' ''y'' ''w'' ''h'':    fits (scale&translate) the whole ''pathName'' into the given rect. 
+
+   ''pathName'' '''moveTo''' ''point0'':    sets the starting ''point0'' (expressed as a list of two numbers) for the next commands .. 
+
+   ''pathName'' '''lineTo''' ''point'' ?''point'' ...?:    
+
+   ''pathName'' '''quadTo''' ''p1'' ''p2'' ?''p1'' ''p2''...?:    
+
+   ''pathName'' '''cubicTo''' ''p1'' ''p2'' ''p3'' ?''p1'' ''p2'' ''p3''...?:    
+
+   ''pathName'' '''smoothQuadTo''' ''p2'' ?''p2''...?:    
+
+   ''pathName'' '''smoothCubicTo''' ''p2'' ''p3'' ?''p2'' ''p3''...?:    
+
+   ''pathName'' '''arcQuadrantTo''' ''point1'' ''point2'':    
+
+   ''pathName'' '''arcTo''' ''pointC'' ''pointR'' ''start'' ''sweep'' ?'''-moveto''' ''boolean''?:    
+
+   ''pathName'' '''ellipticArcTo''' ''point1'' ''pointR'' ''rotation'' ''largeArcFlag'' ''sweepFlag'' ''point1'':    
+
+   ''pathName'' '''close''':    
+
+   ''pathName'' '''reset''':    
+
+   ''pathName'' '''shrink''':    shrinks the internal capacity of the path to fit the current usage. 
+
+   ''pathName'' '''bbox''':    Get the path's bounding-box. 
+Note that bbox does not consider the line-width, offset, caps (these parameters are definied when stroking/filling the path). If path is empty returns '''{0.0 0.0 0.0 0.0}'''
+
+   ''pathName'' '''view''':    Returns the path data in SVG format 
+
+   ''pathName'' '''contour''':    returns the number of countours. 
+
+   ''pathName'' '''contour''' ''i''|'''*''':    returns the number of simple curves of the i-th contour. If '''*''' is specified, return a list with the number of simple curves of every contour. 
+
+   ''pathName'' '''contour''' ''i''|'''*''' ''j''|'''*''' ''OP'' ''t'':    by using the parametric equation B(t) of the j-th curve of the i-th contour, evaluates one of the following ''OP'' functions at value ''t'' (''t'' must be between 0.0 and 1.0):  
+
+   *  '''at''': returns the position {x y} at B(t)
+
+   *  '''tangent''': returns the tangent versor {x y} at B(t)
+
+   *  '''normal''': returns the normal versor {x y} at B(t)
+
+   *  '''tangentAt''': returns the the position and the tangent versor at B(t)
+
+   *  '''normalAt''': returns the the position and the normal versor at B(t)  If '''*''' is specified instead of the contour index, this command returns a list with all the ''OP'' evaluations at ''t'' for the j-th curves of every contour. If some contour has less than j curves, its evaluation is {}.
+If '''*''' is specified instead of the curve index, this command returns a list with all the ''OP'' evaluations at ''t'' for every curve of the i-th contour.
+If '''*''' is specified for both the contour index and the curve index,this command returns a list of list, i.e. for every contours returns a list of the evaluations of ''OP'' at ''t'' for every its single curve.
+
+**BL::FontFace, BL::Font and Glyphs**
+
+''
+Note: Currently text support is still basic and subject to changes.
+''
+Before drawing some text, you need to load some fonts from an external font-file.
+
+   '''BL::FontFace''' '''create''' ''faceName'' ''fontfile'' ?''faceIdx''?:    loads a ''fontfile'' and creates a new instance of the class '''BL::FontFace''' named ''faceName''. 
+If ''fontfile'' is a font collection, you can specify which fontface to load. Default value for ''faceIdx'' is 0 (i.e. the first fontface). if ''faceIdx'' is greater than the number of the available fontfaces, the last fontface is loaded, and it can be inspected with the '''detail''' method.
+
+   '''BL::FontFace''' '''new''' ''fontfile'' ?''faceIdx''?:    loads a ''fontfile'', creates a new instance of the class '''BL::FontFace''' returning a new unique ''faceName''. 
+
+   ''faceName'' '''destroy''':    destroys ''faceName''. Note that in general any oo-object like ''faceName'' should be explicitly destroyed 
+
+   '''BL::FontFace''' '''names''':    returns the list of all the currently allocated fontfaces. 
+
+   ''faceName'' '''details''':    returns a dictionary with some properties of the loaded ''faceName''. 
+These are the currently listed properties ;more properties may be added in future Blend2d releases.
+======
+
+  # load the last fontface from a fontfile-collection
+  #   ("AmericanTypewriter.ttc" can be found in the tclBlend2d-devkit distribution )
+  # Note that I want to load the last fontface, so I specify a large 'faceIdx'
+  # surely greater than the available fontface (.. there're 6 fontfaces in this collection ..) 
+ set fface [BL::FontFace new "./AmericanTypewriter.ttc" 999]
+  # pretty print details
+ dict for {key value} [$fface details] {
+    puts "[format "%25s %s" $key $value]"
+ }
+  # ....
+  # other ops ...
+  #
+ $fface destroy
+
+======
+This produces the following output :
+======
+
+                faceIndex 5
+               glyphCount 916
+                 fullName American Typewriter Condensed Light
+               familyName American Typewriter
+            subfamilyName Condensed Light
+           postScriptName AmericanTypewriter-CondensedLight
+               unitsPerEm 1000
+                   weight 300
+                    style 0
+                  stretch 3
+    hasCharToGlyphMapping 1 
+
+======
+Once a '''BL::FontFace''' has been loaded,and before drawing some text or extracting some glyphs, you should create a '''BL::Font''' object based on an instance of '''BL::FontFace'''
+
+   '''BL::Font''' '''create''' ''fontName'' ''faceName'' ''fontsize'':    creates a new instance of the class '''BL::Font''', based on ''faceName'', having size ''fontsize'' (float). 
+Note that although any text and glyph can be arbitrarialy scaled with the usual 2D trasnsformations, ''fontsize'' can be used to select some special glyphs that some fonts may make available for working with very small font sizes.
+
+   '''BL::Font''' '''new''' ''faceName'' ''fontsize'':    creates a new instance of the class '''BL::Font''' returning a new unique ''fontName''. 
+
+   ''fontName'' '''destroy''':    destroys ''fontName''. Note that in general any oo-object like ''fontName'' should be explicitly destroyed 
+
+   '''BL::Font''' '''names''':    returns the list of all the currently allocated fonts.  A ''fontName'' can be used for drawing some text like in the following example 
+======
+
+  set fontFace [BL::FontFace new "./Arial.ttf"]
+  set fontName [BL::Font $fontFace 12.0]
+  set sfc [BL::Surface new]
+  $sfc fill [BL::text {100 100} $fontName "Hello World"] -style [BL::color orange]
+
+======
+but it can also used for extracting single glyphs from it.
+
+   ''fontName'' '''glyphs''' ''someText'':    returns a list of glyph-indexes, one glyph-index for each (Unicode) character in ''someText''. 
+
+   ''fontName'' '''glyph''' ''glyphIdx'':    returns a new instance of '''BL::Path''' containing the geometrical representation of the given ''glyphIdx''. Raise an error if ''glyphIdx'' is invalid. 
+Note: this method creates a new '''BL::Path'''instance, and it is user's responsability to destroy it explicitly.  Before drawing some text (or a single glyph) you should load a ''fontfile'', then setup a '''BL::Font''' with a given size
+======
+
+    set aFontFace [BL::FontFace new _fontfile_]
+    set aFont [BL::Font new $aFontFace _size_]
+
+======
+note that both '''BL:FontFace''' and '''BL::Font''' create new objects, and therefore it's programmer's responsability to delete them (e.g call "$aFontFace destroy" )
+The easiest way to draw a text on a '''Surface''' is to use the special 'geometry' '''BL::text''' with the fill/stroke methods
+======
+
+    surfaceName fill [BL::text {10 20} $aFont "Hello World!!"]
+
+======
+Of course you can set the drawing-properties of the Surface as usual (color, gradient,line width, matrix transformation ....)
+Alternatively, you can extract a single glyph from a font, store them as a '''BL::Path''', and then manipulate it as usual
+======
+
+    set aGlyph [$font glyph 44]  ;# extract glyph n.44
+    $sfc stroke $aGlyph
+
+======
+Note that the '''glyph''' methods returns a new '''BL::Path''' object,and therefore it is programmer's responsability to free the resources (e.g. "$aGlyph destroy" )
+
+**Applying filters**
+
+TclBlend2d provides two basic ways to work with filters. You can apply a filter to a rectangular region of a Surface (currently only '''blur''' filter), or you can set a filter to a ''script'', so that it will be applied to all the graphical primitives that will be rendered by this script.
+
+   ''sfcName'' '''blur''' ''radius'' ?'''-rect''' ''{x y w h}''?:    applies a blur filter of size ''radius'' (from 2 to 254) to a rectangular region of ''sfcName'' 
+Valid '''options''' are:
+
+   '''-rect''' ''{x y w h}'':    defines the rectangular subregion where the blur filter will be applied. ''x'', ''y'', ''w'',''h'' are pixel coords (integer coords) 
+If '''-rect''' is not specified , the blur filter will be applied to the whole surface.
+
+   ''sfcName'' '''filter''' ''filterType'' ?filter-args? ''script'':    all the graphical primitives created by this ''script'' that will be rendered on ''sfcName'' will be redirected on a special temporary layer, then the filter will be applied to this temporary layer and then it will be blended with the underlying Surface. 
+Parameters are:
+
+   ''filterType'':    Valid values are '''blur''', '''shadow''', and the special filter '''ignore'''. This latter filter means that no filter will be applied. 
+
+   ''filter-args'':    A list of options for ''filterType''. (see below .....) 
+
+   ''script'':    A tcl script. Usually this script should contain some rendering commands on ''sfcName''. All these commands will temporary redirected to an automatically allocated temporary Surface. This temporary surface is initialized as a transparent surface and has the same 'state' (e,g the set of options) of ''sfcName''. When ''script'' ends, the filter is applied to the whole temporary surface (or better, only to the bounding-box of the rendered primitives), and finally, this temporary Surface will be blended with the underlying ''sfcName''. 
+Note that if this script changes the state of the (redirected) ''sfcName'', these changes will be also visible in the original ''sfcName''.
+Warning: take care of not "popping" the initial stack level of ''sfcName''. Method '''push''' and '''pop''' are allowed within ''script'' as long as they are properly paired.
+
+***filter-args for "blur" filter***
+
+
+
+   '''-radius''' ''radius'':    blur radius (from 2 to 254). Default is '''5''' pixels.  
+
+***filter-args for "shadow" filter***
+
+
+
+   '''-radius''' ''radius'':    blur radius (from 2 to 254). Default is '''5''' pixels. 
+
+   '''-dxy''' {''dx'' ''dy''}:    dx,dy translation of the blurred shadow. Default is '''{3 5}''' 
+
+   '''-color''' ''color'':    shadow color . Default is [['''BL::color gray30''']]  
+======
+
+	$sfc reset
+	$sfc clear -style [BL::color white]
+	 #
+	 # --- a shadowed blue/white/red disc
+	 #
+	set center {100 150}
+	$sfc filter shadow -radius 20 -dxy {5 9} {
+		foreach circleRadius {90 60 30} color {lightblue white red} {
+			$sfc fill [BL::circle $center $circleRadius] -style [BL::color $color]		
+		}
+	}
+	 #
+	 # --- three shadowed discs	
+	 #
+	set center {300 150}
+	foreach circleRadius {90 60 30} color {lightblue white red} {
+		$sfc filter shadow -radius 20 -dxy {5 9} {
+			$sfc fill [BL::circle $center $circleRadius] -style [BL::color $color]		
+		}
+	}
+
+======
+
+
+**Exchanging pixmaps**
+
+Blend2d provides commands for loading graphics files in a Surface, as well for saving the Surface's internal framebuffer in a graphic file. Blend2d provides commands for copying (part of) the internal framebuffer among different Surfaces. If the Tk support is loaded, that is if you loaded the '''Blend2d''' or '''tkBlend2d''' packages, you can also exchange parts of the Surfaces framebuffer with tk '''photo''' images.
+
+***read/write files***
+
+
+
+   ''sfcName'' '''load''' ''filename'':    loads the contents of ''filename''. Supported formats: png, jpeg, bmp. 
+WARNING: the internal framebuffer is resized.
+
+   ''sfcName'' '''save''' ''filename'' ?'''-format''' ''file-format''?:    saves the internal framebuffer in ''filename'' If '''-format''' is not specified, this command tries to guess the ''file-format'' from the file extension. 
+NOTE: currently only BMP and PNG encoder are available
+
+***copy among surfaces***
+
+
+
+   ''sfcName'' '''copy''' ''srcSurface'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{xp yp}''? ?'''-compop''' ''op''? ?'''-globalalpha''' ''alpha''?:    
+
+   ''sfcName'' '''copy''' ''srcSurface'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x y w h}''? ?'''-compop''' ''op''? ?'''-globalalpha''' ''alpha''?:    copies (a sub-region of) ''srcSurface'' to the current ''sfcName''. If no options are specified, this command copies the whole ''srcSurface'' starting at coordinates (0,0). 
+The following options may be specified:
+
+   '''-from''' ''{x y w h}'':    specifies a rectangular sub-region of the surface to be copied. The pixels copied will include the left and top edges of the specified rectangle but not the bottom or right edges. If the '''-from''' option is not given, the default is the whole surface. 
+
+   '''-to''' ''{x y}'':    specifies where to place the source sub-region in the current surface. The current surface is never resized, therefore, all parts of the ''srcSurface'' that will be placed outside this surface will be excluded (clipped). 
+
+   '''-to''' ''{x y  w h}'':    specifies a rectangular sub-region of the current surface. The source sub-region is scaled to fit into destination rectangle. 
+
+   '''-compop''' ''value'':    applies a composition-operation to the pixels that will be copied. If this option is not specified, the current value of the '''-compop''' option is used. 
+
+   '''-globalalpha''' ''alpha'':    ''srcSurface'' will be blitted using ''alpha'' transparency. If this option is not specified, the current value of the '''-globalalpha''' option is used.  copies (a sub-region of) ''srcSurface'' to the current ''sfcName''. If no options are specified, this command copies the whole ''srcSurface'' starting at coordinates (0,0). 
+Note that if there's a matrix-trasformation (rotation, scaling, ..) on the current surface, this transformation will be applied to all points of the destination sub-region (i.e. the '''-from''' rectangle will be rotated, scaled, ...)
+
+   ''sfcName'' '''rawcopy''' ''srcSurface'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x y w h}''? ?'''-compop''' ''op''? ?'''-globalalpha''' ''alpha''?:    similar to the '''copy''' method. The only difference is that the source region (those specified by the '''-from''' option) will be copied in ''sfcName'' *without* any transformation. 
+The default '''-compop''' mode is '''SRC_OVER'''.
+
+***reading/writing tkphoto***
+
+These commands require the '''Blend2d''' or '''tkBlend2d''' package. These commands are not available if you loaded the '''tclBlend2d''' package;
+
+   ''sfcName'' '''readFromTkphoto''' ''tkphoto'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x0 y0 w h}''?:    copies (a sub-region of) ''tkphoto'' to the current ''sfcName''. If no options are specified, this command copies the whole ''srcSurface'' starting at coordinates (0,0). 
+NOTE: ''sfcName'' is not resized; you should take care to resize it in order to get all the portion of the tkphoto you are interested in.
+
+   ''sfcName'' '''writeToTkphoto''' ''tkphoto'' ?'''-from''' ''{x0 y0 w h}''? ?'''-to''' ''{x0 y0 w h}''?:    copies (a sub-region of) ''sfcName'' to the current ''sfcName''. If no options are specified, this command copies the whole ''srcSurface'' starting at coordinates (0,0).   
+
+**Creating a blend2d (tk-)image**
+
+These commands require the "Blend2d" or "tkBlend2d" package. These commands are not available if you loaded the "tclBlend2d" package;
+
+   '''image''' '''create''' '''blend2d''' ?''name''? ?''options''?:    Similar to the standard command "'''image create photo ...'''", this command creates a new image of type '''blend2d''' plus a new surface-object that can be used for manipulating the image. 
+Options are the same options used for the "'''BL::Surface create ..'''" command.
+The image can then be embedded in a widget (like a "label" or a "canvas"); every command like '''fill''', '''stroke''' issued to the image name, will immediately change the displayed image.
+Both "'''image delete sfcName'''" and "''sfcName'' '''destroy'''" can be used to delete the image AND the related surface-object.
+
+**Other BL:: commands**
+
+
+
+   '''BL::classes''' :    lists the name of the BL classes (e.g BL::Surface,BL::Path, ...) 
+
+   '''BL::classinfo''' ''objectName'':    returns the class name of ''objectName''. ''objectName'' can be any '''tcloo''' object (not limited to BL:: objects) 
+
+   '''BL::codecs''' :    lists the supported graphics file formats. 
+For each supported graphic file formats, returns a detailed list made of 5 elements: '''id''', '''vendor''', '''mimeType''', '''extensions''', '''features'''.
+
+   *  '''id''' is the key element to be used in load/save operations (e.g. JPEG)
+
+   *  '''vendor''' is the name of the codec's vendor.
+
+   *  '''mimetype''' is a string (e.g. image/jpeg)
+
+   *  '''extensions''' is a sequence of recognized filename-extensions; elements are separated by "|" (e.g. jpg|jpeg|jif|jfi|jfif)
+
+   *  '''features''' is a list of supported features
+
+   *  '''READ''': reading is supported
+
+   *  '''WRITE''': writing is supported
+
+   *  '''LOSSY''': loosy compression
+
+   *  '''LOSSLESS''': lossless compression
+
+   *  '''MULTI_FRAME''': multiple frames (GIF).
+
+   *  '''IPTC''': supported IPTC metadata.
+
+   *  '''EXIF''': supported EXIF metadata.
+
+   *  '''XMP''': supported XMP metadata.
+
+   '''BL::enum''' :    lists all the enum categories 
+
+   '''BL::enum''' ''category'':    lists all the values for that _category_ e.g. BL::enum GRADIENT_TYPE --> LINEAR RADIAL CONICAL 
+
+   '''BL::libinfo''' :    returns a dictionary with info about the core Blend2d library. The dictionary keys are '''version''', '''type''' (build-type) 
+
+   '''BL::platform''' :    returns a dictionary with info about the cpu architecture and the cpu features used by Blend2d. The dictionary keys are '''cpuArch''', '''cpuFeatures''', '''coreCount'''.   
+
+**Auxiliary utilities**
+
+Blend2d provides some small helpers for working with transformation-matrix and colors
+
+***Affine matrix***
+
+An affine matrix is a 3x3 matrix whose last column is fixed 0 0 1
+======
+
+    a b 0
+    c d 0
+    e f 1
+
+======
+Given this rule it is convenient to express such matrices as a list of 6 numbers { a b c d e f } instead of 9 numbers.
+Working with these matrices can be simplified by using the '''Mtx''' package included in Blend2D.
+In the following paragraphs "M" stands for a matrix (a list of 6 numbers), "P" stands for a 2D point (a list of 2 numbers).
+The following ops are supported
+
+   '''Mtx::identity''' :    returns the identity matrix '''{1 0 0 1 0 0}''' 
+
+   '''Mtx::MxM''' ''M1'' ''M2'':    matrix multiplication 
+
+   '''Mtx::determinant''' ''M'':    
+
+   '''Mtx::invert''' ''M'':    matrix inversion - Raise an error if ''M'' is not invertible. 
+
+   '''Mtx::PxM''' ''P'' ''M'':    map a Point 
+
+   '''Mtx::multiPxM''' ''Points'' ''M'':    map a list of Points 
+
+   '''Mtx::P-P''' ''P1'' ''P2'':    return P1-P2 
+
+   '''Mtx::VxM''' ''V'' ''M'':    map a vector ''V'' : VxM(V,M) = PxM(V,M)-PxM(0,M) 
+
+   '''Mtx::translation''' ''dx'' ''dy'':    
+
+   '''Mtx::scale''' ''sx'' ?''sx''? ?''C''?:    scale sx sy around the fixed-point C 
+
+   '''Mtx::rotation''' ''angle'' '''radians'''|'''degrees''' ?''C''?:    performs a rotation of ''angle'' around the fixex-point ''C'' 
+
+   '''Mtx::skew''' ''sx'' ''sy'':    
+
+   '''Mtx::xreflection''' :    
+
+   '''Mtx::yreflection''' :    
+
+   '''Mtx::translate''' ''M'' ''dx'' ''dy'':    
+
+   '''Mtx::post_translate''' ''M'' ''dx'' ''dy'':    
+
+   '''Mtx::scaling''' ''M'' ''sx'' ''sy'' ?''C''?:    
+
+   '''Mtx::post_scaling''' ''M'' ''sx'' ''sy'' ?''C''?:    
+
+   '''Mtx::rotate''' ''M'' ''angle'' '''radians'''|'''degrees''' ?''C''?:    
+
+   '''Mtx::post_rotate''' ''M'' ''angle'' '''radians'''|'''degrees''' ?''C''?:    
+
+   '''Mtx::yreflect''' ''M'':     
+
+***HSB color model***
+
+Blend2d internally works with colors expressed in terms of red,green,blue and alpha channels, but in some cases it is more natural to express color following the HSB color model, where:
+
+   *  h (hue) is a 0.0..360.0 angle
+
+   *  s (saturation) is 0.0 .. 1.0
+
+   *  b (brigthess) is 0.0 .. 1.0 ( 0 is black, 1 is white )  The following commands are availables for converting between between ARGB and HSB color models. alpha is 0.0 .. 1.0
+
+   '''HSB''' ''h'' ''s'' ''b'' ?''alpha''?:    returns an ARGB number (in decimal notation, not in hex notation) 
+
+   '''RGB2HSB''' ''0xAARRGGBB'':    returns a list with the HSB components. { h s b alpha }   
+
+**Limitations**
+
+
+
+   *  Saving a Surface is currently limited to BMP or PNG files.
+
+   *  The '''-stroke.dasharray''' option is currently a no-op.
+
+**KEYWORDS**
+
+
+graphics
+
+
+**CATEGORY**
+
+
+vector grahics
+
+
+**COPYRIGHT**
+
+ Copyright (c) 2021..2023 - A.Buratti
