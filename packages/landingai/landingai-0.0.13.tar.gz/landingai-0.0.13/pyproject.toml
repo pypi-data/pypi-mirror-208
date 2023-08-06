@@ -1,0 +1,51 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "landingai"
+version = "0.0.13"
+description = "Helper library for interacting with Landing AI LandingLens"
+authors = ["Landing AI <dev@landing.ai>"]
+readme = "README.md"
+packages = [{include = "landingai"}]
+
+[tool.poetry.urls]
+"Homepage" = "https://landing.ai"
+"repository" = "https://github.com/landing-ai/landingai-python"
+"documentation" = "https://landing-ai.github.io/landingai-python/landingai.html"
+
+[tool.poetry.dependencies]  # main dependency group
+python = ">=3.8"
+
+opencv-python-headless = ">=4.5"
+numpy = ">=1.21.0"
+pillow = ">=9.1.1"
+pydantic = { version = "*", extras = ["dotenv"] }
+requests = "*"
+segmentation-mask-overlay = "*"
+
+[tool.poetry.group.dev.dependencies]
+autoflake = "*"
+pytest = "*"
+black = "*"
+flake8 = "*"
+isort = "*"
+pdoc = "*"
+
+[tool.poetry.group.examples.dependencies]
+jupyterlab = "*"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.black]
+exclude = '.vscode|.eggs|venv'
+line-length = 88               # suggested by black official site
+
+[tool.isort]
+line_length = 88
+profile = "black"
