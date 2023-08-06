@@ -1,0 +1,100 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: "1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out the repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+        cache: 'pip'
+        cache-dependency-path: 'setup.cfg'
+
+    - name: Upgrade pip and nox
+      run: |
+        python -m pip install --upgrade pip nox
+        pip --version
+        nox --version
+
+    - name: Lint code and check dependencies
+      run: nox -s lint safety
+
+  tests:
+    timeout-minutes: 20
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macos-latest]
+        pyv: ['3.8', '3.9', '3.10', '3.11']
+        exclude:
+        - os: windows-latest
+          pyv: '3.9'
+        - os: windows-latest
+          pyv: '3.10'
+        - os: macos-latest
+          pyv: '3.9'
+        - os: macos-latest
+          pyv: '3.10'
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python ${{ matrix.pyv }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.pyv }}
+        cache: 'pip'
+        cache-dependency-path: 'setup.cfg'
+
+    - name: Cache .nox
+      uses: actions/cache@v3
+      id: cache-nox
+      with:
+        path: .nox
+        key: nox-${{ env.pythonLocation }}-${{ hashFiles('setup.cfg') }}-${{ hashFiles('noxfile.py') }}
+
+    - name: Skip installing dependencies if .nox directory is cached
+      shell: bash
+      run: echo SKIP_DEPS_INSTALL="${{ steps.cache-nox.outputs.cache-hit }}" >> $GITHUB_ENV
+
+    - name: Upgrade pip and nox
+      run: |
+        python -m pip install --upgrade pip nox
+        pip --version
+        nox --version
+
+    - name: Pre-build reflink wheel (#477)
+      run: python -m pip install reflink
+
+    - name: Run tests
+      run: nox -s tests-${{ matrix.nox_pyv || matrix.pyv }} -- --cov-report=xml --durations=10
+
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v3.1.1
+
+    - name: Build package
+      run: nox -s build
