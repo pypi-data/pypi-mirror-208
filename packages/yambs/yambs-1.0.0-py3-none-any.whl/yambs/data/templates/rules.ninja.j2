@@ -1,0 +1,19 @@
+include $include_dir/chips/$chip/chip.ninja
+include $include_dir/toolchains/$toolchain/toolchain.ninja
+
+cflags = $common_cflags -march=$arch -mcpu=$cpu $target_extra_cflags $
+         $toolchain_cflags
+
+tool = {{toolchains_root}}/${toolchain}-{{cc}}
+
+rule cc
+  depfile = $out.d
+  deps = gcc
+  command = $tool -MD -MF $out.d $cflags -c $in -o $out
+
+ldflags = -T$include_dir/chips/$chip/chip.ld
+
+rule link
+  command = $tool $cflags $ldflags $in -o $out
+
+build_dir = {{build_root}}/$toolchain/$arch/$cpu
