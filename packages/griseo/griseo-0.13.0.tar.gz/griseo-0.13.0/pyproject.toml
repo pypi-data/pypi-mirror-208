@@ -1,0 +1,41 @@
+# Copyright 2023 Korandoru Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[tool.poetry]
+name = "griseo"
+version = "0.13.0"
+description = "Chat with OpenAI in the Hacker way."
+authors = ["tison <wander4096@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/korandoru/griseo"
+repository = "https://github.com/korandoru/griseo"
+documentation = "https://github.com/korandoru/griseo"
+keywords = ["chatgpt", "cli", "openai"]
+
+include = ["griseo/prompts/*.jsonl"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+openai = "^0.27.4"
+python-dotenv = "^1.0.0"
+tenacity = "^8.2.2"
+prompt-toolkit = "^3.0.38"
+
+[tool.poetry.scripts]
+griseo = "griseo:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
