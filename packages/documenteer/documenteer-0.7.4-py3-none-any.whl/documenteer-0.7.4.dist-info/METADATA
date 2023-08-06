@@ -1,0 +1,130 @@
+Metadata-Version: 2.1
+Name: documenteer
+Version: 0.7.4
+Summary: Rubin Observatory / LSST Sphinx documentation tools, extensions, and configurations.
+License: The MIT License (MIT)
+        
+        Copyright (c) 2015-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://documenteer.lsst.io
+Project-URL: Source, https://github.com/lsst-sqre/documenteer
+Keywords: rubin,lsst
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Documentation
+Classifier: Topic :: Documentation :: Sphinx
+Classifier: Framework :: Sphinx :: Extension
+Classifier: Environment :: Console
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: Sphinx (>=2.4.0)
+Requires-Dist: PyYAML
+Requires-Dist: GitPython
+Requires-Dist: requests
+Requires-Dist: click
+Requires-Dist: sphinxcontrib-bibtex (>=2.0.0)
+Requires-Dist: pydantic
+Requires-Dist: tomli ; python_version < "3.11"
+Requires-Dist: importlib-metadata ; python_version < "3.8"
+Provides-Extra: dev
+Requires-Dist: twine ; extra == 'dev'
+Requires-Dist: coverage[toml] ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pytest-mock ; extra == 'dev'
+Requires-Dist: lxml ; extra == 'dev'
+Requires-Dist: cssselect ; extra == 'dev'
+Requires-Dist: sphinx-click ; extra == 'dev'
+Requires-Dist: sphinxcontrib-autoprogram ; extra == 'dev'
+Requires-Dist: types-setuptools ; extra == 'dev'
+Requires-Dist: types-requests ; extra == 'dev'
+Requires-Dist: types-PyYAML ; extra == 'dev'
+Requires-Dist: types-docutils ; extra == 'dev'
+Requires-Dist: types-mock ; extra == 'dev'
+Provides-Extra: guide
+Requires-Dist: sphinx-design ; extra == 'guide'
+Requires-Dist: pydata-sphinx-theme (<0.13.0,>=0.10.0) ; extra == 'guide'
+Requires-Dist: sphinx-autodoc-typehints ; extra == 'guide'
+Requires-Dist: sphinx-automodapi ; extra == 'guide'
+Requires-Dist: sphinx-copybutton ; extra == 'guide'
+Requires-Dist: sphinx-prompt ; extra == 'guide'
+Requires-Dist: myst-parser ; extra == 'guide'
+Requires-Dist: markdown-it-py[linkify] ; extra == 'guide'
+Requires-Dist: sphinxcontrib-mermaid ; extra == 'guide'
+Requires-Dist: sphinxext-opengraph ; extra == 'guide'
+Provides-Extra: pipelines
+Requires-Dist: sphinx (<7.0.0) ; extra == 'pipelines'
+Requires-Dist: lsst-sphinx-bootstrap-theme (<0.3.0,>=0.2.0) ; extra == 'pipelines'
+Requires-Dist: numpydoc ; extra == 'pipelines'
+Requires-Dist: sphinx-automodapi ; extra == 'pipelines'
+Requires-Dist: sphinx-jinja ; extra == 'pipelines'
+Requires-Dist: sphinxcontrib-autoprogram ; extra == 'pipelines'
+Requires-Dist: sphinx-prompt ; extra == 'pipelines'
+Requires-Dist: sphinxcontrib-doxylink ; extra == 'pipelines'
+Requires-Dist: sphinx-click ; extra == 'pipelines'
+Provides-Extra: technote
+Requires-Dist: sphinx (<7.0.0) ; extra == 'technote'
+Requires-Dist: lsst-dd-rtd-theme (<0.3.0,>=0.2.3) ; extra == 'technote'
+Requires-Dist: sphinx-prompt ; extra == 'technote'
+
+[![Documentation](https://img.shields.io/badge/documenteer-lsst.io-brightgreen.svg)](https://documentation.lsst.io)
+[![PyPI](https://img.shields.io/pypi/v/documenteer.svg?style=flat-square)](https://pypi.python.org/pypi/documenteer)
+[![For Python 3.7+](https://img.shields.io/pypi/pyversions/documenteer.svg?style=flat-square)](https://pypi.python.org/pypi/documenteer)
+[![MIT license](https://img.shields.io/pypi/l/documenteer.svg?style=flat-square)](https://pypi.python.org/pypi/documenteer)
+[![CI](https://github.com/lsst-sqre/documenteer/actions/workflows/ci.yaml/badge.svg)](https://github.com/lsst-sqre/documenteer/actions/workflows/ci.yaml)
+[![Weekly CI](https://github.com/lsst-sqre/documenteer/actions/workflows/ci-cron.yaml/badge.svg)](https://github.com/lsst-sqre/documenteer/actions/workflows/ci-cron.yaml)
+
+# Documenteer
+
+Documenteer provides tools, extensions, and configurations for Rubin Observatory's Sphinx documentation projects, [user guides](https://documenteer.lsst.io/guides/index.html), [technotes](https://developer.lsst.io/project-docs/technotes.html) and EUPS-packaged stacks (such as the [LSST Science Pipelines](https://pipelines.lsst.io)).
+
+For more information about Documenteer, see the documentation at https://documenteer.lsst.io.
+
+Browse the [lsst-doc-engineering](https://github.com/topics/lsst-doc-engineering) GitHub topic for more Rubin Observatory documentation engineering projects.
+
+## Quick installation:
+
+For [user guides](https://documenteer.lsst.io/guides/index.html):
+
+```sh
+pip install "documenteer[technote]"
+```
+
+For [technical note projects](https://documenteer.lsst.io/technotes/index.html):
+
+```sh
+pip install "documenteer[technote]"
+```
+
+For the [stack projects](https://documenteer.lsst.io/pipelines/index.html) (such as the [LSST Science Pipelines](https://pipelines.lsst.io)):
+
+```sh
+pip install "documenteer[pipelines]"
+```
