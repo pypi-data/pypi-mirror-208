@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://collimator.ai/models/link-uiprops.schema.json",
+
+  "title": "Link UI Props",
+  "description": "Link UI-specific properties that need to be persisted (eg. color, shape, style, etc...)",
+  "type": "object",
+
+  "properties": {
+    "link_type": { "$ref": "#/definitions/link_type" },
+    "segments": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/segment" }
+    },
+    "hang_coord_start": {
+      "type": "object",
+      "description": "The coordinate of the visual beginning of the link when it does not have a source port connection.",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": ["x", "y"]
+    },
+    "hang_coord_end": {
+      "type": "object",
+      "description": "The coordinate of the visual ending of the link when it does not have a source port connection.",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": ["x", "y"]
+    }
+  },
+  "required": ["link_type", "segments"],
+
+  "definitions": {
+    "fake_tapped_segment_type": {
+      "title": "FakeTappedSegmentType",
+      "type": "string",
+      "enum": ["sstart", "smiddle", "send", "start", "end"]
+    },
+
+    "link_type": {
+      "title": "LinkTypeType",
+      "description": "Describes the type of link in terms of whether it's connected directly to a node or tapped from a link. Link UUID is specified in the case of being (visually) tapped from an orphaned (unconnected) link in the model.",
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "connection_method": {
+              "enum": ["direct_to_block"]
+            }
+          },
+          "required": ["connection_method"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "connection_method": {
+              "enum": ["link_tap"]
+            },
+            "tapped_link_uuid": {
+              "type": "string",
+              "description": "The UUID of the tapped link."
+            },
+            "tapped_segment": {
+              "description": "Descriptor for the semantic visual type of link",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "segment_type": { "$ref": "#/definitions/fake_tapped_segment_type" },
+                    "tapped_segment_direction": {
+                      "enum": ["horiz", "vert"]
+                    }
+                  },
+                  "required": ["segment_type"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "segment_type": { "enum": ["real"] },
+                    "tapped_segment_index": {
+                      "type": "number",
+                      "description": "The index of the segment in the tapped link."
+                    },
+                    "tapped_segment_direction": {
+                      "enum": ["horiz", "vert"]
+                    }
+                  },
+                  "required": ["segment_type", "tapped_segment_index"]
+                }
+              ]
+            },
+            "tap_coordinate": {
+              "type": "number",
+              "description": "The visual location coordinate for the tap's starting point (Y if vertical segment, X if horizontal segment). The other coordinate will be derived from the segment's defined location."
+            }
+          },
+          "required": [
+            "connection_method",
+            "tapped_link_uuid",
+            "tapped_segment",
+            "tap_coordinate"
+          ]
+        }
+      ]
+    },
+
+    "segment": {
+      "type": "object",
+      "title": "LinkSegmentType",
+      "properties": {
+        "segment_direction": {
+          "type": "string",
+          "description": "The type (direction) of line segment to draw",
+          "enum": ["horiz", "vert"]
+        },
+        "coordinate": {
+          "type": "number",
+          "description": "The X (if vert) or Y (if horiz) coordinate of this segment."
+        }
+      },
+      "required": ["segment_direction", "coordinate"]
+    }
+  }
+}

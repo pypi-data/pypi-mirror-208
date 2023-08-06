@@ -1,0 +1,52 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/constant.json",
+
+  "base": {
+    "name": "Constant",
+    "namespace": "core",
+    "description": "Returns a given constant value.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#constant",
+    "supports_experiments": true
+  },
+
+  "modes": {
+    "time": "constant"
+  },
+
+  "ports": {
+    "outputs": {
+      "static": [
+        {
+          "name": "out_0",
+          "parameter_definitions": [
+            {
+              "name": "dtype",
+              "data_type": "string",
+              "default_value": "auto",
+              "allowed_values": ["auto", "double", "bool", "int"],
+              "description": "Data type of the output signal. 'auto' means ",
+              "feature_level": "dev"
+            },
+            {
+              "name": "shape",
+              "data_type": "any",
+              "default_value": "()",
+              "description": "Shape or dimension of the output signal, follows numpy syntax like: (2,3) or ()",
+              "feature_level": "dev"
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  "parameter_definitions": [
+    {
+      "name": "value",
+      "description": "The value to return",
+      "data_type": "float",
+      "default_value": "0.0"
+    }
+  ]
+}

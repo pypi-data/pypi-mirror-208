@@ -1,0 +1,57 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/product.json",
+  "base": {
+    "name": "Product",
+    "namespace": "core",
+    "description": "Multiplies all inputs together",
+    "development_notes": "the parameter operators must be used to configure the number of block inputs. this algorithm can be found in maths.py/Product/compute_configuration",
+    "keywords": [
+      "multiply",
+      "divide"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#product",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 2,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "operators",
+      "description": "A string of '*' or '/' operators to apply multiplication or division on the respective inputs",
+      "data_type": "string",
+      "default_value": "**",
+      "hidden": true
+    },
+    {
+      "name": "divide_by_zero_behavior",
+      "description": "User input to define the behavior. Two options. 1] return inf and raise RuntimeWarning, or 2] prevent it by preventing denominator being zero.",
+      "data_type": "string",
+      "default_value": "inf",
+      "allowed_values": [
+        "inf",
+        "limit_denominator"
+      ]
+    },
+    {
+      "name": "denominator_limit",
+      "description": "When the abs(denominator) is between zero and denominator_limit, the denominator will be set to denominator_limit, with its sign preserved. divide_by_zero_behavior must be set to limit_denominator for this to have an effect. Negative values for denominator_limit are converted to positive.",
+      "data_type": "float",
+      "default_value": "1e-12"
+    }
+  ]
+}

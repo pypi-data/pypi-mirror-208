@@ -1,0 +1,44 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/cosine_wave.json",
+  "base": {
+    "name": "CosineWave",
+    "namespace": "core",
+    "description": "Generates a cosine wave based on the simulation time.\n\ny(t) = amplitude * cos(t*frequency + phase) + bias.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#cosine-wave"
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "frequency",
+      "description": "Frequency in rad/s.",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "amplitude",
+      "description": "Amplitude of the signal.",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "phase",
+      "description": "Phase shift in rad.",
+      "data_type": "float",
+      "default_value": "0.0"
+    },
+    {
+      "name": "bias",
+      "description": "Constant bias added to the signal.",
+      "data_type": "float",
+      "default_value": "0.0"
+    }
+  ]
+}

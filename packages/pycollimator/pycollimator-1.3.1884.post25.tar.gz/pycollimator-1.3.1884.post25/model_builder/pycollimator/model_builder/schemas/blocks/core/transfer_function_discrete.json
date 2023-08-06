@@ -1,0 +1,41 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/transfer_function_discrete.json",
+  "base": {
+    "name": "TransferFunctionDiscrete",
+    "namespace": "core",
+    "description": "Models a linear system by a transfer function of the discrete time system variable z.",
+    "development_notes": "the order of the denominator must be greater than the numerator. leading zeros in either num or den should be pruned.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#transfer-function-discrete",
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": false
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "discrete_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "numerator_coefficients",
+      "data_type": "any",
+      "default_value": "[1]",
+      "description": "Coefficients of the polynomial of discrete time variable z for the numerator of the transfer function."
+    },
+    {
+      "name": "denominator_coefficients",
+      "data_type": "any",
+      "default_value": "[1, 1]",
+      "description": "Coefficients of the polynomial of discrete time variable z for the denominator of the transfer function."
+    }
+  ]
+}

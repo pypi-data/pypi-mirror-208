@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "BlockOverride": {
+            "properties": {
+                "outputs": {
+                    "$ref": "#/definitions/PortOverrides"
+                },
+                "parameters": {
+                    "$ref": "#/definitions/ParameterOverrides"
+                },
+                "path": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "type": "object"
+        },
+        "ParameterOverrides": {
+            "additionalProperties": {
+                "$ref": "#/definitions/ParameterValueOverride"
+            },
+            "type": "object"
+        },
+        "ParameterValueOverride": {
+            "properties": {
+                "is_string": {
+                    "type": "boolean"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "value"
+            ],
+            "type": "object"
+        },
+        "PortOverride": {
+            "properties": {
+                "parameters": {
+                    "$ref": "#/definitions/ParameterOverrides"
+                }
+            },
+            "type": "object"
+        },
+        "PortOverrides": {
+            "additionalProperties": {
+                "$ref": "#/definitions/PortOverride"
+            },
+            "type": "object"
+        },
+        "RecordedSignals": {
+            "properties": {
+                "signal_ids": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "signal_ids"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "block_overrides": {
+            "items": {
+                "$ref": "#/definitions/BlockOverride"
+            },
+            "type": "array"
+        },
+        "recorded_signals": {
+            "$ref": "#/definitions/RecordedSignals"
+        }
+    },
+    "type": "object"
+}

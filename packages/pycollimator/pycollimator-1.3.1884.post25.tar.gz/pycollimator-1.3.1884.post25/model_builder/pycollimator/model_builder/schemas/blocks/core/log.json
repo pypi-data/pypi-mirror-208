@@ -1,0 +1,36 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/log.json",
+  "base": {
+    "name": "Log",
+    "namespace": "core",
+    "description": "Outputs the logarithm of base N of the inputs, where N is specified by the user.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#log",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "base",
+      "data_type": "string",
+      "default_value": "2",
+      "description": "Base for the logarithm operation.",
+      "allowed_values": [
+        "natural",
+        "2",
+        "10"
+      ]
+    }
+  ]
+}

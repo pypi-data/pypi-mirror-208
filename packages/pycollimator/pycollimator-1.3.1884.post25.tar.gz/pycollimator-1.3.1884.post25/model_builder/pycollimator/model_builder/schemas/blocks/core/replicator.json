@@ -1,0 +1,26 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "base": {
+    "name": "Replicator",
+    "namespace": "core",
+    "description": "replcaite a submodel N times.",
+    "extra_parameters": true,
+    "hidden": true,
+    "feature_level": "dev"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "any"
+  },
+  "ports": {
+    "has_automatic_ports": true
+  },
+  "parameter_definitions": [
+    {
+      "name": "instances",
+      "data_type": "int",
+      "default_value": "2",
+      "description": "the number of instances/replicas"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/signal_routing/mux.json",
+  "base": {
+    "name": "Mux",
+    "namespace": "core",
+    "description": "Create a vector signal from all of the inputs.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#mux",
+    "supports_experiments": true
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 2,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  }
+}

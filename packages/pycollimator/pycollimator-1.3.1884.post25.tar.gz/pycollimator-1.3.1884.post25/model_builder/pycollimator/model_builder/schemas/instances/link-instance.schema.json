@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://collimator.ai/models/link-instance.schema.json",
+
+  "title": "Link Instance",
+  "description": "Connection between two nodes",
+  "type": "object",
+
+  "properties": {
+    "uuid": { "$ref": "uuid.schema.json" },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+    },
+    "src": {
+      "$ref": "port-connection.schema.json",
+      "$comment": "Source port must be an output port of the source node"
+    },
+    "dst": {
+      "$ref": "port-connection.schema.json",
+      "$comment": "Destination port must be an input port of the destination node"
+    },
+    "uiprops": { "$ref": "link-uiprops.schema.json" }
+  },
+  "required": ["uuid"]
+}

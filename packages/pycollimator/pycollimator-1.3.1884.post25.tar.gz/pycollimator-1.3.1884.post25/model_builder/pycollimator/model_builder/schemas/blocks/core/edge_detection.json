@@ -1,0 +1,56 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/logic_and_bit_operations/edge_detection.json",
+  "base": {
+    "name": "EdgeDetection",
+    "namespace": "core",
+    "description": "Outputs True when it detects the signal transition conditions specified by user (e.g. rising edge).",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#edge-detection",
+    "supports_experiments": true,
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "events": {
+    "count": 1
+  },
+  "ports": {
+    "inputs": {
+      "static": [{
+        "name": "in_0"
+      }]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "feedthrough_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "edge_detection",
+      "description": "Defines the type of edge that is detected.",
+      "data_type": "string",
+      "default_value": "rising",
+      "allowed_values": [
+        "rising",
+        "falling",
+        "either"
+      ]
+    },
+    {
+      "name": "initial_state",
+      "description": "An edge detection detects a change in a signal, so it needs an 'old value' to compare against the 'new value', this is the initial value of 'old value'.",
+      "data_type": "bool",
+      "default_value": "false",
+      "display_variant": "list",
+      "allowed_values": [
+        "true",
+        "false"
+      ]
+    }
+  ]
+}

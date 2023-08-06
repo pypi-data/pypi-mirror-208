@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/param.schema.json",
+
+  "title": "Param",
+  "description": "A single parameters and its value for use in ordered lists",
+  "type": "object",
+
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the parameter, following python-like syntax",
+      "pattern": "[a-zA-Z0-9_]+"
+    },
+    "value": {
+      "type": "string",
+      "description": "Value of the parameter, following python-like syntax",
+      "pattern": "[a-zA-Z0-9_ \\(\\)\\[\\]{},\\+\\-\\*/\\.<>=]+",
+      "$comment": "The pattern might not work in all cases - hopefully supports all numbers and basic oneliner expressions"
+    },
+    "is_string": {
+      "type": "boolean",
+      "default": false,
+      "description": "Set to true to intepret this value as a string, without any evaluation",
+      "$comment": "The objective is to avoid having quotes inside string values"
+    }
+  },
+  "required": [
+    "name",
+    "value"
+  ]
+}

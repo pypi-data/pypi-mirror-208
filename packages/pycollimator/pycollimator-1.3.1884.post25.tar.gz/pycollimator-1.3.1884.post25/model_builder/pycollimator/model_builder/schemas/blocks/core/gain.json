@@ -1,0 +1,35 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/gain.json",
+  "base": {
+    "name": "Gain",
+    "namespace": "core",
+    "description": "This block outputs its input value multiplied by a constant scalar.",
+    "keywords": [
+      "multiply",
+      "product"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#gain",
+    "supports_experiments": true
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "gain",
+      "data_type": "float",
+      "default_value": "1.0",
+      "description": "Scalar multiplying factor"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/matrix_operations/matrix_concatenation.json",
+  "base": {
+    "name": "MatrixConcatenation",
+    "namespace": "core",
+    "description": "This block outputs the concatenation of 2 matrices.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#matrix-operator",
+    "feature_level": "dev"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "in_0"
+        },
+        {
+          "name": "in_1"
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "out_0"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "concatenation_orientation",
+      "data_type": "string",
+      "default_value": "horizontal",
+      "description": "Orientation for the concatenation function",
+      "allowed_values": [
+        "horizontal",
+        "vertical"
+      ]
+    }
+  ]
+}

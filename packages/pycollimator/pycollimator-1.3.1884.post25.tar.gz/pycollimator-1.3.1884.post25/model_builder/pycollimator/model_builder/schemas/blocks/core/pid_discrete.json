@@ -1,0 +1,65 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/pid_discrete.json",
+  "base": {
+    "name": "PID_Discrete",
+    "namespace": "core",
+    "description": "Discrete time PID controller",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#pid-discrete",
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}],
+      "conditional": [
+        {
+          "name": "initial_state",
+          "order": 1
+        }
+      ]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "discrete_states_dimension": 1,
+    "feedthrough_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "Kp",
+      "data_type": "float",
+      "default_value": "1.0",
+      "description": "Proportional gain."
+    },
+    {
+      "name": "Ki",
+      "data_type": "float",
+      "default_value": "1.0",
+      "description": "Integral gain."
+    },
+    {
+      "name": "Kd",
+      "data_type": "float",
+      "default_value": "1.0",
+      "description": "Derivative gain."
+    },
+    {
+      "name": "enable_external_initial_state",
+      "data_type": "bool",
+      "default_value": "false",
+      "description": "Source for the value used for the integrator initial state. True=from inport, False=from the initial_state parameter."
+    },
+    {
+      "name": "initial_state",
+      "data_type": "float",
+      "default_value": "0.0",
+      "description": "Initial value of the integrator state which sets the initial value of the I term."
+    }
+  ]
+}

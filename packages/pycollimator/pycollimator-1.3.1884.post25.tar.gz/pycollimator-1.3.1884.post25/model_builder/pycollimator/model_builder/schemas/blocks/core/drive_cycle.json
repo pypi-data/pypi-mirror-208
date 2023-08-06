@@ -1,0 +1,58 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/drive_cycle.json",
+  "base": {
+    "name": "DriveCycle",
+    "namespace": "core",
+    "description": "Outputs the speed signal from standard automotive drive cycles."
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "speed_kph"}],
+      "conditional": [
+        {
+          "name": "upper_limit_kph",
+          "order": 1
+        },
+        {
+          "name": "lower_limit_kph",
+          "order": 2
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "cycle",
+      "description": "Name of the drive cycle.",
+      "data_type": "string",
+      "default_value": "ECE",
+      "allowed_values": [
+        "CSC",
+        "CWTVC",
+        "ECE",
+        "EUDC",
+        "FTP",
+        "HDUDDS",
+        "HWYFET",
+        "IM240",
+        "JPN10",
+        "JPN15",
+        "LA92",
+        "NYCC",
+        "SC03",
+        "US06",
+        "WHVC"
+      ]
+    },
+    {
+      "name": "output_limits",
+      "description": "Check this box to also output the upper and lower limits.",
+      "data_type": "bool",
+      "default_value": "false"
+    }
+  ]
+}

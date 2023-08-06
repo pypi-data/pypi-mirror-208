@@ -1,0 +1,141 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/coordinate_rotation.json",
+  "base": {
+    "name": "CoordinateRotation",
+    "namespace": "core",
+    "description": "computes rotation between coordinate systems, e.g. quaternion, DCM, etc.",
+    "keywords": [
+      "quaternion",
+      "dcm",
+      "rotation",
+      "angles",
+      "euler",
+      "angle",
+      "conversion",
+      "coordinate"
+    ],
+    "development_notes": "when quaternion selected: expose either w,x,y,z inports or params. when rotation_angle selected, expose either alpha,beta,gamma, ports or params. when DCM slected, expose DCM param or port. "
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "vector"
+        }
+      ],
+      "conditional": [
+        {
+          "name": "quaternion_w",
+          "order": 1
+        },
+        {
+          "name": "quaternion_x",
+          "order": 2
+        },
+        {
+          "name": "quaternion_y",
+          "order": 3
+        },
+        {
+          "name": "quaternion_z",
+          "order": 4
+        },
+        {
+          "name": "rotation_angles_alpha",
+          "order": 5
+        },
+        {
+          "name": "rotation_angles_beta",
+          "order": 6
+        },
+        {
+          "name": "rotation_angles_gamma",
+          "order": 7
+        },
+        {
+          "name": "DCM",
+          "order": 8
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "vector"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+        "name": "rotation_type",
+        "data_type": "string",
+        "default_value": "quaternion",
+        "description": "Select the rotation type desired.",
+        "allowed_values": [
+            "quaternion",
+            "rotation_angles",
+            "DCM"
+          ],
+          "display_full_width": true
+    },
+    {
+        "name": "enable_external_rotation_definition",
+        "data_type": "bool",
+        "default_value": "false",
+        "description": "Source for the rotation parameters. True=from inport(s), False=from the block parameters."
+    },
+    {
+        "name": "quaternion_w",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "quaternion w param."
+    },
+    {
+        "name": "quaternion_x",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "quaternion x param."
+    },
+    {
+        "name": "quaternion_y",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "quaternion y param."
+    },
+    {
+        "name": "quaternion_z",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "quaternion z param."
+    },
+    {
+        "name": "rotation_angles_alpha",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "rotation angles alpha angle."
+    },
+    {
+        "name": "rotation_angles_beta",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "rotation angles beta angle."
+    },
+    {
+        "name": "rotation_angles_gamma",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "rotation angles gamma angle."
+    },{
+        "name": "DCM_matrix",
+        "data_type": "any",
+        "default_value": "[[1.0,0.0,0.0],\n[0.0,1.0,0.0],\n[0.0,0.0,1.0]]\n",
+        "description": "DCM 3x3 matrix"
+    }
+  ]
+}

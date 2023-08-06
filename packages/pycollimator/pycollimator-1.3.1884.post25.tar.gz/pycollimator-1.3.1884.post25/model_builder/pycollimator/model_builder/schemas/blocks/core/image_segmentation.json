@@ -1,0 +1,34 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/core/image_segmentation.json",
+  "base": {
+    "name": "ImageSegmentation",
+    "namespace": "core",
+    "description": "Panoptic segmentation. Model was trained on COCO 2017 panoptic. Output is a python dictionary of \"segmentations\" numpy array with each position set to the ID of the object detected and \"annotations\" list of python dictionary containing the \"label\", \"score\" and \"id\" for each object detected."
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{ "name": "image" }]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "segmentations"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "model",
+      "data_type": "string",
+      "default_value": "detr-resnet-50-panoptic",
+      "allowed_values": ["detr-resnet-50-panoptic"],
+      "description": "Image segmentation model."
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/rigid_body.json",
+  "base": {
+    "name": "RigidBody",
+    "namespace": "core",
+    "description": "Models rigid body motion with 3 translational degress of freedom, and optionally 3 rotational degrees of freedom.",
+    "keywords": [
+      "dof",
+      "6dof",
+      "six degrees of freedom"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/continuous-blocks#rigid-body",
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "continuous",
+    "feedthrough": false
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "force_vector"
+        }
+      ],
+      "conditional": [
+        {
+          "name": "mass",
+          "order": 1
+        },
+        {
+          "name": "torque_vector",
+          "order": 2
+        },
+        {
+          "name": "inertia_matrix",
+          "order": 3
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "translational_states"
+        }
+      ],
+      "conditional": [
+        {
+          "name": "rotational_states",
+          "order": 1
+        },
+        {
+          "name": "state_derivatives",
+          "order": 2
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+        "name": "enable_external_mass",
+        "data_type": "bool",
+        "default_value": "false",
+        "description": "Source for the value used as the mass of the body. True=from inport, False=from the mass parameter."
+    },
+    {
+        "name": "mass",
+        "data_type": "float",
+        "default_value": "1.0",
+        "description": "Mass of the body."
+    },
+    {
+        "name": "Vx0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial X direction velocity."
+    },
+    {
+        "name": "Vy0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial Y direction velocity."
+    },
+    {
+        "name": "Vz0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial Z direction velocity."
+    },
+    {
+        "name": "Px0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial X direction position."
+    },
+    {
+        "name": "Py0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial Y direction position."
+    },
+    {
+        "name": "Pz0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial Z direction position."
+    },
+    {
+        "name": "enable_rotational_DoFs",
+        "data_type": "bool",
+        "default_value": "false",
+        "description": "User selection for enabling the rotational degrees of freedom."
+    },
+    {
+        "name": "enable_external_inertia_matrix",
+        "data_type": "bool",
+        "default_value": "false",
+        "description": "Source for the value used as the inertia matrix of the body. True=from inport, False=from the inertia matrix parameter."
+    },
+    {
+        "name": "inertia_matrix",
+        "data_type": "any",
+        "default_value": "[[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]]",
+        "description": "The rotational inertia matrix."
+    },
+    {
+        "name": "Wx0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial rotational velocity about the X axis."
+    },
+    {
+        "name": "Wy0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial rotational velocity about the Y axis."
+    },
+    {
+        "name": "Wz0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial rotational velocity about the Z axis."
+    },
+    {
+        "name": "ThetaX0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial angle about the X axis."
+    },
+    {
+        "name": "ThetaY0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial angle about the Y axis."
+    },
+    {
+        "name": "ThetaZ0",
+        "data_type": "float",
+        "default_value": "0.0",
+        "description": "Initial angle about the Z axis."
+    },
+    {
+      "name": "enable_output_state_derivatives",
+      "data_type": "bool",
+      "default_value": "false",
+      "description": "User selection for enabling the output port for the blocks state derivatives as a vector."
+    }
+  ]
+}

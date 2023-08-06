@@ -1,0 +1,41 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/sawtooth.json",
+  "base": {
+    "name": "Sawtooth",
+    "namespace": "core",
+    "description": "Generates sawtooth wave",
+    "keywords": [
+      "triangle"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#sawtooth"
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "amplitude",
+      "description": "the amplitude of the wave.",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "frequency",
+      "description": "the frequency of the wave.",
+      "data_type": "float",
+      "default_value": "0.5"
+    },
+    {
+      "name": "phase_delay",
+      "description": "the time dimension offset when the first cycle should start.",
+      "data_type": "float",
+      "default_value": "1.0"
+    }
+  ]
+}

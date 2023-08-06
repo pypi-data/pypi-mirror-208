@@ -1,0 +1,118 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/coordinate_rotation_conversion.json",
+  "base": {
+    "name": "CoordinateRotationConversion",
+    "namespace": "core",
+    "description": "computes conversion between coordinate rotations, e.g. quaternion to DCM, etc.",
+    "keywords": [
+      "quaternion",
+      "dcm",
+      "rotation",
+      "angles",
+      "euler",
+      "angle",
+      "conversion",
+      "coordinate"
+    ],
+    "development_notes": "when quaternion_to_X selected: expose w,x,y,z inports. when rotation_angle_to_X selected, alpha,beta,gamma, ports. when DCM_to slected, DCM inport. and vice versa for outports."
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [],
+      "conditional": [
+        {
+          "name": "quaternion_w",
+          "order": 0
+        },
+        {
+          "name": "quaternion_x",
+          "order": 1
+        },
+        {
+          "name": "quaternion_y",
+          "order": 2
+        },
+        {
+          "name": "quaternion_z",
+          "order": 3
+        },
+        {
+          "name": "rotation_angles_alpha",
+          "order": 4
+        },
+        {
+          "name": "rotation_angles_beta",
+          "order": 5
+        },
+        {
+          "name": "rotation_angles_gamma",
+          "order": 6
+        },
+        {
+          "name": "DCM",
+          "order": 7
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+      ],
+      "conditional": [
+        {
+          "name": "quaternion_w",
+          "order": 0
+        },
+        {
+          "name": "quaternion_x",
+          "order": 1
+        },
+        {
+          "name": "quaternion_y",
+          "order": 2
+        },
+        {
+          "name": "quaternion_z",
+          "order": 3
+        },
+        {
+          "name": "rotation_angles_alpha",
+          "order": 4
+        },
+        {
+          "name": "rotation_angles_beta",
+          "order": 5
+        },
+        {
+          "name": "rotation_angles_gamma",
+          "order": 6
+        },
+        {
+          "name": "DCM",
+          "order": 7
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "conversion_type",
+      "data_type": "string",
+      "default_value": "quaternion_to_DCM",
+      "description": "Select the rotation conversion type desired.",
+      "allowed_values": [
+          "quaternion_to_DCM",
+          "quaternion_to_rotation_angles",
+          "DCM_to_quaternion",
+          "DCM_to_rotation_angles",
+          "rotation_angles_to_quaternion",
+          "rotation_angles_to_DCM"
+        ],
+      "display_full_width": true
+  }
+  ]
+}

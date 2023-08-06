@@ -1,0 +1,76 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/user_defined/c_function.json",
+  "base": {
+    "name": "CFunction",
+    "namespace": "core",
+    "description": "Executes a C function.",
+    "keywords": ["code"],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#c-function"
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 0,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "double",
+            "allowed_values": ["double"],
+            "description": "Data type of the input signal, follows numpy syntax like: double"
+          },
+          {
+            "name": "shape",
+            "data_type": "any",
+            "default_value": "()",
+            "description": "Shape or dimension of the input signal, follows numpy syntax like: (2,3) or ()"
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 1,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "double",
+            "allowed_values": ["bool", "double", "float", "int32"],
+            "description": "Data type of the output signal, e.g. double."
+          },
+          {
+            "name": "shape",
+            "data_type": "any",
+            "default_value": "()",
+            "description": "Shape or dimension of the output signal, syntax like: (2,3) or ()"
+          }
+        ]
+      }
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "user_statements",
+      "data_type": "string",
+      "default_value": "typedef struct {\n  bool initialized;\n} STATE_T;\n\nvoid UPDATE(INPUT_T const* in, STATE_T* state, OUTPUT_T* out) {\n  if (!state->initialized) {\n    // STATE_T will initially be zeroed\n    state->initialized = true;\n  }\n  out->out_0 = in->in_0;\n}\n",
+      "description": "String representation of the C function definition.",
+      "hidden": true
+    },
+    {
+      "name": "has_state",
+      "description": "True if this function takes a STATE parameter. If so, the block must also define the STATE type and provide an INIT function.",
+      "data_type": "bool",
+      "default_value": "true"
+    }
+  ]
+}

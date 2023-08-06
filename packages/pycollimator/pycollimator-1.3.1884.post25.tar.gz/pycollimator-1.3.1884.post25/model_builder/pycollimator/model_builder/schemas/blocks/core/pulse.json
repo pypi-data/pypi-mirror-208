@@ -1,0 +1,38 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/pulse.json",
+  "base": {
+    "name": "Pulse",
+    "namespace": "core",
+    "description": "Generates square wave pulses at regular intervals",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#pulse"
+  },
+  "modes": {
+    "time": "discrete"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "amplitude",
+      "description": "the amplitude of the pulses.",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "pulse_width",
+      "description": "the fraction of the period that the signal has the value of amplitude.",
+      "data_type": "float",
+      "default_value": "0.5"
+    },
+    {
+      "name": "period",
+      "description": "the time take for both the on and off portions of the signal. e.g. one cycle.",
+      "data_type": "float",
+      "default_value": "1.0"
+    }
+  ]
+}

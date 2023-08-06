@@ -1,0 +1,41 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/signal_routing/bus_selector.json",
+  "base": {
+    "name": "BusSelector",
+    "namespace": "core",
+    "description": "Extract the selected signals from the bus signal as outputs of this block.",
+    "feature_level": "disabled"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 1,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "has_automatic_ports": true
+  },
+  "parameter_definitions": [
+    {
+      "name": "signal_name_list",
+      "data_type": "any",
+      "default_value": "[\"out_0\", \"out_1\"]",
+      "description": "List of signal names in the bus."
+    },
+    {
+      "name": "selected_signal_name_list",
+      "data_type": "any",
+      "default_value": "[\"out_0\", \"out_1\"]",
+      "description": "List of signal names in the bus that have been selected for extraction and output."
+    }
+  ]
+}

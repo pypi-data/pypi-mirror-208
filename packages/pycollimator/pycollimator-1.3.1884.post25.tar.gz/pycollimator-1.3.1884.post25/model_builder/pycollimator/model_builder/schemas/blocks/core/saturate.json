@@ -1,0 +1,66 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discontinuities/saturate.json",
+  "base": {
+    "name": "Saturate",
+    "namespace": "core",
+    "description": "Passes through the input but constrains the output to be between the upper and lower limits.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#saturate",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "events": {
+    "count": 2
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "in_0"
+        }
+      ],
+      "conditional": [
+        {
+          "name": "upper_limit",
+          "order": 0
+        },
+        {
+          "name": "lower_limit",
+          "order": 2
+        }
+      ]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "enable_dynamic_upper_limit",
+      "data_type": "bool",
+      "default_value": "false",
+      "description": "User selection for enabling inport for upper limit value."
+    },
+    {
+      "name": "upper_limit",
+      "description": "upper limit impose on the output",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "enable_dynamic_lower_limit",
+      "data_type": "bool",
+      "default_value": "false",
+      "description": "User selection for enabling inport for lower limit value."
+    },
+    {
+      "name": "lower_limit",
+      "description": "lower limit impose on the output",
+      "data_type": "float",
+      "default_value": "-1.0"
+    }
+  ]
+}

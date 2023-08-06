@@ -1,0 +1,28 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/user_defined/state_machine.json",
+  "base": {
+    "name": "StateMachine",
+    "namespace": "core",
+    "description": "Executes a user defined state machine designed using pytransitions to compute the outputs from the inputs.",
+    "development_notes": "This block cannot yet be instantiated in the front end until the front end state machine editor is defined.",
+    "feature_level": "disabled"
+  },
+  "modes": {
+    "time": "any",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "feedthrough_states_dimension": 1,
+    "min_feedthrough_states_dimension": 1,
+    "max_feedthrough_states_dimension": -1
+  }
+}

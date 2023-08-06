@@ -1,0 +1,29 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/signal_routing/demux.json",
+  "base": {
+    "name": "Demux",
+    "namespace": "core",
+    "description": "Split a vector signal into its component, and pass each component as an output from this block.",
+    "development_notes": "FIXME ports should be automatic based on the connected mux",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#demux",
+    "supports_experiments": true
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 1,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "has_automatic_ports": true
+  }
+}

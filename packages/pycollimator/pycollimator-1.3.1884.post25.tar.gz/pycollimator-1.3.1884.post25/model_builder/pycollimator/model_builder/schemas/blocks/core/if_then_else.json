@@ -1,0 +1,36 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/signal_routing/if_then_else.json",
+  "base": {
+    "name": "IfThenElse",
+    "namespace": "core",
+    "description": "When If input is true, passes The input to output, otherwise passes Else input to output.",
+    "keywords": [
+      "switch"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#if-then-else",
+    "supports_experiments": true
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "test"
+        },
+        {
+          "name": "if_true"
+        },
+        {
+          "name": "if_false"
+        }
+      ]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  }
+}

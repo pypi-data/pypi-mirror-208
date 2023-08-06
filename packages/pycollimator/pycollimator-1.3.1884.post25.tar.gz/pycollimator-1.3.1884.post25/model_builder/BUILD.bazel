@@ -1,0 +1,24 @@
+load("@pycollimator//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_python//python:packaging.bzl", "py_package", "py_wheel")
+
+compile_pip_requirements(
+    name = "compile_pip_requirements",
+    extra_args = ["--allow-unsafe"],
+    requirements_in = "requirements.in",
+    requirements_txt = "requirements-lock.txt",
+)
+
+py_library(
+    name = "model_builder",
+    srcs = glob(["pycollimator/**/*.py"]),
+    data = [
+        "//src/lib/model-schemas/schemas",
+    ],
+    imports = ["."],
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("numpy"),  # FIXME: this shouldn't be required
+    ],
+)

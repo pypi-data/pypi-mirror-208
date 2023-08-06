@@ -1,0 +1,36 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/ports_and_submodels/inport.json",
+  "base": {
+    "name": "Inport",
+    "namespace": "core",
+    "description": "This block represents the inport of a submodel.",
+    "supports_models": false,
+    "supports_submodels": true,
+    "supports_experiments": false
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "port_id",
+      "data_type": "int",
+      "read_only": true,
+      "description": "The index / id matching with the actual inport of the submodel block that houses this inport block",
+      "default_value": "0"
+    },
+    {
+      "name": "description",
+      "data_type": "string",
+      "description": "Description of the port",
+      "default_value": ""
+    }
+  ]
+}

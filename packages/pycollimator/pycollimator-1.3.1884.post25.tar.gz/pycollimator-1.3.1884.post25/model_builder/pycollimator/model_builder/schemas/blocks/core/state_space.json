@@ -1,0 +1,68 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/continuous/state_space.json",
+  "base": {
+    "name": "StateSpace",
+    "namespace": "core",
+    "description": "Models a linear system by State Space representation.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/continuous-blocks#state-space",
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "continuous",
+    "feedthrough": false
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 1,
+        "max_count": -1,
+        "default_count": 1
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 1,
+        "max_count": -1,
+        "default_count": 1
+      }
+    }
+  },
+  "states": {
+    "continuous_states_dimension": 2,
+    "max_continuous_states_dimension": 10,
+    "min_continuous_states_dimension": 0
+  },
+  "parameter_definitions": [
+    {
+      "name": "A",
+      "data_type": "any",
+      "default_value": "[[1,0],[0,1]]",
+      "description": "Coefficients of the state space A matrix, which is sort of like a jacobian like this state*A=derivative."
+    },
+    {
+      "name": "B",
+      "data_type": "any",
+      "default_value": "[0,0]",
+      "description": "Coefficients of the state space B matrix, which is the input matrix like this input*B=derivative."
+    },
+    {
+      "name": "C",
+      "data_type": "any",
+      "default_value": "[1,1]",
+      "description": "Coefficients of the state space C matrix, which is the output matrix like state*C=output."
+    },
+    {
+      "name": "D",
+      "data_type": "any",
+      "default_value": "[0]",
+      "description": "Coefficients of the state space D matrix, which is feedthrough matrix like this output=D*input."
+    },
+    {
+      "name": "initial_states",
+      "data_type": "float",
+      "default_value": "0.0",
+      "description": "initial value of state space system state vector"
+    }
+  ]
+}

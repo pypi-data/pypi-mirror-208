@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://collimator.ai/models/codegen-config.schema.json",
+
+    "title": "Code Generation Config",
+    "description": "Configuration required for generating C code from a submodel",
+    "type": "object",
+
+    "properties": {
+        "submodel_uuid": { "$ref": "uuid.schema.json" },
+        "name": {
+            "type": "string",
+            "description": "Name of the submodel form which code is to be generated",
+            "$comment": "default is there for frontend autogen types",
+            "default": "Submodel_0"
+          }
+    },
+    "required": [
+        "submodel_uuid",
+        "name"
+    ]
+}

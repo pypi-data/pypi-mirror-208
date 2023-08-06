@@ -1,0 +1,74 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/core/predictor.json",
+  "base": {
+    "name": "Predictor",
+    "namespace": "core",
+    "description": "Prediction with machine learning model."
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 1,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "float32",
+            "description": "Input dtype. Must be a dtype supported by the selected model_format. Example values: 'float32', 'int32', 'uint8'."
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 1,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "double",
+            "allowed_values": [
+              "double",
+              "bool",
+              "object"
+            ],
+            "description": "Output dtype. Must be a dtype supported by collimator."
+          },
+          {
+            "name": "shape",
+            "data_type": "any",
+            "default_value": "()",
+            "description": "Shape or dimension of the output, follows numpy syntax like: (2,3) or ()"
+          }
+        ]
+      }
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "file_name",
+      "data_type": "string",
+      "default_value": "",
+      "description": "Name of the ML model to load."
+    },
+    {
+      "name": "model_format",
+      "data_type": "string",
+      "default_value": "TorchScript",
+      "allowed_values": [
+        "TorchScript",
+        "SavedModel"
+      ],
+      "description": "Format of the model."
+    }
+  ]
+}

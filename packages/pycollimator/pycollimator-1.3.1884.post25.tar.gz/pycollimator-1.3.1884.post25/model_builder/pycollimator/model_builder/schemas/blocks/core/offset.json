@@ -1,0 +1,31 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/offset.json",
+  "base": {
+    "name": "Offset",
+    "namespace": "core",
+    "description": "This block outputs its input value offset (added) by a constant scalar.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#offset",
+    "supports_experiments": true
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "offset",
+      "data_type": "float",
+      "default_value": "1.0",
+      "description": "Scalar offset"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/battery_cell.json",
+  "base": {
+    "name": "BatteryCell",
+    "namespace": "core",
+    "description": "Single cell of a chemical battery like a Lithium-Ion, Lithium-Polymer, NiCad, NiMH, or Lead-Acid.",
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "continuous",
+    "feedthrough": false
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "current"
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "voltage"
+        },
+        {
+          "name": "SOC"
+        }
+      ]
+    }
+  },
+  "states": {
+    "continuous_states_dimension": 2
+  },
+  "parameter_definitions": [
+    {
+        "name": "E0",
+        "data_type": "float",
+        "default_value": "3.366",
+        "description": "Constant Voltage (V)."
+    },
+    {
+        "name": "K",
+        "data_type": "float",
+        "default_value": "0.0076",
+        "description": "Polarization Constant (V/Ah)."
+    },
+    {
+        "name": "Q",
+        "data_type": "float",
+        "default_value": "2.3",
+        "description": "cell capacity (Ah)."
+    },
+    {
+      "name": "R",
+      "data_type": "float",
+      "default_value": "0.01",
+      "description": "Internal Resistance (Ohms). Must be negative even though the parameter is positive, compiler expects the negative of the parameter value."
+    },
+    {
+        "name": "A",
+        "data_type": "float",
+        "default_value": "0.2642",
+        "description": "Exponential zone amplitude (V)."
+    },
+    {
+        "name": "B",
+        "data_type": "float",
+        "default_value": "26.5487",
+        "description": "Exponential zone time constant inverse (1/Ah). Must be negative even though the parameter is positive, compiler expects the negative of the parameter value. "
+    },
+    {
+        "name": "intial_SOC",
+        "data_type": "float",
+        "default_value": "1.0",
+        "description": "Initial value of the Depth of Discharge."
+    }
+  ]
+}

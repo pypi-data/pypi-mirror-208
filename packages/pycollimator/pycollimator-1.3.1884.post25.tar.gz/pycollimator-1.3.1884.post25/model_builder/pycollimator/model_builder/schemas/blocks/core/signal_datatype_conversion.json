@@ -1,0 +1,39 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/signal_attributes/signal_datatype_conversion.json",
+  "base": {
+    "name": "SignalDatatypeConversion",
+    "namespace": "core",
+    "description": "This block converts the the input signal to the required data type provided by the user.",
+    "feature_level": "dev"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "convert_to_type",
+      "data_type": "string",
+      "default_value": "float",
+      "description": "data type of the outputs",
+      "allowed_values": [
+        "float",
+        "int",
+        "uint",
+        "bool",
+        "byte",
+        "ubyte",
+        "'"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+load("@pycollimator//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "upload_file",
+    srcs = ["upload_file.py"],
+    imports = ["../"],
+    deps = [
+        requirement("absl-py"),
+        "//src/lib/pycollimator",
+    ],
+)

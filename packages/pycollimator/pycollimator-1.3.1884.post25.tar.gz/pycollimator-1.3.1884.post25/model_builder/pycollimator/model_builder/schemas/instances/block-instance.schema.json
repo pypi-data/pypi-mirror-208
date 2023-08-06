@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/block-instance.schema.json",
+
+  "title": "Block Instance",
+  "description": "Representation of a computation block instance and its parameters",
+  "type": "object",
+
+  "properties": {
+    "$class_version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Block class version to use",
+      "$comment": "Unclear how to handle this, frontend would need to know the version when creating a new block and have a way to upgrade a block as well."
+    },
+    "uuid": { "$ref": "uuid.schema.json" },
+    "original_uuid": { "$ref": "uuid.schema.json" },
+    "name": {
+      "description": "Name of this block",
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+    },
+    "type": { "$ref": "block-class-name.schema.json" },
+    "inputs": {
+      "type": "array",
+      "items": { "$ref": "port.schema.json" }
+    },
+    "outputs": {
+      "type": "array",
+      "items": { "$ref": "port.schema.json" }
+    },
+    "file_outputs": {
+      "type": "array",
+      "items": { "$ref": "file-output.schema.json" }
+    },
+    "parameters": { "$ref": "parameters.schema.json" },
+    "parameter_list": { "$ref": "parameter-list.schema.json" },
+    "time_mode": {
+      "type": "string",
+      "description": "For (source) blocks where `modes.time` is `any`, selects whether to force discrete output.",
+      "enum": ["agnostic","discrete"],
+      "default": "agnostic"
+    },
+    "uiprops": { "$ref": "node-uiprops.schema.json" }
+  },
+  "required": ["type", "uuid", "name", "inputs", "outputs", "parameters"]
+}

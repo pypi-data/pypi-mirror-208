@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/file-output.schema.json",
+
+  "title": "File Output",
+  "description": "Description of a file output",
+  "type": "object",
+
+  "properties": {
+    "filename": {
+      "type": "string",
+      "description": "Filename which may contain identifier {{block_name}} that will be replaced by the block's name. Files should be saved in artifacts folder of the simulation folder by the block."
+    },
+    "type": {
+      "type": "string",
+      "description": "MIME type.",
+      "examples": ["video/mp4"]
+    }
+  }
+}

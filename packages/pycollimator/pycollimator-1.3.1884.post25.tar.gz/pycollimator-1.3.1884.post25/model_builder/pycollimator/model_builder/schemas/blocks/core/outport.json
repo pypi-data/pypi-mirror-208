@@ -1,0 +1,37 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/ports_and_submodels/outport.json",
+  "base": {
+    "name": "Outport",
+    "namespace": "core",
+    "description": "This block represents the outport of a submodel.",
+    "supports_models": false,
+    "supports_submodels": true,
+    "supports_experiments": false
+
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "port_id",
+      "data_type": "int",
+      "description": "The index / id matching with the actual outport of the submodel block that houses this outport block",
+      "default_value": "0",
+      "read_only": true
+    },
+    {
+      "name": "description",
+      "data_type": "string",
+      "description": "Description of the port",
+      "default_value": ""
+    }
+  ]
+}

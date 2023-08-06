@@ -1,0 +1,50 @@
+[
+  {
+    "uuid": "7a4b5e07-dcaa-47f9-89c9-0e2655d07914",
+    "created_at": "2022-05-04 05:31:41.209716+00",
+    "updated_at": "2022-05-04 05:31:57.195732+00",
+    "deleted_at": null,
+    "version": 6,
+    "name": "test_002: Parameter simple",
+    "model_data": "{\"uuid\": \"bd18b085-a455-4540-ad40-bf212ae8b6ef\", \"links\": [], \"nodes\": [{\"name\": \"TestOutput\", \"type\": \"core.Constant\", \"uuid\": \"29965e17-6138-4f01-8d39-1adcac77b8b0\", \"inputs\": [], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\"}], \"uiprops\": {\"x\": 584, \"y\": 136}, \"parameters\": {\"value\": {\"value\": \"ParamValue\"}}, \"$class_version\": \"0.1\"}]}",
+    "owner_uuid": "967f1e67-9883-4332-9784-298b07a1c1e2",
+    "project_uuid": "9230e5cc-1152-44c4-8321-117c3b8dd2bb",
+    "configuration": "{\"solver\": {\"type\": \"variable_step\", \"method\": \"RK45\", \"max_step\": 1000000, \"min_step\": 0, \"first_step\": 0.0001, \"fixed_step\": 0.01, \"absolute_tolerance\": 0.000001, \"relative_tolerance\": 0.001}, \"stop_time\": 10, \"sample_time\": 0.1, \"events_handling\": \"normal\", \"continuous_time_result_interval\": 0.01}",
+    "parameters": "{\"ParamValue\": {\"value\": \"0\"}}",
+    "submodels": "{\"diagrams\": {}, \"references\": {}}",
+    "linearization": null,
+    "description": null
+  },
+  {
+    "uuid": "8a94a1c7-202c-499e-81bf-964d5a403b2f",
+    "created_at": "2022-05-04 05:34:39.003971+00",
+    "updated_at": "2022-05-04 06:02:30.612981+00",
+    "deleted_at": null,
+    "version": 19,
+    "name": "test_003: Simple DataSource",
+    "model_data": "{\"uuid\": \"2a326301-030f-4703-915c-01606b3f8ddb\", \"links\": [{\"dst\": {\"node\": \"ed958ed0-096a-418c-9984-08581692c38e\", \"port\": 0}, \"src\": {\"node\": \"56c191df-c67b-4ca0-825f-e836db2408e1\", \"port\": 0}, \"uuid\": \"0d9b6b33-d3f0-4ad0-9859-78a66087f8f4\", \"uiprops\": {\"segments\": [], \"link_type\": {\"connection_method\": \"direct_to_block\"}}}], \"nodes\": [{\"name\": \"DataSourceBlock\", \"type\": \"core.DataSource\", \"uuid\": \"56c191df-c67b-4ca0-825f-e836db2408e1\", \"inputs\": [], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\"}], \"uiprops\": {\"x\": 368, \"y\": 112}, \"parameters\": {\"column\": {\"value\": \"0\", \"is_string\": true}, \"file_name\": {\"value\": \"\", \"is_string\": true}, \"sampling_rate\": {\"value\": \"0.1\"}}, \"$class_version\": \"0.1\"}, {\"name\": \"TestOutput\", \"type\": \"core.ZeroOrderHold\", \"uuid\": \"ed958ed0-096a-418c-9984-08581692c38e\", \"inputs\": [{\"kind\": \"static\", \"name\": \"in_0\"}], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_1\", \"record\": true}], \"uiprops\": {\"x\": 512, \"y\": 112}, \"parameters\": {}, \"$class_version\": \"0.1\"}]}",
+    "owner_uuid": "967f1e67-9883-4332-9784-298b07a1c1e2",
+    "project_uuid": "9230e5cc-1152-44c4-8321-117c3b8dd2bb",
+    "configuration": "{\"solver\": {\"type\": \"variable_step\", \"method\": \"RK45\", \"max_step\": 1000000, \"min_step\": 0, \"first_step\": 0.0001, \"fixed_step\": 0.01, \"absolute_tolerance\": 0.000001, \"relative_tolerance\": 0.001}, \"stop_time\": 1, \"sample_time\": 0.1, \"events_handling\": \"normal\", \"__developer_options\": {\"log_level\": \"info\", \"ignore_cache\": false, \"output_format\": \"csv+hdf5\"}, \"continuous_time_result_interval\": 10}",
+    "parameters": "{}",
+    "submodels": "{\"diagrams\": {}, \"references\": {}}",
+    "linearization": null,
+    "description": null
+  },
+  {
+    "uuid": "d5149bbd-1e01-4d8d-8ed3-321ce3ae5e61",
+    "created_at": "2022-05-04 04:41:24.562895+00",
+    "updated_at": "2022-05-04 05:30:16.673666+00",
+    "deleted_at": null,
+    "version": 63,
+    "name": "test_001: A simple model",
+    "model_data": "{\"uuid\": \"a1293ca7-35f4-4a3a-9126-cb91923532b7\", \"links\": [{\"dst\": {\"node\": \"0810c46d-81a5-4d75-a8d2-57b94a037486\", \"port\": 0}, \"src\": {\"node\": \"4522a8d6-6d0f-4a8a-a360-5ec7b5098bc3\", \"port\": 0}, \"uuid\": \"3148cdfa-0786-4648-815d-ddfa7982fa76\", \"uiprops\": {\"segments\": [], \"link_type\": {\"connection_method\": \"direct_to_block\"}}}, {\"dst\": {\"node\": \"6a60566e-6f4e-4338-a343-782185b00191\", \"port\": 1}, \"src\": {\"node\": \"5dff82b0-74c3-452d-9d94-d913280df510\", \"port\": 0}, \"uuid\": \"48b09d98-ee91-4f69-9909-96ece325b282\", \"uiprops\": {\"segments\": [{\"coordinate\": 624, \"segment_direction\": \"vert\"}], \"link_type\": {\"connection_method\": \"direct_to_block\"}, \"hang_coord_start\": {\"x\": 576, \"y\": 280}}}, {\"dst\": {\"node\": \"6a60566e-6f4e-4338-a343-782185b00191\", \"port\": 0}, \"src\": {\"node\": \"0810c46d-81a5-4d75-a8d2-57b94a037486\", \"port\": 0}, \"uuid\": \"40263072-3e3a-48cf-88be-01f55432800b\", \"uiprops\": {\"segments\": [], \"link_type\": {\"connection_method\": \"direct_to_block\"}}}], \"nodes\": [{\"name\": \"SineWave_0\", \"type\": \"core.SineWave\", \"uuid\": \"5dff82b0-74c3-452d-9d94-d913280df510\", \"inputs\": [], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\"}], \"uiprops\": {\"x\": 368, \"y\": 232}, \"parameters\": {\"bias\": {\"value\": \"0.0\"}, \"phase\": {\"value\": \"0.0\"}, \"amplitude\": {\"value\": \"1.0\"}, \"frequency\": {\"value\": \"1.0\"}}}, {\"name\": \"CosineWave_0\", \"type\": \"core.CosineWave\", \"uuid\": \"4522a8d6-6d0f-4a8a-a360-5ec7b5098bc3\", \"inputs\": [], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\"}], \"uiprops\": {\"x\": 368, \"y\": 112}, \"parameters\": {\"bias\": {\"value\": \"0.0\"}, \"phase\": {\"value\": \"0.0\"}, \"amplitude\": {\"value\": \"1.0\"}, \"frequency\": {\"value\": \"1.0\"}}}, {\"name\": \"TestOutput\", \"type\": \"core.Adder\", \"uuid\": \"6a60566e-6f4e-4338-a343-782185b00191\", \"inputs\": [{\"kind\": \"dynamic\", \"name\": \"in_1\"}, {\"kind\": \"dynamic\", \"name\": \"in_2\"}], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\", \"record\": true}], \"uiprops\": {\"x\": 664, \"y\": 120}, \"parameters\": {\"operators\": {\"value\": \"+-\", \"is_string\": true}}}, {\"name\": \"Integrator_0\", \"type\": \"core.Integrator\", \"uuid\": \"0810c46d-81a5-4d75-a8d2-57b94a037486\", \"inputs\": [{\"kind\": \"static\", \"name\": \"in_0\"}], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_1\", \"record\": true}], \"uiprops\": {\"x\": 504, \"y\": 112}, \"parameters\": {\"enable_reset\": {\"value\": \"false\"}, \"initial_states\": {\"value\": \"0.0\"}}}, {\"name\": \"ControlOutput\", \"type\": \"core.Constant\", \"uuid\": \"fecf9808-9414-4ab6-83a5-ef1af12ba9a1\", \"inputs\": [], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\"}], \"uiprops\": {\"x\": 664, \"y\": 288}, \"parameters\": {\"value\": {\"value\": \"0.0\"}}}, {\"name\": \"TestParameter\", \"type\": \"core.Constant\", \"uuid\": \"5dea1331-09ea-4274-9319-d94d6252f26f\", \"inputs\": [], \"outputs\": [{\"kind\": \"static\", \"name\": \"out_0\"}], \"uiprops\": {\"x\": 664, \"y\": 432}, \"parameters\": {\"value\": {\"value\": \"TestParameterValue\"}}, \"$class_version\": \"0.1\"}]}",
+    "owner_uuid": "967f1e67-9883-4332-9784-298b07a1c1e2",
+    "project_uuid": "9230e5cc-1152-44c4-8321-117c3b8dd2bb",
+    "configuration": "{\"solver\": {\"type\": \"variable_step\", \"method\": \"RK45\", \"max_step\": 1000000, \"min_step\": 0, \"first_step\": 0.0001, \"fixed_step\": 0.01, \"absolute_tolerance\": 0.000001, \"relative_tolerance\": 0.001}, \"stop_time\": 0.5, \"sample_time\": 0.1, \"events_handling\": \"normal\", \"__developer_options\": {\"log_level\": \"info\", \"ignore_cache\": false, \"output_format\": \"csv+hdf5\"}, \"continuous_time_result_interval\": 0.01}",
+    "parameters": "{\"TestParameterValue\": {\"value\": \"0\"}}",
+    "submodels": "{\"diagrams\": {}, \"references\": {}}",
+    "linearization": null,
+    "description": null
+  }
+]

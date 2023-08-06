@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/submodels-section.schema.json",
+
+  "title": "Submodels Section",
+  "description": "Section of SimulationModel that contains references and diagrams of submodels",
+  "type": "object",
+
+  "properties": {
+    "references": {
+      "type": "object",
+      "$comment": "Keys are submodel UUIDs",
+      "description": "Map of submodel UUID to their hierarchical info and other metadata",
+      "additionalProperties": { "$ref": "submodel-reference.schema.json" }
+    },
+    "diagrams": {
+      "$comment": "Keys are diagram UUIDs, which can be referred to by submodels",
+      "type": "object",
+      "description": "Map of diagram UUID to their contents",
+      "additionalProperties": { "$ref": "model-diagram.schema.json" }
+    }
+  },
+  "required": ["diagrams", "references"]
+}

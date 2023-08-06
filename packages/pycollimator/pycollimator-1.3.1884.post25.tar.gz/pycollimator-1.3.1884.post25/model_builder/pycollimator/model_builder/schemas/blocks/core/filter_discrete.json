@@ -1,0 +1,56 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/filter_discrete.json",
+  "base": {
+    "name": "FilterDiscrete",
+    "namespace": "core",
+    "description": "A discrete implementation of either an FIR or IIR filter.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#fir-iir-filter",
+    "keywords": [
+      "filter",
+      "fir",
+      "iir"
+    ],
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "feedthrough_states_dimension": 1,
+    "min_feedthrough_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "filter_type",
+      "data_type": "string",
+      "default_value": "FIR",
+      "description": "the type of filter to implement. FIR or IIR.",
+      "allowed_values": [
+        "FIR",
+        "IIR"
+      ]
+    },
+    {
+      "name": "b_coefficients",
+      "data_type": "any",
+      "default_value": "[0.5, 0.5]",
+      "description": "Used for FIR filter and feed forward leg of IIR filter."
+    },
+    {
+      "name": "a_coefficients",
+      "data_type": "any",
+      "default_value": "[0.5, 0.5]",
+      "description": "Used for feedback leg of IIR filter. Not used for FIR filter."
+    }
+  ]
+}

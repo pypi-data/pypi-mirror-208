@@ -1,0 +1,32 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/user_defined/python_function.json",
+  "base": {
+    "name": "PythonFunction",
+    "namespace": "core",
+    "description": "Executes a user defined python function to compute the outputs from the inputs.",
+    "keywords": ["code"],
+    "feature_level": "dev"
+  },
+  "modes": {
+    "time": "any",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{ "name": "in_0" }]
+    },
+    "outputs": {
+      "static": [{ "name": "out_0" }]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "user_func_python",
+      "data_type": "string",
+      "default_value": "import typing as T\nimport numpy as np\n\ndef blk_func(t: float, inputs: T.List):\n    return inputs\n",
+      "description": "String representation of the users function.",
+      "hidden": true
+    }
+  ]
+}

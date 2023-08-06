@@ -1,0 +1,124 @@
+{
+  "name": "test_003: Simple DataSource",
+  "diagram": {
+    "uuid": "2a326301-030f-4703-915c-01606b3f8ddb",
+    "links": [
+      {
+        "dst": {
+          "node": "ed958ed0-096a-418c-9984-08581692c38e",
+          "port": 0
+        },
+        "src": {
+          "node": "56c191df-c67b-4ca0-825f-e836db2408e1",
+          "port": 0
+        },
+        "uuid": "0d9b6b33-d3f0-4ad0-9859-78a66087f8f4",
+        "uiprops": {
+          "segments": [],
+          "link_type": {
+            "connection_method": "direct_to_block"
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "name": "DataSourceBlock",
+        "type": "core.DataSource",
+        "uuid": "56c191df-c67b-4ca0-825f-e836db2408e1",
+        "inputs": [],
+        "outputs": [
+          {
+            "kind": "static",
+            "name": "out_0"
+          }
+        ],
+        "uiprops": {
+          "x": 368,
+          "y": 112
+        },
+        "parameters": {
+          "file_name": {
+            "value": "",
+            "is_string": true
+          },
+          "header_as_first_row": {
+            "value": "true"
+          },
+          "time_samples_as_column": {
+            "value": "false"
+          },
+          "time_column": {
+            "value": "0",
+            "is_string": true
+          },
+          "sampling_interval": {
+            "value": "0.1"
+          },
+          "data_columns": {
+            "value": "value",
+            "is_string": true
+          },
+          "extrapolation": {
+            "value": "hold",
+            "is_string": true
+          },
+          "interpolation": {
+            "value": "zero_order_hold",
+            "is_string": true
+          }
+        },
+        "$class_version": "0.1"
+      },
+      {
+        "name": "TestOutput",
+        "type": "core.ZeroOrderHold",
+        "uuid": "ed958ed0-096a-418c-9984-08581692c38e",
+        "inputs": [
+          {
+            "kind": "static",
+            "name": "in_0"
+          }
+        ],
+        "outputs": [
+          {
+            "kind": "static",
+            "name": "out_1",
+            "record": true
+          }
+        ],
+        "uiprops": {
+          "x": 512,
+          "y": 112
+        },
+        "parameters": {},
+        "$class_version": "0.1"
+      }
+    ]
+  },
+  "parameters": {},
+  "configuration": {
+    "solver": {
+      "type": "variable_step",
+      "method": "RK45",
+      "max_step": 1000000,
+      "min_step": 0,
+      "first_step": 0.0001,
+      "fixed_step": 0.01,
+      "absolute_tolerance": 0.000001,
+      "relative_tolerance": 0.001
+    },
+    "stop_time": 1,
+    "sample_time": 0.1,
+    "events_handling": "normal",
+    "__developer_options": {
+      "log_level": "info",
+      "ignore_cache": false
+    },
+    "continuous_time_result_interval": 10
+  },
+  "submodels": {
+    "diagrams": {},
+    "references": {}
+  }
+}

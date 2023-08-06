@@ -1,0 +1,31 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/video_source.json",
+  "base": {
+    "name": "VideoSource",
+    "namespace": "core",
+    "description": "Loads a video file and outputs it frame by frame. Output is a tensor of shape 3 x W x H in RGB color space.",
+    "development_notes": "We need tensor support. We also need to detect width/height automatically.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#videosource"
+  },
+  "modes": {
+    "time": "discrete"
+  },
+  "ports": {
+    "outputs": {
+      "static": [
+        {
+          "name": "out_frame"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "file_name",
+      "description": "Name of the image file to load.",
+      "data_type": "string",
+      "default_value": ""
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/user_defined/python_script.json",
+  "base": {
+    "name": "CodeBlockDev",
+    "namespace": "core",
+    "description": "An EXPERIMENTAL variant of the PythonScript block that can also support C and C++ code.",
+    "$comment": "This block will be replaced by a PythonScript or CFunction or CppFunction block by simworker. This is a HUGE HACK. Thanks for reading my comment.",
+    "keywords": [
+      "code"
+    ],
+    "extra_parameters": true,
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#python-script",
+    "supports_experiments": false,
+    "feature_level": "dev"
+  },
+  "modes": {
+    "time": "any",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 0,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "double",
+            "allowed_values": ["double"],
+            "description": "Data type of the output signal, follows numpy syntax like: double",
+            "feature_level": "dev"
+          },
+          {
+            "name": "shape",
+            "data_type": "any",
+            "default_value": "()",
+            "description": "Shape or dimension of the input signal, follows numpy syntax like: (2,3) or ()",
+            "feature_level": "dev"
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 0,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "double",
+            "allowed_values": ["double","bool"],
+            "description": "Data type of the output signal, follows numpy syntax like: double"
+          },
+          {
+            "name": "shape",
+            "data_type": "any",
+            "default_value": "()",
+            "description": "Shape or dimension of the output signal, follows numpy syntax like: (2,3) or ()"
+          }
+        ]
+      }
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "user_statements",
+      "data_type": "string",
+      "default_value": "out_0 = in_0",
+      "description": "String representation of the user statements.",
+      "hidden": true
+    },
+    {
+      "name": "init_script",
+      "data_type": "string",
+      "default_value": "",
+      "description": "String representation of the initialization script.",
+      "hidden": true
+    },
+    {
+      "name": "finalize_script",
+      "data_type": "string",
+      "default_value": "",
+      "description": "String representation of the finalization script.",
+      "hidden": true
+    },
+    {
+      "name": "__c_function_code",
+      "data_type": "string",
+      "default_value": "",
+      "description": "Equivalent C code for this PythonScript as a CFunction block.",
+      "hidden": true
+    },
+    {
+      "name": "use_c_function_code",
+      "data_type": "bool",
+      "default_value": "false",
+      "description": "Use the CFunction code instead of the Python scripts.",
+      "feature_level": "dev"
+    },
+    {
+      "name": "__cpp_function_code",
+      "data_type": "string",
+      "default_value": "",
+      "description": "Equivalent C++ code for this PythonScript as a Cpp block.",
+      "feature_level": "dev",
+      "hidden": true
+    },
+    {
+      "name": "use_cpp_function_code",
+      "data_type": "bool",
+      "default_value": "false",
+      "description": "Use the C++ code instead of the Python scripts.",
+      "feature_level": "dev"
+    }
+  ]
+}

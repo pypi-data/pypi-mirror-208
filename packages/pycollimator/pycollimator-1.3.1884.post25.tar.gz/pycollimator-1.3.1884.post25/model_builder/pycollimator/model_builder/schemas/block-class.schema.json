@@ -1,0 +1,453 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/block-class.schema.json",
+  "title": "Computation block class",
+  "description": "Meta representation of a computation block class and its static properties",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "enum": [
+        "https://collimator.ai/models/block-class.schema.json",
+        "../../block-class.schema.json"
+      ]
+    },
+    "$id": {
+      "type": "string",
+      "pattern": "https://collimator.ai/models/blocks/([a-z_]+\\/)+[a-z0-9_]+.json"
+    },
+    "base": {
+      "$ref": "#/definitions/base"
+    },
+    "modes": {
+      "$ref": "#/definitions/modes"
+    },
+    "ports": {
+      "$ref": "#/definitions/ports"
+    },
+    "states": {
+      "$ref": "#/definitions/states"
+    },
+    "parameter_definitions": {
+      "$ref": "#/definitions/block_parameter_definitions"
+    },
+    "file_outputs": {
+      "$ref": "#/definitions/file_outputs"
+    },
+    "events": {
+      "$ref": "#/definitions/events"
+    },
+    "ui_defaults": {
+      "$ref": "node-uiprops.schema.json"
+    }
+  },
+  "required": ["base", "modes", "ports"],
+  "definitions": {
+    "base": {
+      "type": "object",
+      "description": "Base properties of the computation block",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the computation block class",
+          "examples": ["Gain", "Product"],
+          "$comment": "default is there for frontend autogen types",
+          "default": "NamelessBlockClass",
+          "pattern": "^[A-Z][a-zA-Z0-9_]*$"
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Class namespace",
+          "enum": ["core"],
+          "default": "core"
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the block class",
+          "examples": ["Outputs the blocks inputs multiplied by a fixed value"]
+        },
+        "help_url": {
+          "type": "string",
+          "description": "A URL that leads to documentation for the block type.",
+          "examples": [
+            "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#cosine-wave"
+          ]
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Search terms that should yield this block as a search result.",
+          "examples": [["filter", "fir", "iir"]]
+        },
+        "development_notes": {
+          "type": "string",
+          "description": "Indicate any non-json-able coupling between frontend and backend implementation that need to be addressed for the block to behave correctly.",
+          "examples": [
+            "the parameters x, y, and z, must be used to configure the number of block inputs. this algorithm can be found in blah.py between lines a and b"
+          ]
+        },
+        "feature_level": {
+          "$ref": "#/definitions/feature_level"
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "If true, this block should not appear in the library.",
+          "default": false
+        },
+        "extra_parameters": {
+          "type": "boolean",
+          "description": "Whether the block class supports extra arbitrary parameters (eg. Submodel, Python)"
+        },
+        "supports_models": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this block can be added to a normal Model block diagram (true by default)"
+        },
+        "supports_submodels": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this block can be added to a Submodel block diagram (true by default)"
+        },
+        "supports_experiments": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this block can be added to an Experiment block diagram"
+        },
+        "supports_iterator": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this block can be added to an Iterator container diagram. (true by default)"
+        }
+      },
+      "required": ["name", "namespace"],
+      "additionalProperties": false
+    },
+    "modes": {
+      "type": "object",
+      "description": "Modes of operation of the block",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": ["any", "continuous", "discrete", "agnostic", "constant"],
+          "default": "agnostic",
+          "$comment": "NOTE: We can also have complex 'hybrid' blocks that operate both continuous and discrete times"
+        },
+        "feedthrough": {
+          "type": "boolean",
+          "description": "Set to true if this block has direct feedthrough (outputs depend on the inputs)",
+          "default": false
+        }
+      },
+      "required": ["time"]
+    },
+    "ports": {
+      "type": "object",
+      "description": "I/O ports definitions",
+      "properties": {
+        "inputs": {
+          "$ref": "#/definitions/ports_definition"
+        },
+        "outputs": {
+          "$ref": "#/definitions/ports_definition"
+        },
+        "has_automatic_ports": {
+          "type": "boolean",
+          "description": "Whether the block class has automatic ports (eg. Submodel, Demux, Bus selector)",
+          "default": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "ports_definition": {
+      "$comment": "We might want to consolidate the counts within this object",
+      "type": "object",
+      "description": "IO ports definition",
+      "properties": {
+        "conditional": {
+          "type": "array",
+          "description": "Conditional ports definitions",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Builtin name of the conditional port",
+                "examples": ["reset", "max_limit", "trigger", "clock"],
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+              },
+              "order": {
+                "type": "number",
+                "description": "Default port index if this port is enabled, starts from 0. This shall affect rendering and the position in the array but not the functionality of special ports that should be linked to their name.",
+                "default": 0
+              },
+              "default_enabled": {
+                "type": "boolean",
+                "description": "Whether the port is enabled by default",
+                "default": false
+              },
+              "appearance": {
+                "type": "string",
+                "description": "Tag for the expected visual appearance of the port",
+                "enum": ["default", "hollow"],
+                "default": "default"
+              }
+            },
+            "required": ["name"],
+            "additionalProperties": false
+          }
+        },
+        "dynamic": {
+          "$comment": "TODO/FIXME We should consolidate the counts within this object",
+          "type": "object",
+          "description": "Dynamic ports",
+          "properties": {
+            "min_count": {
+              "type": "number",
+              "description": "Minimum number of dynamic ports",
+              "default": 0
+            },
+            "max_count": {
+              "type": "number",
+              "description": "Maximum number of dynamic ports, -1 for no limit",
+              "default": 0
+            },
+            "default_count": {
+              "type": "number",
+              "description": "Default number of dynamic ports, must be between min and max",
+              "default": 0
+            },
+            "parameter_definitions": {
+              "$ref": "#/definitions/block_parameter_definitions"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "static": {
+          "type": "array",
+          "description": "Static builtin ports",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Builtin name of the port",
+                "examples": ["input", "if_true", "if_false"],
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+              },
+              "appearance": {
+                "type": "string",
+                "description": "Tag for the expected visual appearance of the port",
+                "enum": ["default", "hollow"],
+                "default": "default"
+              },
+              "parameter_definitions": {
+                "$ref": "#/definitions/block_parameter_definitions"
+              }
+            },
+            "required": ["name"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "states": {
+      "type": "object",
+      "description": "Continuous and discrete state definitions",
+      "properties": {
+        "continuous_states_dimension": {
+          "type": "integer",
+          "description": "Default dimension of the continuous states vector",
+          "default": 0
+        },
+        "discrete_states_dimension": {
+          "type": "integer",
+          "description": "Default dimension of the discrete states vector",
+          "default": 0
+        },
+        "feedthrough_states_dimension": {
+          "type": "integer",
+          "description": "Default dimension of the feedthrough states vector",
+          "default": 0
+        },
+        "min_continuous_states_dimension": {
+          "type": "integer",
+          "description": "Minimum dimension of the continuous states vector",
+          "default": 0
+        },
+        "max_continuous_states_dimension": {
+          "type": "integer",
+          "description": "Maximum dimension of the continuous states vector",
+          "default": 0
+        },
+        "min_discrete_states_dimension": {
+          "type": "integer",
+          "description": "Minimum number of discrete state values (dimension of the discrete state vector)",
+          "default": 0
+        },
+        "max_discrete_states_dimension": {
+          "type": "integer",
+          "description": "Maximum number of discrete state values (dimension of the discrete state vector)",
+          "default": 0
+        },
+        "min_feedthrough_states_dimension": {
+          "type": "integer",
+          "description": "Minimum number of feedthrough state values (dimension of the feedthrough state vector)",
+          "default": 0
+        },
+        "max_feedthrough_states_dimension": {
+          "type": "integer",
+          "description": "Maximum number of feedthrough state values (dimension of the feedthrough state vector)",
+          "default": 0
+        },
+        "continuous_states_initial_condition": {
+          "type": "number",
+          "description": "Initial value(s) for the continuous state(s) of the blocks.",
+          "default": 0.0
+        },
+        "discrete_states_initial_condition": {
+          "type": "number",
+          "description": "Initial value(s) for the discrete state(s) of the blocks.",
+          "default": 0.0
+        },
+        "feedthrough_states_initial_condition": {
+          "type": "number",
+          "description": "Initial value(s) for the feedthrough state(s) of the blocks.",
+          "default": 0.0
+        }
+      }
+    },
+    "block_parameter_definitions": {
+      "type": "array",
+      "description": "List of parameters",
+      "items": {
+        "$ref": "#/definitions/block_parameter_definition"
+      }
+    },
+    "file_outputs": {
+      "type": "array",
+      "description": "List of media outputs",
+      "items": {
+        "$ref": "#/definitions/file_output"
+      }
+    },
+    "file_output": {
+      "type": "object",
+      "description": "Description of a file output",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Filename which may contain identifier {{block_name}} that will be replaced by the block's name."
+        },
+        "type": {
+          "type": "string",
+          "description": "MIME type.",
+          "examples": ["video/mp4"]
+        }
+      }
+    },
+    "block_parameter_definition": {
+      "type": "object",
+      "description": "Description of a block configuration parameter",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the parameter",
+          "examples": ["gain", "amplitude"]
+        },
+        "read_only": {
+          "type": "boolean",
+          "description": "If true, the user cannot edit this value.",
+          "default": false
+        },
+        "feature_level": {
+          "$ref": "#/definitions/feature_level"
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "If true, this value should not be directly visible to the user.",
+          "default": false
+        },
+        "data_type": {
+          "$comment": "this should become anyOf { data_type, data_type[] }",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/data_type"
+            }
+          ]
+        },
+        "default_value": {
+          "type": "string",
+          "description": "Default value of this parameter (pseudo-python syntax)",
+          "examples": ["1.0", "[1, 1]"],
+          "default": null
+        },
+        "empty_value": {
+          "type": "string",
+          "description": "Value of this parameter when an input is emptied (pseudo-python syntax)",
+          "examples": ["1.0", "[1, 1]"],
+          "default": null
+        },
+        "description": {
+          "type": "string",
+          "description": "Short string describing the parameter",
+          "examples": ["Multiplying factor"]
+        },
+        "allowed_values": {
+          "type": "array",
+          "description": "Optional list of allowed values, to use with specific types (eg. string or int)",
+          "default": null,
+          "items": {
+            "type": "string"
+          }
+        },
+        "$comment": {
+          "type": "string",
+          "description": "Developer-only comment for the parameter"
+        },
+        "display_variant": {
+          "type": "string",
+          "description": "An alternative display variant for how the UI will render the parameter. For example, a boolean is displayed as a checkbox by default, but can also be displayed with either a switch or list by specifying the display variant.  The first value of 'allowed_values' will be used to represent 'true'.",
+          "enum": ["switch", "list"]
+        },
+        "display_full_width": {
+          "type": "boolean",
+          "description": "Set to true in order to have the parameter control take the full form width (rather than half-width which is the default for some controls, including enums).",
+          "default": false
+        }
+      },
+      "required": ["name", "default_value"],
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "object",
+      "description": "Information about blocks handling of events. Most blocks don't have events.",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "description": "The number of events tracked by the block. If non-zero, the user can select to disable event tracking for the block. -1 means event_count determined by input_count",
+          "default": 0
+        }
+      }
+    },
+    "data_type": {
+      "type": "string",
+      "description": "Data type for this parameter",
+      "$comment": "FIXME: only some of these types make sense (bool, string+allowed_values, any). They are used by the frontend but not by the compiler.",
+      "enum": ["bool", "float", "int", "string", "any"],
+      "default": "float"
+    },
+    "feature_level": {
+      "type": "string",
+      "enum": ["all", "dev", "disabled"],
+      "description": "all (default): everyone can use the feature. dev: only @collimator.ai. disabled: feature not available at all (code may be removed in the future)",
+      "default": "all"
+    },
+    "additionalProperties": false
+  }
+}

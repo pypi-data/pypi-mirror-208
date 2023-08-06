@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/workspace-config.schema.json",
+
+  "title": "WorkspaceConfig",
+  "description": "Defines the environment within which the simulation will run",
+  "type": "object",
+
+  "properties": {
+    "init_scripts": {
+      "description": "A list of initialization script files to run.",
+      "$comment": "While designed as a list/array, we only need to support a single file for now.",
+      "type": "array",
+      "items": { "$ref": "data-file.schema.json" }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/parameters.schema.json",
+
+  "title": "Parameters",
+
+  "type": "object",
+  "description": "Parameters to configure this instance. Allowed properties depend on the class of the block.",
+  "patternProperties": {
+    "[a-z][a-z0-9_]*": { "$ref": "parameter.schema.json" }
+  },
+
+  "$comment": "FIXME - this should be false but go types codegen falls apart...",
+  "additionalProperties": { "$ref": "parameter.schema.json" }
+}

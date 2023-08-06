@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/submodel-configuration.schema.json",
+  "title": "SubmodelConfiguration",
+  "description": "Submodel properties like init scripts, fixed discrete step; but not parameters.",
+  "type": "object",
+  "properties": {
+    "init_script": {
+      "description": "Init script to run before the model is used.",
+      "allOf": [
+        {
+          "$ref": "parameter.schema.json"
+        }
+      ]
+    },
+    "discrete_step": {
+      "description": "Simulation time interval between discrete steps.",
+      "allOf": [
+        {
+          "$ref": "parameter.schema.json"
+        }
+      ]
+    },
+    "atomic": {
+      "description": "Whether this submodel should be scheduled for computation as if it was a single (atomic) operation.",
+      "allOf": [
+        {
+          "$ref": "parameter.schema.json"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

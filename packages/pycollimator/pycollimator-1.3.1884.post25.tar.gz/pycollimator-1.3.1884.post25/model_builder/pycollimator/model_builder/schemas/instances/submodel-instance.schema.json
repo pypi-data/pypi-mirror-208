@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/submodel-instance.schema.json",
+  "title": "Submodel Instance",
+  "description": "Representation of a submodel instance and its parameters",
+  "type": "object",
+  "properties": {
+    "uuid": { "$ref": "uuid.schema.json" },
+    "original_uuid": { "$ref": "uuid.schema.json" },
+    "submodel_reference_uuid": {
+      "$ref": "uuid.schema.json",
+      "$comment": "Only defined if the submodel is an instance of a reference submodel.  Undefined for all local submodels."
+    },
+    "submodel_reference_version": {
+      "oneOf": [
+        {
+          "$ref": "uuid.schema.json",
+          "$comment": "If defined, this points to a specific reference submodel snapshot by snapshot uuid."
+        },
+        {
+          "$ref": "#/definitions/version_tag"
+        }
+      ],
+      "default": "latest"
+    },
+    "name": {
+      "description": "User given name of this submodel",
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+    },
+    "type": {
+      "type": "string",
+      "description": "Fully classified class of this block, including namespace",
+      "default": "core.Submodel",
+      "enum": ["core.Submodel", "core.ReferenceSubmodel", "core.Group", "core.Iterator", "core.Replicator", "core.Conditional"]
+    },
+    "inputs": {
+      "type": "array",
+      "items": { "$ref": "port.schema.json" }
+    },
+    "outputs": {
+      "type": "array",
+      "items": { "$ref": "port.schema.json" }
+    },
+    "parameters": { "$ref": "parameters.schema.json" },
+    "configuration": { "$ref": "submodel-configuration.schema.json" },
+    "uiprops": { "$ref": "node-uiprops.schema.json" }
+  },
+  "required": ["type", "uuid", "name", "inputs", "outputs", "parameters"],
+  "definitions": {
+    "version_tag": {
+      "title": "VersionTag",
+      "type": "string",
+      "enum": ["latest", "latest_tagged"]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "base": {
+    "name": "ExperimentModel",
+    "namespace": "core",
+    "description": "This is a stub to allow a model to render as a block inside an Experiment model",
+    "feature_level": "dev",
+    "supports_experiments": false,
+    "supports_submodels": false,
+    "supports_models": false
+  },
+  "modes": {
+    "feedthrough": false,
+    "time": "discrete"
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "parameters",
+          "appearance": "hollow"
+        }
+      ],
+      "dynamic": {
+        "max_count": 999
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "max_count": 999
+      }
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "model",
+      "description": "The model to run simulations with",
+      "display_full_width": true,
+      "data_type": "string",
+      "default_value": ""
+    },
+    {
+      "name": "model_version",
+      "description": "UUID of the model version to run the experiment with (defaults to latest)",
+      "display_full_width": true,
+      "data_type": "string",
+      "default_value": "latest"
+    }
+  ]
+}

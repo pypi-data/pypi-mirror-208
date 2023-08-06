@@ -1,0 +1,46 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/matrix_operations/matrix_multiplication.json",
+  "base": {
+    "name": "MatrixMultiplication",
+    "namespace": "core",
+    "description": "This block outputs the result of multiplying a matrix/vector by a matrix/vector.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#matrix-operator"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "in_0"
+        },
+        {
+          "name": "in_1"
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "out_0"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "type",
+      "data_type": "string",
+      "default_value": "matrix_matrix",
+      "description": "Matrix multiplication type",
+      "allowed_values": [
+        "matrix_matrix",
+        "matrix_vector",
+        "vector_matrix"
+      ]
+    }
+  ]
+}

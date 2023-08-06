@@ -1,0 +1,38 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/core/object_detection.json",
+  "base": {
+    "name": "ObjectDetection",
+    "namespace": "core",
+    "description": "Detect objects in images. Model was trained on COCO 2017 object detection. Output is a list of python dictionary containing the \"label\", \"score\" and \"box\" (xmin, ymin, xmax, ymax) for each object detected."
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "image"
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "results"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "model",
+      "data_type": "string",
+      "default_value": "detr-resnet-50",
+      "allowed_values": ["detr-resnet-50"],
+      "description": "Object detection model. Only \"detr-resnet-50\" supported for now."
+    }
+  ]
+}

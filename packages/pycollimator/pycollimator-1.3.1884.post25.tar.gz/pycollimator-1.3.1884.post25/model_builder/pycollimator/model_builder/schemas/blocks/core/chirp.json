@@ -1,0 +1,44 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/chirp.json",
+  "base": {
+    "name": "Chirp",
+    "namespace": "core",
+    "description": "The Chirp block outputs a swept-frequency cosine (chirp) signal with unity amplitude and continuous phase. The function returns cos(f(t) * t), where f(t) is defined as: f(t) = f0 + (f1 - f0) * t / t1.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#chirp"
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "f0",
+      "description": "Starting frequency.",
+      "data_type": "float",
+      "default_value": "0.0"
+    },
+    {
+      "name": "f1",
+      "description": "Stop frequency.",
+      "data_type": "float",
+      "default_value": "10.0"
+    },
+    {
+      "name": "stop_time",
+      "description": "Time it reaches f1.",
+      "data_type": "float",
+      "default_value": "10.0"
+    },
+    {
+      "name": "phi",
+      "description": "Phase offset.",
+      "data_type": "float",
+      "default_value": "0.0"
+    }
+  ]
+}

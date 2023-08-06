@@ -1,0 +1,45 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/trigonometric.json",
+  "base": {
+    "name": "Trigonometric",
+    "namespace": "core",
+    "description": "This block outputs the result of a trigonometric function based on the input, e.g. sin(x).",
+    "keywords": [
+      "sin",
+      "cos",
+      "tan",
+      "sine",
+      "cosine",
+      "tangent",
+      "trigonometric",
+      "trigonometry"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#trigonometric"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "function",
+      "data_type": "string",
+      "default_value": "sin",
+      "description": "Trigonometric function",
+      "allowed_values": [
+        "sin",
+        "cos",
+        "tan"
+      ]
+    }
+  ]
+}

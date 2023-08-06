@@ -1,0 +1,35 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/exponent.json",
+  "base": {
+    "name": "Exponent",
+    "namespace": "core",
+    "description": "This block outputs exp(inputs) or 2^inputs.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#exponent",
+    "supports_experiments": true
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "base",
+      "data_type": "string",
+      "default_value": "exp",
+      "description": "Base of the exponential.",
+      "allowed_values": [
+        "exp",
+        "2"
+      ]
+    }
+  ]
+}

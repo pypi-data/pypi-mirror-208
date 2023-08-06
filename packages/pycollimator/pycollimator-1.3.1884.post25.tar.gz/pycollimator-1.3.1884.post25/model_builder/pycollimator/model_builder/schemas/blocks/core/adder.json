@@ -1,0 +1,41 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/adder.json",
+  "base": {
+    "name": "Adder",
+    "namespace": "core",
+    "description": "Returns a sum by adding/subtracting the inputs per the user definition.",
+    "development_notes": "the parameter operators must be used to configure the number of block inputs. this algorithm can be found in maths.py/Adder/compute_configuration",
+    "keywords": [
+      "sum",
+      "subtract"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#adder",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 2,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "operators",
+      "description": "A string containing the signs to apply to each input port, like '++' or '+-'. Must contain exactly as many symbols as input ports.",
+      "data_type": "string",
+      "default_value": "++",
+      "hidden": true
+    }
+  ]
+}

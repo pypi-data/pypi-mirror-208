@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/node-instance.schema.json",
+
+  "title": "NodeInstance",
+  "description": "Either a block or a submodel nodes",
+  "type": "object",
+
+  "oneOf": [
+    { "$ref": "block-instance.schema.json" },
+    { "$ref": "submodel-instance.schema.json" }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/lookup_tables/lookup_table_2d.json",
+  "base": {
+    "name": "LookupTable2d",
+    "namespace": "core",
+    "description": "The block models non-linearity by mapping inputs to an output value by looking up or interpolating a table of values, in this case, the table is a 2d array, and has 2 breakpoint vectors.",
+    "keywords": [
+      "interpolate"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#lookup-table-2d"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}, {"name": "in_1"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "input_x_array",
+      "data_type": "any",
+      "default_value": "[0.0, 1.0]",
+      "description": "Array on which the input is mapped"
+    },
+    {
+      "name": "input_y_array",
+      "data_type": "any",
+      "default_value": "[0.0, 1.0]",
+      "description": "Array on which the input is mapped"
+    },
+    {
+      "name": "output_table_array",
+      "data_type": "any",
+      "default_value": "[ [0.0, 1.0], [2.0, 3.0] ]",
+      "description": "Array on which the output is mapped"
+    },
+    {
+      "name": "interpolation",
+      "data_type": "string",
+      "default_value": "linear",
+      "description": "Interpolation method. Options: [linear, cubic, quintic]. Only linear is supported presently",
+      "allowed_values": [
+        "linear"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discontinuities/dead_zone.json",
+  "base": {
+    "name": "DeadZone",
+    "namespace": "core",
+    "description": "Sets outputs to zero within a given range centered on a given value.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#dead-zone",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "events": {
+    "count": 2
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "half_range",
+      "description": "the full range of the dead zone is 2*half_range. the dead zone will extend half_range in each direction from zero",
+      "data_type": "float",
+      "default_value": "0.5"
+    }
+  ]
+}

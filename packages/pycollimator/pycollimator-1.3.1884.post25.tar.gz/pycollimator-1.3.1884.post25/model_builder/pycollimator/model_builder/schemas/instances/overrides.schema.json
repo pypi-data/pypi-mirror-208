@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/overrides.schema.json",
+
+  "title": "BlockParameterOverrides",
+
+  "type": "array",
+  "description": "Block parameter value override by block id and param name, only valid for a specific simulation run",
+  "$comment": "Please don't use this schema anymore. We need to fix pycollimator and remove this definition",
+
+  "items": {
+    "type": "object",
+    "description": "Block parameter override.",
+    "properties": {
+      "block_uuid": { "$ref": "uuid.schema.json" },
+      "parameter_name": {
+        "type": "string",
+        "description": "Block parameter name",
+        "pattern": "^[a-zA-Z0-9_]+$"
+      },
+      "expression": {
+        "type": "string",
+        "description": "Block parameter expression (currently only supports hashed files)"
+      },
+      "is_string": {
+        "type": "boolean",
+        "default": false,
+        "description": "Set to true to intepret this value as a string, without any evaluation"
+      }
+    },
+    "required": ["block_uuid", "parameter_name", "expression"]
+  }
+}

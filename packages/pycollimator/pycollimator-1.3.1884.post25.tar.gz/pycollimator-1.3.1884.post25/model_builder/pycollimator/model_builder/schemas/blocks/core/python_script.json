@@ -1,0 +1,73 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/user_defined/python_script.json",
+  "base": {
+    "name": "PythonScript",
+    "namespace": "core",
+    "description": "Executes Python statements. Values on named input ports are bound to Python variables before the statements in the block are executed. Values for named output ports are retrieved from the Python environment after executing the statements in the block.",
+    "keywords": [
+      "code"
+    ],
+    "extra_parameters": true,
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#python-script",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "any",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 0,
+        "default_count": 1,
+        "max_count": -1
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 0,
+        "default_count": 1,
+        "max_count": -1,
+        "parameter_definitions": [
+          {
+            "name": "dtype",
+            "data_type": "string",
+            "default_value": "double",
+            "allowed_values": ["double","bool","object"],
+            "description": "Data type of the output signal, follows numpy syntax like: double"
+          },
+          {
+            "name": "shape",
+            "data_type": "any",
+            "default_value": "()",
+            "description": "Shape or dimension of the output signal, follows numpy syntax like: (2,3) or ()"
+          }
+        ]
+      }
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "user_statements",
+      "data_type": "string",
+      "default_value": "out_0 = in_0",
+      "description": "String representation of the user statements.",
+      "hidden": true
+    },
+    {
+      "name": "init_script",
+      "data_type": "string",
+      "default_value": "",
+      "description": "String representation of the initialization script.",
+      "hidden": true
+    },
+    {
+      "name": "finalize_script",
+      "data_type": "string",
+      "default_value": "",
+      "description": "String representation of the finalization script.",
+      "hidden": true
+    }
+  ]
+}

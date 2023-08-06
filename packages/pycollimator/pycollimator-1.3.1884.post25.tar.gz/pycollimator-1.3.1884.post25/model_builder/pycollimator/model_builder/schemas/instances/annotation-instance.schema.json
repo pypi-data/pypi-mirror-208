@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/annotation-instance.schema.json",
+
+  "title": "Annotation Instance",
+  "description": "Representation of an annotation instance and its parameters",
+  "type": "object",
+
+  "properties": {
+    "uuid": { "$ref": "uuid.schema.json" },
+    "text": {
+      "description": "Text caption for this annotation.",
+      "type": "string"
+    },
+    "x": {
+      "type": "number",
+      "description": "Visual X coordinate of this annotation in the model",
+      "default": 0
+    },
+    "y": {
+      "type": "number",
+      "description": "Visual Y coordinate of this annotation in the model",
+      "default": 0
+    },
+    "grid_height": {
+      "type": "number",
+      "description": "Manually defined visual height in grid-space units.",
+      "default": 0
+    },
+    "grid_width": {
+      "type": "number",
+      "description": "Manually defined visual width in grid-space units.",
+      "default": 0
+    },
+    "color_id": {
+      "type": "string",
+      "description": "ID corresponding to a color definition for the background of the annotation."
+    },
+    "label_position": {
+      "type": "string",
+      "enum": ["bottom", "top", "inside"],
+      "description": "Visual location of the annotation's label",
+      "default": "bottom"
+    }
+  },
+  "required": ["uuid", "text", "x", "y", "grid_height", "grid_width"]
+}

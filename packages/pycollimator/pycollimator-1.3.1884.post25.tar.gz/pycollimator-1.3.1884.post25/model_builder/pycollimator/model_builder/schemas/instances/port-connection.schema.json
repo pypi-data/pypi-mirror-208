@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://collimator.ai/models/port-connection.schema.json",
+
+  "title": "Port Connection",
+  "type": "object",
+
+  "description": "Points to a node's I/O port",
+  "properties": {
+    "node": {
+      "$ref": "uuid.schema.json",
+      "description": "Unique ID of a node in the same diagram as this link"
+    },
+    "port": {
+      "type": "integer",
+      "description": "Port ID for sequentially numbered ports",
+      "default": 0,
+      "$comment": "FIXME we are considering using named ports as well"
+    }
+  },
+  "required": ["node", "port"]
+}

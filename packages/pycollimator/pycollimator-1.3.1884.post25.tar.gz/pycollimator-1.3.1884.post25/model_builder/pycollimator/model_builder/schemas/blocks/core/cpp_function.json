@@ -1,0 +1,34 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/user_defined/cpp_function.json",
+  "base": {
+    "name": "CppFunction",
+    "namespace": "core",
+    "description": "Runs functions defined in uploaded C or C++ projects",
+    "extra_parameters": true,
+    "keywords": ["code"],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#cpp_function"
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": false
+  },
+  "ports": {
+    "has_automatic_ports": true
+  },
+  "parameter_definitions": [
+    {
+      "name": "file_name",
+      "description": "Name of the file to use",
+      "data_type": "string",
+      "default_value": ""
+    },
+    {
+      "name": "function_name",
+      "data_type": "string",
+      "default_value": "",
+      "description": "name of the function definition",
+      "hidden": true
+    }
+  ]
+}

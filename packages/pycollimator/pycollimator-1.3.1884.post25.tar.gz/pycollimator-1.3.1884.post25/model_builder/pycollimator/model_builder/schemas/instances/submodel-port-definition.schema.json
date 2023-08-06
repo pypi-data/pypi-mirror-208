@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dev.collimator.ai/api/v0/internal/schemas/submodel-port-definition.schema.json",
+
+  "title": "SubmodelPortDefinition",
+  "description": "Definition for a single submodel I/O port.",
+
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "$comment": "why would codegen fail here? :(",
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the port"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the port",
+      "default": null
+    }
+  },
+  "required": [
+    "uuid",
+    "name"
+  ],
+  "additionalProperties": false
+}

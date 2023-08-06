@@ -1,0 +1,35 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "base": {
+    "name": "ReferenceSubmodel",
+    "namespace": "core",
+    "description": "A submodel that can be referenced multiple times by many models.",
+    "extra_parameters": true,
+    "feature_level": "dev"
+  },
+  "ui_defaults": {
+    "grid_width": 24,
+    "grid_height": 12
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "any"
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 0,
+        "max_count": -1,
+        "default_count": 1
+      }
+    },
+    "outputs": {
+      "dynamic": {
+        "min_count": 0,
+        "max_count": -1,
+        "default_count": 1
+      }
+    },
+    "has_automatic_ports": true
+  }
+}

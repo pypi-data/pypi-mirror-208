@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/submodel-port-definitions.schema.json",
+  "title": "SubmodelPortDefinitions",
+  "description": "Definitions of submodel I/O ports.",
+  "type": "object",
+  "properties": {
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "submodel-port-definition.schema.json"
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "$ref": "submodel-port-definition.schema.json"
+      }
+    }
+  },
+  "required": ["inputs", "outputs"],
+  "additionalProperties": false
+}

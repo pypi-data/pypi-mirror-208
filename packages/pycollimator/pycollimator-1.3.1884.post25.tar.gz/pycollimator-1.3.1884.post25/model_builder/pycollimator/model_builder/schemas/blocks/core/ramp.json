@@ -1,0 +1,39 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/ramp.json",
+  "base": {
+    "name": "Ramp",
+    "namespace": "core",
+    "description": "Generates a signal that starts at a specified time and value and changes by a specified rate. y(t) = A*(t-t0) if t >= t0.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#ramp",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "slope",
+      "description": "specified rate at which the signal changes.",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "start_value",
+      "description": "Initial value of the signal before the start time.",
+      "data_type": "float",
+      "default_value": "0.0"
+    },
+    {
+      "name": "start_time",
+      "description": "Time in seconds when the output start to change according to the slope value.",
+      "data_type": "float",
+      "default_value": "1.0"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/model-diagram.schema.json",
+
+  "title": "Model Diagram",
+  "description": "Model diagram with nodes (blocks or submodels) and links, this represents a single plane but can point to submodels using a recursive definition",
+  "type": "object",
+
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "description": "List of nodes in this model, which are either blocks or submodels",
+      "items": { "$ref": "node-instance.schema.json" }
+    },
+    "links": {
+      "type": "array",
+      "description": "List of directional links in this model",
+      "items": { "$ref": "link-instance.schema.json" }
+    },
+    "annotations": {
+      "type": "array",
+      "description": "List of annotations in this model",
+      "items": { "$ref": "annotation-instance.schema.json" }
+    },
+    "uuid": {
+      "type": "string",
+      "description": "Unique ID of this model diagram, optional"
+    }
+  },
+  "required": ["nodes", "links"]
+}

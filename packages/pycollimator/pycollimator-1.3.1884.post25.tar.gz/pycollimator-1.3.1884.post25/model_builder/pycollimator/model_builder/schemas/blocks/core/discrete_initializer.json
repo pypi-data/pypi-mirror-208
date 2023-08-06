@@ -1,0 +1,37 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/discrete_initializer.json",
+  "base": {
+    "name": "DiscreteInitializer",
+    "namespace": "core",
+    "description": "First output is true, all following are false, or vice versa, first output is false, and all following are true.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#discrete-initializer",
+    "supports_experiments": true,
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "discrete",
+    "feedthrough": false
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "discrete_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "initial_state",
+      "data_type": "bool",
+      "default_value": "true",
+      "description": "Initial output value.",
+      "display_variant": "list",
+      "allowed_values": [
+        "true",
+        "false"
+      ]
+    }
+  ]
+}

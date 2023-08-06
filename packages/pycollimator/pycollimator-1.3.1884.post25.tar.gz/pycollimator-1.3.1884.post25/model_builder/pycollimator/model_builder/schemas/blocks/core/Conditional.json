@@ -1,0 +1,48 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "base": {
+    "name": "Conditional",
+    "namespace": "core",
+    "description": "conditionally execute the model content inside.",
+    "extra_parameters": true,
+    "hidden": true,
+    "feature_level": "dev"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "any"
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "enable",
+          "appearance": "hollow"
+        }
+      ]
+    },
+    "has_automatic_ports": true
+  },
+  "parameter_definitions": [
+    {
+      "name": "output_on_disable",
+      "data_type": "string",
+      "default_value": "hold",
+      "description": "how the outputs of the conditional block are computed when it is disabled",
+      "allowed_values": [
+        "hold",
+        "reset to 0"
+      ]
+    },
+    {
+      "name": "state_on_disable",
+      "data_type": "string",
+      "default_value": "hold",
+      "description": "how the states of the blocks inside the conditional block are computed when it is disabled",
+      "allowed_values": [
+        "hold",
+        "reset"
+      ]
+    }
+  ]
+}

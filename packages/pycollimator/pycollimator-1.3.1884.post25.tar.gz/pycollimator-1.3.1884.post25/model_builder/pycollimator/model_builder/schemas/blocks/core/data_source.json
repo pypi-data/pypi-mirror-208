@@ -1,0 +1,76 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/data_source.json",
+  "base": {
+    "name": "DataSource",
+    "namespace": "core",
+    "description": "Specifies a data file that can be used as a source.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#data-source"
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [{ "name": "out_0" }]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "data_integration_id",
+      "description": "ID of the integration to be used.",
+      "data_type": "string",
+      "default_value": ""
+    },
+    {
+      "name": "file_name",
+      "description": "Name of the file to use as a data source.",
+      "data_type": "string",
+      "default_value": ""
+    },
+    {
+      "name": "header_as_first_row",
+      "description": "Check this box if the file has a header.",
+      "data_type": "bool",
+      "default_value": "false"
+    },
+    {
+      "name": "time_samples_as_column",
+      "description": "Check this box to use a column in the data file as the source of time stamps for data samples(rows).",
+      "data_type": "bool",
+      "default_value": "true"
+    },
+    {
+      "name": "time_column",
+      "description": "Index of the time stamps column. Default is 0, which is the first column.",
+      "data_type": "string",
+      "default_value": "0"
+    },
+    {
+      "name": "sampling_interval",
+      "description": "Time interval between two data samples(rows) of the data file whe there is no time column. Must be > 0.",
+      "data_type": "float",
+      "default_value": "0.1"
+    },
+    {
+      "name": "data_columns",
+      "description": "Index or String to select the data column for the output. Default is 1, which is the first column after time column.",
+      "data_type": "string",
+      "default_value": "1"
+    },
+    {
+      "name": "extrapolation",
+      "data_type": "string",
+      "default_value": "hold",
+      "description": "Method used to compute output after end-of-file has been reached.",
+      "allowed_values": ["hold", "zero"]
+    },
+    {
+      "name": "interpolation",
+      "data_type": "string",
+      "default_value": "linear",
+      "description": "Method used to compute output at times between time stamps.",
+      "allowed_values": ["zero_order_hold", "linear"]
+    }
+  ]
+}

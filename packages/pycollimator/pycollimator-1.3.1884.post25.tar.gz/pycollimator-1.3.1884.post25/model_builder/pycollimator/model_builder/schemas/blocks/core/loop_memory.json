@@ -1,0 +1,42 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/loop_memory.json",
+  "base": {
+    "name": "LoopMemory",
+    "namespace": "core",
+    "description": "Memory in an Iterator loop.",
+    "supports_iterator": true,
+    "supports_models": false,
+    "supports_experiments": false,
+    "supports_submodels": false,
+    "feature_level": "dev"
+  },
+  "modes": {
+    "time": "any",
+    "feedthrough": false
+  },
+  "ports": {
+    "inputs": {
+      "static": [
+        {
+          "name": "in_0"
+        }
+      ]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "out_0"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "initial_value",
+      "data_type": "float",
+      "default_value": "0.0",
+      "description": "initial value of memory."
+    }
+  ]
+}

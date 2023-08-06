@@ -1,0 +1,50 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/lookup_tables/lookup_table_1d.json",
+  "base": {
+    "name": "LookupTable1d",
+    "namespace": "core",
+    "description": "The block models non-linearity by mapping inputs to an output value by looking up or interpolating a table of values, in this case, the table is 2 1d arrays.",
+    "keywords": [
+      "interpolate"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#lookup-table-1d"
+  },
+  "modes": {
+    "feedthrough": true,
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "input_array",
+      "data_type": "any",
+      "default_value": "[0.0, 1.0]",
+      "description": "Array on which the input is mapped"
+    },
+    {
+      "name": "output_array",
+      "data_type": "any",
+      "default_value": "[0.0, 1.0]",
+      "description": "Array on which the output is mapped"
+    },
+    {
+      "name": "interpolation",
+      "data_type": "string",
+      "default_value": "linear",
+      "description": "Interpolation method",
+      "allowed_values": [
+        "flat",
+        "nearest",
+        "linear"
+      ]
+    }
+  ]
+}

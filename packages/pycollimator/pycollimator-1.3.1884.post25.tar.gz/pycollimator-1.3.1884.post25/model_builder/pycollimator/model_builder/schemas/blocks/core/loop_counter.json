@@ -1,0 +1,46 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/loop_counter.json",
+  "base": {
+    "name": "LoopCounter",
+    "namespace": "core",
+    "description": "Acts as the (i=0;i<N;i+=increment) feature of a typical for loop.",
+    "supports_iterator": true,
+    "supports_models": false,
+    "supports_experiments": false,
+    "supports_submodels": false,
+    "feature_level": "dev"
+  },
+  "modes": {
+    "time": "any"
+  },
+  "ports": {
+    "outputs": {
+      "static": [
+        {
+          "name": "out_0"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "start_value",
+      "description": "The value the counter starts at, e.g. for(i=value; ...",
+      "data_type": "int",
+      "default_value": "0"
+    },
+    {
+      "name": "end_value",
+      "description": "The value the counter stops at, e.g. for(i=0;i<value ...",
+      "data_type": "int",
+      "default_value": "0"
+    },
+    {
+      "name": "increment",
+      "description": "The value the counter steps by, e.g. for(i=0;i<N,i+=value) ...",
+      "data_type": "int",
+      "default_value": "1"
+    }
+  ]
+}

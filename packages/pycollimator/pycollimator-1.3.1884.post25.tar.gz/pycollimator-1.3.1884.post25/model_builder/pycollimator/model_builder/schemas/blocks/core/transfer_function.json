@@ -1,0 +1,41 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/continuous/transfer_function.json",
+  "base": {
+    "name": "TransferFunction",
+    "namespace": "core",
+    "description": "Models a linear system by a transfer function of the Laplace-domain variable s.",
+    "development_notes": "the order of the denominator must be greater than the numerator. leading zeros in either num or den should be pruned.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/continuous-blocks#transfer-function",
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "continuous",
+    "feedthrough": false
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "continuous_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "numerator_coefficients",
+      "data_type": "any",
+      "default_value": "[1]",
+      "description": "Coefficients of the polynomial of Laplace variable s for the numerator of the transfer function."
+    },
+    {
+      "name": "denominator_coefficients",
+      "data_type": "any",
+      "default_value": "[1, 1]",
+      "description": "Coefficients of the polynomial of Laplace variable s for the denominator of the transfer function."
+    }
+  ]
+}

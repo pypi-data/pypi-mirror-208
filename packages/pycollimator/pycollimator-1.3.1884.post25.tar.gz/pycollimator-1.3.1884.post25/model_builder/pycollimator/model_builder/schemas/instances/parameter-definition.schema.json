@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/parameter-definition.schema.json",
+
+  "title": "ParameterDefinition",
+  "description": "Definition for a single parameter, including everything needed to properly display the parameter in the UI, such as the name and the default value.",
+
+  "type": "object",
+  "properties": {
+    "uuid": { "$ref": "uuid.schema.json" },
+    "name": {
+      "type": "string",
+      "description": "Name of the parameter",
+      "examples": [
+        "gain",
+        "amplitude"
+      ]
+    },
+    "default_value": {
+      "type": "string",
+      "description": "Default value of this parameter (pseudo-python syntax)",
+      "examples": [
+        "1.0",
+        "[1, 1]"
+      ],
+      "default": null
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the parameter",
+      "default": null
+    },
+    "uiprops": {
+      "$ref": "parameter-definition-uiprops.schema.json"
+    }
+  },
+  "required": [
+    "uuid",
+    "name",
+    "default_value"
+  ],
+  "additionalProperties": false
+}

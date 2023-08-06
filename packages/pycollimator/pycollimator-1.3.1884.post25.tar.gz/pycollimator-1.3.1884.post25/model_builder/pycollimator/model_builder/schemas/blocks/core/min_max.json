@@ -1,0 +1,49 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/minmax.json",
+  "base": {
+    "name": "MinMax",
+    "namespace": "core",
+    "description": "Outputs the minimum or maximum of the inputs.",
+    "keywords": [
+      "min",
+      "max"
+    ],
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#minmax",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "states": {
+    "feedthrough_states_dimension": 1
+  },
+  "events": {
+    "count": -1
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 2,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "operator",
+      "description": "Selection to apply min() or max() operator.",
+      "data_type": "string",
+      "default_value": "max",
+      "allowed_values": [
+        "max",
+        "min"
+      ]
+    }
+  ]
+}

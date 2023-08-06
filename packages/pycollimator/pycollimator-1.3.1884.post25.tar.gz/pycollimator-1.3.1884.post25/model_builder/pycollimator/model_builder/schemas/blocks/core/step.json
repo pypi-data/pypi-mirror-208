@@ -1,0 +1,42 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/step.json",
+  "base": {
+    "name": "Step",
+    "namespace": "core",
+    "description": "Generates a single step output, aka. Heaviside function.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#step",
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "any"
+  },
+  "events": {
+    "count": 1
+  },
+  "ports": {
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "start_value",
+      "description": "Output value before jump.",
+      "data_type": "float",
+      "default_value": "0.0"
+    },
+    {
+      "name": "end_value",
+      "description": "Output value at and after jump.",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "step_time",
+      "description": "Time in seconds when the output jumps from `start_value` to `end_value`.",
+      "data_type": "float",
+      "default_value": "1.0"
+    }
+  ]
+}

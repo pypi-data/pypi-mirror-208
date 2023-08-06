@@ -1,0 +1,35 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/signal_routing/bus_creator.json",
+  "base": {
+    "name": "BusCreator",
+    "namespace": "core",
+    "description": "Create a bus signal from all of the inputs.",
+    "supports_models": false,
+    "supports_submodels": false,
+    "supports_experiments": true
+  },
+  "modes": {
+    "time": "agnostic"
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 1,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "merge",
+      "data_type": "bool",
+      "default_value": "true",
+      "description": "If true, input bus signals will be merged into one. Otherwise, a tree of bus signals will be created."
+    }
+  ]
+}

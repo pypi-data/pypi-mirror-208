@@ -1,0 +1,40 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/sources/video_sink.json",
+  "base": {
+    "name": "VideoSink",
+    "namespace": "core",
+    "description": "Output to a video.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/discrete-blocks#videosink"
+  },
+  "modes": {
+    "time": "discrete"
+  },
+  "ports": {
+    "inputs": {
+      "static": [{ "name": "frame" }]
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "frame_id"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "fps",
+      "description": "FPS.",
+      "data_type": "float",
+      "default_value": "24",
+      "hidden": true
+    }
+  ],
+  "file_outputs": [
+    {
+      "filename": "{{block_name}}.mp4",
+      "type": "video/mp4"
+    }
+  ]
+}

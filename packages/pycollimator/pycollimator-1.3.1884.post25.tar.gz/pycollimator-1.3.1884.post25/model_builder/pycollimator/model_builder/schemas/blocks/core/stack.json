@@ -1,0 +1,59 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/maths/stack.json",
+  "base": {
+    "name": "Stack",
+    "namespace": "core",
+    "description": "Stacks arrays.",
+    "keywords": [
+      "vector",
+      "matrix",
+      "concatenate",
+      "horizontal",
+      "vertical",
+      "stack",
+      "hstack",
+      "vstack",
+      "row_stack",
+      "column_stack",
+      "dstack",
+      "join",
+      "mux"
+    ]
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "dynamic": {
+        "min_count": 2,
+        "max_count": -1,
+        "default_count": 2
+      }
+    },
+    "outputs": {
+      "static": [
+        {
+          "name": "out_0"
+        }
+      ]
+    }
+  },
+  "parameter_definitions": [
+    {
+      "name": "dimension_to_stack_along",
+      "description": "How the stacking will be done.",
+      "data_type": "string",
+      "default_value": "first",
+      "allowed_values": [
+        "first",
+        "horizontal",
+        "vertical",
+        "depth",
+        "column_wise"
+      ]
+    }
+  ]
+}

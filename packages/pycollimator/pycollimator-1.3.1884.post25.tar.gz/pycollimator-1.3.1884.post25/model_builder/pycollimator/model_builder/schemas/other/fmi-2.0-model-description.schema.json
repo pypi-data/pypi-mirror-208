@@ -1,0 +1,372 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/fmi-2.0-model-description.schema.json",
+  "title": "FmiModelDescription",
+  "definitions": {
+    "schemas": {
+      "LogCategory": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["name"],
+        "type": "object"
+      },
+      "ScalarVariable": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/schemas/ScalarVariableReal"
+          },
+          {
+            "$ref": "#/definitions/schemas/ScalarVariableInteger"
+          },
+          {
+            "$ref": "#/definitions/schemas/ScalarVariableBoolean"
+          },
+          {
+            "$ref": "#/definitions/schemas/ScalarVariableString"
+          },
+          {
+            "$ref": "#/definitions/schemas/ScalarVariableEnumeration"
+          }
+        ]
+      },
+      "ScalarVariableBoolean": {
+        "properties": {
+          "Boolean": {
+            "type": "boolean"
+          },
+          "causality": {
+            "default": "local",
+            "enum": [
+              "calculatedParameter",
+              "independent",
+              "input",
+              "local",
+              "output",
+              "parameter"
+            ],
+            "type": "string"
+          },
+          "cml_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "initial": {
+            "default": "continuous",
+            "enum": ["approx", "calculated", "exact"],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "valueReference": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "variability": {
+            "default": "continuous",
+            "enum": ["constant", "continuous", "discrete", "fixed", "tunable"],
+            "type": "string"
+          }
+        },
+        "required": ["Boolean", "cml_name", "name", "valueReference"],
+        "type": "object"
+      },
+      "ScalarVariableEnumeration": {
+        "properties": {
+          "Enumeration": {
+            "type": "string"
+          },
+          "causality": {
+            "default": "local",
+            "enum": [
+              "calculatedParameter",
+              "independent",
+              "input",
+              "local",
+              "output",
+              "parameter"
+            ],
+            "type": "string"
+          },
+          "cml_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "initial": {
+            "default": "continuous",
+            "enum": ["approx", "calculated", "exact"],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "valueReference": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "variability": {
+            "default": "continuous",
+            "enum": ["constant", "continuous", "discrete", "fixed", "tunable"],
+            "type": "string"
+          }
+        },
+        "required": ["Enumeration", "cml_name", "name", "valueReference"],
+        "type": "object"
+      },
+      "ScalarVariableInteger": {
+        "properties": {
+          "Integer": {
+            "type": "integer"
+          },
+          "causality": {
+            "default": "local",
+            "enum": [
+              "calculatedParameter",
+              "independent",
+              "input",
+              "local",
+              "output",
+              "parameter"
+            ],
+            "type": "string"
+          },
+          "cml_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "initial": {
+            "default": "continuous",
+            "enum": ["approx", "calculated", "exact"],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "valueReference": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "variability": {
+            "default": "continuous",
+            "enum": ["constant", "continuous", "discrete", "fixed", "tunable"],
+            "type": "string"
+          }
+        },
+        "required": ["Integer", "cml_name", "name", "valueReference"],
+        "type": "object"
+      },
+      "ScalarVariableReal": {
+        "properties": {
+          "Real": {
+            "type": "number"
+          },
+          "causality": {
+            "default": "local",
+            "enum": [
+              "calculatedParameter",
+              "independent",
+              "input",
+              "local",
+              "output",
+              "parameter"
+            ],
+            "type": "string"
+          },
+          "cml_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "initial": {
+            "default": "continuous",
+            "enum": ["approx", "calculated", "exact"],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "valueReference": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "variability": {
+            "default": "continuous",
+            "enum": ["constant", "continuous", "discrete", "fixed", "tunable"],
+            "type": "string"
+          }
+        },
+        "required": ["Real", "cml_name", "name", "valueReference"],
+        "type": "object"
+      },
+      "ScalarVariableString": {
+        "properties": {
+          "String": {
+            "type": "string"
+          },
+          "causality": {
+            "default": "local",
+            "enum": [
+              "calculatedParameter",
+              "independent",
+              "input",
+              "local",
+              "output",
+              "parameter"
+            ],
+            "type": "string"
+          },
+          "cml_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "initial": {
+            "default": "continuous",
+            "enum": ["approx", "calculated", "exact"],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "valueReference": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "variability": {
+            "default": "continuous",
+            "enum": ["constant", "continuous", "discrete", "fixed", "tunable"],
+            "type": "string"
+          }
+        },
+        "required": ["String", "cml_name", "name", "valueReference"],
+        "type": "object"
+      }
+    }
+  },
+  "description": "Schema for our modelDescription.json converted from FMI modelDescription.xml\ngenerated with `typescript-json-schema schema.ts fmiModelDescription > schema.json`",
+  "properties": {
+    "CoSimulation": {
+      "properties": {
+        "canGetAndSetFMUstate": {
+          "type": "boolean"
+        },
+        "canHandleVariableCommunicationStepSize": {
+          "type": "boolean"
+        },
+        "canNotUseMemoryManagementFunctions": {
+          "type": "boolean"
+        },
+        "canSerializeFMUstate": {
+          "type": "boolean"
+        },
+        "modelIdentifier": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "canGetAndSetFMUstate",
+        "canHandleVariableCommunicationStepSize",
+        "canNotUseMemoryManagementFunctions",
+        "canSerializeFMUstate",
+        "modelIdentifier"
+      ],
+      "type": "object"
+    },
+    "DefaultExperiment": {
+      "properties": {
+        "startTime": {
+          "type": "number"
+        },
+        "stepSize": {
+          "type": "number"
+        },
+        "stopTime": {
+          "type": "number"
+        },
+        "tolerance": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "LogCategories": {
+      "items": {
+        "$ref": "#/definitions/schemas/LogCategory"
+      },
+      "type": "array"
+    },
+    "ModelExchange": {
+      "properties": {
+        "canGetAndSetFMUstate": {
+          "type": "boolean"
+        },
+        "canNotUseMemoryManagementFunctions": {
+          "type": "boolean"
+        },
+        "canSerializeFMUstate": {
+          "type": "boolean"
+        },
+        "modelIdentifier": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "canGetAndSetFMUstate",
+        "canNotUseMemoryManagementFunctions",
+        "canSerializeFMUstate",
+        "modelIdentifier"
+      ],
+      "type": "object"
+    },
+    "ModelVariables": {
+      "items": {
+        "$ref": "#/definitions/schemas/ScalarVariable"
+      },
+      "type": "array"
+    },
+    "description": {
+      "type": "string"
+    },
+    "fmiVersion": {
+      "enum": ["2.0"],
+      "type": "string"
+    },
+    "generationTool": {
+      "type": "string"
+    },
+    "guid": {
+      "type": "string"
+    },
+    "modelName": {
+      "type": "string"
+    },
+    "numberOfEventIndicators": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "ModelVariables",
+    "fmiVersion",
+    "generationTool",
+    "guid",
+    "modelName",
+    "numberOfEventIndicators"
+  ],
+  "type": "object",
+  "$comment": "DO NOT EDIT THIS FILE DIRECTLY - GO TO src/lib/model-schemas/ INSTEAD"
+}

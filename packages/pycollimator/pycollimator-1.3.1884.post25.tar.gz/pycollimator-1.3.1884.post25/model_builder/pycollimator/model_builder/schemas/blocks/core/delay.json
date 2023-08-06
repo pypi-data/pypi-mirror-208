@@ -1,0 +1,41 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discrete/delay.json",
+  "base": {
+    "name": "Delay",
+    "namespace": "core",
+    "description": "Delays the input to the output by a fixed amount of time.",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/continuous-blocks#delay",
+    "supports_experiments": true,
+    "supports_iterator": false
+  },
+  "modes": {
+    "time": "continuous",
+    "feedthrough": true
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "feedthrough_states_dimension": 100
+  },
+  "parameter_definitions": [
+    {
+      "name": "delay",
+      "data_type": "float",
+      "default_value": "1.0",
+      "description": "Amount of time to delay."
+    },
+    {
+      "name": "initial_output",
+      "data_type": "float",
+      "default_value": "0.0",
+      "description": "Value of block output until delay time has passed."
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://collimator.ai/models/model-configuration.schema.json",
+
+  "title": "Model Configuration",
+  "description": "Default simulation configuration for a given model",
+  "$comment": "The defaults should probably be kept in sync with those in cml app.h",
+  "type": "object",
+
+  "properties": {
+    "stop_time": {
+      "type": "number",
+      "default": 10.0,
+      "description": "Time at which the simulation stops.",
+      "format": "double"
+    },
+    "sample_time": {
+      "type": "number",
+      "description": "The discrete step or update interval for all discrete blocks in the model.",
+      "default": 0.1,
+      "format": "double"
+    },
+    "continuous_time_result_interval": {
+      "type": "number",
+      "description": "The time interval at which results samples are computed for blocks with time_mode=continuous (Optional)",
+      "default": 0.0,
+      "format": "double"
+    },
+    "events_handling": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "none"
+      ],
+      "description": "Configure handling of events. none=globally disable for all blocks. normal=enables events and zeno handling.",
+      "default": "normal"
+    },
+    "solver": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "RK45",
+            "BDF"
+          ],
+          "default": "RK45",
+          "description": "The ODE solver to use for continuous blocks in the model."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "fixed_step", "variable_step"
+          ],
+          "default": "variable_step",
+          "description": "The mechanism by which steps size is determined by the ODE solver."
+        },
+        "first_step": {
+          "type": "number",
+          "description": "Size of the first step taken by ODE solver.",
+          "default": 1e-4,
+          "format": "double"
+        },
+        "max_step": {
+          "type": "number",
+          "description": "Maximum size of an ODE solver step.",
+          "default": 1.0e6,
+          "format": "double"
+        },
+        "min_step": {
+          "type": "number",
+          "description": "Minimum size of an ODE solver step.",
+          "default": 0.0,
+          "format": "double"
+        },
+        "fixed_step": {
+          "type": "number",
+          "description": "Fixed size of an ODE solver step.",
+          "default": 1e-2,
+          "format": "double"
+        },
+        "relative_tolerance": {
+          "type": "number",
+          "description": "Relative tolerance for the ODE solver error estimation.",
+          "default": 1e-3,
+          "format": "double"
+        },
+        "absolute_tolerance": {
+          "type": "number",
+          "description": "Absolute tolerance for the ODE solver error estimation.",
+          "default": 1e-6,
+          "format": "double"
+        }
+      }
+    },
+    "record_mode": {
+      "type": "string",
+      "enum": [
+        "all",
+        "selected"
+      ],
+      "default": "all",
+      "description": "Whether to record outputs of all blocks, or only the outputs of selected blocks."
+    },
+    "workspace": {
+      "$ref": "workspace-config.schema.json"
+    },
+    "worker_type": {
+      "type": "string",
+      "enum": ["any", "cpu", "gpu"],
+      "default": "any",
+      "description": "Instance type of the worker to run the simulation on."
+    },
+    "__developer_options": {
+      "type": "object",
+      "$comment": "These are private options for Collimator engineers. TODO: migrate out of model.json",
+      "properties": {
+        "disable_firejail" : {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "stop_time"
+  ]
+}

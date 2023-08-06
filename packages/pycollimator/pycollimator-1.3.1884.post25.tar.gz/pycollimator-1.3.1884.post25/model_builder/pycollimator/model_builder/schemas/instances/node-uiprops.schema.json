@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://collimator.ai/models/node-uiprops.schema.json",
+
+  "title": "Node UI Props",
+  "description": "Node UI-specific properties that need to be persisted (eg. color, shape, style, etc...)",
+  "type": "object",
+
+  "properties": {
+    "x": {
+      "type": "number",
+      "description": "Visual X coordinate of this block in the model",
+      "default": 0
+    },
+    "y": {
+      "type": "number",
+      "description": "Visual Y coordinate of this block in the model",
+      "default": 0
+    },
+    "grid_height": {
+      "type": "number",
+      "description": "Manually defined visual height in grid-space units (unused if smaller than the minimum height based on other factors).",
+      "default": 0
+    },
+    "grid_width": {
+      "type": "number",
+      "description": "Manually defined visual width in grid-space units (unused if smaller than the minimum width based on other factors).",
+      "default": 0
+    },
+    "label_position": {
+      "type": "string",
+      "enum": ["bottom", "top"],
+      "description": "Visual location of the block's label",
+      "default": "bottom"
+    },
+    "directionality": {
+      "type": "string",
+      "enum": ["left", "right"],
+      "description": "Visual location of the block's label",
+      "default": "right"
+    },
+    "show_port_name_labels": {
+      "type": "boolean",
+      "description": "Flag that determines whether the block's port names will show within the block",
+      "default": false
+    },
+    "port_alignment": {
+      "type": "string",
+      "enum": ["spaced", "top", "center", "bottom"],
+      "description": "Visual spacing option for the block's ports",
+      "default": "spaced"
+    },
+    "parameter_heights": {
+      "type": "object",
+      "description": "Height of the parameter value textarea for each parameter name",
+      "additionalProperties": {"type": "string"}
+    }
+  },
+  "required": ["x", "y"]
+}

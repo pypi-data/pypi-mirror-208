@@ -1,0 +1,212 @@
+load("@pycollimator//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_python//python:packaging.bzl", "py_package", "py_wheel")
+
+# To update dependencies, edit the requirements.in file and build this rule to
+# generate requirements-lock.txt: bazel run //src/lib/pycollimator:compile_pip_requirements.update
+compile_pip_requirements(
+    name = "compile_pip_requirements",
+    extra_args = ["--allow-unsafe"],
+    requirements_in = "requirements.in",
+    requirements_txt = "requirements-lock.txt",
+)
+
+py_library(
+    name = "pycollimator",
+    srcs = glob(["pycollimator/*.py"]),
+    imports = ["pycollimator"],
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("control"),
+        requirement("numpy"),
+        requirement("pandas"),
+        requirement("requests"),
+        requirement("simpleeval"),
+        requirement("ipywidgets"),
+    ],
+)
+
+# This will package all transitive dependencies.
+py_package(
+    name = "pycollimator_pkg",
+    deps = [":pycollimator"],
+)
+
+# Will build "pycollimator-0.0.1-py3-none-any.whl"
+py_wheel(
+    name = "pycollimator_whl",
+    distribution = "pycollimator",
+    python_tag = "py3",
+    strip_path_prefixes = [
+        "src/lib/pycollimator",
+    ],
+    version = "0.0.1",
+    deps = [":pycollimator_pkg"],
+)
+
+# Should run fetch-test-token.sh first
+py_test(
+    name = "test_auth",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_auth.py",
+    ],
+    data = [
+        "secrets/token.txt",
+        "tests/config-dev.json",
+        "tests/config-local.json",
+    ],
+    env = {
+        "FIXTURES_ROOT": "src/lib/pycollimator/",
+    },
+    env_inherit = ["ENV"],
+    imports = [
+        "./",
+        "tests",
+    ],
+    deps = [
+        requirement("pytest"),
+        ":pycollimator",
+    ],
+)
+
+# Should run fetch-test-token.sh first
+py_test(
+    name = "test_datasource",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_datasource.py",
+    ],
+    data = [
+        "secrets/token.txt",
+        "tests/config-dev.json",
+        "tests/config-local.json",
+        "tests/fixtures/test_003.json",
+    ],
+    env = {
+        "FIXTURES_ROOT": "src/lib/pycollimator/",
+    },
+    env_inherit = ["ENV"],
+    imports = [
+        "./",
+        "tests",
+    ],
+    deps = [
+        requirement("pytest"),
+        ":pycollimator",
+    ],
+)
+
+# Should run fetch-test-token.sh first
+py_test(
+    name = "test_projects",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_projects.py",
+    ],
+    data = [
+        "secrets/token.txt",
+        "tests/config-dev.json",
+        "tests/config-local.json",
+        "tests/fixtures/test_001.json",
+        "tests/fixtures/test_002.json",
+        "tests/fixtures/test_003.json",
+        "tests/fixtures/test_004.json",
+        "tests/fixtures/test_005.json",
+    ],
+    env = {
+        "FIXTURES_ROOT": "src/lib/pycollimator/",
+    },
+    env_inherit = ["ENV"],
+    imports = [
+        "./",
+        "tests",
+    ],
+    deps = [
+        requirement("pytest"),
+        ":pycollimator",
+    ],
+)
+
+# Should run fetch-test-token.sh first
+py_test(
+    name = "test_results",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_results.py",
+    ],
+    data = [
+        "secrets/token.txt",
+        "tests/config-dev.json",
+        "tests/config-local.json",
+        "tests/fixtures/test_004.json",
+    ],
+    env = {
+        "FIXTURES_ROOT": "src/lib/pycollimator/",
+    },
+    env_inherit = ["ENV"],
+    imports = [
+        "./",
+        "tests",
+    ],
+    deps = [
+        requirement("pytest"),
+        ":pycollimator",
+    ],
+)
+
+# Should run fetch-test-token.sh first
+py_test(
+    name = "test_simulations",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_simulations.py",
+    ],
+    data = [
+        "secrets/token.txt",
+        "tests/config-dev.json",
+        "tests/config-local.json",
+        "tests/fixtures/test_001.json",
+        "tests/fixtures/test_002.json",
+        "tests/fixtures/test_004.json",
+        "tests/fixtures/test_005.json",
+    ],
+    env = {
+        "FIXTURES_ROOT": "src/lib/pycollimator/",
+    },
+    env_inherit = ["ENV"],
+    imports = [
+        "./",
+        "tests",
+    ],
+    deps = [
+        requirement("pytest"),
+        ":pycollimator",
+    ],
+)
+
+py_test(
+    name = "test_upload_file",
+    srcs = [
+        "tests/__init__.py",
+        "tests/test_upload_file.py",
+    ],
+    data = [
+        "secrets/token.txt",
+        "tests/config-dev.json",
+        "tests/config-local.json",
+        "tests/fixtures/stop.png",
+    ],
+    env = {
+        "FIXTURES_ROOT": "src/lib/pycollimator/",
+    },
+    env_inherit = ["ENV"],
+    imports = [
+        "./",
+        "tests",
+    ],
+    deps = [
+        ":pycollimator",
+    ],
+)

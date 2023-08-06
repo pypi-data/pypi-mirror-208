@@ -1,0 +1,61 @@
+{
+  "$schema": "../../block-class.schema.json",
+  "$id": "https://collimator.ai/models/blocks/base/discontinuities/relay.json",
+  "base": {
+    "name": "Relay",
+    "namespace": "core",
+    "description": "The Relay block allows its output to switch between two specified values. ",
+    "development_notes": "this block initial_state should not be exposed to the user, it defaults to off_value. ",
+    "help_url": "https://docs.collimator.ai/using-model-editors/block-library/agnostic-blocks#relay"
+  },
+  "modes": {
+    "time": "agnostic",
+    "feedthrough": true
+  },
+  "events": {
+    "count": 2
+  },
+  "ports": {
+    "inputs": {
+      "static": [{"name": "in_0"}]
+    },
+    "outputs": {
+      "static": [{"name": "out_0"}]
+    }
+  },
+  "states": {
+    "feedthrough_states_dimension": 1
+  },
+  "parameter_definitions": [
+    {
+      "name": "on_threshold",
+      "description": "threshold above which the output will switch to the on_value",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "off_threshold",
+      "description": "threshold below which the output will switch to the off_value",
+      "data_type": "float",
+      "default_value": "0.0"
+    },
+    {
+      "name": "on_value",
+      "description": "output value when in on state",
+      "data_type": "float",
+      "default_value": "1.0"
+    },
+    {
+      "name": "off_value",
+      "description": "output value when in off state",
+      "data_type": "float",
+      "default_value": "0.0"
+    },
+    {
+      "name": "initial_state",
+      "data_type": "float",
+      "default_value": "0.0",
+      "description": "initial value of relay state."
+    }
+  ]
+}
