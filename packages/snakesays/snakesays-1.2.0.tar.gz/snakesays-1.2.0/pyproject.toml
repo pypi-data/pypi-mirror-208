@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snakesays"
+authors = [
+    { name = "Ishan Mahajan", email = "imahajan0007@gmail.com"},
+]
+description = "Snake says"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+dynamic = ["version"]
+
+[project.scripts]
+snakey = "snakesay.__main__:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "snakesay.VERSION"}
+
+[tool.setuptools]
+packages = ["snakesay"]
