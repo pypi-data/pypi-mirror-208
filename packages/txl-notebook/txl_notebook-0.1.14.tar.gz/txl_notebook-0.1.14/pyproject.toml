@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "txl_notebook"
+description = "TXL plugin for a notebook"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "David Brochart", email = "david.brochart@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "txl",
+  "jupyter_ydoc >=0.3.0a4"
+]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/davidbrochart/jpterm/plugins/notebook"
+
+[project.entry-points."asphalt.components"]
+notebook = "txl_notebook.components:NotebookComponent"
+
+[tool.hatch.version]
+path = "txl_notebook/__init__.py"
