@@ -1,0 +1,105 @@
+Metadata-Version: 2.1
+Name: django-import-export-extensions
+Version: 0.1.3
+Summary: Extend functionality of `django-import-export`
+Author-email: Saritasa <pypi@saritasa.com>
+License: MIT License
+        
+        Copyright (c) 2022, Saritasa
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/saritasa-nest/django-import-export-extensions
+Project-URL: Bug Tracker, https://github.com/saritasa-nest/django-import-export-extensions/issues
+Keywords: django_import_export_extensions
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.2
+Classifier: Framework :: Django :: 4.0
+Classifier: Framework :: Django :: 4.1
+Classifier: Framework :: Django :: 4.2
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: django-import-export
+Requires-Dist: celery
+Requires-Dist: redis
+Requires-Dist: django (>=3.2)
+Requires-Dist: django-object-actions
+Requires-Dist: django-picklefield
+Requires-Dist: django-filter
+Requires-Dist: requests
+Requires-Dist: psycopg2-binary
+
+===============================
+django-import-export-extensions
+===============================
+
+.. image:: https://github.com/saritasa-nest/django-import-export-extensions/actions/workflows/checks.yml/badge.svg
+        :target: https://github.com/saritasa-nest/django-import-export-extensions/actions/workflows/checks.yml
+        :alt: Build status on Github
+
+.. image:: https://img.shields.io/badge/python%20versions-3.9%20%7C%203.10%20%7C%203.11-blue
+        :target: https://pypi.org/project/django-import-export-extensions/
+        :alt: Supported python versions
+
+.. image:: https://img.shields.io/badge/django--versions-3.2%20%7C%204.0%20%7C%204.1%20%7C%204.2-blue
+        :target: https://pypi.org/project/django-import-export-extensions/
+        :alt: Supported django versions
+
+.. image:: https://readthedocs.org/projects/django-import-export-extensions/badge/?version=latest
+    :target: https://django-import-export-extensions.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+Description
+-----------
+`django-import-export-extensions` extends the functionality of
+`django-import-export <https://github.com/django-import-export/django-import-export/>`_
+adding the following features:
+
+* Import/export resources in the background via Celery
+* Manage import/export jobs via Django Admin
+* DRF integration that allows to work with import/export jobs via API
+* Support `drf-spectacular <https://github.com/tfranzel/drf-spectacular>`_ generated API schema
+* Additional fields and widgets (FileWidget, IntermediateM2MWidget, M2MField)
+
+Migration from django-import-export
+-----------------------------------
+Resources migration
+^^^^^^^^^^^^^^^^^^^
+Change ``Resource`` or ``ModelResource`` to
+``CeleryResource`` or ``CeleryModelResource`` respectively.
+
+Admin migration
+^^^^^^^^^^^^^^^
+Change ``ImportMixin``, ``ExportMixin``, ``ImportExportMixin``
+to ``CeleryImportMixin``, ``CeleryExportMixin`` or ``CeleryImportExportMixin`` respectively.
+
+License
+-------
+* Free software: MIT license
+* Documentation: https://django-import-export-extensions.readthedocs.io.
