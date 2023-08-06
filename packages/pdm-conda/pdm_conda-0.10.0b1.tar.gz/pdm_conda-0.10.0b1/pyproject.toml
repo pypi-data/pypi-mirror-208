@@ -1,0 +1,119 @@
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[project]
+name = "pdm-conda"
+description = "A PDM plugin to resolve/install/uninstall project dependencies with Conda"
+requires-python = ">=3.10"
+authors = [
+    { name = "Marcos Pastorini" },
+]
+keywords = [
+    "pdm",
+    "plugin",
+    "conda",
+]
+readme = "README.md"
+dynamic = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    "pdm~=2.6.0",
+    "requests>=2.28.1",
+]
+version = "0.10.0b1"
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+Homepage = "https://github.com/macro128/pdm-conda"
+Changelog = "https://github.com/macro128/pdm-conda/blob/main/CHANGELOG.md"
+
+[project.entry-points.pdm]
+conda = "pdm_conda:main"
+
+[tool.pdm]
+plugins = [
+    "pdm-backend",
+]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.2.0",
+    "pytest-mock>=3.10.0",
+    "pytest-cov>=4.0.0",
+    "pytest-random-num>=1.0.13",
+    "responses>=0.23.0",
+]
+
+[tool.pdm.version]
+source = "file"
+path = "src/pdm_conda/__init__.py"
+
+[tool.pdm.build]
+package-dir = "src"
+includes = [
+    "src",
+    "data/*.json",
+]
+excludes = [
+    "tests",
+]
+
+[tool.pdm.scripts]
+test = "pytest --cov=src/pdm_conda/ tests/ --cov-report xml --cov-report term"
+
+[tool.pytest.ini_options]
+addopts = "--random-order"
+
+[tool.mypy]
+python_version = "3.10"
+pretty = true
+
+[tool.isort]
+honor_noqa = true
+profile = "black"
+combine_star = true
+remove_redundant_aliases = true
+multi_line_output = 3
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+inline-quotes = "double"
+max-line-length = 120
+extend-ignore = [
+    "E203",
+    "W503",
+    "E722",
+    "D107",
+    "WPS412",
+    "WPS326",
+]
+per-file-ignores = [
+    "__init__.py:",
+    "F401",
+    "F403",
+    "WPS410",
+    "test_*.py,tests.py,tests_*.py,*/tests/*,conftest.py:",
+    "S101",
+    "WPS442",
+    "WPS210",
+    "WPS432",
+    "DAR101",
+    "WPS211",
+]
+exclude = [
+    "./.git",
+    "./venv",
+    "migrations",
+    "./var",
+]
