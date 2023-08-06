@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: express-integrations-monday
+Version: 1.0.16
+Summary: A Python client library for Monday.com
+Home-page: https://github.com/expressintegrations/monday
+Author: Express Integrations
+Author-email: jasper@expressintegrations.com
+License: BSD
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown; charset=UTF-8
+License-File: LICENSE
+
+# monday
+A python client for the monday.com GraphQL API
+
+
+For the Monday API docs, [click here](https://monday.com/developers/v2#introduction-section).
+
+
+#### Requirements
+- Python >= 3.6
+
+#### Getting started
+`pip install monday`
+
+`monday` sample usage:
+```python
+from monday import MondayClient
+
+
+monday = MondayClient('your token')
+
+monday.items.create_item(board_id='12345678', group_id='today',  item_name='Do a thing')
+
+```
