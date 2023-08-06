@@ -1,0 +1,14 @@
+{%- if _ is not defined -%}
+    {% macro _(message) -%}
+        {{ message }}
+    {%- endmacro %}
+{%- endif -%}
+
+{% if renderer.grid.filtered_cols -%}
+<table {{renderer.filtering_table_attrs(class='filters')|wg_attributes}}>
+{{renderer.filtering_session_key()}}
+    <tbody>
+        {{ renderer.filtering_fields() }}
+    </tbody>
+</table>
+{%- endif %}

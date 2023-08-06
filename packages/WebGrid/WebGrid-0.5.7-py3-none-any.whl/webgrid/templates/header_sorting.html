@@ -1,0 +1,14 @@
+{%- if _ is not defined -%}
+    {% macro _(message) -%}
+        {{ message }}
+    {%- endmacro %}
+{%- endif -%}
+
+{% if grid.sorter_on %}
+<dl>
+    <dt>{{ _('Sort By') }}:</dt>
+    <dd>{{ renderer.sorting_select1() }}</dd>
+    <dd>{{ renderer.sorting_select2() }}</dd>
+    <dd>{{ renderer.sorting_select3() }}</dd>
+</dl>
+{% endif %}
