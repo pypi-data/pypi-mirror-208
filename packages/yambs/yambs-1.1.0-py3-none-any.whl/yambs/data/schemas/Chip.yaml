@@ -1,0 +1,33 @@
+---
+type: object
+additionalProperties: false
+required: [architecture, cpu]
+
+properties:
+  architecture:
+    type: string
+  cpu:
+    type: string
+
+  extra_cflags:
+    type: array
+    default: []
+    items:
+      type: string
+
+  linker:
+    type: object
+    additionalProperties: false
+    required: [symbols]
+
+    properties:
+      symbols:
+        type: object
+        additionalProperties: false
+        patternProperties:
+          "^[a-zA-Z0-9-_.]+$":
+            type: string
+
+      include:
+        default: picolibc
+        type: string
