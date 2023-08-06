@@ -1,0 +1,27 @@
+[package]
+name = "convert"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+py_types = { path = "../py_types" }
+
+[dependencies.quaint]
+git = "https://github.com/carlos-rian/quaint"
+features = [
+    "json",
+    "uuid",
+    "chrono",
+    "bigdecimal"
+]
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros"] }
+
+[dev-dependencies.quaint]
+git = "https://github.com/carlos-rian/quaint"
+features = [
+    "sqlite",
+]

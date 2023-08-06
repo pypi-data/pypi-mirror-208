@@ -1,0 +1,60 @@
+[package]
+name = "pysqlx-core"
+version = "0.1.44"
+edition = "2021"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+include = [
+    "/pyproject.toml",
+    "/LICENSE",
+    "/README.md",
+    "/convert",
+    "/database",
+    "/py_types",
+    "/pysqlx_core.pyi",
+    "/src"
+]
+
+[lib]
+name = "pysqlx_core"
+crate-type = ["rlib", "cdylib"]
+
+
+[package.metadata.maturin]
+python-source = "pysqlx_core"
+
+[dependencies]
+pyo3 = { version = "0.18", features = ["extension-module"] }
+pyo3-asyncio = { version = "0.18", features = ["tokio-runtime"] }
+#env_logger = "0.10"
+
+# my packages
+py_types = { path = "local_dependencies/py_types" }
+convert = { path = "local_dependencies/convert" }
+database = { path = "local_dependencies/database" }
+
+[workspace]
+members = ["local_dependencies/convert", "local_dependencies/database", "local_dependencies/py_types"]
+
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+incremental = true
+# panic = "abort"
+
+debug = false
+debug-assertions = false
+overflow-checks = false
+rpath = false
+
+
+[profile.dev]
+opt-level = 0
+incremental = true
+lto = false
+debug = true
+overflow-checks = false
+codegen-units = 256
+rpath = false
