@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "identity-client"
+version = "1.0.34"
+description = "A middleware and a set of handlers to handle Code Grant authentication."
+authors = ["stitchdev <dev@stitchdesignlab.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "identity_client"}]
+repository = "https://github.com/hatch-studio/identity-client"
+exclude = [
+    "tests",
+    "tests.*",
+    "poetry.lock"
+]
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 2.2",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = ">=2.2.3"
+djangorestframework = ">=3.9.3"
+requests = "^2.30.0"
+netaddr = ">=0.7.19"
+python-jose = "^3.3.0"
+cryptography = "^40.0.2"
+boto3 = "^1.26.133"
+lxml = "^4.9.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
