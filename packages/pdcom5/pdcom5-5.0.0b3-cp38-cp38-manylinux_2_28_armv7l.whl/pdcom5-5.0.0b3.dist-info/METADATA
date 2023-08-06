@@ -1,0 +1,122 @@
+Metadata-Version: 2.1
+Name: pdcom5
+Version: 5.0.0b3
+Summary: Library for process data exchange
+Home-page: https://etherlab.org
+Author: Bjarne von Horn
+Author-email: Bjarne von Horn <vh@igh.de>, Florian Pose <fp@igh.de>, Richard Hacker <ha@igh.de>
+Project-URL: Homepage, https://gitlab.com/etherlab.org/pdcom
+Project-URL: Bug Tracker, https://gitlab.com/etherlab.org/pdcom/-/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+
+[![pipeline status](https://gitlab.com/etherlab.org/pdcom/badges/pdcom5-devel/pipeline.svg)](https://gitlab.com/etherlab.org/pdcom/-/commits/pdcom5-devel)
+[![coverage report](https://gitlab.com/etherlab.org/pdcom/badges/pdcom5-devel/coverage.svg)](https://docs.etherlab.org/pdcom/5/coverage/index.html)
+[![online c++ documentation](https://img.shields.io/badge/Documentation-C++-informational)](https://docs.etherlab.org/pdcom/5/doxygen/index.html)
+[![online python documentation](https://img.shields.io/badge/Documentation-Python-informational)](https://docs.etherlab.org/pdcom/5/sphinx/index.html)
+
+This is the README file of the PdCom library, that is part of the EtherLab
+project (http://etherlab.org/en). The home of PdCom is
+http://etherlab.org/en/pdcom. The Library is released under the terms and
+conditions of the GNU Lesser General Public License (LGPL), version 3 or (at
+your option) any later version.
+
+## Documentation
+
+You can find the documentation online [here
+(C++)](https://docs.etherlab.org/pdcom/5/doxygen/index.html) and [here
+(Python)](https://docs.etherlab.org/pdcom/5/sphinx/index.html).
+
+The library documentation resides in the header files and can be brought to
+HTML, LaTeX and man format with the doxygen tool. To generate the
+documentation, make sure that doxygen is installed and then call:
+
+```sh
+    git submodule update --init
+    mkdir build
+    cd build
+    cmake -DBUILD_TESTING=OFF ..
+    make doc
+```
+
+Then point your favourite browser to doc/html/index.html.
+
+## Building and Installing
+
+To just build and install the library, call:
+
+```sh
+    mkdir build
+    cd build
+    cmake -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ..
+    make
+    make install
+```
+
+You'll need the following packages:
+ - libexpat-devel
+ - libgnutls-devel
+ - cyrus-sasl-devel
+
+For running the unit tests, the GTest library is required.
+
+## Python API
+
+In the python subdirectory, an [asyncio](https://docs.python.org/3/library/asyncio.html) based Python API is provided.
+It requires Python >= 3.6, numpy and pybind11 >= 2.6.0.
+Please note that `make install` does not install this Python module.
+Instead, please navigate to the python subdirectory after installing the C++ library
+and install the pdcom5 python module using `pip3 install .`.
+
+There are also some pre-built wheel packages available.
+Use `pip3 install pdcom5`
+to install pdcom5 from PyPI.
+
+The starting point for almost everything is the `Process` class
+which is in charge of handling the communication.
+You can use it to find variables, to set parameters and to subscribe to signals.
+Most of the functions in this API are coroutines,
+which have to be `await`ed.
+
+In this snippet, a connection is made to the oscillator example in PdServ.
+Its cosine output is subscribed to with a period of one second.
+The value is printed five times, then the `enable` Parameter is set to False.
+After that, the cosine output is polled twice.
+Note that for the interactive asyncio REPL (`python3 -m asyncio`), Python >= 3.8 is required.
+
+```py
+>>> import pdcom5
+>>> process = pdcom5.Process()
+>>> await process.connect("msr://localhost:2345")
+>>> variable = await process.find("/osc/cos")
+>>> variable.shape
+(1,)
+>>> sub = await process.subscribe(1.0, variable)
+>>> for i in range(5):
+...     await sub.read()
+...
+(8.78446130364271, datetime.timedelta(days=19459, seconds=29086, microseconds=437320))
+(7.851994244479773, datetime.timedelta(days=19459, seconds=29087, microseconds=437407))
+(-3.094420865989016, datetime.timedelta(days=19459, seconds=29088, microseconds=437398))
+(-10.094402900214018, datetime.timedelta(days=19459, seconds=29089, microseconds=437408))
+(-4.220607508690086, datetime.timedelta(days=19459, seconds=29090, microseconds=437397))
+>>> await process.setVariableValue("/osc/enable", False)
+>>> await variable.poll()
+(-2.7455815235765124, datetime.timedelta(days=19459, seconds=29159, microseconds=877336))
+>>> await variable.poll()
+(-2.7455815235765124, datetime.timedelta(days=19459, seconds=29160, microseconds=817388))
+```
+
+There is also `Transmission.event_mode` and
+`Transmission.poll_mode` for creating non-periodical subscriptions
+
+## Further Information
+
+For questions of any kind, subscribe to the etherlab-users mailing list at
+http://etherlab.org/en.
+
+Have fun with PdCom!
