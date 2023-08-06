@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "descope"
+version = "1.5.1"
+description = "Descope Python SDK"
+authors = ["Descope <info@descope.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://descope.com/"
+repository = "https://github.com/descope/python-sdk"
+documentation = "https://docs.descope.com"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [
+    { include = "descope"},
+    { include = "descope/authmethod"},
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/descope/python-sdk/issues"
+
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "2.30.0" # First support for python 3.10
+PyJWT = {version = "2.7.0", extras = ["crypto"]} # Latest secrutiy update
+email-validator = "==2.0.0.post2"
+
+[tool.poetry.group.dev.dependencies]
+mock = "5.0.2"
+pre-commit = "2.21.0"
+Flask = "2.2.5"
+flake8 = "5.0.4"
+flake8-bugbear = "22.12.6"
+pytest-cov = "4.0.0"
+pytest = "7.3.1"
+black = "23.3.0"
+liccheck = "0.9.0"
+isort = "5.11.4"
+pep8-naming = "0.13.3"
+
+[build-system]
+requires = ["poetry-core>=1.1.0"]
+build-backend = "poetry.core.masonry.api"
