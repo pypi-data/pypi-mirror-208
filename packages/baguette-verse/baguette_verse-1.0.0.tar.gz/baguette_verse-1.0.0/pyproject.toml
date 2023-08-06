@@ -1,0 +1,34 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "baguette-verse"
+version = "1.0.0"
+authors = [
+  { name="Vincent Raulin", email="vincent.raulin@inria.fr" },
+]
+description = "A malware behavioral analysis framework centered around BAGUETTE!"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Operating System :: OS Independent",
+]
+dependencies =  [
+  "viper_lib>=0.5.4",
+  "python-magic; platform_system != 'Windows'",
+  "python-magic-bin; platform_system == 'Windows'",
+  "Levenshtein"
+]
+
+[project.scripts]
+bake = "bake:main"
+metalib = "metalib:main"
+toast = "toast:main"
+
+[project.urls]
+"Repository" = "https://gitlab.inria.fr/vraulin/baguette-verse"
+"Bug Tracker" = "https://gitlab.inria.fr/vraulin/baguette-verse/-/issues"
