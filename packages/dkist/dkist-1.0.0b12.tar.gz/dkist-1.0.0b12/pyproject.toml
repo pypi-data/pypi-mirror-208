@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=30.3.0", "setuptools_scm", "wheel"]
+build-backend = 'setuptools.build_meta'
+
+[tool.isort]
+line_length = 99
+skip = "docs/conf.py,.tox"
+sections = "FUTURE,STDLIB,THIRDPARTY,ASTRO,FIRSTPARTY,LOCALFOLDER"
+default_section = "THIRDPARTY"
+known_first_party = "dkist,dkist_inventory"
+known_astro = "astropy,sunpy,gwcs,asdf,ndcube"
+multi_line_output = 0
+balanced_wrapping = true
+include_trailing_comma = false
+length_sort = false
+length_sort_sections = "stdlib"
+
+[tool.gilesbot]
+  [ tool.gilesbot.pull_requests ]
+    enabled = true
+
+  [ tool.gilesbot.towncrier_changelog ]
+    enabled = true
+    verify_pr_number = true
+    changelog_skip_label = "no changelog"
+    help_url = "https://github.com/DKISTDC/dkist/changelog/README.rst"
+
+  [ tool.gilesbot.milestones ]
+    enabled = false
+
+[tool.towncrier]
+    package = "dkist"
+    filename = "CHANGELOG.rst"
+    directory = "changelog/"
+    issue_format = "`#{issue} <https://github.com/DKISTDC/dkist/pull/{issue}>`_"
+    title_format = "{version} ({project_date})"
+
+    [[tool.towncrier.type]]
+        directory = "breaking"
+        name = "Backwards Incompatible Changes"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+        directory = "api"
+        name = "API Changes"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+      directory = "removal"
+      name = "Deprecations and Removals"
+      showcontent = true
+
+    [[tool.towncrier.type]]
+      directory = "feature"
+      name = "Features"
+      showcontent = true
+
+    [[tool.towncrier.type]]
+      directory = "bugfix"
+      name = "Bug Fixes"
+      showcontent = true
+
+    [[tool.towncrier.type]]
+      directory = "doc"
+      name = "Improved Documentation"
+      showcontent = true
+
+    [[tool.towncrier.type]]
+      directory = "trivial"
+      name = "Trivial/Internal Changes"
+      showcontent = true
