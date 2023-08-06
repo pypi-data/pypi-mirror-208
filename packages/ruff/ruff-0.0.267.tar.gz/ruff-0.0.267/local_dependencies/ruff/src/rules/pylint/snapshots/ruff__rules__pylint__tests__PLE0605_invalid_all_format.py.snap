@@ -1,0 +1,82 @@
+---
+source: crates/ruff/src/rules/pylint/mod.rs
+---
+invalid_all_format.py:1:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+  |
+1 | __all__ = "CONST"  # [invalid-all-format]
+  | ^^^^^^^ PLE0605
+2 | 
+3 | __all__ = ["Hello"] + {"world"}  # [invalid-all-format]
+  |
+
+invalid_all_format.py:3:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+  |
+3 | __all__ = "CONST"  # [invalid-all-format]
+4 | 
+5 | __all__ = ["Hello"] + {"world"}  # [invalid-all-format]
+  | ^^^^^^^ PLE0605
+6 | 
+7 | __all__ += {"world"}  # [invalid-all-format]
+  |
+
+invalid_all_format.py:5:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+  |
+5 | __all__ = ["Hello"] + {"world"}  # [invalid-all-format]
+6 | 
+7 | __all__ += {"world"}  # [invalid-all-format]
+  | ^^^^^^^ PLE0605
+8 | 
+9 | __all__ = {"world"} + ["Hello"]  # [invalid-all-format]
+  |
+
+invalid_all_format.py:7:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+   |
+ 7 | __all__ += {"world"}  # [invalid-all-format]
+ 8 | 
+ 9 | __all__ = {"world"} + ["Hello"]  # [invalid-all-format]
+   | ^^^^^^^ PLE0605
+10 | 
+11 | __all__ = {"world"} + list(["Hello"])  # [invalid-all-format]
+   |
+
+invalid_all_format.py:9:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+   |
+ 9 | __all__ = {"world"} + ["Hello"]  # [invalid-all-format]
+10 | 
+11 | __all__ = {"world"} + list(["Hello"])  # [invalid-all-format]
+   | ^^^^^^^ PLE0605
+12 | 
+13 | __all__ = list(["Hello"]) + {"world"}  # [invalid-all-format]
+   |
+
+invalid_all_format.py:11:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+   |
+11 | __all__ = {"world"} + list(["Hello"])  # [invalid-all-format]
+12 | 
+13 | __all__ = list(["Hello"]) + {"world"}  # [invalid-all-format]
+   | ^^^^^^^ PLE0605
+14 | 
+15 | __all__ = (x for x in ["Hello", "world"])  # [invalid-all-format]
+   |
+
+invalid_all_format.py:13:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+   |
+13 | __all__ = list(["Hello"]) + {"world"}  # [invalid-all-format]
+14 | 
+15 | __all__ = (x for x in ["Hello", "world"])  # [invalid-all-format]
+   | ^^^^^^^ PLE0605
+16 | 
+17 | __all__ = {x for x in ["Hello", "world"]}  # [invalid-all-format]
+   |
+
+invalid_all_format.py:15:1: PLE0605 Invalid format for `__all__`, must be `tuple` or `list`
+   |
+15 | __all__ = (x for x in ["Hello", "world"])  # [invalid-all-format]
+16 | 
+17 | __all__ = {x for x in ["Hello", "world"]}  # [invalid-all-format]
+   | ^^^^^^^ PLE0605
+18 | 
+19 | __all__ = ["Hello"]
+   |
+
+

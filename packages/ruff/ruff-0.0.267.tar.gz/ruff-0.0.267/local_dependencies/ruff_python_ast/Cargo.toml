@@ -1,0 +1,30 @@
+[package]
+name = "ruff_python_ast"
+version = "0.0.0"
+publish = false
+edition = "2021"
+rust-version = "1.69"
+
+[lib]
+
+[dependencies]
+ruff_text_size = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" }
+
+anyhow = { version = "1.0.69" }
+bitflags = { version = "2.2.1" }
+is-macro = { version = "0.2.2" }
+itertools = { version = "0.10.5" }
+log = { version = "0.4.17" }
+memchr = "2.5.0"
+num-bigint = { version = "0.4.3" }
+num-traits = { version = "0.2.15" }
+once_cell = { version = "1.17.1" }
+regex = { version = "1.7.1" }
+rustc-hash = { version = "1.1.0" }
+rustpython-literal = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" }
+rustpython-parser = { git = "https://github.com/RustPython/Parser.git", rev = "947fb53d0b41fec465db3d8e725bdb2eec1299ec" , default-features = false}
+serde = { version = "1.0.152", features = ["derive"] , optional = true }
+smallvec = { version = "1.10.0" }
+
+[features]
+serde = ["dep:serde", "ruff_text_size/serde"]

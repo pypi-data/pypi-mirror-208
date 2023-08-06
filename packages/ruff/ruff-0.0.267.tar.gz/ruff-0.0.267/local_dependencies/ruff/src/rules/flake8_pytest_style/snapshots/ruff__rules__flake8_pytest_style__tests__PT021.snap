@@ -1,0 +1,23 @@
+---
+source: crates/ruff/src/rules/flake8_pytest_style/mod.rs
+---
+PT021.py:49:5: PT021 Use `yield` instead of `request.addfinalizer`
+   |
+49 | def my_fixture(request):  # Error return
+50 |     resource = acquire_resource()
+51 |     request.addfinalizer(resource.release)
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ PT021
+52 |     return resource
+   |
+
+PT021.py:56:5: PT021 Use `yield` instead of `request.addfinalizer`
+   |
+56 | def my_fixture(request):  # Error yield
+57 |     resource = acquire_resource()
+58 |     request.addfinalizer(resource.release)
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ PT021
+59 |     yield resource
+60 |     resource  # prevent PT022
+   |
+
+
