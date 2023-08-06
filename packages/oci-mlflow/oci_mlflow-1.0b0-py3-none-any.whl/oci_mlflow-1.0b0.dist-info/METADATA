@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: oci-mlflow
+Version: 1.0b0
+Summary: OCI MLflow plugin to use OCI resources within MLflow
+Author: Oracle Cloud Infrastructure Data Science
+License: Universal Permissive License 1.0
+Keywords: Oracle Cloud Infrastructure,OCI,Object Storage,MLflow
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Universal Permissive License (UPL)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: mlflow
+Requires-Dist: oracle-ads (>=2.8.2)
+Provides-Extra: dev
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest-env ; extra == 'dev'
+
+# OCI Mlflow Plugin
+
+[![PyPI](https://img.shields.io/pypi/v/oci-mlflow.svg?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/oci-mlflow/) [![Python](https://img.shields.io/pypi/pyversions/oci-mlflow.svg?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/oci-mlflow/)
+
+The OCI MLflow plugin enables OCI users to use OCI resources to manage their machine learning usecase life cycle. This table below provides the mapping between the MLflow features and the OCI resources that are used.
+
+| MLflow Use Case    | OCI Resource |
+| -------- | ------- |
+| User running machine learning experiments on notebook, logs model artifacts, model performance etc  | Data Science Jobs, Object Storage, MySQL |
+| Batch workloads using spark | Data Flow, Object Storage, MySQL |
+| Model Deployment    | Data Science Model Deployment |
+| User running machine learning experiments on notebook, logs model artifacts, model performance etc    | Object Storage, MySQL |
+
+
+## Installation
+
+To install the `oci-mlflow` plugin call -
+
+```bash
+  python3 -m pip install oci-mlflow
+```
+
+To test the `oci-mlflow` plugin call -
+
+```bash
+  mlflow deployments help -t oci-datascience
+```
+
+
