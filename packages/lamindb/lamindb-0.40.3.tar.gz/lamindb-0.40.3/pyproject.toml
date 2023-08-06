@@ -1,0 +1,77 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "lamindb"
+requires-python = ">=3.8"
+authors = [{name = "Lamin Labs", email = "laminlabs@gmail.com"}]
+readme = "README.md"
+dynamic = ["version", "description"]
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    # Lamin PINNED packages
+    # !!! These packages should ALWAYS be pinned, do not unpin !!!
+    # !!! They cannot be pinned ANYWHERE else !!!
+    "lnschema_core==0.33.6",
+    "lndb_storage==0.2rc6",
+    "lndb==0.44.7",
+    # Lamin GREATEREQ packages
+    "nbproject>=0.8.6",
+    "erdiagram>=0.1.1",
+]
+
+[project.urls]
+Home = "https://github.com/laminlabs/lamindb"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "nox",
+    "laminci>=0.2.5",
+]
+bionty = [
+    "lnschema_bionty==0.16.4",
+]
+biolab = [
+    "lnbase_biolab==0.15.2",
+]
+lamin1 = [
+    "lnbase_biolab==0.15.2",  # need to duplicate right now, absorb in lamin1
+    "lnschema_lamin1",  # let's rather not pin here
+]
+test = [
+    # Lamin pinned packages
+    "lamindb[bionty,lamin1]",
+    "nbproject_test>=0.3.0",
+    # External packages
+    "pytest>=6.0",
+    "coverage",
+    "pytest-cov",
+    "scanpy",
+    "scikit-learn>=1.1.1",
+    "psycopg2-binary",
+    "matplotlib<3.7",
+]
+
+[project.scripts]
+lamin = "lndb.__main__:main"
+
+[tool.black]
+preview = true
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "docs/faq",
+    "docs/guide",
+]
+
+[tool.coverage.run]
+omit = [
+    "lamindb/*",
+]
