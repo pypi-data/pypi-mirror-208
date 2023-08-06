@@ -1,0 +1,98 @@
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[project]
+name = "dymoval"
+version = "0.8.83"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas",
+    "matplotlib",
+    "scipy",
+    "control",
+    "numpy",
+    "tomli",
+    "h5py",
+]
+authors = [
+    { name = "Ubaldo Tiberi", email = "ubaldo.tiberi@volvo.com" },
+    { name = "Ubaldo Tiberi", email = "ubaldo.tiberi@gmail.com" },
+]
+description = "Dymoval is a Python package for validating models and analyzing datasets."
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "data-analysis",
+    "modeling",
+    "model validation",
+    "dataset",
+    "data",
+]
+
+[project.license]
+file = "LICENSE"
+
+[project.optional-dependencies]
+build = [
+    "pdm",
+]
+dev = [
+    "sphinx",
+    "furo",
+    "sphinx-toolbox",
+    "sphinx-autodoc-typehints",
+    "pytest",
+    "mypy",
+    "black",
+    "flake8",
+    "coverage",
+    "grayskull",
+]
+
+[project.urls]
+Homepage = "https://github.com/VolvoGroup/dymoval"
+Documentation = "https://volvogroup.github.io/dymoval/"
+"Bug Tracker" = "https://github.com/VolvoGroup/dymoval/issues"
+
+[tool.black]
+target-version = [
+    "py310",
+]
+line-length = 80
+exclude = "/(manual_tests|docs)/"
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+show_error_codes = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+disable_error_code = [
+    "name-defined",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "dataset",
+    "validation",
+    "utils",
+    "config",
+]
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    "manual_tests",
+]
+markers = [
+    "plots: marks SLOW plot tests (deselect with '-m \"not plots\"')",
+    "open_tutorial: marks the open_tutorial (which opens VSCode all the times)",
+]
