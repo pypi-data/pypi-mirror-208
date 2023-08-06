@@ -1,0 +1,84 @@
+# Zoom Python client
+
+[![Python tests](https://github.com/cern-vc/zoom-python-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/cern-vc/zoom-python-client/actions/workflows/python-tests.yml) [![pre-commit](https://github.com/cern-vc/zoom-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/zoom-python-client/actions/workflows/pre-commit.yaml) [![CodeQL](https://github.com/cern-vc/zoom-python-client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cern-vc/zoom-python-client/actions/workflows/codeql-analysis.yml) [![codecov](https://codecov.io/gh/cern-vc/zoom-python-client/branch/main/graph/badge.svg?token=04EY0K0P2S)](https://codecov.io/gh/cern-vc/zoom-python-client)
+
+> ⚠️ WIP: This project is a WIP and therefore may contain bugs. Use it at your own risk and keep this in mind if you decide to use it in production environments.
+
+Zoom API Python client with support for [Server to Server Oauth tokens](https://developers.zoom.us/docs/internal-apps/s2s-oauth/)
+
+## Usage
+
+### Defining your env variables
+
+Define the following variables in your `env` or your `.env` file:
+
+- ZOOM_ACCOUNT_ID
+- ZOOM_CLIENT_ID
+- ZOOM_CLIENT_SECRET
+
+### Initialize the ZoomApiClient from environment variables
+
+```python
+from src.zoom_python_client.zoom_api_client import ZoomApiClient
+
+zoom_client = ZoomApiClient.init_from_env()
+```
+
+### Initialize the ZoomApiClient from .env
+
+```python
+from src.zoom_python_client.zoom_api_client import ZoomApiClient
+
+zoom_client = ZoomApiClient.init_from_dotenv()
+```
+### Initialize the ZoomApiClient manually
+
+```python
+from src.zoom_python_client.zoom_api_client import ZoomApiClient
+
+zoom_client = ZoomApiClient(
+        account_id="<YOUR ACCOUNT ID>",
+        client_id="<YOUR CLIENT ID>",
+        client_secret="<YOUR CLIENT SECRET>")
+```
+
+
+## How to make API calls
+
+```python
+MEETING_ID = "12345"
+USER_ID = "abcdfgh"
+
+result = zoom_client.users.get_user(USER_ID)
+print(result)
+
+result = zoom_client.meetings.get_meeting(MEETING_ID)
+print(result)
+```
+
+## Optional: How to configure the logging
+
+```python
+from zoom_python_client.zoom_api_client import ZoomApiClient
+
+setup_logs(log_level=logging.DEBUG)
+```
+
+## Available endpoints
+
+### **users**:
+1. get user details
+2. get user meetings
+### **meetings**:
+1. get meeting details
+2. get meeting token
+### **meeting live streams**:
+1. get meeting live stream
+2. update live stream
+3. update livestream status
+### **webinars**:
+1. get webinar details
+### **webinar live streams**:
+1. get webinar live stream
+2. update webinar live stream
+3. update webinar livestream status
