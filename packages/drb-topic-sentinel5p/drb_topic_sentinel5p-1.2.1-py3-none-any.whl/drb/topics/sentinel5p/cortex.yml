@@ -1,0 +1,32 @@
+###############################################################################
+# Sentinel-5P Base class
+# Base class for Sentinel 5P. This class includes all S5P products and
+# auxiliary products (with exception to NISE auxiliary products).
+###############################################################################
+id: 74cb1198-c0c1-11ec-9d64-0242ac120002
+# Subclass drb-impl-netcdf
+subClassOf: 83720abe-2c0e-11ec-8d3d-0242ac130003
+label: Sentinel-5P Base Class
+category: CONTAINER
+signatures:
+  - name: (?i)S5P_...._(AUX|L).*
+---
+###############################################################################
+# Sentinel-5P Product
+###############################################################################
+id: 8351f100-c0c1-11ec-9d64-0242ac120002
+subClassOf: 74cb1198-c0c1-11ec-9d64-0242ac120002
+label: Sentinel-5P Product
+category: CONTAINER
+signatures:
+  - name: (?i)S5P_...._L.*
+---
+###############################################################################
+# Sentinel-5P Auxiliary Product
+###############################################################################
+id: de97218e-c0c1-11ec-9d64-0242ac120002
+subClassOf: 74cb1198-c0c1-11ec-9d64-0242ac120002
+label: Sentinel-5P Auxiliary Product
+category: CONTAINER
+signatures:
+  - name: (?i)S5P_...._AUX.*
