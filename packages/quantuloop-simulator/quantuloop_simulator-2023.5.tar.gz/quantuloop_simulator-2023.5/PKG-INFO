@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: quantuloop-simulator
+Version: 2023.5
+Summary: Quantuloop Quantum Simulator Suite for HPC
+Author: Quantuloop
+Author-email: dev@quantuloop.com
+Requires-Python: >=3.8,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: quantuloop-dense (>=0.2.1,<0.3.0)
+Requires-Dist: quantuloop-quest (>=0.2.2,<0.3.0)
+Requires-Dist: quantuloop-sparse (>=0.2.1,<0.3.0)
+Description-Content-Type: text/markdown
+
+# Quantuloop Quantum Simulator Suite for HPC
+
+The **Quantuloop Quantum Simulator Suite for HPC** is a collection of high-performance quantum computer simulators for the **Ket language**. Since quantum algorithms explore distinct aspects of quantum computation to extract advantages, there is no silver bullet for the simulation of a quantum computer. The Quantuloop Quantum Simulator Suite for HPC offers three quantum simulators today, with new ones coming in the future. The simulators available today are:
+
+* **Quantuloop Sparse**, which brings the Bitwise Representation (implemented in the KBW Sparse) for HPC. This is the only simulator that implements this simulation algorithm and it provides many benefits:
+  * Ready for multi-GPU systems, allowing you to scale up simulations as needed.
+  * Efficient execution time with the amount of superposition, providing faster simulations.
+  * Exact simulation of more than 100 qubits [depending on the algorithm](https://repositorio.ufsc.br/handle/123456789/231060), making it ideal for larger simulations.
+* **Quantuloop Dense** is a state vector simulator built with the NVIDIA cuQuantum SDK cuStateVec. It provides several advantages:
+  * Great scalability in multi-GPU systems, enabling large simulations to be run with ease.
+  * The perfect fit for most quantum algorithms, allowing you to simulate many different types of quantum circuits.
+* **Quantuloop QuEST**, which is an interface for the open-source simulator QuEST. It provides many benefits, including:
+  * Excellent performance for single GPU systems, allowing you to run simulations even if you don't have access to multiple GPUs.
+
+By using the Quantuloop Quantum Simulator Suite for HPC, you can enjoy the following benefits:
+
+* Faster simulation times, as the simulators are optimized for GPU-based computing.
+* Higher scalability, as multi-GPU systems, can be used to run large simulations.
+* Access to unique simulation algorithms, such as the Parallel Bitwise implemented in the Quantuloop Sparse simulator.
+* Ability to simulate a wide range of quantum algorithms and circuits, allowing you to explore the potential of quantum computing.
+
+The use of this simulator is exclusively for Quantuloop's customers and partners. Contact your institution to get your access token or visit <https://quantuloop.com>.
+
+## Installation  
+
+Installing using pip:
+
+```shell
+pip install --index-url https://gitlab.com/api/v4/projects/43029789/packages/pypi/simple quantuloop-simulator
+```
+
+Add in poetry:
+
+```shell
+poetry source add quantuloop https://gitlab.com/api/v4/projects/43029789/packages/pypi/simple --secondary
+poetry add quantuloop-simulator
+```
+
+## Usage
+
+```py
+import quantuloop_simulator as ql
+
+ql.set_simulator(
+    "Sparse", # or "Dense" or "QuEST"
+    token="YOR.ACCESS.TOKEN", # Quantuloop Access Token is required to use the simulators 
+    precision=2, # optional, default 1
+    gpu_count=4, # optional, default use all GPUs
+)
+```
+
+## Compatibility
+
+The following system requirements are necessary to run the Quantuloop Dense simulator:
+
+* CUDA 11.2 or newer with compatible NVIDIA driver
+* Linux x86_64 with glibc 2.17 or newer
+  * Ubuntu 18.04 or newer.
+  * Red Hat Enterprise Linux 7 or newer.
+* Python 3.8 or newer
+* Ket 0.6.1 or newer
+
+Quantuloop Dense is compatible only with CUDA architecture 70, 75, 80, and 86.
+
+----
+
+By installing or using this package, you agree to the Quantuloop Quantum Simulator Suite EULA.
+
+All rights reserved (C) 2023 Quantuloop
+

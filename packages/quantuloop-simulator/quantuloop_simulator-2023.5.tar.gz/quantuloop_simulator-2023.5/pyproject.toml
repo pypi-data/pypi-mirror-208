@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "quantuloop-simulator"
+version = "2023.05"
+description = "Quantuloop Quantum Simulator Suite for HPC"
+authors = ["Quantuloop <dev@quantuloop.com>"]
+readme = "README.md"
+packages = [{include = "quantuloop_simulator", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+quantuloop-quest = "^0.2.2"
+quantuloop-dense = "^0.2.1"
+quantuloop-sparse = "^0.2.1"
+
+
+[[tool.poetry.source]]
+name = "quantuloop"
+url = "https://gitlab.com/api/v4/projects/43029789/packages/pypi/simple"
+default = false
+secondary = true
+
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
