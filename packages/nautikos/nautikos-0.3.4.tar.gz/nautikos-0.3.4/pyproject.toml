@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "nautikos"
+version = "0.3.4"
+description = "A CD tool for updating image tags in Kubernetes manifests"
+authors = ["Jan Hein de Jong <janhein.dejong@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://www.github.com/janheindejong/nautikos"
+keywords = ["Kubernetes", "DevOps", "CI/CD", "Kustomize", "GitOps"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Build Tools", 
+    "Operating System :: OS Independent"
+]
+
+[tool.poetry.scripts]
+nautikos = "nautikos.cli:app"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+typer = "^0.7.0"
+ruamel-yaml = "^0.17.21"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.257"
+black = "^23.1.0"
+pytest = "^7.2.2"
+mypy = "^1.1.1"
+types-pyyaml = "^6.0.12.8"
+poethepoet = "^0.18.1"
+rich = "^13.3.2"
+pytest-cov = "^4.0.0"
+
+[tool.poe.tasks]
+format.sequence = [
+    {cmd = "black ."},
+    {cmd = "ruff check . --fix"}, 
+    {cmd = "black ."}
+]
+format.ignore_fail = true
+test = [
+    {cmd = "ruff check ."},
+    {cmd = "black . --check"}, 
+    {cmd = "mypy ."}, 
+    {cmd = "pytest -vv"}
+
+]
+
+[tool.ruff]
+select = ["E", "F", "I"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
