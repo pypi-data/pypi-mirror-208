@@ -1,0 +1,78 @@
+Metadata-Version: 2.1
+Name: shoulder
+Version: 1.0.7
+Summary: patient specific anatomic coordinate system generation for shoulder bones
+Home-page: https://github.com/gregspangenberg/shoulder
+License: MIT
+Author: Gregory W Spangenberg
+Author-email: gspangen@westerneng.ca
+Requires-Python: >=3.10,<3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: circle-fit (>=0.1.3,<0.2.0)
+Requires-Dist: networkx (>=2.8.6,<3.0.0)
+Requires-Dist: numpy-stl (>=2.17.1,<3.0.0)
+Requires-Dist: plotly (>=5.10.0,<6.0.0)
+Requires-Dist: rtree (>=1.0.0,<2.0.0)
+Requires-Dist: ruptures (>=1.1.7,<2.0.0)
+Requires-Dist: scikit-learn (>=1.1.2,<2.0.0)
+Requires-Dist: scikit-spatial (>=6.5.0,<7.0.0)
+Requires-Dist: scipy (>=1.9.1,<2.0.0)
+Requires-Dist: shapely (>=1.8.4,<2.0.0)
+Requires-Dist: trimesh (>=3.14.1,<4.0.0)
+Project-URL: Repository, https://github.com/gregspangenberg/shoulder
+Description-Content-Type: text/markdown
+
+# *shoulder*
+
+[![PyPI Latest Release](https://img.shields.io/pypi/v/shoulder.svg)](https://pypi.org/project/shoulder/)
+[![License](https://img.shields.io/pypi/l/shoulder.svg)](https://github.com/gspangenberg/shoulder/blob/main/LICENSE)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+This package detects anatomic landmarks on stl files of shoulder bones and also generates patient specific coordinate systems. It is currently implemented for the humerus and will be extended to the glenoid in the future. Landmarks that *shoulder* can currently identify on the humerus are:
+
+- bicipital groove
+- canal 
+- transepicondylar axis
+- anatomic neck 
+
+
+## Installation
+compatible with python 3.10 and 3.11
+```
+pip install shoulder
+```
+
+## Example
+Start by using the example bone stl's located in "tests/test_bones"
+
+    # pass stl into Humerus
+    hum = shoulder.Humerus("tests/test_bones/humerus_left.stl")
+
+    # calculate landmarks
+    hum.canal.axis()
+    hum.trans_epiconylar.axis()
+    hum.anatomic_neck.plane()
+    hum.bicipital_groove.axis()
+
+    # apply coordinate sysytem
+    hum.apply_csys_canal_transepiconylar()
+
+    # construct plot from above humeral bone with landmarks and coordinate system
+    plot = shoulder.Plot(hum)
+    plot.figure.show()
+
+The output of the plot will appear as shown below with landmarks included and transformed from the original CT coordinate system to a coordainte system defined by the canal and transepicondylar axis.
+
+![Plot of Example code above](https://raw.githubusercontent.com/gregspangenberg/shoulder/main/images/plot.png)
+
+
+## Contributing 
+Clone the repo, open the cloned folder containing the poetry.lock file, then install the development dependencies using poetry. 
+```
+poetry install --with dev
+```
+
+
