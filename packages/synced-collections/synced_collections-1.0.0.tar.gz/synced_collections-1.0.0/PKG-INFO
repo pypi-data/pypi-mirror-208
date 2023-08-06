@@ -1,0 +1,100 @@
+Metadata-Version: 2.1
+Name: synced_collections
+Version: 1.0.0
+Summary: Interact with persistent key-value stores using Pythonic abstractions.
+Author-email: "Vyas Ramasubramani et al." <vyas.ramasubramani@gmail.com>
+Maintainer-email: signac Developers <signac-support@umich.edu>
+License: BSD 3-Clause License for the software synced_collections.
+        
+        Copyright (c) 2016, The Regents of the University of Michigan
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without modification,
+        are permitted provided that the following conditions are met:
+        
+        1.  Redistributions of source code must retain the above copyright notice, this
+            list of conditions and the following disclaimer.
+        
+        2.  Redistributions in binary form must reproduce the above copyright notice,
+            this list of conditions and the following disclaimer in the documentation
+            and/or other materials provided with the distribution.
+        
+        3.  Neither the name of the copyright holder nor the names of its contributors may
+            be used to endorse or promote products derived from this software without
+            specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+        ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+        WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+        IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+        INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+        BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+        OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+        WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+        ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+        POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://signac.io
+Keywords: database,containers
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Topic :: Database
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: zarr
+Provides-Extra: redis
+Provides-Extra: mongodb
+License-File: LICENSE.txt
+
+# <img src="https://raw.githubusercontent.com/glotzerlab/signac/main/doc/images/palette-header.png" width="75" height="58"> synced_collections - Pythonic abstractions over data collections
+
+[![Affiliated with NumFOCUS](https://img.shields.io/badge/NumFOCUS-affiliated%20project-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](https://numfocus.org/sponsored-projects/affiliated-projects)
+[![GitHub Actions](https://github.com/glotzerlab/synced_collections/actions/workflows/run-pytest.yml/badge.svg)](https://github.com/glotzerlab/synced_collections/actions)
+[![License](https://img.shields.io/github/license/glotzerlab/synced_collections.svg)](https://github.com/glotzerlab/synced_collections/blob/main/LICENSE.txt)
+[![Slack](https://img.shields.io/badge/Slack-chat%20support-brightgreen.svg?style=flat&logo=slack)](https://signac.io/slack-invite/)
+[![Twitter](https://img.shields.io/twitter/follow/signacdata?style=social)](https://twitter.com/signacdata)
+[![GitHub Stars](https://img.shields.io/github/stars/glotzerlab/synced_collections?style=social)](https://github.com/glotzerlab/synced_collections/)
+
+The [**signac** framework](https://signac.io) helps users manage and scale file-based workflows, facilitating data reuse, sharing, and reproducibility.
+
+The **synced_collections** package provides Pythonic abstractions over various underlying data stores, presenting APIs that behave like standard built-in Python collections like dicts.
+**synced_collections** form the backbone of **signac**'s data and metadata storage, but may be used just as easily outside of **signac**.
+For instance, users wishing to access a JSON file on disk like a dictionary and automatically persist all changes could use the `synced_collections.JSONDict`.
+
+## Resources
+
+- [Slack Chat Support](https://signac.io/slack-invite/):
+  Get help and ask questions on the **signac** Slack workspace.
+- [**signac** website](https://signac.io/):
+  Framework overview and news.
+
+## Quickstart
+
+This short example demonstrates what you can do with `synced_collections`.
+
+```python
+>>> from synced_collections.backends.collection_json import JSONDict
+>>> d = JSONDict("data.json")
+>>> d["size"] = 10
+>>> d["color"] = "blue"
+>>> import json
+>>> with open("data.json") as f:
+...     print(json.load(f))
+...
+{'size': 10, 'color': 'blue'}
+```
+
+## Testing
+
+You can test this package by executing:
+
+```bash
+$ python -m pytest tests/
+```
