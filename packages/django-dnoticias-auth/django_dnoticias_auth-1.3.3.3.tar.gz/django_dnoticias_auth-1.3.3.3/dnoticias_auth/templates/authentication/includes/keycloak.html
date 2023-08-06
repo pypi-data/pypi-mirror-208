@@ -1,0 +1,7 @@
+{% load static %}
+<script src="{% static 'frontoffice/keycloak.js' %}"></script>
+<script>
+    var keycloakAuthUrl = "{{OIDC_OP_AUTHENTICATION_ENDPOINT}}";
+    var isAuthenticatedByServer = {{user.is_authenticated|yesno:"true,false"}};
+</script>
+<script src="{% static 'frontoffice/js/keycloak-usage.js' %}"></script>
