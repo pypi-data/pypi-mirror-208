@@ -1,0 +1,18 @@
+<h2>Quizzes</h2>
+
+
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'new' %} active{% endif %}" href="{% url 'quiz:quiz_list' %}">Quiz</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'taken' %} active{% endif %}" href="{% url 'quiz:taken_quiz_list' %}">Taken</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'students' %} active{% endif %}" href="{% url 'quiz:student_list' %}">Students</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'profile' %} active{% endif %}" href="{% url 'quiz:student_detail' student=user.id %}">Profile</a>
+  </li>
+</ul>
+
