@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" id="BigConfig" elementFormDefault="qualified">
+  <xs:complexType name="MachineConfig">
+    <xs:sequence>
+      <xs:element name="ip" type="xs:string"/>
+      <xs:element name="cores" type="xs:integer"/>
+      <xs:element name="org_owner">
+        <xs:complexType>
+          <!--this is a union!-->
+          <xs:sequence>
+            <xs:element name="variantint" type="xs:integer" minOccurs="0"/>
+            <xs:element name="variantNoneType" minOccurs="0">
+              <!--This is a None type-->
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MachineID">
+    <xs:sequence>
+      <xs:element name="location" type="xs:string"/>
+      <xs:element name="serv_name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BigConfig">
+    <xs:sequence>
+      <xs:element name="machine_ids">
+        <xs:complexType>
+          <!--this is a dictionary!-->
+          <xs:sequence>
+            <xs:element name="dictitem" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="key" type="MachineID"/>
+                  <xs:element name="val" type="MachineConfig"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="show_logs" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BigConfig" type="BigConfig"/>
+</xs:schema>
