@@ -1,0 +1,99 @@
+metadata:
+  general_description: 
+  vcf_doi: 
+  vcf_reference_genome_doi: 
+  gff3_doi: 
+
+
+# absolute path to the directory containing the data files
+datadir: /opt/divbrowse/data/
+
+variants:
+  # name of the directory containing the Zarr array converted from a VCF file
+  zarr_dir: SNP_matrix_WGS_300_samples.vcf.zarr
+
+  # filename of the mapping table to map other sample IDs on the VCF sample IDs
+  sample_id_mapping_filename: 
+
+
+gff3:
+  # filename of the GFF3 file containing the gene annotations
+  filename: 
+  
+  additional_attributes_keys: biotype,gene_id
+  
+  feature_type_with_description: gene
+  count_exon_variants: true
+  
+  key_confidence: 
+  key_ontology: Ontology_term
+  main_feature_types_for_genes_track:
+    - gene
+    - pseudogene
+    - ncRNA_gene
+  external_link_ontology_term: https://www.ebi.ac.uk/QuickGO/term/{ID}
+  external_links:
+    - feature_attribute: ID
+      url: https://some.external.resource.org/{FEATURE_ID}
+      linktext: Open this gene in an external resource
+
+features:
+  pca: true
+  umap: true
+
+chromosome_labels:
+  1: 1H
+  2: 2H
+  3: 3H
+  4: 4H
+  5: 5H
+  6: 6H
+  7: 7H
+  0: Un
+
+
+gff3_chromosome_labels:
+  1: chr1H
+  2: chr2H
+  3: chr3H
+  4: chr4H
+  5: chr5H
+  6: chr6H
+  7: chr7H
+  0: chrUn
+
+
+centromeres_positions:
+  1: 205502676
+  2: 305853815
+  3: 271947776
+  4: 282386439
+  5: 205989812
+  6: 260041240
+  7: 328847863
+  0: 0
+
+
+blast:
+  active: false
+  galaxy_server_url: https://galaxy-web.ipk-gatersleben.de
+  galaxy_apikey:
+  galaxy_user:
+  galaxy_pass:
+  blastn:
+    galaxy_tool_id: ncbi_blastn_wrapper_barley
+    blast_database: morex_v3
+    blast_type: megablast
+  tblastn:
+    galaxy_tool_id: ncbi_tblastn_wrapper_barley
+    blast_database: morex_v3
+    blast_type: tblastn-fast
+  blast_result_to_vcf_chromosome_mapping:
+    chr1H: chr1H
+    chr2H: chr2H
+    chr3H: chr3H
+    chr4H: chr4H
+    chr5H: chr5H
+    chr6H: chr6H
+    chr7H: chr7H
+    chrUn: chrUn
