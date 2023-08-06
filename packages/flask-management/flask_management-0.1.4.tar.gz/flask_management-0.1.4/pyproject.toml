@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "flask-management"
+version = "0.1.4"
+description = "create the flask project quickly."
+authors = ["huangsong <huangsong@leyantech.com>"]
+readme = "README.md"
+packages = [{ include = "flask_management" }]
+homepage = "https://github.com/ponytailer/flask-management"
+
+[[tool.poetry.source]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+typer = "*"
+cookiecutter = ">= 1.7.2"
+pydantic = { version = ">=1.7.2", extras = ["email"] }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+flaskapi = "flask_management.main:app"
