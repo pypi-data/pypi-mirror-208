@@ -1,0 +1,152 @@
+site_name: OccuPy
+site_url: https://github.com/bforsbe/OccuPy
+site_author: Bjoern Forsberg
+site_description: >-
+  Documentation for OccuPy, a fast and simple python module and program 
+  to estimate local scaling of cryo-EM maps.
+# Repository
+repo_name: bforsbe/OccuPy
+repo_url: https://github.com/bforsbe/OccuPy
+
+# Copyright
+copyright: Copyright &copy; 2022 - 2022 Björn Forsberg
+
+theme:
+  icon:
+    logo: material/home-circle
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: blue grey
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    #- navigation.tabs
+    #- navigation.top
+    #- navigation.tracking
+    - search.highlight
+    - search.suggest
+    # - toc.follow
+    # - content.code.annotate
+    - content.tabs.link
+
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
+
+
+extra:
+  analytics:
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >- 
+            Thanks for your feedback! Help us improve this page by
+            using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
+
+nav:
+  - Introduction: index.md
+  - Install: install.md
+  - Troubleshooting:
+      - Install troubles: Troubleshooting/install_trbl.md
+      - ChimeraX: Troubleshooting/chimX_trbl.md
+      - Other: Troubleshooting/other_trbl.md
+  - Tutorials:
+      - GUI overview: Tutorials/gui.md
+      - Intro tutorial: Tutorials/intro.md
+      - I want to:
+          - Estimate relative resolution: Tutorials/case/est_res.md
+          - Estimate occupancy: Tutorials/case/est_occ.md
+          - Modify a map: Tutorials/case/modification.md
+          - Supress solvent: Tutorials/case/supp_solv.md
+          - Make a subtraction mask : Tutorials/case/sub_mask.md
+          - Use a solvent definition: Tutorials/case/soldef.md
+  - Showcase/gallery:
+    - View all: gallery/index.md
+    - Individual:
+        - From the paper:
+          - Synthetic: gallery/synthetic.md
+          - Mass: gallery/mass.md
+          - Membrane: gallery/membrane.md
+          - Modification: gallery/modification.md
+        - From the team:
+          - High-res: gallery/highres.md
+  - About: about.md
+
+plugins:
+  - search
+
+
+#  - autorefs
+#  - minify:
+#      minify_html: true
+#  - mkdocstrings:
+#      watch:
+#        - src/psygnal
+#      handlers:
+#        python:
+#          import:
+#            - https://docs.python.org/3/objects.inv
+#          selection:
+#            docstring_style: numpy
+#            filters: [ "!^_" ]
+#          rendering:
+#            show_root_heading: true
+#            # show_root_toc_entry: true
+#            show_root_full_path: true
+#            # show_object_full_path: false
+#            # show_root_members_full_path: false
+#            # show_category_heading: false
+#            # show_if_no_docstring: false
+#            # show_signature: true
+#            # show_signature_annotations: false
+#            show_source: true
+#            # show_bases: true
+#            # group_by_category: true
+#            # heading_level: 2
+#            members_order: alphabetical  # alphabetical/source
+#
+#            ## experimental
+#            # separate_signature: false
+#            # line_length: 60
+#            # show_submodules: true
+#            docstring_section_style: list  # or table/list/spacy
+
+
+
+extra_css:
+  - stylesheets/extra.css
+  - gallery/stylesheets/extra.css
