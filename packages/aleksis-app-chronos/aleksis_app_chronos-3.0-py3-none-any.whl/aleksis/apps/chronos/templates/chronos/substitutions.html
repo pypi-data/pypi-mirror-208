@@ -1,0 +1,94 @@
+{# -*- engine:django -*- #}
+
+{% extends 'core/base.html' %}
+
+{% load i18n static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/chronos/timetable.css' %}">
+{% endblock %}
+
+{% block browser_title %}{% blocktrans %}Substitutions{% endblocktrans %}{% endblock %}
+{% block no_page_title %}{% endblock %}
+
+{% block content %}
+  <div class="row no-margin">
+    <div class="col s10 m6 no-padding">
+      <h1>{% trans "Substitutions" %}</h1>
+    </div>
+    <div class="col s2 m6 right align-right print-icon">
+      <a class="waves-effect waves-teal btn-flat btn-flat-medium right"
+         href="{% url "substitutions_print_by_date" day.year day.month day.day %}" target="_blank">
+        <i class="material-icons iconify center" data-icon="mdi:printer-outline"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="row no-print">
+    <div class="col s12 m6 l8">
+      {% include "chronos/partials/headerbox.html" %}
+
+      {% include "core/partials/announcements.html" with announcements=announcements show_recipients=1 %}
+    </div>
+    <div class="col s12 m6 l4 no-padding">
+      {% include "chronos/partials/datepicker.html" %}
+    </div>
+  </div>
+
+  <h2 class="hide-on-small-and-down">{{ day|date:"l" }}, {{ day }}</h2>
+
+  <div class="table-container">
+    <table class="substitutions striped">
+      <thead>
+      <tr>
+        <th><i class="material-icons iconify center" data-icon="mdi:account-multiple-outline"></i></th>
+        <th><i class="material-icons iconify center" data-icon="mdi:clock-outline"></i></th>
+        <th>{% trans "Teacher" %}</th>
+        <th>{% trans "Subject" %}</th>
+        <th>{% trans "Room" %}</th>
+        <th>{% trans "Notes" %}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {% if not substitutions %}
+        <td colspan="7">
+          <p class="flow-text center">
+            {% blocktrans %}No substitutions available.{% endblocktrans %}
+          </p>
+        </td>
+      {% endif %}
+      {% for item in substitutions %}
+        <tr class="{% include "chronos/partials/subs/colour.html" with item=item %}">
+          {# TODO: Extend support for purple (events) #}
+          <td>
+            {% include "chronos/partials/subs/groups.html" with type=item.type el=item.el %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/period.html" with type=item.type el=item.el item=item %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/teachers.html" with type=item.type el=item.el %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/subject.html" with type=item.type el=item.el %}
+          </td>
+          <td>
+            {% include "chronos/partials/subs/room.html" with type=item.type el=item.el %}
+          </td>
+          <td>
+            <span class="hide-on-med-and-up">
+              {% include "chronos/partials/subs/badge.html" with sub=item.el %}
+            </span>
+            {% include "chronos/partials/subs/comment.html" with el=item.el %}
+          </td>
+          <td class="hide-on-small-and-down">
+            {% include "chronos/partials/subs/badge.html" with sub=item.el %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
