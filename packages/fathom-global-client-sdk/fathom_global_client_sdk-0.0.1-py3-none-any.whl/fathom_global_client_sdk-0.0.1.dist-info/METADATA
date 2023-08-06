@@ -1,0 +1,65 @@
+Metadata-Version: 2.1
+Name: fathom_global_client_sdk
+Author: Fathom
+Home-page: https://fathom.global
+Description-Content-Type: text/markdown
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Requires-Dist: protoc-gen-validate==0.10.1
+Requires-Dist: googleapis-common-protos==1.56.2
+Requires-Dist: grpcio==1.50.0
+Version: 0.0.1
+
+# Fathom Python SDK client
+
+The Python SDK client for communicating with the Fathom API
+
+Example usage:
+
+[//]: # "Example is expanded below"
+```python
+"""An example usage of the Fathom API client."""
+import os
+
+from fathom import Client, point, points, simple_polygon
+
+if __name__ == "__main__":
+    client = Client(
+        os.getenv("FATHOM_CLIENT_ID"),
+        os.getenv("FATHOM_CLIENT_SECRET"),
+        os.getenv("FATHOM_API_ADDR"),
+    )
+
+    layer_ids = [
+        "GLOBAL-1ARCSEC-00_OFFSET-1in10-PLUVIAL-DEFENDED-DEPTH-2020-PERCENTILE50-v0.0.0_test",
+        "GLOBAL-1ARCSEC-00_OFFSET-1in100-PLUVIAL-DEFENDED-DEPTH-2020-PERCENTILE50-v0.0.0_test",
+    ]
+
+    pt = point(lat=50.8162643, lng=-1.1081944)
+    client.get_points(points([pt]), layer_ids)
+
+    poly = simple_polygon(
+        [
+            point(52.41, -1.52),
+            point(52.4, -1.52),
+            point(52.4, -1.5),
+            point(52.41, -1.5),
+            point(52.41, -1.52),
+        ]
+    )
+    results = client.get_polygon(poly, layer_ids).results
+    for layer_id, data in results.items():
+        for geotiff in data.polygons.geo_tiffs:
+            f = open(layer_id + ".tif", "wb")
+            f.write(geotiff)
+            f.close()
+
+    results = client.get_with_shapefile(shapefile, layer_ids).results
+    for layer_id, data in results.items():
+        for geotiff in data.polygons.geo_tiffs:
+            f = open(layer_id + ".tif", "wb")
+            f.write(geotiff)
+            f.close()
+```
+
