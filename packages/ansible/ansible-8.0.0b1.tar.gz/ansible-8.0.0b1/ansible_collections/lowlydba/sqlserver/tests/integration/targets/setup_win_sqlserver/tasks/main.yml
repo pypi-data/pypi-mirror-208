@@ -1,0 +1,7 @@
+---
+- name: Install Powershell modules
+  ansible.windows.win_shell: |
+    {{ item }}
+  loop:
+    - "{{ dbatools_install_cmd }}"
+    - "{{ dbops_install_cmd }}"
