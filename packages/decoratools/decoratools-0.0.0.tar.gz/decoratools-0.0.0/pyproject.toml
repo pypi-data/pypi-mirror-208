@@ -1,0 +1,57 @@
+[project]
+name = "decoratools"
+description = "Collection of useful decorators"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [
+    { name = "Quentin Bouget", email = "ypsah@devyard.org" },
+]
+keywords = [
+    "decorator",
+    "utility",
+    "library",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+]
+readme = "README.md"
+dynamic = ["dependencies", "version"]
+
+[project.urls]
+homepage = "https://gitlab.com/ypsah/decoratools"
+repository = "https://gitlab.com/ypsah/decoratools"
+
+[build-system]
+requires = ["setuptools>=63", "setuptools_scm[toml]>=6.2", "setuptools-pipfile"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[tool.setuptools-pipfile]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+# enrole in feature-preview
+preview = true
+
+[tool.isort]
+profile = "black"
+src_paths = ["decoratools", "tests"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --cov=decoratools --cov-branch --cov-fail-under=90"
+
+[tool.ruff]
+ignore = [
+    "E501",  # line-length: black already covers this
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
