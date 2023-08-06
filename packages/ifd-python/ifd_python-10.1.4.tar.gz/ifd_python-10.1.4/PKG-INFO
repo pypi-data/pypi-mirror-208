@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: ifd-python
+Version: 10.1.4
+Summary: 
+Author: Antonin Lemoine
+Author-email: antonin.lemoine@altitudeinfra.fr
+Requires-Python: >=3.6,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: pandas (>=2.0.0,<3.0.0)
+Requires-Dist: pika (>=1.3.0,<2.0.0)
+Requires-Dist: pymssql (>=2.0.0,<3.0.0)
+Requires-Dist: requests (>=2.0.0,<3.0.0)
+Description-Content-Type: text/markdown
+
+# Executer les tests unitaires
+```bash
+python -m unittest discover --pattern=*.test.py
+```
+
+## Environement d'execution des tests unitaires du package
+Afin d'exécuter les tests unitaire dans les meilleur conditions vous devez vous munir d'un serveur RabbitMQ
+avec les spécifications suivant :
+
+- Nom d'utilisateur : **guest**
+- Mot de passe : **guest**
+- Role de l'utilisateur **guest** : **administrator**
+
+
+- Adresse IP du serveur RabbitMQ : **127.0.0.1**
+- Ouvrir le port **5672**
+
+## Build package
+```bash
+python -m build
+```
