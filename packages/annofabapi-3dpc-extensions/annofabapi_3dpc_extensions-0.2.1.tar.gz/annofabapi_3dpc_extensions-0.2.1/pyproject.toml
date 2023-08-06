@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "annofabapi-3dpc-extensions"
+version = "0.2.1"  # `poetry-dynamic-versioning`を使ってGitHubのバージョンタグを取得している。変更不要
+description = "annofabapiの3DPC Editor用の拡張機能です。"
+authors = ["Kurusugawa Computer Inc."]
+packages = [
+    { include = "annofab_3dpc" }
+]
+readme="README.md"
+repository="https://github.com/kurusugawa-computer/annofabapi-3dpc-extensions"
+classifiers = [
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Topic :: Utilities",
+        "Operating System :: OS Independent",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+dataclasses-json="*"
+numpy = "*"
+
+[tool.poetry.dev-dependencies]
+# テストコードで利用するため
+annofabapi = ">=0.47.0"
+
+# test library
+pytest = "*"
+pytest-xdist = "*"
+pytest-cov = "*"
+
+# format library
+isort = "^5"
+autoflake = "*"
+black = "^23"
+
+# lint library
+flake8 = "^6"
+mypy = "^1"
+pylint = "^2"
+
+
+
+# document library
+sphinx = "^7"
+# pandasのdocumentationページに近いレイアウトにするためのパッケージ
+pydata-sphinx-theme = ">=0.13.3"
+
+
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
+[tool.mypy]
+# スタブが無いパッケージのエラーは無視させる.サードパーティのライブラリに型情報がないケースもあるため
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[tool.poetry-dynamic-versioning]
+enable = false
+format = "{base}"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
