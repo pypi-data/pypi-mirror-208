@@ -1,0 +1,101 @@
+Metadata-Version: 2.1
+Name: lifescale-utils
+Version: 0.0.7
+Summary: Lifescale utility software.
+Home-page: https://gitlab.com/hellerdev/lifescale_utils
+Author: Andreas Hellerschmied
+Author-email: heller182@gmx.at
+License: GNU GPLv3
+Keywords: Lifescale
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Programming Language :: Python :: 3
+Requires-Python: <4,>=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: openpyxl
+Requires-Dist: PyQt6
+Requires-Dist: pyqtgraph
+
+# lifescale_utils
+Data analysis utilities for lifescale.
+
+# Programs:
+
+## lsgui
+*lsgui* starts the graphical user interface (gui) of lifescale-utils. It provides toe following main features:
+  * Read lifescale xlsm files
+  * Visualize the data from the xlsm file and calculate various statistics
+  * Assess the mass distribution of samples by histograms and flag invalid data
+  * Write the cleand data to csv files (see *ls2csv*)
+
+### Usage:
+```
+usage: lsgui [-h]
+
+Starts lifescale utils gui.
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+## ls2csv
+*ls2csv* is a command line program that converts xlsm files written by lifescale units to csv files. The following files  
+are created:
+  * `Masses_<run-name>_<guid>.csv`: Data series from the sheet AcquisitionIntervals.
+  * `Metadata_<run-name>_<guid>.csv`: Data from the sheet PanelData.
+  * `SampleSummary_<run-name>_<guid>.csv`: Data from the sheet IntervalAnalysis plus sample related data from AcquisitionIntervals.
+`<run-name>` and `<guid>` are the taken from the fields `Name` and `Guid` (if available) from the settings sheet of the xml file.
+
+### Usage:
+```
+usage: ls2csv [-h] -i INPUT_XLSM -o OUT_DIR [-nv] [-s] [-t]
+
+Conversion from lifescale xlsm output to csv files
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT_XLSM, --input-xlsm INPUT_XLSM
+                        Path and name of the input xlsm file created by
+                        lifescale. (default: None)
+  -o OUT_DIR, --out-dir OUT_DIR
+                        Output directory for the CSV files. (default: None)
+  -nv, --not-verbose    Disable command line status messages. (default: False)
+  -s, --sample-stats    Calculate sample statistics of masses (median, std.
+                        deviation, quartiles, interquartile range) and add
+                        them to the SampleSummary output CSV file (columns:
+                        Mass_median, Mass_std, Mass_q25, Mass_q75,Mass_iqr).
+                        (default: False)
+  -t, --sort-masses-by-time
+                        Sort data in the Masses CSV file by acquisition time.
+                        (default: False)
+                        
+```
+
+# Python package and installation
+
+Lifescale_utils is available at https://pypi.org/project/lifescale-utils/
+
+Installation: ```pip install lifescale_utils```
+
+# License and copyright
+
+Copyright (C) 2023  Andreas Hellerschmied (<heller182@gmx.at>)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Funding
+lifescale_utils was funded by the Centre for Microbiology and Environmental Systems Science (CMES) of the University of 
+Vienna (https://cmess.univie.ac.at/). 
