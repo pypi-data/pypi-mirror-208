@@ -1,0 +1,67 @@
+Metadata-Version: 2.1
+Name: genius-chatbot
+Version: 0.5.0
+Summary: Use huggingface models to create an intelligent and scalable chatbot
+Home-page: https://github.com/Knuckles-Team/genius-chatbot
+Author: Audel Rouhi
+Author-email: knucklessg1@gmail.com
+License: Unlicense
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: Public Domain
+Classifier: Environment :: Console
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: accelerate (>=0.15.0)
+Requires-Dist: psutil (>=5.9.4)
+Requires-Dist: torch (>=1.13.1)
+Requires-Dist: transformers (>=4.29.1)
+
+# Genius Chatbot
+*Version: 0.5.0*
+
+Chatbot that uses any desired hugging face model or allows for scalable 
+intelligence based on hardware limitations
+
+### Usage:
+| Short Flag | Long Flag       | Description                                |
+|------------|-----------------|--------------------------------------------|
+| -h         | --help          | See Usage                                  |
+| -c         | --cuda          | Use Nvidia Cuda instead of CPU             |
+| -s         | --save          | Save model locally                         |
+| -d         | --directory     | Directory for model                        |
+| -o         | --output-length | Maximum output length of response          |
+| -p         | --prompt        | Prompt for chatbot                         |
+| -m         | --model         | Model to use from Huggingface              |
+
+### Example:
+```bash
+genius-chatbot --model "facebook/opt-66b" --output-length "500" --prompt "Chatbots are cool because they"
+```
+
+#### Install Instructions
+Install Python Package
+
+```bash
+python -m pip install genius-chatbot
+```
+
+#### Build Instructions
+Build Python Package
+
+```bash
+sudo chmod +x ./*.py
+sudo pip install .
+python3 setup.py bdist_wheel --universal
+# Test Pypi
+twine upload --repository-url https://test.pypi.org/legacy/ dist/* --verbose -u "Username" -p "Password"
+# Prod Pypi
+twine upload dist/* --verbose -u "Username" -p "Password"
+```
+
+
