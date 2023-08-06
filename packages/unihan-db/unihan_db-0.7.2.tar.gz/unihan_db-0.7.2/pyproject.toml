@@ -1,0 +1,150 @@
+[tool.poetry]
+name = "unihan_db"
+version = "0.7.2"
+description = "SQLAlchemy models for UNIHAN CJK database"
+license = "MIT"
+authors = ["Tony Narlock <tony@git-pull.com>"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Database",
+  "Topic :: Software Development :: Internationalization",
+  "Topic :: Software Development :: Localization",
+  "Topic :: Utilities",
+]
+keywords = [
+  "unihan",
+  "sqlalchemy",
+  "cjk",
+  "chinese",
+  "japanese",
+  "sql",
+  "database",
+]
+
+readme = "README.md"
+packages = [
+  { include = "*", from = "src" },
+]
+include = [
+  { path = "tests", format = "sdist" },
+]
+
+homepage = "https://unihan-db.git-pull.com"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/cihai/unihan-db/issues"
+Documentation = "https://unihan-db.git-pull.com"
+Repository = "https://github.com/cihai/unihan-db"
+"Release notes" = "https://github.com/cihai/unihan-db/blob/master/CHANGES"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+appdirs = "*"
+SQLAlchemy = "<2"
+unihan-etl = "~=0.18.2"
+
+[tool.poetry.dev-dependencies]
+### Docs ###
+sphinx = "*"
+furo = "*"
+gp-libs = "*"
+sphinx-autobuild = "*"
+sphinx-autodoc-typehints = "*"
+sphinx-inline-tabs = "<2023.4.21"  # For Python 3.7 support
+sphinxext-opengraph = "<0.8"  # https://github.com/wpilibsuite/sphinxext-opengraph/issues/100
+sphinx-copybutton = "*"
+sphinxext-rediraffe = "*"
+myst_parser = ">=0.18.1"
+docutils = "*"
+
+### Testing ###
+pytest = "*"
+pytest-rerunfailures = "*"
+pytest-watcher = "*"
+
+### Coverage ###
+codecov = "*"
+coverage = "*"
+pytest-cov = "*"
+
+### Format ###
+black = "*"
+isort = "*"
+
+### Lint ###
+flake8 = [
+  { version = "*", python = "^3.7" },
+  { version = ">=5", python = "^3.8" },
+]
+flake8-bugbear = "*"
+flake8-comprehensions = "*"
+mypy = "*"
+sqlalchemy-stubs = "*"
+types-appdirs = "*"
+
+[tool.poetry.extras]
+docs = [
+  "docutils",
+  "sphinx",
+  "sphinx-autodoc-typehints",
+  "sphinx-autobuild",
+  "sphinx-copybutton",
+  "sphinxext-opengraph",
+  "sphinx-inline-tabs",
+  "sphinxext-rediraffe",
+  "myst_parser",
+  "furo",
+  "gp-libs",
+]
+test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
+coverage = ["codecov", "coverage", "pytest-cov"]
+format = ["black", "isort"]
+lint = [
+  "flake8",
+  "flake8-bugbear",
+  "flake8-comprehensions",
+  "mypy",
+  "sqlalchemy-stubs",
+  "types-appdirs",
+]
+
+[tool.mypy]
+plugins = [
+  "sqlmypy",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "*/_compat.py",
+  "docs/conf.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "if __name__ == .__main__.:",
+  "pragma: no cover",
+  "def __repr__",
+  "raise NotImplementedError",
+  "return NotImplemented",
+  "if TYPE_CHECKING:",
+  "if t.TYPE_CHECKING:",
+  "@overload( |$)",
+]
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
