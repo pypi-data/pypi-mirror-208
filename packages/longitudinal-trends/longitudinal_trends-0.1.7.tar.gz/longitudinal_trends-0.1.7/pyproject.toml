@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]#, "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "longitudinal_trends"
+version='0.1.7'
+description="Generate long-term longitudinal Google Trends Data"
+urls = {homepage = "https://github.com/Mohammad-sakir/longitudinalTrends"}
+requires-python = ">=3.7"
+authors = [
+    {name = "Mohammad Saleh Ahsan Sakir"},
+    {name = "Taeyong Park"}, 
+    {email="ahsansakir506@gmail.com"},    
+    {email = "taeyongp@andrew.cmu.edu"}
+]
+license = {text="MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+keywords = [
+    "longitudinal-trends longitudinal data python google-trends-api google-trends search-data"
+]
+
+dynamic = ["readme", "dependencies"]
+
+[tool.setuptools]
+packages = ["longitudinal_trends"]
+
+[tool.setuptools.dynamic.readme]
+file = ["README.md"]
+content-type = "text/markdown"
+
+[tool.setuptools.dynamic.dependencies]
+file = ["requirements.txt"]
