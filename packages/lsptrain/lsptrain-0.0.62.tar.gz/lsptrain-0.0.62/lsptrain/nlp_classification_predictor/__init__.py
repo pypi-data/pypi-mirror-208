@@ -1,0 +1,1 @@
+from lsptrain.nlp_classification_predictor.predictor import TextClassificationPredictor
