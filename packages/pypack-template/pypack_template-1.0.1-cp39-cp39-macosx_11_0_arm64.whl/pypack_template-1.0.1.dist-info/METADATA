@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: pypack-template
+Version: 1.0.1
+Summary: A python package template
+Author-email: dy <jealousing@alumni.sjtu.edu.cn>
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Provides-Extra: dev
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pip-tools ; extra == 'dev'
+Requires-Dist: pybind11 ; extra == 'dev'
+Requires-Dist: build ; extra == 'dev'
+Requires-Dist: twine ; extra == 'dev'
+
+# How to
+
+
+## Used as a project
+
+```bash
+python -m pip install pip-tools
+pip-compile --upgrade # produces and update requirements.txt
+pip-sync
+```
+
+## Used as a package
+
+```bash
+python -m pip install -e . # install locally
+```
+
+## Publish as a package
+
+```bash
+python -m pip install build twine
+
+python -m build # build sdist(tar.gz) and bdist(wheel)
+
+twine upload dist/* # publish to pypi
+```
+
+
+### Reference
++ [pip-tools](https://github.com/jazzband/pip-tools/)
++ https://realpython.com/pypi-publish-python-package/
++ https://pybind11.readthedocs.io/en/stable/compiling.html
