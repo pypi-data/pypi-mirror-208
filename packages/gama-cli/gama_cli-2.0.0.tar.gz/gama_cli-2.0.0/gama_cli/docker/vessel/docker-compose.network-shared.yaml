@@ -1,0 +1,37 @@
+# See /docs/architecture/networking.md
+
+version: "3.8"
+
+services:
+  gama_ui:
+    networks:
+      - vessel
+      - shared
+
+  gama_chart_tiler:
+    networks:
+      - vessel
+      - shared
+
+  gama_chart_api:
+    networks:
+      - vessel
+      - shared
+
+  gama_vessel:
+    networks:
+      - vessel
+      - shared
+    ports:
+      - 1666:1666
+      - 9090:9090
+      - 8080:8080
+
+  groot:
+    networks:
+      - vessel
+      - shared
+
+networks:
+  vessel:
+  shared:
