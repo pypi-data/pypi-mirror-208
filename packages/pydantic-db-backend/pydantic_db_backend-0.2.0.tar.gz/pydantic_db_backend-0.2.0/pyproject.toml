@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "pydantic-db-backend"
+version = "0.2.0"
+description = ""
+authors = ["Marco Bartel <bsimpson888@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+couchdb = { version = "^1.2", optional = true }
+pydash = "^7.0.3"
+iso8601 = "^1.1.0"
+pydantic = "^1.10.7"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+
+[tool.poetry.extras]
+couchdb = ["couchdb"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q -s -v"
+testpaths = [
+    "tests",
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "[%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
