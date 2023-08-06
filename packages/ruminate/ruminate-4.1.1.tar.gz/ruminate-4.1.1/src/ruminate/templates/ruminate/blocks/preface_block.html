@@ -1,0 +1,19 @@
+{% load static wagtailcore_tags wagtailimages_tags django_list_tags %}
+<dl class="article-preface">
+    {% if value.summary %}
+    <dt class="article-preface-label article-summary-label">Summary</dt>
+    <dd class="article-preface-value article-summary">{{ value.summary }}</dd>
+    {% endif %}
+    {% if value.authors %}
+    <dt class="article-preface-label article-authors-label">Authors</dt>
+    <dd class="article-preface-value article-authors"><ol>
+    {% for author in value.authors %}
+    <li class="article-author">{% include_block author %}</li>
+    {% endfor %}
+    </ol></dd>
+    {% endif %}
+    {% if value.publication_date %}
+    <dt class="article-preface-label article-publication-date-label">Publication Date</dt>
+    <dd class="article-preface-value article-publication-date">{{ value.publication_date|date:"j F Y" }}</dd>
+    {% endif %}
+</dl>

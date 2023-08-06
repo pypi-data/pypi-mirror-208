@@ -1,0 +1,6 @@
+{% load tour_guide_tags %}
+{% if value.identify_with %}
+<a href="{% rich_link_url value.identify_with.navigation_link.as_rich_link %}">{{ value.identify_with.full_name_no_title }}</a>
+{% else %}
+{{ value.given_names_and_initials }} {{ value.family_name }}
+{% endif %}

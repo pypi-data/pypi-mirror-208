@@ -1,0 +1,7 @@
+{% load static wagtailcore_tags concisely_tags tour_guide_tags %}
+{% if not skip_heading %}
+{% heading value.level %}
+{% if label_sections %}{% label_anchor anchor_category value.anchor_identifier label_format='no_prefix_label' %}{% endif %}
+{% include_block value.heading %}
+{% endheading %}
+{% endif %}

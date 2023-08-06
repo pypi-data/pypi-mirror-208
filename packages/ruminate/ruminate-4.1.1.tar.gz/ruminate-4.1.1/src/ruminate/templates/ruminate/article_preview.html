@@ -1,0 +1,38 @@
+{% load static wagtailcore_tags django_auxiliaries_tags %}
+<!DOCTYPE html>
+<html class="no-js {% block html_class %}{% endblock %}" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% include_app_support container_element='head' %}
+
+        <style type="text/css">
+
+            main {
+                width: 100vw;
+                height: 100vh;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+                transform: translate(0px, 0px);
+                /*
+                padding-top: 5vh;
+                padding-bottom: 5vh;
+                */
+            }
+
+        </style>
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+
+        <main>
+            {% include 'ruminate/article.html' %}
+        </main>
+
+        {% include_app_support container_element='body' %}
+
+        <script type="text/javascript">
+            window.initiator.initialiseAll();
+        </script>
+    </body>
+</html>

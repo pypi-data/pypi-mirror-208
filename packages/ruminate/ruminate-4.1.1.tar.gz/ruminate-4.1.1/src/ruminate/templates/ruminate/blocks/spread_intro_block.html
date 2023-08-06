@@ -1,0 +1,10 @@
+{% load static wagtailcore_tags wagtail_richer_text_tags %}
+<header {% if self.block.meta.classname %}class="{{ self.block.meta.classname }}"{% endif %}>
+{% include_block intro_visual with content=value.visual.value %}
+<div class="lead-container" {% if value.summary_colour %}style="color: {{ value.summary_colour.as_css_string }};"{% endif %}>
+<div>
+<h1 {% if value.title_colour %}style="color: {{ value.title_colour.as_css_string }};"{% endif %}>{{ value.article.title }}</h1>
+{{ value.article.summary|richertext }}
+</div>
+</div>
+</header>

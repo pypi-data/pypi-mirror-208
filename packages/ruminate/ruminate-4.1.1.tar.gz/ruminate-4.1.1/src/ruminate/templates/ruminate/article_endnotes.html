@@ -1,0 +1,17 @@
+{% load static wagtailcore_tags tour_guide_tags bibster_tags %}
+{% define_anchor 'section' 'endnotes' level=0 as endnote_anchor_id %}
+<section id="{{ endnote_anchor_id }}">
+<header>
+<h2>Notes</h2>
+</header>
+<ol class="endnote-list">
+{% for child_block in value %}
+{% if child_block.block_type == 'note' and child_block.value.category == 'ruminate:endnote' %}
+{% define_anchor 'endnote' child_block.value.anchor_identifier level=0 label_prefix=anchor_label as anchor_id %}
+<li id="{{ anchor_id }}" class="note endnote">
+{% include_block child_block.value %}
+</li>
+{% endif %}
+{% endfor %}
+</ol>
+</section>
