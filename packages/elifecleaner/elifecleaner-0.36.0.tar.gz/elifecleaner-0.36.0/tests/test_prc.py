@@ -1,0 +1,442 @@
+import os
+import unittest
+from xml.etree import ElementTree
+import json
+from elifecleaner import LOGGER, configure_logging, prc
+from tests.helpers import delete_files_in_folder
+
+# elife ISSN example of non-PRC journal-id tag values
+NON_PRC_XML = (
+    "<article><front><journal-meta>"
+    '<journal-id journal-id-type="nlm-ta">elife</journal-id>'
+    '<journal-id journal-id-type="hwp">eLife</journal-id>'
+    '<journal-id journal-id-type="publisher-id">eLife</journal-id>'
+    "<journal-title-group>"
+    "<journal-title>eLife</journal-title>"
+    "</journal-title-group>"
+    '<issn pub-type="epub">2050-084X</issn>'
+    "<publisher>"
+    "<publisher-name>eLife Sciences Publications, Ltd</publisher-name>"
+    "</publisher>"
+    "</journal-meta></front></article>"
+)
+
+# PRC xml will have non-eLife journal-id tag text values
+PRC_XML = (
+    "<article><front><journal-meta>"
+    '<journal-id journal-id-type="nlm-ta">foo</journal-id>'
+    '<journal-id journal-id-type="hwp">foo</journal-id>'
+    '<journal-id journal-id-type="publisher-id">foo</journal-id>'
+    "<journal-title-group>"
+    "<journal-title>eLife</journal-title>"
+    "</journal-title-group>"
+    '<issn pub-type="epub">2050-084X</issn>'
+    "<publisher>"
+    "<publisher-name>eLife Sciences Publications, Ltd</publisher-name>"
+    "</publisher>"
+    "</journal-meta></front></article>"
+)
+
+
+class TestIsXmlPrc(unittest.TestCase):
+    def test_is_xml_prc(self):
+        "PRC XML will return true"
+        root = ElementTree.fromstring(PRC_XML)
+        self.assertTrue(prc.is_xml_prc(root))
+
+    def test_is_xml_prc_false(self):
+        "test non-PRC XML will return false"
+        root = ElementTree.fromstring(NON_PRC_XML)
+        self.assertEqual(prc.is_xml_prc(root), False)
+
+    def test_is_xml_prc_incomplete(self):
+        "incomplete XML will return false"
+        root = ElementTree.fromstring("<root/>")
+        self.assertEqual(prc.is_xml_prc(root), False)
+
+
+class TestTransformJournalIdTags(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = "tests/tmp"
+        self.log_file = os.path.join(self.temp_dir, "test.log")
+        self.log_handler = configure_logging(self.log_file)
+
+    def tearDown(self):
+        LOGGER.removeHandler(self.log_handler)
+        delete_files_in_folder(self.temp_dir, filter_out=[".keepme"])
+
+    def test_transform_journal_id_tags(self):
+        # populate an ElementTree
+        identifier = "test.zip"
+        xml_string = PRC_XML
+        expected = bytes(NON_PRC_XML, encoding="utf-8")
+        root = ElementTree.fromstring(xml_string)
+        # invoke the function
+        root_output = prc.transform_journal_id_tags(root, identifier)
+        # assertions
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+        log_file_lines = []
+        with open(self.log_file, "r") as open_file:
+            for line in open_file:
+                log_file_lines.append(line)
+        for index, (journal_id_type, tag_text) in enumerate(
+            [("nlm-ta", "elife"), ("hwp", "eLife"), ("publisher-id", "eLife")]
+        ):
+            self.assertEqual(
+                log_file_lines[index],
+                (
+                    (
+                        "INFO elifecleaner:prc:transform_journal_id_tags: "
+                        "%s replacing journal-id tag text of type %s to %s\n"
+                    )
+                )
+                % (identifier, journal_id_type, tag_text),
+            )
+
+
+class TestAddPrcCustomMetaTags(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = "tests/tmp"
+        self.log_file = os.path.join(self.temp_dir, "test.log")
+        self.log_handler = configure_logging(self.log_file)
+        self.expected_xml = bytes(
+            "<article>"
+            "<front>"
+            "<article-meta>"
+            "<custom-meta-group>"
+            '<custom-meta specific-use="meta-only">'
+            "<meta-name>publishing-route</meta-name>"
+            "<meta-value>prc</meta-value>"
+            "</custom-meta>"
+            "</custom-meta-group>"
+            "</article-meta>"
+            "</front>"
+            "</article>",
+            encoding="utf-8",
+        )
+
+    def tearDown(self):
+        LOGGER.removeHandler(self.log_handler)
+        delete_files_in_folder(self.temp_dir, filter_out=[".keepme"])
+
+    def test_add_custom_meta_tags(self):
+        "test when custom-meta-group tag does not yet exist"
+        # populate an ElementTree
+        xml_string = "<article><front><article-meta/></front></article>"
+        root = ElementTree.fromstring(xml_string)
+        # invoke the function
+        root_output = prc.add_prc_custom_meta_tags(root)
+        # assertions
+        self.assertEqual(ElementTree.tostring(root_output), self.expected_xml)
+
+    def test_group_tag_exists(self):
+        "test if custom-meta-group tag already exists"
+        # populate an ElementTree
+        xml_string = (
+            "<article><front><article-meta>"
+            "<custom-meta-group />"
+            "</article-meta></front></article>"
+        )
+        root = ElementTree.fromstring(xml_string)
+        # invoke the function
+        root_output = prc.add_prc_custom_meta_tags(root)
+        # assertions
+        self.assertEqual(ElementTree.tostring(root_output), self.expected_xml)
+
+    def test_no_article_meta_tag(self):
+        # populate an ElementTree
+        identifier = "test.zip"
+        xml_string = "<root/>"
+        expected = b"<root />"
+        root = ElementTree.fromstring(xml_string)
+        # invoke the function
+        root_output = prc.add_prc_custom_meta_tags(root, identifier)
+        # assertions
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+        with open(self.log_file, "r") as open_file:
+            self.assertEqual(
+                open_file.read(),
+                (
+                    "WARNING elifecleaner:prc:add_prc_custom_meta_tags: "
+                    "%s article-meta tag not found\n"
+                )
+                % identifier,
+            )
+
+
+class TestTransformElocationId(unittest.TestCase):
+    def setUp(self):
+        self.xml_string_pattern = (
+            "<article><front><article-meta>%s</article-meta></front></article>"
+        )
+
+    def test_transform_elocation_id(self):
+        xml_string = (
+            self.xml_string_pattern % "<elocation-id>e1234567890</elocation-id>"
+        )
+        expected = bytes(
+            self.xml_string_pattern % "<elocation-id>RP1234567890</elocation-id>",
+            encoding="utf-8",
+        )
+        identifier = "test.zip"
+        root = ElementTree.fromstring(xml_string)
+        root_output = prc.transform_elocation_id(root, identifier=identifier)
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+
+    def test_no_change(self):
+        xml_string = self.xml_string_pattern % "<elocation-id>foo</elocation-id>"
+        expected = bytes(xml_string, encoding="utf-8")
+        root = ElementTree.fromstring(xml_string)
+        root_output = prc.transform_elocation_id(root)
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+
+    def test_tag_missing(self):
+        xml_string = "<article />"
+        expected = bytes(xml_string, encoding="utf-8")
+        root = ElementTree.fromstring(xml_string)
+        root_output = prc.transform_elocation_id(root)
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+
+
+def docmap_test_data(doi=None):
+    "generate a docmap json test fixture"
+    docmap_json = {
+        "first-step": "_:b0",
+        "steps": {
+            "_:b0": {"next-step": "_:b1"},
+            "_:b1": {
+                "actions": [
+                    {
+                        "outputs": [
+                            {
+                                "type": "preprint",
+                                "identifier": "85111",
+                                "versionIdentifier": "2",
+                            }
+                        ]
+                    },
+                ]
+            },
+        },
+    }
+    if doi:
+        # add doi key and value to the outputs
+        docmap_json["steps"]["_:b1"]["actions"][0]["outputs"][0]["doi"] = doi
+    return docmap_json
+
+
+class TestVersionDoiFromDocmap(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = "tests/tmp"
+        self.log_file = os.path.join(self.temp_dir, "test.log")
+        self.log_handler = configure_logging(self.log_file)
+        self.identifier = "test.zip"
+
+    def tearDown(self):
+        LOGGER.removeHandler(self.log_handler)
+        delete_files_in_folder(self.temp_dir, filter_out=[".keepme"])
+
+    def test_version_doi_from_docmap(self):
+        "test for when a doi is found"
+        doi = "10.7554/eLife.85111.2"
+        docmap_json = docmap_test_data(doi)
+        result = prc.version_doi_from_docmap(json.dumps(docmap_json), self.identifier)
+        self.assertEqual(result, doi)
+
+    def test_docmap_is_none(self):
+        "test for no docmap"
+        docmap_json = {}
+        result = prc.version_doi_from_docmap(json.dumps(docmap_json), self.identifier)
+        self.assertEqual(result, None)
+        with open(self.log_file, "r") as open_file:
+            log_messages = open_file.readlines()
+            self.assertEqual(
+                log_messages[-1],
+                (
+                    "WARNING elifecleaner:prc:version_doi_from_docmap: "
+                    "%s parsing docmap returned None\n"
+                )
+                % self.identifier,
+            )
+
+    def test_no_preprint_in_docmap(self):
+        "test for doi is not present"
+        docmap_json = docmap_test_data(None)
+        # delete the step holding the preprint data
+        del docmap_json["steps"]["_:b1"]
+        result = prc.version_doi_from_docmap(json.dumps(docmap_json), self.identifier)
+        self.assertEqual(result, None)
+        with open(self.log_file, "r") as open_file:
+            log_messages = open_file.readlines()
+            self.assertEqual(
+                log_messages[-1],
+                (
+                    "WARNING elifecleaner:prc:version_doi_from_docmap: "
+                    "%s no preprint data was found in the docmap\n"
+                )
+                % self.identifier,
+            )
+
+    def test_no_doi_key_in_docmap(self):
+        "test for doi is not present"
+        docmap_json = docmap_test_data(None)
+        result = prc.version_doi_from_docmap(json.dumps(docmap_json), self.identifier)
+        self.assertEqual(result, None)
+        with open(self.log_file, "r") as open_file:
+            log_messages = open_file.readlines()
+            self.assertEqual(
+                log_messages[-1],
+                (
+                    "WARNING elifecleaner:prc:version_doi_from_docmap: "
+                    "%s did not find doi data in the docmap preprint data\n"
+                )
+                % self.identifier,
+            )
+
+
+class TestNextVersionDoi(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = "tests/tmp"
+        self.log_file = os.path.join(self.temp_dir, "test.log")
+        self.log_handler = configure_logging(self.log_file)
+        self.identifier = "test.zip"
+
+    def tearDown(self):
+        LOGGER.removeHandler(self.log_handler)
+        delete_files_in_folder(self.temp_dir, filter_out=[".keepme"])
+
+    def test_next_version_doi(self):
+        doi = "10.7554/eLife.85111.2"
+        expected = "10.7554/eLife.85111.3"
+        result = prc.next_version_doi(doi, self.identifier)
+        self.assertEqual(result, expected)
+        with open(self.log_file, "r") as open_file:
+            log_messages = open_file.readlines()
+            self.assertEqual(
+                log_messages[-1],
+                (
+                    "INFO elifecleaner:prc:next_version_doi: "
+                    "%s next version doi, from DOI %s, next DOI %s\n"
+                )
+                % (self.identifier, doi, expected),
+            )
+
+    def test_non_int_version(self):
+        "non-int version value at the end"
+        version = "sa1"
+        doi = "10.7554/eLife.85111.2.%s" % version
+        expected = None
+        result = prc.next_version_doi(doi, self.identifier)
+        self.assertEqual(result, expected)
+        with open(self.log_file, "r") as open_file:
+            log_messages = open_file.readlines()
+            self.assertEqual(
+                log_messages[-1],
+                (
+                    "WARNING elifecleaner:prc:next_version_doi: "
+                    "%s version from DOI could not be converted to int, version %s\n"
+                )
+                % (self.identifier, version),
+            )
+
+    def test_version_exceeds_limit(self):
+        "non-int version value at the end"
+        article_id = "85111"
+        doi = "10.7554/eLife.%s" % article_id
+        expected = None
+        result = prc.next_version_doi(doi, self.identifier)
+        self.assertEqual(result, expected)
+        with open(self.log_file, "r") as open_file:
+            log_messages = open_file.readlines()
+            self.assertEqual(
+                log_messages[-1],
+                (
+                    "WARNING elifecleaner:prc:next_version_doi: "
+                    "%s failed to determine the version from DOI, "
+                    "version %s exceeds MAX_VERSION %s\n"
+                )
+                % (self.identifier, article_id, prc.MAX_VERSION),
+            )
+
+    def test_none(self):
+        "non-int version value at the end"
+        doi = None
+        expected = None
+        result = prc.next_version_doi(doi, self.identifier)
+        self.assertEqual(result, expected)
+
+
+class TestAddVersionDoi(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = "tests/tmp"
+        self.log_file = os.path.join(self.temp_dir, "test.log")
+        self.log_handler = configure_logging(self.log_file)
+        self.doi = "10.7554/eLife.1234567890.5"
+        self.identifier = "test.zip"
+
+    def tearDown(self):
+        LOGGER.removeHandler(self.log_handler)
+        delete_files_in_folder(self.temp_dir, filter_out=[".keepme"])
+
+    def test_add_version_doi(self):
+        xml_string = "<article><front><article-meta /></front></article>"
+        root = ElementTree.fromstring(xml_string)
+        expected = (
+            b"<article>"
+            b"<front>"
+            b"<article-meta>"
+            b'<article-id pub-id-type="doi" specific-use="version">'
+            b"10.7554/eLife.1234567890.5"
+            b"</article-id>"
+            b"</article-meta>"
+            b"</front>"
+            b"</article>"
+        )
+        root_output = prc.add_version_doi(root, self.doi, self.identifier)
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+
+    def test_add_version_doi_in_order(self):
+        "test the new article-id tag is added in a particular order"
+        xml_string = (
+            "<article>"
+            "<front>"
+            "<article-meta>"
+            "<article-id />"
+            "<open-access>YES</open-access>"
+            "</article-meta>"
+            "</front>"
+            "</article>"
+        )
+        root = ElementTree.fromstring(xml_string)
+        expected = (
+            b"<article>"
+            b"<front>"
+            b"<article-meta>"
+            b"<article-id />"
+            b'<article-id pub-id-type="doi" specific-use="version">'
+            b"10.7554/eLife.1234567890.5"
+            b"</article-id>"
+            b"<open-access>YES</open-access>"
+            b"</article-meta>"
+            b"</front>"
+            b"</article>"
+        )
+        root_output = prc.add_version_doi(root, self.doi, self.identifier)
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+
+    def test_no_article_meta(self):
+        "test if no article-meta tag is in the XML"
+        xml_string = "<article />"
+        root = ElementTree.fromstring(xml_string)
+        expected = bytes(xml_string, encoding="utf-8")
+        root_output = prc.add_version_doi(root, self.doi, self.identifier)
+        self.assertEqual(ElementTree.tostring(root_output), expected)
+        with open(self.log_file, "r") as open_file:
+            self.assertEqual(
+                open_file.read(),
+                (
+                    "WARNING elifecleaner:prc:add_version_doi: "
+                    "%s article-meta tag not found\n"
+                )
+                % self.identifier,
+            )
