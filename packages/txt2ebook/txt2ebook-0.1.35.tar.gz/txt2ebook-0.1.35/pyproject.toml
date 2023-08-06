@@ -1,0 +1,131 @@
+[tool.poetry]
+name = "txt2ebook"
+version = "0.1.35"
+description = "CLI tool to convert txt file to ebook format"
+authors = ["Kian-Meng Ang <kianmeng@cpan.org>"]
+license = "AGPL-3.0-or-later"
+readme = "README.md"
+homepage = "https://github.com/kianmeng/txt2ebook"
+repository = "https://github.com/kianmeng/txt2ebook"
+keywords = ["txt", "ebook", "epub", "cjk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Natural Language :: Chinese (Simplified)",
+    "Natural Language :: Chinese (Traditional)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Filters",
+    "Topic :: Text Processing :: General",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Text Processing :: Markup :: Markdown",
+]
+include = [
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE.md",
+]
+
+[tool.poetry.dependencies]
+CJKwrap = "^2.2"
+EbookLib = "^0.17.1"
+bs4 = "^0.0.1"
+langdetect = "^1.0.9"
+python = "^3.7"
+regex = "^2021.11.10"
+pypandoc = "^1.11"
+typing-extensions = "^4.5.0"
+reportlab = "^4.0.0"
+
+[tool.poetry.dev-dependencies]
+bandit = "^1.7.1"
+line-profiler = "^4.0.3"
+mypy = "^0.910"
+pep8-naming = "^0.12.1"
+pre-commit = "^2.20.0"
+pylint = "^2.11.1"
+pytest = "^7.0"
+pytest-console-scripts = "^1.3.1"
+pytest-cov = "^3.0.0"
+pytest-randomly = "^3.12.0"
+pytest-xdist = "^3.2.1"
+tox = "^3.25.0"
+tox-poetry = "^0.4.1"
+tox-pyenv = "^1.1.0"
+vulture = "^2.3"
+
+[tool.poetry.scripts]
+txt2ebook = 'txt2ebook.txt2ebook:main'
+tte = 'txt2ebook.txt2ebook:main'
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = [
+  "poetry-core>=1",
+]
+
+[tool.pytest.ini_options]
+script_launch_mode = "subprocess"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = 1
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py3{7,8,9,10,11}
+
+[testenv]
+deps =
+    pytest
+    pytest-console-scripts
+    pytest-xdist
+description = testing against {basepython}
+commands = pytest --numprocesses auto -vvv {posargs}
+
+[testenv:cover]
+description = generate code coverage report in html
+basepython = python3.11
+deps =
+    pytest
+    pytest-console-scripts
+    pytest-cov
+    pytest-xdist
+commands = pytest --numprocesses auto --cov=txt2ebook --cov-report term-missing --cov-report html {toxinidir}/tests
+
+[testenv:doc]
+description = generate sphinx documentation in html
+basepython = python3.11
+deps =
+    sphinx
+    myst_parser
+    sphinx_copybutton
+    sphinx-autodoc-typehints
+commands = sphinx-build {toxinidir}/docs/source/ {toxinidir}/docs/_build/html
+
+[testenv:gettext]
+description = update pot/po/mo files
+basepython = python3.11
+skip_install = true
+allowlist_externals =
+    pygettext3
+    msgmerge
+    msgfmt
+commands =
+    pygettext3 -d txt2ebook -o {toxinidir}/src/txt2ebook/locales/txt2ebook.pot {toxinidir}/src/txt2ebook/
+    msgmerge --update {toxinidir}/src/txt2ebook/locales/en/LC_MESSAGES/txt2ebook.po {toxinidir}/src/txt2ebook/locales/txt2ebook.pot
+    msgmerge --update {toxinidir}/src/txt2ebook/locales/zh-cn/LC_MESSAGES/txt2ebook.po {toxinidir}/src/txt2ebook/locales/txt2ebook.pot
+    msgfmt -o {toxinidir}/src/txt2ebook/locales/en/LC_MESSAGES/txt2ebook.mo {toxinidir}/src/txt2ebook/locales/en/LC_MESSAGES/txt2ebook.po
+    msgfmt -o {toxinidir}/src/txt2ebook/locales/zh-cn/LC_MESSAGES/txt2ebook.mo {toxinidir}/src/txt2ebook/locales/zh-cn/LC_MESSAGES/txt2ebook.po
+"""
