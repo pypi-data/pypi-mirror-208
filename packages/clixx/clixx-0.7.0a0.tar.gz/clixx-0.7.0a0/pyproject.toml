@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=51.0", "wheel>=0.36"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target-version = ["py38", "py39", "py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+show-fixes = true
+show-source = true
+select = [
+    "F",      # pyflakes
+    "E",      # pycodestyle error
+    "W",      # pycodestyle warning
+    "D3",     # pydocstyle
+    "YTT",    # flake8-2020
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "ISC",    # flake8-implicit-str-concat
+    "SIM",    # flake8-simplify
+    "RUF100",
+]
+ignore = [
+    # Module level import not at top of file
+    "E402",
+    # Line too long ({width} > {limit} characters)
+    "E501",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_context = true
+show_column_numbers = true
+show_error_codes = true
+pretty = true
+
+[tool.pyright]
+pythonVersion = "3.8"
+pythonPlatform = "All"
