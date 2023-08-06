@@ -1,0 +1,12 @@
+model_class: "{{cookiecutter.__model_class}}"
+model_module: "{{cookiecutter.__model_name}}"
+module_path: "./src/{{cookiecutter.__model_name}}"
+params:
+  - gamma: 0.002
+pipeline_steps:
+  - transform_data: "Transform data"
+  - data_contains_pii_ethics_check: "Data PII ethics check"
+  - data_balance_ethics_check: "Data balance ethics check"
+  - data_bias_ethics_check: "Data bias ethics check"
+  - fit: "Fit model"
+  - evaluate: "Evaluate model"
