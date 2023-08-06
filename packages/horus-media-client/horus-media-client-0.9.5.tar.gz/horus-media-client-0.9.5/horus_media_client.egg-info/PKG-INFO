@@ -1,0 +1,80 @@
+Metadata-Version: 2.1
+Name: horus-media-client
+Version: 0.9.5
+Summary: Horus Media Server Client
+Home-page: https://github.com/horus-view-and-explore/horus-media-client
+Author: Horus View and Explore B.V.
+Author-email: info@horus.nu
+License: MIT
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: >=3.6, <4
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Provides-Extra: test
+License-File: LICENSE.txt
+
+# Horus Media Server Client
+
+An [Horus Media Server](https://horus.nu/horus-geo-suite/) client python library
+
+## [Install latest release](https://github.com/horus-view-and-explore/horus-media-client/wiki/Install-latest-release)
+
+
+## Example tools
+
+Interactive examples: they require access to the horus test playground to run.
+
+### Spherical camera
+This example shows how a series _minimum of 3_ of geo referenced pixels `GeoReferencedPixel`
+obtained from a spherical image are used to calculate an accurate GeographicLocation for a specific label.
+```
+python -m horus_media_examples.spherical_camera --help
+```
+
+### Recordings tool
+This example can be used to list published recordings.
+```
+python -m horus_media_examples.recordings_tool --help
+```
+
+### Export spherical
+This example can be used to export spherical views from a set of recordings.
+```
+python -m horus_media_examples.export_spherical --help
+```
+### Export orthographic
+This example can be used to export orthographic views from a set of recordings.
+```
+python -m horus_media_examples.export_orthographic --help
+```
+
+### Triangulation examples
+
+
+These examples require to manually install these modules:
+```
+pip install pandas pandera fiona geopandas
+```
+
+Run these examples in order.
+```
+python -m horus_media_examples.spherical_camera_single_measurement --help
+```
+```
+python -m horus_media_examples.single_measurement_clustering
+```
+```
+python -m horus_media_examples.triangulate_spherical_camera_single_measurement_clusters
+```
+
+```
+python -m horus_media_examples.clustering_analytics
+```
+
+## [Run the example strategy](https://github.com/horus-view-and-explore/horus-media-client/wiki/Example-strategy-tool)
+
+```
+python3 -m horus_media_examples.example_strategy --help
+```
