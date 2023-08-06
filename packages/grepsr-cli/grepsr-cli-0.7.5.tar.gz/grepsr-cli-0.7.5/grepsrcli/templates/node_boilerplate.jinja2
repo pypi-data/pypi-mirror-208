@@ -1,0 +1,100 @@
+/**
+ * Name: {{plugin_name}}
+ * Description: {{plugin_name}}
+ * PID: {{pid}} force
+ * PROP-mem: 512
+ */
+
+process.env['APIFY_MEMORY_MBYTES'] = 512;
+
+const Apify = require('apify');
+const cheerio = require('cheerio');
+const vortexNodebackEnd = require('vortex-node-backend');
+const GrepsrPuppeteerCrawler = vortexNodebackEnd.puppeteer_crawler;
+const options = vortexNodebackEnd.settings;
+const Proxy = vortexNodebackEnd.proxy;
+
+//pageName using dateformat
+let dateFormat = require("dateformat");
+const pageDate = dateFormat(new Date(), "yyyy-mm-dd");
+const page_name = `google_map_location_search-${pageDate}`;
+
+let crawler;
+const fs = require('fs');
+
+
+class Crawler extends GrepsrPuppeteerCrawler {
+    constructor(options) {
+        // Initialize parent.
+        //override settings here
+        super(options);
+        // Do any other initializations below.
+        this.handlePageFunction = this.handlePage;
+        this.handleFailedRequestFunction = this.handleFailedRequest;
+        this.gotoFunction = this.goto;
+
+    }
+
+
+    async goto({request, page}) {
+        await page.evaluateOnNewDocument(() => {
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => false,
+            });
+        });
+        await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36');
+        await page.setDefaultTimeout(60000);
+        // await page.setRequestInterception(true);
+
+        // page.on('request', (req) => {
+        //     if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image') {
+        //         req.abort();
+        //     } else {
+        //         req.continue();
+        //     }
+        // });
+        return await page.goto(request.url);
+    }
+
+
+    async handlePage({request, page}) {
+        console.log(`Processing ${request.url}`);
+  
+        let contents = await page.content();
+        const $ = cheerio.load(contents);
+        console.log(`data loaded ${request.url}`);
+
+
+    }
+
+    async handleFailedRequest() {
+        console.log(`Request ${request.url} failed too many times`);
+    }
+}
+
+
+Apify.main(async () => {
+    const requestQueue = await Apify.openRequestQueue('machinery');
+
+
+    let url = `https://www.tomtom.com/en_gb/traffic-index/pune-traffic/#statistics`;
+    console.log(url);
+    await requestQueue.addRequest({url: url});
+
+    //override settings here
+    //setting up proxy
+    let proxy = new Proxy();
+    let proxy_list = await proxy.getProxy({number: 500, type: 'default'});
+    // console.log(proxy_list);
+    // console.log('Proxy got', proxy_list.length);
+    // options.puppeteerPoolOptions.proxyUrls = proxy_list;
+    options.requestQueue = requestQueue;
+    options.launchPuppeteerOptions.headless = false;
+
+    crawler = new Crawler(options);
+    // Run the crawler and wait for it to finish.
+    console.log('begin');
+    await crawler.run();
+    await crawler.pipeline.close_spider();
+    console.log('Crawler finished.');
+});
