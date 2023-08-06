@@ -1,0 +1,273 @@
+#!/bin/env python
+
+from pathlib import Path
+import argparse
+import asyncio
+import os
+import re
+
+from submerger.merge_subtitles import merge_subtitles
+from submerger.subtitle_format import SubtitleFormat
+
+BASE_SUBTITLE_FORMAT = SubtitleFormat().set_position(
+    SubtitleFormat.Position.BOTTOM_CENTER)
+SECONDARY_SUBTITLE_FORMAT = SubtitleFormat().set_position(
+    SubtitleFormat.Position.TOP_CENTER).set_color('#333').set_italic()
+
+MIN_SUBTITLE_SIZE_BYTES = 2048
+VIDEO_FILE_FORMATS = ['.webm', '.mkv', '.flv', '.vob', '.ogv', '.ogg',
+                      '.drc', '.gif', '.gifv', '.mng', '.avi', '.m2ts',
+                      '.mts', '.ts', '.mov', '.qt', '.wmv', '.yuv',
+                      '.rm', '.rmvb', '.viv', '.asf', '.amv', '.mp4',
+                      '.m4p', '.m4v', '.mpg', '.mp2', '.mpeg', '.mpe',
+                      '.mpv', '.m2v', '.svi', '.3gp', '.3g2', '.mxf',
+                      '.roq', '.nsv', '.f4v', '.f4p', '.f4a', '.f4b']
+
+
+class SubtitleNotFoundError(Exception):
+    pass
+
+
+def create_dual_subtitle(
+    base_subtitles: Path,
+    additional_subtitles: Path,
+    file_to_write: Path,
+) -> None:
+    with (open(base_subtitles, encoding='utf-8') as base_srt,
+            open(additional_subtitles, encoding='utf-8') as secondary_srt,
+            open(file_to_write, 'w', encoding='utf-8') as dual_subtitle):
+        dual_subtitle.write(merge_subtitles(
+            base_srt.read(),
+            BASE_SUBTITLE_FORMAT,
+            secondary_srt.read(),
+            SECONDARY_SUBTITLE_FORMAT,
+        ))
+
+
+async def merge_global(
+        series_dir: Path,
+        base_lang: str,
+        secondary_lang: str,
+) -> None:
+    async def get_raw_subtitles(episode_path: Path, language: str) -> str:
+        # ./foo_ep1.ger.srt
+        local_subtitle_path = series_dir / \
+            f'{episode_path.stem}.{language}.srt'
+        if (local_subtitle_path.exists()
+                and os.stat(local_subtitle_path).st_size >= MIN_SUBTITLE_SIZE_BYTES):
+            with open(local_subtitle_path, encoding='utf-8') as subtitles:
+                return subtitles.read()
+
+        #  ./foo_ep1/German.srt
+        for subtitle_path in sorted(series_dir.glob(f'**/{episode_path.stem}/*')):
+            subtitles_name = subtitle_path.stem.lower()
+            subtitle_suffix = subtitle_path.suffix.lower()
+            if (subtitle_suffix == '.srt'
+                    and os.stat(Path(subtitle_path)).st_size >= MIN_SUBTITLE_SIZE_BYTES
+                    and re.search(f'^[^a-z]*{language}', subtitles_name)):
+                with open(subtitle_path, encoding='utf-8') as subtitles:
+                    return subtitles.read()
+
+        return await extract_subtitles_from_media_file(episode_path, language)
+
+    for episode in sorted(series_dir.glob('*')):
+        if episode.suffix.lower() not in VIDEO_FILE_FORMATS:
+            continue
+
+        base_lang_subs, secondary_lang_subs = '', ''
+        errors = []
+
+        try:
+            base_lang_subs = await get_raw_subtitles(
+                episode, base_lang.lower())
+        except SubtitleNotFoundError as error:
+            errors.append(error)
+
+        try:
+            secondary_lang_subs = await get_raw_subtitles(
+                episode, secondary_lang.lower())
+        except SubtitleNotFoundError as error:
+            errors.append(error)
+
+        if errors:
+            print(''.join(f'{error}\n' for error in errors))
+            continue
+
+        with open(series_dir / (f'{episode.stem}.srt'), 'w', encoding='utf-8') as dual_subtitle:
+            dual_subtitle.write(merge_subtitles(
+                base_lang_subs,
+                BASE_SUBTITLE_FORMAT,
+                secondary_lang_subs,
+                SECONDARY_SUBTITLE_FORMAT,
+            ))
+
+
+async def extract_subtitles_from_media_file(video: Path, language: str) -> str:
+    ffmpeg_command = [
+        'ffmpeg',
+        '-i',
+        str(video),
+        '-map',
+        f'0:m:language:{language}',
+        '-map',
+        '-0:v',
+        '-map',
+        '-0:a',
+        '-f',
+        'srt',
+        'pipe:1',
+    ]
+
+    # Execute `ffmpeg` command
+    pipe = await asyncio.create_subprocess_exec(
+        *ffmpeg_command,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+
+    stdout, _ = await pipe.communicate()
+
+    if stdout == bytes():
+        raise SubtitleNotFoundError(
+            f'No {language} subtitles for {video.stem}')
+
+    return stdout.decode()
+
+
+async def create_dual_subtitle_from_video(
+        video: Path,
+        file_to_write: Path,
+        base_lang: str,
+        additional_lang: str,
+) -> None:
+    with open(file_to_write, 'w', encoding='utf-8') as dual_subtitle:
+        dual_subtitle.write(merge_subtitles(
+            await extract_subtitles_from_media_file(video, base_lang),
+            BASE_SUBTITLE_FORMAT,
+            await extract_subtitles_from_media_file(video, additional_lang),
+            SECONDARY_SUBTITLE_FORMAT,
+        ))
+
+
+async def run():
+    # pylint: disable=too-many-return-statements
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        '-s',
+        '--subtitles',
+        dest='subs',
+        type=str,
+        nargs=2,
+        help='Add .srt subtitles to convert',
+    )
+    parser.add_argument(
+        '-v',
+        '--video',
+        dest='video',
+        type=str,
+        help='Add video to extract subtitles from',
+    )
+    parser.add_argument(
+        '-l',
+        '--language',
+        dest='language',
+        type=str,
+        nargs=2,
+        # pylint: disable-next=line-too-long
+        help='Specify main and additional languages from video. Check for available subtitles: ffprobe -v error -of json video.mkv -of json -show_entries "stream=index:stream_tags=language" -select_streams s',
+    )
+    parser.add_argument(
+        '-o',
+        '--output',
+        dest='dualsub',
+        type=str,
+        help='Specify a name for a file with merged subtitles',
+    )
+    parser.add_argument(
+        '-g',
+        '--global',
+        dest='glob',
+        default=False,
+        action="store_true",
+        help='Merge subtitles for multiple videos',
+    )
+    parser.add_argument(
+        '-d',
+        '--directory',
+        dest='series_dir',
+        type=str,
+        default='',
+        help='Specify series directory',
+    )
+
+    args = parser.parse_args()
+
+    if (args.video is not None or args.language is not None) and (args.subs is not None):
+        print('Specify only subtitles or only a video & languages')
+        return -1
+
+    if args.dualsub is None and not args.glob:
+        print('Specify an output file')
+        return -1
+
+    file_to_write = Path(args.dualsub) if args.dualsub else Path()
+
+    # If it works in --global
+    if args.glob:
+        if args.language is None or len(args.language) != 2:
+            print('Specify 2 languages, e.g.: eng ger')
+            return -1
+
+        base_lang, additional_lang = args.language
+
+        await merge_global(Path(args.series_dir), base_lang, additional_lang)
+
+    # If subtitles are given
+    elif args.subs is not None:
+        base_subtitle_path, additional_subtitle_path = Path(
+            args.subs[0]), Path(args.subs[1])
+
+        if not base_subtitle_path.exists() or not additional_subtitle_path.exists():
+            print('Subtitles do not exist')
+            return -1
+
+        if base_subtitle_path == additional_subtitle_path:
+            print('Subtitles must be different files')
+            return -1
+
+        if any(not path.name.endswith('.srt') for path in [
+            file_to_write,
+            base_subtitle_path,
+            additional_subtitle_path,
+        ]):
+            print('Subtitles must be in .srt format')
+            return -1
+
+        create_dual_subtitle(base_subtitle_path,
+                             additional_subtitle_path, file_to_write)
+
+    # If video is given
+    elif args.video is not None:
+        video_path = Path(args.video)
+
+        if args.language is None or len(args.language) != 2:
+            # pylint: disable-next=line-too-long
+            print('Specify 2 languages or use this command to check for available subtitles:\nffprobe -v error -of json video.mkv -of json -show_entries "stream=index:stream_tags=language" -select_streams s')
+            return -1
+
+        base_lang, additional_lang = args.language
+
+        try:
+            await create_dual_subtitle_from_video(
+                video_path, file_to_write, base_lang, additional_lang)
+        except SubtitleNotFoundError as error:
+            print(error)
+
+    else:
+        print('Not enough arguments')
+        return -1
+
+
+if __name__ == '__main__':
+    asyncio.run(run())
