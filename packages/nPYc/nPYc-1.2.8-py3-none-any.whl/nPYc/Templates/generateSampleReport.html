@@ -1,0 +1,10 @@
+{% extends "base_QC.html" %}
+{% import 'sampleReportChunk.html' as sampleReport %}
+
+{% block title %}Sample Summary Report For: {{ item.Name}}{% endblock %}
+
+{% block content %}
+
+{{ sampleReport.sampleReport(item.sampleSummary) }}
+
+{% endblock %}
