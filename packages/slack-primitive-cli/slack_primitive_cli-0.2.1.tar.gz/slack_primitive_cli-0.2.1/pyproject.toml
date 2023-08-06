@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "slack-primitive-cli"
+version = "0.2.1"  # `poetry-dynamic-versioning`を使ってGitHubのバージョンタグを取得している。変更不要
+description = "Primitive Slack CLI"
+authors = ["yuji38kwmt <yuji38kwmt@gmail.com>"]
+maintainers = ["yuji38kwmt <yuji38kwmt@gmail.com>"]
+keywords=["slack", "cli"]
+license="MIT"
+readme="README.md"
+repository="https://github.com/yuji38kwmt/slack-primitive-cli"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+    "Operating System :: OS Independent",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+click = "^8"
+click-option-group = "*"
+backoff = "*"
+slack-sdk = "^3"
+
+
+[tool.poetry.dev-dependencies]
+flake8 = "^6"
+autoflake = "*"
+isort = "^5"
+black = "^23"
+mypy = "^1"
+
+[tool.poetry.scripts]
+slackcli = "slack_primitive_cli.__main__:cli"
+
+[tool.black]
+line-length = 120
+
+
+[tool.isort]
+line_length = 120
+
+[tool.poetry-dynamic-versioning]
+enable = false
+format = "{base}"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
