@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "myws"
+version = "0.1.0"
+description = "µWork Studio, Microprocessor IDE"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["stormworks", "microcontroller"]
+license = {text = "MIT License"}
+authors = [
+    {name = "Fabian Wunsch"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Games/Entertainment :: Simulation",
+    "Typing :: Typed",
+]
+dependencies = [
+    "sw_mc_lib>=0.3.0",
+    "tumfl>=0.1.7",
+    "PyQt6>=5.15"
+]
+
+[project.optional-dependencies]
+dev = ["black", "isort", "pip-tools", "mypy", "flake8", "coverage", "pylint"]
+
+[project.urls]
+homepage = "https://github.com/stormworks-utils/myws"
+repository = "https://github.com/stormworks-utils/myws"
+
+[tool.setuptools]
+packages = ["myws"]
