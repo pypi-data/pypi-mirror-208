@@ -1,0 +1,15 @@
+default:
+    tags:
+        # Ensure that the pipeline is executed in IJCLab intranet - TO BE CHANGED
+        - oval-checks
+
+stages:
+    - build
+
+build:
+    stage: build
+    script:
+        - pip install nox pyproject-parser consolekit
+        - nox -s lint
+        - pyproject-parser check
+        - pyproject-parser reformat
