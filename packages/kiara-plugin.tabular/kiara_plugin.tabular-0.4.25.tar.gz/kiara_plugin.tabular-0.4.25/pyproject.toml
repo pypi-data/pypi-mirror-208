@@ -1,0 +1,190 @@
+[build-system]
+requires = [
+    "setuptools>=63",
+    "setuptools_scm[toml]>7.0.0",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kiara_plugin.tabular"
+description = "kiara data-types and modules for working with tables and databases."
+authors = [
+    {name = "Markus Binsteiner", email = "markus@frkl.io"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["kiara"]
+license = {text = "MPL-2.0"}
+classifiers = [
+    "Framework :: Django",
+    "Programming Language :: Python :: 3",
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+dependencies = [
+    "kiara>=0.4.32",
+    "kiara_plugin.core_types>=0.4.16",
+    "duckdb>=0.7.0,<0.8.0",
+    "pandas>=1.4.0",
+    "polars>=0.17.0",
+    "pyarrow>=12.0.0",
+    "sqlalchemy>=2.0.0",
+    "sqlalchemy-utc>=0.10.0",
+    "sqlalchemy-utils>=0.38.0",
+    "sqlite-utils==3.30"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev_documentation = [
+    "kiara[dev_documentation]"
+]
+dev_testing = [
+    "kiara[dev_testing]",
+]
+dev_utils = [
+    "kiara[dev_utils]",
+]
+dev_all = [
+    "kiara[dev_all]"
+]
+
+[project.entry-points."kiara.plugin"]
+tabular = "kiara_plugin.tabular"
+
+[project.entry-points."kiara.data_types"]
+tabular = "kiara_plugin.tabular:find_data_types"
+
+[project.entry-points."kiara.model_classes"]
+tabular = "kiara_plugin.tabular:find_model_classes"
+
+[project.entry-points."kiara.modules"]
+tabular = "kiara_plugin.tabular:find_modules"
+
+[project.entry-points."kiara.pipelines"]
+tabular = "kiara_plugin.tabular:find_pipelines"
+
+
+[project.urls]
+homepage = "https://github.com/DHARPA-Project/kiara_plugin.tabular"
+documentation = "https://DHARPA-Project.github.io/kiara_plugin.tabular"
+repository = "https://github.com/DHARPA-Project/kiara_plugin.tabular"
+
+[tool.black]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | external
+)/
+'''
+
+[tool.setuptools_scm]
+write_to = "src/kiara_plugin/tabular/version.txt"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src"
+]
+
+[tool.ruff]
+line-length = 88
+
+src = ["src", "tests"]
+
+select = [
+    "E",
+    "F",
+    "RUF",
+    "I001",
+    "YTT",
+    "S",
+    "C4",
+    "T10",
+    "ISC",
+    "ICN",
+    "T20",
+    "Q",
+    "TID",
+    "PD",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "PIE",
+]
+ignore = ["E501", "S101", "SIM118", "SIM108", "PLR2004", "PLR0913", "S110", "PLR0912", "PLR0915", "PIE810", "S608"]
+
+fix = true
+fixable = ["E", "F", "RUF100", "I001", "Q"]
+
+
+#fixable = ["E", "F", "RUF100", "I001"]
+# Enable Pyflakes `E` and `F` codes by default.
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+per-file-ignores = { }
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.10.
+target-version = "py310"
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.isort]
+known-first-party = ["kiara", "kiara_plugin"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__"]
+ignore = []
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+executionEnvironments = [
+]

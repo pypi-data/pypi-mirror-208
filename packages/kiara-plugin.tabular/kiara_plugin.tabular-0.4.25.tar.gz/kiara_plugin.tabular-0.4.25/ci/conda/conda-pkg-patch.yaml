@@ -1,0 +1,22 @@
+channels:
+  - conda-forge
+  - dharpa
+
+host_requirements:
+  - pip
+  - python
+  - setuptools<=63
+  - setuptools_scm
+
+requirements:
+  duckdb: "python-duckdb>=0.6.0"
+
+test:
+  imports:
+    - kiara_plugin.tabular
+  source_files:
+    - tests
+    - examples
+  commands:
+    - kiara module list
+    - kiara run import.table.from.local_file_path path=examples/data/journals/JournalEdges1902.csv
