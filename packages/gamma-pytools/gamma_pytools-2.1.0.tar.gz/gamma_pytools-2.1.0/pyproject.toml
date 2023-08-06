@@ -1,0 +1,111 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.sdist]
+exclude = [".idea", "tmp", "dist", ".tox", ".pytest_cache"]
+
+[tool.flit.metadata]
+module = "pytools"
+author = "Boston Consulting Group (BCG)"
+home-page = "https://github.com/BCG-Gamma/pytools"
+description-file = "pypi_description.rst"
+dist-name = "gamma-pytools"
+license = "Apache Software License v2.0"
+
+requires = [
+    "joblib            >=0.14,<2a",
+    "matplotlib        ~=3.0",
+    "numpy             >=1.21,<2a",  # cannot use ~= due to conda bug
+    "pandas            >=1",
+    "scipy             ~=1.2",
+    "typing_inspect    ~=0.4",
+    "typing_extensions ~=4.0",
+]
+
+requires-python = ">=3.7,<4a"
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering",
+]
+
+[tool.flit.metadata.requires-extra]
+testing = [
+    "pytest ~= 7.1",
+    "pytest-cov ~= 2.12",
+]
+docs = [
+    "sphinx ~= 4.5",
+    "sphinx-autodoc-typehints ~= 1.19",
+    "pydata-sphinx-theme ~= 0.8.1",
+    "jinja2 ~= 2.11",
+    "nbsphinx ~= 0.8.9",
+    "jupyter == 1",
+    "docutils ~= 0.17",
+    "xlrd ~= 1.2",
+    "m2r ~= 0.2"
+]
+
+[tool.flit.metadata.urls]
+Documentation = "https://bcg-gamma.github.io/pytools/"
+Repository = "https://github.com/BCG-Gamma/pytools"
+
+[build]
+# comma-separated list of packages to be built from source in pip min builds
+no-binary.min = ["matplotlib"]
+
+[build.matrix.min]
+# minimum requirements of gamma-pytools
+joblib            = "~=0.14.0"
+matplotlib        = "~=3.0.3"
+numpy             = "==1.21.6"  # cannot use ~= due to conda bug
+pandas            = "~=1.0.5"
+python            = ">=3.7.12,<3.8a"    # cannot use ~= due to conda bug
+scipy             = "~=1.2.1"
+typing_inspect    = "~=0.4.0"
+typing_extensions = "~=4.0.0"
+
+[build.matrix.max]
+# maximum requirements of gamma-pytools
+joblib            = "~=1.1"
+matplotlib        = "~=3.5"
+numpy             = ">=1.24,<2a"  # cannot use ~= due to conda bug
+pandas            = "~=2.0"
+python            = ">=3.9,<4a"   # cannot use ~= due to conda bug
+scipy             = "~=1.8"
+typing_inspect    = "~=0.7"
+typing_extensions = "~=4.3"
+
+[tool.black]
+# quiet = "True"
+line-length = 88
+target_version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | data
+    | docs
+    | notebooks
+    | sphinx
+  )/
+)
+'''
