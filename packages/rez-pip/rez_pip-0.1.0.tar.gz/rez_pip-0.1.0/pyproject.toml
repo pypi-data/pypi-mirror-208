@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rez-pip"
+version = "0.1.0"
+description = "Modern rez-pip"
+authors = [
+    { name="Jean-Christophe Morin", email="jean_christophe_morin@hotmail.com" },
+]
+license = { file="LICENSE" }
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "installer>=0.7.0",
+    "aiohttp",
+    "packaging>=23.1",
+    "rez",
+    "dataclasses-json",
+    "rich",
+    "importlib_metadata>=4.6 ; python_version < '3.10'",
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Operating System :: OS Independent",
+    "Natural Language :: English"
+]
+keywords = []
+
+[project.urls]
+Homepage = "https://github.com/JeanChristopheMorinPerso/rez-pip"
+Tracker = "https://github.com/JeanChristopheMorinPerso/rez-pip/issues"
+
+[project.scripts]
+rez-pip2 = "rez_pip.__main__:run"
+
+[tool.hatch.build.targets.sdist]
+# Ensure the sdist includes a setup.py for older pip versions
+# support-legacy = true
+exclude = [".github"]
