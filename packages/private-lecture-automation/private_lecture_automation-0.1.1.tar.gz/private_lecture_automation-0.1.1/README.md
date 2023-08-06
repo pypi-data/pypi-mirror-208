@@ -1,0 +1,77 @@
+## Private Lecture Automation
+
+This repository contains tools that make managing private lectures easier.
+
+These tools include:
+- Sending out an introduction email to new potential clients (`send_introduction_email`)
+- Creating a calendar event for the next lecture for a client (`send_calendar_event`)
+
+## Usage
+The package heavily relies on the `config.ini` file.
+This file contains all the necessary information such as where specific files are located.
+
+The file is structured as follows:
+```ini
+[calendar_event]
+student_data_path = data/students.json  ; Path to the student data file
+
+[introduction_email]
+email_path = data/introduction.html  ; Path to the email template
+logo_path = data/logo.png  ; Path to the logo in the email (optional)
+
+[email]
+email_address = your@email.com  ; Your email address
+email_password = your_password  ; The password of your email address
+host = smtp.gmail.com  ; The host of your email provider
+port = 465  ; The port for the SSL connection (https://developers.google.com/gmail/imap/imap-smtp)
+```
+
+### Send introduction email
+Upon request, the script sends out an email containing the most up-to-date information about the lectures.
+For this an `html` template file must be created. This file will be used as the body of the email.
+The template file can contain placeholders that will be replaced when the email is sent.
+
+
+It is also possible to include a logo in the email, but this is not required.
+
+Running the script:
+```python
+from private_lecture_automation import send_introduction_email
+
+send_introduction_email(
+    recipient_email="aranyb@gmail.com",  # The email address of the recipient
+    values_to_replace={"NAME": "Arany Barna"},  # The values to replace in the email template
+)
+```
+
+
+### Create calendar event for the next lesson
+When called, sends out the calendar event of the next lecture for the client.
+For this a `json` file must be created that contains the information about the students.
+
+The file is structured as follows:
+```json
+{
+    "Arany Barna": {
+        "name": "Arany Barna",  // The name of the student
+        "email": "aranyb@gmail.com",  // The email address of the student
+        "content_link": "https://www.pythonvilag.hu",  // The link to where lesson specific content can be found (usually a Google Drive folder)
+        "day": "2",  // The day of the week when the lecture takes place (0: Monday, 1: Tuesday, ..., 6: Sunday)
+        "time": "1630",  // The time of the lecture in the format HHMM
+        "duration": "90",  // The duration of the lecture in minutes
+        "occasion_number": "3"  // The number of the next lecture
+    },
+    ...
+}
+```
+
+Running the script:
+
+```python
+from private_lecture_automation import send_calendar_event
+
+send_calendar_event(
+    student_name="Arany Barna",  # The name of the student, must match the key in the json file
+    **kwargs: {time: "1700"}  # For temporal changes the content of the json file can be overwritten
+)
+```
