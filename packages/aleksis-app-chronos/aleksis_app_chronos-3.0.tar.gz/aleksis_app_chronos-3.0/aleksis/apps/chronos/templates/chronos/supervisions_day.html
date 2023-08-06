@@ -1,0 +1,38 @@
+{# -*- engine:django -*- #}
+
+{% extends "core/base.html" %}
+{% load i18n material_form any_js %}
+
+
+{% load render_table from django_tables2 %}
+
+{% block extra_head %}
+  {{ supervisions_filter.form.media.css }}
+  {% include_css "select2-materialize" %}
+{% endblock %}
+
+{% block browser_title %}{% blocktrans %}Lessons{% endblocktrans %}{% endblock %}
+{% block no_page_title %}{% endblock %}
+
+{% block content %}
+  <h2>{% trans "Filter supervisions" %}</h2>
+  <form method="get">
+    {% form form=supervisions_filter.form %}{% endform %}
+    {% trans "Search" as caption %}
+    {% include "core/partials/save_button.html" with caption=caption icon="mdi:search" %}
+  </form>
+
+  <div class="row no-margin">
+    <div class="col s12 m6 l8 no-padding">
+      <h1>{% blocktrans %}Supervisions{% endblocktrans %} {{ day|date:"l" }}, {{ day }}</h1>
+    </div>
+    <div class="col s12 m6 l4 no-padding">
+      {% include "chronos/partials/datepicker.html" %}
+    </div>
+  </div>
+
+  {% render_table supervisions_table %}
+
+  {% include_js "select2-materialize" %}
+  {{ supervisions_filter.form.media.js }}
+{% endblock %}
