@@ -1,0 +1,61 @@
+[project]
+name = "remotemanager"
+authors = [
+    {name = "Louis Beal", email = "louis.j.beal@gmail.com"}
+]
+requires-python = ">=3.7"
+description = "remote run management tool"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    'pyyaml',
+    'numpy',
+]
+dynamic = ['version']
+
+[project.optional-dependencies]
+dill = ["dill"]
+jsonpickle = ["jsonpickle"]
+all = ["dill", "jsonpickle"]
+dev = [
+    "dill",
+    "jsonpickle",
+    'sphinx',
+    "nbsphinx",
+    "sphinx-rtd-theme",
+    "pytest",
+    "pytest-cov",
+    "nbval"
+]
+
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = 'remotemanager.__version__'}
+
+[tool.pytest.ini_options]
+addopts = "--nbval --cov=remotemanager --cov-report term-missing --cov-append --nbval-sanitize-with ./tests/uuid_sanitise.cfg"
+
+[tool.coverage.report]
+omit = ["remotemanager/connection/computers/*"]
+
+[tool.bumpver]
+current_version = "0.5.15"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "[clean] bump version {old_version} -> {new_version}"
+commit = true
+tag = false
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+]
+"remotemanager/__init__.py" = [
+    '^__version__ = "{version}"'
+]
