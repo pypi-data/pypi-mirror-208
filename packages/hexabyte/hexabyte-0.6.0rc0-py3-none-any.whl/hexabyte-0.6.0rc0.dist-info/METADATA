@@ -1,0 +1,62 @@
+Metadata-Version: 2.1
+Name: hexabyte
+Version: 0.6.0rc0
+Summary: A modern, modular, and robust TUI hex editor.
+Home-page: https://github.com/thetacom/hexabyte
+Keywords: commandline,hexeditor,binary,hexadecimal,raw,byteview
+Author: Justin C
+Author-email: justin@thetacom.info
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development
+Classifier: Topic :: Utilities
+Requires-Dist: hilbertcurve (>=2.0.5,<3.0.0)
+Requires-Dist: munch (>=2.5.0,<3.0.0)
+Requires-Dist: python-magic (>=0.4.27,<0.5.0)
+Requires-Dist: textual (>=0.24.1,<0.25.0)
+Requires-Dist: toml (>=0.10.2,<0.11.0)
+Project-URL: Repository, https://github.com/thetacom/hexabyte
+Description-Content-Type: text/markdown
+
+# Hexabyte - Commandline Hex Editor
+
+A modern, robust, and extensible commandline hex editor.
+
+## Usage
+
+```bash
+~/$ pip install hexabyte
+...
+~/$ hexabyte --help
+usage: hexabyte [-h] [-c CONFIG_FILEPATH] [-s] [files ...]
+
+Hexabyte can operate in three distinct modes. Single file mode opens a single file with a single editor. Split screen mode opens a single file with a split screen view. Diff
+mode opens two files side by side.
+
+positional arguments:
+  files                 Specify 1 or 2 filenames
+
+options:
+  -h, --help            show this help message and exit
+  -c CONFIG_FILEPATH, --config CONFIG_FILEPATH
+                        Specify config location. Default: ~/.config/hexabyte/config.toml
+  -s, --split           Display a single file in two split screen editors.
+```
+
