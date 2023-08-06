@@ -1,0 +1,64 @@
+[fragments]
+
+
+[operations]
+
+GQL_CREATE_UPLOAD = """
+mutation sdk_url_createupload($name: String!, $size: BigInt!, $parts: Int!) {
+  createUpload(
+    blob: {
+      name: $name,
+      size: $size
+    },
+    parts: $parts
+  ) {
+    uploadId
+    parts {
+      partNumber
+      url
+    }
+    blob {
+      id
+    }
+  }
+}
+"""
+
+GQL_COMPLETEUPLOAD_SINGLE = """
+mutation completeUpload($blobId: ID!, $uploadId: ID!, $eTag: String) {
+  completeUpload (
+    blobId: $blobId,
+    completedUpload: {
+      uploadId: $uploadId,
+      parts: [
+        {
+          partNumber: 1,
+          eTag: $eTag
+        }
+      ]
+    }
+  )
+}
+"""
+
+GQL_LIST_BLOBS_NAME_CONTAINS = """
+query($name: String!) {
+  blobs(where: { name_CONTAINS: $name }) {
+    id
+    name
+    size
+    createdTimestamp
+  }
+}
+"""
+
+MUTATION_CREATEDOWNLOAD = """
+mutation MUTATION_CREATEDOWNLOAD($userLabel: String!, $blobId: ID!) {
+  createDownload(
+    userId: $userLabel
+    blobId: $blobId
+  )
+}
+"""
+
+   

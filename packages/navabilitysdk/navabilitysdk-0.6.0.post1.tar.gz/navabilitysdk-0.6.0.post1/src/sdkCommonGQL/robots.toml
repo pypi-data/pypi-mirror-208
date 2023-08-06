@@ -1,0 +1,50 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_ROBOT = """
+fragment FRAGMENT_ROBOT on Robot {
+  id
+  label
+  metadata
+  blobEntries { ...FRAGMENT_BLOBENTRY }
+  _version
+  createdTimestamp
+  lastUpdatedTimestamp
+
+  # sessions
+}
+"""
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_ROBOTS = """
+query QUERY_GET_ROBOTS (
+  $userLabel: EmailAddress!
+  ) {
+    users (where: {label: $userLabel}) {
+      robots {
+        ...FRAGMENT_ROBOT
+      }
+    }
+  }
+"""
+
+QUERY_GET_ROBOT = """
+query QUERY_GET_ROBOT (
+  $userLabel: EmailAddress!,
+  $robotLabel: String!
+  ) {
+    users (where: {label: $userLabel}) {
+      robots (where: {label: $robotLabel}) {
+        ...FRAGMENT_ROBOT
+      }
+    }
+  }
+"""

@@ -1,0 +1,144 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_PPE = """
+fragment FRAGMENT_PPE on PPE {
+    id
+    solveKey
+    suggested
+    max
+    mean
+    _type
+    _version
+    createdTimestamp
+    lastUpdatedTimestamp
+  }
+"""
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_PPE = """
+query QUERY_GET_PPE(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+  $solveKey: ID!
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+          ppes(where: { solveKey: $solveKey }) {
+            ...FRAGMENT_PPE
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+QUERY_GET_PPES_FOR_VARIABLE = """
+query QUERY_GET_PPES_FOR_VARIABLE(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+          ppes {
+            ...FRAGMENT_PPE
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+MUTATION_ADD_PPES = """
+mutation MUTATION_ADD_PPES($ppes: [PPECreateInput!]!) {
+  addPpes(
+    input: $ppes
+  ) {
+    ppes {
+      ...FRAGMENT_PPE
+    }
+  }
+}
+"""
+
+QUERY_LIST_PPES = """
+query QUERY_LIST_PPES(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+        ppes {
+            solveKey
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+MUTATION_UPDATE_PPE = """
+mutation MUTATION_UPDATE_PPE($id: ID!, $ppe: PPEUpdateInput!) {
+  updatePpes(
+    update: $ppe
+    where: {id: $id}
+  ) {
+    ppes {
+      ...FRAGMENT_PPE
+    }
+  }
+}
+"""
+
+MUTATION_DELETE_PPE = """
+mutation MUTATION_DELETE_PPE($id: ID!) {
+  deletePpes(where: { id: $id }) {
+    nodesDeleted
+  }
+}
+"""
+
+MUTATION_DELETE_PPE_BY_LABEL = """
+mutation MUTATION_DELETE_PPE_BY_LABEL(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+  $solveKey: ID!
+) {
+  deletePpes(
+    where: {
+      userLabel: $userLabel
+      robotLabel: $robotLabel
+      sessionLabel: $sessionLabel
+      variableLabel: $variableLabel
+      solveKey: $solveKey
+    }
+  ) {
+    nodesDeleted
+  }
+}
+"""

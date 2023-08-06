@@ -1,0 +1,108 @@
+# =================================================
+# Factor Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_FACTOR_SKELETON = """
+fragment FRAGMENT_FACTOR_SKELETON on Factor {
+  id
+  label
+  tags
+  _variableOrderSymbols
+}
+"""
+
+FRAGMENT_FACTOR_SUMMARY = """
+fragment FRAGMENT_FACTOR_SUMMARY on Factor {
+  timestamp
+  nstime
+}
+"""
+
+FRAGMENT_FACTOR = """
+fragment FRAGMENT_FACTOR on Factor {
+  fnctype
+  solvable
+  data
+  metadata
+  _type
+  _version
+}
+"""
+
+# =================================================
+# Factor Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_FACTOR = """
+query QUERY_GET_FACTOR(
+  $userLabel: EmailAddress!,
+  $robotLabel: String!,
+  $sessionLabel: String!,
+  $label: String!) {
+    users(where:{label: $userLabel}) {
+      robots(where:{label: $robotLabel}) {
+        sessions(where:{label: $sessionLabel}) {
+          factors(where:{label: $label}) {
+            ...FRAGMENT_FACTOR_SKELETON
+            ...FRAGMENT_FACTOR_SUMMARY
+            ...FRAGMENT_FACTOR
+          }
+        }
+      }
+    }
+  }
+"""
+
+QUERY_GET_FACTORS = """
+query QUERY_GET_FACTORS(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $fields_summary: Boolean! = true
+  $fields_full: Boolean! = true
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        factors {
+          ...FRAGMENT_FACTOR_SKELETON
+          ...FRAGMENT_FACTOR_SUMMARY @include(if: $fields_summary)
+          ...FRAGMENT_FACTOR @include(if: $fields_full)
+        }
+      }
+    }
+  }
+}
+"""
+
+QUERY_LISTFACTORS = """
+query sdk_list_factors($userLabel: EmailAddress!, $robotLabel: String!, $sessionLabel: String!) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        factors {
+          label
+        }
+      }
+    }
+  }
+}
+"""
+
+MUTATION_ADD_FACTORS = """
+mutation sdk_add_factors($factorsToCreate: [FactorCreateInput!]!) {
+  addFactors(
+    input: $factorsToCreate
+  ) {
+    factors {
+      ...FRAGMENT_FACTOR_SKELETON
+      ...FRAGMENT_FACTOR_SUMMARY
+      ...FRAGMENT_FACTOR
+    }
+  }
+}
+"""

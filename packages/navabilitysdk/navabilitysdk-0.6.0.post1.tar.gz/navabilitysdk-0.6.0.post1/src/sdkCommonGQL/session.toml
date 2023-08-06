@@ -1,0 +1,61 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_SESSION = """
+fragment FRAGMENT_SESSION on Session {
+  id
+  label
+  originLatitude
+  originLongitude
+
+  metadata
+  blobEntries { ...FRAGMENT_BLOBENTRY }
+
+  _version
+  createdTimestamp
+  lastUpdatedTimestamp
+
+  # variables
+  # factors
+}
+"""
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_SESSIONS = """
+query QUERY_GET_SESSIONS (
+  $userLabel: EmailAddress!,
+  $robotLabel: String!,
+  ) {
+    users (where: {label: $userLabel}) {
+      robots (where: {label: $robotLabel}) {
+        sessions {
+          ...FRAGMENT_SESSION
+        }
+      }
+    }
+  }
+"""
+
+QUERY_GET_SESSION = """
+query QUERY_GET_SESSION (
+  $userLabel: EmailAddress!,
+  $robotLabel: String!,
+  $sessionLabel: String!
+  ) {
+    users (where: {label: $userLabel}) {
+      robots (where: {label: $robotLabel}) {
+        sessions (where: {label: $sessionLabel}) {
+          ...FRAGMENT_SESSION
+        }
+      }
+    }
+  }
+"""

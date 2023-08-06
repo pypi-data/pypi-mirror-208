@@ -1,0 +1,157 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_SOLVERDATA = """
+fragment FRAGMENT_SOLVERDATA on SolverData {
+  id
+  vecval
+  dimval
+  vecbw
+  dimbw
+  BayesNetOutVertIDs
+  dimIDs
+  dims
+  eliminated
+  BayesNetVertID
+  separator
+  variableType
+  initialized
+  infoPerCoord
+  ismargin
+  dontmargin
+  solveInProgress
+  solvedCount
+  solveKey
+  covar
+  _version  
+}
+"""
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_SOLVERDATA = """
+query QUERY_GET_SOLVERDATA(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+  $solveKey: ID!
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+          ppes(where: { solveKey: $solveKey }) {
+            ...FRAGMENT_SOLVERDATA
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+QUERY_GET_SOLVERDATA_FOR_VARIABLE = """
+query QUERY_GET_SOLVERDATA_FOR_VARIABLE(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+          ppes {
+            ...FRAGMENT_SOLVERDATA
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+MUTATION_ADD_SOLVERDATA = """
+mutation MUTATION_ADD_SOLVERDATA($ppes: [SolverDataCreateInput!]!) {
+  addPpes(
+    input: $ppes
+  ) {
+    ppes {
+      ...FRAGMENT_SOLVERDATA
+    }
+  }
+}
+"""
+
+QUERY_LIST_SOLVERDATA = """
+query QUERY_LIST_SOLVERDATA(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+        ppes {
+            solveKey
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+MUTATION_UPDATE_SOLVERDATA = """
+mutation MUTATION_UPDATE_SOLVERDATA($id: ID!, $ppe: SolverDataUpdateInput!) {
+  updatePpes(
+    update: $ppe
+    where: {id: $id}
+  ) {
+    ppes {
+      ...FRAGMENT_SOLVERDATA
+    }
+  }
+}
+"""
+
+MUTATION_DELETE_SOLVERDATA = """
+mutation MUTATION_DELETE_SOLVERDATA($id: ID!) {
+  deleteSolverData(where: { id: $id }) {
+    nodesDeleted
+  }
+}
+"""
+
+MUTATION_DELETE_SOLVERDATA_BY_LABEL = """
+mutation MUTATION_DELETE_SOLVERDATA_BY_LABEL(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+  $solveKey: ID!
+) {
+  deletePpes(
+    where: {
+      userLabel: $userLabel
+      robotLabel: $robotLabel
+      sessionLabel: $sessionLabel
+      variableLabel: $variableLabel
+      solveKey: $solveKey
+    }
+  ) {
+    nodesDeleted
+  }
+}
+"""
+

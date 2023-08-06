@@ -1,0 +1,229 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_VARIABLE_SKELETON = """
+fragment FRAGMENT_VARIABLE_SKELETON on Variable {
+    id
+    label
+    tags
+  }
+"""
+
+FRAGMENT_VARIABLE_SUMMARY = """
+fragment FRAGMENT_VARIABLE_SUMMARY on Variable {
+  timestamp
+  nstime
+  ppes {
+    ...FRAGMENT_PPE
+  }
+  blobEntries {
+    ...FRAGMENT_BLOBENTRY
+  }
+  variableType
+  _version
+}
+"""
+
+FRAGMENT_VARIABLE = """
+fragment FRAGMENT_VARIABLE on Variable {
+  metadata
+  solvable
+  solverData
+  {
+    ...FRAGMENT_SOLVERDATA
+  }
+}
+"""
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_VARIABLE = """
+query QUERY_GET_VARIABLE(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabel: String!
+  $fields_summary: Boolean! = true
+  $fields_full: Boolean! = true
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $variableLabel }) {
+          ...FRAGMENT_VARIABLE_SKELETON
+          ...FRAGMENT_VARIABLE_SUMMARY @include(if: $fields_summary)
+          ...FRAGMENT_VARIABLE @include(if: $fields_full)
+        }
+      }
+    }
+  }
+}
+"""
+
+QUERY_GET_VARIABLES_BY_LABELS = """
+query QUERY_GET_VARIABLES_BY_LABELS(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $variableLabels: [String!]!
+  $fields_summary: Boolean! = true
+  $fields_full: Boolean! = true
+  ) {
+    variables(
+      where: {
+        userLabel: $userLabel
+        robotLabel: $robotLabel
+        sessionLabel: $sessionLabel
+        label_IN: $variableLabels
+      }
+    ) {
+      ...FRAGMENT_VARIABLE_SKELETON
+      ...FRAGMENT_VARIABLE_SUMMARY @include(if: $fields_summary)
+      ...FRAGMENT_VARIABLE @include(if: $fields_full)
+    }
+  }
+"""
+
+QUERY_GET_VARIABLES = """
+query QUERY_GET_VARIABLES(
+  $userLabel: EmailAddress!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $fields_summary: Boolean! = true
+  $fields_full: Boolean! = true
+) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables {
+          ...FRAGMENT_VARIABLE_SKELETON
+          ...FRAGMENT_VARIABLE_SUMMARY @include(if: $fields_summary)
+          ...FRAGMENT_VARIABLE @include(if: $fields_full)
+        }
+      }
+    }
+  }
+}
+"""
+
+QUERY_GET_VARIABLES_FILTERED = """
+query sdk_get_variables_filtered(
+    $userLabel: EmailAddress!,
+    $robotLabels: [String]!,
+    $sessionLabels: [String]!,
+    $variable_label_regexp: String = ".*",
+    $variable_tags: [String] = ["VARIABLE"],
+    $solvable: Int! = 0,
+  	$fields_summary: Boolean! = false, 
+  	$fields_full: Boolean! = false){
+	users(where:{label:$userLabel}){
+    name
+		robots(where:{label_IN: $robotLabels}) {
+      name
+      sessions(where:{label_IN: $sessionLabels}){
+        name
+        variables(where:{
+            label_MATCHES: $variable_label_regexp, 
+          	tags: $variable_tags, 
+          	solvable_GTE: $solvable}) {
+          ...variable_skeleton_fields
+          ...variable_summary_fields @include(if: $fields_summary)
+          ...variable_full_fields @include(if: $fields_full)
+        }
+      }
+    }
+  }
+}"""
+
+
+MUTATION_ADD_VARIABLES = """
+mutation MUTATION_ADD_VARIABLES($variablesToCreate: [VariableCreateInput!]!) {
+  addVariables(input: $variablesToCreate) {
+    variables {
+      ...FRAGMENT_VARIABLE_SKELETON
+      ...FRAGMENT_VARIABLE_SUMMARY
+      ...FRAGMENT_VARIABLE
+    }
+  }
+}
+"""
+
+QUERY_LIST_VARIABLES = """
+query QUERY_LIST_VARIABLES(
+    $userLabel: EmailAddress!
+    $robotLabel: String!
+    $sessionLabel: String!
+  ) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables {
+          label
+        }
+      }
+    }
+  }
+}
+"""
+
+QUERY_LIST_NEIGHBORS = """
+query QUERY_LIST_NEIGHBORS(
+  $userLabel: String!
+  $robotLabel: String!
+  $sessionLabel: String!
+  $nodeLabel: String!
+) {
+  variables(
+    where: {
+      userLabel: $userLabel
+      robotLabel: $robotLabel
+      sessionLabel: $sessionLabel
+      label: $nodeLabel
+    }
+  ) {
+    factors {
+      label
+    }
+  }
+  factors(
+    where: {
+      userLabel: $userLabel
+      robotLabel: $robotLabel
+      sessionLabel: $sessionLabel
+      label: $nodeLabel
+    }
+  ) {
+    variables {
+      label
+    }
+  }
+}
+"""
+
+QUERY_EXISTS_VARIABLE_FACTOR_LABEL = """
+query QUERY_EXISTS_VARIABLE_FACTOR_LABEL(
+    $userLabel: EmailAddress!
+    $robotLabel: String!
+    $sessionLabel: String!
+    $label: String!) {
+  users(where: { label: $userLabel }) {
+    robots(where: { label: $robotLabel }) {
+      sessions(where: { label: $sessionLabel }) {
+        variables(where: { label: $label }) {
+          label
+        }
+        factors(where: { label: $label }) {
+          label
+        }
+      }
+    }
+  }
+}
+"""

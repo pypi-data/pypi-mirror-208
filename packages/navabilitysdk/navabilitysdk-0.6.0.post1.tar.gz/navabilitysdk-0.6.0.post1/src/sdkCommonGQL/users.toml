@@ -1,0 +1,50 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_USER = """
+fragment FRAGMENT_USER on User {
+  id
+  label
+  sub
+  givenName
+  familyName
+  status
+  metadata
+  _version
+  createdTimestamp
+  lastUpdatedTimestamp
+  lastAuthenticatedTimestamp
+  permissions
+  blobEntries { ...FRAGMENT_BLOBENTRY }
+
+  # robots
+  # maps
+}
+"""
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_GET_USERS = """
+query QUERY_GET_USERS {
+  users {
+    ...FRAGMENT_USER
+  }
+}
+"""
+
+QUERY_GET_USER = """
+query QUERY_GET_USER (
+  $userLabel: EmailAddress!
+  ) {
+    users (where: {label: $userLabel}) {
+    ...FRAGMENT_USER
+  }
+}
+"""
