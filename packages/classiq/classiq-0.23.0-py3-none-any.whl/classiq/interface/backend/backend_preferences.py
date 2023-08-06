@@ -1,0 +1,217 @@
+from __future__ import annotations
+
+from datetime import timedelta
+from typing import Any, Dict, Iterable, List, Optional, Union
+
+import pydantic
+from pydantic import BaseModel, validator
+
+from classiq.interface.backend import pydantic_backend
+from classiq.interface.backend.quantum_backend_providers import (
+    EXACT_SIMULATORS,
+    AWSBackendNames,
+    AzureQuantumBackendNames,
+    IBMQBackendNames,
+    IonqBackendNames,
+    NvidiaBackendNames,
+    ProviderTypeVendor,
+    ProviderVendor,
+)
+
+
+class QctrlOptimizationPreferences(BaseModel):
+    use_qctrl: bool = pydantic.Field(
+        False,
+        description="Execute using QCtrl FireOpal (requires Qctrl authentication).",
+    )
+    qctrl_access_token: Union[dict, None] = pydantic.Field(
+        None, description="Qctrl access token for FireOpal backend."
+    )
+
+
+class BackendPreferences(BaseModel):
+    # Due to the way the field is currently implemented, i.e. it redefined with different types
+    # in the subclass, it shouldn't be dumped with exclude_*. This causes this field not to appear.
+    # For example: don't use obj.dict(exclude_unset=True).
+    backend_service_provider: str = pydantic.Field(
+        ..., description="Provider company or cloud for the requested backend."
+    )
+    backend_name: str = pydantic.Field(
+        ..., description="Name of the requested backend or target."
+    )
+    qctrl_preferences: QctrlOptimizationPreferences = pydantic.Field(
+        default=QctrlOptimizationPreferences(use_qctrl=False),
+        description="QCtrl preferences.",
+    )
+
+    @classmethod
+    def batch_preferences(
+        cls, *, backend_names: Iterable[str], **kwargs
+    ) -> List[BackendPreferences]:
+        return [cls(backend_name=name, **kwargs) for name in backend_names]
+
+
+AWS_DEFAULT_JOB_TIMEOUT_SECONDS = int(timedelta(minutes=5).total_seconds())
+
+
+class AwsBackendPreferences(BackendPreferences):
+    backend_service_provider: ProviderTypeVendor.AWS_BRAKET = (
+        ProviderVendor.AMAZON_BRAKET
+    )
+    # Allow running any backend supported by the vendor
+    backend_name: Union[AWSBackendNames, str]
+    aws_role_arn: pydantic_backend.PydanticAwsRoleArn = pydantic.Field(
+        description="ARN of the role to be assumed for execution on your Braket account."
+    )
+    s3_bucket_name: pydantic_backend.PydanticS3BucketName = pydantic.Field(
+        description="S3 Bucket Name"
+    )
+    s3_bucket_key: pydantic_backend.PydanticS3BucketKey = pydantic.Field(
+        description="S3 Bucket Key"
+    )
+    job_timeout: pydantic_backend.PydanticExecutionTimeout = pydantic.Field(
+        description="Timeout for Jobs sent for execution in seconds.",
+        default=AWS_DEFAULT_JOB_TIMEOUT_SECONDS,
+    )
+
+
+class IBMBackendProvider(BaseModel):
+    hub: Optional[str] = None
+    group: Optional[str] = None
+    project: Optional[str] = None
+
+
+class QctrlIBMBackendProvider(IBMBackendProvider):
+    token: Optional[str] = None
+
+
+class IBMBackendPreferences(BackendPreferences):
+    backend_service_provider: ProviderTypeVendor.IBM_QUANTUM = (
+        ProviderVendor.IBM_QUANTUM
+    )
+    backend_name: Union[IBMQBackendNames, str]
+    access_token: Optional[str] = pydantic.Field(
+        default=None,
+        description="IBM Quantum access token to be used"
+        " with IBM Quantum hosted backends",
+    )
+    provider: IBMBackendProvider = pydantic.Field(
+        default_factory=IBMBackendProvider,
+        description="Provider specs. for identifying a single IBM Quantum provider.",
+    )
+    use_ibm_runtime: bool = pydantic.Field(
+        default=False,
+        description="Whether to execute using IBM runtime. Ignored if not applicable.",
+    )
+
+
+class AzureCredential(pydantic.BaseSettings):
+    tenant_id: str = pydantic.Field(description="Azure Tenant ID")
+    client_id: str = pydantic.Field(description="Azure Client ID")
+    client_secret: str = pydantic.Field(description="Azure Client Secret")
+    resource_id: pydantic_backend.PydanticAzureResourceIDType = pydantic.Field(
+        description="Azure Resource ID (including Azure subscription ID, resource "
+        "group and workspace), for personal resource",
+    )
+
+    class Config:
+        title = "Azure Service Principal Credential"
+        env_prefix = "AZURE_"
+        case_sensitive = False
+
+
+class AzureBackendPreferences(BackendPreferences):
+    backend_service_provider: ProviderTypeVendor.AZURE_QUANTUM = (
+        ProviderVendor.AZURE_QUANTUM
+    )
+    # Allow running any backend supported by the vendor
+    backend_name: Union[AzureQuantumBackendNames, str]
+
+    location: str = pydantic.Field(
+        default="East US", description="Azure personal resource region"
+    )
+
+    run_through_classiq: bool = pydantic.Field(
+        default=True,
+        description="When set to True backend will run through classiq resources",
+    )
+
+    credentials: Optional[AzureCredential] = pydantic.Field(
+        default=None,
+        description="The service principal credential to access personal quantum workspace",
+    )
+
+    @validator("credentials", pre=True, always=True)
+    def set_default_credentials(
+        cls, credentials: Optional[AzureCredential], values: Dict[str, Any]
+    ):
+        run_through_classiq: bool = values["run_through_classiq"]
+        if run_through_classiq:
+            if credentials is not None:
+                raise ValueError(
+                    "No need to provide credentials when running through classiq"
+                )
+        else:
+            if credentials is None:
+                credentials = AzureCredential()
+        return credentials
+
+
+class IonqBackendPreferences(BackendPreferences):
+    backend_service_provider: ProviderTypeVendor.IONQ = ProviderVendor.IONQ
+    backend_name: IonqBackendNames = pydantic.Field(
+        default=IonqBackendNames.SIMULATOR,
+        description="IonQ backend for quantum programs execution.",
+    )
+    api_key: pydantic_backend.PydanticIonQApiKeyType = pydantic.Field(
+        ..., description="IonQ API key"
+    )
+
+
+class NvidiaBackendPreferences(BackendPreferences):
+    backend_service_provider: ProviderTypeVendor.NVIDIA = ProviderVendor.NVIDIA
+    backend_name: NvidiaBackendNames = NvidiaBackendNames.STATEVECTOR
+
+
+def is_exact_simulator(backend_preferences: BackendPreferences):
+    return backend_preferences.backend_name in EXACT_SIMULATORS
+
+
+def default_backend_preferences(
+    backend_name: str = IBMQBackendNames.IBMQ_AER_SIMULATOR,
+) -> BackendPreferences:
+    return IBMBackendPreferences(backend_name=backend_name)
+
+
+def backend_preferences_field(
+    backend_name: str = IBMQBackendNames.IBMQ_AER_SIMULATOR,
+) -> Any:
+    return pydantic.Field(
+        default_factory=lambda: default_backend_preferences(backend_name),
+        description="Preferences for the requested backend to run the quantum circuit.",
+        discriminator="backend_service_provider",
+    )
+
+
+BackendPreferencesTypes = Union[
+    AzureBackendPreferences,
+    IBMBackendPreferences,
+    AwsBackendPreferences,
+    IonqBackendPreferences,
+    NvidiaBackendPreferences,
+]
+
+__all__ = [
+    "AzureBackendPreferences",
+    "AzureCredential",
+    "AzureQuantumBackendNames",
+    "IBMBackendPreferences",
+    "IBMBackendProvider",
+    "IBMQBackendNames",
+    "AwsBackendPreferences",
+    "AWSBackendNames",
+    "IonqBackendPreferences",
+    "IonqBackendNames",
+    "NvidiaBackendPreferences",
+    "NvidiaBackendNames",
+]
