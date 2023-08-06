@@ -1,0 +1,88 @@
+Metadata-Version: 2.1
+Name: flashpass
+Version: 1.0.0
+Summary: Encrypt & Decrypt FlashPass .fp files
+Home-page: https://github.com/Septem151/flashpass
+License: GPL-2.0-only
+Keywords: security,passwords
+Author: Carson Mullins
+Author-email: carsonmullins@yahoo.com
+Requires-Python: >=3.11,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Security
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Requires-Dist: cryptography (>=40.0.2,<41.0.0)
+Requires-Dist: pyperclip (>=1.8.2,<2.0.0)
+Project-URL: Repository, https://github.com/Septem151/flashpass
+Description-Content-Type: text/x-rst
+
+=========
+FlashPass
+=========
+
+FlashPass is a simple cross-platform password manager written in Python.
+
+Decrypted passwords are copied to your clipboard.
+
+************
+Installation
+************
+
+Install from PyPi:
+
+.. code-block:: console
+
+  pip install flashpass
+
+Or, from the release tarball/wheel:
+
+* Download the `latest release <https://github.com/Septem151/flashpass/releases/latest>`_
+* Navigate to the directory where you saved the release
+* ``pip install --upgrade [release file]``
+
+*****
+Usage
+*****
+
+Interactive mode
+================
+
+* ``flashpass``
+
+Standard mode of FlashPass, guided prompts for password encryption/decryption.
+
+Encrypt a new password
+======================
+
+* ``flashpass -e [name]`` or ``flashpass --encrypt [name]``
+
+Encrypts a new password with the given name.
+
+Decrypt an existing password
+============================
+
+* ``flashpass -d [name]`` or ``flashpass --decrypt [name]``
+
+Decrypts an existing password with the given name and copies the password to your clipboard.
+
+List all stored passwords
+=========================
+
+* ``flashpass -l`` or ``flashpass --list``
+
+List the names of all stored passwords.
+
+Print help
+==========
+
+* ``flashpass -h`` or ``flashpass --help``
+
+Print all available commands and their descriptions.
+
