@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "poetry-poet"
+version = "0.1.8"
+description = ""
+authors = ["Phillip Sitbon <phillip.sitbon@gmail.com>"]
+readme = "README.md"
+
+packages = [
+    { include = "poet" }
+]
+
+[tool.poetry.plugins."poetry.plugin"]
+demo = "poet.plug.plug:PoetPlugin"
+
+[tool.poetry.plugins."poetry.application.plugin"]
+foo-command = "poet.plug.poet:PoetApplicationPlugin"
+
+[tool.poetry.scripts]
+poet = "poetry.console.application:main"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+poetry = "^1.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
