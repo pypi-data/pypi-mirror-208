@@ -1,0 +1,69 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=65.6.3",
+    "wheel>=0.38.4",
+]
+
+[project]
+name = "serverless-sdk"
+description = "Serverless SDK for Python"
+readme = "README.md"
+authors = [{ name = "serverlessinc" }]
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dynamic = [
+    "version",
+]
+dependencies = [
+    "backports.cached-property", # included in Python >=3.8
+    "blinker>=1.5",
+    "js-regex<1.1.0,>=1.0.1",
+    "typing-extensions>=4.4", # included in Python 3.8 - 3.11
+]
+[project.optional-dependencies]
+tests = [
+    "aiohttp>=3.8.4",
+    "black>=22.12",
+    "flask>=2.2.3",
+    "importlib_metadata>=5.2", # included in Python >=3.8
+    "mypy>=1.2",
+    "pytest>=7.2",
+    "pytest-httpserver>=1.0.6",
+    "requests>=2.28.2",
+    "ruff>=0.0.199",
+    "urllib3>=1.26.15",
+    "yarl~=1.8.0",
+]
+[project.urls]
+changelog = "https://github.com/serverless/console/blob/main/python/packages/sdk/CHANGELOG.md"
+documentation = "https://github.com/serverless/console/tree/main/python/packages/sdk"
+homepage = "https://www.serverless.com/console"
+repository = "https://github.com/serverless/console"
+
+[tool.setuptools.packages.find]
+include = ["sls_sdk*", "serverless_sdk*"]
+
+[tool.setuptools.package-data]
+"*" = ["py.typed", "VERSION"]
+
+[tool.setuptools.dynamic]
+version = {file = "./sls_sdk/VERSION"}
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+[tool.mypy]
+disable_error_code = "override,assignment,arg-type"
+exclude = [
+    '^tests/',
+]
