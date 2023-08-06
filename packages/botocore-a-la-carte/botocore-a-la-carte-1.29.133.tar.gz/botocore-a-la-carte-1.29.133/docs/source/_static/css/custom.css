@@ -1,0 +1,59 @@
+/* Prevents two-dimensional scrolling and content loss. */
+h1, code, li {
+    overflow-wrap: break-word;
+}
+/* Provides padding to push down the "breadcrumb" navigation in nested pages. */
+.content{
+    padding: 1em 3em;
+}
+/* Improves spacing around custom sidebar section*/
+.sidebar-div{
+    margin: var(--sidebar-caption-space-above) 0 0 0;
+    padding: var(--sidebar-item-spacing-vertical) var(--sidebar-item-spacing-horizontal);
+}
+/* Custom sidebar heading text. Example: Feedback Section heading. */
+.sidebar-heading{
+    color: var(--color-sidebar-caption-text);
+    font-size: var(--font-size--normal);
+    font-weight: 700;
+}
+/* Improves text used in custom sidebar section. Example: Feedback section content.*/
+.sidebar-text{
+    color: var(--color-sidebar-caption-text);
+    font-size: var(--sidebar-item-font-size);
+    line-height: 1.4;
+}
+/* Removes empty space above the sidebar-tree (under "Feedback" section) */
+.sidebar-tree{
+    margin-top: 0px;
+}
+/* Adds padding around AWS Logo in the left sidebar. */
+.sidebar-logo{
+    padding: 20% 15%;
+}
+
+/* Apply furo styled admonition titles for <h3>. */
+h3.admonition-title {
+  position: relative;
+  margin: 0 -0.5rem 0.5rem;
+  padding-left: 2.5rem;
+  padding-right: .5rem;
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.25;
+  border-radius: unset;
+  background-color: var(--color-admonition-title-background);
+}
+/* Apply furo styled admonition icons before <h3>. */
+h3.admonition-title::before {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--color-admonition-title);
+    mask-image: var(--icon-admonition-default);
+    mask-repeat: no-repeat;
+}
