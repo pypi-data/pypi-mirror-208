@@ -1,0 +1,56 @@
+#!python
+import argparse
+from pprint import pprint
+
+from swdl.swrest import DataService
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("Simple Application to get match infos")
+    parser.add_argument("match_id", type=int)
+    parser.add_argument(
+        "-c",
+        "--camera_id",
+        dest="camera_id",
+        action="store_true",
+        help="Output camera ID.",
+    )
+    parser.add_argument(
+        "-u",
+        "--user_stream",
+        dest="user_stream",
+        action="store_true",
+        help="Output user stream link.",
+    )
+    parser.add_argument(
+        "-g",
+        "--grid_stream",
+        dest="grid_stream",
+        action="store_true",
+        help="Output grid stream link.",
+    )
+    parser.add_argument(
+        "-v",
+        "--video_type",
+        dest="video_type",
+        action="store_true",
+        help="Output video type.",
+    )
+    args = parser.parse_args()
+
+    assert (
+        sum([args.camera_id, args.user_stream, args.grid_stream, args.video_type]) <= 1
+    ), "Select at most one output."
+
+    match_id = args.match_id
+    ds = DataService()
+    match = ds.get_match(match_id)
+    if args.camera_id:
+        print(match.camera_id)
+    elif args.user_stream:
+        print(match.user_stream_link)
+    elif args.grid_stream:
+        print(match.grid_stream_link)
+    elif args.video_type:
+        print(match.video_type)
+    else:
+        pprint(match.__dict__)
