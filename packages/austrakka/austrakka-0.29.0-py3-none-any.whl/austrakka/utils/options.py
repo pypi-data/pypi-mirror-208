@@ -1,0 +1,409 @@
+import typing as t
+
+import click
+
+from austrakka.utils.enums.seq import SEQ_TYPES
+from austrakka.utils.enums.seq import READS
+from austrakka.utils.enums.seq import READ_BOTH
+from austrakka.utils.misc import AusTrakkaCliOption
+
+
+def opt_abbrev(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Abbreviated name, for use with the CLI and in metadata uploads'}
+    return _create_option(
+        "-a",
+        "--abbrev",
+        **{**defaults, **attrs}
+    )
+
+
+def opt_name(var_name='name', **attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Name',
+    }
+    return _create_option(
+        "-n",
+        "--name",
+        var_name,
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_group_name(var_name='group_name', **attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Group Name',
+    }
+    return _create_option(
+        "-g",
+        "--group-name",
+        var_name,
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_sample_id(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'name',
+    }
+    return _create_option(
+        "-s",
+        "--sample-id",
+        type=click.STRING,
+        multiple=True,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_field_name(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'multiple': True,
+        'help': 'Field name to show for this project',
+    }
+    return _create_option(
+        "-fn",
+        "--field-names",
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_description(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'default': '',
+        'help': 'Human-readable description text',
+    }
+    return _create_option(
+        '-d',
+        '--description',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_project(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'multiple': False,
+        'help': 'Project Abbreviation',
+    }
+    return _create_option(
+        '--project',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_definition(var_name='definition', **attrs: t.Any):
+    defaults = {
+        'required': True,
+        'multiple': False,
+        'help': 'Analysis definition name',
+    }
+    return _create_option(
+        '--definition',
+        var_name,
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_organisation(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Organisation abbreviation. Must match an organisation ' +
+                'known to AusTrakka, use `austrakka org list` to see valid ' +
+                'values',
+    }
+    return _create_option(
+        '-o',
+        '--org',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_group(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'multiple': True,
+        'help': 'Name of group.'
+    }
+    return _create_option(
+        '-g',
+        '--group-name',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_groups(**attrs: t.Any):
+    return _create_option(
+        '-g',
+        '--group-names',
+        multiple=True,
+        type=click.STRING,
+        **attrs
+    )
+
+
+def opt_proforma(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Proforma abbreviation. Use `austrakka proforma list` to see '
+                'options.',
+    }
+    return _create_option(
+        '-p',
+        '--proforma',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_csv(**attrs: t.Any):
+    defaults = {
+        'required': False,
+        'help': 'CSV file',
+    }
+    return _create_option(
+        "--csv",
+        "csv_file",
+        type=click.File('rb'),
+        default=None,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_seq_type(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Sequence format',
+    }
+    return _create_option(
+        "-t",
+        '--type',
+        'seq_type',
+        type=click.Choice(SEQ_TYPES),
+        **{**defaults, **attrs}
+    )
+
+
+def opt_output_dir(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'The output directory where files are saved. The directory and '
+                'any sub-directories will be created beneath this as needed.',
+    }
+    return _create_option(
+        "-o",
+        '--outdir',
+        'output_dir',
+        type=click.Path(exists=False),
+        **{**defaults, **attrs}
+    )
+
+
+def opt_read(**attrs: t.Any):
+    defaults = {
+        'help': f'Fastq read. Defaults to {READ_BOTH}, meaning both 1 and 2',
+        'default': READ_BOTH,
+    }
+    return _create_option(
+        "-r",
+        '--read',
+        'read',
+        type=click.Choice(READS),
+        **{**defaults, **attrs}
+    )
+
+
+def opt_analysis(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Analysis Abbreviation',
+    }
+    return _create_option(
+        '-a',
+        '--analysis',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_fieldtype(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Metadata field type. Use `austrakka fieldtype list` to see '
+                'options.'
+    }
+    return _create_option(
+        '-ft',
+        '--field-type',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_plottype(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Plot type. Use `austrakka plot types` to see options.'
+    }
+    return _create_option(
+        '-pt',
+        '--plottype',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_plotspec(**attrs: t.Any):
+    defaults = {
+        'required': False,
+        'help': 'Plot spec. If not provided, or empty, the default spec for the'
+        ' plot type will be used.'}
+    return _create_option(
+        '-spec',
+        'spec',
+        type=click.File('r'),
+        **{**defaults, **attrs}
+    )
+
+
+def opt_owner_group_roles(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'multiple': True,
+        'help': 'The user''s Owner group and role assignment. Exclude ' +
+                'this option if the user is not an owner.',
+    }
+    return _create_option(
+        '-ogr',
+        '--owner-group-roles',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_user_object_id(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'User object ID',
+    }
+    return _create_option(
+        '-ui',
+        '--user-id',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_is_active(is_update=False, **attrs: t.Any):
+    defaults = {
+        'help': 'Determines if the entry is active'
+    }
+    return _create_option(
+        '--is-active/--not-active',
+        type=bool,
+        default=None if is_update else True,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_is_append(**attrs: t.Any):
+    defaults = {
+        'help': 'Specify validation mode (as if appending or creating) when '
+                'checking data.'
+    }
+    return _create_option(
+        '--is-append/--not-append',
+        type=bool,
+        default=False,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_country(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Country',
+    }
+    return _create_option(
+        "--country",
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_state(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'State',
+        'default': None,
+    }
+    return _create_option(
+        "--state",
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_filter_string(**attrs: t.Any):
+    defaults = {
+        'required': True,
+        'help': 'Filter String',
+    }
+    return _create_option(
+        "--filter-str",
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_fieldtype_value(var_name='values', **attrs: t.Any):
+    defaults = {
+        'required': True,
+        'multiple': True,
+        'help': 'Allowed value for this categorical field.',
+    }
+    return _create_option(
+        '-v',
+        '--value',
+        var_name,
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def opt_group_role(**attrs: t.Any):
+    defaults = {
+        'required': False,
+        'multiple': True,
+        'help': 'The group and role to remove from the specified user. Use '
+                'comma (,) as a separator. Format is <group>,<role> '
+                'Eg. group1,role1',
+    }
+    return _create_option(
+        '-gr',
+        '--group-role',
+        type=click.STRING,
+        **{**defaults, **attrs}
+    )
+
+
+def _create_option(*param_decls: str, **attrs: t.Any):
+    def inner_func(func):
+        return click.option(
+            *param_decls,
+            cls=AusTrakkaCliOption,
+            **attrs)(func)
+    return inner_func
