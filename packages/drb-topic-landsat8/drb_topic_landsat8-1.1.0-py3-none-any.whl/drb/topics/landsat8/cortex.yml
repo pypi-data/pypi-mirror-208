@@ -1,0 +1,34 @@
+---
+id: d6ec274f-d84a-499d-923a-5116c1b96655
+label: 'Landsat-8 Level-1 GeoTIFF Product'
+category: CONTAINER
+signatures:
+  # Before 2017: Landsat - 10.0 specification: LSDS-809_V10.0.pdf
+  - name: (i?)L[OTC]8[0-9]{13}.....\.
+  # Collection 1: Landsat - 11.0 specification: LSDS-809-Landsat8-Level1DFCB.pdf
+  - name: (i?)L[OTC]08_L1(TP|GT|GS)_[0-9]{6}_[0-9]{8}_[0-9]{8}_01_(RT|T1|T2)\.tar.gz
+  # Collection 2: LSDS-1822_Landsat8-9-OLI-TIRS-C2-L1-DFCB-v6.pdf
+  - name: (?i)L[OTC]0[89]_L1(TP|GT)_[0-9]{6}_[0-9]{8}_[0-9]{8}_02_(RT|T1|T2)\.tar
+---
+id: 10e14810-3060-4f55-99e7-3a84e2947343
+subClassOf: d6ec274f-d84a-499d-923a-5116c1b96655
+label: 'Landsat-8 Level-1 GeoTIFF Collection 1 Product'
+category: CONTAINER
+factory: tar
+signatures:
+  - name: (i?)L[OTC]08_L1(TP|GT|GS)_[0-9]{6}_[0-9]{8}_[0-9]{8}_01_(RT|T1|T2)\.tar.gz
+---
+id: 460f7ffa-3ebb-4122-8ce3-53d54432727b
+subClassOf: d6ec274f-d84a-499d-923a-5116c1b96655
+label: 'Landsat-8 Level-1 GeoTIFF Collection 2 Product'
+category: CONTAINER
+factory: tar
+signatures:
+  - name: (?i)L[OTC]0[89]_L1(TP|GT)_[0-9]{6}_[0-9]{8}_[0-9]{8}_02_(RT|T1|T2)\.tar
+---
+id: b299117e-123b-482e-869f-ddb085677952
+label: 'Landsat-8 Level-1 Metadata Text File'
+category: FORMATTING
+factory: java
+signatures:
+  - name: (?i)(l(o|t|c)8[0-9]{13}.....|l(o|t|c)08_.*_(RT|T1|T2))_mtl\.txt
