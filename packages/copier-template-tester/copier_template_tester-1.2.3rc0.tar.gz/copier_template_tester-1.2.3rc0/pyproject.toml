@@ -1,0 +1,49 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.commitizen]
+version = "1.2.3rc0"
+version_files = ["copier_template_tester/__init__.py:^__version", "pyproject.toml:^version"]
+
+[tool.poetry]
+authors = ["Kyle King <dev.act.kyle@gmail.com>"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+] # https://pypi.org/classifiers/
+description = "Test copier templates"
+documentation = "https://copier-template-tester.kyleking.me"
+include = ["LICENSE"]
+keywords = []
+license = "MIT"
+maintainers = []
+name = "copier_template_tester"
+readme = "docs/README.md"
+repository = "https://github.com/kyleking/copier-template-tester"
+version = "1.2.3rc0"
+
+[tool.poetry.dependencies]
+python = "^3.10.5"
+copier = ">=7.0.1"
+corallium = ">=0.2.0"
+
+[tool.poetry.group.dev.dependencies]
+calcipy = {extras = ["doc", "lint", "nox", "stale", "tags", "test", "types"], version = ">=1.2.4"}
+pytest-shell-utilities = ">=1.7.0"
+types-pyyaml = ">=6.0.12.9"
+types-setuptools = ">=67.6.0.8"
+
+[tool.poetry.scripts]
+ctt = "copier_template_tester.main:run_cli"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/kyleking/copier-template-tester/issues"
+"Changelog" = "https://github.com/kyleking/copier-template-tester/blob/main/docs/docs/CHANGELOG.md"
+
+[tool.pyright]
+include = ["copier_template_tester"]
+pythonVersion = "3.10"
