@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "stronglytypedproperty"
+description = "Adds strongly typed property to a class"
+version = "0.1.0"
+license = "LICENSE"
+readme = "README.md"
+keywords = [
+    "Property",
+    "Strongly Typed"
+]
+repository = "https://gitlab.com/semantik-software/code/python/StronglyTypedProperty"
+documentation = "https://semantik-software.gitlab.io/code/python/StronglyTypedProperty"
+authors = [
+    "William McLendon <wcmclen@hotmail.com>",
+]
+maintainers = [
+    "William McLendon <wcmclen@hotmail.com>",
+]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Intended Audience :: System Administrators',
+    'Intended Audience :: Other Audience',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3 :: Only',
+    'License :: OSI Approved :: BSD License',
+]
+packages = [
+    { include = 'stronglytypedproperty', from = 'src' },
+]
+include = [ "CHANGELOG.md" ]
+
+
+[tool.poetry.urls]
+# CI     = "https://github.com/sandialabs/ConfigParserEnhanced/actions/workflows/test-driver-core.yml"
+Issues = "https://gitlab.com/semantik-software/code/python/stronglytypedproperty/-/issues"
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+
+[tool.poetry.dev-dependencies]
+mock = "^4.0"
+pytest = "^6.2"
+pytest-cov = "^2.11"
+Sphinx = "^3.5"
+sphinx-argparse = "^0.2"
+sphinx-rtd-theme = "^0.5"
+
+
+[tool.pycodestyle]
+statistics = true
+
+
+[build-system]
+requires = ["poetry-core>=1.0"]
+build-backend = "poetry.core.masonry.api"
+
+
