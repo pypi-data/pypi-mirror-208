@@ -1,0 +1,1 @@
+conda env update --name venvOseeMed --file environment.yml --prune 
