@@ -1,0 +1,55 @@
+from typing import List, Optional, Union
+
+import torch
+
+from open_gpt.models.llama.modeling import LlamaModel
+
+
+class VicunaModel(LlamaModel):
+    """Wrapper for Vicuna model, which is a fine-tuned LLaMA model.
+
+    Vicuna is trained by fine-tuning LLaMA on user-shared conversations collected from ShareGPT.
+    See https://vicuna.lmsys.org/ for more details.
+
+    The quick way to use Vicuna via :meth:`open_gpt.create_model`:
+
+    ```python
+    import open_gpt
+
+    model = open_gpt.create_model('lmsys/vicuna-7b-delta-v1.1')
+
+    # Generate text
+    text_out = model.generate_text(prompts='Hello, my name is', max_length=50)
+    ```
+
+    If you want to run inference with lower precision and/or on a specific device, you can do:
+
+    ```python
+    import open_gpt
+
+    model = open_gpt.create_model(
+        'lmsys/vicuna-7b-delta-v1.1', precision='fp16', device_map='balanced'
+    )
+    ```
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def load_model_and_transforms(
+        self, model_name_or_path: str, tokenizer_name_or_path: Optional[str] = None
+    ):
+
+        from .loading import load_model_and_tokenizer
+
+        self.model, self.tokenizer = load_model_and_tokenizer(
+            model_name_or_path,
+            tokenizer_name_or_path=tokenizer_name_or_path,
+            dtype=self._dtype,
+            device=self._device,
+            device_map=self._device_map,
+            no_split_module_classes=self.no_split_module_classes,
+        )
+
+        self.model.eval()
