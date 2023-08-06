@@ -1,0 +1,83 @@
+Metadata-Version: 2.1
+Name: django-rich-logging
+Version: 0.3.0
+Summary: A prettier way to see Django requests while developing.
+Home-page: https://github.com/adamghill/django-rich-logging/
+License: MIT
+Keywords: django,python,static,markdown
+Author: adamghill
+Author-email: adam@adamghill.com
+Requires-Python: >=3.7,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Provides-Extra: docs
+Requires-Dist: Django (>3.0)
+Requires-Dist: Sphinx (>=4.3.2,<5.0.0) ; extra == "docs"
+Requires-Dist: attrs (>=21.4.0,<22.0.0) ; extra == "docs"
+Requires-Dist: furo (>=2021.11.23,<2022.0.0) ; extra == "docs"
+Requires-Dist: linkify-it-py (>=1.0.3,<2.0.0) ; extra == "docs"
+Requires-Dist: myst-parser (>=0.16.1,<0.17.0) ; extra == "docs"
+Requires-Dist: rich (>11.2.0)
+Requires-Dist: sphinx-autobuild (>=2021.3.14,<2022.0.0) ; extra == "docs"
+Requires-Dist: sphinx-copybutton (>=0.4.0,<0.5.0) ; extra == "docs"
+Requires-Dist: toml ; extra == "docs"
+Project-URL: Documentation, https://django-rich-logging.readthedocs.io/
+Project-URL: Funding, https://github.com/sponsors/adamghill
+Project-URL: Repository, https://github.com/adamghill/django-rich-logging/
+Description-Content-Type: text/markdown
+
+<p align="center">
+  <a href="https://django-rich-logging.readthedocs.io"><h1 align="center">django-rich-logging</h1></a>
+</p>
+<p align="center">A prettier way to see Django requests while developing.</p>
+
+![PyPI](https://img.shields.io/pypi/v/django-rich-logging?color=blue&style=flat-square)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/django-rich-logging?color=blue&style=flat-square)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/adamghill?color=blue&style=flat-square)
+
+📖 Complete documentation: https://django-rich-logging.readthedocs.io
+
+📦 Package located at https://pypi.org/project/django-rich-logging/
+
+## ⭐ Features
+
+- live-updating table of all requests while developing
+
+![demo of django-rich-logging](https://raw.githubusercontent.com/adamghill/django-rich-logging/main/django-rich-logging.gif)
+
+## Installation
+
+`poetry add django-rich-logging` OR `pip install django-rich-logging`
+
+### Configuration
+
+```python
+# settings.py
+
+# other settings here
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "django_rich_logging": {
+            "class": "django_rich_logging.logging.DjangoRequestHandler",
+            "level": "INFO",
+        },
+    },
+    "loggers": {
+        "django.server": {"handlers": ["django_rich_logging"], "level": "INFO"},
+        "django.request": {"level": "CRITICAL"},
+    },
+}
+
+# other settings here
+```
+
+Read all of the documentation at https://django-rich-logging.readthedocs.io.
+
