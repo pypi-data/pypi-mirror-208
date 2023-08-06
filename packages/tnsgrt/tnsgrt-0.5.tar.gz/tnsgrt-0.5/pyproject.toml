@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tnsgrt"
+version = "0.5"
+authors = [
+    { name = "Mauricio C. de Oliveira", email = "mcdeoliveira@duck.com" }
+]
+description = "Python library with support for analysis and design of Tensegrity structures"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["Tensegrity", "structures", "trusses"]
+requires-python = ">3.7"
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Other Audience",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.7",
+]
+
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "pandas",
+    "scipy",
+    "cvxpy",
+    "vispy",
+    "parameterized",
+    "more-itertools"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mcdeoliveira/tensegrity"
+
+[tool.setuptools]
+py-modules = []
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
