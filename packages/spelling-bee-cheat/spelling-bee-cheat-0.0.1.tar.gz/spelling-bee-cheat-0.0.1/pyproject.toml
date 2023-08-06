@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spelling-bee-cheat"
+version = "0.0.1"
+authors = [
+    {name = "James Hoctor", email = "jehoctor@protonmail.com"}
+]
+description = "Cheat at the NYT Spelling Bee."
+readme = "README.md"
+license = {file = "LICENSE"}
+dependencies = [
+    "beautifulsoup4",
+    "click",
+    "more-itertools",
+    "nltk",
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "spacy",
+    "transformers",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+
+[project.scripts]
+markov = "spelling_bee_cheat.scripts.markov:markov"
+scrape = "spelling_bee_cheat.scripts.scrape:scrape"
+
+[project.urls]
+"Homepage" = "https://github.com/JEHoctor/spelling-bee-cheat"
+
+[project.optional-dependencies]
+dev = ["black", "build", "isort", "jupyter", "pip-tools", "pytest", "ruff", "seaborn", "twine"]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+py_version=311
+sections="FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+import_heading_stdlib="standard libraries"
+import_heading_thirdparty="third party libraries"
+
+[tool.ruff]
+per-file-ignores = {"__init__.py" = ["F401"]}
+line-length = 120
