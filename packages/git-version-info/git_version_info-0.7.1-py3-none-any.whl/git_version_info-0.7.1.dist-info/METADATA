@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: git-version-info
+Version: 0.7.1
+Summary: Basic version tagging for python scripts and plots
+Home-page: https://gitlab.com/charlesbaynham/version_info
+Author: Charles Baynham
+License: UNKNOWN
+Project-URL: Bug Tracker, https://gitlab.com/charlesbaynham/version_info/-/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: matplotlib ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: black ; extra == 'dev'
+Requires-Dist: rope ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: pip-tools ; extra == 'dev'
+
+git_version_info
+================
+
+CFAB 2020
+
+A very simple package for getting the git hash of the current repository and
+adding it to a matplotlib plot. The two main commands are:
+
+```
+get_version()
+```
+
+...which returns the current git hash, and
+
+```
+tag_plot(small=True, ax=plt.gca())
+```
+
+...which adds the current hash to the given plot axis, optionally as a small tag
+in the corner.
+
+
