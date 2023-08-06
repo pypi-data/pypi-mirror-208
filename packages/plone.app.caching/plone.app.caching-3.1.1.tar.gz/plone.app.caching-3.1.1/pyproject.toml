@@ -1,0 +1,53 @@
+# Generated from:
+# https://github.com/plone/meta/tree/master/config/default
+[tool.towncrier]
+filename = "CHANGES.md"
+directory = "news/"
+start_string = "<!-- towncrier release notes start -->\n"
+title_format = "## {version} ({project_date})"
+template = "docs/changelog_template.jinja"
+underlines = ["", "", ""]
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Breaking changes:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "New features:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bug fixes:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "internal"
+name = "Internal:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "tests"
+name = "Tests"
+showcontent = true
+
+[tool.isort]
+profile = "plone"
+
+[tool.black]
+target-version = ["py38"]
+
+[tool.codespell]
+ignore-words-list = "discreet,ordner"
+
+[tool.dependencychecker]
+ignore-packages = ['zope.dublincore']
+Zope = ['OFS', 'Products.Five', 'Products.PageTemplates', 'ZPublisher']
+python-dateutil = ['dateutil']
