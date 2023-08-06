@@ -1,0 +1,140 @@
+Metadata-Version: 2.1
+Name: fedinesia
+Version: 2.5.1
+Summary: Deletes old posts from fediverse accounts. Confirmed working with Mastodon and Pleroma (and Forks)
+Author-email: marvin8 <marvin8@tuta.io>
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: rich>=13.3.1
+Requires-Dist: outdated>=0.2.2
+Requires-Dist: tqdm>=4.64.1
+Requires-Dist: aiofiles>=23.1.0
+Requires-Dist: minimal-activitypub>=0.5.2
+Requires-Dist: click>=8.1.3
+Requires-Dist: aiocsv>=1.2.3
+Requires-Dist: typing-extensions>=4.5.0
+Requires-Dist: pre-commit>=3.0.4 ; extra == "dev"
+Requires-Dist: black>=23.1.0 ; extra == "dev"
+Requires-Dist: mypy>=1.0.0 ; extra == "dev"
+Requires-Dist: safety>=2.3.4 ; extra == "dev"
+Requires-Dist: pip-audit>=2.4.14 ; extra == "dev"
+Requires-Dist: types-aiofiles>=22.1.0.8 ; extra == "dev"
+Requires-Dist: interrogate>=1.5.0 ; extra == "dev"
+Requires-Dist: ruff>=0.0.247 ; extra == "dev"
+Requires-Dist: flit>=3.8.0 ; extra == "dev"
+Requires-Dist: Sphinx>=6.1.3 ; extra == "doc"
+Requires-Dist: python-docs-theme>=2022.1 ; extra == "doc"
+Requires-Dist: sphinx-rtd-theme>=1.2.0 ; extra == "doc"
+Project-URL: Changelog, https://codeberg.org/MarvinsMastodonTools/fedinesia/src/branch/main/CHANGELOG.rst
+Project-URL: Documentation, https://codeberg.org/MarvinsMastodonTools/fedinesia/src/branch/main/README.rst
+Project-URL: Issues, https://codeberg.org/MarvinsMastodonTools/fedinesia/issues
+Project-URL: Source, https://codeberg.org/MarvinsMastodonTools/fedinesia
+Provides-Extra: dev
+Provides-Extra: doc
+
+""""""""""""""""""""""""""
+Fedinesia
+""""""""""""""""""""""""""
+
+|Repo| |CI| |Downloads|
+
+|Checked against| |Checked with|
+
+|Code style| |Version| |Wheel|
+
+|AGPL|
+
+
+***!!! BEWARE, THIS TOOL WILL DELETE SOME OF YOUR POSTS ON THE FEDIVERSE !!!***
+
+Fedinesia is a command line (CLI) tool to delete old statuses from Mastodon or Pleroma instances.
+It respects rate limits imposed by servers.
+
+Install and run from `PyPi <https://pypi.org>`_
+=================================================
+
+It's ease to install Fedinesia from Pypi using the following command::
+
+    pip install fednesia
+
+Once installed Fedinesia can be started by typing ``fedinesia`` into the command line.
+
+Install and run from `Source <https://codeberg.org/MarvinsMastodonTools/fedinesia>`_
+==============================================================================================
+
+Alternatively you can run Fedinesia from source by cloning the repository using the following command line::
+
+    git clone https://codeberg.org/MarvinsMastodonTools/fedinesia.git
+
+Fedinesia uses `PDM <https://pdm.fming.dev/latest/>`_ for dependency control, please install PDM before proceeding further.
+
+Before running, make sure you have all required python modules installed. With PDM this is as easy as::
+
+    pdm sync --group :all
+
+Run Fedinesia with the command `pdm run fedinesia`
+
+Configuration / First Run
+=========================
+
+Fedinesia will ask for all necessary parameters when run for the first time and store them in ```config.json``
+file in the current directory.
+
+Licensing
+=========
+Fedinesia is licensed under the `GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-3.0.html>`_
+
+Supporting Fedinesia
+==========================
+
+There are a number of ways you can support Fedinesia:
+
+- Create an issue with problems or ideas you have with/for Fedinesia
+- You can `buy me a coffee <https://www.buymeacoffee.com/marvin8>`_.
+- You can send me small change in Monero to the address below:
+
+Monero donation address
+-----------------------
+``86ZnRsiFqiDaP2aE3MPHCEhFGTeipdQGJZ1FNnjCb7s9Gax6ZNgKTyUPmb21WmT1tk8FgM7cQSD5K7kRtSAt1y7G3Vp98nT``
+
+
+.. |AGPL| image:: https://www.gnu.org/graphics/agplv3-with-text-162x68.png
+    :alt: AGLP 3 or later
+    :target:  https://codeberg.org/MarvinsMastodonTools/fedinesia/src/branch/main/LICENSE.md
+
+.. |Repo| image:: https://img.shields.io/badge/repo-Codeberg.org-blue
+    :alt: Repo at Codeberg.org
+    :target: https://codeberg.org/MarvinsMastodonTools/fedinesia
+
+.. |Downloads| image:: https://pepy.tech/badge/fedinesia
+    :alt: Download count
+    :target: https://pepy.tech/project/fedinesia
+
+.. |Code style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :alt: Code Style: Black
+    :target: https://github.com/psf/black
+
+.. |Checked against| image:: https://img.shields.io/badge/Safety--DB-Checked-green
+    :alt: Checked against Safety DB
+    :target: https://pyup.io/safety/
+
+.. |Checked with| image:: https://img.shields.io/badge/pip--audit-Checked-green
+    :alt: Checked with pip-audit
+    :target: https://pypi.org/project/pip-audit/
+
+.. |Version| image:: https://img.shields.io/pypi/pyversions/fedinesia
+    :alt: PyPI - Python Version
+
+.. |Wheel| image:: https://img.shields.io/pypi/wheel/fedinesia
+    :alt: PyPI - Wheel
+
+.. |CI| image:: https://ci.codeberg.org/api/badges/MarvinsMastodonTools/fedinesia/status.svg
+    :alt: CI / Woodpecker
+    :target: https://ci.codeberg.org/MarvinsMastodonTools/fedinesia
+
