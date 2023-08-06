@@ -1,0 +1,136 @@
+Metadata-Version: 2.1
+Name: numerous.sdk
+Version: 0.18.3
+License: MIT License
+        
+        Copyright (c) 2023 Energy Machines ApS
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://numerous.com
+Project-URL: Repository, https://gitlab.com/numerous/numerous.sdk
+Project-URL: Documentation, https://numeroussdk.readthedocs.io
+Project-URL: Changelog, https://gitlab.com/numerous/numerous.sdk/-/blob/main/CHANGELOG.md
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: colorama (>=0.4.4)
+Requires-Dist: ipywidgets (<9,>=8.0.4)
+Requires-Dist: jinja2 (<4,>=3.1.2)
+Requires-Dist: networkx (<4,>=3.0)
+Requires-Dist: numerous-client-common (>=0.4.5)
+Requires-Dist: numerous-api-grpc (>=0.8.0)
+Requires-Dist: numerous-tokens (>=0.6.0)
+Requires-Dist: pandas (<2,>=1.5.3)
+Requires-Dist: pathspec (>=0.11.1)
+Requires-Dist: plotly (<6,>=5.13.0)
+Requires-Dist: prettytable (<4,>=3.6.0)
+Requires-Dist: requests (<3,>=2.28.2)
+Requires-Dist: str2bool (<2,>=1.1)
+Provides-Extra: lint
+Requires-Dist: flake8 (==6.0.0) ; extra == 'lint'
+Requires-Dist: flake8-pyproject (==1.2.2) ; extra == 'lint'
+Requires-Dist: black (==23.1.0) ; extra == 'lint'
+Requires-Dist: isort (==5.12.0) ; extra == 'lint'
+Requires-Dist: vulture (==2.7) ; extra == 'lint'
+Requires-Dist: bandit (==1.7.4) ; extra == 'lint'
+Requires-Dist: mypy (==1.0.0) ; extra == 'lint'
+Requires-Dist: types-requests (==2.28.11.12) ; extra == 'lint'
+Requires-Dist: types-setuptools (==67.2.0.1) ; extra == 'lint'
+Provides-Extra: test
+Requires-Dist: pytest (==7.2.1) ; extra == 'test'
+Requires-Dist: pytest-mock (==3.10.0) ; extra == 'test'
+Requires-Dist: numpy (==1.24.2) ; extra == 'test'
+Requires-Dist: coverage (==7.1.0) ; extra == 'test'
+Requires-Dist: scipy (==1.10.1) ; extra == 'test'
+
+# numerous SDK
+
+![pipeline](https://gitlab.com/numerous/numerous.sdk/badges/main/pipeline.svg)
+![coverage](https://gitlab.com/numerous/numerous.sdk/badges/main/coverage.svg?job=pytest)
+![Documentation Status](https://readthedocs.org/projects/numeroussdk/badge/?version=latest)
+
+Welcome to the repository for `numerous.sdk`!
+
+The `numerous.sdk` which includes all the things you need to build tools and
+applications that can run on the [numerous platform](https://numerous.com).
+
+## Dependencies
+
+* This project requires python version 3.9 or later.
+
+* Some dependencies are currently hosted on a pypi registry managed by the
+  numerous platform team, which exists at https://pypi.numerously.com/simple.
+
+  In the installation section below, we will show how to specify this, in order
+  to properly install `numerous.sdk`.
+
+## Installation
+
+Some dependencies are hosted on the pypi registry
+https://pypi.numerously.com/simple, which means that to install `numerous.sdk`
+you must either:
+
+1. Set the `PIP_EXTRA_INDEX_URL` environment variable
+   ```
+   export PIP_EXTRA_INDEX_URL="https://pypi.numerously.com/simple"
+   pip install numerous.sdk
+   ```
+2. Use the `pip` flag `--extra-index-url`
+   ```
+   pip install --extra-index-url=https://pypi.numerously.com/simple numerous.sdk
+   ```
+3. Or add the pip flag to your `requirements.txt`, resulting in a file like
+   below:
+   ```
+   --extra-index-url=https://pypi.numerously.com/simple
+   numerous.sdk
+   other_package
+   ```
+   which you can then install with
+   ```
+   pip install -r requirements.txt
+   ```
+
+
+## Documentation
+
+Documentation for the numerous SDK can be found at
+[readthedocs.io](https://numeroussdk.readthedocs.io). This contains the latest
+documentation. We are continuously adding more, as the project matures.
+
+## Contributing
+
+We welcome contributions, but please read [CONTRIBUTING.md](CONTRIBUTING.md)
+before you start. It lays down the processes and expectations of contributions
+to the numerous SDK.
+
+## Changes
+
+See the [CHANGELOG.md](CHANGELOG.md) to get an overview latest features, fixes
+and other changes to `numerous.sdk`, and also to find the general history of
+changes.
+
+## License
+
+`numerous.sdk` is licensed under the MIT License, and it can be read in
+[LICENSE.md](LICENSE.txt).

@@ -1,0 +1,24 @@
+import os
+
+from str2bool import str2bool
+
+GRPC_RETRY_ATTEMPTS = int(os.getenv("GRPC_RETRY_ATTEMPTS", "5"))
+GRPC_RETRY_TIMEOUT = float(os.getenv("GRPC_RETRY_TIMEOUT", "60"))
+GRPC_RETRY_DELAY = float(os.getenv("GRPC_RETRY_DELAY", "1"))
+NUMEROUS_PROJECT = os.getenv("NUMEROUS_PROJECT")
+NUMEROUS_SCENARIO = os.getenv("NUMEROUS_SCENARIO")
+JOB_ID = os.getenv("JOB_ID")
+NUMEROUS_EXECUTION_ID = os.getenv("NUMEROUS_EXECUTION_ID")
+FORCE_INSECURE = str2bool(os.getenv("FORCE_INSECURE", "False"))
+NUMEROUS_API_SERVER = os.getenv("NUMEROUS_API_SERVER")
+NUMEROUS_API_PORT = (
+    int(os.environ["NUMEROUS_API_PORT"]) if "NUMEROUS_API_PORT" in os.environ else None
+)
+NUMEROUS_CLEAR_DATA = str2bool(os.getenv("NUMEROUS_CLEAR_DATA", "False"))
+NUMEROUS_API_REFRESH_TOKEN = os.getenv("NUMEROUS_API_REFRESH_TOKEN")
+
+GRPC_MAX_MESSAGE_SIZE = int(os.environ.get("GRPC_MAX_MESSAGE_SIZE", 2**22))
+
+DATA_STREAM_DEFAULT_TIMEOUT_SLEEP_FOR = float(
+    os.environ.get("DATA_STREAM_DEFAULT_TIMEOUT_SLEEP_FOR", 0.5)
+)
