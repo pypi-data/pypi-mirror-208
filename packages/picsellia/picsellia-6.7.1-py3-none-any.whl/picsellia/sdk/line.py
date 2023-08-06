@@ -1,0 +1,98 @@
+import logging
+import warnings
+from typing import List, Optional
+from uuid import UUID
+
+import orjson
+from beartype import beartype
+from beartype.roar import BeartypeDecorHintPep585DeprecationWarning
+
+from picsellia.colors import Colors
+from picsellia.decorators import exception_handler
+from picsellia.sdk.connexion import Connexion
+from picsellia.sdk.dao import Dao
+from picsellia.sdk.label import Label
+from picsellia.types.schemas import LineSchema
+
+logger = logging.getLogger("picsellia")
+warnings.filterwarnings("ignore", category=BeartypeDecorHintPep585DeprecationWarning)
+
+
+class Line(Dao):
+    def __init__(self, connexion: Connexion, annotation_id: UUID, data: dict) -> None:
+        Dao.__init__(self, connexion, data)
+        self._annotation_id = annotation_id
+
+    @property
+    def annotation_id(self) -> UUID:
+        """UUID of (Annotation) holding this (Line)"""
+        return self._annotation_id
+
+    @property
+    def coords(self) -> List[List[int]]:
+        """Coords of this (Line)"""
+        return self._coords
+
+    @property
+    def label(self) -> Label:
+        """(Label) of this (Line)"""
+        return self._label
+
+    def __str__(self):
+        return f"{Colors.BLUE}Line ({len(self.coords)} points) with label {self.label.name} on annotation {self.annotation_id} {Colors.ENDC} (id: {self.id})"
+
+    @exception_handler
+    @beartype
+    def sync(self) -> dict:
+        r = self.connexion.get(f"/sdk/line/{self.id}").json()
+        self.refresh(r)
+        return r
+
+    @exception_handler
+    @beartype
+    def refresh(self, data: dict) -> LineSchema:
+        schema = LineSchema(**data)
+        self._coords = schema.coords
+        self._label = Label(self.connexion, schema.label.dict())
+        return schema
+
+    @exception_handler
+    @beartype
+    def update(
+        self,
+        coords: Optional[List] = None,
+        label: Optional[Label] = None,
+    ) -> None:
+        """Update this line with new coords or new label.
+
+        Examples:
+            ```python
+            line.update(coords=[[0, 0], [0, 1], [1, 1]])
+            ```
+        """
+        payload = {}
+        if coords is not None:
+            payload["line"] = coords
+        if label is not None:
+            payload["label_id"] = label.id
+        assert payload != {}, "You can't update this line with no data to update"
+        r = self.connexion.patch(
+            f"/sdk/line/{self.id}", data=orjson.dumps(payload)
+        ).json()
+        self.refresh(r)
+        logger.info(f"{self} updated")
+
+    @exception_handler
+    @beartype
+    def delete(self) -> None:
+        """Delete this line from the platform.
+
+        :warning: **DANGER ZONE**: Be very careful here!
+
+        Examples:
+            ```python
+            line.delete()
+            ```
+        """
+        self.connexion.delete(f"/sdk/line/{self.id}")
+        logger.info(f"{self} deleted.")
