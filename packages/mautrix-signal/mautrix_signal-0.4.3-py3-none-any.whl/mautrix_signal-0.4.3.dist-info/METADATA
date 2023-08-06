@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: mautrix-signal
+Version: 0.4.3
+Summary: A Matrix-Signal puppeting bridge.
+Home-page: https://github.com/mautrix/signal
+Author: Tulir Asokan
+Author-email: tulir@maunium.net
+Project-URL: Changelog, https://github.com/mautrix/signal/blob/master/CHANGELOG.md
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Topic :: Communications :: Chat
+Classifier: Framework :: AsyncIO
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: ~=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp (<4,>=3)
+Requires-Dist: asyncpg (<0.28,>=0.20)
+Requires-Dist: attrs (>=19.1)
+Requires-Dist: commonmark (<0.10,>=0.8)
+Requires-Dist: mautrix (<0.20,>=0.19.14)
+Requires-Dist: python-magic (<0.5,>=0.4)
+Requires-Dist: ruamel.yaml (<0.18,>=0.15.35)
+Requires-Dist: yarl (<2,>=1)
+Provides-Extra: all
+Requires-Dist: Pillow (<10,>=4) ; extra == 'all'
+Requires-Dist: aiosqlite (<0.20,>=0.16) ; extra == 'all'
+Requires-Dist: phonenumbers (<9,>=8) ; extra == 'all'
+Requires-Dist: prometheus-client (<0.17,>=0.6) ; extra == 'all'
+Requires-Dist: pycryptodome (<4,>=3) ; extra == 'all'
+Requires-Dist: python-olm (<4,>=3) ; extra == 'all'
+Requires-Dist: qrcode (<8,>=6) ; extra == 'all'
+Requires-Dist: signalstickers-client (<4,>=3) ; extra == 'all'
+Requires-Dist: unpaddedbase64 (<3,>=1) ; extra == 'all'
+Provides-Extra: e2be
+Requires-Dist: pycryptodome (<4,>=3) ; extra == 'e2be'
+Requires-Dist: python-olm (<4,>=3) ; extra == 'e2be'
+Requires-Dist: unpaddedbase64 (<3,>=1) ; extra == 'e2be'
+Provides-Extra: formattednumbers
+Requires-Dist: phonenumbers (<9,>=8) ; extra == 'formattednumbers'
+Provides-Extra: metrics
+Requires-Dist: prometheus-client (<0.17,>=0.6) ; extra == 'metrics'
+Provides-Extra: qrlink
+Requires-Dist: Pillow (<10,>=4) ; extra == 'qrlink'
+Requires-Dist: qrcode (<8,>=6) ; extra == 'qrlink'
+Provides-Extra: sqlite
+Requires-Dist: aiosqlite (<0.20,>=0.16) ; extra == 'sqlite'
+Provides-Extra: stickers
+Requires-Dist: signalstickers-client (<4,>=3) ; extra == 'stickers'
+
+# mautrix-signal
+![Languages](https://img.shields.io/github/languages/top/mautrix/signal.svg)
+[![License](https://img.shields.io/github/license/mautrix/signal.svg)](LICENSE)
+[![Release](https://img.shields.io/github/release/mautrix/signal/all.svg)](https://github.com/mautrix/signal/releases)
+[![GitLab CI](https://mau.dev/mautrix/signal/badges/master/pipeline.svg)](https://mau.dev/mautrix/signal/container_registry)
+[![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+
+A Matrix-Signal puppeting bridge.
+
+## Documentation
+All setup and usage instructions are located on
+[docs.mau.fi](https://docs.mau.fi/bridges/python/signal/index.html).
+Some quick links:
+
+* [Bridge setup](https://docs.mau.fi/bridges/python/setup.html?bridge=signal)
+  (or [with Docker](https://docs.mau.fi/bridges/python/signal/docker-setup.html))
+* Basic usage: [Authentication](https://docs.mau.fi/bridges/python/signal/authentication.html)
+
+### Features & Roadmap
+[ROADMAP.md](https://github.com/mautrix/signal/blob/master/ROADMAP.md)
+contains a general overview of what is supported by the bridge.
+
+## Discussion
+Matrix room: [`#signal:maunium.net`](https://matrix.to/#/#signal:maunium.net)
