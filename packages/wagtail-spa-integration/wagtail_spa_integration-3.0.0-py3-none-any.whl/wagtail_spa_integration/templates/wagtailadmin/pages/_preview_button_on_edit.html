@@ -1,0 +1,11 @@
+{% load wagtailadmin_tags wagtail_spa_integration_tags %}
+
+<button id="PREVIEW-BUTTON" class="button {% if icon %}icon icon-view{% endif %}">{{ label }}  (LATEST DRAFT) </button>
+
+<script>
+    document.getElementById("PREVIEW-BUTTON").addEventListener("click", function(e){
+        e.preventDefault()
+        let url = '{{ page.url }}' + '?draft={% get_preview_code %}'
+        window.open(url, '_blank')
+    });
+</script>
