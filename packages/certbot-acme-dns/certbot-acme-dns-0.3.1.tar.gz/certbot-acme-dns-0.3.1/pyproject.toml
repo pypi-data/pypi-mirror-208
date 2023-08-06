@@ -1,0 +1,208 @@
+[build-system]
+requires = ["setuptools>=53", "wheel>=0.36", "setuptools_scm[toml]>=5"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match", "v[0-9]*"]
+
+[project]
+name = "certbot-acme-dns"
+description = "ACME DNS Authenticator plugin for Certbot"
+dynamic = ["version"]
+authors = [
+    {name = "Patrik Hagara", email = "patrihagar+certbot-acme-dns@gmail.com"},
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "BSD-2-Clause"}
+dependencies = [
+    "acme",
+    "certbot",
+    "dnspython",
+    "requests",
+    "setuptools",
+    "zope.component",
+    "zope.interface",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Plugins",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+]
+
+[project.urls]
+repository = "https://github.com/phagara/certbot-acme-dns"
+
+[project.entry-points."certbot.plugins"]
+acme-dns = "certbot_acme_dns.plugin:Authenticator"
+
+[tool.coverage.run]
+branch = true
+source_pkgs = ["certbot_acme_dns"]
+parallel = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+
+[tool.coverage.paths]
+source = [
+    "src/",
+    ".tox/py[0-9]*/lib/python*/site-packages/",
+    ".tox/distro-*/lib/python*/site-packages/",
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+mypy_path = "$MYPY_CONFIG_FILE_DIR/stubs"
+warn_redundant_casts = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = "certbot_acme_dns.*"
+disallow_any_unimported = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pylint."MESSAGES CONTROL"]
+enable = [
+    "useless-suppression",
+]
+disable = [
+    "line-too-long",
+    "fixme",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    isolated_build = true
+    skip_missing_interpreters = true
+    envlist =
+        isort
+        black
+        bandit
+        mypy
+        pylint
+        py38
+        py39
+        py310
+        py311
+        distro-debian11
+        coverage
+        doctest
+
+    [testenv]
+    deps =
+        coverage[toml]
+        pytest
+        requests-mock
+    commands = coverage run -m pytest --pyargs tests
+
+    [testenv:distro-debian11]
+    basepython = python3.9
+    deps =
+        coverage[toml]
+        pytest
+        requests-mock
+        acme>=1.12.0,<1.13
+        certbot>=1.12.0,<1.13
+        dnspython>=2.0.0,<2.1
+        josepy>=1.2.0,<1.3
+        requests>=2.25.1,<2.26
+        setuptools>=52.0.0,<52.1
+        zope.component>=4.3.0,<4.4
+        zope.interface>=5.2.0,<5.3
+
+    [testenv:run]
+    commands = certbot --config-dir=.certbot{/}config --work-dir=.certbot{/}work --logs-dir=.certbot{/}logs {posargs}
+
+    [testenv:isort]
+    deps = isort
+    skip_install = true
+    commands = isort --check-only --diff src
+
+    [testenv:black]
+    deps = black
+    skip_install = true
+    commands = black --skip-string-normalization --check --diff src
+
+    [testenv:reformat]
+    deps =
+        isort
+        black
+    skip_install = true
+    commands =
+        isort src
+        black --skip-string-normalization src
+
+    [testenv:pylint]
+    deps = pylint
+    changedir = src/
+    commands = pylint {posargs} --rcfile={toxinidir}{/}pyproject.toml certbot_acme_dns
+
+    [testenv:mypy]
+    deps =
+        mypy
+        types-requests
+    allowlist_externals = touch
+    commands_pre =
+        touch {envsitepackagesdir}{/}acme{/}py.typed
+        touch {envsitepackagesdir}{/}certbot{/}py.typed
+    commands = mypy -p certbot_acme_dns
+
+    [testenv:bandit]
+    deps = bandit
+    skip_install = true
+    commands = bandit -r src
+
+    [testenv:ipython]
+    deps = ipython
+    commands = ipython
+
+    [testenv:build]
+    deps = build
+    skip_install = true
+    commands = python3 -m build {posargs:--sdist}
+
+    [testenv:coverage]
+    deps = coverage[toml]
+    skip_install = true
+    commands =
+        coverage combine
+        coverage report
+
+    [testenv:doctest]
+    deps = pytest
+    commands = pytest --doctest-modules --pyargs certbot_acme_dns
+
+    [testenv:docs]
+    extras = pdoc3
+    commands = pdoc3 --force --html --output-dir docs certbot_acme_dns
+
+    [testenv:publish]
+    deps = twine
+    skip_install = True
+    commands = twine upload -r certbot-acme-dns --sign {posargs:} --skip-existing dist{/}*
+"""
