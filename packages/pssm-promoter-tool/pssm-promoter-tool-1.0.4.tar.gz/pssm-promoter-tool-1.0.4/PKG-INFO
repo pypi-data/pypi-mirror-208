@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: pssm-promoter-tool
+Version: 1.0.4
+Summary: The tool applies direct and inverted Codon Restrained Promoter Silencing method to the provided gene sequence
+Home-page: https://github.com/ellinium/PSSM_PromoterTool
+Author: Ellina Trofimova
+Author-email: ellina.trofimova@gmail.com
+License: GNU General Public License
+Keywords: promoter prediction transcription rate
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+**PSSM Promoter Tool**
+
+The tool applies CORPSE (Codon Restrained Promoter Silencing) method and inverted CORPSE (iCORPSE) to the provided gene sequence.
+
+-35 and -10 promoters along with the additional non-canonical sequence motifs are predicted based on the Salis Lab Promoter Calculator (https://github.com/hsalis/SalisLabCode/tree/master/Promoter_Calculator).
+Position-specific scoring matrix (PSSM) is applied to all the synonymous codon variants of the promoters associated with the lowest and highest transcription rates in order to maximally decrease (CORPSE) or increase the transcription rate (iCORPSE).
+The output CSV file/files contain synonymous codon promoters and sequence motifs for the minimal and maximal transcriptional rates along with the non-canonical sequence motifs for forward and reverse strands.
+
+For a web (Google Colab) version, please navigate to https://colab.research.google.com/drive/171iBNCrA1hMS-LpX_qaFani34HiueTZO?usp=sharing.
+
+INSTALLATION:
+
+1. Install required libraries using pip:
+```
+pip install pssm-promoter-tool
+```
+
+2. Download and unpack the archive with files using "Code"->"Download ZIP" buttons in the right corner at https://github.com/ellinium/pssm_promoter_tool. 
+Or use
+```
+git clone https://github.com/ellinium/pssm-promoter-tool
+```
+
+
+
+USAGE:
+
+The tool requires a text or fasta file with a nucleotide sequence of a gene to process.
+From the folder with the downloaded files run:
+```
+python pssm_promoter_calculator.py <file_name>
+```
+where 'file_name' is a path to the file with a gene sequence (TXT or FASTA format).
+
+Depending on the result, up to four output CSV files can be generated:
+1) PSSMPromoterCalculator_MIN_FWD_results.csv - contains promoters to minimise transcription rate (forward strand)
+2) PSSMPromoterCalculator_MIN_REV_results.csv - contains promoters to minimise transcription rate (reverse strand)
+3) PSSMPromoterCalculator_MAX_FWD_results.csv - contains promoters to maximise transcription rate (forward strand)
+4) PSSMPromoterCalculator_MAX_REV_results.csv - contains promoters to maximise transcription rate (reverse strand).
+
+The output file fields in the CSV files contain data from Salis' Promoter calculator and additional fields:
+1) new_sequence - contains a gene sequence (nt) with substituted promoters. Empty for the original promoters.
+2) promoter_sequence - contains -35 motif, spacer and - 10 motif
+3) TSS -  transcriptional start site
+4) Tx_rate - transcription initiation rate
+5) Tx_rate_FoldChange - the fold change between the original transcription rate and re-calculated with PSSM primers
+6) UP - a 20-nucleotide region that appears upstream of the −35 motif, called the UP element 
+7) hex35 -  an upstream 6-nucleotide site called the −35 motif 
+8) PSSM_hex35 - position-specific scoring matrix value for the -35 motif \
+9) AA_hex35 - an amino acid sequence for the -35 motif 
+10) spacer - a spacer region that separates the −10 and −35 motifs 
+11) hex10 - a downstream 6-nucleotide site called the −10 motif 
+12) PSSM_hex10 - position-specific scoring matrix value for the -10 motif 
+13) AA_hex10 - an amino acid sequence for the -10 motif 
+14) disc - a typically 6-nucleotide region in between the −10 motif and TSS, called the discriminator (Disc)
+15) ITR - the first 20 transcribed nucleotides, called the initial transcribed region (ITR)
+16) dG_total - total Gibbs free energy for the sequence 
+17) dG_10 - -10 motif Gibbs free energy 
+18) dG_35 - -35 motif Gibbs free energy 
+19) dG_disc - a discriminator Gibbs free energy 
+20) dG_ITR - an ITR Gibbs free energy 
+21) dG_ext10 −10 extended motif Gibbs free energy 
+22) dG_spacer - a spacer Gibbs free energy 
+23) dG_UP - an UP Gibbs free energy 
+24) dG_bind - binding Gibbs free energy 
+25) UP_position - a position of the UP element 
+26) hex35_position - a position of the -35 motif 
+27) spacer_position - a position of the spacer 
+28) hex10_position - a position of the -10 motif 
+29) disc_position - a position of the discriminator
+
+References:
+
+1. Logel DY, Trofimova E, Jaschke PR. Codon-Restrained Method for Both Eliminating and Creating Intragenic Bacterial Promoters. ACS Synth Biol. 2022 Jan 19;acssynbio.1c00359. Available from https://pubs.acs.org/doi/10.1021/acssynbio.1c00359. doi: 10.1021/acssynbio.1c00359
+2. LaFleur TL, Hossain A, Salis HM. Automated model-predictive design of synthetic promoters to control transcriptional profiles in bacteria. Nat Commun. 2022 Sep 2;13(1):5159. Available from https://www.nature.com/articles/s41467-022-32829-5. doi: 10.1038/s41467-022-32829-5
