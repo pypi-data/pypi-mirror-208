@@ -1,0 +1,195 @@
+[tool.poetry]
+name = "pyriksprot_tagger"
+version = "2023.4.3"
+description = "Pipeline that tags pyriksprot Parla-Clarin XML files"
+authors = ["Roger Mähler <roger.mahler@hotmail.com>"]
+packages = [
+    { include = "pyriksprot_tagger" },
+]
+classifiers = [
+    'License :: OSI Approved :: Apache Software License',
+    'Operating System :: OS Independent',
+    'Topic :: Software Development',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.11',
+]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://westac.se"
+repository = "https://github.com/welfare-state-analytics/pyriksprot_tagger"
+
+[tool.poetry.dependencies]
+python = "==3.11.*"
+click = "*"
+snakefmt = "*"
+# transformers = "^4.3.3"
+dehyphen = "*"
+pygit2 = "*"
+cookiecutter = "*"
+pandas = "*"
+snakemake = "*"
+loguru = "*"
+stanza = "*"
+poetry = "^1.4.2"
+nltk = "^3.8.1"
+pathvalidate = "^2.5.2"
+# need to pip install torch
+torch = {extras = ["cuda"], version = "^2.0.1" }
+# torch = {extras = ["cuda"], version = "^2.0.1", source="torch"}
+
+# [[tool.poetry.source]]
+# name = "torch"
+# url = "https://download.pytorch.org/whl/cu117"
+# secondary = true
+pyriksprot = "^2023.4.4"
+
+[tool.poetry.dev-dependencies]
+black = "==20.*,>=20.8.0.b1"
+coverage = "==5.*,>=5.4.0"
+flake8 = "==3.*,>=3.8.4"
+flake8-black = "==0.*,>=0.2.1"
+isort = "==5.*,>=5.7.0"
+mypy = "==0.*,>=0.812.0"
+pre-commit = "==2.*,>=2.10.1"
+pycodestyle = "==2.*,>=2.6.0"
+pyflakes = "==2.*,>=2.2.0"
+pylint = "==2.*,>=2.7.1"
+pytest = "==6.*,>=6.2.2"
+pytest-cov = "==2.*,>=2.11.1"
+pyinstrument = "^4.0.3"
+pygit2 = "^1.7.2"
+poethepoet = "^0.13.1"
+
+[tool.poe.tasks]
+portal1_torch = """
+    pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+"""
+
+[tool.poetry.scripts]
+tag_info = "pyriksprot_tagger.scripts.tag_info:main"
+pos_tag = "pyriksprot_tagger.scripts.tag:main"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-rfE", "-q"]
+log_cli = "False"
+testpaths = ["tests"]
+python_files = "*_test.py"
+python_functions = "test_*"
+markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
+norecursedirs = [
+    "test_data",
+    "output",
+    "__pycache__",
+    "config",
+    "deprecated",
+    "resources",
+    "sandbox",
+    ".git",
+    ".github",
+    ".vscode",
+    "profile-reports",
+    "tmp",
+]
+
+[tool.snakefmt]
+line_length = 120
+include = '\.smk$|^Snakefile$'
+
+[tool.black]
+skip_string_normalization = true
+line-length = 120
+target-version = ["py38"]
+skip-string-normalization = true
+exclude = '''
+(
+  \.git
+  | \.pypy_cache
+  | \.pytest_cache
+  | \.mypy_cache
+  | deprecated
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+py_version = "auto"
+float_to_top = true
+src_paths = ["workflow", "tests"]
+
+[tool.coverage]
+    [tool.coverage.run]
+        source = ["workflow"]
+        branch = true
+        data_file = "tests/coverage/data.bin"
+        omit = [
+            "**/__init__.py",
+            "tests/*",
+            "pyriksprot_tagger/workflow/Snakefile",
+            "pyriksprot_tagger/workflow/rules/*.smk",
+        ]
+
+    [tool.coverage.report]
+        exclude_lines = [
+            "pragma: no cover",
+            "def __repr__",
+            "if TYPE_CHECKING:",
+            "pass",
+            "if sys.version_info",
+            "raise NotImplementedError",
+        ]
+        show_missing = true
+        sort = "Name"
+    [tool.coverage.html]
+        directory     = "tests/coverage/html"
+        show_contexts = true
+
+[tool.pyright]
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+# include = ["pyriksprot_tagger", "tests"]
+exclude = [
+    ".git",
+    ".snakemake",
+    ".vscode",
+    "**/__init__.py",
+    "**/__pycache__",
+    "**/purgatory",
+    "resources",
+    "scripts",
+    "**/test_data",
+    "**/data",
+    "**/exports",
+    "**/output",
+    "**/deprecated"
+]
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportUntypedFunctionDecorator = false
+reportUntypedClassDecorator = true
+reportOptionalSubscript = false
+reportOptionalMemberAccess = false
+reportOptionalCall = false
+pythonVersion = "3.11"
+
+[tool.dephell.main]
+from = { format = "poetry", path = "pyproject.toml" }
+to = { format = "poetry", path = "pyproject.toml" }
+
+[tool.mypy]
+allow_redefinition = true
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+strict_optional = false
+warn_no_return = false
+python_version = 3.8
+
+[build-system]
+requires = ["setuptools", "poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
