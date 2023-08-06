@@ -1,0 +1,41 @@
+
+root_path: C:\respositories
+remote_firmware: \\172.29.190.4\share\release
+RedTail:
+  - cmd: redtail_fw_joint\Tahoe\clean_build.bat
+    output:
+    artifact:
+  - cmd: redtail_fw_joint\Tahoe\build_redtail_all.bat
+    output: redtail_fw_joint\Tahoe\firmware\lba_fw_dp
+    artifact:
+      - bin
+      - cap
+      - json
+  - cmd: redtail_fw_joint\Tahoe\clean_build.bat
+    output:
+    artifact:
+  - cmd: redtail_fw_joint\Tahoe\build_spiapp.bat
+    output: redtail_fw_joint\Tahoe\firmware\lba_fw_dp
+    artifact:
+      - bin
+      - cap
+      - json
+RedTail2:
+  - cmd: redtail_refresh_fw_joint\Tahoe\clean_build.bat
+    output:
+    artifact:
+  - cmd: redtail_refresh_fw_joint\Tahoe\build_rt2_all.bat
+    output: redtail_refresh_fw_joint\Tahoe\firmware\lba_fw_dp
+    artifact:
+      - bin
+      - cap
+      - json
+  - cmd: redtail_refresh_fw_joint\Tahoe\clean_build.bat
+    output:
+    artifact:
+  - cmd: redtail_refresh_fw_joint\Tahoe\build_spiapp.bat
+    output: redtail_refresh_fw_joint\Tahoe\firmware\lba_fw_dp
+    artifact:
+      - bin
+      - cap
+      - json
