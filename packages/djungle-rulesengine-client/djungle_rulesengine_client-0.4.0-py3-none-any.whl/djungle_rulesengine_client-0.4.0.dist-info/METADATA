@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: djungle-rulesengine-client
+Version: 0.4.0
+Summary: A client to Djungle Studio rulesengine API
+Home-page: https://github.com/djungle-io/djungle-rulesengine-client
+Author: Djungle s.r.l.
+License: MIT
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests (>=2.30.0)
+Requires-Dist: httpx (>=0.24.0)
+
+# djungle-rulesengine-client
+A client to Djungle Studio rulesengine API
+
+
+## Tests
+This project uses `tox` to run the test suite:
+simply run the command `tox` in the root of the repository.
+
+## Release
+This project uses `tox` to release a version to PyPI.
+Run `tox -e release -- <env>`, where `<env>` is an index identifier in
+your `~/.pypirc` file.
+
+Alternatively, push a tag to the `main` branch to make a release
+using GitHub Actions.
+
+## Usage examples
+```python
+from rulesengine.async_client import AsyncEngineClient
+from rulesengine.client import EngineClient
+
+engine = EngineClient(base_url="https://example.com", token="abcde")
+
+# To push an action to the engine:
+engine.push_action(subject_id="sys-1", action="my-action", payload={"key": "value"})
+
+# To get a pluggable prop from the engine
+prop_value = engine.get_pluggable_props(subject_id="sys-1", props="my-prop")
+
+# To make a "direct" call to the engine
+return_value = engine.direct_post(
+    subject_id="sys-1", path="/my/path/", params={"key": "value"}, data={"my": "payload"}
+)
+
+# To push an action to the engine (async client):
+async_engine = AsyncEngineClient(base_url="https://example.com", token="abcde")
+
+await async_engine.push_action(subject_id="sys-1", action="my-action", payload={"key": "value"})
+```
+
+MIT License
+
+Copyright (c) 2023 Djungle s.r.l.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
