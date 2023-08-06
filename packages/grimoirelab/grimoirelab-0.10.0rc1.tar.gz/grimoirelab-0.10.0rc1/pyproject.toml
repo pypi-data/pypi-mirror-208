@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "grimoirelab"
+version = "0.10.0-rc.1"
+description = "Tool set for software development analytics"
+authors = [
+    "GrimoireLab Developers"
+]
+license = "GPL-3.0+"
+
+readme = "README.md"
+
+homepage = "https://chaoss.github.io/grimoirelab/"
+repository = "https://github.com/chaoss/grimoirelab"
+
+keywords = [
+    "development",
+    "grimoirelab"
+]
+
+packages = [
+    { include = "grimoirelab" }
+]
+
+classifiers = [
+   "Development Status :: 5 - Production/Stable",
+   "Intended Audience :: Developers",
+   "Topic :: Software Development",
+   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+   "Programming Language :: Python :: 3"
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/chaoss/grimoirelab/issues"
+
+[tool.poetry.scripts]
+'grimoirelab' = 'grimoirelab.grimoirelab:main'
+
+[tool.poetry.dependencies]
+python = "^3.7.1"
+
+grimoirelab-toolkit = {version = ">=0.3.4", allow-prereleases = true}
+perceval-mozilla = {version = ">=0.3.11-rc.1", allow-prereleases = true}
+perceval-opnfv = {version = ">=0.2.11-rc.1", allow-prereleases = true}
+perceval-puppet = {version = ">=0.2.11-rc.1", allow-prereleases = true}
+perceval-weblate = {version = ">=0.2.11-rc.1", allow-prereleases = true}
+sortinghat = {version = ">=0.10.0-rc.2", allow-prereleases = true}
+kidash = {version = ">=0.5.6-rc.1", allow-prereleases = true}
+grimoirelab-panels = {version = ">=0.2.0", allow-prereleases = true}
+grimoire-elk = {version = ">=0.105.0-rc.2", allow-prereleases = true}
+sirmordred = {version = ">=0.8.0-rc.1", allow-prereleases = true}
+cereslib = {version = ">=0.4.0", allow-prereleases = true}
+graal = {version = ">=0.4.9-rc.1", allow-prereleases = true}
+statsmodels = "^0.13.2"
+perceval = {version = ">=0.21.7-rc.1", allow-prereleases = true}
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
