@@ -1,0 +1,138 @@
+Metadata-Version: 2.1
+Name: jinjat
+Version: 0.6
+Summary: A low-code data application framework that uses dbt Core and OpenAPI
+Home-page: https://github.com/jinjat-data/jinjat
+License: Apache 2.0
+Keywords: dbt,server,streamlit,git,refine,data-app,snowflake
+Author: buremba
+Author-email: emrekabakci@gmail.com
+Requires-Python: >=3.8.1,<4
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Software Development :: Build Tools
+Provides-Extra: deploy
+Provides-Extra: duckdb
+Provides-Extra: playground
+Requires-Dist: bottle (>=0.12.23,<0.13.0)
+Requires-Dist: click (>7)
+Requires-Dist: dbt-core (==1.5.0)
+Requires-Dist: dbt-duckdb (>=1.5.0,<2.0.0) ; extra == "duckdb"
+Requires-Dist: deepmerge (>=1.1.0,<2.0.0)
+Requires-Dist: duckcli (>=0.2.1,<0.3.0) ; extra == "duckdb"
+Requires-Dist: fal-serverless (==0.6.29) ; extra == "deploy"
+Requires-Dist: fastapi (>=0.85.0,<0.86.0)
+Requires-Dist: feedparser (>=6.0.10,<7.0.0) ; extra == "playground"
+Requires-Dist: graphviz (>=0.17) ; extra == "playground"
+Requires-Dist: jinja2-simple-tags (>=0.4.0,<0.5.0)
+Requires-Dist: jmespath (>=1.0.1,<2.0.0)
+Requires-Dist: jsonref (>=1.1.0,<2.0.0)
+Requires-Dist: jsonschema (>=3.0,<4.0)
+Requires-Dist: modal-client (==0.49.2059) ; extra == "deploy"
+Requires-Dist: openapi-schema-pydantic (>=1.2.4,<2.0.0)
+Requires-Dist: orjson (>=3.8.0,<4.0.0)
+Requires-Dist: pandas (>=1.5.3,<2.0.0)
+Requires-Dist: pydantic (>=1.9.1,<2.0.0)
+Requires-Dist: pydot (>=1.4.2) ; extra == "playground"
+Requires-Dist: rich (>=10)
+Requires-Dist: ruamel.yaml (>=0.17)
+Requires-Dist: scipy (>=1.3.1,<2.0.0) ; extra == "playground"
+Requires-Dist: sqlglot (==12.3.0)
+Requires-Dist: streamlit (>=1.0.0) ; extra == "playground"
+Requires-Dist: streamlit-ace (>=0.1.0) ; extra == "playground"
+Requires-Dist: streamlit-aggrid (>=0.2.2) ; extra == "playground"
+Requires-Dist: streamlit-agraph (>=0.0.35) ; extra == "playground"
+Requires-Dist: streamlit-pandas-profiling (>=0.1.3) ; extra == "playground"
+Requires-Dist: uvicorn[standard] (>=0.18.3,<0.19.0)
+Requires-Dist: watchdog (>=2.2.1)
+Project-URL: Documentation, https://github.com/jinjat-data/jinjat
+Project-URL: Repository, https://github.com/jinjat-data/jinjat
+Description-Content-Type: text/markdown
+
+# Jinjat
+
+## Develop data applications with dbt, SQL, and OpenAPI
+
+### Installation
+
+```commandline
+pip install jinjat
+```
+
+### Create your first API
+
+Create an [analysis]() in `analysis/my_first_api.sql`:
+```sql
+{%- set query = request().query %}
+
+select '{{query.example}}' as col1
+```
+
+And create a YML file in `analysis/schema.yml`:
+
+```yml
+version: 2
+
+analyses:
+  - name: my_first_api
+    config:
+      jinjat:
+        method: get
+        openapi:
+          parameters:
+            - in: query
+              name: example
+              schema:
+                type: number
+```
+
+Start Jinjat as follows:
+
+```commandline
+jinjat serve --project-dir [YOUR_DBT_PROJECT_DIRECTORY]
+```
+
+And then run the following CURL command to test the API:
+
+```commandline
+curl -XGET 'http://127.0.0.1:8581?example=value'
+```
+
+It should return the following response:
+
+```json
+[
+  "col1": "3"
+]
+```
+
+Jinjat uses OpenAPI to validate the requests and create an API documentation automatically for your API.
+
+## Integrations
+
+poetry install --extras "duckdb"
+
+### Playground
+
+poetry install --extras "playground"
+
+
+#### Installation
+
+```commandline
+pip install jinjat[playground]
+```
+
+Jinjat Playground is a Streamlit app that lets you develop APIs in your browser.
+Once you write the template, you can save it to your dbt project as an analysis and expose the API.
