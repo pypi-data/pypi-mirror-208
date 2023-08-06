@@ -1,0 +1,301 @@
+Metadata-Version: 2.1
+Name: cookie-composer
+Version: 0.10.3
+Summary: Create new projects from a composition of several templates
+Home-page: https://github.com/coordt/cookie-composer
+Author: Corey Oordt
+Author-email: coreyoordt@gmail.com
+Keywords: cookie_composer cookiecutter
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp
+Requires-Dist: backports.shutil-copytree
+Requires-Dist: click-log
+Requires-Dist: cookiecutter (>=2.0.0)
+Requires-Dist: fsspec
+Requires-Dist: ghapi
+Requires-Dist: gitpython
+Requires-Dist: immutabledict
+Requires-Dist: orjson
+Requires-Dist: pydantic
+Requires-Dist: questionary
+Requires-Dist: requests
+Requires-Dist: rich-click
+Requires-Dist: ruamel.yaml
+Requires-Dist: toml
+Provides-Extra: dev
+Requires-Dist: aiohttp (==3.8.3) ; extra == 'dev'
+Requires-Dist: aiosignal (==1.2.0) ; extra == 'dev'
+Requires-Dist: arrow (==1.2.3) ; extra == 'dev'
+Requires-Dist: async-timeout (==4.0.2) ; extra == 'dev'
+Requires-Dist: attrs (==22.1.0) ; extra == 'dev'
+Requires-Dist: backports-shutil-copytree (==0.0.0.2) ; extra == 'dev'
+Requires-Dist: binaryornot (==0.4.4) ; extra == 'dev'
+Requires-Dist: black (==22.10.0) ; extra == 'dev'
+Requires-Dist: certifi (==2022.9.24) ; extra == 'dev'
+Requires-Dist: cfgv (==3.3.1) ; extra == 'dev'
+Requires-Dist: chardet (==5.0.0) ; extra == 'dev'
+Requires-Dist: charset-normalizer (==2.1.1) ; extra == 'dev'
+Requires-Dist: click (==8.1.3) ; extra == 'dev'
+Requires-Dist: click-log (==0.4.0) ; extra == 'dev'
+Requires-Dist: commonmark (==0.9.1) ; extra == 'dev'
+Requires-Dist: cookiecutter (==2.1.1) ; extra == 'dev'
+Requires-Dist: coverage[toml] (==6.5.0) ; extra == 'dev'
+Requires-Dist: distlib (==0.3.6) ; extra == 'dev'
+Requires-Dist: fastcore (==1.5.27) ; extra == 'dev'
+Requires-Dist: filelock (==3.8.0) ; extra == 'dev'
+Requires-Dist: flake8 (==5.0.4) ; extra == 'dev'
+Requires-Dist: frozenlist (==1.3.1) ; extra == 'dev'
+Requires-Dist: fsspec (==2022.8.2) ; extra == 'dev'
+Requires-Dist: ghapi (==1.0.3) ; extra == 'dev'
+Requires-Dist: gitdb (==4.0.9) ; extra == 'dev'
+Requires-Dist: gitpython (==3.1.28) ; extra == 'dev'
+Requires-Dist: identify (==2.5.6) ; extra == 'dev'
+Requires-Dist: idna (==3.4) ; extra == 'dev'
+Requires-Dist: immutabledict (==2.2.3) ; extra == 'dev'
+Requires-Dist: iniconfig (==1.1.1) ; extra == 'dev'
+Requires-Dist: jinja2 (==3.1.2) ; extra == 'dev'
+Requires-Dist: jinja2-time (==0.2.0) ; extra == 'dev'
+Requires-Dist: markupsafe (==2.1.1) ; extra == 'dev'
+Requires-Dist: mccabe (==0.7.0) ; extra == 'dev'
+Requires-Dist: multidict (==6.0.2) ; extra == 'dev'
+Requires-Dist: mypy-extensions (==0.4.3) ; extra == 'dev'
+Requires-Dist: nodeenv (==1.7.0) ; extra == 'dev'
+Requires-Dist: orjson (==3.8.3) ; extra == 'dev'
+Requires-Dist: packaging (==23.0) ; extra == 'dev'
+Requires-Dist: pathspec (==0.10.1) ; extra == 'dev'
+Requires-Dist: platformdirs (==2.5.2) ; extra == 'dev'
+Requires-Dist: pluggy (==1.0.0) ; extra == 'dev'
+Requires-Dist: pre-commit (==2.20.0) ; extra == 'dev'
+Requires-Dist: prompt-toolkit (==3.0.36) ; extra == 'dev'
+Requires-Dist: py (==1.11.0) ; extra == 'dev'
+Requires-Dist: pycodestyle (==2.9.1) ; extra == 'dev'
+Requires-Dist: pydantic (==1.10.2) ; extra == 'dev'
+Requires-Dist: pyflakes (==2.5.0) ; extra == 'dev'
+Requires-Dist: pygments (==2.13.0) ; extra == 'dev'
+Requires-Dist: pytest (==7.1.3) ; extra == 'dev'
+Requires-Dist: pytest-cov (==4.0.0) ; extra == 'dev'
+Requires-Dist: pytest-env (==0.6.2) ; extra == 'dev'
+Requires-Dist: pytest-mock (==3.10.0) ; extra == 'dev'
+Requires-Dist: python-dateutil (==2.8.2) ; extra == 'dev'
+Requires-Dist: python-slugify (==6.1.2) ; extra == 'dev'
+Requires-Dist: pyyaml (==6.0) ; extra == 'dev'
+Requires-Dist: questionary (==1.10.0) ; extra == 'dev'
+Requires-Dist: requests (==2.28.1) ; extra == 'dev'
+Requires-Dist: rich (==12.6.0) ; extra == 'dev'
+Requires-Dist: rich-click (==1.5.2) ; extra == 'dev'
+Requires-Dist: ruamel-yaml (==0.17.21) ; extra == 'dev'
+Requires-Dist: ruamel-yaml-clib (==0.2.6) ; extra == 'dev'
+Requires-Dist: six (==1.16.0) ; extra == 'dev'
+Requires-Dist: smmap (==5.0.0) ; extra == 'dev'
+Requires-Dist: text-unidecode (==1.3) ; extra == 'dev'
+Requires-Dist: toml (==0.10.2) ; extra == 'dev'
+Requires-Dist: tomli (==2.0.1) ; extra == 'dev'
+Requires-Dist: typing-extensions (==4.4.0) ; extra == 'dev'
+Requires-Dist: urllib3 (==1.26.12) ; extra == 'dev'
+Requires-Dist: virtualenv (==20.16.2) ; extra == 'dev'
+Requires-Dist: wcwidth (==0.2.6) ; extra == 'dev'
+Requires-Dist: yarl (==1.8.1) ; extra == 'dev'
+Requires-Dist: alabaster (==0.7.13) ; extra == 'dev'
+Requires-Dist: babel (==2.11.0) ; extra == 'dev'
+Requires-Dist: beautifulsoup4 (==4.11.1) ; extra == 'dev'
+Requires-Dist: docutils (==0.19) ; extra == 'dev'
+Requires-Dist: furo (==2022.12.7) ; extra == 'dev'
+Requires-Dist: ghp-import (==2.1.0) ; extra == 'dev'
+Requires-Dist: imagesize (==1.4.1) ; extra == 'dev'
+Requires-Dist: linkify-it-py (==2.0.0) ; extra == 'dev'
+Requires-Dist: markdown-it-py (==2.2.0) ; extra == 'dev'
+Requires-Dist: mdit-py-plugins (==0.3.3) ; extra == 'dev'
+Requires-Dist: mdurl (==0.1.2) ; extra == 'dev'
+Requires-Dist: myst-parser (==0.18.1) ; extra == 'dev'
+Requires-Dist: pytz (==2022.7.1) ; extra == 'dev'
+Requires-Dist: snowballstemmer (==2.2.0) ; extra == 'dev'
+Requires-Dist: soupsieve (==2.3.2.post1) ; extra == 'dev'
+Requires-Dist: sphinx (==5.3.0) ; extra == 'dev'
+Requires-Dist: sphinx-autodoc-typehints (==1.21.6) ; extra == 'dev'
+Requires-Dist: sphinx-basic-ng (==1.0.0b1) ; extra == 'dev'
+Requires-Dist: sphinx-click (==4.4.0) ; extra == 'dev'
+Requires-Dist: sphinx-copybutton (==0.5.1) ; extra == 'dev'
+Requires-Dist: sphinxcontrib-applehelp (==1.0.3) ; extra == 'dev'
+Requires-Dist: sphinxcontrib-devhelp (==1.0.2) ; extra == 'dev'
+Requires-Dist: sphinxcontrib-htmlhelp (==2.0.0) ; extra == 'dev'
+Requires-Dist: sphinxcontrib-jsmath (==1.0.1) ; extra == 'dev'
+Requires-Dist: sphinxcontrib-qthelp (==1.0.3) ; extra == 'dev'
+Requires-Dist: sphinxcontrib-serializinghtml (==1.1.5) ; extra == 'dev'
+Requires-Dist: uc-micro-py (==1.0.1) ; extra == 'dev'
+Requires-Dist: bump2version (>=1.0.1) ; extra == 'dev'
+Requires-Dist: git-fame (>=1.12.2) ; extra == 'dev'
+Requires-Dist: generate-changelog ; extra == 'dev'
+Requires-Dist: pip-tools ; extra == 'dev'
+Provides-Extra: test
+Requires-Dist: aiohttp (==3.8.3) ; extra == 'test'
+Requires-Dist: aiosignal (==1.2.0) ; extra == 'test'
+Requires-Dist: arrow (==1.2.3) ; extra == 'test'
+Requires-Dist: async-timeout (==4.0.2) ; extra == 'test'
+Requires-Dist: attrs (==22.1.0) ; extra == 'test'
+Requires-Dist: backports-shutil-copytree (==0.0.0.2) ; extra == 'test'
+Requires-Dist: binaryornot (==0.4.4) ; extra == 'test'
+Requires-Dist: certifi (==2022.9.24) ; extra == 'test'
+Requires-Dist: chardet (==5.0.0) ; extra == 'test'
+Requires-Dist: charset-normalizer (==2.1.1) ; extra == 'test'
+Requires-Dist: click (==8.1.3) ; extra == 'test'
+Requires-Dist: click-log (==0.4.0) ; extra == 'test'
+Requires-Dist: commonmark (==0.9.1) ; extra == 'test'
+Requires-Dist: cookiecutter (==2.1.1) ; extra == 'test'
+Requires-Dist: fastcore (==1.5.27) ; extra == 'test'
+Requires-Dist: frozenlist (==1.3.1) ; extra == 'test'
+Requires-Dist: fsspec (==2022.8.2) ; extra == 'test'
+Requires-Dist: ghapi (==1.0.3) ; extra == 'test'
+Requires-Dist: gitdb (==4.0.9) ; extra == 'test'
+Requires-Dist: gitpython (==3.1.28) ; extra == 'test'
+Requires-Dist: idna (==3.4) ; extra == 'test'
+Requires-Dist: immutabledict (==2.2.3) ; extra == 'test'
+Requires-Dist: jinja2 (==3.1.2) ; extra == 'test'
+Requires-Dist: jinja2-time (==0.2.0) ; extra == 'test'
+Requires-Dist: markupsafe (==2.1.1) ; extra == 'test'
+Requires-Dist: multidict (==6.0.2) ; extra == 'test'
+Requires-Dist: orjson (==3.8.3) ; extra == 'test'
+Requires-Dist: packaging (==23.0) ; extra == 'test'
+Requires-Dist: prompt-toolkit (==3.0.36) ; extra == 'test'
+Requires-Dist: pydantic (==1.10.2) ; extra == 'test'
+Requires-Dist: pygments (==2.13.0) ; extra == 'test'
+Requires-Dist: python-dateutil (==2.8.2) ; extra == 'test'
+Requires-Dist: python-slugify (==6.1.2) ; extra == 'test'
+Requires-Dist: pyyaml (==6.0) ; extra == 'test'
+Requires-Dist: questionary (==1.10.0) ; extra == 'test'
+Requires-Dist: requests (==2.28.1) ; extra == 'test'
+Requires-Dist: rich (==12.6.0) ; extra == 'test'
+Requires-Dist: rich-click (==1.5.2) ; extra == 'test'
+Requires-Dist: ruamel-yaml (==0.17.21) ; extra == 'test'
+Requires-Dist: ruamel-yaml-clib (==0.2.6) ; extra == 'test'
+Requires-Dist: six (==1.16.0) ; extra == 'test'
+Requires-Dist: smmap (==5.0.0) ; extra == 'test'
+Requires-Dist: text-unidecode (==1.3) ; extra == 'test'
+Requires-Dist: toml (==0.10.2) ; extra == 'test'
+Requires-Dist: typing-extensions (==4.4.0) ; extra == 'test'
+Requires-Dist: urllib3 (==1.26.12) ; extra == 'test'
+Requires-Dist: wcwidth (==0.2.6) ; extra == 'test'
+Requires-Dist: yarl (==1.8.1) ; extra == 'test'
+Requires-Dist: black (>=19.10b0) ; extra == 'test'
+Requires-Dist: coverage (>=6.1.2) ; extra == 'test'
+Requires-Dist: flake8 (>=4.0.1) ; extra == 'test'
+Requires-Dist: pre-commit (>=2.15.0) ; extra == 'test'
+Requires-Dist: pytest-cov (>=3.0.0) ; extra == 'test'
+Requires-Dist: pytest-env ; extra == 'test'
+Requires-Dist: pytest-mock ; extra == 'test'
+Requires-Dist: pytest (>=6.0.0) ; extra == 'test'
+Requires-Dist: virtualenv (<20.16.3) ; extra == 'test'
+
+# Cookie Composer
+
+<!-- start-badges -->
+
+[![PyPI](https://img.shields.io/pypi/v/cookie-composer)][pypi_]
+[![Status](https://img.shields.io/pypi/status/cookie-composer)][status]
+[![Python Version](https://img.shields.io/pypi/pyversions/cookie-composer)][python version]
+[![License](https://img.shields.io/pypi/l/cookie-composer)][license]
+[![codecov](https://codecov.io/gh/callowayproject/cookie-composer/branch/master/graph/badge.svg?token=YO2JQLV1OB)](https://codecov.io/gh/callowayproject/cookie-composer)
+
+[pypi_]: https://pypi.org/project/cookie-composer/
+[status]: https://pypi.org/project/cookie-composer/
+[python version]: https://pypi.org/project/cookie-composer
+[license]: https://github.com/callowayproject/cookie-composer/blob/master/LICENSE
+
+Documentation: https://callowayproject.github.io/cookie-composer/
+
+<!-- end-badges -->
+
+Cookie composer builds on the [cookie cutter](https://github.com/cookiecutter/cookiecutter) project to generate projects based on one or more cookiecutter templates.
+
+## Goals
+
+- Create new projects from a composition of several templates
+- Add new capabilities to an existing repository by applying a template
+- Apply template updates to the generated project
+
+## Introduction
+
+Cookie Cutter treats templates like sandwiches. There are templates for hamburgers, clubs, and any other kind of sandwich you can dream up. You might have options and defaults on a template, like `Hold the mustard?[False]:` or `Mustard type [dijon]:`, but those are decided by the template author. 
+
+
+<img src="https://raw.githubusercontent.com/coordt/cookie-composer/master/docsrc/_static/img/sandwiches.png" alt="Templates are treated like finished sandwiches" style="zoom:50%;" />
+
+If you look closely at the sandwiches (templates), there is usually many things in common. What if we treated the templates as compositions of other templates:
+
+<img src="https://raw.githubusercontent.com/coordt/cookie-composer/master/docsrc/_static/img/compositions.png" alt="Sandwiches as a composition of layers" style="zoom:50%;" />
+
+You now can manage several smaller and specialized templates that provide functionality. Each template's options will be specific to what that template needs.
+
+<img src="https://raw.githubusercontent.com/coordt/cookie-composer/master/docsrc/_static/img/layers.png" alt="Templates broken out as layers on a sandwich" style="zoom:50%;" />
+
+Cookie Composer uses a composition file to describe the layers required, and even override a template's default answers.
+
+```yaml
+template: bottom-bun
+context:
+  toasting_level: light
+  buttered: False
+---
+template: burger
+---
+template: cheese
+context:
+  kind: swiss
+---
+template: bacon
+context:
+  cooking_level: crispy
+---
+template: ketchup
+---
+template: mustard
+context:
+  type: yellow
+---
+template: top-bun
+context:
+  toasting_level: light
+  buttered: False
+```
+
+We have created [a repo of highly composable templates](https://github.com/coordt/cookiecomposer-templates) as examples or reference. However, Cookie Composer is designed to handle any Cookie Cutter template.
+
+## Purpose
+
+- Separate out parts to a repo into composable templates
+  - Boilerplate
+    - README, CONTRIBUTING, docs, Makefile, license, tooling configurations
+  - Project-specific
+    - Django
+    - Flask
+    - Library
+    - Data science
+  - CI/CD specific
+    - Helm chart
+    - GitHub Actions vs. Jenkins vs. ...
+  - Documentation specific
+    - Sphinx
+    - MkDocs
+- Each composable template is managed and updated individually
+- A project can update itself based on chages in layers
+
+
+## Please contribute
+
+- Documentation critiques
+- Documentation suggestions
+- Feature suggestions
+- Feature improvements
+- Edge case identification
+- Code improvements
