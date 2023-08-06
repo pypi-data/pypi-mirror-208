@@ -1,0 +1,52 @@
+trigger:
+  - main
+
+jobs:
+  - job: Windows
+
+    pool:
+      vmImage: 'windows-2019'
+
+    strategy:
+      matrix:
+        Python37:
+          python.arch: 'x86'
+          python.version: '3.7'
+        Python37-x64:
+          python.arch: 'x64'
+          python.version: '3.7'
+      maxParallel: 2
+
+    steps:
+
+      - powershell: |
+          $environmentVars = get-childitem -path env:*
+          foreach($var in $environmentVars)
+          {
+            $keyname = $var.Key
+            $keyvalue = $var.Value
+
+            Write-Output "${keyname}: $keyvalue"
+          }
+        displayName: Display env. variables
+
+
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          addToPath: true
+          architecture: '$(python.arch)'
+
+      - script: |
+          python -m pip install nox
+        displayName: Prerequisites
+
+
+      - script: python -m nox -s tests-$(python.version)
+        displayName: Test
+        env:
+          # Used in 'test_platform_windows_find_visual_studio'
+          # See https://github.com/Microsoft/azure-pipelines-image-generation/blob/master/images/win/Vs2017-Server2016-Readme.md
+          SKBUILD_TEST_FIND_VS2017_INSTALLATION_EXPECTED: 0
+          SKBUILD_TEST_FIND_VS2019_INSTALLATION_EXPECTED: 1
+          SKBUILD_TEST_FIND_VS2022_INSTALLATION_EXPECTED: 0
