@@ -1,0 +1,61 @@
+Metadata-Version: 2.1
+Name: mpservice
+Version: 0.12.8b1
+Summary: The package `mpservice <https://github.com/zpz/mpservice>`_ provides utilities for Python concurrency, including most notably
+Author-email: Zepu Zhang <zepu.zhang@gmail.com>
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: asgiref
+Requires-Dist: deprecation
+Requires-Dist: psutil
+Requires-Dist: typing-extensions
+Requires-Dist: uvicorn[standard] >=0.15.0,<1.0
+Requires-Dist: sphinx ; extra == "doc"
+Requires-Dist: numpydoc ; extra == "doc"
+Requires-Dist: pydata-sphinx-theme ; extra == "doc"
+Requires-Dist: coverage[toml] ; extra == "test"
+Requires-Dist: Faker ; extra == "test"
+Requires-Dist: httpx ; extra == "test"
+Requires-Dist: mypy ; extra == "test"
+Requires-Dist: pytest ; extra == "test"
+Requires-Dist: pytest-asyncio ; extra == "test"
+Requires-Dist: requests ; extra == "test"
+Requires-Dist: starlette ; extra == "test"
+Requires-Dist: zpz ; extra == "test"
+Requires-Dist: ruff ; extra == "test"
+Project-URL: Source, https://github.com/zpz/mpservice
+Provides-Extra: doc
+Provides-Extra: test
+
+mpservice
+=========
+
+The package ``mpservice`` provides classes for serving, stream processing, and some related utilities.
+The central theme is concurrency by threads or processes.
+
+Read the `documentation <https://mpservice.readthedocs.io/en/latest/>`_.
+
+To install, do
+
+::
+    
+    python3 -m pip install mpservice
+
+
+Status
+------
+
+Production ready. Under active development.
+
+
+Python version
+--------------
+
+Development and testing were conducted in Python 3.8 until version 0.12.0.
+Starting with 0.12.1, development and testing happen in Python 3.10.
+Code continues to NOT intentionally use features beyond Python 3.8.
+I intend to test agsint versions 3.8, 3.9, 3.10, 3.11 once I find time to set that up.
+
