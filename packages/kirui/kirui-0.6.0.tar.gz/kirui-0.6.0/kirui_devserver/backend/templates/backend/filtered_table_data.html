@@ -1,0 +1,28 @@
+<kr-filtered-table style="display: block; margin-top: 30px;">
+    <div class="row">
+        <div class="col-6">
+            <kr-form b:object="form" label-width="sm-4 md-3 lg-2" field-width="sm-8 md-9 lg-10" action="/backend/form/" id="proba" style="margin-top: 30px;">
+                <input type="submit" name="submit" value="Submit" class="btn btn-primary" @click="${ (ev) => { ev.target.closest('kr-filtered-table').submit(ev) } }" />
+            </kr-form>
+        </div>
+    </div>
+
+    <kr-table class="table table-bordered" style="margin-top: 30px;">
+        <kr-columns>
+            <kr-column id="first" style="width: 500px;">Első</kr-column>
+            <kr-column id="second">Második</kr-column>
+            <kr-column id="edit">Szerkesztés</kr-column>
+        </kr-columns>
+
+        <kr-rows c:if="page is not None">
+            <kr-row c:for="row in page.object_list">
+                <kr-cell b:text="row.first"></kr-cell>
+                <kr-cell b:text="row.second"></kr-cell>
+                <kr-cell>
+                    <kr-modal-link .class="${'btn btn-outline-primary'}" .href="${'/backend/modal/'}" @modal-closed="${ (ev) => { ev.target.closest('kr-filtered-table').submit(ev) } }">Modal link</kr-modal-link>
+                </kr-cell>
+            </kr-row>
+        </kr-rows>
+        <!-- kr-paginator b:prevpage="page.previous_page_number()" b:actpage="page.number" b:nextpage="page.next_page_number()" .paginate="${ (ev, page) => ev.target.closest('kr-filtered-table').submit(ev, page) }" / -->
+    </kr-table>
+</kr-filtered-table>

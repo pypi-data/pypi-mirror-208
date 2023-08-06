@@ -1,0 +1,30 @@
+{% load static %}
+{% load i18n %}
+{% load bundled_static %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>kirUI</title>
+    <script type="text/javascript" src="{% static 'kirui/js/kirui.native.js' %}"></script>
+    <link rel="stylesheet" href="{% bundled_static 'bootstrap/scss/bootstrap.scss.css' %}" />
+    <script src="{% static 'django_kirui/brython.js' %}"></script>
+    <script src="{% static 'django_kirui/brython_stdlib.js' %}"></script>
+    <script type="text/javascript" src="{% bundled_static 'kirui/js/kirui.brython.js' %}"></script>
+    <script src="{% static 'jquery/js/jquery-3.6.0.min.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <script type="text/python">
+      from kirui.main import entrypoint
+      entrypoint(is_pwa={{ request.user_agent.is_mobile }})
+    </script>
+    <script type="text/javascript">
+      brython({debug: 1, pythonpath: ['/brython/'], 'indexedDB': true});
+    </script>
+
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>

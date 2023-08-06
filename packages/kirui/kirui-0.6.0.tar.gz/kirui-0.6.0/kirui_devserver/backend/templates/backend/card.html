@@ -1,0 +1,29 @@
+<html>
+  <head c:include="xml/header.html"></head>
+  <body>
+      <kr-app id="app" b:is_pwa="int(request.user_agent.is_mobile)" b:module="djsamon.static('kirui/js/entrypoint.js')" entrypoint="entrypoint">
+        <kr-layout-sidebar>
+            <kr-sidebar-header c:include="xml/sidebar_header.html" />
+            <kr-sidebar-nav c:include="xml/menu.html" />
+
+            <kr-sidebar-main>
+              <kr-card style="margin-top: 30px;">
+                <kr-card-header>
+                  <span @click="${ (ev) => ev.target.closest('kr-card').toggleCardBody(ev) }">íHeader content</span>
+                </kr-card-header>
+                <kr-card-body class="show">
+                  <div class="row" style="height: 500px;">
+                    <div class="col-6">
+                      Első oszlop
+                    </div>
+                    <div class="col-6">
+                      Második oszlop
+                    </div>
+                  </div>
+                </kr-card-body>
+              </kr-card>
+            </kr-sidebar-main>
+        </kr-layout-sidebar>
+      </kr-app>
+  </body>
+</html>

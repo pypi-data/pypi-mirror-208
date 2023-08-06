@@ -1,0 +1,30 @@
+<kr-ajax-panel contentUrl="/backend/panel/data/" reactContextRef="panel" lang="en" xmlns:c="https://doculabs.io/2020/xtmpl#control" xmlns:b="https://doculabs.io/2020/xtmpl#data-binding">
+    <kr-form id="proba" b:object="form" onSubmit="this.bubbleStateChange" reactContextRef="form" label-width="sm-4 md-3 lg-4" field-width="sm-8 md-9 lg-6">
+        <input type="submit" value="Submit" class="btn btn-primary" onClick="form.bubbleStateChange" />
+    </kr-form>
+
+    <p b:text="now.strftime('%Y-%m-%d %H:%M:%S')"></p>
+    <kr-table class="table" b:prevPage="page.previous_page_number()" b:actPage="page.number" b:nextPage="page.next_page_number()" style="margin-top: 30px;">
+        <kr-columns>
+            <kr-column id="first" style="width: 500px;">Első</kr-column>
+            <kr-column id="second">Második</kr-column>
+            <kr-column id="operations" style="width: 200px; text-align: center;">Műveletek</kr-column>
+        </kr-columns>
+
+        <kr-rows c:if="page is not None">
+            <kr-row c:for="row in page.object_list">
+                <kr-cell b:text="row.first"></kr-cell>
+                <kr-cell b:text="row.second"></kr-cell>
+                <kr-cell style="text-align: center;">
+                    <kr-modal-link href="/backend/modal/" class="btn btn-outline-secondary" bubbleSuccessEvent="ReloadContent">Modal</kr-modal-link>
+                </kr-cell>
+            </kr-row>
+        </kr-rows>
+
+        <kr-rows c:if="page is None">
+            <kr-row>
+                <kr-cell colspan="1000" style="text-align: center;">Nincsenek megjelenítendő sorok</kr-cell>
+            </kr-row>
+        </kr-rows>
+    </kr-table>
+</kr-ajax-panel>

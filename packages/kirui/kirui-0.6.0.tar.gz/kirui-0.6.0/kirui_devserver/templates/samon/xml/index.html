@@ -1,0 +1,19 @@
+<html>
+  <head c:include="xml/header.html"></head>
+  <body>
+    <kr-app id="app" b:is_pwa="int(request.user_agent.is_mobile)" b:module="djsamon.static('kirui/js/entrypoint.js')" entrypoint="entrypoint">
+      <kr-layout-sidebar b:is_pwa="int(request.user_agent.is_mobile)">
+        <kr-sidebar-header c:include="xml/sidebar_header.html" />
+        <kr-sidebar-nav c:include="xml/menu.html" />
+
+        <kr-sidebar-main>
+          <div class="row col" style="padding: 2rem;">
+            <button id="installApp">Install</button>
+            <kr-modal-link .class="${'btn btn-outline-primary'}" .href="${'/backend/modal/'}">Modal link</kr-modal-link>
+            <kr-source-editor>content</kr-source-editor>
+          </div>
+        </kr-sidebar-main>
+      </kr-layout-sidebar>
+    </kr-app>
+  </body>
+</html>

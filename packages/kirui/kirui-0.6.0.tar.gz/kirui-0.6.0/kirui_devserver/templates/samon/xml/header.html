@@ -1,0 +1,31 @@
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>kirUI</title>
+
+    <link rel="manifest" b:href="djsamon.static('kirui/js/pwa/manifest.json')">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" b:href="djsamon.static('kirui/js/pwa/img/apple-touch-icon.png')">
+    <link rel="apple-touch-startup-image" b:href="djsamon.static('kirui/js/pwa/img/apple-touch-icon.png')">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="PWA test page">
+    <meta name="author" content="Bence Lovas">
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function () {
+                navigator.serviceWorker
+                    .register('/static/kirui/js/pwa/service-worker.js')
+                    .then(res => console.log("service worker registered"))
+                    .catch(err => console.log("service worker not registered", err))
+            });
+        }
+    </script>
+
+    <script type="text/javascript" b:src="djsamon.static('django_kirui/tinymce/tinymce.min.js')"></script>
+    <script type="text/javascript" b:src="djsamon.static('jquery/js/jquery-3.6.0.min.js')"></script>
+    <link rel="stylesheet" b:href="djsamon.bundled_static('bootstrap/scss/bootstrap.scss.css')" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
+</head>

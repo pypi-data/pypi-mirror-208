@@ -1,0 +1,20 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        
+        <script type="text/javascript" src="assets/js/brython.js"></script>
+        <!-- script type="text/javascript" src="assets/js/brython_stdlib.js"></script -->
+        <script type="text/python">
+            from browser import document
+            
+            el = document.getElementById('dynamic')
+            el.innerHTML = '<h2>Dynamic content</h2>'
+        </script>
+    </head>
+    
+    <body onload="brython(0)">
+        <h1>Go online!</h1>
+        
+        <div id="dynamic"></div>
+    </body>
+</html>

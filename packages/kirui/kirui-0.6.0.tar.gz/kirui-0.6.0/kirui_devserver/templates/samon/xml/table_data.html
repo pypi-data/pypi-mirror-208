@@ -1,0 +1,21 @@
+<kr-table class="table" style="margin-top: 30px;">
+    <kr-columns>
+        <kr-column id="first" style="width: 500px;">Első</kr-column>
+        <kr-column id="second">Második</kr-column>
+        <kr-column id="third" style="width: 40px;">Szerkesztés</kr-column>
+    </kr-columns>
+
+    <kr-rows c:if="page is not None">
+        <kr-row c:for="row in page.object_list">
+            <kr-cell b:text="row.first"></kr-cell>
+            <kr-cell b:text="row.second"></kr-cell>
+            <kr-cell>
+                <kr-button-group label="Valami">
+                    <kr-modal-link .href="${'/backend/modal/'}" .class="${'dropdown-item'}">Szerkesztés</kr-modal-link>
+                    <a class="dropdown-item" href="#">Dropdown link</a>
+                </kr-button-group>
+            </kr-cell>
+        </kr-row>
+    </kr-rows>
+    <kr-paginator b:prevpage="page.previous_page_number()" b:actpage="page.number" b:nextpage="page.next_page_number()" />
+</kr-table>
