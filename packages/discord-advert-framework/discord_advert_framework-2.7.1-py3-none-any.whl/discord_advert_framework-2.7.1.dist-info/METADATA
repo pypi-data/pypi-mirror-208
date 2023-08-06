@@ -1,0 +1,119 @@
+Metadata-Version: 2.1
+Name: discord-advert-framework
+Version: 2.7.1
+Summary: Framework for periodic advertisements on Discord
+Author: David Hozic
+Keywords: Discord,Advertising,Framework,NFT,Shilling
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE.md
+Requires-Dist: aiohttp (<3.9.0,>=3.6.0)
+Requires-Dist: aiohttp-socks (==0.8.0)
+Requires-Dist: typeguard (==2.13)
+Requires-Dist: typing-extensions (<5,>=4) ; python_version < "3.11"
+Provides-Extra: all
+Requires-Dist: PyNaCl (==1.5.0) ; extra == 'all'
+Requires-Dist: yt-dlp (==2023.3.4) ; extra == 'all'
+Requires-Dist: sqlalchemy[asyncio] (>=2.0) ; extra == 'all'
+Requires-Dist: aiosqlite (==0.19.0) ; extra == 'all'
+Requires-Dist: pymssql (==2.2.7) ; extra == 'all'
+Requires-Dist: asyncpg (==0.27.0) ; extra == 'all'
+Requires-Dist: asyncmy (==0.2.7) ; extra == 'all'
+Requires-Dist: selenium (==4.9.1) ; extra == 'all'
+Requires-Dist: undetected-chromedriver (==3.4.6) ; extra == 'all'
+Provides-Extra: docs
+Requires-Dist: sphinx ; extra == 'docs'
+Requires-Dist: sphinx-autobuild ; extra == 'docs'
+Requires-Dist: sphinx-copybutton ; extra == 'docs'
+Requires-Dist: furo ; extra == 'docs'
+Requires-Dist: enum-tools[sphinx] ; extra == 'docs'
+Requires-Dist: sphinx-design[furo] ; extra == 'docs'
+Requires-Dist: readthedocs-sphinx-search ; extra == 'docs'
+Requires-Dist: sphinxcontrib-svg2pdfconverter ; extra == 'docs'
+Provides-Extra: sql
+Requires-Dist: sqlalchemy[asyncio] (>=2.0) ; extra == 'sql'
+Requires-Dist: aiosqlite (==0.19.0) ; extra == 'sql'
+Requires-Dist: pymssql (==2.2.7) ; extra == 'sql'
+Requires-Dist: asyncpg (==0.27.0) ; extra == 'sql'
+Requires-Dist: asyncmy (==0.2.7) ; extra == 'sql'
+Provides-Extra: testing
+Requires-Dist: pytest ; extra == 'testing'
+Requires-Dist: pytest-asyncio ; extra == 'testing'
+Provides-Extra: voice
+Requires-Dist: PyNaCl (==1.5.0) ; extra == 'voice'
+Requires-Dist: yt-dlp (==2023.3.4) ; extra == 'voice'
+Provides-Extra: web
+Requires-Dist: selenium (==4.9.1) ; extra == 'web'
+Requires-Dist: undetected-chromedriver (==3.4.6) ; extra == 'web'
+
+=========================================================
+Discord Advertisement Framework (Shiller)
+=========================================================
+The Discord advertisement framework is a Python based **shilling framework** that allows easy advertising on Discord.
+
+**Documentation** can be found `here <https://daf.davidhozic.com>`_.
+
+
+.. image:: ./docs/images/daf-gui-front.png
+    :width: 15cm
+
+.. image:: ./docs/images/daf-console-run.png
+    :width: 15cm
+
+
+----------------------
+Key features
+----------------------
+- Periodic and scheduled advertisements,
+- Message logging, invite link tracking & statistics
+- Multi-account support
+- Graphical Interface (GUI) / Console (script)
+- Easy to setup
+- Asynchronous
+
+.. caution::
+
+    While running this on user accounts is possible, it is against Discord's ToS.
+    I am not responsible if your account get's disabled for using self-bots!
+
+----------------------
+Installation
+----------------------
+DAF can be installed though command prompt/terminal using the bottom commands.
+
+Pre-requirement: `Python (minimum v3.8) <https://www.python.org/downloads/>`_.
+
+**Main package**
+
+::
+
+    pip install discord-advert-framework
+
+**Voice Messaging / AUDIO**
+
+::
+
+    pip install discord-advert-framework[voice]
+
+
+**SQL logging**
+            
+::
+
+    pip install discord-advert-framework[sql]
+
+
+**Chrome browser integration**
+
+::
+
+    pip install discord-advert-framework[web]
+            
+**All of the above (full package)**
+
+::
+
+    pip install discord-advert-framework[all]
