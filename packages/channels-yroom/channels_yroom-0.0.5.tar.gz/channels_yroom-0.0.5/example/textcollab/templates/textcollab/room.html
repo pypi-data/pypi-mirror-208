@@ -1,0 +1,16 @@
+{% load django_vite %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Text Collaboration Room</title>
+    {% vite_hmr_client %}
+</head>
+<body>
+    <div id="editor-container"></div>
+    {{ room_settings|json_script:"room-settings" }}
+    {% vite_asset 'frontend/main.js' %}
+    <a href="{% url 'save_room-'|add:room_settings.editor room_name=room_settings.roomName %}">Get Room Content</a>
+</body>
+</html>
