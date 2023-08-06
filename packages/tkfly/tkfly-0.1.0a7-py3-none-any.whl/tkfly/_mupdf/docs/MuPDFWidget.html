@@ -1,0 +1,383 @@
+<!DOCTYPE html><html><head>
+<title>mupdf::widget - A basic PDF-viewer widget</title>
+<style type="text/css"><!--
+    HTML {
+	background: 	#FFFFFF;
+	color: 		black;
+    }
+    BODY {
+	background: 	#FFFFFF;
+	color:	 	black;
+    }
+    DIV.doctools {
+	margin-left:	10%;
+	margin-right:	10%;
+    }
+    DIV.doctools H1,DIV.doctools H2 {
+	margin-left:	-5%;
+    }
+    H1, H2, H3, H4 {
+	margin-top: 	1em;
+	font-family:	sans-serif;
+	font-size:	large;
+	color:		#005A9C;
+	background: 	transparent;
+	text-align:		left;
+    }
+    H1.doctools_title {
+	text-align: center;
+    }
+    UL,OL {
+	margin-right: 0em;
+	margin-top: 3pt;
+	margin-bottom: 3pt;
+    }
+    UL LI {
+	list-style: disc;
+    }
+    OL LI {
+	list-style: decimal;
+    }
+    DT {
+	padding-top: 	1ex;
+    }
+    UL.doctools_toc,UL.doctools_toc UL, UL.doctools_toc UL UL {
+	font:		normal 12pt/14pt sans-serif;
+	list-style:	none;
+    }
+    LI.doctools_section, LI.doctools_subsection {
+	list-style: 	none;
+	margin-left: 	0em;
+	text-indent:	0em;
+	padding: 	0em;
+    }
+    PRE {
+	display: 	block;
+	font-family:	monospace;
+	white-space:	pre;
+	margin:		0%;
+	padding-top:	0.5ex;
+	padding-bottom:	0.5ex;
+	padding-left:	1ex;
+	padding-right:	1ex;
+	width:		100%;
+    }
+    PRE.doctools_example {
+	color: 		black;
+	background: 	#f5dcb3;
+	border:		1px solid black;
+    }
+    UL.doctools_requirements LI, UL.doctools_syntax LI {
+	list-style: 	none;
+	margin-left: 	0em;
+	text-indent:	0em;
+	padding:	0em;
+    }
+    DIV.doctools_synopsis {
+	color: 		black;
+	background: 	#80ffff;
+	border:		1px solid black;
+	font-family:	serif;
+	margin-top: 	1em;
+	margin-bottom: 	1em;
+    }
+    UL.doctools_syntax {
+	margin-top: 	1em;
+	border-top:	1px solid black;
+    }
+    UL.doctools_requirements {
+	margin-bottom: 	1em;
+	border-bottom:	1px solid black;
+    }
+--></style>
+</head>
+<!-- Generated from file 'MuPDFWidget.man' by tcllib/doctools with format 'html'
+   -->
+<!-- Copyright &amp;copy; 2021, by A.Buratti
+   -->
+<!-- mupdf::widget.n
+   -->
+<body><div class="doctools">
+<h1 class="doctools_title">mupdf::widget(n) 2.2 MuPDFWidget &quot;A basic PDF-viewer widget&quot;</h1>
+<div id="name" class="doctools_section"><h2><a name="name">Name</a></h2>
+<p>mupdf::widget - a basic PDF-viewer widget</p>
+</div>
+<div id="toc" class="doctools_section"><h2><a name="toc">Table Of Contents</a></h2>
+<ul class="doctools_toc">
+<li class="doctools_section"><a href="#toc">Table Of Contents</a></li>
+<li class="doctools_section"><a href="#synopsis">Synopsis</a></li>
+<li class="doctools_section"><a href="#section1">Description</a></li>
+<li class="doctools_section"><a href="#section2">WIDGET OPTIONS</a></li>
+<li class="doctools_section"><a href="#section3">WIDGET COMMANDS</a></li>
+<li class="doctools_section"><a href="#section4">BINDINGS</a>
+<ul>
+<li class="doctools_subsection"><a href="#subsection1">Redefining bindings</a></li>
+</ul>
+</li>
+<li class="doctools_section"><a href="#section5">VIRTUAL EVENTS</a></li>
+<li class="doctools_section"><a href="#section6">SHARED VIEWS and SHARED CHANGES</a></li>
+<li class="doctools_section"><a href="#section7">BUGS, IDEAS, FEEDBACK</a></li>
+<li class="doctools_section"><a href="#keywords">Keywords</a></li>
+<li class="doctools_section"><a href="#category">Category</a></li>
+<li class="doctools_section"><a href="#copyright">Copyright</a></li>
+</ul>
+</div>
+<div id="synopsis" class="doctools_section"><h2><a name="synopsis">Synopsis</a></h2>
+<div class="doctools_synopsis">
+<ul class="doctools_requirements">
+<li>package require <b class="pkgname">Tk 8.6</b></li>
+<li>package require <b class="pkgname">mupdf::widget <span class="opt">?2.2?</span></b></li>
+</ul>
+<ul class="doctools_syntax">
+<li><a href="#1"><b class="widget">mupdf::widget</b> <i class="arg">pathName</i> <span class="opt">?<i class="arg">pdfObj</i>?</span> <span class="opt">?<i class="arg">option</i> <i class="arg">value</i>...?</span></a></li>
+<li><a href="#2"><i class="arg">pathName</i> <b class="method">attach</b></a></li>
+<li><a href="#3"><i class="arg">pathName</i> <b class="method">attach</b> <b class="const">&quot;&quot;</b></a></li>
+<li><a href="#4"><i class="arg">pathName</i> <b class="method">attach</b> <i class="arg">pdfObj</i> <span class="opt">?<i class="arg">pageNum</i>?</span></a></li>
+<li><a href="#5"><i class="arg">pathName</i> <b class="method">cget</b> <i class="arg">option</i></a></li>
+<li><a href="#6"><i class="arg">pathName</i> <b class="method">configure</b> <span class="opt">?<i class="arg">option</i>?</span> <span class="opt">?<i class="arg">value</i> <i class="arg">option</i> <i class="arg">value</i> ...?</span></a></li>
+<li><a href="#7"><i class="arg">pathName</i> <b class="method">reqsize</b></a></li>
+<li><a href="#8"><i class="arg">pathName</i> <b class="method">clone</b> <i class="arg">newPath</i></a></li>
+<li><a href="#9"><i class="arg">pathName</i> <b class="method">zoom</b></a></li>
+<li><a href="#10"><i class="arg">pathName</i> <b class="method">zoom</b> <i class="arg">zf</i></a></li>
+<li><a href="#11"><i class="arg">pathName</i> <b class="method">zoomfit</b> <i class="arg">mode</i></a></li>
+<li><a href="#12"><i class="arg">pathName</i> <b class="method">rzoom</b> <i class="arg">delta</i></a></li>
+<li><a href="#13"><i class="arg">pathName</i> <b class="method">center</b> <i class="arg">mode</i></a></li>
+<li><a href="#14"><i class="arg">pathName</i> <b class="method">align</b> <i class="arg">side</i></a></li>
+<li><a href="#15"><i class="arg">pathName</i> <b class="method">scroll</b> <i class="arg">dWx</i> <i class="arg">dWy</i></a></li>
+<li><a href="#16"><i class="arg">pathName</i> <b class="method">scan</b> <b class="const">mark</b> <i class="arg">x</i> <i class="arg">y</i></a></li>
+<li><a href="#17"><i class="arg">pathName</i> <b class="method">scan</b> <b class="const">dragto</b> <i class="arg">x</i> <i class="arg">y</i> <span class="opt">?<i class="arg">gain</i>?</span></a></li>
+<li><a href="#18"><i class="arg">pathName</i> <b class="method">xview</b> <span class="opt">?<i class="arg">args</i>?</span></a></li>
+<li><a href="#19"><i class="arg">pathName</i> <b class="method">yview</b> <span class="opt">?<i class="arg">args</i>?</span></a></li>
+<li><a href="#20"><i class="arg">pathName</i> <b class="method">page</b></a></li>
+<li><a href="#21"><i class="arg">pathName</i> <b class="method">page</b> <i class="arg">pagenumber</i></a></li>
+<li><a href="#22"><i class="arg">pathName</i> <b class="method">nextpage</b></a></li>
+<li><a href="#23"><i class="arg">pathName</i> <b class="method">prevpage</b></a></li>
+<li><a href="#24"><i class="arg">pathName</i> <b class="method">search</b> <i class="arg">text</i> <span class="opt">?<b class="option">-startpage</b> <i class="arg">n</i>?</span> <span class="opt">?<b class="option">-currpageonly</b> <i class="arg">true/false</i>?</span></a></li>
+<li><a href="#25"><i class="arg">pathName</i> <b class="method">search</b> <b class="const">&quot;&quot;</b></a></li>
+<li><a href="#26"><i class="arg">pathName</i> <b class="method">search</b></a></li>
+<li><a href="#27"><i class="arg">pathName</i> <b class="method">selectionclear</b></a></li>
+<li><a href="#28"><i class="arg">pathName</i> <b class="method">annot_get</b></a></li>
+<li><a href="#29"><i class="arg">pathName</i> <b class="method">annot_add</b> <i class="arg">type</i> <i class="arg">color</i></a></li>
+<li><a href="#30"><i class="arg">pathName</i> <b class="method">annot_setcolor</b> <i class="arg">color</i></a></li>
+<li><a href="#31"><i class="arg">pathName</i> <b class="method">annot_delete</b></a></li>
+<li><a href="#32"><i class="arg">pathName</i> <b class="method">annot_flatten</b></a></li>
+<li><a href="#33"><i class="arg">pathName</i> <b class="method">win2page</b> <i class="arg">x</i> <i class="arg">y</i></a></li>
+<li><a href="#34"><i class="arg">pathName</i> <b class="method">win2PDFcoords</b> <i class="arg">x</i> <i class="arg">y</i></a></li>
+</ul>
+</div>
+</div>
+<div id="section1" class="doctools_section"><h2><a name="section1">Description</a></h2>
+<p><b class="widget">mupdf::widget</b> is a fully customizable widget for displaying PDF-files, 
+based on the package <b class="package">tclMuPDF</b>, a tcl-binding of the popular MuPDF framework.</p>
+<p>You need to install <b class="package">tclMuPDF</b>, then use it for opening PDF files. 
+Once a PDF-file has been opened, i.e. you got a <i class="arg">pdfObj</i>, you can use it for
+working with an instance of a <b class="widget">mupdf::widget</b>.</p>
+<pre class="doctools_example">
+ # choose a PDF file ...
+set PDFname  &quot;/docs/abc.pdf&quot;
+ # create a pdfObj
+set pdfObj [mupdf::open $PDFname]
+ # create a widget for pdfObj 
+mupdf::widget .pdfWin $pdfObj
+ # display the widget .pdfW
+pack .pdfWin -expand 1 -fill both
+</pre>
+<p>The general form for creating a widget is:</p>
+<dl class="doctools_definitions">
+<dt><a name="1"><b class="widget">mupdf::widget</b> <i class="arg">pathName</i> <span class="opt">?<i class="arg">pdfObj</i>?</span> <span class="opt">?<i class="arg">option</i> <i class="arg">value</i>...?</span></a></dt>
+<dd></dd>
+</dl>
+<p>This command command creates the <i class="arg">pathName</i> widget and returns a new Tcl command whose name is <i class="arg">pathName</i>. 
+If <i class="arg">pdfObj</i> is not specified, then the widget starts 'empty', with no attached PDF. You should then <b class="cmd">attach</b> a <i class="arg">pdfObj</i> later (see below).</p>
+<p>Note that a <b class="cmd">mupdf::widget</b> starts with a basic set of interaction-controls (bindings) for
+scrolling the pages, selecting text and annotations;
+it's your responsability to choose whick kind of UI you want to implement (menus, buttons)
+and how to respond to some custom events (text/annotation selection) by binding these controls and events with the basic actions <b class="cmd">mupdf::widget</b> provides.</p>
+</div>
+<div id="section2" class="doctools_section"><h2><a name="section2">WIDGET OPTIONS</a></h2>
+<dl class="doctools_options">
+<dt><b class="option">-background</b></dt>
+<dd><p>The background color of the underlying canvas.</p></dd>
+<dt><b class="option">-cursor</b></dt>
+<dd><p>The mouse cursor to be used for the widget. The value may have any of the forms acceptable to Tk_GetCursor.
+In addition, if an empty string is specified, it indicates that the widget should defer to its parent for cursor specification.</p></dd>
+<dt><b class="option">-extramargin</b></dt>
+<dd><p>A non-negative value indicating the extra space surrounding the displayed PDF pages.</p></dd>
+<dt><b class="option">-foundtextcolor</b></dt>
+<dd><p>The color used for highlighting the searched words. Default is <b class="const">red</b>. See subcommand <b class="method">search</b>.</p></dd>
+<dt><b class="option">-selectioncolor</b></dt>
+<dd><p>The color used for highlighting the selected text. Default is <b class="const">yellow</b>.</p></dd>
+<dt><b class="option">-shadow</b></dt>
+<dd><p>a list of gray shades for rendering a pseudo shadow under the page. 
+Note: since currently shadows are only gray-level shadows option <b class="option">-background</b> should be a gray shade,too.</p></dd>
+<dt><b class="option">-zoomratio</b></dt>
+<dd><p>A coefficient used for relative zoom. See subcommand <b class="method">rzoom</b>.</p></dd>
+<dt><b class="option">-xscrollcommand</b></dt>
+<dd></dd>
+<dt><b class="option">-yscrollcommand</b></dt>
+<dd></dd>
+<dt><b class="option">-xscrollincrement</b></dt>
+<dd></dd>
+<dt><b class="option">-yscrollincrement</b></dt>
+<dd><p>Same as the standard options to communicate with <b class="widget">scrollbar</b>s</p></dd>
+</dl>
+</div>
+<div id="section3" class="doctools_section"><h2><a name="section3">WIDGET COMMANDS</a></h2>
+<p>The <b class="widget">mupdf::widget</b> command creates a widget and a new Tcl command whose name is <i class="arg">pathName</i>. 
+<i class="arg">pathName</i> may be used to invoke various operations on the widget. It has the following general form:</p>
+<dl class="doctools_definitions">
+<dt><i class="arg">pathName</i> <i class="arg">subCommand</i> <span class="opt">?<i class="arg">arg ...</i>?</span></dt>
+<dd></dd>
+</dl>
+<p>The following <i class="arg">subCommands</i> are available for the widget <i class="arg">pathName</i>:</p>
+<dl class="doctools_definitions">
+<dt><a name="2"><i class="arg">pathName</i> <b class="method">attach</b></a></dt>
+<dd><p>return the currently attached <i class="arg">pdfObj</i> or {}.</p></dd>
+<dt><a name="3"><i class="arg">pathName</i> <b class="method">attach</b> <b class="const">&quot;&quot;</b></a></dt>
+<dd><p>break the link with the attached <i class="arg">pdfObj</i> (if any). An 'empty' page is displayed.</p></dd>
+<dt><a name="4"><i class="arg">pathName</i> <b class="method">attach</b> <i class="arg">pdfObj</i> <span class="opt">?<i class="arg">pageNum</i>?</span></a></dt>
+<dd><p>attach the <i class="arg">pdfObj</i> object (created by <b class="cmd">mupdf::open</b>) and display the page <i class="arg">pageNum</i> or the closest one to <i class="arg">pageNum</i>.
+If <i class="arg">pageNum</i> is not specified, then page 0 (the first page) is displayed.</p></dd>
+<dt><a name="5"><i class="arg">pathName</i> <b class="method">cget</b> <i class="arg">option</i></a></dt>
+<dd><p>return the current value of the configuration option given by <i class="arg">option</i>. <i class="arg">Option</i> may have any of the values accepted by the <b class="cmd">mupdf::widget</b> command.</p></dd>
+<dt><a name="6"><i class="arg">pathName</i> <b class="method">configure</b> <span class="opt">?<i class="arg">option</i>?</span> <span class="opt">?<i class="arg">value</i> <i class="arg">option</i> <i class="arg">value</i> ...?</span></a></dt>
+<dd><p>Query or modify the configuration options of the widget.
+If no <i class="arg">option</i> is specified, returns a list describing all of the available options for <i class="arg">pathName</i> (see Tk_ConfigureInfo for information on the format of this list).
+If <i class="arg">option</i> is specified with no value, thena the command returns a list describing the one named option (this list will be identical to the corresponding sublist of the value returned if no option is specified).
+If one or more option-value pairs are specified, then the command modifies the given widget <i class="arg">option(s)</i> to have the given <i class="arg">value(s)</i>; in this case the command returns an empty string. 
+Option may have any of the values accepted by the <b class="cmd">mupdf::widget</b> command.</p></dd>
+<dt><a name="7"><i class="arg">pathName</i> <b class="method">reqsize</b></a></dt>
+<dd><p>return a list of two integer representing the width and height (in pixel) of the zoomed page including the <b class="option">-extramargin</b>.
+Note that this size is just the 'virtual' size of the zoomed page since just the visible area of the page (plus some extra 'margin') is rendered as a bitmap by the the underling mupdf engine.</p></dd>
+<dt><a name="8"><i class="arg">pathName</i> <b class="method">clone</b> <i class="arg">newPath</i></a></dt>
+<dd><p>creates a new mupdf::widget named <i class="arg">newPath</i> as a clone of <i class="arg">pathName</i>.</p></dd>
+<dt><a name="9"><i class="arg">pathName</i> <b class="method">zoom</b></a></dt>
+<dd><p>get the current zoom-factor</p></dd>
+<dt><a name="10"><i class="arg">pathName</i> <b class="method">zoom</b> <i class="arg">zf</i></a></dt>
+<dd><p>set the current zoom-factor</p></dd>
+<dt><a name="11"><i class="arg">pathName</i> <b class="method">zoomfit</b> <i class="arg">mode</i></a></dt>
+<dd><p>set the optimal zoom-factor for displaying the page.
+<i class="arg">mode</i> can be <b class="const">x</b> (best-width) <b class="const">y</b> (best-height) <b class="const">xy</b> (best fit).</p></dd>
+<dt><a name="12"><i class="arg">pathName</i> <b class="method">rzoom</b> <i class="arg">delta</i></a></dt>
+<dd><p>multiply-or-divide the zoom-factor by the <b class="option">-zoomratio</b> coefficient.
+If <i class="arg">delta</i> is positive, zoom-factor is multiplied, else it's divided</p></dd>
+<dt><a name="13"><i class="arg">pathName</i> <b class="method">center</b> <i class="arg">mode</i></a></dt>
+<dd><p>align the center of the page with the center of the window.
+<i class="arg">mode</i> can be <b class="const">x</b>, <b class="const">y</b> or <b class="const">xy</b>.</p></dd>
+<dt><a name="14"><i class="arg">pathName</i> <b class="method">align</b> <i class="arg">side</i></a></dt>
+<dd><p>align the page on a side of the window. <i class="arg">side</i> can be <b class="const">top</b>, <b class="const">bottom</b>, <b class="const">left</b> or <b class="const">right</b>.</p></dd>
+<dt><a name="15"><i class="arg">pathName</i> <b class="method">scroll</b> <i class="arg">dWx</i> <i class="arg">dWy</i></a></dt>
+<dd><p>scroll the viewport by <i class="arg">dWx</i>,<i class="arg">dWy</i> pixels.</p></dd>
+<dt><a name="16"><i class="arg">pathName</i> <b class="method">scan</b> <b class="const">mark</b> <i class="arg">x</i> <i class="arg">y</i></a></dt>
+<dd></dd>
+<dt><a name="17"><i class="arg">pathName</i> <b class="method">scan</b> <b class="const">dragto</b> <i class="arg">x</i> <i class="arg">y</i> <span class="opt">?<i class="arg">gain</i>?</span></a></dt>
+<dd><p>The <b class="method">scan</b> subcommands is used to implement scanning.
+See the <b class="method">scan</b> subcommand of the <b class="cmd">canvas</b> widget.</p></dd>
+<dt><a name="18"><i class="arg">pathName</i> <b class="method">xview</b> <span class="opt">?<i class="arg">args</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="19"><i class="arg">pathName</i> <b class="method">yview</b> <span class="opt">?<i class="arg">args</i>?</span></a></dt>
+<dd><p>These subcommands are used to query and change the horizontal/vertical position of the page displayed in the window.
+They are usually used for interacting with scrollbars.
+See the <b class="method">xview</b>,<b class="method">yview</b> subcommands of the <b class="cmd">canvas</b> widget.</p></dd>
+<dt><a name="20"><i class="arg">pathName</i> <b class="method">page</b></a></dt>
+<dd><p>get the current page number (first page is 0).</p></dd>
+<dt><a name="21"><i class="arg">pathName</i> <b class="method">page</b> <i class="arg">pagenumber</i></a></dt>
+<dd><p>show the page <i class="arg">pagenumber</i> (first page is 0).  This subcommand returns an error if <i class="arg">pagenumber</i> is out of bounds.</p></dd>
+<dt><a name="22"><i class="arg">pathName</i> <b class="method">nextpage</b></a></dt>
+<dd><p>show the next page. This subcommand returns <b class="const">false</b> if there's not a next page, else it returns <b class="const">true</b>.</p></dd>
+<dt><a name="23"><i class="arg">pathName</i> <b class="method">prevpage</b></a></dt>
+<dd><p>show the previous page. This subcommand returns <b class="const">false</b> if there's not a previous page, else it returns <b class="const">true</b>.</p></dd>
+<dt><a name="24"><i class="arg">pathName</i> <b class="method">search</b> <i class="arg">text</i> <span class="opt">?<b class="option">-startpage</b> <i class="arg">n</i>?</span> <span class="opt">?<b class="option">-currpageonly</b> <i class="arg">true/false</i>?</span></a></dt>
+<dd><p>start searching <i class="arg">text</i> and highlight all its occurrencies starting from the current page, or from page <i class="arg">n</i> if specified.
+If option <b class="option">-currpageonly</b> is <b class="const">true</b>, the the search is limited to the current page (or from the page specificed as <b class="option">-startpage</b>).</p></dd>
+<dt><a name="25"><i class="arg">pathName</i> <b class="method">search</b> <b class="const">&quot;&quot;</b></a></dt>
+<dd><p>reset the text-to-search.</p></dd>
+<dt><a name="26"><i class="arg">pathName</i> <b class="method">search</b></a></dt>
+<dd><p>get the currently set text-to-search.</p></dd>
+<dt><a name="27"><i class="arg">pathName</i> <b class="method">selectionclear</b></a></dt>
+<dd><p>turn off the highlights on the currently selected text.</p></dd>
+<dt><a name="28"><i class="arg">pathName</i> <b class="method">annot_get</b></a></dt>
+<dd><p>This method should be used only after an existing annotation has been selected, 
+i.e. in response to the <b class="const">&lt;&lt;MuPDF.AnnotSelected&gt;&gt;</b> event.</p></dd>
+<dt><a name="29"><i class="arg">pathName</i> <b class="method">annot_add</b> <i class="arg">type</i> <i class="arg">color</i></a></dt>
+<dd><p>This method should be used only after receiving the event <b class="const">&lt;&lt;MuPDF.TextSelected&gt;&gt;</b>.
+The selected text is transformed in a pdf-annotation.
+<i class="arg">type</i> must be <b class="const">highlight</b>, <b class="const">underline</b>, <b class="const">strikeout</b> or <b class="const">squiggly</b>.
+<i class="arg">color</i> must be a symbolic color (eg, red, ligthblue, ,,,) or #rrggbb</p></dd>
+<dt><a name="30"><i class="arg">pathName</i> <b class="method">annot_setcolor</b> <i class="arg">color</i></a></dt>
+<dd><p>This method should be used only after an existing annotation has been selected, 
+i.e. in response to the <b class="const">&lt;&lt;MuPDF.AnnotSelected&gt;&gt;</b> event.
+<i class="arg">color</i> must be a symbolic color (eg, red, lightblue, ,,,) or #rrggbb</p></dd>
+<dt><a name="31"><i class="arg">pathName</i> <b class="method">annot_delete</b></a></dt>
+<dd><p>This method should be used only after an existing annotation has been selected, 
+i.e. in response to the <b class="const">&lt;&lt;MuPDF.AnnotSelected&gt;&gt;</b> event.</p></dd>
+<dt><a name="32"><i class="arg">pathName</i> <b class="method">annot_flatten</b></a></dt>
+<dd><p>This method should be used only after an existing annotation has been selected, 
+i.e. in response to the <b class="const">&lt;&lt;MuPDF.AnnotSelected&gt;&gt;</b> event.</p></dd>
+<dt><a name="33"><i class="arg">pathName</i> <b class="method">win2page</b> <i class="arg">x</i> <i class="arg">y</i></a></dt>
+<dd><p>given a screen point (relative to the origin of the <i class="arg">pathName</i> widget),
+return the corresponding point of the PDF page (in 'points' unit), accordling to the MuPDF coord-sys where (0,0) is the top-left corner of the page.</p></dd>
+<dt><a name="34"><i class="arg">pathName</i> <b class="method">win2PDFcoords</b> <i class="arg">x</i> <i class="arg">y</i></a></dt>
+<dd><p>given a screen point (relative to the origin of the <i class="arg">pathName</i> widget),
+return the corresponding point of the PDF page (in 'points' unit), accordling to the standard PDF coord-sys where (0,0) is the bottom-left corner of the page.</p></dd>
+</dl>
+</div>
+<div id="section4" class="doctools_section"><h2><a name="section4">BINDINGS</a></h2>
+<p><b class="widget">mupdf::widget</b> provides only basic built-in bindings for scrolling the page.
+The behavior of <b class="widget">mupdf::widget</b> can be enhanced by defining new bindings for individual widgets or by redefining the class bindings.</p>
+<ul class="doctools_itemized">
+<li><p>The arrows-keys can be used for scrolling a large page as do the mousewheel or two-finger gesture on a touchpad.</p></li>
+<li><p>On Windows you can also use an horizontal two-finger gesture for horizontal scrolling; on other platforms you should use &lt;shift&gt;+&lt;mousewheel&gt;.</p></li>
+</ul>
+<div id="subsection1" class="doctools_subsection"><h3><a name="subsection1">Redefining bindings</a></h3>
+<p><b class="widget">mupdf::widget</b> subcommands may be associated with different kind of UI controls,
+such as buttons, menus, or they may be bound to events.</p>
+<p>It is recommended to redefine and add new bindings at widget-class level. The name of the widget-class for <b class="widget">mupdf::widget</b>
+is <b class="const">MuPDFWidget</b>.</p>
+<p>Just few examples:</p>
+<p>Associate the <b class="method">zoomfit</b> subcommand with the keyboard's key &quot;Z&quot;</p>
+<pre class="doctools_example">
+bind MuPDFWidget &lt;Key-z&gt; { %W zoomfit xy }
+</pre>
+<p>Change the page using the PageUp, PageDown keys</p>
+<pre class="doctools_example">
+bind MuPDFWidget &lt;Key-Next&gt; { %W nextpage }
+bind MuPDFWidget &lt;Key-Prior&gt; { %W prevpage }
+</pre>
+</div>
+</div>
+<div id="section5" class="doctools_section"><h2><a name="section5">VIRTUAL EVENTS</a></h2>
+<p>MUPDFWidget defines a few virtual events for the purposes of notification.</p>
+<ul class="doctools_itemized"> 
+<li><p>Any time the widget is resized, the virtual event <b class="const">&lt;&lt;MuPDF.Configured&gt;&gt;</b> will be generated.</p></li>
+<li><p>Any time the current page is changed, the virtual event <b class="const">&lt;&lt;MuPDF.PageLoaded&gt;&gt;</b> will be generated. Binding scripts can use the %d value for getting the new page-number.</p></li>
+<li><p>Any time an annotation is selected, the virtual event <b class="const">&lt;&lt;MuPDF.AnnotSelected&gt;&gt;</b> will be generated. 
+Binding scripts can use the %x and %y value for getting the coords of the selection, and the %d value for getting the annotation-type.</p></li>
+<li><p>Any time a text is selected, the virtual event <b class="const">&lt;&lt;MuPDF.TextSelected&gt;&gt;</b> will be generated.</p></li>
+</ul>
+</div>
+<div id="section6" class="doctools_section"><h2><a name="section6">SHARED VIEWS and SHARED CHANGES</a></h2>
+<p>Starting with mupdf::widget 2.0, programmers were able to create multiple instances of mupdf::widget
+ even working on the same PDF (e.g. two views on the same PDF).</p>
+<p>This worked but with one severe limitation: changes made through one view (e.g. add/change/delete annotations)
+  weren't propagated to other views; as a matter of fact others views were kept
+  in sync only after a full-page reload.</p>
+<p>Starting with mupdf::widget 2.2, all the widget instances working on the same PDF
+are kept in sync, so that changes made in one view (add/change/remove annotations..)
+are instantly propagated to all the widget instances working on the same doc.</p>
+</div>
+<div id="section7" class="doctools_section"><h2><a name="section7">BUGS, IDEAS, FEEDBACK</a></h2>
+<ul class="doctools_itemized">
+<li><p>-</p></li>
+</ul>
+</div>
+<div id="keywords" class="doctools_section"><h2><a name="keywords">Keywords</a></h2>
+<p>PDF, Snit, widget</p>
+</div>
+<div id="category" class="doctools_section"><h2><a name="category">Category</a></h2>
+<p>widgets</p>
+</div>
+<div id="copyright" class="doctools_section"><h2><a name="copyright">Copyright</a></h2>
+<p>Copyright &copy; 2021, by A.Buratti</p>
+</div>
+</div></body></html>

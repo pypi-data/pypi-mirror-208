@@ -1,0 +1,1182 @@
+<!DOCTYPE html><html><head>
+<title>tclBlend2d - Tcl meets Blend2d</title>
+<style type="text/css"><!--
+    HTML {
+	background: 	#FFFFFF;
+	color: 		black;
+    }
+    BODY {
+	background: 	#FFFFFF;
+	color:	 	black;
+    }
+    DIV.doctools {
+	margin-left:	10%;
+	margin-right:	10%;
+    }
+    DIV.doctools H1,DIV.doctools H2 {
+	margin-left:	-5%;
+    }
+    H1, H2, H3, H4 {
+	margin-top: 	1em;
+	font-family:	sans-serif;
+	font-size:	large;
+	color:		#005A9C;
+	background: 	transparent;
+	text-align:		left;
+    }
+    H1.doctools_title {
+	text-align: center;
+    }
+    UL,OL {
+	margin-right: 0em;
+	margin-top: 3pt;
+	margin-bottom: 3pt;
+    }
+    UL LI {
+	list-style: disc;
+    }
+    OL LI {
+	list-style: decimal;
+    }
+    DT {
+	padding-top: 	1ex;
+    }
+    UL.doctools_toc,UL.doctools_toc UL, UL.doctools_toc UL UL {
+	font:		normal 12pt/14pt sans-serif;
+	list-style:	none;
+    }
+    LI.doctools_section, LI.doctools_subsection {
+	list-style: 	none;
+	margin-left: 	0em;
+	text-indent:	0em;
+	padding: 	0em;
+    }
+    PRE {
+	display: 	block;
+	font-family:	monospace;
+	white-space:	pre;
+	margin:		0%;
+	padding-top:	0.5ex;
+	padding-bottom:	0.5ex;
+	padding-left:	1ex;
+	padding-right:	1ex;
+	width:		100%;
+    }
+    PRE.doctools_example {
+	color: 		black;
+	background: 	#f5dcb3;
+	border:		1px solid black;
+    }
+    UL.doctools_requirements LI, UL.doctools_syntax LI {
+	list-style: 	none;
+	margin-left: 	0em;
+	text-indent:	0em;
+	padding:	0em;
+    }
+    DIV.doctools_synopsis {
+	color: 		black;
+	background: 	#80ffff;
+	border:		1px solid black;
+	font-family:	serif;
+	margin-top: 	1em;
+	margin-bottom: 	1em;
+    }
+    UL.doctools_syntax {
+	margin-top: 	1em;
+	border-top:	1px solid black;
+    }
+    UL.doctools_requirements {
+	margin-bottom: 	1em;
+	border-bottom:	1px solid black;
+    }
+--></style>
+</head>
+<!-- Generated from file 'tclBlend2d.man' by tcllib/doctools with format 'html'
+   -->
+<!-- Copyright &amp;copy; 2021..2023 - A.Buratti
+   -->
+<!-- tclBlend2d.n
+   -->
+<body><div class="doctools">
+<h1 class="doctools_title">tclBlend2d(n) 1.0 tclBlend2d &quot;Tcl meets Blend2d&quot;</h1>
+<div id="name" class="doctools_section"><h2><a name="name">Name</a></h2>
+<p>tclBlend2d - Tcl meets Blend2d</p>
+</div>
+<div id="toc" class="doctools_section"><h2><a name="toc">Table Of Contents</a></h2>
+<ul class="doctools_toc">
+<li class="doctools_section"><a href="#toc">Table Of Contents</a></li>
+<li class="doctools_section"><a href="#synopsis">Synopsis</a></li>
+<li class="doctools_section"><a href="#section1">Description</a></li>
+<li class="doctools_section"><a href="#section2">Blend2d with and without Tk</a></li>
+<li class="doctools_section"><a href="#section3">BL::Surface and the graphics state parameters</a>
+<ul>
+<li class="doctools_subsection"><a href="#subsection1">Setting a style</a></li>
+<li class="doctools_subsection"><a href="#subsection2">Geometric types</a></li>
+<li class="doctools_subsection"><a href="#subsection3">Drawing on a surface</a></li>
+<li class="doctools_subsection"><a href="#subsection4">Other Surface commands</a></li>
+</ul>
+</li>
+<li class="doctools_section"><a href="#section4">BL::Path</a></li>
+<li class="doctools_section"><a href="#section5">BL::FontFace, BL::Font and Glyphs</a></li>
+<li class="doctools_section"><a href="#section6">Applying filters</a>
+<ul>
+<li class="doctools_subsection"><a href="#subsection5">filter-args for &quot;blur&quot; filter</a></li>
+<li class="doctools_subsection"><a href="#subsection6">filter-args for &quot;shadow&quot; filter</a></li>
+</ul>
+</li>
+<li class="doctools_section"><a href="#section7">Exchanging pixmaps</a>
+<ul>
+<li class="doctools_subsection"><a href="#subsection7">read/write files</a></li>
+<li class="doctools_subsection"><a href="#subsection8">copy among surfaces</a></li>
+<li class="doctools_subsection"><a href="#subsection9">reading/writing tkphoto</a></li>
+</ul>
+</li>
+<li class="doctools_section"><a href="#section8">Creating a blend2d (tk-)image</a></li>
+<li class="doctools_section"><a href="#section9">Other BL:: commands</a></li>
+<li class="doctools_section"><a href="#section10">Auxiliary utilities</a>
+<ul>
+<li class="doctools_subsection"><a href="#subsection10">Affine matrix</a></li>
+<li class="doctools_subsection"><a href="#subsection11">HSB color model</a></li>
+</ul>
+</li>
+<li class="doctools_section"><a href="#section11">Limitations</a></li>
+<li class="doctools_section"><a href="#keywords">Keywords</a></li>
+<li class="doctools_section"><a href="#category">Category</a></li>
+<li class="doctools_section"><a href="#copyright">Copyright</a></li>
+</ul>
+</div>
+<div id="synopsis" class="doctools_section"><h2><a name="synopsis">Synopsis</a></h2>
+<div class="doctools_synopsis">
+<ul class="doctools_requirements">
+<li>package require <b class="pkgname">Tcl 8.6</b></li>
+<li>package require <b class="pkgname">Blend2d <span class="opt">?1.0?</span></b></li>
+</ul>
+<ul class="doctools_syntax">
+<li><a href="#1"><b class="class">BL::Surface</b> <b class="method">create</b> <i class="arg">sfcName</i> <span class="opt">?options?</span></a></li>
+<li><a href="#2"><b class="class">BL::Surface</b> <b class="method">new</b> <span class="opt">?options?</span></a></li>
+<li><a href="#3"><i class="arg">sfcName</i> <b class="method">destroy</b></a></li>
+<li><a href="#4"><i class="arg">sfcName</i> <b class="method">dup</b></a></li>
+<li><a href="#5"><b class="cmd">BL::Surface</b> <b class="method">names</b></a></li>
+<li><a href="#6"><i class="arg">sfcName</i> <b class="method">configure</b></a></li>
+<li><a href="#7"><i class="arg">sfcName</i> <b class="method">cget</b> <i class="arg">optionName</i></a></li>
+<li><a href="#8"><i class="arg">sfcName</i> <b class="method">configure</b> <i class="arg">optionName</i></a></li>
+<li><a href="#9"><i class="arg">sfcName</i> <b class="method">configure</b> <i class="arg">optionName</i> <i class="arg">optionValue</i> <span class="opt">?<i class="arg">optionName</i> <i class="arg">optionValue</i> ...?</span></a></li>
+<li><a href="#10"><i class="arg">sfcName</i> <b class="method">push</b></a></li>
+<li><a href="#11"><i class="arg">sfcName</i> <b class="method">pop</b></a></li>
+<li><a href="#12"><i class="arg">sfcName</i> <b class="method">stacksize</b></a></li>
+<li><a href="#13"><i class="arg">sfcName</i> <b class="method">reset</b></a></li>
+<li><a href="#14"><b class="cmd">BL::rgb</b> <i class="arg">RR</i> <i class="arg">GG</i> <i class="arg">BB</i> <span class="opt">?<i class="arg">alpha</i>?</span></a></li>
+<li><a href="#15"><b class="cmd">BL::color</b> <i class="arg">colorName</i> <span class="opt">?<i class="arg">alpha</i>?</span></a></li>
+<li><a href="#16"><b class="cmd">HSB</b> <i class="arg">hue</i> <i class="arg">sat</i> <i class="arg">brightness</i> <span class="opt">?alpha?</span></a></li>
+<li><a href="#17"><b class="cmd">BL::gradient</b> <i class="arg">type</i> <i class="arg">values</i> <i class="arg">stopList</i> <span class="opt">?options?</span></a></li>
+<li><a href="#18"><b class="cmd">BL::pattern</b> <i class="arg">sfcName</i>|<i class="arg">filename</i> <span class="opt">?options?</span></a></li>
+<li><a href="#19"><b class="cmd">BL::line</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i></a></li>
+<li><a href="#20"><b class="cmd">BL::polyline</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i> <span class="opt">?<i class="arg">{x2 y2}</i> ....?</span></a></li>
+<li><a href="#21"><b class="cmd">BL::polygon</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i> <span class="opt">?<i class="arg">{x2 y2}</i> ....?</span></a></li>
+<li><a href="#22"><b class="cmd">BL::box</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i></a></li>
+<li><a href="#23"><b class="cmd">BL::rect</b> <i class="arg">x</i> <i class="arg">y</i> <i class="arg">w</i> <i class="arg">h</i></a></li>
+<li><a href="#24"><b class="cmd">BL::roundrect</b> <i class="arg">x</i> <i class="arg">y</i> <i class="arg">w</i> <i class="arg">h</i> <i class="arg">rx</i> <span class="opt">?<i class="arg">ry</i>?</span></a></li>
+<li><a href="#25"><b class="cmd">BL::circle</b> <i class="arg">{cx cy}</i> <i class="arg">r</i></a></li>
+<li><a href="#26"><b class="cmd">BL::ellipse</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i></a></li>
+<li><a href="#27"><b class="cmd">BL::arc</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i> <i class="arg">start</i> <i class="arg">sweep</i></a></li>
+<li><a href="#28"><b class="cmd">BL::pie</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i> <i class="arg">start</i> <i class="arg">sweep</i></a></li>
+<li><a href="#29"><b class="cmd">BL::chord</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i> <i class="arg">start</i> <i class="arg">sweep</i></a></li>
+<li><a href="#30"><b class="cmd">BL::text</b> <i class="arg">{x y}</i> <i class="arg">font</i> <i class="arg">text</i></a></li>
+<li><a href="#31"><i class="arg">sfcName</i> <b class="method">stroke</b> <i class="arg">geometry</i> <span class="opt">?options?</span></a></li>
+<li><a href="#32"><i class="arg">sfcName</i> <b class="method">fill</b> <b class="const">all</b>|<i class="arg">geometry</i> <span class="opt">?options?</span></a></li>
+<li><a href="#33"><i class="arg">sfcName</i> <b class="method">clear</b> <span class="opt">?options?</span></a></li>
+<li><a href="#34"><i class="arg">sfcName</i> <b class="method">flush</b></a></li>
+<li><a href="#35"><i class="arg">sfcName</i> <b class="method">size</b></a></li>
+<li><a href="#36"><i class="arg">sfcName</i> <b class="method">userToMeta</b></a></li>
+<li><a href="#37"><b class="class">BL::Path</b> <b class="method">create</b> <i class="arg">pathName</i></a></li>
+<li><a href="#38"><b class="class">BL::Path</b> <b class="method">new</b></a></li>
+<li><a href="#39"><i class="arg">pathName</i> <b class="method">destroy</b></a></li>
+<li><a href="#40"><i class="arg">pathName</i> <b class="method">dup</b></a></li>
+<li><a href="#41"><b class="cmd">BL::Path</b> <b class="method">names</b></a></li>
+<li><a href="#42"><i class="arg">pathName</i> <b class="method">add</b> <i class="arg">geometry</i> <span class="opt">?<i class="arg">geometry</i> ...?</span> <span class="opt">?<i class="arg">options</i>?</span></a></li>
+<li><a href="#43"><i class="arg">pathName</i> <b class="method">newStrokedPath</b> <span class="opt">?<i class="arg">stroke-options</i>?</span></a></li>
+<li><a href="#44"><i class="arg">pathName</i> <b class="method">addSVGpath</b> <i class="arg">dataString</i></a></li>
+<li><a href="#45"><i class="arg">pathName</i> <b class="method">apply</b> <i class="arg">matrix</i></a></li>
+<li><a href="#46"><i class="arg">pathName</i> <b class="method">fitTo</b> <i class="arg">x</i> <i class="arg">y</i> <i class="arg">w</i> <i class="arg">h</i></a></li>
+<li><a href="#47"><i class="arg">pathName</i> <b class="method">moveTo</b> <i class="arg">point0</i></a></li>
+<li><a href="#48"><i class="arg">pathName</i> <b class="method">lineTo</b> <i class="arg">point</i> <span class="opt">?<i class="arg">point</i> ...?</span></a></li>
+<li><a href="#49"><i class="arg">pathName</i> <b class="method">quadTo</b> <i class="arg">p1</i> <i class="arg">p2</i> <span class="opt">?<i class="arg">p1</i> <i class="arg">p2</i>...?</span></a></li>
+<li><a href="#50"><i class="arg">pathName</i> <b class="method">cubicTo</b> <i class="arg">p1</i> <i class="arg">p2</i> <i class="arg">p3</i> <span class="opt">?<i class="arg">p1</i> <i class="arg">p2</i> <i class="arg">p3</i>...?</span></a></li>
+<li><a href="#51"><i class="arg">pathName</i> <b class="method">smoothQuadTo</b> <i class="arg">p2</i> <span class="opt">?<i class="arg">p2</i>...?</span></a></li>
+<li><a href="#52"><i class="arg">pathName</i> <b class="method">smoothCubicTo</b> <i class="arg">p2</i> <i class="arg">p3</i> <span class="opt">?<i class="arg">p2</i> <i class="arg">p3</i>...?</span></a></li>
+<li><a href="#53"><i class="arg">pathName</i> <b class="method">arcQuadrantTo</b> <i class="arg">point1</i> <i class="arg">point2</i></a></li>
+<li><a href="#54"><i class="arg">pathName</i> <b class="method">arcTo</b> <i class="arg">pointC</i> <i class="arg">pointR</i> <i class="arg">start</i> <i class="arg">sweep</i> <span class="opt">?<b class="option">-moveto</b> <i class="arg">boolean</i>?</span></a></li>
+<li><a href="#55"><i class="arg">pathName</i> <b class="method">ellipticArcTo</b> <i class="arg">point1</i> <i class="arg">pointR</i> <i class="arg">rotation</i> <i class="arg">largeArcFlag</i> <i class="arg">sweepFlag</i> <i class="arg">point1</i></a></li>
+<li><a href="#56"><i class="arg">pathName</i> <b class="method">close</b></a></li>
+<li><a href="#57"><i class="arg">pathName</i> <b class="method">reset</b></a></li>
+<li><a href="#58"><i class="arg">pathName</i> <b class="method">shrink</b></a></li>
+<li><a href="#59"><i class="arg">pathName</i> <b class="method">bbox</b></a></li>
+<li><a href="#60"><i class="arg">pathName</i> <b class="method">view</b></a></li>
+<li><a href="#61"><i class="arg">pathName</i> <b class="method">contour</b></a></li>
+<li><a href="#62"><i class="arg">pathName</i> <b class="method">contour</b> <i class="arg">i</i>|<b class="const">*</b></a></li>
+<li><a href="#63"><i class="arg">pathName</i> <b class="method">contour</b> <i class="arg">i</i>|<b class="const">*</b> <i class="arg">j</i>|<b class="const">*</b> <i class="arg">OP</i> <i class="arg">t</i></a></li>
+<li><a href="#64"><b class="class">BL::FontFace</b> <b class="method">create</b> <i class="arg">faceName</i> <i class="arg">fontfile</i> <span class="opt">?<i class="arg">faceIdx</i>?</span></a></li>
+<li><a href="#65"><b class="class">BL::FontFace</b> <b class="method">new</b> <i class="arg">fontfile</i> <span class="opt">?<i class="arg">faceIdx</i>?</span></a></li>
+<li><a href="#66"><i class="arg">faceName</i> <b class="method">destroy</b></a></li>
+<li><a href="#67"><b class="cmd">BL::FontFace</b> <b class="method">names</b></a></li>
+<li><a href="#68"><i class="arg">faceName</i> <b class="method">details</b></a></li>
+<li><a href="#69"><b class="class">BL::Font</b> <b class="method">create</b> <i class="arg">fontName</i> <i class="arg">faceName</i> <i class="arg">fontsize</i></a></li>
+<li><a href="#70"><b class="class">BL::Font</b> <b class="method">new</b> <i class="arg">faceName</i> <i class="arg">fontsize</i></a></li>
+<li><a href="#71"><i class="arg">fontName</i> <b class="method">destroy</b></a></li>
+<li><a href="#72"><b class="cmd">BL::Font</b> <b class="method">names</b></a></li>
+<li><a href="#73"><i class="arg">fontName</i> <b class="method">glyphs</b> <i class="arg">someText</i></a></li>
+<li><a href="#74"><i class="arg">fontName</i> <b class="method">glyph</b> <i class="arg">glyphIdx</i></a></li>
+<li><a href="#75"><i class="arg">sfcName</i> <b class="method">blur</b> <i class="arg">radius</i> <span class="opt">?<b class="option">-rect</b> <i class="arg">{x y w h}</i>?</span></a></li>
+<li><a href="#76"><i class="arg">sfcName</i> <b class="method">filter</b> <i class="arg">filterType</i> <span class="opt">?filter-args?</span> <i class="arg">script</i></a></li>
+<li><a href="#77"><i class="arg">sfcName</i> <b class="method">load</b> <i class="arg">filename</i></a></li>
+<li><a href="#78"><i class="arg">sfcName</i> <b class="method">save</b> <i class="arg">filename</i> <span class="opt">?<b class="option">-format</b> <i class="arg">file-format</i>?</span></a></li>
+<li><a href="#79"><i class="arg">sfcName</i> <b class="method">copy</b> <i class="arg">srcSurface</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{xp yp}</i>?</span> <span class="opt">?<b class="option">-compop</b> <i class="arg">op</i>?</span> <span class="opt">?<b class="option">-globalalpha</b> <i class="arg">alpha</i>?</span></a></li>
+<li><a href="#80"><i class="arg">sfcName</i> <b class="method">copy</b> <i class="arg">srcSurface</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x y w h}</i>?</span> <span class="opt">?<b class="option">-compop</b> <i class="arg">op</i>?</span> <span class="opt">?<b class="option">-globalalpha</b> <i class="arg">alpha</i>?</span></a></li>
+<li><a href="#81"><i class="arg">sfcName</i> <b class="method">rawcopy</b> <i class="arg">srcSurface</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x y w h}</i>?</span> <span class="opt">?<b class="option">-compop</b> <i class="arg">op</i>?</span> <span class="opt">?<b class="option">-globalalpha</b> <i class="arg">alpha</i>?</span></a></li>
+<li><a href="#82"><i class="arg">sfcName</i> <b class="method">readFromTkphoto</b> <i class="arg">tkphoto</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x0 y0 w h}</i>?</span></a></li>
+<li><a href="#83"><i class="arg">sfcName</i> <b class="method">writeToTkphoto</b> <i class="arg">tkphoto</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x0 y0 w h}</i>?</span></a></li>
+<li><a href="#84"><b class="cmd">image</b> <b class="method">create</b> <b class="const">blend2d</b> <span class="opt">?<i class="arg">name</i>?</span> <span class="opt">?<i class="arg">options</i>?</span></a></li>
+<li><a href="#85"><b class="cmd">BL::classes</b></a></li>
+<li><a href="#86"><b class="cmd">BL::classinfo</b> <i class="arg">objectName</i></a></li>
+<li><a href="#87"><b class="cmd">BL::codecs</b></a></li>
+<li><a href="#88"><b class="cmd">BL::enum</b></a></li>
+<li><a href="#89"><b class="cmd">BL::enum</b> <i class="arg">category</i></a></li>
+<li><a href="#90"><b class="cmd">BL::libinfo</b></a></li>
+<li><a href="#91"><b class="cmd">BL::platform</b></a></li>
+<li><a href="#92"><b class="cmd">Mtx::identity</b></a></li>
+<li><a href="#93"><b class="cmd">Mtx::MxM</b> <i class="arg">M1</i> <i class="arg">M2</i></a></li>
+<li><a href="#94"><b class="cmd">Mtx::determinant</b> <i class="arg">M</i></a></li>
+<li><a href="#95"><b class="cmd">Mtx::invert</b> <i class="arg">M</i></a></li>
+<li><a href="#96"><b class="cmd">Mtx::PxM</b> <i class="arg">P</i> <i class="arg">M</i></a></li>
+<li><a href="#97"><b class="cmd">Mtx::multiPxM</b> <i class="arg">Points</i> <i class="arg">M</i></a></li>
+<li><a href="#98"><b class="cmd">Mtx::P-P</b> <i class="arg">P1</i> <i class="arg">P2</i></a></li>
+<li><a href="#99"><b class="cmd">Mtx::VxM</b> <i class="arg">V</i> <i class="arg">M</i></a></li>
+<li><a href="#100"><b class="cmd">Mtx::translation</b> <i class="arg">dx</i> <i class="arg">dy</i></a></li>
+<li><a href="#101"><b class="cmd">Mtx::scale</b> <i class="arg">sx</i> <span class="opt">?<i class="arg">sx</i>?</span> <span class="opt">?<i class="arg">C</i>?</span></a></li>
+<li><a href="#102"><b class="cmd">Mtx::rotation</b> <i class="arg">angle</i> <b class="const">radians</b>|<b class="const">degrees</b> <span class="opt">?<i class="arg">C</i>?</span></a></li>
+<li><a href="#103"><b class="cmd">Mtx::skew</b> <i class="arg">sx</i> <i class="arg">sy</i></a></li>
+<li><a href="#104"><b class="cmd">Mtx::xreflection</b></a></li>
+<li><a href="#105"><b class="cmd">Mtx::yreflection</b></a></li>
+<li><a href="#106"><b class="cmd">Mtx::translate</b> <i class="arg">M</i> <i class="arg">dx</i> <i class="arg">dy</i></a></li>
+<li><a href="#107"><b class="cmd">Mtx::post_translate</b> <i class="arg">M</i> <i class="arg">dx</i> <i class="arg">dy</i></a></li>
+<li><a href="#108"><b class="cmd">Mtx::scaling</b> <i class="arg">M</i> <i class="arg">sx</i> <i class="arg">sy</i> <span class="opt">?<i class="arg">C</i>?</span></a></li>
+<li><a href="#109"><b class="cmd">Mtx::post_scaling</b> <i class="arg">M</i> <i class="arg">sx</i> <i class="arg">sy</i> <span class="opt">?<i class="arg">C</i>?</span></a></li>
+<li><a href="#110"><b class="cmd">Mtx::rotate</b> <i class="arg">M</i> <i class="arg">angle</i> <b class="const">radians</b>|<b class="const">degrees</b> <span class="opt">?<i class="arg">C</i>?</span></a></li>
+<li><a href="#111"><b class="cmd">Mtx::post_rotate</b> <i class="arg">M</i> <i class="arg">angle</i> <b class="const">radians</b>|<b class="const">degrees</b> <span class="opt">?<i class="arg">C</i>?</span></a></li>
+<li><a href="#112"><b class="cmd">Mtx::yreflect</b> <i class="arg">M</i></a></li>
+<li><a href="#113"><b class="cmd">HSB</b> <i class="arg">h</i> <i class="arg">s</i> <i class="arg">b</i> <span class="opt">?<i class="arg">alpha</i>?</span></a></li>
+<li><a href="#114"><b class="cmd">RGB2HSB</b> <i class="arg">0xAARRGGBB</i></a></li>
+</ul>
+</div>
+</div>
+<div id="section1" class="doctools_section"><h2><a name="section1">Description</a></h2>
+<p>Package <b class="package">Blend2d</b> integrates the <a href="https://blend2d.com">Blend2d</a> vector engine in Tcl/Tk.</p>
+<p><a href="http://blend2d.com">Blend2d</a> is an open source, high quality, high performance vector graphics engine.</p>
+<p><b class="package">Blend2d</b> is a binary package, distributed in a multi-platform bundle, i.e. it can be used on</p>
+<ul class="doctools_itemized">
+<li><p>Windows 64 bit</p></li>
+<li><p>Linux 64 bit</p></li>
+<li><p>MacOS 64 bit   (... some limitations ...)</p></li>
+</ul>
+<p>Just an example to get the flavor of how to use <b class="package">Blend2d</b>:</p>
+<pre class="doctools_example">
+    # draw a circle ...
+    package require Blend2d
+    set sfc [BL::Surface new]
+    $sfc clear
+    $sfc configure -fill.style [BL::color orange]
+    $sfc fill [BL::circle {150 150} 100]
+    $sfc save &quot;./image01.bmp&quot;
+    $sfc destroy
+</pre>
+</div>
+<div id="section2" class="doctools_section"><h2><a name="section2">Blend2d with and without Tk</a></h2>
+<p>You can run <b class="package">Blend2d</b> from a tclsh interpreter, without loading <b class="cmd">Tk</b>.
+The following command</p>
+<pre class="doctools_example">
+package require tclBlend2d
+</pre>
+<p>can be used in a <b class="cmd">tclsh</b> interpreter to load the package without requiring <b class="cmd">Tk</b> support.
+You will be still able to generate and save images, but of course some subcommands related to Tk won't be available.</p>
+<p>The command</p>
+<pre class="doctools_example">
+package require tkBlend2d
+</pre>
+<p>loads the full package (and requires <b class="cmd">Tk</b>).</p>
+<p>Note that</p>
+<pre class="doctools_example">
+package require Blend2d
+</pre>
+<p>is equivalent to</p>
+<pre class="doctools_example">
+package require tkBlend2d
+</pre>
+</div>
+<div id="section3" class="doctools_section"><h2><a name="section3">BL::Surface and the graphics state parameters</a></h2>
+<p>The main concept of Tcl-Blend2d is the <b class="class">Surface</b>.</p>
+<p>A <b class="class">Surface</b> comes with an internal framebuffer (32bit depth, with alpha support) and holds all of the 
+graphics state parameters that describe how drawing is to be done. This includes parameters like the 
+current line width, the current color (or gradient), a 2D transformation matrix and many other things.</p>
+<p>A <b class="class">Surface</b> can be created with the following commands</p>
+<dl class="doctools_definitions">
+<dt><a name="1"><b class="class">BL::Surface</b> <b class="method">create</b> <i class="arg">sfcName</i> <span class="opt">?options?</span></a></dt>
+<dd><p>creates a new instance of the class <b class="class">BL::Surface</b> called <i class="arg">sfcName</i>.
+Options can be set at creation time, or later with the <b class="method">configure</b> method.</p></dd>
+<dt><a name="2"><b class="class">BL::Surface</b> <b class="method">new</b> <span class="opt">?options?</span></a></dt>
+<dd><p>creates a new instance of the class <b class="class">BL::Surface</b> returning a new unique <i class="arg">sfcName</i>.
+Options can be set at creation time, or later with the <b class="method">configure</b> method.</p></dd>
+<dt><a name="3"><i class="arg">sfcName</i> <b class="method">destroy</b></a></dt>
+<dd><p>destroys <i class="arg">sfcName</i>. Note that in general any oo-object like <i class="arg">sfcName</i> should be explicitly destroyed</p></dd>
+<dt><a name="4"><i class="arg">sfcName</i> <b class="method">dup</b></a></dt>
+<dd><p>duplicates <i class="arg">sfcName</i>. Return a new BL::Surface.</p>
+<p>Note: the full stack of options is not duplicated; only the current options are duplicated.</p></dd>
+<dt><a name="5"><b class="cmd">BL::Surface</b> <b class="method">names</b></a></dt>
+<dd><p>returns the list of all the currently allocated surfaces.</p></dd>
+</dl>
+<p>The whole set of Surface's options is also called the <i class="term">drawing state</i>.</p>
+<p>A <i class="term">drawing state</i> consists of</p>
+<ul class="doctools_itemized">
+<li><p>the 2D transformations that have been applied (i.e. translate, rotate and scale ... see below),</p></li>
+<li><p>the current values of various attributes controlling how to fill and how to stroke all the basic
+ and complex <em>geometric entities</em>,</p></li>
+</ul>
+<p>and it can be manipulated with the <b class="method">cget</b>/<b class="method">configure</b> methods.</p>
+<dl class="doctools_definitions">
+<dt><a name="6"><i class="arg">sfcName</i> <b class="method">configure</b></a></dt>
+<dd><p>returns a list with all the valid options and their values.</p></dd>
+<dt><a name="7"><i class="arg">sfcName</i> <b class="method">cget</b> <i class="arg">optionName</i></a></dt>
+<dd><p>returns the current value of the option <i class="arg">optionName</i>.
+Raise an error if <i class="arg">optionName</i> is not a valid option.</p></dd>
+<dt><a name="8"><i class="arg">sfcName</i> <b class="method">configure</b> <i class="arg">optionName</i></a></dt>
+<dd><p>returns a list with two values: the named option and its value.
+Raise an error if <i class="arg">optionName</i> is not a valid option.</p></dd>
+<dt><a name="9"><i class="arg">sfcName</i> <b class="method">configure</b> <i class="arg">optionName</i> <i class="arg">optionValue</i> <span class="opt">?<i class="arg">optionName</i> <i class="arg">optionValue</i> ...?</span></a></dt>
+<dd><p>modifies all the named options with the specified values.
+Raise an error if any <i class="arg">optionName</i> is not recognized or its <i class="arg">optionValue</i> is not valid;
+in this case no option is modified.</p>
+<p>Surface options are:</p>
+<dl class="doctools_options">
+<dt><b class="option">-threads</b> <i class="arg">count</i></dt>
+<dd><p>If <i class="arg">count</i> is &gt;=1 then all the rendering commands are queued and executed by worker-threads
+    when needed (i.e. before exporting an image or,if the surface is a Tkimage, in the event-loop)
+    Default is 0 (i.e all the rendering commands are run immediately (synchronous mode)).</p></dd>
+<dt><b class="option">-format</b> <i class="arg">{dx dy {<span class="opt">?<b class="const">PRGB32</b> | <b class="const">XRGB32</b>?</span>}}</i></dt>
+<dd><p>sets the size (in pixel) and type of the internal framebuffer.</p>
+<p><em>WARNING</em>: When user sets a new <b class="option">-format</b>, the previous content of the framebuffer is lost,
+    and the new framebuffer is unitialized (it contains garbage). It is user's responsability
+    to clean it or to properly restore the previous contents.
+    Default is <b class="const">{400 400 PRGB32}</b></p></dd>
+<dt><b class="option">-matrix</b> <i class="arg">matrix</i></dt>
+<dd><p><i class="arg">matrix</i> defines the affine transformations that will be applied to the next
+    geometric entities specified with the &quot;fill&quot; or &quot;stroke&quot; operations
+    See the section &quot;Affine Matrix&quot; for more details.
+    Default is <b class="const">{1.0 0.0  0.0 1.0  0.0 0.0}</b> (Identity matrix)</p></dd>
+<dt><b class="option">-metamatrix</b> <i class="arg">matrix</i></dt>
+<dd><p>This is a readonly option. metamatrix is (TO BE DOC'ed...)</p></dd>
+<dt><b class="option">-compop</b> <i class="arg">compositionOp</i></dt>
+<dd><p>defines how colors should be blended.
+    For further details try googling &quot;Porter-Duff composition&quot; or &quot;Alpha composition&quot;.
+    Default is <b class="const">SRC_OVER</b>.</p></dd>
+<dt><b class="option">-globalalpha</b> <i class="arg">alphaValue</i></dt>
+<dd><p>defines a global alpha value.
+    <i class="arg">alphaValue</i> should be between <b class="const">0.0</b> (transparent) and <b class="const">1.0</b> (opaque).
+    Default value is <b class="const">1.0</b></p></dd>
+<dt><b class="option">-fill.style</b> <i class="arg">style</i></dt>
+<dd><p>defines the style to be used for filling.
+    <i class="arg">style</i> can be a solid-color (with alpha transparency), a gradient,or a pattern ...
+    Default is <b class="const">0xFF000000</b> (Opaque Black).</p>
+<p>See the &quot;Setting a style&quot; section below.</p></dd>
+<dt><b class="option">-fill.alpha</b> <i class="arg">alphaValue</i></dt>
+<dd><p>defines the alpha value for <b class="method">fill</b> operations.
+    <i class="arg">alphaValue</i> should be between <b class="const">0.0</b> (transparent) and <b class="const">1.0</b> (opaque).
+    Default value is <b class="const">1.0</b></p></dd>
+<dt><b class="option">-fill.rule</b> <i class="arg">mode</i></dt>
+<dd><p>defines how to fill intersecting curves.
+    Default is <b class="const">NON_ZERO</b></p></dd>
+<dt><b class="option">-stroke.style</b> <i class="arg">style</i></dt>
+<dd><p>defines the style to be used for stroking.
+    <i class="arg">style</i> can be a solid-color (with alpha transparency), a gradient,or a pattern.
+    Default is <b class="const">0xFF000000</b> (Opaque Black)
+    See above notes for <b class="option">-fill.style</b></p></dd>
+<dt><b class="option">-stroke.alpha</b> <i class="arg">alphaValue</i></dt>
+<dd><p>desfines the alpha value for <b class="method">stroke</b> operations.
+    <i class="arg">alphaValue</i> should be between <b class="const">0.0</b> (trasnparent) and <b class="const">1.0</b> (opaque).
+    Default value is <b class="const">1.0</b></p></dd>
+<dt><b class="option">-stroke.width</b> <i class="arg">width</i></dt>
+<dd><p>defines the width of the strokes (outlines).
+    Default value is <b class="const">1.0</b>. 
+    Note that the stroke width is scaled accordling to the current matrix transformation. 
+    If you want a constant width, independent of the current scale factor, you should set 
+    the option <b class="option">-stroke.transformorder</b> to <b class="const">BEFORE</b>.</p></dd>
+<dt><b class="option">-stroke.dashoffset</b> <i class="arg">offset</i></dt>
+<dd><p>defines the offset on the rendering of the associated dash array.
+    Default is <b class="const">0.0</b></p></dd>
+<dt><b class="option">stroke.join</b> <i class="arg">mode</i></dt>
+<dd><p>defines how the junction point of two consecutive segment will be stroked.
+    Default is <b class="const">MITER_CLIP</b></p></dd>
+<dt><b class="option">-stroke.miterlimit</b> <i class="arg">value</i></dt>
+<dd><p>defines the limit on the ratio of the miter length to the stroke-width used to draw a miter join.
+    When the limit is exceeded, the join is converted from a miter to a bevel.
+    Default is <b class="const">4.0</b>.</p></dd>
+<dt><b class="option">-stroke.cap</b> <i class="arg">capMode</i></dt>
+<dd></dd>
+<dt><b class="option">-stroke.cap</b> {<i class="arg">startCap endCap</i>}</dt>
+<dd><p><i class="arg">capMode</i> specifies how to render the extremities of the stroke.
+    <i class="arg">capMode</i> may be a list of two values to specify the <i class="arg">startCap</i> and the <i class="arg">endCap</i> separately.
+    Default is <b class="const">{BUTT BUTT}</b></p></dd>
+<dt><b class="option">-stroke.transformorder</b> <i class="arg">mode</i></dt>
+<dd><p>With the default <i class="arg">mode</i> <b class="const">AFTER</b> the stroke width will be scaled accordling to the current transformation matrix.
+	If <i class="arg">mode</i> is set to <b class="const">BEFORE</b>, the stroke width won't be scaled.</p></dd>
+</dl></dd>
+</dl>
+<p>The whole drawing-state can be stored on an <em>internal stack</em>, and you can inspect,
+save and restore the whole drawing state (i.e. all the options) with just the following commands:</p>
+<dl class="doctools_definitions">
+<dt><a name="10"><i class="arg">sfcName</i> <b class="method">push</b></a></dt>
+<dd><p>saves the current graphic-state on an internal stack.</p></dd>
+<dt><a name="11"><i class="arg">sfcName</i> <b class="method">pop</b></a></dt>
+<dd><p>pops the graphic-state from the stack.
+    Raise an error if stack is empty.</p></dd>
+<dt><a name="12"><i class="arg">sfcName</i> <b class="method">stacksize</b></a></dt>
+<dd><p>returns the size of the internal stack (i.e. number of saved graphic-states)</p></dd>
+<dt><a name="13"><i class="arg">sfcName</i> <b class="method">reset</b></a></dt>
+<dd><p>sets the whole surface's graphic-state, including the internal stack.
+    All the options (but <b class="option">-format</b> and <b class="option">-threads</b>) are reset to their default values.</p></dd>
+</dl>
+<div id="subsection1" class="doctools_subsection"><h3><a name="subsection1">Setting a style</a></h3>
+<p>There are 3 types of styles you can set for strokes and fills:
+    SOLID, GRADIENT, PATTERN</p>
+<ul class="doctools_itemized">
+<li><p>A <b class="const">SOLID</b> style is an uniform color (with optional alpha transparency).
+It can be specified as a simple hex number in 0xAARRGGBB format,
+     0xFFFF0000  is red
+     0xFF0000FF  is blue
+     or through the following utilities:</p>
+<dl class="doctools_definitions">
+<dt><a name="14"><b class="cmd">BL::rgb</b> <i class="arg">RR</i> <i class="arg">GG</i> <i class="arg">BB</i> <span class="opt">?<i class="arg">alpha</i>?</span></a></dt>
+<dd><p>returns a 0xAARRGGBB color by combining the <i class="arg">RR</i> <i class="arg">GG</i> <i class="arg">BB</i>
+    and the (optional) <i class="arg">alpha</i> arguments.</p>
+<p><i class="arg">RR</i>, <i class="arg">GG</i>, <i class="arg">BB</i>  are integers 0..255  (best expressed as 0x00..0xFF),
+    <i class="arg">alpha</i> is an optional parameter ranging from 0.0 (transparent) to 1.0 (opaque).
+    Default <i class="arg">alpha</i> is 1.0</p></dd>
+<dt><a name="15"><b class="cmd">BL::color</b> <i class="arg">colorName</i> <span class="opt">?<i class="arg">alpha</i>?</span></a></dt>
+<dd><p>returns a 0xAARRGGBB color by combining the <i class="arg">colorName</i> and the (optional) <i class="arg">alpha</i> arguments.</p>
+<p><i class="arg">colorName</i> is a color name (e.g &quot;lightblue&quot;) or a numeric-color like #rrggbb,
+    <i class="arg">alpha</i> is an optional parameter ranging from 0.0 (transparent) to 1.0 (opaque).
+    Default <i class="arg">alpha</i> is 1.0</p></dd>
+<dt><a name="16"><b class="cmd">HSB</b> <i class="arg">hue</i> <i class="arg">sat</i> <i class="arg">brightness</i> <span class="opt">?alpha?</span></a></dt>
+<dd><p>This is an alternative way for specifying a color (HSB model).</p>
+<p>See the &quot;HSB color model&quot; section at the end for more details.</p></dd>
+</dl>
+</li>
+<li><p>A <b class="const">GRADIENT</b> can be specified with the following syntax:</p>
+<dl class="doctools_definitions">
+  
+<dt><a name="17"><b class="cmd">BL::gradient</b> <i class="arg">type</i> <i class="arg">values</i> <i class="arg">stopList</i> <span class="opt">?options?</span></a></dt>
+<dd><ul class="doctools_itemized">
+    
+<li><p><i class="arg">type</i> should be one of the following values: LINEAR, RADIAL, CONICAL</p></li>
+<li><p><i class="arg">values</i> is a list of parameters (depending on <i class="arg">type</i>)</p>
+<ul class="doctools_itemized">
+        
+<li><p>BL::gradient LINEAR  {x0 y0 x1 y1}        _stopList_  ?_options_?</p></li>
+<li><p>BL::gradient RADIAL  {x0 y0 x1 y1 radius} _stopList_  ?_options_?</p></li>
+<li><p>BL::gradient CONICAL {x0 y0 angle}        _stopList_  ?_options_?</p></li>
+</ul>
+</li>
+<li><p><i class="arg">stopList</i> is a list of offset and colors (at least two pairs of offset color)</p>
+<ul class="doctools_itemized">
+        
+<li><p><i class="arg">offset</i> is a number between 0.0 and 1.0</p></li>
+<li><p><i class="arg">color</i> can be expressed as an hex number (0xAARRGGBB) or with the above cited
+         <b class="cmd">BL::rgb</b> , <b class="cmd">BL::color</b>, <b class="cmd">HSB</b> commands.</p></li>
+</ul>
+</li>
+<li><p><i class="arg">options</i> are:</p>
+<dl class="doctools_options"> 
+        
+<dt><b class="option">-mode</b> <i class="arg">extendMode</i></dt>
+<dd><p>defines how to extend or repeat the style outside the defined region.
+           Default is <b class="const">PAD</b>.
+           See command &quot;<b class="cmd">BL::enum</b> <b class="const">EXTEND_MODE</b>&quot; for valid values.</p></dd>
+<dt><b class="option">-matrix</b> <i class="arg">mtx</i></dt>
+<dd><p>defines an auxiliary 2D tranformation that should be combined with the
+            current transformation matrix.</p></dd>
+</dl>
+</li>
+</ul></dd>
+</dl>
+<p>Gradient example:</p>
+<pre class="doctools_example">
+    # define an oblique LINEAR gradient
+    set gr1 [BL::gradient LINEAR  {0 0 400 400} \ 
+        [list  0.0 [BL::color lightblue]  0.8 [BL::color blue] 1.0 [BL::rgb 0 0 0 0.1]] \ 
+        ]
+    $sfc fill [BL::circle {200 200} 100] -style $gr1
+</pre>
+</li>
+<li><p>A <b class="const">PATTERN</b> can be specified with the following syntax:</p>
+<dl class="doctools_definitions">
+  
+<dt><a name="18"><b class="cmd">BL::pattern</b> <i class="arg">sfcName</i>|<i class="arg">filename</i> <span class="opt">?options?</span></a></dt>
+<dd><p>defines a pattern based on another <em>sourceBitmap</em>, i.e a <i class="arg">SfcName</i>, or an external JPEG,PNG,BMP <i class="arg">filename</i>.</p>
+<p>Valid <b class="option">options</b> are:</p>
+<dl class="doctools_options">
+    
+<dt><b class="option">-mode</b> <i class="arg">extendMode</i></dt>
+<dd><p>same as for <b class="cmd">BL::gradient</b></p></dd>
+<dt><b class="option">-matrix</b> <i class="arg">mtx</i></dt>
+<dd><p>same as for <b class="cmd">BL::gradient</b></p></dd>
+<dt><b class="option">-from</b> <i class="arg">{x y w h}</i></dt>
+<dd><p>defines the pattern based on a rectangular subregion of the <em>srcBitmap</em>.
+        <i class="arg">x</i>, <i class="arg">y</i>, <i class="arg">w</i>,<i class="arg">h</i> are pixel coords (integer coords)</p></dd>
+</dl></dd>
+</dl>
+</li>
+</ul>
+</div>
+<div id="subsection2" class="doctools_subsection"><h3><a name="subsection2">Geometric types</a></h3>
+<p>Blend2D provides both
+  simple geometric types ( line, rectangle, circle ....)
+  and complex geometric types (Path).
+The main difference between simple and complex geometry types derives from their
+implementation.
+Although all the geometric types could be implemented as oo-classes, this will
+tend to develop programs difficult to maintain, since in Tcl oo-objects should be
+explicitly destroyed.  
+Therefore most of the following commands for building geometric types don't return oo-objects
+but simple tcl-lists/dictionaries, that are automatically disposed when they go out of scope.</p>
+<p>Currently just one complex geometry-types (<b class="class">BL::Path</b>) is implemented as oo-class,
+(and then it's programmers's responsability to explicitly destroy it).</p>
+<p>A simple example for drawing a simple geometry is</p>
+<pre class="doctools_example">
+$sfcName fill [BL::box 0 0 120 175.8]
+</pre>
+<p>The supported simple-geometries are:</p>
+<dl class="doctools_definitions">
+  
+<dt><a name="19"><b class="cmd">BL::line</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i></a></dt>
+<dd></dd>
+<dt><a name="20"><b class="cmd">BL::polyline</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i> <span class="opt">?<i class="arg">{x2 y2}</i> ....?</span></a></dt>
+<dd></dd>
+<dt><a name="21"><b class="cmd">BL::polygon</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i> <span class="opt">?<i class="arg">{x2 y2}</i> ....?</span></a></dt>
+<dd></dd>
+<dt><a name="22"><b class="cmd">BL::box</b> <i class="arg">{x0 y0}</i> <i class="arg">{x1 y1}</i></a></dt>
+<dd></dd>
+<dt><a name="23"><b class="cmd">BL::rect</b> <i class="arg">x</i> <i class="arg">y</i> <i class="arg">w</i> <i class="arg">h</i></a></dt>
+<dd></dd>
+<dt><a name="24"><b class="cmd">BL::roundrect</b> <i class="arg">x</i> <i class="arg">y</i> <i class="arg">w</i> <i class="arg">h</i> <i class="arg">rx</i> <span class="opt">?<i class="arg">ry</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="25"><b class="cmd">BL::circle</b> <i class="arg">{cx cy}</i> <i class="arg">r</i></a></dt>
+<dd></dd>
+<dt><a name="26"><b class="cmd">BL::ellipse</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i></a></dt>
+<dd></dd>
+<dt><a name="27"><b class="cmd">BL::arc</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i> <i class="arg">start</i> <i class="arg">sweep</i></a></dt>
+<dd></dd>
+<dt><a name="28"><b class="cmd">BL::pie</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i> <i class="arg">start</i> <i class="arg">sweep</i></a></dt>
+<dd></dd>
+<dt><a name="29"><b class="cmd">BL::chord</b> <i class="arg">{cx cy}</i> <i class="arg">rx</i> <i class="arg">ry</i> <i class="arg">start</i> <i class="arg">sweep</i></a></dt>
+<dd></dd>
+<dt><a name="30"><b class="cmd">BL::text</b> <i class="arg">{x y}</i> <i class="arg">font</i> <i class="arg">text</i></a></dt>
+<dd></dd>
+</dl>
+<p>Note that all these commands defining <em>simple geometry types</em> start
+with a lowercase letter. These commands do not create oo-objects; they simply
+return a special crafted list that should be passed to the <b class="method">fill</b>/<b class="method">stroke</b> methods.
+These objects (lists/dictionaries!) don't require an explicit &quot;destroy&quot; method.</p>
+<p>Other than <em>simple geometries</em> there are <em>complex geometries</em> like 
+  <b class="class">BL::Path</b>
+and they will be described in the following sections.</p>
+</div>
+<div id="subsection3" class="doctools_subsection"><h3><a name="subsection3">Drawing on a surface</a></h3>
+<dl class="doctools_definitions">
+<dt><a name="31"><i class="arg">sfcName</i> <b class="method">stroke</b> <i class="arg">geometry</i> <span class="opt">?options?</span></a></dt>
+<dd><p>draws the outline of the specified <i class="arg">geometry</i>, accordling to the current drawing-state.
+   Extra options listed after <i class="arg">geometry</i> are temporary set just for this operation.
+   Note that some options like <b class="option">-stroke.width</b>, <b class="option">-stroke.style</b>, can be abbreviated
+   as <b class="option">-width</b>, <b class="option">-style</b>, and so on.</p></dd>
+<dt><a name="32"><i class="arg">sfcName</i> <b class="method">fill</b> <b class="const">all</b>|<i class="arg">geometry</i> <span class="opt">?options?</span></a></dt>
+<dd><p>draws (fills) the specified <i class="arg">geometry</i>, accordling to the current drawing-state.
+   The special geometry <b class="const">all</b> means &quot;the whole framebuffer&quot;.
+   Extra options listed after <i class="arg">geometry</i> are temporary set just for this operation.
+   Note that within this fill operation, the option <b class="option">-fill.style</b> can be abbreviated as <b class="option">-fill</b>.</p></dd>
+<dt><a name="33"><i class="arg">sfcName</i> <b class="method">clear</b> <span class="opt">?options?</span></a></dt>
+<dd><p>This is a shorthand for &quot;<i class="arg">sfcName</i> <b class="method">fill</b> <b class="const">all</b> <span class="opt">?options?</span>&quot;</p></dd>
+</dl>
+</div>
+<div id="subsection4" class="doctools_subsection"><h3><a name="subsection4">Other Surface commands</a></h3>
+<dl class="doctools_definitions">
+<dt><a name="34"><i class="arg">sfcName</i> <b class="method">flush</b></a></dt>
+<dd><p>flushes the internal rendering command queue and wait for its completion (will block).
+    (only useful in Multi-Thread contexts).
+	This command is normally unnecessary, since a flush() is automatically performed
+	before the image is copied/exported/displayed.</p></dd>
+<dt><a name="35"><i class="arg">sfcName</i> <b class="method">size</b></a></dt>
+<dd><p>returns a list of two values: width and height of the surface (in pixel)</p></dd>
+<dt><a name="36"><i class="arg">sfcName</i> <b class="method">userToMeta</b></a></dt>
+<dd><p>sets the surface MetaMatrix.  TO BE DOC'ed ...</p></dd>
+</dl>
+</div>
+</div>
+<div id="section4" class="doctools_section"><h2><a name="section4">BL::Path</a></h2>
+<p>The following commands can be used for creating and manipulating a <b class="class">Path</b>:</p>
+<dl class="doctools_definitions"> 
+<dt><a name="37"><b class="class">BL::Path</b> <b class="method">create</b> <i class="arg">pathName</i></a></dt>
+<dd><p>creates a new instance of the class <b class="class">BL::Path</b> called <i class="arg">pathName</i>.</p></dd>
+<dt><a name="38"><b class="class">BL::Path</b> <b class="method">new</b></a></dt>
+<dd><p>creates a new instance of the class <b class="class">BL::Path</b> returning a new unique <i class="arg">pathName</i>.</p></dd>
+<dt><a name="39"><i class="arg">pathName</i> <b class="method">destroy</b></a></dt>
+<dd><p>destroys <i class="arg">pathName</i>.</p></dd>
+<dt><a name="40"><i class="arg">pathName</i> <b class="method">dup</b></a></dt>
+<dd><p>duplicates <i class="arg">pathName</i>. Return a new path</p></dd>
+<dt><a name="41"><b class="cmd">BL::Path</b> <b class="method">names</b></a></dt>
+<dd><p>returns the list of the currently available paths</p></dd>
+<dt><a name="42"><i class="arg">pathName</i> <b class="method">add</b> <i class="arg">geometry</i> <span class="opt">?<i class="arg">geometry</i> ...?</span> <span class="opt">?<i class="arg">options</i>?</span></a></dt>
+<dd><p>adds one or more <i class="arg">geometry</i> to <i class="arg">pathName</i>. <i class="arg">geometry</i> is any geometric type above defined,
+including the same <i class="arg">pathName</i>.</p>
+<p>Valid options are:</p>
+<dl class="doctools_options">
+    
+<dt><b class="option">-direction</b> <i class="arg">value</i></dt>
+<dd><p><i class="arg">value</i> can be one of <b class="const">NONE</b>, <b class="const">CW</b>, <b class="const">CCW</b>.  Default is <b class="const">CW</b>.</p>
+<p>Hint: Use <b class="const">CCW</b> for adding holes in a path</p></dd>
+<dt><b class="option">-matrix</b> <i class="arg">matrix</i></dt>
+<dd><p>applies a 2D transformation to the added geometries.</p></dd>
+</dl>
+<pre class="doctools_example">
+   # starting from Blend2d 1.0, the &quot;add&quot; method also accepts a &quot;BL::text&quot; as a geometry.
+   # All the glyphs are converted and added to a BLPath using a simple layout algorith
+  set fontFace [BL::FontFace new &quot;./Arial.ttf&quot;]
+  set fontName [BL::Font $fontFace 12.0]
+  set blPath [BL::Path new]
+  $blPath add [BL::text {100 100} $font &quot;ABC .. Z&quot;]
+   # then you can get and manipulate its SVG representation 
+  set SVG [$blPath view] 
+  ...
+</pre>
+</dd>
+<dt><a name="43"><i class="arg">pathName</i> <b class="method">newStrokedPath</b> <span class="opt">?<i class="arg">stroke-options</i>?</span></a></dt>
+<dd><p>creates a new BL::Path made by stroking the current path with the stroking options passed as arguments.
+Valid stroke-options are:</p>
+<dl class="doctools_options">
+    
+<dt><b class="option">-width</b> <i class="arg">value</i></dt>
+<dd></dd>
+<dt><b class="option">-dasharray</b> <i class="arg">value</i></dt>
+<dd></dd>
+<dt><b class="option">-dashoffset</b> <i class="arg">value</i></dt>
+<dd></dd>
+<dt><b class="option">-join</b> <i class="arg">value</i></dt>
+<dd></dd>
+<dt><b class="option">-cap</b> <i class="arg">value</i></dt>
+<dd></dd>
+<dt><b class="option">-miterlimit</b> <i class="arg">value</i></dt>
+<dd></dd>
+<dt><b class="option">-transformorder</b> <i class="arg">value</i></dt>
+<dd></dd>
+</dl>
+<p>These stroke-options are a subset of the options used for the <b class="method">stroke</b> method of the <b class="class">BL::Surface</b> class.</p>
+<pre class="doctools_example">
+    # build path0 as a simple triangle
+   set path0 [BL::Path new]
+   $path0 add [BL::polygon {100 100} {150 200} {200 200}]
+    # then derive a new path ... as the prevoius path but with a thick contour and rounded corners ..'
+   set path1 [$path0 newStrokedPath -width 20 -join ROUND]
+   ... rememeber to destroy path0 and path1
+</pre>
+</dd>
+<dt><a name="44"><i class="arg">pathName</i> <b class="method">addSVGpath</b> <i class="arg">dataString</i></a></dt>
+<dd><p>reads and parses the SVG-path-data commands in <i class="arg">dataString</i> and adds the equivalent Blend2d command.
+<i class="arg">dataString</i> must follow the rules for the &quot;d&quot; property of the SVG path elements, see the specs at <a href="https://www.w3.org/TR/SVG/paths.html#DProperty">https://www.w3.org/TR/SVG/paths.html#DProperty</a></p>
+<pre class="doctools_example">
+    set blPath [BL::Path new]
+    # the following SVG-path is presented in this way just for readability  ..
+    $blPath addSVGpath &quot;
+       M 100 100
+       q -100 0 -200 -100
+       l 10.0 20.1 30 40 50 -5
+       h 1.5e+3
+       Z&quot;
+    # but it can also be specified in a compact form       
+    $blPath addSVGpath &quot;M100+100q-100+0-200-100l10.0,20.1,30,40,50-4H2E+3h1.5e+3Z&quot;
+</pre>
+</dd>
+<dt><a name="45"><i class="arg">pathName</i> <b class="method">apply</b> <i class="arg">matrix</i></a></dt>
+<dd><p>applies the 2D <i class="arg">matrix</i> transformation to the whole <i class="arg">pathName</i>.</p></dd>
+<dt><a name="46"><i class="arg">pathName</i> <b class="method">fitTo</b> <i class="arg">x</i> <i class="arg">y</i> <i class="arg">w</i> <i class="arg">h</i></a></dt>
+<dd><p>fits (scale&amp;translate) the whole <i class="arg">pathName</i> into the given rect.</p></dd>
+<dt><a name="47"><i class="arg">pathName</i> <b class="method">moveTo</b> <i class="arg">point0</i></a></dt>
+<dd><p>sets the starting <i class="arg">point0</i> (expressed as a list of two numbers) for the next commands ..</p></dd>
+<dt><a name="48"><i class="arg">pathName</i> <b class="method">lineTo</b> <i class="arg">point</i> <span class="opt">?<i class="arg">point</i> ...?</span></a></dt>
+<dd></dd>
+<dt><a name="49"><i class="arg">pathName</i> <b class="method">quadTo</b> <i class="arg">p1</i> <i class="arg">p2</i> <span class="opt">?<i class="arg">p1</i> <i class="arg">p2</i>...?</span></a></dt>
+<dd></dd>
+<dt><a name="50"><i class="arg">pathName</i> <b class="method">cubicTo</b> <i class="arg">p1</i> <i class="arg">p2</i> <i class="arg">p3</i> <span class="opt">?<i class="arg">p1</i> <i class="arg">p2</i> <i class="arg">p3</i>...?</span></a></dt>
+<dd></dd>
+<dt><a name="51"><i class="arg">pathName</i> <b class="method">smoothQuadTo</b> <i class="arg">p2</i> <span class="opt">?<i class="arg">p2</i>...?</span></a></dt>
+<dd></dd>
+<dt><a name="52"><i class="arg">pathName</i> <b class="method">smoothCubicTo</b> <i class="arg">p2</i> <i class="arg">p3</i> <span class="opt">?<i class="arg">p2</i> <i class="arg">p3</i>...?</span></a></dt>
+<dd></dd>
+<dt><a name="53"><i class="arg">pathName</i> <b class="method">arcQuadrantTo</b> <i class="arg">point1</i> <i class="arg">point2</i></a></dt>
+<dd></dd>
+<dt><a name="54"><i class="arg">pathName</i> <b class="method">arcTo</b> <i class="arg">pointC</i> <i class="arg">pointR</i> <i class="arg">start</i> <i class="arg">sweep</i> <span class="opt">?<b class="option">-moveto</b> <i class="arg">boolean</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="55"><i class="arg">pathName</i> <b class="method">ellipticArcTo</b> <i class="arg">point1</i> <i class="arg">pointR</i> <i class="arg">rotation</i> <i class="arg">largeArcFlag</i> <i class="arg">sweepFlag</i> <i class="arg">point1</i></a></dt>
+<dd></dd>
+<dt><a name="56"><i class="arg">pathName</i> <b class="method">close</b></a></dt>
+<dd></dd>
+<dt><a name="57"><i class="arg">pathName</i> <b class="method">reset</b></a></dt>
+<dd></dd>
+<dt><a name="58"><i class="arg">pathName</i> <b class="method">shrink</b></a></dt>
+<dd><p>shrinks the internal capacity of the path to fit the current usage.</p></dd>
+<dt><a name="59"><i class="arg">pathName</i> <b class="method">bbox</b></a></dt>
+<dd><p>Get the path's bounding-box.</p>
+<p>Note that bbox does not consider the line-width, offset, caps (these parameters
+    are definied when stroking/filling the path).
+    If path is empty returns <b class="const">{0.0 0.0 0.0 0.0}</b></p></dd>
+<dt><a name="60"><i class="arg">pathName</i> <b class="method">view</b></a></dt>
+<dd><p>Returns the path data in SVG format</p></dd>
+<dt><a name="61"><i class="arg">pathName</i> <b class="method">contour</b></a></dt>
+<dd><p>returns the number of countours.</p></dd>
+<dt><a name="62"><i class="arg">pathName</i> <b class="method">contour</b> <i class="arg">i</i>|<b class="const">*</b></a></dt>
+<dd><p>returns the number of simple curves of the i-th contour.
+    If <b class="const">*</b> is specified, return a list with the number of simple curves of every contour.</p></dd>
+<dt><a name="63"><i class="arg">pathName</i> <b class="method">contour</b> <i class="arg">i</i>|<b class="const">*</b> <i class="arg">j</i>|<b class="const">*</b> <i class="arg">OP</i> <i class="arg">t</i></a></dt>
+<dd><p>by using the parametric equation B(t) of the j-th curve of the i-th contour,
+    evaluates one of the following <i class="arg">OP</i> functions at value <i class="arg">t</i> (<i class="arg">t</i> must be between 0.0 and 1.0):</p>
+<ul class="doctools_itemized">
+    
+<li><p><b class="const">at</b>:  returns the position {x y} at B(t)</p></li>
+<li><p><b class="const">tangent</b>:  returns the tangent versor {x y} at B(t)</p></li>
+<li><p><b class="const">normal</b>:  returns the normal versor {x y} at B(t)</p></li>
+<li><p><b class="const">tangentAt</b>:  returns the the position and the tangent versor at B(t)</p></li>
+<li><p><b class="const">normalAt</b>:  returns the the position and the normal versor at B(t)</p></li>
+</ul>
+<p>If <b class="const">*</b> is specified instead of the contour index, this command returns
+    a list with all the <i class="arg">OP</i> evaluations at <i class="arg">t</i> for the j-th curves of every contour.
+    If some contour has  less than j curves, its evaluation is {}.</p>
+<p>If <b class="const">*</b> is specified instead of the curve index, this command returns
+    a list with all the <i class="arg">OP</i> evaluations at <i class="arg">t</i> for every curve of the i-th contour.</p>
+<p>If <b class="const">*</b> is specified for both the contour index and the curve index,this
+    command returns a list of list, i.e. for every contours returns a list of the evaluations
+    of <i class="arg">OP</i> at <i class="arg">t</i> for every its single curve.</p></dd>
+</dl>
+</div>
+<div id="section5" class="doctools_section"><h2><a name="section5">BL::FontFace, BL::Font and Glyphs</a></h2>
+<p><em>
+  Note: Currently text support is still basic and subject to changes.
+</em></p>
+<p>Before drawing some text, you need to load some fonts from an external font-file.</p>
+<dl class="doctools_definitions">
+ 
+<dt><a name="64"><b class="class">BL::FontFace</b> <b class="method">create</b> <i class="arg">faceName</i> <i class="arg">fontfile</i> <span class="opt">?<i class="arg">faceIdx</i>?</span></a></dt>
+<dd><p>loads a <i class="arg">fontfile</i> and creates a new instance of the class <b class="class">BL::FontFace</b>
+  named <i class="arg">faceName</i>.</p>
+<p>If <i class="arg">fontfile</i> is a font collection, you can specify which
+  fontface to load. Default value for <i class="arg">faceIdx</i> is 0 (i.e. the first fontface).
+  if <i class="arg">faceIdx</i> is greater than the number of the available fontfaces, the last fontface is loaded, and it can be inspected with the <b class="method">detail</b> method.</p></dd>
+<dt><a name="65"><b class="class">BL::FontFace</b> <b class="method">new</b> <i class="arg">fontfile</i> <span class="opt">?<i class="arg">faceIdx</i>?</span></a></dt>
+<dd><p>loads a <i class="arg">fontfile</i>, creates a new instance of the class <b class="class">BL::FontFace</b> returning
+  a new unique <i class="arg">faceName</i>.</p></dd>
+<dt><a name="66"><i class="arg">faceName</i> <b class="method">destroy</b></a></dt>
+<dd><p>destroys <i class="arg">faceName</i>. Note that in general any oo-object like <i class="arg">faceName</i> should be explicitly destroyed</p></dd>
+<dt><a name="67"><b class="cmd">BL::FontFace</b> <b class="method">names</b></a></dt>
+<dd><p>returns the list of all the currently allocated fontfaces.</p></dd>
+<dt><a name="68"><i class="arg">faceName</i> <b class="method">details</b></a></dt>
+<dd><p>returns a dictionary with some properties of the loaded <i class="arg">faceName</i>.</p>
+<p>These are the currently listed properties ;more properties may be added in future Blend2d releases.</p>
+<pre class="doctools_example">
+  # load the last fontface from a fontfile-collection
+  #   (&quot;AmericanTypewriter.ttc&quot; can be found in the tclBlend2d-devkit distribution )
+  # Note that I want to load the last fontface, so I specify a large 'faceIdx'
+  # surely greater than the available fontface (.. there're 6 fontfaces in this collection ..) 
+ set fface [BL::FontFace new &quot;./AmericanTypewriter.ttc&quot; 999]
+  # pretty print details
+ dict for {key value} [$fface details] {
+    puts &quot;[format &quot;%25s %s&quot; $key $value]&quot;
+ }
+  # ....
+  # other ops ...
+  #
+ $fface destroy
+</pre>
+<p>This produces the following output :</p>
+<pre class="doctools_example">
+                faceIndex 5
+               glyphCount 916
+                 fullName American Typewriter Condensed Light
+               familyName American Typewriter
+            subfamilyName Condensed Light
+           postScriptName AmericanTypewriter-CondensedLight
+               unitsPerEm 1000
+                   weight 300
+                    style 0
+                  stretch 3
+    hasCharToGlyphMapping 1 
+</pre>
+</dd>
+</dl>
+<p>Once a <b class="class">BL::FontFace</b> has been loaded,and before drawing some text or extracting some glyphs, you should create a <b class="class">BL::Font</b> object based on an instance of <b class="class">BL::FontFace</b></p>
+<dl class="doctools_definitions">
+ 
+<dt><a name="69"><b class="class">BL::Font</b> <b class="method">create</b> <i class="arg">fontName</i> <i class="arg">faceName</i> <i class="arg">fontsize</i></a></dt>
+<dd><p>creates a new instance of the class <b class="class">BL::Font</b>, based on <i class="arg">faceName</i>, having size <i class="arg">fontsize</i> (float).</p>
+<p>Note that although any text and glyph can be arbitrarialy scaled with the usual 2D trasnsformations, <i class="arg">fontsize</i> can be used to select some special glyphs that some fonts
+  may make available for working with very small font sizes.</p></dd>
+<dt><a name="70"><b class="class">BL::Font</b> <b class="method">new</b> <i class="arg">faceName</i> <i class="arg">fontsize</i></a></dt>
+<dd><p>creates a new instance of the class <b class="class">BL::Font</b> returning
+  a new unique <i class="arg">fontName</i>.</p></dd>
+<dt><a name="71"><i class="arg">fontName</i> <b class="method">destroy</b></a></dt>
+<dd><p>destroys <i class="arg">fontName</i>. Note that in general any oo-object like <i class="arg">fontName</i> should be explicitly destroyed</p></dd>
+<dt><a name="72"><b class="cmd">BL::Font</b> <b class="method">names</b></a></dt>
+<dd><p>returns the list of all the currently allocated fonts.</p></dd>
+</dl>
+<p>A <i class="arg">fontName</i> can be used for drawing some text like in the following example</p>
+<pre class="doctools_example">
+  set fontFace [BL::FontFace new &quot;./Arial.ttf&quot;]
+  set fontName [BL::Font $fontFace 12.0]
+  set sfc [BL::Surface new]
+  $sfc fill [BL::text {100 100} $fontName &quot;Hello World&quot;] -style [BL::color orange]
+</pre>
+<p>but it can also used for extracting single glyphs from it.</p>
+<dl class="doctools_definitions">
+ 
+<dt><a name="73"><i class="arg">fontName</i> <b class="method">glyphs</b> <i class="arg">someText</i></a></dt>
+<dd><p>returns a list of glyph-indexes, one glyph-index for each (Unicode) character in <i class="arg">someText</i>.</p></dd>
+<dt><a name="74"><i class="arg">fontName</i> <b class="method">glyph</b> <i class="arg">glyphIdx</i></a></dt>
+<dd><p>returns a new instance of <b class="class">BL::Path</b> containing the geometrical representation of the given <i class="arg">glyphIdx</i>. Raise an error if <i class="arg">glyphIdx</i> is invalid.</p>
+<p>Note: this method creates a new <b class="class">BL::Path</b>instance, and it is user's responsability
+    to destroy it explicitly.</p></dd>
+</dl>
+<p>Before drawing some text (or a single glyph) you should load a <i class="arg">fontfile</i>, then
+setup a <b class="class">BL::Font</b> with a given size</p>
+<pre class="doctools_example">
+    set aFontFace [BL::FontFace new _fontfile_]
+    set aFont [BL::Font new $aFontFace _size_]
+</pre>
+<p>note that both <b class="class">BL:FontFace</b> and <b class="class">BL::Font</b> create new objects, and therefore it's
+programmer's responsability to delete them  (e.g call &quot;$aFontFace destroy&quot; )</p>
+<p>The easiest way to draw a text on a <b class="class">Surface</b> is to use the special 'geometry' <b class="class">BL::text</b>
+with the fill/stroke methods</p>
+<pre class="doctools_example">
+    surfaceName fill [BL::text {10 20} $aFont &quot;Hello World!!&quot;]
+</pre>
+<p>Of course you can set the drawing-properties of the Surface as usual  (color, gradient,line width, matrix transformation ....)</p>
+<p>Alternatively, you can extract a single glyph from a font, store them as a <b class="class">BL::Path</b>, and then
+manipulate it as usual</p>
+<pre class="doctools_example">
+    set aGlyph [$font glyph 44]  ;# extract glyph n.44
+    $sfc stroke $aGlyph
+</pre>
+<p>Note that the <b class="method">glyph</b> methods returns a new <b class="class">BL::Path</b> object,and therefore it is
+programmer's responsability to free the resources (e.g.  &quot;$aGlyph destroy&quot; )</p>
+</div>
+<div id="section6" class="doctools_section"><h2><a name="section6">Applying filters</a></h2>
+<p>TclBlend2d provides two basic ways to work with filters.
+You can apply a filter to a rectangular region of a Surface (currently only <b class="const">blur</b> filter), or you can 
+set a filter to a <i class="term">script</i>, so that it will be applied to all the graphical primitives that will be rendered by this script.</p>
+<dl class="doctools_definitions">
+<dt><a name="75"><i class="arg">sfcName</i> <b class="method">blur</b> <i class="arg">radius</i> <span class="opt">?<b class="option">-rect</b> <i class="arg">{x y w h}</i>?</span></a></dt>
+<dd><p>applies a blur filter of size <i class="arg">radius</i> (from 2 to 254) to a rectangular region of <i class="arg">sfcName</i></p>
+<p>Valid <b class="option">options</b> are:</p>
+<dl class="doctools_options">
+    
+<dt><b class="option">-rect</b> <i class="arg">{x y w h}</i></dt>
+<dd><p>defines the rectangular subregion where the blur filter will be applied.
+        <i class="arg">x</i>, <i class="arg">y</i>, <i class="arg">w</i>,<i class="arg">h</i> are pixel coords (integer coords)</p>
+<p>If <b class="option">-rect</b> is not specified , the blur filter will be applied to the whole surface.</p></dd>
+</dl></dd>
+<dt><a name="76"><i class="arg">sfcName</i> <b class="method">filter</b> <i class="arg">filterType</i> <span class="opt">?filter-args?</span> <i class="arg">script</i></a></dt>
+<dd><p>all the graphical primitives created by this <i class="arg">script</i> that will be rendered on <i class="arg">sfcName</i> will be 
+redirected on a special temporary layer,
+then the filter will be applied to this temporary layer and then it will be blended with the underlying Surface.</p>
+<p>Parameters are:</p>
+<dl class="doctools_definitions">
+<dt><i class="arg">filterType</i></dt>
+<dd><p>Valid values are <b class="const">blur</b>, <b class="const">shadow</b>, and the special filter <b class="const">ignore</b>.
+  This latter filter means that no filter will be applied.</p></dd>
+<dt><i class="arg">filter-args</i></dt>
+<dd><p>A list of options for <i class="arg">filterType</i>. (see below .....)</p></dd>
+<dt><i class="arg">script</i></dt>
+<dd><p>A tcl script. Usually this script should contain some rendering commands on <i class="arg">sfcName</i>. All these commands will temporary redirected
+  to an automatically allocated temporary Surface. This temporary surface is initialized as a transparent surface and has the same 'state' (e,g the set of options)
+  of <i class="arg">sfcName</i>. When <i class="arg">script</i> ends, the filter is applied to the whole temporary surface 
+  (or better, only to the bounding-box of the rendered primitives), and finally, this temporary Surface will be blended
+  with the underlying <i class="arg">sfcName</i>.</p>
+<p>Note that if this script changes the state of the (redirected) <i class="arg">sfcName</i>, these changes will be also visible in the original <i class="arg">sfcName</i>.</p>
+<p>Warning: take care of not &quot;popping&quot; the initial stack level of <i class="arg">sfcName</i>. Method <b class="method">push</b> and <b class="method">pop</b>
+  are allowed within <i class="arg">script</i> as long as they are properly paired.</p></dd>
+</dl></dd>
+</dl>
+<div id="subsection5" class="doctools_subsection"><h3><a name="subsection5">filter-args for &quot;blur&quot; filter</a></h3>
+<dl class="doctools_options">
+	
+<dt><b class="option">-radius</b> <i class="arg">radius</i></dt>
+<dd><p>blur radius (from 2 to 254). Default is <b class="const">5</b> pixels.</p></dd>
+</dl>
+</div>
+<div id="subsection6" class="doctools_subsection"><h3><a name="subsection6">filter-args for &quot;shadow&quot; filter</a></h3>
+<dl class="doctools_options">
+	
+<dt><b class="option">-radius</b> <i class="arg">radius</i></dt>
+<dd><p>blur radius (from 2 to 254). Default is <b class="const">5</b> pixels.</p></dd>
+<dt><b class="option">-dxy</b> {<i class="arg">dx</i> <i class="arg">dy</i>}</dt>
+<dd><p>dx,dy translation of the blurred shadow. Default is <b class="const">{3 5}</b></p></dd>
+<dt><b class="option">-color</b> <i class="arg">color</i></dt>
+<dd><p>shadow color . Default is [<b class="const">BL::color gray30</b>]</p></dd>
+</dl>
+<pre class="doctools_example">
+	$sfc reset
+	$sfc clear -style [BL::color white]
+	 #
+	 # --- a shadowed blue/white/red disc
+	 #
+	set center {100 150}
+	$sfc filter shadow -radius 20 -dxy {5 9} {
+		foreach circleRadius {90 60 30} color {lightblue white red} {
+			$sfc fill [BL::circle $center $circleRadius] -style [BL::color $color]		
+		}
+	}
+	 #
+	 # --- three shadowed discs	
+	 #
+	set center {300 150}
+	foreach circleRadius {90 60 30} color {lightblue white red} {
+		$sfc filter shadow -radius 20 -dxy {5 9} {
+			$sfc fill [BL::circle $center $circleRadius] -style [BL::color $color]		
+		}
+	}
+</pre>
+</div>
+</div>
+<div id="section7" class="doctools_section"><h2><a name="section7">Exchanging pixmaps</a></h2>
+<p>Blend2d provides commands for loading graphics files in a Surface, as well for saving the 
+Surface's internal framebuffer in a graphic file.
+Blend2d provides commands for copying (part of) the internal framebuffer among different Surfaces.
+If the Tk support is loaded, that is if you loaded the <b class="package">Blend2d</b> or <b class="package">tkBlend2d</b> packages, you can also
+exchange parts of the Surfaces framebuffer with tk <b class="cmd">photo</b> images.</p>
+<div id="subsection7" class="doctools_subsection"><h3><a name="subsection7">read/write files</a></h3>
+<dl class="doctools_definitions">
+<dt><a name="77"><i class="arg">sfcName</i> <b class="method">load</b> <i class="arg">filename</i></a></dt>
+<dd><p>loads the contents of <i class="arg">filename</i>. Supported formats: png, jpeg, bmp.</p>
+<p>WARNING: the internal framebuffer is resized.</p></dd>
+<dt><a name="78"><i class="arg">sfcName</i> <b class="method">save</b> <i class="arg">filename</i> <span class="opt">?<b class="option">-format</b> <i class="arg">file-format</i>?</span></a></dt>
+<dd><p>saves the internal framebuffer in <i class="arg">filename</i>
+If <b class="option">-format</b> is not specified, this command tries to guess the <i class="arg">file-format</i> from the file extension.</p>
+<p>NOTE: currently only BMP and PNG encoder are available</p></dd>
+</dl>
+</div>
+<div id="subsection8" class="doctools_subsection"><h3><a name="subsection8">copy among surfaces</a></h3>
+<dl class="doctools_definitions">
+<dt><a name="79"><i class="arg">sfcName</i> <b class="method">copy</b> <i class="arg">srcSurface</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{xp yp}</i>?</span> <span class="opt">?<b class="option">-compop</b> <i class="arg">op</i>?</span> <span class="opt">?<b class="option">-globalalpha</b> <i class="arg">alpha</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="80"><i class="arg">sfcName</i> <b class="method">copy</b> <i class="arg">srcSurface</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x y w h}</i>?</span> <span class="opt">?<b class="option">-compop</b> <i class="arg">op</i>?</span> <span class="opt">?<b class="option">-globalalpha</b> <i class="arg">alpha</i>?</span></a></dt>
+<dd><p>copies (a sub-region of) <i class="arg">srcSurface</i> to the current <i class="arg">sfcName</i>.
+    If no options are specified, this command copies the whole <i class="arg">srcSurface</i>
+    starting at coordinates (0,0).</p>
+<p>The following options may be specified:</p>
+<dl class="doctools_options">
+     
+<dt><b class="option">-from</b> <i class="arg">{x y w h}</i></dt>
+<dd><p>specifies a rectangular sub-region of the surface to be copied.
+        The pixels copied will include the left and top edges of the specified rectangle but not the bottom or right edges.
+        If the <b class="option">-from</b> option is not given, the default is the whole surface.</p></dd>
+<dt><b class="option">-to</b> <i class="arg">{x y}</i></dt>
+<dd><p>specifies where to place the source sub-region in the current surface.
+        The current surface is never resized, therefore, all parts
+        of the <i class="arg">srcSurface</i> that will be placed outside this surface will be excluded (clipped).</p></dd>
+<dt><b class="option">-to</b> <i class="arg">{x y  w h}</i></dt>
+<dd><p>specifies a rectangular sub-region of the current surface.
+        The source sub-region is scaled to fit into destination rectangle.</p></dd>
+<dt><b class="option">-compop</b> <i class="arg">value</i></dt>
+<dd><p>applies a composition-operation to the pixels that will be copied.
+        If this option is not specified, the current value of the <b class="option">-compop</b> option  is used.</p></dd>
+<dt><b class="option">-globalalpha</b> <i class="arg">alpha</i></dt>
+<dd><p><i class="arg">srcSurface</i> will be blitted using <i class="arg">alpha</i> transparency.
+        If this option is not specified, the current value of the <b class="option">-globalalpha</b> option  is used.</p></dd>
+</dl>
+<p>copies (a sub-region of) <i class="arg">srcSurface</i> to the current <i class="arg">sfcName</i>.
+    If no options are specified, this command copies the whole <i class="arg">srcSurface</i>
+    starting at coordinates (0,0).</p>
+<p>Note that if there's a matrix-trasformation (rotation, scaling, ..) on the
+    current surface, this transformation will be applied to all points of the 
+    destination sub-region (i.e. the <b class="option">-from</b> rectangle will be rotated, scaled, ...)</p></dd>
+<dt><a name="81"><i class="arg">sfcName</i> <b class="method">rawcopy</b> <i class="arg">srcSurface</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x y w h}</i>?</span> <span class="opt">?<b class="option">-compop</b> <i class="arg">op</i>?</span> <span class="opt">?<b class="option">-globalalpha</b> <i class="arg">alpha</i>?</span></a></dt>
+<dd><p>similar to the <b class="method">copy</b> method. The only difference is that the source region
+	(those specified by the <b class="option">-from</b> option) will be copied in <i class="arg">sfcName</i>
+	*without* any transformation.</p>
+<p>The default <b class="option">-compop</b> mode is <b class="const">SRC_OVER</b>.</p></dd>
+</dl>
+</div>
+<div id="subsection9" class="doctools_subsection"><h3><a name="subsection9">reading/writing tkphoto</a></h3>
+<p>These commands require the <b class="package">Blend2d</b> or <b class="package">tkBlend2d</b> package.
+These commands are not available if you loaded the <b class="package">tclBlend2d</b> package;</p>
+<dl class="doctools_definitions">
+ 
+<dt><a name="82"><i class="arg">sfcName</i> <b class="method">readFromTkphoto</b> <i class="arg">tkphoto</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x0 y0 w h}</i>?</span></a></dt>
+<dd><p>copies (a sub-region of) <i class="arg">tkphoto</i> to the current <i class="arg">sfcName</i>.
+    If no options are specified, this command copies the whole <i class="arg">srcSurface</i>
+    starting at coordinates (0,0).</p>
+<p>NOTE: <i class="arg">sfcName</i> is not resized; you should take care to resize it 
+   in order to get all the portion of the tkphoto you are interested in.</p></dd>
+<dt><a name="83"><i class="arg">sfcName</i> <b class="method">writeToTkphoto</b> <i class="arg">tkphoto</i> <span class="opt">?<b class="option">-from</b> <i class="arg">{x0 y0 w h}</i>?</span> <span class="opt">?<b class="option">-to</b> <i class="arg">{x0 y0 w h}</i>?</span></a></dt>
+<dd><p>copies (a sub-region of) <i class="arg">sfcName</i> to the current <i class="arg">sfcName</i>.
+    If no options are specified, this command copies the whole <i class="arg">srcSurface</i>
+    starting at coordinates (0,0).</p></dd>
+</dl>
+</div>
+</div>
+<div id="section8" class="doctools_section"><h2><a name="section8">Creating a blend2d (tk-)image</a></h2>
+<p>These commands require the &quot;Blend2d&quot; or &quot;tkBlend2d&quot; package.
+These commands are not available if you loaded the &quot;tclBlend2d&quot; package;</p>
+<dl class="doctools_definitions">
+ 
+<dt><a name="84"><b class="cmd">image</b> <b class="method">create</b> <b class="const">blend2d</b> <span class="opt">?<i class="arg">name</i>?</span> <span class="opt">?<i class="arg">options</i>?</span></a></dt>
+<dd><p>Similar to the standard command &quot;<b class="cmd">image create photo ...</b>&quot;, this command creates a new image of type <b class="const">blend2d</b> plus a new surface-object that can be used for manipulating the image.</p>
+<p>Options are the same options used for the &quot;<b class="cmd">BL::Surface create ..</b>&quot;  command.</p>
+<p>The image can then be embedded in a widget (like a &quot;label&quot; or a &quot;canvas&quot;); every
+    command like <b class="method">fill</b>, <b class="method">stroke</b> issued to the image name, will immediately change the displayed image.</p>
+<p>Both &quot;<b class="cmd">image delete sfcName</b>&quot; and &quot;<i class="arg">sfcName</i> <b class="method">destroy</b>&quot; can be used to delete the image AND the related surface-object.</p></dd>
+</dl>
+</div>
+<div id="section9" class="doctools_section"><h2><a name="section9">Other BL:: commands</a></h2>
+<dl class="doctools_definitions">
+<dt><a name="85"><b class="cmd">BL::classes</b></a></dt>
+<dd><p>lists the name of the BL classes (e.g BL::Surface,BL::Path, ...)</p></dd>
+<dt><a name="86"><b class="cmd">BL::classinfo</b> <i class="arg">objectName</i></a></dt>
+<dd><p>returns the class name of <i class="arg">objectName</i>.
+    <i class="arg">objectName</i> can be any <b class="cmd">tcloo</b> object (not limited to BL:: objects)</p></dd>
+<dt><a name="87"><b class="cmd">BL::codecs</b></a></dt>
+<dd><p>lists the supported graphics file formats.</p>
+<p>For each supported graphic file formats, returns a detailed list made of 5 elements:
+    <b class="const">id</b>, <b class="const">vendor</b>, <b class="const">mimeType</b>, <b class="const">extensions</b>, <b class="const">features</b>.</p>
+<ul class="doctools_itemized">
+    
+<li><p><b class="const">id</b> is the key element to be used in load/save operations  (e.g.   JPEG)</p></li>
+<li><p><b class="const">vendor</b> is the name of the codec's vendor.</p></li>
+<li><p><b class="const">mimetype</b> is a string (e.g.   image/jpeg)</p></li>
+<li><p><b class="const">extensions</b> is a sequence of recognized filename-extensions; elements are separated by &quot;|&quot;  (e.g.   jpg|jpeg|jif|jfi|jfif)</p></li>
+<li><p><b class="const">features</b> is a list of supported features</p>
+<ul class="doctools_itemized">    
+        
+<li><p><b class="const">READ</b>:   reading is supported</p></li>
+<li><p><b class="const">WRITE</b>:  writing is supported</p></li>
+<li><p><b class="const">LOSSY</b>:  loosy compression</p></li>
+<li><p><b class="const">LOSSLESS</b>:  lossless compression</p></li>
+<li><p><b class="const">MULTI_FRAME</b>:  multiple frames (GIF).</p></li>
+<li><p><b class="const">IPTC</b>:  supported IPTC metadata.</p></li>
+<li><p><b class="const">EXIF</b>:  supported EXIF metadata.</p></li>
+<li><p><b class="const">XMP</b>:   supported XMP metadata.</p></li>
+</ul>
+</li>
+</ul></dd>
+<dt><a name="88"><b class="cmd">BL::enum</b></a></dt>
+<dd><p>lists all the enum categories</p></dd>
+<dt><a name="89"><b class="cmd">BL::enum</b> <i class="arg">category</i></a></dt>
+<dd><p>lists all the values for that _category_
+    e.g. BL::enum GRADIENT_TYPE  --&gt;  LINEAR RADIAL CONICAL</p></dd>
+<dt><a name="90"><b class="cmd">BL::libinfo</b></a></dt>
+<dd><p>returns a dictionary with info about the core Blend2d library.
+    The dictionary keys are <b class="const">version</b>, <b class="const">type</b> (build-type)</p></dd>
+<dt><a name="91"><b class="cmd">BL::platform</b></a></dt>
+<dd><p>returns a dictionary with info about the cpu architecture and the cpu features used by Blend2d.
+    The dictionary keys are <b class="const">cpuArch</b>, <b class="const">cpuFeatures</b>, <b class="const">coreCount</b>.</p></dd>
+</dl>
+</div>
+<div id="section10" class="doctools_section"><h2><a name="section10">Auxiliary utilities</a></h2>
+<p>Blend2d provides some small helpers for working with transformation-matrix and colors</p>
+<div id="subsection10" class="doctools_subsection"><h3><a name="subsection10">Affine matrix</a></h3>
+<p>An affine matrix is a 3x3 matrix whose last column is fixed 0 0 1</p>
+<pre class="doctools_example">
+    a b 0
+    c d 0
+    e f 1
+</pre>
+<p>Given this rule it is convenient to express such matrices as a list of 6 numbers
+{ a b c d e f } instead of 9 numbers.</p>
+<p>Working with these matrices can be simplified by using the <b class="package">Mtx</b> package included in Blend2D.</p>
+<p>In the following paragraphs &quot;M&quot; stands for a matrix (a list of 6 numbers), &quot;P&quot; stands for
+a 2D point (a list of 2 numbers).</p>
+<p>The following ops are supported</p>
+<dl class="doctools_definitions">
+ 
+<dt><a name="92"><b class="cmd">Mtx::identity</b></a></dt>
+<dd><p>returns the identity matrix <b class="const">{1 0 0 1 0 0}</b></p></dd>
+<dt><a name="93"><b class="cmd">Mtx::MxM</b> <i class="arg">M1</i> <i class="arg">M2</i></a></dt>
+<dd><p>matrix multiplication</p></dd>
+<dt><a name="94"><b class="cmd">Mtx::determinant</b> <i class="arg">M</i></a></dt>
+<dd></dd>
+<dt><a name="95"><b class="cmd">Mtx::invert</b> <i class="arg">M</i></a></dt>
+<dd><p>matrix inversion - Raise an error if <i class="arg">M</i> is not invertible.</p></dd>
+<dt><a name="96"><b class="cmd">Mtx::PxM</b> <i class="arg">P</i> <i class="arg">M</i></a></dt>
+<dd><p>map a Point</p></dd>
+<dt><a name="97"><b class="cmd">Mtx::multiPxM</b> <i class="arg">Points</i> <i class="arg">M</i></a></dt>
+<dd><p>map a list of Points</p></dd>
+<dt><a name="98"><b class="cmd">Mtx::P-P</b> <i class="arg">P1</i> <i class="arg">P2</i></a></dt>
+<dd><p>return P1-P2</p></dd>
+<dt><a name="99"><b class="cmd">Mtx::VxM</b> <i class="arg">V</i> <i class="arg">M</i></a></dt>
+<dd><p>map a vector <i class="arg">V</i> : VxM(V,M) = PxM(V,M)-PxM(0,M)</p></dd>
+<dt><a name="100"><b class="cmd">Mtx::translation</b> <i class="arg">dx</i> <i class="arg">dy</i></a></dt>
+<dd></dd>
+<dt><a name="101"><b class="cmd">Mtx::scale</b> <i class="arg">sx</i> <span class="opt">?<i class="arg">sx</i>?</span> <span class="opt">?<i class="arg">C</i>?</span></a></dt>
+<dd><p>scale sx sy around the fixed-point C</p></dd>
+<dt><a name="102"><b class="cmd">Mtx::rotation</b> <i class="arg">angle</i> <b class="const">radians</b>|<b class="const">degrees</b> <span class="opt">?<i class="arg">C</i>?</span></a></dt>
+<dd><p>performs a rotation of <i class="arg">angle</i> around the fixex-point <i class="arg">C</i></p></dd>
+<dt><a name="103"><b class="cmd">Mtx::skew</b> <i class="arg">sx</i> <i class="arg">sy</i></a></dt>
+<dd></dd>
+<dt><a name="104"><b class="cmd">Mtx::xreflection</b></a></dt>
+<dd></dd>
+<dt><a name="105"><b class="cmd">Mtx::yreflection</b></a></dt>
+<dd></dd>
+<dt><a name="106"><b class="cmd">Mtx::translate</b> <i class="arg">M</i> <i class="arg">dx</i> <i class="arg">dy</i></a></dt>
+<dd></dd>
+<dt><a name="107"><b class="cmd">Mtx::post_translate</b> <i class="arg">M</i> <i class="arg">dx</i> <i class="arg">dy</i></a></dt>
+<dd></dd>
+<dt><a name="108"><b class="cmd">Mtx::scaling</b> <i class="arg">M</i> <i class="arg">sx</i> <i class="arg">sy</i> <span class="opt">?<i class="arg">C</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="109"><b class="cmd">Mtx::post_scaling</b> <i class="arg">M</i> <i class="arg">sx</i> <i class="arg">sy</i> <span class="opt">?<i class="arg">C</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="110"><b class="cmd">Mtx::rotate</b> <i class="arg">M</i> <i class="arg">angle</i> <b class="const">radians</b>|<b class="const">degrees</b> <span class="opt">?<i class="arg">C</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="111"><b class="cmd">Mtx::post_rotate</b> <i class="arg">M</i> <i class="arg">angle</i> <b class="const">radians</b>|<b class="const">degrees</b> <span class="opt">?<i class="arg">C</i>?</span></a></dt>
+<dd></dd>
+<dt><a name="112"><b class="cmd">Mtx::yreflect</b> <i class="arg">M</i></a></dt>
+<dd></dd>
+</dl>
+</div>
+<div id="subsection11" class="doctools_subsection"><h3><a name="subsection11">HSB color model</a></h3>
+<p>Blend2d internally works with colors expressed in terms of red,green,blue and alpha channels, 
+but in some cases it is more natural to express color following the HSB color model, where:</p>
+<ul class="doctools_itemized">     
+     
+<li><p>h (hue)  is a 0.0..360.0 angle</p></li>
+<li><p>s (saturation)  is 0.0 .. 1.0</p></li>
+<li><p>b (brigthess)   is 0.0 .. 1.0  ( 0 is black, 1 is white )</p></li>
+</ul>
+<p>The following commands are availables for converting between between ARGB and HSB color models.
+  
+     alpha is 0.0 .. 1.0</p>
+<dl class="doctools_definitions">
+<dt><a name="113"><b class="cmd">HSB</b> <i class="arg">h</i> <i class="arg">s</i> <i class="arg">b</i> <span class="opt">?<i class="arg">alpha</i>?</span></a></dt>
+<dd><p>returns an ARGB number (in decimal notation, not in hex notation)</p></dd>
+<dt><a name="114"><b class="cmd">RGB2HSB</b> <i class="arg">0xAARRGGBB</i></a></dt>
+<dd><p>returns a list with the HSB components.  { h s b alpha }</p></dd>
+</dl>
+</div>
+</div>
+<div id="section11" class="doctools_section"><h2><a name="section11">Limitations</a></h2>
+<ul class="doctools_itemized">
+<li><p>Saving a Surface is currently limited to BMP or PNG files.</p></li>
+<li><p>The <b class="option">-stroke.dasharray</b> option is currently a no-op.</p></li>
+</ul>
+</div>
+<div id="keywords" class="doctools_section"><h2><a name="keywords">Keywords</a></h2>
+<p>graphics</p>
+</div>
+<div id="category" class="doctools_section"><h2><a name="category">Category</a></h2>
+<p>vector grahics</p>
+</div>
+<div id="copyright" class="doctools_section"><h2><a name="copyright">Copyright</a></h2>
+<p>Copyright &copy; 2021..2023 - A.Buratti</p>
+</div>
+</div></body></html>
