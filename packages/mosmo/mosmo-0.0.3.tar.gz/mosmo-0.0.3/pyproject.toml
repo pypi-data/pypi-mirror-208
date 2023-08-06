@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mosmo"
+version = "0.0.3"
+authors = [
+  { name="Frank D Russo", email="fdrusso.42@gmail.com" },
+]
+license = {file = "LICENSE.txt"}
+description = "Molecular Systems Modeling toolkit"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Artificial Life',
+    'Topic :: Scientific/Engineering :: Bio-Informatics',
+]
+dependencies = [
+    "equilibrator-api>=0.4.7",
+    "ipywidgets>=8.0",
+    "jax>=0.4.7",
+    "jaxlib>=0.4.7",
+    "numpy>=1.23",
+    "pymongo>=4.3",
+    "scipy>=1.10",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/fdrusso/msmtk"
+"Bug Tracker" = "https://github.com/fdrusso/msmtk/issues"
+
+[tool.hatch.build]
+packages = ["mosmo"]
