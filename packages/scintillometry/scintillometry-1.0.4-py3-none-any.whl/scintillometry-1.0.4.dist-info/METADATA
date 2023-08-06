@@ -1,0 +1,442 @@
+Metadata-Version: 2.1
+Name: scintillometry
+Version: 1.0.4
+Summary: Analyse data & 2D flux footprints from Scintec's BLS scintillometers.
+Project-URL: Homepage, https://github.com/gampnico/scintillometry
+Project-URL: Bug Tracker, https://github.com/gampnico/scintillometry/issues
+Project-URL: Documentation, https://scintillometry.readthedocs.io/en/latest/
+Author: Scintillometry Contributors
+License:                                  Apache License
+                                   Version 2.0, January 2004
+                                http://www.apache.org/licenses/
+        
+           TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+        
+           1. Definitions.
+        
+              "License" shall mean the terms and conditions for use, reproduction,
+              and distribution as defined by Sections 1 through 9 of this document.
+        
+              "Licensor" shall mean the copyright owner or entity authorized by
+              the copyright owner that is granting the License.
+        
+              "Legal Entity" shall mean the union of the acting entity and all
+              other entities that control, are controlled by, or are under common
+              control with that entity. For the purposes of this definition,
+              "control" means (i) the power, direct or indirect, to cause the
+              direction or management of such entity, whether by contract or
+              otherwise, or (ii) ownership of fifty percent (50%) or more of the
+              outstanding shares, or (iii) beneficial ownership of such entity.
+        
+              "You" (or "Your") shall mean an individual or Legal Entity
+              exercising permissions granted by this License.
+        
+              "Source" form shall mean the preferred form for making modifications,
+              including but not limited to software source code, documentation
+              source, and configuration files.
+        
+              "Object" form shall mean any form resulting from mechanical
+              transformation or translation of a Source form, including but
+              not limited to compiled object code, generated documentation,
+              and conversions to other media types.
+        
+              "Work" shall mean the work of authorship, whether in Source or
+              Object form, made available under the License, as indicated by a
+              copyright notice that is included in or attached to the work
+              (an example is provided in the Appendix below).
+        
+              "Derivative Works" shall mean any work, whether in Source or Object
+              form, that is based on (or derived from) the Work and for which the
+              editorial revisions, annotations, elaborations, or other modifications
+              represent, as a whole, an original work of authorship. For the purposes
+              of this License, Derivative Works shall not include works that remain
+              separable from, or merely link (or bind by name) to the interfaces of,
+              the Work and Derivative Works thereof.
+        
+              "Contribution" shall mean any work of authorship, including
+              the original version of the Work and any modifications or additions
+              to that Work or Derivative Works thereof, that is intentionally
+              submitted to Licensor for inclusion in the Work by the copyright owner
+              or by an individual or Legal Entity authorized to submit on behalf of
+              the copyright owner. For the purposes of this definition, "submitted"
+              means any form of electronic, verbal, or written communication sent
+              to the Licensor or its representatives, including but not limited to
+              communication on electronic mailing lists, source code control systems,
+              and issue tracking systems that are managed by, or on behalf of, the
+              Licensor for the purpose of discussing and improving the Work, but
+              excluding communication that is conspicuously marked or otherwise
+              designated in writing by the copyright owner as "Not a Contribution."
+        
+              "Contributor" shall mean Licensor and any individual or Legal Entity
+              on behalf of whom a Contribution has been received by Licensor and
+              subsequently incorporated within the Work.
+        
+           2. Grant of Copyright License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              copyright license to reproduce, prepare Derivative Works of,
+              publicly display, publicly perform, sublicense, and distribute the
+              Work and such Derivative Works in Source or Object form.
+        
+           3. Grant of Patent License. Subject to the terms and conditions of
+              this License, each Contributor hereby grants to You a perpetual,
+              worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+              (except as stated in this section) patent license to make, have made,
+              use, offer to sell, sell, import, and otherwise transfer the Work,
+              where such license applies only to those patent claims licensable
+              by such Contributor that are necessarily infringed by their
+              Contribution(s) alone or by combination of their Contribution(s)
+              with the Work to which such Contribution(s) was submitted. If You
+              institute patent litigation against any entity (including a
+              cross-claim or counterclaim in a lawsuit) alleging that the Work
+              or a Contribution incorporated within the Work constitutes direct
+              or contributory patent infringement, then any patent licenses
+              granted to You under this License for that Work shall terminate
+              as of the date such litigation is filed.
+        
+           4. Redistribution. You may reproduce and distribute copies of the
+              Work or Derivative Works thereof in any medium, with or without
+              modifications, and in Source or Object form, provided that You
+              meet the following conditions:
+        
+              (a) You must give any other recipients of the Work or
+                  Derivative Works a copy of this License; and
+        
+              (b) You must cause any modified files to carry prominent notices
+                  stating that You changed the files; and
+        
+              (c) You must retain, in the Source form of any Derivative Works
+                  that You distribute, all copyright, patent, trademark, and
+                  attribution notices from the Source form of the Work,
+                  excluding those notices that do not pertain to any part of
+                  the Derivative Works; and
+        
+              (d) If the Work includes a "NOTICE" text file as part of its
+                  distribution, then any Derivative Works that You distribute must
+                  include a readable copy of the attribution notices contained
+                  within such NOTICE file, excluding those notices that do not
+                  pertain to any part of the Derivative Works, in at least one
+                  of the following places: within a NOTICE text file distributed
+                  as part of the Derivative Works; within the Source form or
+                  documentation, if provided along with the Derivative Works; or,
+                  within a display generated by the Derivative Works, if and
+                  wherever such third-party notices normally appear. The contents
+                  of the NOTICE file are for informational purposes only and
+                  do not modify the License. You may add Your own attribution
+                  notices within Derivative Works that You distribute, alongside
+                  or as an addendum to the NOTICE text from the Work, provided
+                  that such additional attribution notices cannot be construed
+                  as modifying the License.
+        
+              You may add Your own copyright statement to Your modifications and
+              may provide additional or different license terms and conditions
+              for use, reproduction, or distribution of Your modifications, or
+              for any such Derivative Works as a whole, provided Your use,
+              reproduction, and distribution of the Work otherwise complies with
+              the conditions stated in this License.
+        
+           5. Submission of Contributions. Unless You explicitly state otherwise,
+              any Contribution intentionally submitted for inclusion in the Work
+              by You to the Licensor shall be under the terms and conditions of
+              this License, without any additional terms or conditions.
+              Notwithstanding the above, nothing herein shall supersede or modify
+              the terms of any separate license agreement you may have executed
+              with Licensor regarding such Contributions.
+        
+           6. Trademarks. This License does not grant permission to use the trade
+              names, trademarks, service marks, or product names of the Licensor,
+              except as required for reasonable and customary use in describing the
+              origin of the Work and reproducing the content of the NOTICE file.
+        
+           7. Disclaimer of Warranty. Unless required by applicable law or
+              agreed to in writing, Licensor provides the Work (and each
+              Contributor provides its Contributions) on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+              implied, including, without limitation, any warranties or conditions
+              of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+              PARTICULAR PURPOSE. You are solely responsible for determining the
+              appropriateness of using or redistributing the Work and assume any
+              risks associated with Your exercise of permissions under this License.
+        
+           8. Limitation of Liability. In no event and under no legal theory,
+              whether in tort (including negligence), contract, or otherwise,
+              unless required by applicable law (such as deliberate and grossly
+              negligent acts) or agreed to in writing, shall any Contributor be
+              liable to You for damages, including any direct, indirect, special,
+              incidental, or consequential damages of any character arising as a
+              result of this License or out of the use or inability to use the
+              Work (including but not limited to damages for loss of goodwill,
+              work stoppage, computer failure or malfunction, or any and all
+              other commercial damages or losses), even if such Contributor
+              has been advised of the possibility of such damages.
+        
+           9. Accepting Warranty or Additional Liability. While redistributing
+              the Work or Derivative Works thereof, You may choose to offer,
+              and charge a fee for, acceptance of support, warranty, indemnity,
+              or other liability obligations and/or rights consistent with this
+              License. However, in accepting such obligations, You may act only
+              on Your own behalf and on Your sole responsibility, not on behalf
+              of any other Contributor, and only if You agree to indemnify,
+              defend, and hold each Contributor harmless for any liability
+              incurred by, or claims asserted against, such Contributor by reason
+              of your accepting any such warranty or additional liability.
+        
+           END OF TERMS AND CONDITIONS
+        
+           Copyright 2019-2023 Nicolas Gampierakis, Josef Zink,
+           Scintillometry Contributors
+        
+           Licensed under the Apache License, Version 2.0 (the "License");
+           you may not use this file except in compliance with the License.
+           You may obtain a copy of the License at
+        
+               http://www.apache.org/licenses/LICENSE-2.0
+        
+           Unless required by applicable law or agreed to in writing, software
+           distributed under the License is distributed on an "AS IS" BASIS,
+           WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+           See the License for the specific language governing permissions and
+           limitations under the License.
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering :: Atmospheric Science
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.8
+Requires-Dist: kneed
+Requires-Dist: matplotlib
+Requires-Dist: mpmath>=1.2.1
+Requires-Dist: numpy
+Requires-Dist: pandas>=2.0
+Requires-Dist: scipy>=1.10
+Requires-Dist: tqdm>4.8
+Provides-Extra: dev
+Requires-Dist: black>=23.1; extra == 'dev'
+Requires-Dist: build>=0.7; extra == 'dev'
+Requires-Dist: flake8>=6.0; extra == 'dev'
+Requires-Dist: hatchling>=1.12; extra == 'dev'
+Requires-Dist: isort; extra == 'dev'
+Requires-Dist: pylint>=2.16.1; extra == 'dev'
+Requires-Dist: scintillometry[docs,tests]; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: sphinx; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme>=1.1; extra == 'docs'
+Provides-Extra: tests
+Requires-Dist: coverage>=7.1; extra == 'tests'
+Requires-Dist: pytest-dependency>=0.5; extra == 'tests'
+Requires-Dist: pytest>=7.0; extra == 'tests'
+Description-Content-Type: text/markdown
+
+<!-- Copyright 2023 Scintillometry Contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
+# Scintillometry
+
+[![Pytest and Flake8](https://github.com/gampnico/scintillometry/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/gampnico/scintillometry/actions/workflows/python-app.yml)
+
+Analyse data & 2D flux footprints from Scintec's BLS scintillometers.
+
+This package started life as part of a field course. If you spot any missing citations or licenses please [open an issue](https://github.com/gampnico/scintillometry/issues).
+
+Comprehensive documentation is available [via ReadTheDocs](https://scintillometry.readthedocs.io/en/latest/).
+
+# Processing Scintillometry Data in Complex Terrain
+
+*Scintillometry* is configured for scintillometer experiments in Austria using public or local data (ZAMG, InnFLUX), but is easily modified to work with other data sources. Note that external data sources may have different licensing constraints.
+
+The package is currently in alpha and may change or break often. Support is only available for Python 3.8+ on debian-based Linux distros.
+
+## Installation
+
+*Scintillometry* supports package installation with pip, or from source as an editable with pip or conda. **Installing as an editable is recommended**, as it allows you to call command line arguments directly on the package instead of writing a frontend.
+
+### Install from Source with Conda/Mamba
+
+Create or activate your preferred conda environment and run:
+
+```bash
+git clone https://github.com/gampnico/scintillometry.git
+make install
+```
+
+That's it!
+
+Install the package with optional dependencies:
+
+```bash
+make install-tests  # install with dependencies for tests
+make install-docs   # install and build local documentation
+make install-all    # install with tests and build local documentation
+make install-dev    # install with dependencies for development
+```
+
+Installation uses conda if mamba is unavailable. Micromamba may also work, but is not currently supported.
+
+### Install with Pip
+
+If conda/mamba are not your package managers, then run:
+
+```bash
+python3 -m pip install --upgrade scintillometry
+```
+
+Note that this installation method does not provide documentation or a Makefile, and you cannot easily use the package from the command line.
+
+To install from source (recommended):
+
+```bash
+git clone https://github.com/gampnico/scintillometry.git
+pip install -e .
+```
+
+Install the package with optional dependencies:
+
+```bash
+pip install -e .[tests]
+pip install -e .[docs]
+pip install -e .[tests,docs]    # no whitespace after comma
+pip install -e .[dev]
+```
+
+# Features
+
+## Scintillometry
+
+Data processing:
+- Parse scintillometry data from Scintec's BLS series of large aperture scintillometers (.mnd files).
+- Recalibrate data if the scintillometer was incorrectly set up (e.g. wrong dip switch settings).
+- Parse topographical data as path transect.
+- Parse meteorological data.
+- Parse innFLUX and HATPRO data.
+
+Metrics:
+- Calculate effective path heights under various stability conditions.
+- Derive C<sub>T</sub><sup>2</sup> values from C<sub>n</sub><sup>2</sup> if these were not collected.
+- Estimate the time when stability conditions change.
+- Estimate the boundary layer height.
+- Compute parameters such as Obukhov length, friction velocity, etc.
+- Compute kinematic and sensible heat fluxes. Supports free convection and iteration with MOST: several sets of coefficients are available for MOST functions, based on previous studies.
+
+Visualisation:
+- Produces time series of scintillometry and meteorological data.
+- Produces vertical profiles.
+- Produces plots for derived or iterated variables.
+- Produces comparisons between calculated parameters and external data sources.
+
+Currently implemented MOST functions:
+- **an1988**: E.L. Andreas (1988), [DOI: 10.1364/JOSAA.5.000481](https://opg.optica.org/josaa/abstract.cfm?uri=josaa-5-4-481)
+- **li2012**: D. Li et al. (2012), [DOI:10.1007/s10546-011-9660-y](https://link.springer.com/article/10.1007/s10546-011-9660-y)
+- **wy1971**: Wyngaard et al. (1971), [DOI: 10.1364/JOSA.61.001646](https://opg.optica.org/josa/abstract.cfm?uri=josa-61-12-1646)
+- **wy1973**: Wyngaard et al. (1973) in Kooijmans and  Hartogensis (2016), [DOI: 10.1007/s10546-016-0152-y](https://link.springer.com/article/10.1007/s10546-016-0152-y)
+- **ma2014**: Maronga et al. (2014), [DOI: 10.1007/s10546-014-9955-x](https://link.springer.com/article/10.1007/s10546-014-9955-x)
+- **br2014**: Braam et al. (2014), [DOI: 10.1007/s10546-014-9938-y](https://link.springer.com/article/10.1007/s10546-014-9938-y)
+
+## Footprint Climatology (Roadmap)
+
+These features are under development.
+
+Metrics:
+- Process 2D flux footprints generated by Natascha Kljun's online model, available [here](http://footprint.kljun.net/).
+- Adjust topography and stitch footprints together.
+
+Visualisation:
+- Produce regression plots between calculated parameters and external data sources.
+- Overlay stitched footprints onto map.
+
+## Workflow
+
+### Example Workflow
+
+This package supports SRun and Austrian-sourced data (ZAMG, InnFLUX) out-of-the-box. If your scintillometry readings were taken in Austria, use [DGM 5m data](https://www.data.gv.at/katalog/dataset/digitales-gelandemodell-des-landes-salzburg-5m) to generate topographical data for the scintillometer's path coordinates. Then generate the path transects necessary for calibrating the scintillometer.
+
+**Scintillometer path coordinates must be accurate. Incorrectly generated topographical data leads to poor calibration and nonsense results!**
+
+List all available arguments with:
+
+```bash
+python3 ./src/scintillometry/main.py -h
+make commands   # if you installed from source
+```
+
+Navigate to the package root in the terminal. Calculate and plot surface
+sensible heat fluxes using MOST in CET, with coefficients from Andreas (1988):
+
+```bash
+python3 ./src/scintillometry/main.py -i "./<path_to_input>/<bls_data>.mnd" \
+-p "./<path_to_transect>/<transect_data>.csv" -t "CET"
+```
+
+If you are not using the scintillometer in Austria, you will need to find and parse topographical and meteorological data yourself. Add parsing functions to classes in ``wrangler/data_parsing.py`` to parse data from other scintillometers, organisations, or countries. A step-by-step guide on how to do this is given in the module's docstring.
+
+### Make Things Simple
+
+If you installed from source, the provided Makefile has many uses. View all the available commands:
+
+```bash
+make help       # display help for Makefile targets
+make commands   # display help for scintillometry
+```
+
+### Run from Terminal
+
+From the package root, pass arguments like so:
+
+```bash
+src/scintillometry/main.py [-h] [-i <input_data>] [-p <path_data>] [-d] [...] [-v]
+```
+
+### Import as Package
+
+*Scintillometry* and its submodules can be imported as Python modules:
+
+```python
+from scintillometry.wrangler.data_parser import WranglerParsing
+
+parser = WranglerParsing()
+dataframe = parser.scintillometer.parse_scintillometer(file_path="./data.mnd")
+weather = parser.weather.parse_weather(file_path="./weather.csv")
+weather = parser.weather.transform.change_index_frequency(weather, "60S")
+```
+
+MOST functions are stored in their respective class:
+
+```python
+from scintillometry.backend.iterations import IterationMost
+
+iteration = IterationMost()
+iteration.most_method(dataframe, eff_h, stability, coeff_id="an1988")
+```
+
+Many classes initialise atmospheric constants using the AtmosConstants class:
+
+```python
+from scintillometry.metrics.calculations import MetricsWorkflow
+from scintillometry.backend.constants import AtmosConstants
+
+workflow = MetricsWorkflow()
+kelvin = workflow.constants.kelvin  # 273.15
+assert isinstance(workflow.constants, AtmosConstants)  # True
+```
+
+For more information see the API section of the documentation.
+
+# Acknowledgements
+
+This project would not be possible without the invaluable contributions from Josef Zink, Dr. Manuela Lehner, and Dr. Helen Ward.
