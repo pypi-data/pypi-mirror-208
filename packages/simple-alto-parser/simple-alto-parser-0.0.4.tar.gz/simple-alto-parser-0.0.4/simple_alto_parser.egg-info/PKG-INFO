@@ -1,0 +1,37 @@
+Metadata-Version: 2.1
+Name: simple-alto-parser
+Version: 0.0.4
+Summary: A python module to read and parse ALTO files
+Home-page: https://simple-alto-parser.readthedocs.io/en/latest/
+Author: Sorin Marti, Lea Kasper
+Author-email: sorin.marti@gmail.com, lea.kasper@unibas.ch
+License: GPLv3
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# simple-alto-parser
+This is a simple parser for ALTO XML files. It is designed to do two tasks separately:
+1. Extract the text from the ALTO XML file with the AltoTextParser class.
+2. Extract structured information from the text with different parsing methods.
+
+## Usage
+```python
+from simple_alto_parser import AltoTextParser
+
+alto_parser = AltoTextParser()
+alto_parser.add_file('path/to/alto.xml')
+alto_parser.parse_text()
+
+result = alto_parser.get_alto_files()
+regions = result[0].get_text_regions()
+lines = regions[0].get_text_lines()
+```
