@@ -1,0 +1,2 @@
+from bytez.tasks.style_transfer import StyleTransferModels
+from bytez.tasks.super_resolution import SuperResolutionModels
