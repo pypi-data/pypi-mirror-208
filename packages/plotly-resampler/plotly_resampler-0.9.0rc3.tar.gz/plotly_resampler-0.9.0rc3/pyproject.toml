@@ -1,0 +1,91 @@
+[tool.poetry]
+name = "plotly-resampler"  # Do not forget to update the __init__.py __version__ variable
+version = "0.9.0rc3"
+description = "Visualizing large time series with plotly"
+authors = ["Jonas Van Der Donckt", "Jeroen Van Der Donckt", "Emiel Deprost"]
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/predict-idlab/plotly-resampler"
+documentation = "https://predict-idlab.github.io/plotly-resampler"
+keywords = ["time-series", "visualization", "resampling", "plotly", "plotly-dash"]
+packages = [
+    { include = "plotly_resampler" }
+]
+include = [
+    # C extensions must be included in the wheel distributions
+    {path = "plotly_resampler/aggregation/algorithms/*.so", format = "wheel"},
+    {path = "plotly_resampler/aggregation/algorithms/*.pyd", format = "wheel"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7.1"
+jupyter-dash = ">=0.4.2"
+plotly = "^5.5.0"
+dash = "^2.2.0"
+pandas = ">=1"
+trace-updater = ">=0.0.8"
+numpy = [
+    { version = ">=1.14", python = "<3.11" },
+    { version = ">=1.24", python = ">=3.11" }
+]
+orjson = "^3.8.0"  # Faster json serialization
+# Optional dependencies
+Flask-Cors = { version = "^3.0.10", optional = true }
+# Lock kaleido dependency until https://github.com/plotly/Kaleido/issues/156 is resolved
+kaleido = {version = "0.2.1", optional = true}
+tsdownsample = "0.1.2"
+
+[tool.poetry.extras]
+# Optional dependencies
+inline_persistent = ["kaleido", "Flask-Cors"]
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+pytest-cov = "^3.0.0"
+selenium = "4.2.0"
+pytest-selenium = "^2.0.1"
+webdriver-manager = "^3.5.2"
+selenium-wire = "^5.0"
+pyarrow = "^10.0"
+Sphinx = "^4.4.0"
+pydata-sphinx-theme = "^0.13.3"
+sphinx-autodoc-typehints = "^1.17.0"
+ipywidgets = "^7.7.1"
+memory-profiler = "^0.60.0"
+line-profiler = "^4.0"
+ruff = "^0.0.262"
+black = "^22.6.0"
+pytest-lazy-fixture = "^0.6.3"
+# yep = "^0.4"  # c code profiling
+
+# Linting
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 88
+ignore = ["E501"] # Never enforce `E501` (line length violations).
+[tool.ruff.per-file-ignores]
+"tests/test_registering.py" = ["F401", "F811"]
+"tests/test_serialization.py" = ["F401", "F811"]
+
+# Formatting
+[tool.black]
+line-length = 88
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
