@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mopidy-YouTube</title>
+  <link rel="stylesheet" href="/mopidy/mopidy.css" type="text/css" media="screen, print">
+  <style>
+    #thumbnails {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 2px;
+      line-height: 0%;
+    }
+
+    #thumbnails a {
+      border: none;
+    }
+
+    #thumbnails img {
+      border: none;
+      width: 100%;
+      aspect-ratio: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // script to allow for right click to add to track list
+    // doing it per img prevents lazy loading
+    window.addEventListener("contextmenu", e => {
+        var targetElement = event.target
+        if (targetElement.nodeName === "IMG") {
+            e.preventDefault();
+            var imgsrc = targetElement.src.split(".")
+            var ytid = imgsrc[(imgsrc.length)-2].split("/").pop()
+            var new_href = `?url=yt:video:${ytid}`
+            location.href = new_href
+        }
+        return false;
+    });    
+  </script>
+
+  <div class="box focus">
+    <h1>Mopidy-YouTube</h1>
+    <p>
+      This web client is used to serve album art cached from remote
+      media files by the Mopidy-YouTube extension and to allow you to
+      easily add youtube tracks and playlists to Mopidy from your web browser.
+    </p>
+  </div>
+  <div class="box">
+    <h2>Add a youtube URL to Mopidy tracklist</h2>
+    <form>
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 10%;">URL: </td>
+          <td style="width: 80%;"><input style="width: 98%;" name="url" type="text" /></td>
+          <td style="width: 10%;"><input style="width: 100%;" type="submit" /></td>
+        </tr>
+      </table>
+    </form>
+    <h2>Add a youtube URL to Mopidy tracklist while browsing</h2>
+    <textarea id="bookmark" rows="4" style="width: 100%;"></textarea>
+    <script>document.getElementById('bookmark').value = "javascript:s='" + window.location +
+        "';f=document.createElement('form');f.action=s;i=document.createElement('input');i.type='hidden';" +
+        "i.name='url';i.value=window.location.href;f.appendChild(i);document.body.appendChild(f);f.submit();"
+    </script>
+    <p>
+      Copy the above snippet, and create a bookmark in your web browser with
+      the snippet as the URL. When you're browsing youtube, you can simply
+      click that bookmark to add the current page to Mopidy.
+    </p>
+  </div>
+  <div class="box">
+    <h2>Image cache</h2>
+    <p>Images for YouTube videos will automatically appear here. Hover for title; click to enlarge; right click to add
+      to tracklist.</p>
+
+    <div id="thumbnails">
+      {% for image in images %}
+      <a href="?image={{image[0]}}&ext={{image[2]}}&track={{image[1]}}">
+        <img src="{{image[0]}}.{{image[2]}}" alt="Link to album art for {{image[1]}}" title="{{image[1]}}" loading="lazy">
+      </a>
+      {% end %}
+    </div>
+  </div>
+</body>
+
+</html>
