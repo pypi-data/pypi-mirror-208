@@ -1,0 +1,12 @@
+prefix=/opt/graphscope
+exec_prefix=${prefix}
+libdir=/opt/graphscope/lib64
+includedir=/opt/graphscope/include
+
+Name: absl_memory
+Description: Abseil memory library
+URL: https://abseil.io/
+Version: 20220623
+Requires: absl_core_headers = 20220623, absl_meta = 20220623
+Libs: -L${libdir}  
+Cflags: -I${includedir} -DNOMINMAX
