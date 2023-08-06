@@ -1,0 +1,32 @@
+{% load nobinobi_child_tags %}
+{% for item in menu %}
+  {#    {% if item.separator %}#}
+  {#      <li>------------</li>{% endif %}#}
+
+  {% if item.label %}
+    <li class="nav-header">{{ item.label }}</li>
+  {% endif %}
+  <li class="nav-item {% if item.children %}has-treeview{% endif %} {% if request.path|startswith:item.url %}menu-open{% endif %}">
+    <a href="{{ item.url }}" class="nav-link {% if request.path|startswith:item.url %}active{% endif %}">
+      <i class="nav-icon {{ item.icon }}"></i>
+      <p>
+        {{ item.title }}
+        {% if item.children %}
+          <i class="fa fa-angle-left right"></i>
+        {% endif %}
+      </p>
+    </a>
+    {% if item.children %}
+      <ul class="nav nav-treeview">
+        {% for child in item.children %}
+          <li class="nav-item">
+            <a href="{{ child.url }}" class="nav-link {% if request.path == child.url %}active{% endif %}">
+              <i class="nav-icon {{ child.icon }}"></i>
+              <p>{{ child.title }}</p>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}

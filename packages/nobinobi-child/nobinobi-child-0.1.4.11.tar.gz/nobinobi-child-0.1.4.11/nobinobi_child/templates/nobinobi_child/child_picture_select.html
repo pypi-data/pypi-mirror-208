@@ -1,0 +1,23 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n static get_verbose_names crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+{% endblock %}
+
+{% block breadcrumb %}
+	{{ block.super }}
+    <li class="breadcrumb-item active"><a href="{% url "nobinobi_child:child_picture_select" %}">{% trans "Child picture select" %}</a></li>
+{% endblock %}
+
+{% block content_title %}{{ title }}{% endblock %}
+
+{% block content_card_title %}{% trans "Child picture select" %}{% endblock %}
+{% block content_card_body %}
+    {% crispy form %}
+{% endblock %}
+{% block content_card_footer %}{% endblock %}
+
+{% block extrajs %}
+{% endblock %}

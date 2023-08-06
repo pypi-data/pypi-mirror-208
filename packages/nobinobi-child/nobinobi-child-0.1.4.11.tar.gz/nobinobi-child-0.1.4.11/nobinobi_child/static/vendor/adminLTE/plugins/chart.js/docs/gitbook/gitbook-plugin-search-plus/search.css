@@ -1,0 +1,60 @@
+/*
+ * Copyright (C) 2020 <Florian Alu - Prolibre - https://prolibre.com
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+    This CSS only styled the search results section, not the search input
+    It defines the basic interraction to hide content when displaying results, etc
+*/
+#book-search-input {
+  background: inherit;
+}
+#book-search-results .search-results {
+  display: none;
+}
+#book-search-results .search-results ul.search-results-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+#book-search-results .search-results ul.search-results-list li {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  /* Highlight results */
+}
+#book-search-results .search-results ul.search-results-list li p em {
+  background-color: rgba(255, 220, 0, 0.4);
+  font-style: normal;
+}
+#book-search-results .search-results .no-results {
+  display: none;
+}
+#book-search-results.open .search-results {
+  display: block;
+}
+#book-search-results.open .search-noresults {
+  display: none;
+}
+#book-search-results.no-results .search-results .has-results {
+  display: none;
+}
+#book-search-results.no-results .search-results .no-results {
+  display: block;
+}
+#book-search-results span.search-highlight-keyword {
+  background: #ff0;
+}
+#book-search-results.search-plus .search-results .has-results .search-results-item {
+  color: inherit;
+}

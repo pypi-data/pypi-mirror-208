@@ -1,0 +1,95 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/DataTables/datatables.min.css' %}"/>
+{% endblock %}
+
+{% block content_title_block %}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block breadcrumb %}
+	{{ block.super }}
+    <li class="breadcrumb-item"><a href="{% url "nobinobi_child:Staff_list" %}">{% trans "Staffs" %}</a></li>
+    <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+
+
+{% block content_card %}
+    <div class="card-body">
+        <table id="staff_datatables" class="display table" style="width:100%">
+            <thead>
+            <tr>
+                <th>{% trans "Staff" %}</th>
+{#                <th>{% trans "Active" %}</th>#}
+                <th>{% trans "Phone" %}</th>
+                <th>{% trans "Mobile phone" %}</th>
+                <th>{% trans "Email" %}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+	<!-- modal instanstiation -->
+	{% include "includes/modal.html" %}
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+    <script src="{% static 'vendor/DataTables/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/moment-with-locales.min.js' %}"></script>
+
+    <script>
+        let table = null;
+        $(document).ready(function () {
+            moment.locale('fr');
+            table = $('#staff_datatables ').DataTable({
+                "language": {
+                    "url": "{% static 'vendor/DataTables/DataTables-1.10.18/i18n/French.json' %}"
+                },
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    url: "{% url 'nobinobi_staff:staff-list' %}?format=datatables&keep=id,first_name,last_name,phone,mobile_phone,email",
+                },
+                "columns": [
+                    {
+                        data: "first_name",
+                        name: "first_name, last_name",
+                        render: function (row, type, data) {
+                            // Combine the first and last names into a single table field
+                            return data.first_name + ' ' + data.last_name;
+                        }
+                    },
+                    {
+                        data: "phone",
+                        name: "phone",
+                        defaultContent: "-",
+                    },
+                    {
+                        data: "mobile_phone",
+                        name: "mobile_phone",
+                        defaultContent: "-",
+                    },
+                    {
+                        data: "email",
+                        name: "email",
+                        defaultContent: "-",
+                    },
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'print',
+                    'csvHtml5',
+                    'pdfHtml5',
+                ],
+                responsive: true,
+            });
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/DataTables/datatables.min.css' %}"/>
+{% endblock %}
+
+{% block content_title_block %}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li class="breadcrumb-item active"><a href="{% url "nobinobi_child:Child_list" %}">{{ title }}</a></li>
+{% endblock %}
+
+
+{% block content_card %}
+    <div class="row">
+        <div class="col-lg-12 text-center"><h2>{{ name_classroom_display }}</h2></div>
+        <div class="col-lg-12">
+
+            <div class="center btn-toolbar" role="toolbar" aria-label="">
+                <div class="btn-group mx-auto" role="group" aria-label="">
+                    {% for classroom in classrooms %}
+                        <button type="button" id="{{ classroom.id }}_btn_choice" rel="{{ classroom.id }}"
+                                class="btn btn-secondary filter_datatable">{{ classroom }}
+                        </button>
+                    {% endfor %}
+                    <button type="button" id="none_btn_choice"
+                            class="btn btn-dark filter_datatable">{% trans "All" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="children_datatables" class="display table" style="width:100%">
+            <thead>
+            <tr>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Picture" %}</th>
+                <th>{% trans "Child" %}</th>
+                <th>{% trans "Gender" %}</th>
+                <th>{% trans "Birth date" %}</th>
+                <th>{{ name_classroom_display }}</th>
+                <th>{% trans "Age group" %}</th>
+                <th>{% trans "Staff" %}</th>
+                <th>{% trans "Contacts Phones" %}</th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+{% endblock %}
+{% block extrajs %}
+    <script src="{% static 'vendor/DataTables/datatables.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            let table = $('#children_datatables').DataTable({
+                "language": {
+                    "url": "{% static 'vendor/DataTables/DataTables-1.10.18/i18n/French.json' %}"
+                },
+                "processing": true,
+                "serverSide": true,
+                "lengthChange": true,
+                "lengthMenu": [[10, 25, 50, 100, 250, 500, -1], [10, 25, 50, 100, 250, 500, "{% trans "ALL" %}"]],
+                {#scroller: true,#}
+                {#"deferLoading": 10,#}
+                {#"deferRender": true,#}
+                "ajax": {
+                    "url": "{% url 'nobinobi_child:api-child-list' %}?format=datatables",
+                    "type": "GET",
+                    {#"beforeSend": function (xhr) {#}
+                    {#    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token|escapejs }}");#}
+                },
+                "columns": [
+                    {data: "status", visible: false},
+                    {
+                        data: "picture",
+                        orderable: false,
+                        searchable: false,
+                        "render": function (row, index, datatable) {
+
+                            if (row == null) {
+                                if (datatable['gender'] === "boy") {
+                                    row = "{% static 'img/avatar/default-avatar-boy.png' %}";
+                                } else if (datatable['gender'] === "girl") {
+                                    row = "{% static 'img/avatar/default-avatar-girl.png' %}";
+                                } else {
+                                    row = "{% static 'img/avatar/default-avatar-other.png' %}";
+                                }
+                            }
+                            return '<img class="thumbnail" height="100px" width="100px" src="' + row + '"/>';
+                        }
+                    },
+                    {
+                        data: "first_name",
+                        name: "first_name, last_name",
+                        "render": function (row, i, data) {
+                            // Combine the first and last names into a single table field
+                            let text = data.first_name + ' ' + data.last_name;
+                            if (data.childspecificneed) {
+                                text += " <i class='fas fa-exclamation-triangle'></i>"
+                            }
+                            return text;
+                        }
+                    },
+                    {
+                        data: "gender",
+                        "render": function (row, index, datatable) {
+                            if (row === "boy") {
+                                row = "{% trans "Boy" %}";
+                            } else if (row === "girl") {
+                                row = "{% trans "Girl" %}";
+                            } else if (row === "other") {
+                                row = "{% trans "Other" %}";
+                            } else {
+                                row = "{% trans "Unknown" %}";
+                            }
+                            return row;
+                        }
+                    },
+                    {data: "birth_date"},
+                    {
+                        data: "classroom",
+                        name: "classroom",
+                        defaultContent: "-",
+                        "render": function (data, type, row) {
+                            if (row.replacementclassroom_set) {
+                                return row.replacementclassroom_set.name;
+                            } else {
+                                return data.name;
+                            }
+                        },
+
+                    },
+                    {
+                        data: "age_group.name",
+                        name: "age_group.name",
+                        defaultContent: "-"
+                    },
+                    {
+                        data: "staff",
+                        name: "staff.first_name, staff.last_name",
+                        defaultContent: "-",
+                        "render": function (data, type, row) {
+                            if (data) {
+                                return data.first_name + " " + data.last_name;
+                            }
+                        },
+                    },
+                    {
+                        data: "childtocontact_set",
+                        orderable: false,
+                        searchable: false,
+                        render: function (row, index, datatable) {
+                            let text = "<p>";
+                            if (row && row.length > 0) {
+                                for (let i = 0; i < row.length; i++) {
+                                    let phone = "";
+                                    let mobile_phone = "";
+                                    let professional_phone = "";
+
+                                    if (row[i].contact.phone) {
+                                        phone = row[i].contact.phone;
+                                    }
+                                    if (row[i].contact.mobile_phone) {
+                                        mobile_phone = " / " + row[i].contact.mobile_phone;
+                                    }
+                                    if (row[i].contact.professional_phone) {
+                                        professional_phone = " / " + row[i].contact.professional_phone;
+                                    }
+                                    text += i + ") " + row[i].contact.first_name + " " + row[i].contact.last_name + " - " + phone + " / " + mobile_phone + " / " + professional_phone + "<br>";
+                                }
+                            } else {
+                                text += "-";
+                            }
+                            text += "</p>";
+                            return text;
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (row, index, datatable) {
+                            let r = '';
+                            {% if perms.nobinobi_child.view_child %}
+                                r += '<a href="{% url "nobinobi_child:Child_detail" pk="00000000-0000-0000-0000-000000000001" %}" class="btn btn-info"><i class="fa fa-eye"></i></a>'.replace("00000000-0000-0000-0000-000000000001", row.id);
+                            {% endif %}
+                            return r;
+                        },
+                    },
+                ],
+                dom: 'Blfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [2, 3, 4, 5, 8]
+                        },
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: [2, 3, 4, 5, 8]
+                        },
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        exportOptions: {
+                            columns: [2, 3, 4, 5, 8]
+                        },
+                    }, {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [2, 3, 4, 5, 8]
+                        },
+                    },
+                ],
+                responsive: true,
+            });
+            $('.filter_datatable').on('click', function (e) {
+                e.preventDefault();
+
+                var rel = $(this).attr('rel');
+                if (rel) {
+                    table.ajax.url("{% url 'nobinobi_child:api-child-by-classroom' classroom_id=999 %}?format=datatables".replace("999", rel)).load();
+
+                } else {
+                    table.ajax.url("{% url 'nobinobi_child:api-child-list' %}?format=datatables").load();
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load widget_tweaks i18n %}
+
+<div class="modal-header">
+  <h3 class="modal-title">{% trans "Absence detail" %}</h3>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <table class="table table-bordered table-hover">
+    <tbody>
+    <tr>
+      <th>{% trans "Child" %}</th>
+      <td>{{ absence.child.full_name }}</td>
+    </tr>
+    <tr>
+      <th>{% trans "Start date" %}</th>
+      <td>{{ absence.start_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+    </tr>
+    <tr>
+      <th>{% trans "End date" %}</th>
+      <td>{{ absence.end_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+    </tr>
+    <tr>
+      <th>{% trans "Absence type" %}</th>
+      <td>{{ absence.type }} ({{ absence.type.group.name }})</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+</div>

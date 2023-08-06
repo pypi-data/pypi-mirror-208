@@ -1,0 +1,56 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n static get_verbose_names crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{#{% block extrastyle %}#}
+{#{% endblock %}#}
+
+{% block breadcrumb %}
+	{{ block.super }}
+    <li class="breadcrumb-item"><a
+            href="{% url "nobinobi_child:child_picture_select" %}">{{ title }}</a></li>
+    <li class="breadcrumb-item active"><a
+            href="{% url "nobinobi_child:child_picture" pk=child.pk %}">{% blocktrans with child.full_name as child %}{{ child }}'s picture{% endblocktrans %}</a></li>
+{% endblock %}
+
+{% block content_title %}{{ title }}{% endblock %}
+
+{% block content_card_title %}{% blocktrans with child.full_name as child %}{{ child }}'s picture{% endblocktrans %}{% endblock %}
+{% block content_card_body %}
+	{% include "includes/messages.html" %}
+    <div class="row">
+        <div class="col-xs-12 mx-auto">
+			{% if child.picture and child.picture.url %}
+                <img width="250" height="250" class="img-fluid img-bordered img-thumbnail" src="{{ child.picture.url }}"
+                     alt="{{ child.full_name }}'s {% trans "picture" %}">
+			{% else %}
+				{% if child.gender == "boy" %}
+                    <img width="250" height="250" class="img-fluid img-bordered img-thumbnail"
+                         src="{% static 'img/avatar/default-avatar-boy.png' %}" alt="{% trans "Default picture" %}">
+				{% elif child.gender == "girl" %}
+                    <img width="250" height="250" class="img-fluid img-bordered img-thumbnail"
+                         src="{% static 'img/avatar/default-avatar-girl.png' %}" alt="{% trans "Default picture" %}">
+				{% else %}
+                    <img width="250" height="250" class="img-fluid img-bordered img-thumbnail"
+                         src="{% static 'img/avatar/default-avatar-other.png' %}" alt="{% trans "Default picture" %}">
+
+				{% endif %}
+			{% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12 mx-auto">
+            <form class="form-horizontal text-center" enctype="multipart/form-data" id="id-child-picture-select"
+                  method="post">
+				{% csrf_token %}
+				{{ form.picture }}
+                <input type="submit" name="submit" value="{% trans "Submit" %}" class="btn btn-primary"
+                       id="submit-id-submit">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block content_card_footer %}{% endblock %}
+

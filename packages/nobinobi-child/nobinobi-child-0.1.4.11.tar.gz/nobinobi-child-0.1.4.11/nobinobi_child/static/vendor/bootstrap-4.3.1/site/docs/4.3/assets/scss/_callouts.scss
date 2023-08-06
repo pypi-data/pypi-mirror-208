@@ -1,0 +1,56 @@
+/*!
+ * Copyright (C) 2020 <Florian Alu - Prolibre - https://prolibre.com
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+//
+// Callouts
+//
+
+.bd-callout {
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #eee;
+  border-left-width: .25rem;
+  @include border-radius;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: .25rem;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  code {
+    @include border-radius;
+  }
+
+  + .bd-callout {
+    margin-top: -.25rem;
+  }
+}
+
+// Variations
+@mixin bs-callout-variant($color) {
+  border-left-color: $color;
+
+  h4 { color: $color; }
+}
+
+.bd-callout-info { @include bs-callout-variant($bd-info); }
+.bd-callout-warning { @include bs-callout-variant($bd-warning); }
+.bd-callout-danger { @include bs-callout-variant($bd-danger); }

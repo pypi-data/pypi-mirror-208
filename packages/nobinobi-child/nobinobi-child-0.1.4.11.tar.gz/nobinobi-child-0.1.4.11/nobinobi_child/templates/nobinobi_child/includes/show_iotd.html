@@ -1,0 +1,29 @@
+{% load i18n %}
+{% if iotds %}
+    <li class="nav-item dropdown">
+        <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"><span
+                class="badge badge-pill badge-light">{{ iotds|length }}</span> {% blocktranslate with iotds_pl=iotds|pluralize %}Information{{ iotds_pl }} of the day{% endblocktranslate %}
+            </button>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="max-width: 1000px !important;">
+            <span
+                class="dropdown-item dropdown-header">{% blocktranslate with iotds_len=iotds|length iotds_pl=iotds|pluralize %}
+                {{ iotds_len }} information{{ iotds_pl }} of the day{% endblocktranslate %}</span>
+                {% for iotd in iotds %}
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url "nobinobi_child:InformationOfTheDay_detail" pk=iotd.id %}" class="dropdown-item">
+                        {{ iotd.content.excerpt }}<br>
+                        <span class="text-muted text-sm">{% for classroom in iotd.classrooms.all %}{{ classroom.name }}
+                            , {% endfor %}</span>
+                    </a>
+                {% endfor %}
+                <div class="dropdown-divider"></div>
+                <a href="{% url "nobinobi_child:InformationOfTheDay_list" %}"
+                   class="dropdown-item dropdown-footer">{% trans "See all Informations of the day" %}</a>
+            </div>
+
+        </div>
+    </li>
+{% endif %}
+

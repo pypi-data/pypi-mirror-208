@@ -1,0 +1,33 @@
+{% extends "nobinobi_child/base.html" %}
+{% load i18n %}
+
+{% block content_title_block %}
+  <p class="lead">{% trans "Information of the day" %} - ID: {{ object.id }}</p>
+{% endblock %}
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item"><a
+    href="{% url "nobinobi_child:InformationOfTheDay_list" %}">{% trans "Informations of the day" %}</a></li>
+  <li class="breadcrumb-item active">{{ object.title }}</li>
+{% endblock %}
+
+{% block content-block %}
+  <section class="content">
+    <div class="card">
+      <div class="card-header bg-warning pl-5 p-0 pt-2 rounded-0">
+        <h2>{{ object.title }}</h2>
+      </div>
+      <div class="card-body m-0">
+        <p class="card-text p-3 m-0 bg-gray-light rounded">{{ object.content }}</p>
+        <p class="card-text text-right">
+          {% for classroom in object.classrooms.all %}
+            <span class="badge badge-primary text-md">{{ classroom.name }}</span>
+          {% endfor %}
+        </p>
+      </div>
+      <div class="card-footer bg-dark text-right">
+        {{ object.start_date|date:"SHORT_DATETIME_FORMAT" }} {% trans "to" %} {{ object.end_date|date:"SHORT_DATETIME_FORMAT" }}
+      </div>
+    </div>
+  </section>
+{% endblock %}

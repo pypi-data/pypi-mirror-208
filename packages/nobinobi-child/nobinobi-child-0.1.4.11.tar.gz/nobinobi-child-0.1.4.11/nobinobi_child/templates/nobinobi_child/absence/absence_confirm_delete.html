@@ -1,0 +1,21 @@
+{% load widget_tweaks i18n %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">{% trans "Delete absence" %}</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <p>{% blocktrans %}Are you sure you want to delete absence:{% endblocktrans %} <strong>{{ absence.start_date|date:"SHORT_DATETIME_FORMAT" }} - {{ absence.end_date|date:"SHORT_DATETIME_FORMAT" }}</strong> {% trans "for child"%} <strong>{{ absence.child.full_name }}</strong>?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-danger">{% trans "Delete" %}</button>
+  </div>
+
+</form>
