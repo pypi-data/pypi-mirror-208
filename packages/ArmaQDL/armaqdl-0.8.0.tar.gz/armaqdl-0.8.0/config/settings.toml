@@ -1,0 +1,58 @@
+# Default profile to use with ArmaQDL
+profile = "Dev"
+
+# Predefined locations of mods to be used with CLI as `location:@mod`
+# Alternatively use full absolute paths to `@mod` folders with the CLI
+[locations]
+  # Every location contains a path and a build flag determining if mods from that folder should be rebuild with the `-b` CLI flag
+  # Every location may contain a type ("dev" [default], "build" or "release") determining the HEMTT build to load by default
+  #   HEMTT builds will automatically load if `.hemttout` folder is present and non-HEMTT build is not forced
+  # Use forward slashes `/` in paths
+
+  [locations.main]
+    path = "C:/Program Files (x86)/Steam/steamapps/common/Arma 3"
+    build = false
+
+  [locations.workshop]
+    path = "C:/Program Files (x86)/Steam/steamapps/common/Arma 3/!Workshop"
+    build = false
+
+  [locations.dev]
+    path = "C:/Arma 3/Mods"
+    build = true
+
+  [locations.p]
+    path = "P:/"
+    build = true
+    type = "build"  # Load HEMTT build from `.hemttout/build/` by default instead, if available, otherwise from `addons/`
+
+# Build tools and their instructions
+[build]
+  # Every build tool contains presence marker (a file) determining if a tool can be used and the invocation command
+  # Order defines priority if project supports multiple build tools
+
+  [build.hemtt]
+    presence = ".hemtt/project.toml"
+    command = ["hemtt", "dev"]
+
+  [build.mikero]
+    presence = "tools/build.py"
+    command = ["python", "tools/build.py"]
+
+  [build.make]
+    presence = "Makefile"
+    command = ["make", "-j4"]
+
+[log]
+  open_delay = 3
+
+# Default server information to use with ArmaQDL
+[server]
+  profile = "Server"
+  ip = "localhost"
+  port = 2302
+  password = "test"
+
+# Default headless client information to use with ArmaQDL
+[headless]
+  profile = "headlessclient"

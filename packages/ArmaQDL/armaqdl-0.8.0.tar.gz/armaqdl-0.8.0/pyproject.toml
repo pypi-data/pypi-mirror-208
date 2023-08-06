@@ -1,0 +1,88 @@
+[build-system]
+requires = ["hatchling>=1.11", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ArmaQDL"
+authors = [
+  { name="Jonpas", email="jonpas33@gmail.com" },
+]
+description = "Python program for quick launching various mod development configurations for Arma through a simple CLI."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Topic :: Software Development :: Build Tools",
+]
+dependencies = [
+  "platformdirs",
+  "toml",
+]
+dynamic = [
+  "version",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jonpas/Arma-QDL"
+"Bug Tracker" = "https://github.com/jonpas/Arma-QDL/issues"
+
+[project.scripts]
+armaqdl = "armaqdl.armaqdl:main"
+
+
+## Hatch
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["armaqdl", "config"]
+
+[tool.hatch.build.targets.wheel.sources]
+"config" = "armaqdl/config"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "armaqdl/_version.py"
+
+
+## Hatch environments
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "flake8",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+lint = "flake8 {args:.}"
+
+
+[tool.hatch.envs.static]
+template = "static"
+dependencies = [
+  "pyinstaller",
+]
+dev-mode = false
+
+[tool.hatch.envs.static.scripts]
+bundle = "pyinstaller armaqdl/__main__.py --add-data armaqdl;armaqdl --add-data config;config -n armaqdl --onefile"
+
+[tool.hatch.envs.static.overrides]
+platform.linux.scripts = [
+  "bundle=pyinstaller armaqdl/__main__.py --add-data armaqdl:armaqdl --add-data config:config -n armaqdl --onefile",
+]
