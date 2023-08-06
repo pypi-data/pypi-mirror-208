@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {name-your-service}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {name-your-service}
+  template:
+    metadata:
+      labels:
+        app: {name-your-service}
+    spec:
+      containers:
+        - name: {name-your-service}
+          image: IMAGE_PLACEHOLDER
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV
+              value: "stg"
+#          resources:
+#            limits:
+#              cpu: "4"
+#              memory: "12Gi"
+#              nvidia.com/gpu: "1"
+#  autoscaling:
+#    minReplicas: 1
+#    maxReplicas: 5
+#    targetCPUUtilizationPercentage: 80
