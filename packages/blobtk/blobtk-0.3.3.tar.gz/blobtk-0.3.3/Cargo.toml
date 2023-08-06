@@ -1,0 +1,60 @@
+[package]
+name = "blobtk"
+version = "0.3.3"
+edition = "2021"
+authors = [
+    "Rich Challis <rc28@sanger.ac.uk>",
+]
+license = "MIT"
+description = "Core utilities for BlobToolKit."
+homepage = "https://github.com/blobtoolkit/blobtk"
+repository = "https://github.com/blobtoolkit/blobtk"
+documentation = "https://github.com/blobtoolkit/blobtk"
+keywords = ["bioinformatics", "blobtoolkit", "genome", "genomics"]
+categories = ["command-line-utilities", "science"]
+include = [
+    "Cargo.*",
+    "pyproject.*",
+    "src/*",
+]
+
+[lib]
+name = "blobtk"
+path = "src/lib.rs"
+crate-type = ["cdylib", "lib"]
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[dependencies]
+atty = "0.2.14"
+clap = { version = "4.0.29", features = [ "derive" ]}
+clap-num = "1.0.2"
+colorous = "1.0.10"
+coord_transforms = "1.4.0"
+flate2 = "1.0.25"
+glob = "0.3.1"
+indexmap = "1.9.2"
+indicatif = "0.17.2"
+needletail = "0.5.1"
+num-integer = "0.1.45"
+pyo3 = { version = "0.18.1", features = ["extension-module"] }
+regex = "1.7.0"
+resvg = "0.31.0"
+rust-htslib = "0.40.2"
+rust_decimal = "1.29.1"
+serde = { version = "1.0.152", features= ["derive"] }
+serde-aux = "4.2.0"
+serde_json = "1.0.93"
+serde_with = "2.3.2"
+svg = "0.13.1"
+tiny-skia = "0.8.3"
+titlecase = "2.2.1"
+url = { version = "2.3.1", features = ["serde"] }
+usvg = "0.31.0"
+
+[build-dependencies]
+pyo3-build-config = "0.18.3"
