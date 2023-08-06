@@ -1,0 +1,309 @@
+#!/usr/bin/python
+# -*- coding:utf-8 _*- 
+"""
+@author:TXU
+@file:ssh_mgr
+@time:2022/09/16
+@email:tao.xu2008@outlook.com
+@description: paramiko ssh
+"""
+import re
+import time
+import paramiko
+import scp
+import inspect
+import socket
+import subprocess
+import unittest
+from loguru import logger
+
+from flexrunner.pkgs.retry import retry, retry_call
+
+
+class SSHManager(object):
+    """
+    SSH Manager: exec_cmd/scp
+    """
+
+    def __init__(self, ip, username, password=None, key_file=None, port=22, conn_timeout=None):
+        self.ip = ip
+        self.username = username
+        self.password = password
+        self.key_file = key_file
+        self.port = port
+        self.conn_timeout = conn_timeout
+        self._ssh = None
+
+    @property
+    def ssh(self):
+        if self._ssh is None or self._ssh.get_transport() is None or \
+                not self._ssh.get_transport().is_active():
+            self._ssh = self.connect()
+        return self._ssh
+
+    @retry(tries=10, delay=3, jitter=1)
+    def connect(self):
+        logger.info('SSH Connect to {0}@{1}(pwd:{2}, key_file:{3})'.format(
+            self.username, self.ip, self.password, self.key_file))
+        compile_ip = re.compile(r'^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
+        if not compile_ip.match(self.ip):
+            logger.error('Error IP address!')
+            return None
+
+        _ssh = paramiko.SSHClient()
+        # _ssh.load_system_host_keys()
+        _ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        try:
+            if self.key_file is not None:
+                pkey = paramiko.RSAKey.from_private_key_file(self.key_file)
+                _ssh.connect(self.ip, self.port, self.username, self.password,
+                             timeout=self.conn_timeout, pkey=pkey)
+            else:
+                _ssh.connect(self.ip, self.port, self.username, self.password,
+                             timeout=self.conn_timeout)
+            # _ssh.get_transport().set_keepalive(30)
+
+            # creat a conn to router using paramiko.SSHClient()
+            # _shell = _ssh.invoke_shell()  # to keep the session go on
+            # _shell.keep_this = _ssh
+            # conn.send("ls -lh\n")
+            # time.sleep(1)
+            # if conn.recv_ready():
+            #     output = conn.recv(65535)
+            #     print(output)
+        except Exception as e:
+            logger.warning('SSH Connect {0} fail!'.format(self.ip))
+            self._ssh = None
+            raise e
+        return _ssh
+
+    def close(self):
+        try:
+            if self._ssh:
+                logger.debug("Call SSHClient().close() ...")
+                self._ssh.close()
+        except Exception as e:
+            logger.debug(e)
+        finally:
+            self._ssh = None
+
+    @property
+    def is_active(self):
+        return self.ssh.get_transport().is_active()
+
+    def subprocess_popen_cmd(self, cmd_spec, timeout=7200):
+        """
+        Executes command and Returns (rc, output) tuple
+        :param cmd_spec: Command to be executed
+        :param timeout
+        :return:
+        """
+
+        sudo = False if self.username == 'root' else True
+        # sudo = False if 'kubectl' in cmd_spec else sudo
+
+        if sudo:
+            cmd_spec = 'sudo {cmd}'.format(cmd=cmd_spec)
+
+        # logger.info('Execute: {cmds}'.format(cmds=cmd_spec))
+        try:
+            p = subprocess.Popen(cmd_spec, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE, shell=True)
+            t_beginning = time.time()
+
+            while True:
+                if p.poll() is not None:
+                    break
+                seconds_passed = time.time() - t_beginning
+                if timeout and seconds_passed > timeout:
+                    p.terminate()
+                    raise TimeoutError('TimeOutError: {0} seconds'.format(timeout))
+                time.sleep(0.1)
+
+            std_out = p.stdout.read().decode('UTF-8', 'ignore')
+            std_err = p.stderr.read().decode('UTF-8', 'ignore')
+            return std_out, std_err
+        except Exception as e:
+            raise Exception('Failed to execute: {0}\n{1}'.format(cmd_spec, e))
+
+    def paramiko_ssh_cmd(self, cmd_spec, timeout=7200, get_pty=False):
+        """
+        ssh to <ip> and then run commands --paramiko
+        :param cmd_spec:
+        :param timeout:
+        :param get_pty:
+        :return:
+        """
+
+        sudo = False if self.username == 'root' else True
+        # sudo = False if 'kubectl' in cmd_spec else sudo
+        if sudo:
+            cmd_spec = 'sudo {cmd}'.format(cmd=cmd_spec)
+
+        # logger.info('Execute: ssh {0}@{1}# {2}'.format(self.username, self.ip, cmd_spec))
+        try:
+            if sudo and self.password and not self.key_file:
+                stdin, stdout, stderr = self.ssh.exec_command(
+                    cmd_spec, get_pty=True, timeout=timeout)
+                stdin.write(self.password + '\n')
+                stdin.flush()
+            else:
+                stdin, stdout, stderr = self.ssh.exec_command(
+                    cmd_spec, get_pty=get_pty, timeout=timeout)
+                stdin.write('\n')
+                stdin.flush()
+            std_out = stdout.read().decode('UTF-8', 'ignore')
+            std_err = stderr.read().decode('UTF-8', 'ignore')
+            return std_out, std_err
+        except Exception as e:
+            self.close()
+            raise Exception(e)
+
+    def ssh_cmd(self, cmd_spec, expected_rc=0, timeout=600, get_pty=False, tries=10, delay=3, keep_alive=True):
+        """
+        ssh and run cmd
+        keep_alive  # keep alive after ssh exec cmd
+        """
+
+        # Get name of the calling method, returns <methodName>'
+        method_name = inspect.stack()[1][3]
+
+        try:
+            local_host_ip = socket.gethostbyname(socket.gethostname())
+        except Exception as e:
+            print(e)
+            local_host_ip = ""
+
+        if self.ip == local_host_ip:
+            # run command on local host
+            stdout, stderr = retry_call(self.subprocess_popen_cmd,
+                                        fkwargs={'cmd_spec': cmd_spec,
+                                                 'timeout': timeout},
+                                        tries=tries, delay=delay, logger=logger)
+        else:
+            stdout, stderr = retry_call(self.paramiko_ssh_cmd,
+                                        fkwargs={'cmd_spec': cmd_spec,
+                                                 'timeout': timeout,
+                                                 'get_pty': get_pty},
+                                        tries=tries, delay=delay, logger=logger)
+
+        rc = -1 if stderr else 0
+        output = stdout + stderr if stderr else stdout
+        if isinstance(expected_rc, str) and expected_rc.upper() == 'IGNORE':
+            logger.info(stdout)
+            if stderr:
+                logger.warning(stderr)
+        elif "Unable to use a TTY" in output:
+            pass
+        elif "command terminated with exit code 255" in output:
+            logger.warning(output)
+        elif rc != expected_rc:
+            raise Exception('%s(): Failed command: %s\nMismatched '
+                            'RC: Received [%d], Expected [%d]\nError: %s' % (
+                                method_name, cmd_spec, rc, expected_rc, output))
+        if not keep_alive:
+            self.close()
+        return rc, output
+
+    @retry(tries=3, delay=1)
+    def remote_scp_put(self, local_path, remote_path):
+        """
+        scp put --paramiko, scp
+        :param local_path:
+        :param remote_path:
+        :return:
+        """
+
+        logger.info('scp %s %s@%s:%s' % (
+            local_path, self.username, self.ip, remote_path))
+
+        try:
+            obj_scp = scp.SCPClient(self.ssh.get_transport())
+            obj_scp.put(local_path, remote_path)
+
+            # make sure the local and remote file md5sum match
+            # local_md5 = util.md5sum(local_path)
+            # rc, output = self.ssh_cmd('md5sum {0}'.format(remote_path), expected_rc=0)
+            # remote_md5 = output.strip('\n').split(' ')[0]
+            # logger.info('{0} {1}'.format(local_md5, local_path))
+            # logger.info('{0} {1}'.format(remote_md5, remote_path))
+            # assert remote_md5 == local_md5
+
+            return True
+        except Exception as e:
+            raise e
+
+    @retry(tries=3, delay=1)
+    def remote_scp_get(self, local_path, remote_path):
+        """
+        scp get --paramiko, scp
+        :param local_path:
+        :param remote_path:
+        :return:
+        """
+
+        logger.info('scp %s@%s:%s %s' % (
+            self.username, self.ip, remote_path, local_path))
+
+        try:
+            obj_scp = scp.SCPClient(self.ssh.get_transport())
+            obj_scp.get(remote_path, local_path)
+
+            # make sure the local and remote file md5sum match
+            # rc, output = self.ssh_cmd('md5sum {0}'.format(remote_path), expected_rc=0)
+            # remote_md5 = output.strip('\n').split(' ')[0]
+            # local_md5 = util.md5sum(local_path)
+            # logger.info('{0} {1}'.format(remote_md5, remote_path))
+            # logger.info('{0} {1}'.format(local_md5, local_path))
+            # assert remote_md5 == local_md5
+
+            return True
+        except Exception as e:
+            raise e
+
+    def mkdir_remote_path_if_not_exist(self, remote_path):
+        cmd1 = 'ls {path}'.format(path=remote_path)
+        rc, output = self.ssh_cmd(cmd1, expected_rc='ignore', tries=2)
+        if 'No such file or directory' in output:
+            cmd2 = 'mkdir -p {path}'.format(path=remote_path)
+            self.ssh_cmd(cmd2)
+        return True
+
+
+class SSHManagerTestCase(unittest.TestCase):
+    """docstring for SSHTestCase"""
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_1(self):
+        ssh_obj = SSHManager(ip='10.25.119.1', username='root',
+                             password='password', key_file=r'c:\tmp\id_rsa')
+        rc, output = ssh_obj.ssh_cmd('pwd')
+        logger.info(output)
+        time.sleep(5)
+        rc, output = ssh_obj.ssh_cmd('ls')
+        logger.info(output)
+
+    def stest_2(self):
+        ssh_obj = SSHManager(ip='10.203.78.98', username='centos', password='password',
+                             key_file=r'C:\Users\user\txu\new-setup-app5.pem')
+        cmd = "find {0} -maxdepth 1 -type d".format('/mnt/test/')
+        rc, output = ssh_obj.ssh_cmd(cmd)
+        dir_list = output.strip('\n').split('\n') if output else []
+        print(dir_list)
+        for dir_name in dir_list:
+            logger.info(dir_name)
+            rc, output = ssh_obj.ssh_cmd('rm -rf {0}/*'.format(dir_name))
+            logger.info(output)
+
+
+if __name__ == '__main__':
+    # test
+    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SSHManagerTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)

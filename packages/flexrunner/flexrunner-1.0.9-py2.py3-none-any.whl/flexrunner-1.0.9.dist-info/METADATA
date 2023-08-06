@@ -1,0 +1,100 @@
+Metadata-Version: 2.1
+Name: flexrunner
+Version: 1.0.9
+Summary: UNKNOWN
+Home-page: https://github.com/txu2k8/test-runner-flex
+Author: TXU
+Author-email: tao.xu2008@outlook.com
+Maintainer: TXU
+Maintainer-email: tao.xu2008@outlook.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: Pytest
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Testing
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: >=3.5
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pymysql
+Requires-Dist: pytz (==2022.1)
+Requires-Dist: six (==1.16.0)
+Requires-Dist: sqlparse (==0.4.2)
+Requires-Dist: tzdata (==2022.1)
+Requires-Dist: loguru (==0.5.3)
+Requires-Dist: pydantic (~=1.10.4)
+Requires-Dist: prettytable (~=3.0.0)
+Requires-Dist: progressbar (~=2.5)
+Requires-Dist: Jinja2 (~=3.0.3)
+Requires-Dist: pytest (~=7.2.1)
+Requires-Dist: pytest-ordering (==0.6)
+Requires-Dist: pytest-xdist (==3.2.1)
+Requires-Dist: pytest-html (==3.1.1)
+Requires-Dist: pytest-flexreport
+Requires-Dist: pytest-json-report
+Requires-Dist: pytest-dependency (==0.5.1)
+Requires-Dist: allure-pytest (==2.9.45)
+Requires-Dist: requests (~=2.27.1)
+Requires-Dist: urllib3 (~=1.26.8)
+Requires-Dist: filetype (~=1.0.10)
+Requires-Dist: filelock (~=3.10.0)
+Requires-Dist: requests-toolbelt (~=0.9.1)
+Requires-Dist: PyYAML (~=6.0)
+Requires-Dist: jsonpath (==0.82)
+Requires-Dist: jmespath (==0.10.0)
+Requires-Dist: xmindparser (~=1.0.9)
+Requires-Dist: pypinyin (~=0.44.0)
+Requires-Dist: arrow (~=1.2.1)
+Requires-Dist: Faker (~=15.3.4)
+Requires-Dist: python-jenkins (==1.7.0)
+Requires-Dist: py (~=1.11.0)
+Requires-Dist: selenium (~=4.3.0)
+Requires-Dist: APScheduler (~=3.9.1)
+Requires-Dist: typer (~=0.6.1)
+Requires-Dist: SQLAlchemy (~=1.4.44)
+Requires-Dist: webdriver-manager
+Requires-Dist: setuptools (~=67.0.0)
+Requires-Dist: paramiko (~=3.0.0)
+Requires-Dist: scp (~=0.14.5)
+
+# test-runner-flex
+测试执行引擎/框架，python
+
+## 快速开始
+```
+(venv) D:\workspace\src\test-runner-flex>python run_main.py --help
+Usage: run_main.py [OPTIONS]
+
+  FlexRunner 命令行 CLI
+
+Options:
+  -f, --test_conf_path TEXT       配置文件路径，对应目录：./{$project}/conf/{$test_conf}
+                                  [default: ./demo/conf/demo.xml]
+  --loglevel [TRACE|DEBUG|INFO|SUCCESS|WARNING]
+                                  日志等级  [default: LogLevelEnum.INFO]
+  --install-completion [bash|zsh|fish|powershell|pwsh]
+                                  Install completion for the specified shell.
+  --show-completion [bash|zsh|fish|powershell|pwsh]
+                                  Show completion for the specified shell, to
+                                  copy it or customize the installation.
+  --help                          Show this message and exit.
+
+```
+
+## 测试demo环境搭建
+```
+.\minio.exe server D:\minio\data\ --console-address 127.0.0.1:9001
+```
+
