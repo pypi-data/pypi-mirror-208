@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aafitrans"
+dynamic = ["version"]
+authors = [
+  { name="Prajwel Joseph", email="prajwel.pj@gmail.com" },
+]
+description = "match coordinate lists"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = ["numpy", 
+                "scipy", 
+                "scikit-image"]
+
+[project.urls]
+"Homepage" = "https://github.com/prajwel/aafitrans"
+"Bug Tracker" = "https://github.com/prajwel/aafitrans/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "aafitrans.aafitrans.__version__"}
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
