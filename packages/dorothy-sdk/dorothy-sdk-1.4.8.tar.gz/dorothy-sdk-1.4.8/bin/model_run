@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+
+import os
+import argparse
+import traceback
+import pandas as pd
+from lpsds.logger import log
+from dorothy_sdk.dataset_wrapper import Dataset
+from scripts.operation import ProductionModelOperation
+
+######## INSTRUÇÕES DE OPERAÇÃO ############################
+
+# O código deste módulo NÂO DEVE SER ALTERADO. Você só precisará editar o código do módulo operation_specific.py (veja instruções lá).
+
+# Para a correta operação do modelo, se fazem necessárias as seguintes informações, que precisam ser fornecidas tais como especificadas abaixo.
+
+# * URL para o servior do MLFLOW (https://mlflow.lps.ufrj.br ou http://localhost:5000, por exemplo): esta URL deve estar
+#   definida numa variável de ambiente chamada "MLFLOW_TRACKING_URI"
+
+# * A saída do deve ser colocada na pasta /bucket/output da sua imagem Docker. A entrega do modelo deve ser sempre um pandas.DataFrame, 
+#   salvo como parquet, e contendo pelo menos 4 colunas:
+
+#     ** Nome do arquivo da imagem (identificador único)
+#     ** y_proba: o valor de saída modelo
+#     ** y_pred: a decisão do modelo (+1 p/ TB+ e 0 para TB-)
+
+#     O nome do arquivo dese ser no formato {dataset_name}-output.parquet. Por exemplo, supondo a operação do modelo em imagens
+#     de um dataset chamado "china", o arquivo de saída deverá ser salvo em "/bucket/output/china-output.parquet"
+#
+# Para uma execução mais simples do seu modelo, você deve criar um arquivo docker-compose.yml tal 
+# como existente nessse projeto. TODOS OS VOLUMES e ENV VARS definidas lá devem estar definidas no seu arquivo.
+# As variáveis de ambiente que tem valor hard coded no arquivo NÃO devem ser alteradas.
+#
+# Para testar a execução, na pasta contendo o seu docker-compose.yml, digite:
+# docker compose -f docker-compose.yml run <NOME DO SEU SERVICO > --help
+#
+# No caso do meu docker-compose.yml de exemplo, o nome do serviço é "main", então o comando ficaria:
+#
+# docker compose -f docker-compose.yml run --build main --help
+#
+# Se a mensagem de help do programa aparecer, deu tudo certo. O próximo passo é chamar o comando passando um dataset e um ID do mlflow.
+# Por exemplo:
+#
+# docker compose -f docker-compose.yml run --build main -d china -r 03d340114adf4a989538a2e41ca518ff
+#
+# O resultado da execução será encontrado em $IMAGE_BUCKET/output (ver no docker-compose.yml)
+#
+
+
+def get_options():
+    """
+    Essa função define os parãmetros necessários para a execução deste script que devem ser passados por linha de comando.
+    
+    NÃO MEXA EM NADA NESTA FUNÇÃO. 
+    """
+    parser = argparse.ArgumentParser(
+                    prog='Script de operação do classificador.',
+                    description='Coleta as imagens do dataset passado e salva o resultado gerado num dataframe em /bucket/output.',
+                    epilog='Este programa roda dentro de ima imagem docker própria apra garantir compatibilidade.'
+                  )
+    parser.add_argument('-d', '--dataset', default=None, help='Nome do dataset do DOROTHY que será aplicado ao modelo (ou path para um dataset local em formato parquet).')
+    parser.add_argument('-r', '--run-id', dest='runid', default=None, help='Run id do modelo no MLFLow (ou o path para o modelo local) que será aplciado ao dataset especificado.')
+    parser.add_argument('-g', '--gpu', dest='gpu', action='store_true', default=False, help='If set, the code will be run in GPU (if one is available).')
+    parser.add_argument('-s', '--stats-only', dest='stats_only', action='store_true', default=False, help='If set, it will only collect stats-related info.')
+    parser.add_argument('-o', '--output', dest='output', default=None, help='Where to save the model results')
+
+    args = parser.parse_args()
+
+    assert args.dataset is not None, 'Você precisa especificar um dataset do DOROTHY. Veja o help.'
+    assert args.runid is not None, 'Você precisa especificar um run id do MLFlow. Veja o help.'
+    assert args.output is not None, 'Você precisa especificar onde salvará o modelo de saída. Veja o help.'
+    return args
+
+
+def get_dataset(dataset, operate):
+    if os.path.exists(dataset):
+        log.info('  Carregando dataset local em "%s"', dataset)
+        metadata = pd.read_parquet(dataset)
+        X, _ = Dataset.load_from_file(metadata)
+        return X, metadata
+    log.info('  Carregando dataset do DOROTHY "%s"', dataset)
+    return operate.get_dataset_images(dataset)
+
+
+def get_model(run_id, operate):
+    if os.path.exists(run_id):
+        log.info('  Carregando modelo local em  "%s"', run_id)
+        return operate.load_model(run_id)
+    log.info('  Carregando modelo do MLFlow com run ID "%s"', run_id)
+    return operate.get_operation_model(run_id)
+
+
+def main():
+  """
+  Função principal do script. Ela organiza o workflow necessário para a operação do modelo.
+
+  NÃO MEXA NESTA FUNÇÃO
+  """
+  opt = get_options()
+
+  device_type = 'gpu' if  opt.gpu else 'cpu'
+  operate = ProductionModelOperation(device_type=device_type)
+
+  log.info('Carregando as imagens do dataset "%s".', opt.dataset)
+  X, metadata = get_dataset(opt.dataset, operate)
+  log.info('Total de %d imagens carregadas.', X.shape[0])
+
+  log.info('Carregando o modelo correspondente ao Run ID "%s".', opt.runid)
+  model, threshold = get_model(opt.runid, operate)
+
+  y_proba = y_pred = None
+  output_type = 'output'
+  if opt.stats_only:
+    log.info('Aplicando as imagens uma a uma para coleta de estatísticas de desempenho operacional.')
+    metadata = operate.get_processing_stats(model, X)
+    output_type = 'stats'
+  else:
+    log.info('Aplicando as imagens obtidas no modelo.')
+    y_proba, y_pred = operate.operate_model(model, X, threshold)
+
+  log.info('Salvando o resultado final em "%s".', opt.output)
+  operate.save_results(opt.output, metadata, y_proba, y_pred)
+
+  log.info('Fim da execução. Nenhum problema encontrado.')
+
+
+if __name__ == "__main__":
+  try: main()
+  except Exception as e:
+    log.fatal ('    ' + str(e))
+    traceback.print_exc()
