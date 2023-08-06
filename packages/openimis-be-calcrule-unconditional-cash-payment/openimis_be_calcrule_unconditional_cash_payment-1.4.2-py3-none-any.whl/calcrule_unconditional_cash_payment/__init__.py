@@ -1,0 +1,1 @@
+default_app_config = 'calcrule_unconditional_cash_payment.apps.CalcruleUnconditionalCashPaymentConfig'
