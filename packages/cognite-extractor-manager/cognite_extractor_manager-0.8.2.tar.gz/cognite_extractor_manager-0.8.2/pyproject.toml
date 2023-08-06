@@ -1,0 +1,92 @@
+[tool.poetry]
+name = "cognite-extractor-manager"
+version = "0.8.2"
+description = "A project manager for Python based extractors"
+authors = ["Mathias Lohne <mathias.lohne@cognite.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+packages = [
+    { include="cognite", from="." },
+]
+
+[tool.black]
+line-length = 120
+target_version = ['py310']
+include = '\.py$'
+
+
+[tool.ruff]
+select = ["E", "F", "I", "T20"]
+ignore = ["E501", "T201"]
+fixable = ["A", "B", "C", "D", "E", "F", "I"]
+unfixable = []
+
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    "tests/pytest_sftpserver"
+]
+
+line-length = 120
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+target-version = "py310"
+
+[tool.mypy]
+pretty = true
+check_untyped_defs = true
+ignore_missing_imports = false
+disallow_untyped_defs = true
+follow_imports = "normal"
+namespace_packages = true
+explicit_package_bases = true
+show_error_codes = true
+
+[tool.poetry.dependencies]
+python = "^3.8.0"
+termcolor = "^2.0.0"
+requests = "^2.26.0"
+toml = "^0.10.2"
+
+[tool.poetry.group.dev.dependencies]
+twine = "^4.0.0"
+pre-commit = "^3.0.0"
+pyinstaller = "^4.0"
+black = "^23.3.0"
+ruff = "^0.0.265"
+mypy = "^1.2.0"
+types-requests = "^2.30.0.0"
+types-toml = "^0.10.8.6"
+
+
+[tool.poetry.scripts]
+cogex = "cognite.extractorutils.cogex.__main__:main"
+
+[tool.cogex.docker]
+base-image = "python:3.10-bullseye"
+tags = [
+    "cognite/extractor-manager:latest",
+    "cognite/extractor-manager:{version}"
+]
+preamble = """
+# Install docker to build docker images (from https://docs.docker.com/engine/install/debian/)
+RUN apt-get update
+RUN apt-get install -y ca-certificates curl gnupg lsb-release
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update
+RUN apt-get install -y docker-ce docker-ce-cli containerd.io
+
+# Install libs and compilers used by python libs
+RUN apt-get install -y unixodbc-dev
+"""
+install-dir = "/cogex"
+work-dir = "/"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
