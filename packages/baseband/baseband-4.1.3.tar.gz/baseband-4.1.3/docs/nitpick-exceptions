@@ -1,0 +1,30 @@
+# All these exceptions are because GuppiHeader inherits from
+# astropy.io.fits.Header, which contains links that are not understood
+# (in particular to Header itself, i.e., things don't get resolved
+# correctly).
+py:obj list.append
+py:obj list.count
+py:obj list.extend
+py:obj list.index
+py:obj list.insert
+py:meth list.pop
+py:obj list.remove
+py:obj Card
+py:obj Header
+py:obj Header.append
+py:obj Header.set
+py:obj Header.update
+py:meth Header.append
+py:meth Header.set
+py:meth Header.update
+# sphinx doing strange things with dict methods (HeaderParserBase).
+py:class None.  Remove all items from D.
+py:class a set-like object providing a view on D's items
+py:class a set-like object providing a view on D's keys
+py:class v, remove specified key and return the corresponding value.
+py:class None.  Update D from dict/iterable E and F.
+py:class an object providing a view on D's values
+py:class a shallow copy of D
+# Same but for OrderedDict (used in DADAHeader).
+py:class None.  Remove all items from od.
+py:class v, remove specified key and return the corresponding
