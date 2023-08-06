@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "params-aws"
+version = "0.1.2"
+description = "Store and Load parameters with AWS Parameter store"
+repository = "https://github.com/varokas/params-aws"
+authors = ["Varokas Panusuwan <varokas@panusuwan.com>"]
+readme = "README.md"
+packages = [{include = "params_aws"}]
+
+[tool.poetry.dependencies]
+python = "^3.8,<4.0"
+boto3 = ">=1.10"
+pydantic = ">=1.0"
+click = "^8.1.3"
+cachetools = "^5.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+params_aws_cli = "params_aws.params_aws_cli:cli"
