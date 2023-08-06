@@ -1,0 +1,38 @@
+[build-system]
+requires = [
+  "setuptools>=45.0",
+  "setuptools-scm[toml]>=6.2.3",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/xdist/_version.py"
+
+[tool.towncrier]
+package = "xdist"
+filename = "CHANGELOG.rst"
+directory = "changelog/"
+title_format = "pytest-xdist {version} ({project_date})"
+template = "changelog/_template.rst"
+
+[tool.towncrier.fragment.removal]
+name = "Removals"
+
+[tool.towncrier.fragment.deprecation]
+name = "Deprecations"
+
+[tool.towncrier.fragment.feature]
+name = "Features"
+
+[tool.towncrier.fragment.bugfix]
+name = "Bug Fixes"
+
+[tool.towncrier.fragment.vendor]
+name = "Vendored Libraries"
+
+[tool.towncrier.fragment.doc]
+name = "Improved Documentation"
+
+[tool.towncrier.fragment.trivial]
+name = "Trivial Changes"
