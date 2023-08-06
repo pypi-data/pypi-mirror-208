@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head title="{{ results.ip_name }} Simulation Results">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js" integrity="sha384-PsUw7Xwds7x08Ew3exXhqzbhuEYmA2xnwc8BuD6SEr+UmEHlX8/MCltYEodzWA4u" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+</head>
+<body style="padding: 5px;">
+
+<table>
+<tr>
+<td rowspan="2"><a href="https://www.mooreio.com/" target="_blank"><img style="height: 150px; margin-left: 10px; margin-right: 10px;" src="https://www.mooreio.com/content/images/logo.png"/></a></td>
+<td><h1>Interactive Simulation Results for {{ results.ip_str }}</h1></td>
+</tr>
+<tr>
+<td>
+{% if results.passed %}
+<h2 style="color: green;">PASSED: {{ results.num_tests }} tests in {{ results.duration_str }}</h2>
+{% else %}
+<h2 style="color: red;">FAILED: {{ results.num_failed_tests }}/{{ results.num_tests }} failed tests ({{ results.pct_passed }}% passing) in {{ results.duration_str }}</h2>
+{% endif %}
+</td>
+</tr>
+<tr>
+<td>
+<h3>{{ results.timestamp }}</h3>
+</td>
+</tr>
+</table>
+
+
+{% if not results.passed %}
+<div style="padding: 10px; background-color: #FFF0F0;">
+<table class="table table-hover table-condensed" style="background-color: white;">
+<thead>
+<tr>
+<th></th>
+<th>Name</th>
+<th>Seed</th>
+<th>#Warnings</th>
+<th>#Errors</th>
+<th>Duration (sec)</th>
+</tr>
+</thead>
+<tbody>
+{% for test in results.failing_tests %}
+<tr>
+<td>{% if test.group.name != 'default' %}{{ test.group.name }}{% endif %}</td>
+<td><!--a href="{{ test.results_path }}" target="_blank"-->{{ test.name }}<!--/a--></td>
+<td>{{ test.seed }}</td>
+<td>{{ test.num_warnings }}</td>
+<td>{{ test.num_errors }}</td>
+<td>{{ test.duration }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
+
+{% if results.num_passed_tests > 0 %}
+{% for group in results.sets['interactive'].groups %}
+<div style="padding: 10px; background-color: background-color: {% if results.sets['interactive'].groups[group].passed %}#F0F0F0{% else %}#FFF0F0{% endif %};">
+<h3>{% if group != 'default' %}{{ group }} - {% endif %}{{ results.sets['interactive'].groups[group].num_passed_tests }}/{{ results.sets['interactive'].groups[group].num_tests }} ({{ results.sets['interactive'].groups[group].pct_passed }}%) passing - {{ results.sets['interactive'].groups[group].duration_pct }}% of simulation time</h3>
+<table class="table table-hover table-condensed" style="background-color: white;">
+<thead>
+<tr>
+<th>Name</th>
+<th>Seed</th>
+<th>#Warnings</th>
+<th>#Errors</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+{% for test in results.sets['interactive'].groups[group].failing_tests %}
+<tr class="danger">
+<td><!--a href="{{ test.results_path }}" target="_blank"-->{{ test.name }}<!--/a--></td>
+<td>{{ test.seed }}</td>
+<td>{{ test.num_warnings }}</td>
+<td>{{ test.num_errors }}</td>
+<td>{{ test.time }}</td>
+<td>{{ test.conclusion }}</td>
+</tr>
+{% endfor %}
+{% for test in results.sets['interactive'].groups[group].passing_tests %}
+<tr>
+<td><!--a href="{{ test.results_path }}" target="_blank"-->{{ test.name }}<!--/a--></td>
+<td>{{ test.seed }}</td>
+<td>{{ test.num_warnings }}</td>
+<td>{{ test.num_errors }}</td>
+<td>{{ test.time }}</td>
+<td>{{ test.conclusion }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endfor %}
+{% endif %}
+
+</body>
+</html>
