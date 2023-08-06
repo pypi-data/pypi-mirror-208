@@ -1,0 +1,18 @@
+[build-system]
+requires = ["maturin>=0.14,<0.15"]
+build-backend = "maturin"
+
+[project]
+name = "rpls-py"
+description = "Python bindings to compute topological data analysis persistence landscapes using the fastest algorithm currently avalible: https://github.com/tph5595/rpls"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
