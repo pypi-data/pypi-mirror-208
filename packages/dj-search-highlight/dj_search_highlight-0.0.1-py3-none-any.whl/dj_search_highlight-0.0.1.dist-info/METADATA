@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: dj-search-highlight
+Version: 0.0.1
+Summary: Highlight string in the text.
+Home-page: https://medium.com/@sevdimali
+Author: Sevdimali Isayev
+Author-email: sevdimaliisa@gmail.com
+License: MIT
+Keywords: django highlight
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: !=3.0.*,!=3.1.*,!=3.2.*,>=2.7
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+
+===========================================
+Simple Django keyword highlighter in a text
+===========================================
+
+Install
+-------
+
+`pip install dj-search-highlight`
+
+Usage
+-----
+It is setup is very easy:
+
+Settings
+^^^^^^^^
+
+.. code:: python
+
+	INSTALLED_APPS = (
+		# ...
+		'highlighter',
+	)
+
+
+Template
+^^^^^^^^
+
+.. code:: html
+
+	{% load highlight_yellow %}
+	{{ some_text|highlight_yellow:keyword }}
