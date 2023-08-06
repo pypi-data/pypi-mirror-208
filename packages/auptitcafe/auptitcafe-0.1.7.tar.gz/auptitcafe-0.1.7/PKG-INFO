@@ -1,0 +1,61 @@
+Metadata-Version: 2.1
+Name: auptitcafe
+Version: 0.1.7
+Summary: SDK pour interagir avec http://auptitcafe.nc/menu/
+Author: Adrien SALES
+Author-email: Adrien.Sales@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: beautifulsoup4 (>=4.12.2,<5.0.0)
+Description-Content-Type: text/markdown
+
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/auptitcafe)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/auptitcafe)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/auptitcafe)
+![PyPI - Format](https://img.shields.io/pypi/format/auptitcafe)
+![PyPI](https://img.shields.io/pypi/v/auptitcafe)
+
+# Quickstart
+
+```python
+!pip install auptitcafe
+
+from auptitcafe.menus import Menus
+
+menu_instance = Menus()
+menus = []
+menus = menu_instance.get_all()
+len(menus)
+```
+
+# For devs
+
+## Build
+
+```
+poetry show --tree
+```
+
+```
+poetry build
+poetry install
+```
+
+## test
+
+```
+poetry run pytest
+```
+
+
+
+## Publish
+
+```
+poetry config pypi-token.pypi $PYPI_TOKEM
+poetry publish
+```
+
