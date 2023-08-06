@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: stdatamodels
+Version: 1.5.0
+Summary: Core support for DataModel classes used in calibration pipelines
+Author: STScI
+License: Copyright (C) 2020 Association of Universities for Research in Astronomy (AURA)
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+            1. Redistributions of source code must retain the above copyright
+              notice, this list of conditions and the following disclaimer.
+        
+            2. Redistributions in binary form must reproduce the above
+              copyright notice, this list of conditions and the following
+              disclaimer in the documentation and/or other materials provided
+              with the distribution.
+        
+            3. The name of AURA and its representatives may not be used to
+              endorse or promote products derived from this software without
+              specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY AURA ``AS IS'' AND ANY EXPRESS OR IMPLIED
+        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL AURA BE LIABLE FOR ANY DIRECT, INDIRECT,
+        INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+        BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+        OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+        ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+        TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+        USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+        DAMAGE.
+        
+Project-URL: Homepage, https://github.com/spacetelescope/stdatamodels
+Project-URL: Bug Tracker, https://github.com/spacetelescope/stdatamodels/issues
+Project-URL: Source Code, https://github.com/spacetelescope/stdatamodels
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Provides-Extra: test
+Provides-Extra: docs
+License-File: LICENSE
+
+# stdatamodels
+
+[![CI](https://github.com/spacetelescope/stdatamodels/actions/workflows/ci.yml/badge.svg)](https://github.com/spacetelescope/stdatamodels/actions/workflows/ci.yml)
+
+[![codecov](https://codecov.io/gh/spacetelescope/stdatamodels/branch/master/graph/badge.svg?token=TrmUKaTP2t)](https://codecov.io/gh/spacetelescope/stdatamodels)
+
+
+Provides `DataModel`, which is the base class for data models implemented in the JWST and Roman calibration software.
+
+
+## Unit Tests
+
+A few unit tests require downloading (~500MB) data from CRDS. CRDS must be configured for these tests to pass
+(see the [CRDS User Guide](https://jwst-crds.stsci.edu/static/users_guide/index.html)
+for more information). Minimally (if not on the stsci vpn where the default path of
+`/grp/crds/cache` is available) you will need to set `CRDS_PATH`.
+
+```bash
+export CRDS_PATH=/tmp/crds_cache/jwst_ops
+```
+
+These tests can also be skipped with the `no-crds` pytest option
+
+```bash
+pytest --no-crds
+```
