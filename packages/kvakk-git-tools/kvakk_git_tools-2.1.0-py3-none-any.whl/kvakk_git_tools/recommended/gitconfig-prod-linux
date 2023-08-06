@@ -1,0 +1,31 @@
+[color]
+	ui = auto
+[core]
+	autocrlf = input
+	editor = nano
+	eol = lf
+[credential]
+	helper = cache --timeout=86400
+[diff]
+	tool = meld
+[diff "ipynb"]
+	textconv = '/usr/bin/python3' -m nbstripout -t
+[difftool]
+	prompt = false
+[fetch]
+	prune = true
+[filter "nbstripout"]
+	clean = '/usr/bin/python3' -m nbstripout
+	extrakeys = metadata.kernelspec metadata.language_info.version cell.metadata.pycharm metadata.language_info.pygments_lexer metadata.language_info.codemirror_mode.version
+	smudge = cat
+[http]
+	sslVerify = false
+[init]
+	defaultBranch = main
+[merge]
+	tool = meld
+[mergetool]
+	keepBackup = false
+	prompt = false
+[push]
+	default = current
