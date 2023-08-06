@@ -1,0 +1,123 @@
+[project]
+name = "somerandomapi.py"
+description = "A maintained wrapper for the somerandomapi API."
+authors = [
+    {name = "Soheab_"},
+]
+requires-python = ">=3.9"
+keywords = [
+    "https://some-random-api.com",
+    "some-random-api",
+    "api",
+    "somerandomapi",
+    "random",
+    "images",
+    "fun",
+    "discord",
+    "discord.py",
+    "generation",
+    "rankcard",
+    "canvas",
+    "welcome",
+    "free",
+    "open-source",
+    "asyncio",
+    "aiohttp",
+    "async",
+    "wrapper",
+]
+license = {file = "LICENSE"}
+dependencies = [
+    "aiohttp>=3.8.0,<4.0.0",
+]
+dynamic = ["version", "readme"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Natural Language :: English",
+    "Typing :: Typed",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+
+[project.optional-dependencies]
+docs = [
+    "Sphinx==6.1",
+    "sphinx_rtd_theme==1.2.*",
+    "sphinx-autodoc-typehints==1.22",
+    "enum-tools[sphinx]==0.9.*",
+]
+
+
+[tool.setuptools]
+packages = [
+    "somerandomapi",
+    "somerandomapi.clients",
+    "somerandomapi.internals",
+    "somerandomapi.models",
+    "somerandomapi.models.welcome",
+    "somerandomapi.types",
+    "somerandomapi.types.canvas",
+]
+
+[project.urls]
+homepage = "https://github.com/Soheab/somerandomapi.py"
+documentation ="https://somerandomapipy.readthedocs.io/"
+repository = "https://github.com/Soheab/somerandomapi.py"
+
+
+[tool.setuptools.dynamic]
+version = {attr = "somerandomapi.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+
+[tool.pyright]
+include = [
+    "somerandomapi",
+    "somerandomapi/types",
+    "somerandomapi/clients",
+    "somerandomapi/models",
+    "somerandomapi/internals",
+]
+exclude = [
+    "**/__pycache__",
+    "_build",
+    "build",
+    "dist",
+    "docs",
+]
+reportUnnecessaryTypeIgnoreComment = "warning"
+reportUnusedImport = "error"
+pythonVersion = "3.9"
+typeCheckingMode = "basic"
+reportDuplicateImport = "warning"
+reportDeprecated = "warning"
+
+[tool.coverage.run]
+omit = [
+    "somerandomapi/types/*",
+    "*/_types.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "@overload"
+]
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+combine_star = true
+line_length = 120
+py_version=39
+multi_line_output=8
+balanced_wrapping=true
+lines_after_imports=2
+include_trailing_comma=true
+force_alphabetical_sort_within_sections=true
+remove_redundant_aliases=true
+
+[tool.black]
+line-length = 120
