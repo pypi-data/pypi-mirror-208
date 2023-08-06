@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gmcapsule"
+description = 'Extensible Gemini/Titan server'
+readme = "README.md"
+requires-python = ">=3.6"
+license = "BSD-2-Clause"
+keywords = ['server', 'internet', 'gemini', 'titan']
+authors = [
+  { name = "Jaakko Keränen", email = "jaakko.keranen@iki.fi" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.6",
+  "Topic :: Internet",
+  "Topic :: System :: Networking"
+]
+dependencies = ["pyOpenSSL>=21"]
+dynamic = ["version"]
+
+[project.urls]
+Home-page = "https://geminispace.org/gmcapsule/"
+Documentation = "https://geminispace.org/gmcapsule/gmcapsule.html"
+Source = "https://codeberg.org/skyjake/gmcapsule"
+Issues = "https://codeberg.org/skyjake/gmcapsule/issues"
+
+[project.scripts]
+gmcapsuled = "gmcapsule:run_server"
+
+[tool.hatch.version]
+path = "gmcapsule/__init__.py"
+
+[tool.hatch.build]
+include = [
+    "example.ini",
+    "gmcapsule/*.py",
+    "gmcapsule/modules/*.py"
+]
+
+#[tool.hatch.envs.default]
+#dependencies = [
+#  "pytest",
+#  "pytest-cov",
+#]
+#[tool.hatch.envs.default.scripts]
+#cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=gmcapsule --cov=tests {args}"
+#no-cov = "cov --no-cov {args}"
+
+#[[tool.hatch.envs.test.matrix]]
+#python = ["37", "38", "39", "310", "311"]
+
+#[tool.coverage.run]
+#branch = true
+#parallel = true
+#omit = [
+#  "gmcapsule/__init__.py",
+#]
+
+# [tool.coverage.report]
+# exclude_lines = [
+#   "no cov",
+#   "if __name__ == .__main__.:",
+#   "if TYPE_CHECKING:",
+# ]
