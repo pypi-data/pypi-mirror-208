@@ -1,0 +1,117 @@
+Metadata-Version: 2.1
+Name: duck-orm
+Version: 1.0.2
+Summary: ORM Async for Python
+License: LICENSE
+Keywords: orm,async,aiohttp,asyncio,databases,database,postgres,sqlite
+Author: Rich
+Author-email: richelton14@gmail.com
+Requires-Python: >=3.8,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Framework :: AsyncIO
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Internet
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: HTTP Servers
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
+Provides-Extra: postgresql
+Provides-Extra: postgresql-aiopg
+Provides-Extra: sqlite
+Requires-Dist: databases (>=0.7.0,<0.8.0)
+Requires-Dist: python-dotenv (>=0.19.0,<0.20.0)
+Description-Content-Type: text/markdown
+
+# [DuckORM](https://pypi.org/project/duck-orm/)
+
+The `Duck-ORM` package is an asynchronous ORM for Python, with support for **Postgres** and **SQLite**. ORM is built with:
+
+- [databases](https://github.com/encode/databases)
+
+**Requirements**: Python 3.8+
+
+**Duck-ORM is still under development**.
+
+## Installation
+
+```bash
+$ pip install duck-orm
+```
+
+!!! note
+    Don't forget to install `databases` before installing `duck-orm`. 
+
+## Quickstart
+
+For this example we will create a connection to the SQLite database and create a model.
+
+```bash
+$ pip install databases[sqlite]
+$ pip install ipython
+```
+
+Note that we want to use `ipython` here, because it supports using await expressions directly from the console.
+
+### Creating the connection to the SQLite database:
+
+```Python
+from databases import Database
+from duck_orm.model import Model
+
+db = Database('sqlite:///example.db')
+await db.connect()
+```
+
+### Defining a model:
+
+```Python
+from duck_orm.sql import fields as Field
+
+class Person(Model):
+    __tablename__ = 'persons'
+    __db__ = db
+
+    id: int = Field.Integer(primary_key=True, auto_increment=True)
+    first_name: str = Field.String(unique=True)
+    last_name: str = Field.String(not_null=True)
+    age: int = Field.BigInteger(min_value=18)
+
+# Table creation in the database.
+await Person.create()
+```
+
+- The `__tablename__` attribute is used to define the table's name in the database.
+- The `__db__` attribute is the instance of the database connection.
+- And then the definition of the fields, their types and restrictions.
+- And finally, the table creation in the database.
+
+## Author
+
+- Rich Ramalho - [@richecr](https://github.com/richecr) - [@richzinho_ecr](https://twitter.com/richzinho_ecr)
+
+## License
+
+`DuckORM` is built as an open-source tool and remains completely free(MIT license).
+
