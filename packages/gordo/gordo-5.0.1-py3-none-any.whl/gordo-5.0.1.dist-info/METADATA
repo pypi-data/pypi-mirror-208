@@ -1,0 +1,263 @@
+Metadata-Version: 2.1
+Name: gordo
+Version: 5.0.1
+Summary: Train and build models for Argo / Kubernetes
+Home-page: https://github.com/equinor/gordo
+Author: Equinor ASA
+Author-email: fg_gpl@equinor.com
+License: AGPLv3
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: dictdiffer (~=0.8)
+Requires-Dist: dataclasses-json (~=0.3)
+Requires-Dist: gunicorn (~=20.0)
+Requires-Dist: h5py (~=3.1)
+Requires-Dist: jinja2 (~=3.1)
+Requires-Dist: python-dateutil (~=2.8)
+Requires-Dist: tensorflow (<2.13,>=2.11)
+Requires-Dist: Flask (<3.0.0,>=2.2.5)
+Requires-Dist: simplejson (~=3.17)
+Requires-Dist: catboost (~=1.1.1)
+Requires-Dist: prometheus-client (~=0.7)
+Requires-Dist: packaging (<22.0,>=21.0)
+Requires-Dist: gordo-client (==6.2.0)
+Requires-Dist: gordo-core (==0.3.0)
+Provides-Extra: docs
+Requires-Dist: sphinx-rtd-theme (~=0.4) ; extra == 'docs'
+Requires-Dist: sphinxcontrib-websupport (~=1.1) ; extra == 'docs'
+Requires-Dist: sphinx (~=2.1) ; extra == 'docs'
+Requires-Dist: sphinx-click (~=2.0) ; extra == 'docs'
+Requires-Dist: pandas (==1.1.4) ; extra == 'docs'
+Provides-Extra: full
+Requires-Dist: mlflow (~=2.3) ; extra == 'full'
+Requires-Dist: azureml-core (~=1.49) ; extra == 'full'
+Requires-Dist: peewee (~=3.14) ; extra == 'full'
+Requires-Dist: psycopg2-binary (~=2.9) ; extra == 'full'
+Provides-Extra: mlflow
+Requires-Dist: mlflow (~=2.3) ; extra == 'mlflow'
+Requires-Dist: azureml-core (~=1.49) ; extra == 'mlflow'
+Provides-Extra: postgres
+Requires-Dist: peewee (~=3.14) ; extra == 'postgres'
+Requires-Dist: psycopg2-binary (~=2.9) ; extra == 'postgres'
+Provides-Extra: tests
+Requires-Dist: anyio (==3.6.2) ; extra == 'tests'
+Requires-Dist: argon2-cffi (==21.3.0) ; extra == 'tests'
+Requires-Dist: argon2-cffi-bindings (==21.2.0) ; extra == 'tests'
+Requires-Dist: asttokens (==2.1.0) ; extra == 'tests'
+Requires-Dist: attrs (==22.1.0) ; extra == 'tests'
+Requires-Dist: backcall (==0.2.0) ; extra == 'tests'
+Requires-Dist: beautifulsoup4 (==4.11.1) ; extra == 'tests'
+Requires-Dist: black (==22.12.0) ; extra == 'tests'
+Requires-Dist: bleach (==5.0.1) ; extra == 'tests'
+Requires-Dist: certifi (==2022.12.7) ; extra == 'tests'
+Requires-Dist: cffi (==1.15.1) ; extra == 'tests'
+Requires-Dist: charset-normalizer (==3.1.0) ; extra == 'tests'
+Requires-Dist: click (==8.1.3) ; extra == 'tests'
+Requires-Dist: coverage[toml] (==6.5.0) ; extra == 'tests'
+Requires-Dist: debugpy (==1.6.3) ; extra == 'tests'
+Requires-Dist: decorator (==5.1.1) ; extra == 'tests'
+Requires-Dist: defusedxml (==0.7.1) ; extra == 'tests'
+Requires-Dist: docker (==6.0.1) ; extra == 'tests'
+Requires-Dist: entrypoints (==0.4) ; extra == 'tests'
+Requires-Dist: exceptiongroup (==1.1.1) ; extra == 'tests'
+Requires-Dist: execnet (==1.9.0) ; extra == 'tests'
+Requires-Dist: executing (==1.2.0) ; extra == 'tests'
+Requires-Dist: fastjsonschema (==2.16.2) ; extra == 'tests'
+Requires-Dist: filelock (==3.8.0) ; extra == 'tests'
+Requires-Dist: idna (==3.4) ; extra == 'tests'
+Requires-Dist: iniconfig (==1.1.1) ; extra == 'tests'
+Requires-Dist: ipykernel (==6.17.0) ; extra == 'tests'
+Requires-Dist: ipython (==8.6.0) ; extra == 'tests'
+Requires-Dist: ipython-genutils (==0.2.0) ; extra == 'tests'
+Requires-Dist: jedi (==0.18.1) ; extra == 'tests'
+Requires-Dist: jinja2 (==3.1.2) ; extra == 'tests'
+Requires-Dist: jsonschema (==4.17.0) ; extra == 'tests'
+Requires-Dist: jupyter-client (==7.4.4) ; extra == 'tests'
+Requires-Dist: jupyter-core (==4.11.2) ; extra == 'tests'
+Requires-Dist: jupyter-server (==1.21.0) ; extra == 'tests'
+Requires-Dist: jupyterlab-pygments (==0.2.2) ; extra == 'tests'
+Requires-Dist: markupsafe (==2.1.2) ; extra == 'tests'
+Requires-Dist: matplotlib-inline (==0.1.6) ; extra == 'tests'
+Requires-Dist: mistune (==2.0.5) ; extra == 'tests'
+Requires-Dist: mock (==5.0.1) ; extra == 'tests'
+Requires-Dist: mypy (==0.982) ; extra == 'tests'
+Requires-Dist: mypy-extensions (==1.0.0) ; extra == 'tests'
+Requires-Dist: nbclassic (==0.4.8) ; extra == 'tests'
+Requires-Dist: nbclient (==0.5.13) ; extra == 'tests'
+Requires-Dist: nbconvert (==7.4.0) ; extra == 'tests'
+Requires-Dist: nbformat (==5.7.0) ; extra == 'tests'
+Requires-Dist: nest-asyncio (==1.5.6) ; extra == 'tests'
+Requires-Dist: notebook (==6.5.2) ; extra == 'tests'
+Requires-Dist: notebook-shim (==0.2.2) ; extra == 'tests'
+Requires-Dist: packaging (==21.3) ; extra == 'tests'
+Requires-Dist: pandocfilters (==1.5.0) ; extra == 'tests'
+Requires-Dist: parso (==0.8.3) ; extra == 'tests'
+Requires-Dist: pathspec (==0.11.1) ; extra == 'tests'
+Requires-Dist: pexpect (==4.8.0) ; extra == 'tests'
+Requires-Dist: pickleshare (==0.7.5) ; extra == 'tests'
+Requires-Dist: platformdirs (==2.5.2) ; extra == 'tests'
+Requires-Dist: pluggy (==1.0.0) ; extra == 'tests'
+Requires-Dist: prometheus-client (==0.16.0) ; extra == 'tests'
+Requires-Dist: prompt-toolkit (==3.0.31) ; extra == 'tests'
+Requires-Dist: psutil (==5.9.3) ; extra == 'tests'
+Requires-Dist: ptyprocess (==0.7.0) ; extra == 'tests'
+Requires-Dist: pure-eval (==0.2.2) ; extra == 'tests'
+Requires-Dist: py-cpuinfo (==9.0.0) ; extra == 'tests'
+Requires-Dist: pycparser (==2.21) ; extra == 'tests'
+Requires-Dist: pyflakes (==2.5.0) ; extra == 'tests'
+Requires-Dist: pygments (==2.15.0) ; extra == 'tests'
+Requires-Dist: pyparsing (==3.0.9) ; extra == 'tests'
+Requires-Dist: pyrsistent (==0.19.2) ; extra == 'tests'
+Requires-Dist: pysocks (==1.7.1) ; extra == 'tests'
+Requires-Dist: pytest (==7.2.2) ; extra == 'tests'
+Requires-Dist: pytest-benchmark (==4.0.0) ; extra == 'tests'
+Requires-Dist: pytest-cov (==4.0.0) ; extra == 'tests'
+Requires-Dist: pytest-flakes (==4.0.5) ; extra == 'tests'
+Requires-Dist: pytest-mock (==3.10.0) ; extra == 'tests'
+Requires-Dist: pytest-mypy (==0.10.0) ; extra == 'tests'
+Requires-Dist: pytest-timeout (==2.1.0) ; extra == 'tests'
+Requires-Dist: pytest-xdist (==3.2.1) ; extra == 'tests'
+Requires-Dist: python-dateutil (==2.8.2) ; extra == 'tests'
+Requires-Dist: pyyaml (==5.4.1) ; extra == 'tests'
+Requires-Dist: pyzmq (==24.0.1) ; extra == 'tests'
+Requires-Dist: requests[socks] (==2.28.2) ; extra == 'tests'
+Requires-Dist: responses (==0.23.1) ; extra == 'tests'
+Requires-Dist: send2trash (==1.8.0) ; extra == 'tests'
+Requires-Dist: six (==1.16.0) ; extra == 'tests'
+Requires-Dist: sniffio (==1.3.0) ; extra == 'tests'
+Requires-Dist: soupsieve (==2.3.2.post1) ; extra == 'tests'
+Requires-Dist: stack-data (==0.6.0) ; extra == 'tests'
+Requires-Dist: terminado (==0.17.0) ; extra == 'tests'
+Requires-Dist: tinycss2 (==1.2.1) ; extra == 'tests'
+Requires-Dist: tomli (==1.2.3) ; extra == 'tests'
+Requires-Dist: tornado (==6.2) ; extra == 'tests'
+Requires-Dist: traitlets (==5.5.0) ; extra == 'tests'
+Requires-Dist: types-mock (==4.0.15.2) ; extra == 'tests'
+Requires-Dist: types-python-dateutil (==2.8.19.2) ; extra == 'tests'
+Requires-Dist: types-pytz (==2022.6.0.1) ; extra == 'tests'
+Requires-Dist: types-pyyaml (==6.0.12.1) ; extra == 'tests'
+Requires-Dist: types-requests (==2.28.11.2) ; extra == 'tests'
+Requires-Dist: types-setuptools (==65.5.0.2) ; extra == 'tests'
+Requires-Dist: types-simplejson (==3.17.7.1) ; extra == 'tests'
+Requires-Dist: types-urllib3 (==1.26.25.1) ; extra == 'tests'
+Requires-Dist: typing-extensions (==4.5.0) ; extra == 'tests'
+Requires-Dist: urllib3 (==1.26.15) ; extra == 'tests'
+Requires-Dist: wcwidth (==0.2.5) ; extra == 'tests'
+Requires-Dist: webencodings (==0.5.1) ; extra == 'tests'
+Requires-Dist: websocket-client (==1.5.1) ; extra == 'tests'
+
+
+
+<h1 align="center">Gordo</h1>
+<div align="center">
+ <!-- Uncomment line below once we decided on 'logo.png' -->
+ <!--<img align="center" src="logo.png" width="250" height="250">-->
+ <br />
+ <strong>
+   Building thousands of models with timeseries data to monitor systems.
+ </strong>
+</div>
+
+<br />
+
+<div align="center">
+  <a href="https://github.com/equinor/gordo/actions?query=branch=master">
+    <img src="https://github.com/equinor/gordo/workflows/CI/badge.svg?branch=master" alt="Build Status"/>
+  </a>
+</div>
+
+---
+## About
+
+Gordo fulfills the role of inhaling config files and supplying components to the pipeline of:
+
+1. Fetching data
+2. Training model
+3. Serving model
+
+## Components
+
+* [gordo-controller](https://github.com/equinor/gordo-controller/) - Kubernetes controller for the Gordo CRDs.
+* [gordo-core](https://github.com/equinor/gordo-core/) - Gordo core library.
+* [gordo-client](https://github.com/equinor/gordo-client/) - Gordo server's client. It can make predictions from deployed models.
+
+---
+## Install
+
+[gordo-helm](https://github.com/equinor/gordo-helm) - you can use [gordo](https://github.com/equinor/gordo-helm/tree/main/charts/gordo) helm chart from this repository to deploy gordo infrastructure to your Kubernetes cluster. 
+
+### Python package 
+
+`pip install --upgrade gordo`  
+
+With additional extras:
+`pip install gordo[postgres,mlflow]`  
+
+Bleeding edge:  
+`pip install git+https://github.com/equinor/gordo.git`
+
+
+## Developer manual
+
+This section will explain how to start development of Gordo.
+
+### Setup
+
+Create and activate a virtual environment first. As a default option, it can be [venv](https://docs.python.org/3/library/venv.html) module.
+
+Install pip-tools
+```
+pip install --upgrade pip
+pip install --upgrade pip-tools
+```
+
+Install requirements
+```
+pip install -r requirements/full_requirements.txt
+pip install -r requirements/test_requirements.txt
+```
+
+Install package:
+```
+python3 setup.py install
+```
+
+#### How to update packages
+
+Note: you have to install `pip-tools` version higher then `6` for requirements to have same multi-line output format.
+
+To update some package in `full_requirements.txt`:
+- Change its version in `requirements.in` file;
+- Compile and upgrade requirements:
+```shell
+pip-compile --upgrade --output-file=full_requirements.txt mlflow_requirements.in postgres_requirements.in requirements.in  
+```
+
+### Examples
+
+See our [example](./examples) notebooks for how to develop with `gordo` locally.
+
+### How to run tests locally
+
+List of commands to run tests can be found [here](/setup.cfg).
+Running of tests takes some time, so it's faster to run tests in parallel:
+```
+pytest -n auto -m 'not dockertest' --ignore benchmarks
+```
+Run docker-related tests:
+```
+pytest -m 'dockertest'
+```
+
+> **_NOTE:_**  To run tests it's required for your system to has (note: commands might differ from your OS):
+> - Running docker daemon.
+> - Available 5432 port for `postgres` container.
+
+> **_NOTE:_** this example is for Pycharm IDE to use `breakpoints` in the code of the tests.  
+> On the configuration setup for test running add to `Additional arguments:` in `pytest` 
+> section following string: `--ignore benchmarks --cov-report= --no-cov ` 
