@@ -1,0 +1,37 @@
+Metadata-Version: 2.1
+Name: aioinsta
+Version: 1.6
+Summary: Tool for parse instagram data
+Project-URL: Homepage, https://github.com/sheldygg/aioinsta
+Author: sheldy
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Dist: aiohttp
+Requires-Dist: pycryptodomex
+Requires-Dist: pydantic
+Description-Content-Type: text/markdown
+
+# aioINSTA
+
+# Still in development
+
+# Asynchronous wrapper of instagram PRIVATE API
+
+```python
+import asyncio
+from aioinsta import Client
+
+settings = {"your_settings": "xxxx"}
+client = Client()
+
+async def main():
+    await client.login("username", "password")
+    data = await client.media_info(
+        client.media_pk_from_url("https://www.instagram.com/p/CrfF1nhslH4")
+    )
+    print(data)
+    
+asyncio.run(main())
+```
