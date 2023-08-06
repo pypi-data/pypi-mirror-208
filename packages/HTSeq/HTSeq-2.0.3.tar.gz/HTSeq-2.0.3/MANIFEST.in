@@ -1,0 +1,23 @@
+# Docs
+include VERSION
+include MANIFEST.in
+include README.md
+exclude todo.txt
+
+# Cython
+include src/HTSeq/*
+include src/*.c
+
+# SWIG (source)
+include src/step_vector.h
+include src/*.i
+# SWIG (transpiled)
+include src/StepVector.py
+include src/StepVector_wrap.cxx
+
+# Pure Python
+include HTSeq/*.py
+
+# Script
+include HTSeq/scripts/*
+include scripts/*
