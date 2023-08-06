@@ -1,0 +1,58 @@
+# GPT 聊天程式碼庫
+
+這是一個使用 OpenAI API 的 GPT 聊天程式碼庫，可以讓你輕鬆地與 GPT 進行對話。這個程式碼庫支持 OpenAI 的 GPT-4 模型，並且可以用作命令列界面或 Python 函式庫。
+
+## 安裝
+
+您可以使用以下命令快速安裝此程式碼庫：
+
+```bash
+python3 -m pip install openai-chat-thread
+```
+
+安裝後，您需要設定`OPENAI_API_KEY`環境變數。一種簡單的方法是在您的主目錄中創建一個`.env`檔案，並在其中添加以下行：
+
+```
+OPENAI_API_KEY=your_api_key_here
+```
+
+記得用您自己的 API 金鑰替換`your_api_key_here`。
+
+## 命令列界面
+
+安裝後，您可以在命令列中使用`openai_chat_thread`命令。請使用以下命令查看可用選項：
+
+```bash
+python3 -m openai_chat_thread --help
+```
+
+要與 GPT 進行對話，只需提供一個提示（prompt），例如：
+
+```bash
+python3 -m openai_chat_thread "你好，GPT！"
+```
+
+然後 GPT 將回應您的提示。
+
+## 函式庫用法
+
+您也可以在 Python 程式中導入此庫並使用它。只需導入`openai_chat_thread`函數，並提供一個提示（prompt）：
+
+```python
+from openai_chat_thread import openai_chat_thread
+
+q = openai_chat_thread("你好，GPT！")
+
+response = q.get()
+print(response)
+```
+
+`openai_chat_thread`函數將返回一個`queue.Queue`對象，您可以使用它來讀取 GPT 的回應。
+
+## 運作原理
+
+該程式碼庫使用 OpenAI 提供的 GPT-4 模型。當您提供一個提示（prompt）時，該程序將向 GPT-4 模型發送請求，並將其回應返回給您。
+
+為了實現實時回應，我們在後台啟動一個新的執行緒，並在其中與 GPT 模型進行通信。這意味著您可以在等待 GPT 的回應時繼續執行其他任務。
+
+該程式碼庫使用 Python 的標準庫`queue`和`threading`來實現多執行緒和通信。這使得程式碼庫易於使用，而無需依賴額外的第三方庫。
