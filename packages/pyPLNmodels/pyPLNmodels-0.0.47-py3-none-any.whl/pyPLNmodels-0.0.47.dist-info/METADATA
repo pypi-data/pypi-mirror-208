@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: pyPLNmodels
+Version: 0.0.47
+Summary: Package implementing PLN models
+Home-page: UNKNOWN
+Author: Bastien Batardière, Julien Chiquet, Joon Kwon
+Author-email: bastien.batardiere@gmail.com, julien.chiquet@inrae.fr, joon.kwon@inrae.fr
+License: MIT
+Project-URL: Source, https://forgemia.inra.fr/bbatardiere/pyplnmodels
+Project-URL: Documentation, https://bbatardiere.pages.mia.inra.fr/pyplnmodels/index.html
+Keywords: python,count,data,count data,high dimension,scRNAseq,PLN
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: matplotlib
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scipy
+Requires-Dist: seaborn
+Requires-Dist: torch
+
+
+# PLNmodels: Poisson lognormal models
+
+> The Poisson lognormal model and variants can be used for analysis of mutivariate count data.
+> This package implements
+> efficient algorithms to fit such models.
+<!-- accompanied with a set of -->
+<!-- > functions for visualization and diagnostic. See [this deck of -->
+<!-- > slides](https://pln-team.github.io/slideshow/) for a -->
+<!-- > comprehensive introduction. -->
+
+
+
+## Installation
+
+**PLNmodels** is available on
+[pypi](https://pypi.org/project/pyPLNmodels/). The development
+version is available on [GitHub](https://github.com/PLN-team/pyPLNmodels).
+
+### Package installation
+
+```
+pip install pyPLNmodels
+```
+
+## Usage and main fitting functions
+
+The package comes with an ecological data set to present the functionality
+```
+import pyPLNmodels
+from pyPLNmodels.models import PLNPCA, PLN
+from pyPLNmodels.oaks import load_oaks
+oaks = load_oaks()
+```
+
+### Unpenalized Poisson lognormal model (aka PLN)
+
+```
+pln = PLN("counts ~ 1  + tree + dist2ground + orientation ", data = oaks, take_log_offsets = True)
+pln.fit()
+print(pln)
+```
+
+
+### Rank Constrained Poisson lognormal for Poisson Principal Component Analysis (aka PLNPCA)
+
+```
+pca =  PLNPCA("counts ~ 1  + tree + dist2ground + orientation ", data = oaks, take_log_offsets = True, ranks = [3,4,5])
+pca.fit()
+print(pca)
+```
+
+
+## References
+
+Please cite our work using the following references:
+-   J. Chiquet, M. Mariadassou and S. Robin: Variational inference for
+    probabilistic Poisson PCA, the Annals of Applied Statistics, 12:
+        2674–2698, 2018. [link](http://dx.doi.org/10.1214/18%2DAOAS1177)
+
+
