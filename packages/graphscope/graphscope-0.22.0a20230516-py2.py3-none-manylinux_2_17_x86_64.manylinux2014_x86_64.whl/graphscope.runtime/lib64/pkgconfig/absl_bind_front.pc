@@ -1,0 +1,12 @@
+prefix=/opt/graphscope
+exec_prefix=${prefix}
+libdir=/opt/graphscope/lib64
+includedir=/opt/graphscope/include
+
+Name: absl_bind_front
+Description: Abseil bind_front library
+URL: https://abseil.io/
+Version: 20220623
+Requires: absl_base_internal = 20220623, absl_compressed_tuple = 20220623
+Libs: -L${libdir}  
+Cflags: -I${includedir} -DNOMINMAX
