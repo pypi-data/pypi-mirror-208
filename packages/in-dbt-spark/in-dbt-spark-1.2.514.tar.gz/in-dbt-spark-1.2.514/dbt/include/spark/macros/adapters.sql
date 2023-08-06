@@ -1,0 +1,389 @@
+{% macro dbt_spark_tblproperties_clause() -%}
+  {%- set tblproperties = config.get('tblproperties') -%}
+  {%- if tblproperties is not none %}
+    tblproperties (
+      {%- for prop in tblproperties -%}
+      '{{ prop }}' = '{{ tblproperties[prop] }}' {% if not loop.last %}, {% endif %}
+      {%- endfor %}
+    )
+  {%- endif %}
+{%- endmacro -%}
+
+{% macro file_format_clause() %}
+  {{ return(adapter.dispatch('file_format_clause', 'dbt')()) }}
+{%- endmacro -%}
+
+{% macro spark__file_format_clause() %}
+  {%- set file_format = config.get('file_format', validator=validation.any[basestring]) -%}
+  {%- if file_format is not none %}
+    using {{ file_format }}
+  {%- endif %}
+{%- endmacro -%}
+
+
+{% macro location_clause() %}
+  {{ return(adapter.dispatch('location_clause', 'dbt')()) }}
+{%- endmacro -%}
+
+{% macro spark__location_clause() %}
+  {%- set location_root = config.get('location_root', validator=validation.any[basestring]) -%}
+  {%- set identifier = model['alias'] -%}
+  {%- if location_root is not none %}
+    location '{{ location_root }}/{{ identifier }}'
+  {%- endif %}
+{%- endmacro -%}
+
+
+{% macro options_clause() -%}
+  {{ return(adapter.dispatch('options_clause', 'dbt')()) }}
+{%- endmacro -%}
+
+{% macro spark__options_clause() -%}
+  {%- set options = config.get('options') -%}
+  {%- if config.get('file_format') == 'hudi' -%}
+    {%- set unique_key = config.get('unique_key') -%}
+    {%- if unique_key is not none and options is none -%}
+      {%- set options = {'primaryKey': config.get('unique_key')} -%}
+    {%- elif unique_key is not none and options is not none and 'primaryKey' not in options -%}
+      {%- set _ = options.update({'primaryKey': config.get('unique_key')}) -%}
+    {%- elif options is not none and 'primaryKey' in options and options['primaryKey'] != unique_key -%}
+      {{ exceptions.raise_compiler_error("unique_key and options('primaryKey') should be the same column(s).") }}
+    {%- endif %}
+  {%- endif %}
+
+  {%- if options is not none %}
+    options (
+      {%- for option in options -%}
+      {{ option }} "{{ options[option] }}" {% if not loop.last %}, {% endif %}
+      {%- endfor %}
+    )
+  {%- endif %}
+{%- endmacro -%}
+
+
+{% macro comment_clause() %}
+  {{ return(adapter.dispatch('comment_clause', 'dbt')()) }}
+{%- endmacro -%}
+
+{% macro spark__comment_clause() %}
+  {%- set raw_persist_docs = config.get('persist_docs', {}) -%}
+
+  {%- if raw_persist_docs is mapping -%}
+    {%- set raw_relation = raw_persist_docs.get('relation', true) -%}
+    {%- if raw_relation and model.description|length -%}
+      comment '{{ model.description | replace("'", "\\'") }}'
+    {% endif %}
+  {%- elif raw_persist_docs -%}
+    {{ exceptions.raise_compiler_error("Invalid value provided for 'persist_docs'. Expected dict but got value: " ~ raw_persist_docs) }}
+  {% endif %}
+{%- endmacro -%}
+
+
+{% macro partition_cols(label, required=false) %}
+  {{ return(adapter.dispatch('partition_cols', 'dbt')(label, required)) }}
+{%- endmacro -%}
+
+{% macro spark__partition_cols(label, required=false) %}
+  {%- set raw_partition_by = config.get('partition_by', validator=validation.any[list, dict]) -%}
+  {%- set file_format = config.get('file_format', validator=validation.any[basestring]) -%}
+
+  {%- if raw_partition_by is not none %}
+    {{ label }} (
+    {%- set partition_by_list = adapter.parse_partition_by(raw_partition_by) -%}
+    {%- for partition_by in partition_by_list -%}
+      {%- if file_format == 'openhouse' and partition_by.data_type | lower in ['timestamp'] -%}
+        {%- if partition_by.granularity is none -%}
+          {% do exceptions.raise_compiler_error("For partitioned tables with file_format = 'openhouse' and data_type = 'timestamp', granularity must be provided") %}
+        {%- endif -%}
+        {{ partition_by.granularity }}({{ partition_by.field }})
+      {%- elif file_format == 'openhouse' and partition_by.data_type | lower in ['string'] -%}
+        {{ partition_by.field }}
+      {%- else -%}
+        {{ partition_by.field }}
+      {%- endif -%}
+      {%- if not loop.last -%},{%- endif -%}
+    {%- endfor -%}
+    )
+  {%- endif %}
+{%- endmacro -%}
+
+{% macro clustered_cols(label, required=false) %}
+  {{ return(adapter.dispatch('clustered_cols', 'dbt')(label, required)) }}
+{%- endmacro -%}
+
+{% macro spark__clustered_cols(label, required=false) %}
+  {%- set cols = config.get('clustered_by', validator=validation.any[list, basestring]) -%}
+  {%- set buckets = config.get('buckets', validator=validation.any[int]) -%}
+  {%- if (cols is not none) and (buckets is not none) %}
+    {%- if cols is string -%}
+      {%- set cols = [cols] -%}
+    {%- endif -%}
+    {{ label }} (
+    {%- for item in cols -%}
+      {{ item }}
+      {%- if not loop.last -%},{%- endif -%}
+    {%- endfor -%}
+    ) into {{ buckets }} buckets
+  {%- endif %}
+{%- endmacro -%}
+
+
+{% macro fetch_tbl_properties(relation) -%}
+  {% call statement('list_properties', fetch_result=True) -%}
+    SHOW TBLPROPERTIES {{ relation }}
+  {% endcall %}
+  {% do return(load_result('list_properties').table) %}
+{%- endmacro %}
+
+
+{% macro create_temporary_view(relation, sql) -%}
+  {{ return(adapter.dispatch('create_temporary_view', 'dbt')(relation, sql)) }}
+{%- endmacro -%}
+
+{#-- We can't use temporary tables with `create ... as ()` syntax #}
+{% macro spark__create_temporary_view(relation, sql) -%}
+  create temporary view {{ relation.include(schema=false) }} as
+    {{ sql }}
+{% endmacro %}
+
+
+{% macro spark__create_table_as(temporary, relation, sql) -%}
+  {% if temporary -%}
+    {{ create_temporary_view(relation, sql) }}
+  {%- else -%}
+    {% if config.get('file_format', validator=validation.any[basestring]) in ['delta', 'iceberg'] %}
+      create or replace table {{ relation }}
+    {% else %}
+      create table {{ relation }}
+    {% endif %}
+    {% if config.get('file_format', validator=validation.any[basestring]) != 'openhouse' %}
+      {{ file_format_clause() }}
+    {% endif %}
+    {{ options_clause() }}
+    {{ partition_cols(label="partitioned by") }}
+    {% if config.get('file_format', validator=validation.any[basestring]) != 'openhouse' %}
+      {{ clustered_cols(label="clustered by") }}
+      {{ location_clause() }}
+    {% endif %}
+    {{ comment_clause() }}
+    as
+      {{ sql }}
+
+  {%- endif %}
+{%- endmacro -%}
+
+{% macro spark__create_view_as(relation, sql) -%}
+  create or replace view {{ relation }}
+  {{ comment_clause() }}
+  as
+    {{ sql }}
+{% endmacro %}
+
+{% macro spark__create_schema(relation) -%}
+  {%- call statement('create_schema') -%}
+    {% if '.' in relation.schema %}
+      show databases like 'fake_placeholder__create_schema'
+    {% else %}
+      create schema if not exists {{relation}}
+    {% endif %}
+  {% endcall %}
+{% endmacro %}
+
+{% macro spark__drop_schema(relation) -%}
+  {%- call statement('drop_schema') -%}
+    {% if '.' in relation.schema %}
+      show databases like 'fake_placeholder__drop_schema'
+    {% else %}
+      drop schema if exists {{ relation }} cascade
+    {% endif %}
+  {%- endcall -%}
+{% endmacro %}
+
+{% macro get_columns_in_relation_raw(relation) -%}
+  {{ return(adapter.dispatch('get_columns_in_relation_raw', 'dbt')(relation)) }}
+{%- endmacro -%}
+
+{% macro spark__get_columns_in_relation_raw(relation) -%}
+  {% call statement('get_columns_in_relation_raw', fetch_result=True) %}
+      describe extended {{ relation.include(schema=(schema is not none)) }}
+  {% endcall %}
+  {% do return(load_result('get_columns_in_relation_raw').table) %}
+{% endmacro %}
+
+{% macro spark__get_columns_in_relation(relation) -%}
+  {% call statement('get_columns_in_relation', fetch_result=True) %}
+      describe extended {{ relation.include(schema=(schema is not none)) }}
+  {% endcall %}
+  {% do return(load_result('get_columns_in_relation').table) %}
+{% endmacro %}
+
+-- override macro to list only relations related to current dbt project
+{% macro spark__list_relations_without_caching(relation) %}
+  {% call statement('list_relations_without_caching', fetch_result=True) -%}
+    show table extended in {{ relation.schema }} like '{{ relation.identifier or "*" }}'
+  {% endcall %}
+  {% do return(load_result('list_relations_without_caching').table) %}
+{% endmacro %}
+
+{% macro list_relations_show_tables_without_caching(schema_relation) %}
+  {#-- Spark with iceberg tables don't work with show table extended for #}
+  {#-- V2 iceberg tables #}
+  {#-- https://issues.apache.org/jira/browse/SPARK-33393 #}
+  {% call statement('list_relations_without_caching_show_tables', fetch_result=True) -%}
+    show tables in {{ schema_relation }} like '*'
+  {% endcall %}
+
+  {% do return(load_result('list_relations_without_caching_show_tables').table) %}
+{% endmacro %}
+
+{% macro describe_table_extended_without_caching(table_name) %}
+  {#-- Spark with iceberg tables don't work with show table extended for #}
+  {#-- V2 iceberg tables #}
+  {#-- https://issues.apache.org/jira/browse/SPARK-33393 #}
+  {% call statement('describe_table_extended_without_caching', fetch_result=True) -%}
+    describe extended {{ table_name }}
+  {% endcall %}
+  {% do return(load_result('describe_table_extended_without_caching').table) %}
+{% endmacro %}
+
+-- override macro to list only schemas related to current dbt project
+{% macro spark__list_schemas(database) -%}
+  {% call statement('list_schemas', fetch_result=True, auto_begin=False) %}
+    show databases like '{{ database or "*" }}'
+  {% endcall %}
+  {{ return(load_result('list_schemas').table) }}
+{% endmacro %}
+
+{% macro spark__current_timestamp() -%}
+  current_timestamp()
+{%- endmacro %}
+
+{% macro spark__rename_relation(from_relation, to_relation) -%}
+  {% call statement('rename_relation') -%}
+    {% if not from_relation.type %}
+      {% do exceptions.raise_database_error("Cannot rename a relation with a blank type: " ~ from_relation.identifier) %}
+    {% elif from_relation.type in ('table') %}
+        alter table {{ from_relation }} rename to {{ to_relation }}
+    {% elif from_relation.type == 'view' %}
+        alter view {{ from_relation }} rename to {{ to_relation }}
+    {% else %}
+      {% do exceptions.raise_database_error("Unknown type '" ~ from_relation.type ~ "' for relation: " ~ from_relation.identifier) %}
+    {% endif %}
+  {%- endcall %}
+{% endmacro %}
+
+{% macro spark__drop_relation(relation) -%}
+  {% call statement('drop_relation', auto_begin=False) -%}
+    drop {{ relation.type }} if exists {{ relation }}
+  {%- endcall %}
+{% endmacro %}
+
+
+{% macro spark__generate_database_name(custom_database_name=none, node=none) -%}
+  {% do return(None) %}
+{%- endmacro %}
+
+{% macro spark__persist_docs(relation, model, for_relation, for_columns) -%}
+  {%- set raw_persist_docs = config.get('persist_docs', {}) -%}
+
+  {%- if raw_persist_docs is mapping -%}
+    {%- set raw_columns = raw_persist_docs.get('columns', true) -%}
+    {%- set raw_relation = raw_persist_docs.get('relation', true) -%}
+      {%- if for_columns and raw_columns and model.columns -%}
+        {% do alter_column_comment(relation, model.columns) %}
+      {% endif %}
+      {%- if for_relation and raw_relation -%}
+         {% do alter_relation_comment(relation, model.description) %}
+      {% endif %}
+  {%- elif raw_persist_docs -%}
+        {{ exceptions.raise_compiler_error("Invalid value provided for 'persist_docs'. Expected dict but got value: " ~ raw_persist_docs) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro spark__alter_column_comment(relation, column_dict) %}
+  {%- set file_format = config.get('file_format', default='openhouse') -%}
+  {% if file_format in ['delta', 'hudi', 'iceberg', 'openhouse'] %}
+    {% for column_name in column_dict %}
+      {% set comment = column_dict[column_name]['description'] %}
+      {% set escaped_comment = comment | replace('\'', '\\\'') %}
+      {% set comment_query %}
+        {% if relation.is_iceberg or relation.is_openhouse %}
+          alter table {{ relation }} alter column
+              {{ adapter.quote(column_name) if column_dict[column_name]['quote'] else column_name }}
+              comment '{{ escaped_comment }}';
+        {% else %}
+          alter table {{ relation }} change column
+              {{ adapter.quote(column_name) if column_dict[column_name]['quote'] else column_name }}
+              comment '{{ escaped_comment }}';
+        {% endif %}
+      {% endset %}
+      {% do run_query(comment_query) %}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro spark__alter_relation_comment(relation, relation_comment) %}
+  {% if config.get('file_format', default='openhouse') in ['openhouse'] %}
+    {% set escaped_comment = relation_comment | replace('\'', '\\\'') %}
+    {% set comment_query %}
+        {% if escaped_comment|length %}
+            alter table {{ relation }} set tblproperties ('comment'='{{ escaped_comment }}');
+        {% else %}
+            alter table {{ relation }} unset tblproperties ('comment');
+        {% endif %}
+    {% endset %}
+    {% do run_query(comment_query) %}
+  {% endif %}
+{% endmacro %}
+
+{% macro spark__make_temp_relation(base_relation, suffix) %}
+    {% set tmp_identifier = base_relation.identifier ~ suffix %}
+    {% set tmp_relation = base_relation.incorporate(path = {
+        "identifier": tmp_identifier,
+        "schema": None
+    }) -%}
+
+    {% do return(tmp_relation) %}
+{% endmacro %}
+
+
+{% macro spark__alter_column_type(relation, column_name, new_column_type) -%}
+  {% call statement('alter_column_type') %}
+    alter table {{ relation }} alter column {{ column_name }} type {{ new_column_type }};
+  {% endcall %}
+{% endmacro %}
+
+
+{% macro spark__alter_relation_add_remove_columns(relation, add_columns, remove_columns) %}
+
+  {% if remove_columns %}
+    {% if relation.is_delta %}
+      {% set platform_name = 'Delta Lake' %}
+    {% elif relation.is_iceberg %}
+      {% set platform_name = 'Iceberg' %}
+    {% elif relation.is_openhouse %}
+      {% set platform_name = 'OpenHouse' %}
+    {% else %}
+      {% set platform_name = 'Apache Spark' %}
+    {% endif %}
+    {{ exceptions.raise_compiler_error(platform_name + ' does not support dropping columns from tables') }}
+  {% endif %}
+
+  {% if add_columns is none %}
+    {% set add_columns = [] %}
+  {% endif %}
+
+  {% set sql -%}
+
+     alter {{ relation.type }} {{ relation }}
+
+       {% if add_columns %} add columns {% endif %}
+            {% for column in add_columns %}
+               {{ column.name }} {{ column.data_type }}{{ ',' if not loop.last }}
+            {% endfor %}
+
+  {%- endset -%}
+
+  {% do run_query(sql) %}
+
+{% endmacro %}
