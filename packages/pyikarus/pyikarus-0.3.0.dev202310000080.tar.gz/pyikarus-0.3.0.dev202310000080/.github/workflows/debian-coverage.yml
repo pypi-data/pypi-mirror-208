@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2022 The Ikarus Developers mueller@ibb.uni-stuttgart.de
+# SPDX-License-Identifier: CC0-1.0
+
+name: CodeCoverage
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '.github/workflows/ghpages.yml'
+      - '.github/workflows/createDockerContainer.yml'
+      - '**.md'
+env:
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+jobs:
+  GCC-Debug-CodeCov:
+    runs-on: ubuntu-latest
+    container:
+      image: ikarusproject/ikarus-dev:latest
+      options: --memory-swap="20g" --memory="20g" --cpus="2" --user root
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: test vars
+        run: |
+          echo $CI
+          echo $GITHUB_ACTIONS
+      - name: Build
+        run: |
+          mkdir cmake-build-debug
+          cd cmake-build-debug
+          cmake ../  -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -DENABLE_TEST_COVERAGE=1
+          cmake --build . --parallel 2 --target ikarus
+          cmake --build . --parallel 2 --target _ikarus
+          cmake --build . --parallel 2 --target build_tests
+
+      - name: Tests
+        working-directory: ./cmake-build-debug
+        run: |
+          ctest --output-on-failure --parallel 2 -C Debug
+          cd ..
+          gcov -abcfu $(find ./cmake-build-debug -not -path "*dune-env/*" -type f -name "*.gcno" | sed  's/gcno//g')
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: tests
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
