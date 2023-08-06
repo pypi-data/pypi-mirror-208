@@ -1,0 +1,49 @@
+[project]
+name = "llmspec"
+version = "0.1.0"
+description = "LLM unified interface"
+authors = [
+    { name = "TensorChord", email = "modelz@tensorchord.ai" },
+]
+dependencies = []
+requires-python = ">=3.7"
+readme = "README.md"
+
+[project.license]
+text = "Apache-2.0"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[tool.pdm.dev-dependencies]
+lint = [
+    "ruff>=0.0.267",
+    "black>=23.3.0",
+]
+test = [
+    "pytest>=7.3.1",
+]
+
+[tool.pdm.scripts]
+black = "black --check llmspec"
+ruff = "ruff check ."
+
+[tool.pdm.scripts.lint]
+composite = [
+    "black",
+    "ruff",
+]
+
+[tool.ruff]
+line-length = 88
+select = [
+    "E",
+    "F",
+    "B",
+]
+
+[tool.black]
+line-length = 88
