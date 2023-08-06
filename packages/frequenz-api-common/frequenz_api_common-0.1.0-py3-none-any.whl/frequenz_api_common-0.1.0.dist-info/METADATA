@@ -1,0 +1,44 @@
+Metadata-Version: 2.1
+Name: frequenz-api-common
+Version: 0.1.0
+Summary: Frequenz common gRPC API and bindings
+Author-email: Frequenz Energy-as-a-Service GmbH <floss@frequenz.com>
+License: MIT
+Project-URL: Changelog, https://github.com/frequenz-floss/frequenz-api-common/releases
+Project-URL: Repository, https://github.com/frequenz-floss/frequenz-api-common
+Project-URL: Issues, https://github.com/frequenz-floss/frequenz-api-common/issues
+Project-URL: Support, https://github.com/frequenz-floss/frequenz-api-common/discussions/categories/support
+Keywords: frequenz,api,microgrid,grpc,common
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Software Development :: Libraries
+Requires-Python: <4,>=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: googleapis-common-protos (<2,>=1.56.2)
+Requires-Dist: grpcio (<2,>=1.51.1)
+Provides-Extra: dev
+Requires-Dist: frequenz-api-common[dev-docstrings,dev-formatting,dev-mypy,dev-noxfile,dev-pylint,dev-pytest] ; extra == 'dev'
+Provides-Extra: dev-docstrings
+Requires-Dist: pydocstyle (==6.3.0) ; extra == 'dev-docstrings'
+Requires-Dist: darglint (==1.8.1) ; extra == 'dev-docstrings'
+Provides-Extra: dev-formatting
+Requires-Dist: black (==23.3.0) ; extra == 'dev-formatting'
+Requires-Dist: isort (==5.12.0) ; extra == 'dev-formatting'
+Provides-Extra: dev-mypy
+Requires-Dist: mypy (==1.1.1) ; extra == 'dev-mypy'
+Requires-Dist: frequenz-api-common[dev-noxfile,dev-pytest] ; extra == 'dev-mypy'
+Provides-Extra: dev-noxfile
+Requires-Dist: nox (==2022.11.21) ; extra == 'dev-noxfile'
+Requires-Dist: frequenz-repo-config[api] (==0.1.0) ; extra == 'dev-noxfile'
+Provides-Extra: dev-pylint
+Requires-Dist: pylint (==2.17.1) ; extra == 'dev-pylint'
+Requires-Dist: frequenz-api-common[dev-noxfile,dev-pytest] ; extra == 'dev-pylint'
+Provides-Extra: dev-pytest
+Requires-Dist: pytest (==7.2.2) ; extra == 'dev-pytest'
+
+# frequenz-api-common
+Common definitions for frequenz GRPC APIs
