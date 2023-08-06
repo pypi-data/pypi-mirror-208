@@ -1,0 +1,52 @@
+{% macro warningItem(item) -%}
+    {% if item.kind == "MismatchedPackageWarning" %}
+You chose {{ format.bold(item.desiredPackage) }} for your production environment, but you have {{ format.bold(item.similarPackage) }} locally.
+
+To match your environment to production, run:
+{% if isIPython %}
+  {{ format.bold("!pip install " + item.desiredPackage) }}
+{% else %}
+  {{ format.bold("pip install " + item.desiredPackage) }}
+{% endif %}
+
+{%if isIPython %}
+To match production to your local environment, include this line in your deployment:
+  mb.deploy(my_deploy_function, {{ format.bold("python_packages=[\"" + item.similarPackage + "\"]") }})
+{% else %}
+To match production to your local environment, include {{ format.bold(item.similarPackage) }} in your {{ format.bold("requirements.txt") }} file. More info: https://doc.modelbit.com/#/git/deploying-with-git?id=_1-requirementstxt
+{% endif %}
+{% endif -%}
+
+{%- if item.kind == "MissingPackageFromImportWarning" %}
+Your deployment imports {{ format.bold(item.importedModule) }} but you did not specify {{ format.bold(item.localPackage) }} in your production environment.
+
+{%if isIPython %}
+To add the missing package to your production environment, run:
+  mb.deploy(my_deploy_function, {{ format.bold("python_packages=[\"" + item.localPackage + "\"]") }}
+{% else %}
+To add the missing package to your production environment, include {{ format.bold(item.localPackage) }} in your {{ format.bold("requirements.txt") }} file.
+{% endif %}
+{% endif -%}
+
+{%- if item.kind == "DifferentPythonVerWarning" %}
+You chose {{ format.bold("Python "+ item.desiredVersion) }} for your production environment, but you have {{format.bold("Python "+ item.localVersion) }} locally.
+
+{%if isIPython %}
+To match production to your local environment, include this line in your deployment:
+  mb.deploy(my_deploy_function, {{ format.bold("python_version=\"" + item.localVersion + "\"") }})
+{% else %}
+To match production to your local environment, include {{ format.bold("pythonVersion: \"" + item.localVersion + "\"") }} in your {{ format.bold("metadata.yaml") }} file. More info: https://doc.modelbit.com/#/git/deploying-with-git?id=_3-metadatayaml
+{% endif %}
+
+To match your local environment to production, consider installing {{ format.bold("Python " + item.desiredVersion) }} locally.
+{% endif %}
+{% endmacro -%}
+
+{% if warningsList | length > 0 %}
+
+{{ format.bold("***Heads Up!***") }}
+
+{% for warning in warningsList %}
+{{ warningItem(warning) }}
+{% endfor %}
+{% endif %}
