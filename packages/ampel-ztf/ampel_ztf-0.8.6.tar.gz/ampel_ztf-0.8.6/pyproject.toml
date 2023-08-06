@@ -1,0 +1,115 @@
+[tool.poetry]
+name = "ampel-ztf"
+version = "0.8.6"
+description = "Zwicky Transient Facility support for the Ampel system"
+authors = [
+    "Valery Brinnel",
+    "Jakob van Santen <jakob.van.santen@desy.de>",
+    "Sjoert van Velzen",
+    "Jakob Nordin",
+]
+maintainers = [
+    "Jakob van Santen <jakob.van.santen@desy.de>"
+]
+license = "BSD-3-Clause"
+readme = "README.md"
+homepage = "https://ampelproject.github.io"
+repository = "https://github.com/AmpelProject/Ampel-ZTF"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Typing :: Typed",
+]
+packages = [
+    {include = "ampel"}
+]
+include = [
+    'conf/*/*.json',
+    'conf/*/*/*.json',
+    'conf/*/*.yaml',
+    'conf/*/*/*.yaml',
+    'conf/*/*.yml',
+    'conf/*/*/*.yml',
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+astropy = "^5.0"
+matplotlib = "^3.3.4"
+aiohttp = "^3.7.3"
+nest-asyncio = "^1.4.3"
+backoff = "^2.0.0"
+fastavro = "~1.6.0"
+requests = "^2.25.1"
+requests-toolbelt = "^0.10.0"
+confluent-kafka = {version = "^2.0.0", optional = true}
+healpy = {version = "^1.15", optional = true}
+light-curve = {version = ">=0.7,<0.8", optional = true}
+ampel-ztf-archive = {version = "^0.8.0-alpha.0", optional = true}
+ampel-interface = "^0.8.7"
+ampel-core = "^0.8.6"
+ampel-photometry = "^0.8.3"
+ampel-alerts = "^0.8.4"
+ampel-plot = {version = "^0.8.3-3", optional = true}
+pandas = {version = "^1.5.2", optional = true}
+scipy = "^1.9.3"
+planobs = {version = "^0.6.1", optional = true}
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+pytest-mock = "^3.10.0"
+mongomock = "^4.1.2"
+mypy = "^1.1.1"
+pytest-timeout = "^2.1.0"
+pytest-asyncio = "^0.21.0"
+types-requests = "^2.25.9"
+before_after = "^1.0.1"
+
+[tool.poetry.extras]
+archive = ["ampel-ztf-archive"]
+healpix = ["healpy"]
+light-curve = ["light-curve"]
+kafka = ["confluent-kafka"]
+plot = ["ampel-plot"]
+fp = ["pandas", "planobs"]
+bayes = ["pandas", "planobs", "ampel-plot"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools >= 40.6.0", "wheel"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.pytest.ini_options]
+addopts = "--showlocals -rsx"
+
+[tool.mypy]
+namespace_packages = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+  "astropy.*",
+  "fastavro.*",
+  "confluent_kafka.*",
+  "ampel.ztf.t0.ArchiveUpdater",
+  "pandas.*",
+  "matplotlib.*",
+  "requests_toolbelt.*",
+  "scipy.*",
+  "ztfquery",
+  "nest_asyncio",
+  "healpy",
+  "light_curve",
+  "planobs.*"
+]
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 88
+
