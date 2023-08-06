@@ -1,0 +1,115 @@
+Metadata-Version: 2.1
+Name: stackdiac
+Version: 0.0.1.dev25
+Summary: 
+License: MIT
+Author: sysr9
+Author-email: 38893296+sysr9@users.noreply.github.com
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: coloredlogs (>=15.0.1,<16.0.0)
+Requires-Dist: deepmerge (>=1.1.0,<2.0.0)
+Requires-Dist: fastapi (>=0.95.0,<0.96.0)
+Requires-Dist: gitpython (>=3.1.31,<4.0.0)
+Requires-Dist: jinja2 (>=3.1.2,<4.0.0)
+Requires-Dist: mergedeep (>=1.3.4,<2.0.0)
+Requires-Dist: pydantic (>=1.10.6,<2.0.0)
+Requires-Dist: pyyaml (>=6.0,<7.0)
+Requires-Dist: requests (>=2.28.2,<3.0.0)
+Requires-Dist: uvicorn (>=0.21.1,<0.22.0)
+Description-Content-Type: text/markdown
+
+# Stackd IAC
+
+IAC stack
+
+## Installation
+
+~~~
+$ pip install stackdiac
+~~~
+
+## Usage
+
+### initializing project
+
+~~~
+$ stackd create
+~~~
+
+Add --help for usage message. Initalizes new project in current directory. Clones core specifications,
+terraform provider versions, setups vault. 
+
+## Updating binaries and repos
+
+~~~
+$ stackd update
+~~~
+
+binaries and repos will be synced with stackd.yaml project file
+
+## Building infrastructure code
+
+~~~
+$ stackd build
+~~~
+
+Builds IAC specifications for all configured clusters
+
+## running terragrunt plan
+
+`stackd tg` uses builded module path as target argument
+
+~~~
+$ stackd tg ./build/<cluster>/<stack>/<module> <command> <args>
+~~~
+
+add -b to build before run terragrunt
+
+~~~
+$ stackd tg -b build/data/sys/nodes/ plan
+$ stackd tg -b build/data/sys/nodes/ apply
+$ stackd tg -b build/data/sys/nodes/ output
+~~~
+
+## running operations
+
+~~~
+stackd op -b data/sys/deploy
+~~~
+
+configuration is stack-scoped. running `terragrunt run-all <op.command>` on operations's modules list.
+target is `<cluster>/<stack>/<operation>` form, not a path
+
+example: upgrading kubernetes:
+
+- adjust k8s version in cluster vars, kubernetes_version
+- run upgrade operation
+
+~~~
+$ stackd op -b data/sys/upgrade
+~~~
+
+## available commands
+
+~~~
+$ stackd
+
+Usage: stackd [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  build
+  create
+  op
+  tg
+  ui
+  update
+~~~
+
