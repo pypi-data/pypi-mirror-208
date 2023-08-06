@@ -1,0 +1,24 @@
+[tool.poetry]
+name         = "multimd"
+version      = "0.3.1-beta"
+description  = 'This project makes it possible to write separated pieces of `MD` files that will be merged to produce one single final `MD` file.'
+readme       = "README.md"
+authors      = ["Christophe BAL"]
+maintainers  = ["Christophe BAL"]
+license      = "GNU License Version 3"
+repository   = "https://github.com/bc-tools/for-dev/tree/main/multimd"
+
+[tool.poetry.scripts]
+multimd = "multimd.__main__:CLI"
+
+[tool.poetry.dependencies]
+python  = "^3.8"
+natsort = "^8.2"
+rich    = "^13.3.5"
+typer   = "^0.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires      = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
