@@ -1,0 +1,294 @@
+Metadata-Version: 2.1
+Name: tmmc-lnpy
+Version: 0.4.0
+Summary: Analysis of lnPi results from TMMC simulation
+Author-email: "William P. Krekelberg" <wpk@nist.gov>
+License: NIST-PD
+Project-URL: homepage, https://github.com/usnistgov/tmmc-lnpy
+Project-URL: documentation, https://pages.nist.gov/tmmc-lnpy/
+Keywords: tmmc-lnpy
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: License :: Public Domain
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: test
+License-File: LICENSE
+
+<!-- markdownlint-disable MD041 -->
+
+[![Repo][repo-badge]][repo-link] [![Docs][docs-badge]][docs-link]
+[![PyPI license][license-badge]][license-link]
+[![PyPI version][pypi-badge]][pypi-link]
+[![Conda (channel only)][conda-badge]][conda-link]
+[![Code style: black][black-badge]][black-link]
+
+<!--
+  For more badges, see
+  https://shields.io/category/other
+  https://naereen.github.io/badges/
+  [pypi-badge]: https://badge.fury.io/py/tmmc-lnpy
+-->
+
+[black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
+[black-link]: https://github.com/psf/black
+[pypi-badge]: https://img.shields.io/pypi/v/tmmc-lnpy
+[pypi-link]: https://pypi.org/project/tmmc-lnpy
+[docs-badge]: https://img.shields.io/badge/docs-sphinx-informational
+[docs-link]: https://pages.nist.gov/tmmc-lnpy/
+[repo-badge]: https://img.shields.io/badge/--181717?logo=github&logoColor=ffffff
+[repo-link]: https://github.com/usnistgov/tmmc-lnpy
+[conda-badge]: https://img.shields.io/conda/v/conda-forge/tmmc-lnpy
+[conda-link]: https://anaconda.org/conda-forge/tmmc-lnpy
+[license-badge]: https://img.shields.io/pypi/l/cmomy?color=informational
+[license-link]: https://github.com/usnistgov/tmmc-lnpy/blob/main/LICENSE
+
+<!-- other links -->
+
+# `tmmc-lnpy`
+
+## Overview
+
+A package to analyze $\ln \Pi(N)$ data from Transition Matrix Monte Carlo
+simulation. The main output from TMMC simulations, $\ln \Pi(N)$, provides a
+means to calculate a host of thermodynamic properties. Moreover, if $\ln \Pi(N)$
+is calculated at a specific chemical potential, it can be reweighted to provide
+thermodynamic information at a different chemical potential
+
+## Features
+
+`tmmc-lnpy` provides a wide array of routines to analyze $\ln \Pi(N)$. These
+include:
+
+- Reweighting to arbitrary chemical potential
+- Segmenting $\ln \Pi(N)$ (to identify unique phases)
+- Containers for interacting with several values of $\ln \Pi(N)$ in a vectorized
+  way.
+- Calculating thermodynamic properties from these containers
+- Calculating limits of stability, and phase equilibrium
+
+## Status
+
+This package is actively used by the author. Please feel free to create a pull
+request for wanted features and suggestions!
+
+## Quick start
+
+Use one of the following
+
+```bash
+pip install tmmc-lnpy
+```
+
+or
+
+```bash
+conda install -c conda-forge tmmc-lnpy
+```
+
+## Example usage
+
+Note that the distribution name `tmmc-lnpy` is different than the import name
+`lnpy` due to name clashing on pypi.
+
+```pycon
+>>> import numpy as np
+>>> import lnpy
+>>> import lnpy.examples
+
+>>> ref = lnpy.examples.load_example_lnpimasked("lj_sub")
+
+>>> phase_creator = lnpy.PhaseCreator(nmax=1, ref=ref)
+>>> build_phases = phase_creator.build_phases_mu([None])
+>>> collection = lnpy.lnPiCollection.from_builder(
+...     lnzs=np.linspace(-10, 3, 5), build_phases=build_phases
+... )
+
+
+# Collections are like pandas.Series
+>>> collection
+<class lnPiCollection>
+lnz_0   phase
+-10.00  0        [-10.0]
+-6.75   0        [-6.75]
+-3.50   0         [-3.5]
+-0.25   0        [-0.25]
+ 3.00   0          [3.0]
+dtype: object
+
+
+# Access xarray backend for Grand Canonical properties with `xge` accessor
+>>> collection.xge.betaOmega()
+<xarray.DataArray 'betaOmega' (lnz_0: 5, phase: 1)>
+array([[-2.32445630e-02],
+       [-6.03695807e-01],
+       [-1.85523371e+02],
+       [-1.54471391e+03],
+       [-2.95801694e+03]])
+Coordinates:
+  * lnz_0    (lnz_0) float64 -10.0 -6.75 -3.5 -0.25 3.0
+  * phase    (phase) int64 0
+    beta     float64 1.372
+    volume   float64 512.0
+Attributes:
+    dims_n:         ['n_0']
+    dims_lnz:       ['lnz_0']
+    dims_comp:      ['component']
+    dims_state:     ['lnz_0', 'beta', 'volume']
+    dims_rec:       ['sample']
+    standard_name:  grand_potential
+    long_name:      $\beta \Omega(\mu,V,T)$
+
+
+```
+
+<!-- end-docs -->
+
+## Documentation
+
+See the [documentation][docs-link] for a look at `tmmc-lnpy` in action.
+
+## License
+
+This is free software. See [LICENSE][license-link].
+
+## Related work
+
+This package is used for with
+[thermoextrap](https://github.com/usnistgov/thermo-extrap) to analyze
+thermodynamically extrapolated macro state probability distributions.
+
+## Contact
+
+The author can be reached at wpk@nist.gov.
+
+## Credits
+
+This package was created with
+[Cookiecutter](https://github.com/audreyr/cookiecutter) and the
+[wpk-nist-gov/cookiecutter-pypackage](https://github.com/wpk-nist-gov/cookiecutter-pypackage)
+Project template forked from
+[audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage).
+
+<!-- markdownlint-disable MD024 -->
+
+# Changelog
+
+Changelog for `lnpy`
+
+## Unreleased
+
+See the fragment files in [changelog.d](https://github.com/usnistgov/tmmc-lnpy)
+
+<!-- scriv-insert-here -->
+
+## v0.4.0 — 2023-05-12
+
+### Added
+
+- Package now available on conda-forge
+
+### Changed
+
+- Changed `examples.load_example_maskddata` to
+  `examples.load_example_lnpimasked` for consistency with other method names.
+
+## v0.3.0 — 2023-05-02
+
+### Added
+
+- Added support for python3.11
+
+- Moved `_docstrings` -> `docstrings` to make available
+- Moved from local docfiller to module_utilities.docfiller
+- Moved from local cached module to module-utilities.cached
+- Add support for python3.11
+
+Full set of changes:
+[`v0.2.2...0.3.0`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.2.2...0.3.0)
+
+### Changed
+
+- Update package layout
+- New linters via pre-commit
+- Development env now handled by tox
+
+## v0.2.2 - 2023-04-05
+
+Full set of changes:
+[`v0.2.1...v0.2.2`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.2.1...v0.2.2)
+
+## v0.2.1 - 2023-04-04
+
+Full set of changes:
+[`v0.2.0...v0.2.1`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.2.0...v0.2.1)
+
+## v0.2.0 - 2023-04-04
+
+Full set of changes:
+[`v0.1.5...v0.2.0`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.1.5...v0.2.0)
+
+## v0.1.5 - 2022-09-28
+
+Full set of changes:
+[`v0.1.4...v0.1.5`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.1.4...v0.1.5)
+
+## v0.1.4 - 2022-09-26
+
+Full set of changes:
+[`v0.1.3...v0.1.4`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.1.3...v0.1.4)
+
+## v0.1.3 - 2022-09-15
+
+Full set of changes:
+[`v0.1.2...v0.1.3`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.1.2...v0.1.3)
+
+## v0.1.2 - 2022-09-14
+
+Full set of changes:
+[`v0.1.1...v0.1.2`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.1.1...v0.1.2)
+
+## v0.1.1 - 2022-09-13
+
+Full set of changes:
+[`v0.1.0...v0.1.1`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.1.0...v0.1.1)
+
+## v0.1.0 - 2022-09-13
+
+Full set of changes:
+[`v0.0.1...v0.1.0`](https://github.com/usnistgov/tmmc-lnpy/compare/v0.0.1...v0.1.0)
+
+## v0.0.1 - 2022-09-13
+
+This software was developed by employees of the National Institute of Standards
+and Technology (NIST), an agency of the Federal Government. Pursuant to title 17
+United States Code Section 105, works of NIST employees are not subject to
+copyright protection in the United States and are considered to be in the public
+domain. Permission to freely use, copy, modify, and distribute this software and
+its documentation without fee is hereby granted, provided that this notice and
+disclaimer of warranty appears in all copies.
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
+SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
+IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+Distributions of NIST software should also include copyright and licensing
+statements of any third-party software that are legally bundled with the code in
+compliance with the conditions of those licenses.
