@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "elefantolib"
+description = "Elefanto lib"
+version = "0.11.1"
+authors = ["Elefanto <elefanto@gmail.com>"]
+license = "MIT"
+readme = "README.rst"
+homepage = "https://github.com/elefanto-organization/elefantolib"
+repository = "https://github.com/elefanto-organization/elefantolib"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
+]
+include = [
+    "LICENSE",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+httpx = "^0.24.0"
+pyjwt = "^2.7.0"
+pytest-env = "^0.8.1"
+websockets = "^11.0.3"
+exceptiongroup = "^1.1.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.2"
+pytest-cov = "^4.0.0"
+pytest-flake8 = "^1.1.1"
+pytest-mock = "^3.10.0"
+flake8-quotes = "^3.3.2"
+flake8-import-order = "^0.18.2"
+flake8-commas = "^2.1.0"
+flake8 = "4.0.1"
+pytest-asyncio = "^0.21.0"
+pytest-freezegun = "^0.4.2"
+
+[tool.hatch.version]
+path = "elefantolib/__init__.py"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "elefantolib"
+python_files = "tests.py test_*.py"
+python_classes = "*Test"
+addopts = "--cov=elefantolib --cov-report term-missing --flake8"
+testpaths = [
+    "tests"
+]
+env = [
+    "ALGORITHM=HS256",
+]
+flake8-max-line-length = 99
