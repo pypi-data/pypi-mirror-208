@@ -1,0 +1,47 @@
+name: Self-Test
+
+on:
+  push:
+    branches: [ "master"]
+  pull_request:
+    branches: [ "master" , "develop"]
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.11"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Disable initramfs update
+      run: sudo sed -i 's/yes/no/g' /etc/initramfs-tools/update-initramfs.conf
+    - name: Disable man-db update
+      run: sudo rm -f /var/lib/man-db/auto-update
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y ffmpeg
+        python -m pip install --upgrade pip
+        python -m pip install .[all]
+        python -m pip install .[testing]
+    - name: Test version compatibility
+      env:
+        DISCORD_TOKEN: ${{secrets.DATT}}
+      if: ${{ matrix.python-version != 3.8 }}
+      run: |
+        pytest -v testing/test_period_dynamic.py  
+    - name: Test all
+      env:
+        DISCORD_TOKEN: ${{secrets.DATT}}
+      if: ${{ matrix.python-version == 3.8 }}
+      run: |
+        pytest -v
+      
