@@ -1,0 +1,2 @@
+class NoJobRunError(Exception):
+    pass
