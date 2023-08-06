@@ -1,0 +1,60 @@
+[build-system]
+requires        = ["setuptools>=61.0.0", "wheel"]
+build-backend   = "setuptools.build_meta"
+
+[project]
+name = "gsheet-player"
+description = "Data class to hold a player information from a spreadsheet row"
+authors = [{ name = "shepworld", email = "info@shepworld.com" }]
+license = { file = "LICENSE" }
+readme = "README.md"
+version = "0.2.0"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+dependencies = []
+requires-python = ">=3.9"
+
+    [project.optional-dependencies]
+    build   = ["build", "twine"]
+    dev     = ["black", "bumpver", "isort", "mypy", "pytest", "ruff"]
+
+[bumpver]
+current_version = "2023.1001-alpha"
+version_pattern = "YYYY.BUILD[-TAG]"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = true
+
+[tool.bumpver]
+current_version = "0.2.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message  = "bump version {old_version} -> {new_version}"
+commit          = true
+tag             = true
+push            = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"',
+]
+"src/gsheet_player/__init__.py" = ["{version}"]
+
+[tool.isort]
+profile                   = "black"
+import_heading_stdlib     = "Standard library imports"
+import_heading_thirdparty = "Third party imports"
+import_heading_firstparty = "gsheet_player imports"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src"
+]
+markers = [
+    "class_test",
+    "file_test",
+]
