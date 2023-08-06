@@ -1,0 +1,14 @@
+transaction_count = 30
+transaction_sum = 600000
+
+base_cost = 0
+base_transaction_fee = 35 / 10000
+min_transaction_cost = 292
+max_transaction_cost = 13214
+
+average_transaction_spend = transaction_sum / transaction_count
+
+transaction_cost = min(max(average_transaction_spend * base_transaction_fee, min_transaction_cost), max_transaction_cost)
+output_cost = transaction_count * transaction_cost + base_cost
+
+print(output_cost)
