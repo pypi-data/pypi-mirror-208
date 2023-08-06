@@ -1,0 +1,59 @@
+[build-system]
+requires = [
+  "setuptools>=61.0",
+  "setuptools_scm[toml]"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotPython"
+version = "0.0.69"
+authors = [
+  { name="T. Bartz-Beielstein", email="tbb@bartzundbartz.de" }
+]
+description = "spotPython - Sequential Parameter Optimization in Python"
+readme = "README.md"
+license = { text="AGPL-3.0-or-later" }
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+  "Operating System :: OS Independent",
+]
+# PEP 621 dependencies declaration
+# adapt to your dependencies manager
+dependencies = [
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "plotly",
+  "tabulate",
+  "scikit-learn",
+  "scipy",
+]
+# dynamic = ["version"]
+
+[project.urls]
+"Homepage" = "https://www.spotseven.de"
+Issues = "https://github.com/sequential-parameter-optimization/spotPython/issues"
+Repository = "https://github.com/sequential-parameter-optimization/spotPython"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 120
+target-version = ["py310"]
+
+[tool.setuptools_scm]
+write_to = "src/spotPython/_version.py"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
