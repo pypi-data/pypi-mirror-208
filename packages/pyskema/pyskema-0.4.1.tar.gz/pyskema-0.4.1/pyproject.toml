@@ -1,0 +1,33 @@
+[project]
+name = "pyskema"
+authors = [{name = "Théo Cavignac", email = "theo.cavignac+dev@gmail.com"}]
+description = "A schema definition module for validation and documentation of structured data."
+
+requires-python = ">= 3.7"
+license = {file = "LICENSE"}
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+
+dynamic = ["version", "readme"]
+
+[project.urls]
+repository = "https://git.sr.ht/~lattay/python-pyskema"
+documentation = "https://pyskema.readthedocs.io"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+# [tool.setuptools]
+# include-package-data = false
+
+[tool.setuptools.dynamic]
+version = {attr = "pyskema.__version__"}
+readme = {file = "README.md", content-type = "text/markdown"}
+
+[tool.setuptools.packages.find]
+exclude = ["tests*"]
