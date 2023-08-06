@@ -1,0 +1,93 @@
+[tool.poetry]
+name = "annoworkcli"
+version = "3.2.2"  # `poetry-dynamic-versioning`を使ってGitHubのバージョンタグを取得している。変更不要
+description = "AnnoworkのCLI(Command Line Interface)"
+authors = ["Kurusugawa Computer Inc."]
+license = "MIT"
+keywords=["annowork", "cli"]
+readme="README.md"
+repository="https://github.com/kurusugawa-computer/annowork-cli"
+classifiers = [
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Environment :: Console",
+        "Topic :: Utilities",
+        "Operating System :: OS Independent",
+]
+
+
+[tool.poetry.dependencies]
+# 3.8.1まで指定している理由: flake8 v6.0.0を利用するため、Python3.8.0のサポートを落とした
+python = "^3.8.1"
+pyyaml = "*"
+annoworkapi = ">=3.0.1"
+annofabapi = ">=0.52.4"
+more-itertools = "*"
+pandas = "*"
+isodate = "*"
+annofabcli = ">=1.61.2"
+
+[tool.poetry.scripts]
+annoworkcli = "annoworkcli.__main__:main"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7"
+pytest-xdist = "*"
+pytest-cov = "*"
+
+[tool.poetry.group.formatter.dependencies]
+autoflake = "*"
+isort = "*"
+black = "^23"
+
+[tool.poetry.group.linter.dependencies]
+mypy = "^1"
+pylint = "^2.16"
+flake8 = "^6"
+
+# typeshed
+types-requests = "*"
+types-python-dateutil = "*"
+types-PyYAML = "*"
+
+
+[tool.poetry.group.documentation.dependencies]
+sphinx = "^6.1"
+pydata-sphinx-theme = ">=0.13"
+sphinx-last-updated-by-git = "*"
+sphinx-argparse = "*"
+
+[tool.poetry.group.dev]
+# 開発するときのみ必要なライブラリ。インストールしなくても開発はできるので、オプショナルにする
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+ipython = "*"
+
+
+[tool.black]
+line-length = 120
+
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+
+[tool.mypy]
+ignore_missing_imports = true
+
+check_untyped_defs = true
+
+
+[tool.poetry-dynamic-versioning]
+enable = false
+format = "{base}"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+
