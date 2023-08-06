@@ -1,0 +1,100 @@
+{
+  "app_name": "ResNet18 Contamination  Application",
+  "run_name": "1",
+  "run_dir_output": "/home/alex/qi3/mir-engine/mir_research/contamination_defects/without_localization/results",
+  "data_dir": "/home/alex/qi3/mir-engine/datasets/contamination_v_1_id_1",
+  "with_batches": true,
+  "model_name": "contamination_resnet18_model",
+  "best_model_name": "best_contamination_resnet18_model.pth",
+  "log_filename": "sim_results_{time}.log",
+  "rotation_file_log_size": "3 MB",
+  "class_0_name": "no_contamination",
+  "class_1_name": "contamination",
+  "data_type": "images",
+  "img_formats": ["jpg", "png", "jpeg"],
+  "validation_size": 0.15,
+  "seed": 42,
+  "shuffle": true,
+  "batch_size": 32,
+  "num_workers": 4,
+  "mean": [0.485, 0.456, 0.406],
+  "std": [0.229, 0.224, 0.225],
+  "transforms": {"name":  "AutoAugmentPolicy", "policy": "IMAGENET"},
+  "num_img_channels": 3,
+  "to_gray_scale": false,
+  "validate_state": false,
+  "train_options": {
+    "do_train": true,
+    "max_train_size": "all",
+    "train_class_0_data_size": 0,
+    "train_class_1_data_size": 0,
+    "use_cuda": true,
+    "model_path": null,
+    "model_type": "RESNET_18",
+    "model_builder_factory": "ResNet",
+    "model_adaptor": {
+         "name": "COMPOSED_ADAPTOR",
+         "adaptors": [{"name": "LINEAR_LAYER_ADAPTOR", "properties": {"in": "LAST_LAYER", "out":  "LAST_LAYER"}},
+         {"name": "FLATTEN_LAYER_ADAPTOR", "properties": {}}]
+    },
+    "freeze_model_parameters": true,
+    "with_pretrained": true,
+    "trainer_type": "CLASSIFIER",
+    "n_classes": 2,
+    "n_epochs": 200,
+    "save_best_model": true,
+    "train_loss_file": "train_loss.csv",
+    "train_accuracy_file": "train_accuracy_file.csv",
+    "dataloader": {
+      "has_imbalanced_classes": true,
+      "with_weighted_random_sampler": true,
+      "class_weights": [0.5, 0.5]
+
+    },
+    "optimizer": {
+      "name": "Adams",
+      "learning_rate": 0.001,
+      "weight_decay": 0.05
+  },
+    "loss_function": {
+      "name": "CrossEntropy"
+    },
+     "few_shot_options": {
+      "n_support_pts": 5,
+      "n_query_pts": 10,
+      "n_iterations": 200,
+       "epoch_fit_model": null,
+       "train_prototypes_name": "train_prototypes.pth"
+    }
+  },
+
+  "validation_options": {
+      "val_loss_file": "val_loss_file.csv",
+      "val_accuracy_file": "val_accuracy_file.csv",
+     "few_shot_options": {
+      "n_support_pts": 5,
+      "n_query_pts": 10,
+      "n_iterations": 50,
+       "epoch_validation_fit_model": null,
+       "validation_prototypes_name": "validation_prototypes_name.pth"
+    }
+  },
+
+  "test_options": {
+      "do_test": true,
+      "max_test_size": "all",
+      "use_cuda": false,
+      "with_simple_segmentation": false,
+      "img_shape": [100, 100],
+      "simple_segmentation_out": "img_segmentation",
+      "class1_threshold": 0.80,
+      "model_adaptor": "AddLinearLayerAdaptor",
+      "few_shot_options": {
+        "n_support_pts": 5,
+        "n_query_pts": 10,
+        "n_iterations": 50,
+         "inference_with": "both_prototypes",
+        "prototypes_names": "validation_prototypes_name.pth"
+      }
+  }
+}
