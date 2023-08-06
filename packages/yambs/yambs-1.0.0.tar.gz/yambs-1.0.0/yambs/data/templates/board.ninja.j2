@@ -1,0 +1,8 @@
+board = {{name}}
+chip = {{chip}}
+
+include $include_dir/rules.ninja
+include $include_dir/boards/$board/sources.ninja
+include $include_dir/boards/$board/apps.ninja
+
+build $board: phony apps
