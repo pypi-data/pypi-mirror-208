@@ -1,0 +1,77 @@
+[tool.poetry]
+authors = ["Free Law Project <info@free.law>"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+description = "A library and microservice to find bad redactions in PDFs"
+keywords = ["legal", "courts", "redactions"]
+license = "BSD-2-Clause"
+maintainers = ["Free Law Project <info@free.law>"]
+name = "x-ray"
+packages = [
+    {include = "xray"}
+]
+readme = "README.md"
+homepage = "https://free.law/projects/x-ray"
+repository = "https://github.com/freelawproject/x-ray"
+documentation = "https://github.com/freelawproject/x-ray/blob/main/README.md"
+version = "0.3.4"
+
+[tool.poetry.scripts]
+xray = "xray.__init__:cli"
+
+[tool.poetry.urls]
+"Organisation Homepage" = "https://free.law/"
+"Change Log" = "https://github.com/freelawproject/x-ray/blob/main/CHANGES.md"
+Issues = "https://github.com/freelawproject/x-ray/issues"
+Funding = "https://www.courtlistener.com/donate/?referrer=pypi-xray"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+PyMuPDF = "1.22.2"
+requests = "^2.26.0"
+types-requests = "^2.26.0"
+
+[tool.poetry.dev-dependencies]
+black = "^23.1"
+isort = "^5.12.0"
+mypy = "^0.910"
+pylint = "^2.7.1"
+wheel = "^0.38.2"
+flynt = "^0.69"
+pre-commit = "^3.2.2"
+ipython = "^8.12.0"
+
+[tool.black]
+include = '''.*\.pyi?$'''
+line-length = 79
+
+[tool.isort]
+force_grid_wrap = 0
+include_trailing_comma = true
+known_third_party = []
+line_length = 79
+multi_line_output = 3
+use_parentheses = true
+
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+
+[tool.pylint.format]
+max-line-length = "79"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
