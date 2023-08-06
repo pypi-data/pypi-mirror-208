@@ -1,0 +1,71 @@
+[build-system]
+requires = ["poetry-core", "wheel"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "macrometa-source-oracle"
+version='0.0.34'
+description = "Macrometa source oracle connector for reading from oracle databases."
+license = "Apache-2.0"
+authors = ["Macrometa <info@macrometa.com>"]
+readme = "README.md"
+homepage = "https://www.macrometa.com/"
+keywords = [
+    "ELT",
+    "Connectors",
+    "Workflows",
+    "Macrometa",
+    "Oracle",
+    "Source"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Operating System :: OS Independent",
+]
+packages = [
+    { include = "macrometa_source_oracle" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+c8connector = ">=0.0.20"
+pipelinewise-singer-python = "1.2.0"
+oracledb = "^1.2.2"
+strict-rfc3339 = "^0.7"
+
+[tool.poetry.scripts]
+macrometa-source-oracle = "macrometa_source_oracle:main"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/Macrometacorp/macrometa-source-oracle/issues"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+
+[tool.black]
+line-length = 120
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+skip = [
+    '.eggs', '.git', '.hg', '.mypy_cache', '.nox', '.pants.d', '.tox',
+    '.venv', '_build', 'buck-out', 'build', 'dist', 'node_modules', 'venv',
+]
+skip_gitignore = true
