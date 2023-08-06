@@ -1,0 +1,126 @@
+Metadata-Version: 2.1
+Name: mitzu
+Version: 0.6.0rc9
+Summary: Product analytics over your data warehouse
+Home-page: https://mitzu.io
+License: MIT
+Author: Istvan Meszaros
+Author-email: istvan.meszaros.88@gmail.com
+Requires-Python: >=3.8,<3.11
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Provides-Extra: athena
+Provides-Extra: bigquery
+Provides-Extra: databricks
+Provides-Extra: doc
+Provides-Extra: mysql
+Provides-Extra: postgres
+Provides-Extra: redshift
+Provides-Extra: snowflake
+Provides-Extra: trinodwh
+Provides-Extra: webapp
+Requires-Dist: PyAthena (>=2.13.0,<3.0.0) ; extra == "athena"
+Requires-Dist: PyJWT[crypto] (>=2.4.0,<3.0.0) ; extra == "webapp"
+Requires-Dist: cryptography (==38.0.4)
+Requires-Dist: dash-bootstrap-components (>=1.2.0,<2.0.0) ; extra == "webapp"
+Requires-Dist: dash-draggable (>=0.1.2,<0.2.0) ; extra == "webapp"
+Requires-Dist: dash-iconify (>=0.1.2,<0.2.0) ; extra == "webapp"
+Requires-Dist: dash-mantine-components (>=0.11.1,<0.12.0) ; extra == "webapp"
+Requires-Dist: dash[celery,compress,diskcache] (>=2.8.1,<2.9.0) ; extra == "webapp"
+Requires-Dist: databricks-sql-connector (>=2.0.2,<3.0.0) ; extra == "databricks"
+Requires-Dist: fastparquet (>=0.8.0,<0.9.0)
+Requires-Dist: gunicorn (>=20.1.0,<21.0.0) ; extra == "webapp"
+Requires-Dist: kaleido (==0.2.1) ; extra == "webapp"
+Requires-Dist: mysql-connector-python (>=8.0.28,<8.1.0) ; extra == "mysql"
+Requires-Dist: orjson (>=3.7.11,<4.0.0) ; extra == "webapp"
+Requires-Dist: pandas (>=1.3.5,<1.4.0)
+Requires-Dist: plotly (>=5.5.0,<5.6.0)
+Requires-Dist: psycopg2 (>=2.9.3,<2.10.0) ; extra == "postgres" or extra == "redshift"
+Requires-Dist: pyarrow (>=8.0.0,<8.1.0)
+Requires-Dist: redis (>=4.4.0,<5.0.0) ; extra == "webapp"
+Requires-Dist: requests (>=2.28.2,<3.0.0)
+Requires-Dist: snowflake-connector-python (>=2.8.3,<2.9.0) ; extra == "snowflake"
+Requires-Dist: snowflake-sqlalchemy (>=1.4.3,<2.0.0) ; extra == "snowflake"
+Requires-Dist: sqlalchemy-bigquery[bqstorage] (>=1.6.1,<2.0.0) ; extra == "bigquery"
+Requires-Dist: sqlalchemy[asyncio] (>=1.4.31,<1.5.0)
+Requires-Dist: sqlparse (>=0.4.2,<0.5.0)
+Requires-Dist: tqdm (>=4.64.1,<5.0.0)
+Requires-Dist: trino[sqlalchemy] (>=0.313.0,<0.314.0) ; extra == "trinodwh"
+Project-URL: Documentation, https://mitzu.io/documentation/
+Project-URL: Repository, https://github.com/mitzu-io/mitzu
+Description-Content-Type: text/markdown
+
+[![PyPI version](https://badge.fury.io/py/mitzu.svg)](https://badge.fury.io/py/mitzu)
+![Mit - License](https://img.shields.io/pypi/l/mitzu)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mitzu.svg)](https://pypi.org/project/mitzu/)
+[![codecov](https://codecov.io/gh/mitzu-io/mitzu/branch/main/graph/badge.svg?token=A1HQLBLSUA)](https://codecov.io/gh/mitzu-io/mitzu)
+
+<h2 align="center">
+<b>Mitzu<b> is an open source <b>product analytics </b> tool over your company's <b>data warehouse</b>.
+</h2>
+</br>
+
+![webapp example](https://raw.githubusercontent.com/mitzu-io/mitzu/main/resources/mitzu_webapp_hero.gif)
+
+</br>
+
+# Features
+
+- Friendly Web UI that enables product analytics over your data warehouse or data lake. (Similar to Amplitude, Mixpanel, Heap and Google Analytics)
+- Easy setup in under a minute.
+- Discovers your company's data warehouse for user events and event properties.
+
+- Metrics such as:
+  - User Funnels
+  - Event Segmentation
+  - Retention
+  - User Journey (coming soon)
+  - Revenue calculations (MRR, ARR) (coming soon)
+  - Churn rate (coming soon)
+- User Lookup (coming soon)
+- Cohorts Analysis (coming soon)
+- A/B Test Evaluation (coming soon)
+- Saved metrics
+- Dashboards
+
+- User Authentication
+  - Internal user management
+  - OAuth2 - (OIDC)
+
+# Supported Warehouse Integrations
+
+Mitzu integrates with most modern data lake and warehouse solutions:
+
+- [AWS Athena](https://aws.amazon.com/athena/?whats-new-cards.sort-by=item.additionalFields.postDateTime&whats-new-cards.sort-order=desc)
+- [Databricks Spark (SQL)](https://www.databricks.com/product/databricks-sql)
+- [MySQL](https://www.mysql.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Snowflake](https://www.snowflake.com/en/)
+- [Trino / Starburst](https://trino.io/)
+- [Redshift](https://aws.amazon.com/redshift/)
+
+## Coming Soon
+
+- [Clickhouse](https://clickhouse.com/)
+- [BigQuery](https://cloud.google.com/bigquery/)
+
+# Getting started
+
+Mitzu can run as a standalone webapp:
+
+Trying out locally:
+
+```zsh
+docker run -p 8080:8080 mitzuio/mitzu:latest
+```
+
+- [Beta webapp](https://beta.mitzu.io)
+- [Documentation](https://mitzu.io/documentation/)
+
+## Contribution Guide
+
+Please read our [Contribution Guide](/CONTRIBUTION.md)
+
