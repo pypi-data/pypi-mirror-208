@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: olive-ai
+Version: 0.2.0
+Summary: Olive is an easy-to-use hardware-aware model optimization tool that composes industry-leading techniques across model compression, optimization, and compilation.
+Home-page: https://microsoft.github.io/Olive/
+Download-URL: https://github.com/microsoft/Olive/tags
+Author: Microsoft Corporation
+Author-email: olivedevteam@microsoft.com
+License: MIT License
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+License-File: LICENSE
+License-File: NOTICE.txt
+Requires-Dist: numpy (<=1.23.4)
+Requires-Dist: onnx
+Requires-Dist: optuna
+Requires-Dist: pandas
+Requires-Dist: pydantic
+Requires-Dist: protobuf (!=3.20.0,!=3.20.1)
+Requires-Dist: pyyaml
+Requires-Dist: torch
+Requires-Dist: torchmetrics (<0.10.1,>=0.7.0)
+Requires-Dist: transformers
+Provides-Extra: azureml
+Requires-Dist: azure-ai-ml (>=0.1.0b6) ; extra == 'azureml'
+Requires-Dist: azure-identity ; extra == 'azureml'
+Provides-Extra: cpu
+Requires-Dist: onnxruntime ; extra == 'cpu'
+Provides-Extra: directml
+Requires-Dist: onnxruntime-directml ; extra == 'directml'
+Provides-Extra: docker
+Requires-Dist: docker ; extra == 'docker'
+Provides-Extra: gpu
+Requires-Dist: onnxruntime-gpu ; extra == 'gpu'
+Provides-Extra: inc
+Requires-Dist: neural-compressor ; extra == 'inc'
+Provides-Extra: openvino
+Requires-Dist: openvino (==2022.3.0) ; extra == 'openvino'
+Requires-Dist: openvino-dev[onnx,tensorflow] (==2022.3.0) ; extra == 'openvino'
+Provides-Extra: tf
+Requires-Dist: tensorflow (==1.15.0) ; extra == 'tf'
+
+Olive is an easy-to-use hardware-aware model optimization tool that composes industry-leading techniques across model compression, optimization, and compilation. Given a model and targeted hardware, Olive composes the best suitable optimization techniques to output the most efficient model(s) for inferencing on cloud or edge, while taking a set of constraints such as accuracy and latency into consideration.
