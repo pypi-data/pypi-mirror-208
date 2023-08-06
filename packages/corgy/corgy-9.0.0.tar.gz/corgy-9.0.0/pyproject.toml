@@ -1,0 +1,116 @@
+[tool.poetry]
+name = "corgy"
+version = "9.0.0"  # managed by `poetry-dynamic-versioning`
+description = "Elegant data classes"
+authors = ["Jayanth Koushik <mail@jkoushik.me>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/jayanthkoushik/corgy"
+packages = [
+  { include = "corgy" },
+]
+include = [
+  { path = "tests", format = "sdist" },
+  { path = "docs", format = "sdist" },
+  { path = "CHANGELOG.md", format = "sdist" },
+]
+exclude = ["docs/make.sh"]
+
+keywords = [
+  "data classes",
+  "argparse",
+  "argument parsing",
+  "command line parsing",
+  "cli",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: User Interfaces",
+  "Topic :: Utilities",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+crayons = { version = "^0.4.0", optional = true }
+typing_extensions = { version = "^4.0", python = "<3.11" }
+tomli = {version = "^2.0.1", optional = true, python = "<3.11" }
+
+[tool.poetry.extras]
+colors = ["crayons"]
+toml = ["tomli"]
+
+[tool.poetry.dev-dependencies]
+black = "^23.0"
+pylint = "~2.13.0"
+pre-commit = "^2.0"
+isort = "^5.1"
+mypy = "~1.1.0"
+pydocstyle = "^6.1"
+sphinx = "^4.2"
+sphinx-markdown-builder = { git = "https://github.com/clayrisser/sphinx-markdown-builder" }
+
+[tool.poetry-dynamic-versioning]
+enable = false
+vcs = "git"
+style = "semver"
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["*/_version.py"]
+
+[tool.black]
+line-length = 88
+skip-magic-trailing-comma = true
+
+[tool.isort]
+line_length = 88
+force_grid_wrap = 0
+multi_line_output = 3
+use_parentheses = true
+include_trailing_comma = true
+combine_as_imports = true
+force_alphabetical_sort_within_sections = true
+
+[tool.pylint.FORMAT]
+max-line-length = "88"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = """
+  fixme,
+  missing-docstring,
+  invalid-name,
+  ungrouped-imports,
+  wrong-import-order,
+  wrong-import-position,
+  import-outside-toplevel,
+  unused-argument,
+  no-self-use,
+  no-member,
+  protected-access,
+  attribute-defined-outside-init,
+  too-few-public-methods,
+  too-many-public-methods,
+  too-many-ancestors,
+  too-many-instance-attributes,
+  too-many-arguments,
+  too-many-locals,
+  too-many-statements,
+  too-many-lines,
+  too-many-branches,
+  too-many-nested-blocks,
+  too-many-return-statements,
+  too-many-boolean-expressions,
+"""
+
+[tool.pydocstyle]
+convention = "pep257"
+add-ignore = "D100,D101,D102,D103,D104,D105,D106,D107"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
