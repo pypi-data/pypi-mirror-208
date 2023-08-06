@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: utilki
+Version: 0.1.8
+Summary: A collection of useful utilities
+Author: Khaidar Bikmaev
+Author-email: khaidar@bikmaev.com
+Requires-Python: >=3.8.1
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: pydantic (>=1.10.7,<2.0.0)
+Description-Content-Type: text/markdown
+
+# utilki
+
+[![codecov](https://codecov.io/gh/realbikmaev/utilki/branch/main/graph/badge.svg?token=VN0UMT7O9A)](https://codecov.io/gh/realbikmaev/utilki)
+
+utils that are frequently used by me and might be useful for others
+
+## installation
+
+```bash
+pip install utilki
+```
+
+## TaskMixin
+
+Mixin class that adds `create()` classmethod to dataclass you define as your task params. Useful when you have a lot of container based tasks executed on remote clusters (e.g. Kubernetes, Hashicorp Nomad, etc.). It reads task params from environment variables, parses, and validates them. 
+
+```python
+from utilki import TaskMixin
+
+@dataclass
+class Task(TaskMixin):
+    ayy: float = 69.69
+    lmao: str = "420"
+
+os.environ["ayy"] = "42.42"
+os.environ["lmao"] = "69"
+
+t = Task.create()
+print(f"ayy: {t.ayy}, type: {type(t.ayy)}")
+# ayy: 42.42, type: <class 'float'>
+print(f"lmao: {t.lmao}, type: {type(t.lmao)}")
+# lmao: 69, type: <class 'str'>
+```
+
+## Cli
+
+### Venv
+
+```bash
+$ utilki venv 3.8.10
+$ Enter venv name: new_venv
+$ Created venv `new_venv` with Python version 3.8.10
+```
