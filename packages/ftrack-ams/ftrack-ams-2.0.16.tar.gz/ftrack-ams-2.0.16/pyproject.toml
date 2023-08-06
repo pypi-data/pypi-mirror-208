@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "ftrack-ams"
+version = "2.0.16"
+description = ""
+authors = ["Lucas Selfslagh <lucas@animotions.be>"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+click = "^8.0.3"
+pick = "^1.2.0"
+ftrack-python-api = "^2.3.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
+pytest-cov = "^3.0.0"
+black = "^22.1.0"
+flake8 = "^4.0.1"
+flake8-bandit = "^2.1.2"
+flake8-black = "^0.2.4"
+flake8-bugbear = "^22.1.11"
+flake8-import-order = "^0.18.1"
+pytest-mock = "^3.7.0"
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+ftrack-ams = "ftrack_ams.console:main"
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["ftrack_ams"]
+
+[tool.coverage.report]
+show_missing = true
