@@ -1,0 +1,118 @@
+Metadata-Version: 2.1
+Name: codeSync-tool
+Version: 0.1.1
+Summary: A tool to detect the inconsistent between code and text in your source code
+Author-email: "Anh T. V. Dau" <vananh09052000@gmail.com>
+Project-URL: Homepage, https://github.com/Fsoft-AIC/CodeSync
+Project-URL: Bug Tracker, https://github.com/Fsoft-AIC/CodeSync/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+<div align="center">
+
+<p align="center">
+  <img src="./assets/logo.jpg" width="300px" alt="logo">
+</p>
+
+# CodeSync: Bootstrapping Code-Text Pretrained Language Model to Detect Inconsistency Between Code and Comment
+
+</div>
+
+<!-- ## Table of content
+- [CodeSync package](#codesync-package)
+	- [Getting Started] (#getting-started)
+	- [Inference] (#inference)
+	- [Pre-training] (#pretrain)
+		- [Installation] (#install)
+	 	- [Dataset] (#dataset-CSN)
+	- [Fine-tuning] (#finetuning)
+		- [Dataset] (#dataset-JustInTime)
+- [Citing CodeSync](#citing-codesync)
+- [Contact Us](#contact-us)
+- [License](#license) -->
+
+___________
+# CodeSync Package
+CodeSync is trained on top of encoder-decoder model to learn from code-text pairs. It is a tool that uses for automated detection to identify inconsistencies between code and docstrings, and generates comprehensive summary sentence to replace the old ones.
+
+<p align="center">
+  <img src="./assets/overview.png" width="800px" alt="overview">
+</p>
+
+## Usage Scenario
+
+### Installation
+Install the dependencies:
+
+```bash
+pip -r install requirements.txt
+```
+
+### Inference
+
+Since CodeSync is a Python package, users can use it by `inference` function. 
+
+```python
+from CodeSync.utils import inference
+```
+Parameters:
++ input_file_path (str): the file path that contains source code if users want to check all the functions in there.
++ raw_code (str): a sequence of source code if `input_file_path` is not given.
++ language (str, required): the programming language. We support 10 popular programming languages such as Java, JavaScript, Python, Ruby, Rust, Golang, C#, C++, C, and PHP.
++ output_file_path (str): if `input_file_path` is given, the results from our tool will be written in this path; otherwise, they will be printed on the screen.
+
+
+#### Example
+```python
+from CodeSync.utils import inference
+
+code = """
+def inject_func_as_unbound_method(class_, func, method_name=None):
+    # This is actually quite simple
+    if method_name is None:
+        method_name = get_funcname(func)
+    setattr(class_, method_name, func)
+
+def e(message, exit_code=None):
+    # Print an error log message.
+    print_log(message, YELLOW, BOLD)
+    if exit_code is not None:
+        sys.exit(exit_code)
+"""
+
+inference(raw_code=code, language='python')
+
+>>> Your code snippet function: inject_func_as_unbound_method
+    Results: 
+            UNMATCH!
+            Recommended docstring:  Inject a function as an unbound method.
+    -------------
+    Your code snippet function: e
+    Results: 
+            MATCH!
+```
+
+# Reference
+More details can be found in our [paper](https://arxiv.org/abs/). 
+If you use this code or our package, please consider citing us:
+
+```bibtex
+@article{codesync,
+  title={Bootstrapping Code-Text Pretrained Language Model to Detect Inconsistency Between Code and Comment},
+  author={},
+  journal={},
+  pages={},
+  year={2023}
+}
+```
+
+# Contact us
+If you have any questions, comments or suggestions, please do not hesitate to contact us.
+- Website: [fpt-aicenter](https://www.fpt-aicenter.com/ai-residency/)
+- Email: support.ailab@fpt.com
+
+# License
+[MIT License](LICENSE.txt)
