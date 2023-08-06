@@ -1,0 +1,75 @@
+{# templates/load_script_template.py.jinja #}
+{# This is a jinja template for huggingface dataset loading script#}
+
+import os
+import datasets
+from datasets import Value, Sequence
+import pandas as pd
+import yaml
+
+_DESCRIPTION = """\
+{{dataset_name}} huggingface dataset
+"""
+
+# TODO: enable is we need to specify the license
+# _LICENSE = "{{license}}"
+
+{# Will add split support using tag and enable test and eval split #}
+_URLS = {
+    "train": {{training_file_list}},
+    # "test": {{test_file_list}},
+    # "eval": {{eval_file_list}},
+}
+
+
+# Name of the dataset usually match the script name with CamelCase instead of snake_case
+class {{dataset_name}}(datasets.GeneratorBasedBuilder):
+    VERSION = datasets.Version("{{dataset_version}}")
+
+    def _info(self):
+        features = datasets.Features({{features}})
+
+        return datasets.DatasetInfo(
+            description=_DESCRIPTION,
+            features=features,
+            {# License for the dataset if available #}
+            # license=_LICENSE,
+        )
+
+    def _split_generators(self, dl_manager):
+        # TODO: replace the download method with S3 url download so we can download directly from S3
+        downloaded_files = dl_manager.download_and_extract(_URLS)
+        return [
+            datasets.SplitGenerator(
+                name=datasets.Split.TRAIN,
+                # These kwargs will be passed to _generate_examples
+                gen_kwargs={"filepaths": downloaded_files["train"]},
+            ),
+            # datasets.SplitGenerator(
+            #     name=datasets.Split.VALIDATION,
+            #     # These kwargs will be passed to _generate_examples
+            #     gen_kwargs={"filepaths": downloaded_files["test"]},
+            # ),
+            # datasets.SplitGenerator(
+            #     name=datasets.Split.TEST,
+            #     # These kwargs will be passed to _generate_examples
+            #     gen_kwargs={"filepaths": downloaded_files["eval"]},
+            # ),
+        ]
+
+    # method parameters are unpacked from `gen_kwargs` as given in `_split_generators`
+    def _generate_examples(self, filepaths):
+        # This method handles input defined in _split_generators to yield (key, example)
+        # tuples from the dataset. The `key` is for legacy reasons (tfds) and is not important in
+        # itself, but must be unique for each example.
+        converters = {
+            feature_name: yaml.safe_load
+            for feature_name, feature_type in {{features}}.items() if isinstance(feature_type, Sequence)
+        }
+
+        cur_idx = -1
+        for filepath in filepaths:
+            dict_from_csv = pd.read_csv(filepath, index_col=False, converters=converters).to_dict("records")
+            for record in dict_from_csv:
+                cur_idx += 1
+                yield cur_idx, record
