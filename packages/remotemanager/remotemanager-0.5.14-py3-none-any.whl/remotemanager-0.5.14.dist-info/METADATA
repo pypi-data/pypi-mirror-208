@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: remotemanager
+Version: 0.5.14
+Summary: remote run management tool
+Author-email: Louis Beal <louis.j.beal@gmail.com>
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyyaml
+Requires-Dist: numpy
+Provides-Extra: all
+Requires-Dist: dill ; extra == 'all'
+Requires-Dist: jsonpickle ; extra == 'all'
+Provides-Extra: dev
+Requires-Dist: dill ; extra == 'dev'
+Requires-Dist: jsonpickle ; extra == 'dev'
+Requires-Dist: sphinx ; extra == 'dev'
+Requires-Dist: nbsphinx ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: nbval ; extra == 'dev'
+Provides-Extra: dill
+Requires-Dist: dill ; extra == 'dill'
+Provides-Extra: jsonpickle
+Requires-Dist: jsonpickle ; extra == 'jsonpickle'
+
+# remotemanager
+
+Modular serialisation and management package for handling the running of functions on remote machines
+
+Based off of the BigDFT RemoteRunner concept, remotemanager represents an improvement and expansion on the concepts based there.
+
+Primary usage is via a `Dataset`, which connects to a remote machine via `URL`
+
+You can think of the `Dataset` as a "container" of sorts for a calculation, to which "runs" are attached. These runs are then executed on the remote machine described by the provided `URL`
+
+### Installation
+
+A quick install of the latest stable release can be done via `pip install remotemanager`
+
+Alternatively, clone this repo and do a local install via `cd remotemanager && pip install .`
+
+### Documentation
+
+See the [documentation](https://l_sim.gitlab.io/remotemanager/) for further information, tutorials and api documentation.
