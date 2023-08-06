@@ -1,0 +1,28 @@
+openapi: 3.0.1
+info:
+  title: OpenAi Framework
+  description: Get current and historical stats for sport players and games.
+  version: 'v1'
+servers:
+  - url: '!HOSTNAME!'
+paths:
+  /players:
+    get:
+      operationId: getPlayers
+      summary: Retrieves all players from all seasons whose names match the query string.
+      parameters:
+      - in: query
+        name: query
+        schema:
+            type: string
+        description: Used to filter players based on their name. For example, ?query=davis will return players that have 'davis' in their first or last name.
+      responses:
+        "200":
+          description: OK
+  /teams:
+    get:
+      operationId: getTeams
+      summary: Retrieves all teams for the current season.
+      responses:
+        "200":
+          description: OK

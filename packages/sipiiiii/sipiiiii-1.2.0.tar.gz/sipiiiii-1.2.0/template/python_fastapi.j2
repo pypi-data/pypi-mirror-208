@@ -1,0 +1,18 @@
+from fastapi import FastAPI
+
+app = FastAPI()
+
+{% for path, methods in paths.items() %}
+{% for method in methods %}
+@app.{{ method|upper }}("{{ path }}")
+async def {{ path[1:].replace('/', '_') }}():
+    return {"message": "Hello World"}
+
+{% endfor %}
+{% endfor %}
+
+def main():
+    app.run(debug=True, host="0.0.0.0", port=8000)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,17 @@
+from flask import Flask
+
+app = Flask(__name__)
+
+{% for path, methods in paths.items() %}
+@app.route('{{ path }}', methods=[{% for method in methods %}'{{ method|upper }}', {% endfor %}])
+def {{ path[1:].replace('/', '_') }}():
+    return 'Hello, world!'
+
+{% endfor %}
+
+def main():
+    app.run(debug=True, host="0.0.0.0", port=8000)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,47 @@
+import json
+import os
+import quart
+import quart_cors
+from quart import request
+
+# Note: Setting CORS to allow chat.openapi.com is required for ChatGPT to access your plugin
+app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
+
+{% for path, methods in paths.items() %}
+@app.route('{{ path }}', methods=[{% for method in methods %}'{{ method|upper }}', {% endfor %}])
+async def {{ path[1:].replace('/', '_') }}():
+    request = await quart.request.get_json(force=True)
+    return quart.Response(response='OK', status=200)
+{% endfor %}
+
+@app.get("/logo.png")
+async def plugin_logo():
+    filename = 'logo.png'
+    return await quart.send_file(filename, mimetype='image/png')
+
+
+@app.get("/.well-known/ai-plugin.json")
+async def plugin_manifest():
+    host = request.headers['Host']
+    with open("ai-plugin.json") as f:
+        text = f.read()
+        text = text.replace("!HOSTNAME!", f"http://{os.environ.get('domain'),'None'}/")
+        # This is a trick we do to populate the PLUGIN_HOSTNAME constant in the manifest
+        return quart.Response(text, mimetype="text/json")
+
+
+@app.get("/openapi.yaml")
+async def openapi_spec():
+    host = request.headers['Host']
+    with open("aiapi.yaml") as f:
+        text = f.read()
+        text = text.replace("!HOSTNAME!", f"http://{os.environ.get('domain', 'None')}/")
+        return quart.Response(text, mimetype="text/yaml")
+
+
+def main():
+    app.run(debug=True, host="0.0.0.0", port=8000)
+
+
+if __name__ == "__main__":
+    main()
