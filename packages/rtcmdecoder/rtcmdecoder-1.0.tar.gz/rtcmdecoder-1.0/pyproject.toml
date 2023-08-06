@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rtcmdecoder"
+version = "1.0"
+authors = [
+  { name="Matthias Vancanneyt, Nathan Prakopetz, Ruben Callens", email="nathan.prakopetz@pm.me" },
+]
+description = "A RTCM decoder for MSM7 and ephemerides data in Python"
+readme = "README.md"
+requires-python = ">=3.10.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "alive_progress>=3.1.1",
+    "numpy>=1.24.3",
+    "pandas>=2.0.1",
+    "pyrtcm>=1.0.8",
+    "pyserial>=3.5"
+]
+[options]
+include-package-data = "True"
+package-dir = "rtcm"
+
+[project.scripts]
+rtcmdecoder = "rtcm.rtcmDecoder:rtcmdecoder"
+
+[project.urls]
+"Homepage" = "https://github.com/P3tzl/Project-SE426"
