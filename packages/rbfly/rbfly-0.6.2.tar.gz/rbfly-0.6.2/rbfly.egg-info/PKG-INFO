@@ -1,0 +1,37 @@
+Metadata-Version: 2.1
+Name: rbfly
+Version: 0.6.2
+Summary: RbFly - a library for RabbitMQ Streams using Python asyncio
+Home-page: https://wrobell.dcmod.org/rbfly/
+Author: Artur Wroblewski
+Author-email: wrobell@riseup.net
+License: GPLv3+
+Project-URL: Source Code, https://gitlab.com/wrobell/rbfly
+Project-URL: Bug tracker, https://gitlab.com/wrobell/rbfly/issues
+Classifier: Topic :: Software Development :: Libraries
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Programming Language :: Python :: 3
+Classifier: Development Status :: 2 - Pre-Alpha
+Requires-Python: >=3.10
+Description-Content-Type: text/x-rst
+Provides-Extra: tests
+License-File: COPYING
+
+RbFly is a library for RabbitMQ Streams using Python asyncio
+
+- https://www.rabbitmq.com/streams.html
+- https://docs.python.org/3/library/asyncio.html
+
+The library is designed and implemented with the following features in mind
+
+1. Simple and flexible API.
+2. Use of AMQP 1.0 message format to enable interoperability between
+   clients.
+3. Performance by implementing critical sections of code using Cython,
+   avoiding copying of data, and testing.
+4. Auto reconnection to RabbitMQ broker with lazily created connection
+   objects.
+
+RbFly library is licensed under terms of GPL license, version 3, see
+COPYING file for details. As stated in the license, there is no warranty,
+so any usage is on your own risk.
