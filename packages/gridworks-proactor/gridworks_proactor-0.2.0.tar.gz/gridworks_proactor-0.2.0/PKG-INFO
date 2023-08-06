@@ -1,0 +1,125 @@
+Metadata-Version: 2.1
+Name: gridworks-proactor
+Version: 0.2.0
+Summary: Gridworks Proactor
+Home-page: https://github.com/thegridelectric/gridworks-proactor
+License: MIT
+Author: Jessica Millar
+Author-email: jmillar@gridworks-consulting.com
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Provides-Extra: tests
+Requires-Dist: gridworks-protocol (>=0.3.6)
+Requires-Dist: paho-mqtt (>=1.6.1,<2.0.0)
+Requires-Dist: pendulum (>=2.1.2,<3.0.0)
+Requires-Dist: pydantic (>=1.10.6,<2.0.0)
+Requires-Dist: pytest (>=7.2.0,<8.0.0) ; extra == "tests"
+Requires-Dist: pytest-asyncio (>=0.20.3,<0.21.0) ; extra == "tests"
+Requires-Dist: python-dotenv (>=1.0.0,<2.0.0)
+Requires-Dist: result (>=0.9.0,<0.10.0)
+Requires-Dist: xdg (>=6.0.0,<7.0.0)
+Project-URL: Changelog, https://github.com/thegridelectric/gridworks-proactor/releases
+Project-URL: Documentation, https://gridworks-proactor.readthedocs.io
+Project-URL: Repository, https://github.com/thegridelectric/gridworks-proactor
+Description-Content-Type: text/markdown
+
+# Gridworks Proactor
+
+[![PyPI](https://img.shields.io/pypi/v/gridworks-proactor.svg)][pypi status]
+[![Status](https://img.shields.io/pypi/status/gridworks-proactor.svg)][pypi status]
+[![Python Version](https://img.shields.io/pypi/pyversions/gridworks-proactor)][pypi status]
+[![License](https://img.shields.io/pypi/l/gridworks-proactor)][license]
+
+[![Read the documentation at https://gridworks-proactor.readthedocs.io/](https://img.shields.io/readthedocs/gridworks-proactor/latest.svg?label=Read%20the%20Docs)][read the docs]
+[![Tests](https://github.com/thegridelectric/gridworks-proactor/workflows/Tests/badge.svg)][tests]
+[![Codecov](https://codecov.io/gh/thegridelectric/gridworks-proactor/branch/main/graph/badge.svg)][codecov]
+
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
+[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
+
+[pypi status]: https://pypi.org/project/gridworks-proactor/
+[read the docs]: https://gridworks-proactor.readthedocs.io/
+[tests]: https://github.com/thegridelectric/gridworks-proactor/actions?workflow=Tests
+[codecov]: https://app.codecov.io/gh/thegridelectric/gridworks-proactor
+[pre-commit]: https://github.com/pre-commit/pre-commit
+[black]: https://github.com/psf/black
+
+This packages provides "live actor" and "application monitored communication" infrastructure for the
+[GridWorks SpaceHeat SCADA](https://github.com/thegridelectric/gw-scada-spaceheat-python) project. This separation
+allows the scada code to be more focussed on on application specific details and provides the potential to re-use the
+"live actor" and "application monitored" infrastructure.
+
+## Features
+
+- [](Proactor), a single threaded event loop running on asyncio, for exchanging messages between the main application
+  object, "live actor" subobjects and MQTT clients.
+- A [communication state] ("active" or not) for each external communications link is available to the proactor and
+  sub-objects. "Active" communications is defined as ALL of the following:
+  - The underlying communications mechanism (MQTT) is connected.
+  - All input channels of underlying mechanism (MQTT topics) are established.
+  - A application messages requiring acknowledgement have been ACKed in timely fashion (by default 5 seconds).
+  - A message has been received "recently" (by default within 1 minute).
+- Reliable delievery of "Events" generated locally. Generated Events are stored locally until they are acknowledged
+  and unacknowledged Events are retransmitted when the "Active" communication state is restored.
+- [](gwproactor_test), a test package for development and test environments of projects that implement a class derived
+  from [](Proactor), allowing the derived class to be tested with the base-class tests.
+
+## Requirements
+
+Testing requires an MQTT broker. This can be installed on a mac with:
+
+```shell
+brew install mosquitto
+brew services restart mosquitto
+```
+
+Alternatively, the MQTT broker used by tests be controlled by .env file as described in [](DefaultTestEnv).
+
+## Installation
+
+You can install _Gridworks Proactor_ via [pip] from [PyPI]:
+
+```console
+$ pip install gridworks-proactor
+```
+
+## Contributing
+
+Contributions are very welcome. In order to develop, do this:
+
+```console
+$ poetry install --all-extras
+```
+
+To learn more, see the [Contributor Guide].
+
+## License
+
+Distributed under the terms of the [MIT license][license],
+_Gridworks Proactor_ is free and open source software.
+
+## Issues
+
+If you encounter any problems,
+please [file an issue] along with a detailed description.
+
+## Credits
+
+This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter] template.
+
+[@cjolowicz]: https://github.com/cjolowicz
+[pypi]: https://pypi.org/
+[hypermodern python cookiecutter]: https://github.com/cjolowicz/cookiecutter-hypermodern-python
+[file an issue]: https://github.com/thegridelectric/gridworks-proactor/issues
+[pip]: https://pip.pypa.io/
+
+<!-- github-only -->
+
+[license]: https://github.com/thegridelectric/gridworks-proactor/blob/main/LICENSE
+[contributor guide]: https://github.com/thegridelectric/gridworks-proactor/blob/main/CONTRIBUTING.md
+[communication state]: https://gridworks-proactor.readthedocs.io/en/latest/comm_state.html
+
