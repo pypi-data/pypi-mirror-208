@@ -1,0 +1,27 @@
+---
+type: object
+additionalProperties: false
+
+properties:
+  directory:
+    type: string
+
+  variant:
+    type: string
+    default: "default"
+
+  manifest:
+    $ref: package://rcmpy/schemas/Config.yaml
+
+  previous:
+    type: object
+    additionalProperties: false
+
+    properties:
+      variant:
+        type: string
+
+      configs:
+        type: object
+      variables:
+        type: object
