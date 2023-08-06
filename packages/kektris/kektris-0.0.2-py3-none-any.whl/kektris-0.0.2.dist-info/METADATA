@@ -1,0 +1,98 @@
+Metadata-Version: 2.1
+Name: kektris
+Version: 0.0.2
+Summary: 4-quarter tetris created by Pyxel
+Home-page: https://github.com/KonstantinKlepikov/kektris
+Author: Konstantin Klepikov
+Author-email: oformleno@gmail.com
+License: MIT
+Keywords: game
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pyxel (==1.9.12)
+Provides-Extra: dev
+Requires-Dist: altgraph (==0.17.3) ; extra == 'dev'
+Requires-Dist: bleach (==6.0.0) ; extra == 'dev'
+Requires-Dist: certifi (==2022.12.7) ; extra == 'dev'
+Requires-Dist: cffi (==1.15.1) ; extra == 'dev'
+Requires-Dist: charset-normalizer (==3.1.0) ; extra == 'dev'
+Requires-Dist: click (==8.1.3) ; extra == 'dev'
+Requires-Dist: cryptography (==40.0.2) ; extra == 'dev'
+Requires-Dist: docutils (==0.19) ; extra == 'dev'
+Requires-Dist: exceptiongroup (==1.1.1) ; extra == 'dev'
+Requires-Dist: idna (==3.4) ; extra == 'dev'
+Requires-Dist: importlib-metadata (==6.6.0) ; extra == 'dev'
+Requires-Dist: iniconfig (==2.0.0) ; extra == 'dev'
+Requires-Dist: jaraco.classes (==3.2.3) ; extra == 'dev'
+Requires-Dist: jeepney (==0.8.0) ; extra == 'dev'
+Requires-Dist: keyring (==23.13.1) ; extra == 'dev'
+Requires-Dist: markdown-it-py (==2.2.0) ; extra == 'dev'
+Requires-Dist: mdurl (==0.1.2) ; extra == 'dev'
+Requires-Dist: more-itertools (==9.1.0) ; extra == 'dev'
+Requires-Dist: packaging (==23.1) ; extra == 'dev'
+Requires-Dist: pkginfo (==1.9.6) ; extra == 'dev'
+Requires-Dist: pluggy (==1.0.0) ; extra == 'dev'
+Requires-Dist: pycparser (==2.21) ; extra == 'dev'
+Requires-Dist: Pygments (==2.15.1) ; extra == 'dev'
+Requires-Dist: pyinstaller (==5.10.1) ; extra == 'dev'
+Requires-Dist: pyinstaller-hooks-contrib (==2023.2) ; extra == 'dev'
+Requires-Dist: pytest (==7.3.1) ; extra == 'dev'
+Requires-Dist: pyxel (==1.9.12) ; extra == 'dev'
+Requires-Dist: readme-renderer (==37.3) ; extra == 'dev'
+Requires-Dist: requests (==2.30.0) ; extra == 'dev'
+Requires-Dist: requests-toolbelt (==1.0.0) ; extra == 'dev'
+Requires-Dist: rfc3986 (==2.0.0) ; extra == 'dev'
+Requires-Dist: rich (==13.3.5) ; extra == 'dev'
+Requires-Dist: SecretStorage (==3.3.3) ; extra == 'dev'
+Requires-Dist: six (==1.16.0) ; extra == 'dev'
+Requires-Dist: tomli (==2.0.1) ; extra == 'dev'
+Requires-Dist: twine (==4.0.2) ; extra == 'dev'
+Requires-Dist: urllib3 (==2.0.2) ; extra == 'dev'
+Requires-Dist: webencodings (==0.5.1) ; extra == 'dev'
+Requires-Dist: zipp (==3.15.0) ; extra == 'dev'
+
+# kektris
+
+4-quarter tetris created by [Pyxel](https://github.com/kitao/pyxel)
+
+![Q-tris](Q-tris.png "Q-tris")
+
+## Development and destribution
+
+Typicaly: `pip install -e .[dev]`
+
+Available make cli:
+
+```sh
+make test
+make run
+make test-pypi
+make pypi
+make build-example
+```
+
+When `build-example` - result is propogated to folder example - here is html-launcher and application file (.pyxapp).
+
+Pyxel cli:
+
+```sh
+pyxel run PYTHON_SCRIPT_FILE(.py)
+pyxel watch WATCH_DIR PYTHON_SCRIPT_FILE(.py)
+pyxel play PYXEL_APP_FILE(.pyxapp)
+pyxel edit [PYXEL_RESOURCE_FILE(.pyxres)]
+pyxel package APP_DIR STARTUP_SCRIPT_FILE(.py)
+pyxel app2exe PYXEL_APP_FILE(.pyxapp)
+pyxel app2html PYXEL_APP_FILE(.pyxapp)
+```
+
+## Play the game in web
+
+[wasm launcher](https://kitao.github.io/pyxel/wasm/launcher/?play=KonstantinKlepikov.kektris.example.kektris)
+
+## Reference
+
+A little of code idea is get from [this](https://github.com/shivanju/pyxel-games/tree/master) tetris repo. Music is copypasted from [pyxel](https://github.com/kitao/pyxel) demo.
