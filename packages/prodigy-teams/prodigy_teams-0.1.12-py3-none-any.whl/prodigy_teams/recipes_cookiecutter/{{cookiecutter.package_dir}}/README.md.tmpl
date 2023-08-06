@@ -1,0 +1,97 @@
+# Prodigy Teams Recipes - {{cookiecutter.name}}
+
+This project contains a Python package with custom Prodigy Teams recipes.
+
+{{cookiecutter.short_description}}
+
+## Python environment
+
+You can now create a new Python environment for this project, for example with:
+
+```console
+$ python3 -m venv .venv
+```
+
+Make sure you are using Python 3.6 or above.
+
+Then you will be able to activate this environment with:
+
+```console
+$ source .venv/bin/activate
+```
+
+...or equivalent, depending on your system.
+
+Then, after activating your environment, you should upgrade the `pip` version:
+
+```console
+$ python -m pip install --upgrade pip
+```
+
+## Install dependencies
+
+After activating the environment and upgrading `pip`, you can now install the development dependencies that are needed to build the Python package:
+
+```console
+$ python -m pip install --upgrade -r dev-requirements.txt
+```
+
+`dev-requirements.txt` includes:
+
+```
+prodigy-teams-recipes
+```
+
+The package `prodigy-teams-recipes` is needed to generate the file called `meta.json` while building your custom recipe's package.
+
+## Edit
+
+You can edit the custom recipes in `recipes.py`.
+
+If you add other Python modules (files) make sure you import them from `__init__.py`.
+
+## Build
+
+Once you have your Prodigy Teams recipes ready, you can create a Python "distributable" package with:
+
+```console
+$ python setup.py sdist bdist_wheel
+```
+
+This will update the required `meta.json` file right before building the package.
+
+## Upload
+
+After building the package you can upload it to your Prodigy Teams cluster with:
+
+```console
+$ ptc recipes add ./dist/{{cookiecutter.package_name}}-0.1.0-py3-none-any.whl
+
+✔ Found valid meta.json in package: {{cookiecutter.package_name}}/meta.json
+✔ Custom recipes found!
+
+name            entry_point                       contains schema
+-------------   -------------------------------   ---------------
+custom_recipe   {{cookiecutter.package_name}}.recipes:custom_recipe   True
+
+✔ Valid recipes package!
+Uploading package file dist/{{cookiecutter.package_name}}-0.1.0-py3-none-any.whl.
+Package successfully added.
+```
+
+## Verify
+
+You can also verify the built package without uploading it with:
+
+```console
+$ ptc recipes verify ./dist/{{cookiecutter.package_name}}-0.1.0-py3-none-any.whl
+
+✔ Found valid meta.json in package: my_recipe/meta.json
+✔ Custom recipes found!
+
+name            entry_point                       contains schema
+-------------   -------------------------------   ---------------
+custom_recipe   my_recipe.recipes:custom_recipe   True
+
+✔ Valid recipes package!
+```
