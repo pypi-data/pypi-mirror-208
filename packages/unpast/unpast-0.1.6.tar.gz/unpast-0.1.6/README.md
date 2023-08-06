@@ -1,0 +1,99 @@
+# UnPaSt
+
+UnPaSt is a novel method for identification of differentially expressed biclusters in gene expression matrix. It searches for gene sets up- or down-regulated in subsets of samples:
+
+![alt text](https://github.com/ozolotareva/DESMOND2/blob/a26d8d7b2075d47a4edc8fc9ce7eca72a2dac7db/poster/DESMOND2_steps2.png?raw=true)
+
+
+Webserver: https://unpast.zbh.uni-hamburg.de/
+
+## Installation
+This UnPaSt can be installed using `pip./poster/DESMOND2.png`, `poetry`, run using `Docker`, or as a script (see examples section). Follow the appropriate instructions below for your preferred method.
+You need to have R (for WGCNA, it is suggested to use v.1.70-3) and **Python 3.8-3.10** installed. The main reason why Python 3.11 is not supported is because Scikit-network does not support it now.
+
+**Using different Python versions, even with the same libraries versions, leads to slightly different computational results.**
+
+1. Using pip: \
+To install the project using `pip`, first make sure you have `pip` installed on your system. If you haven't installed it already, you can find the installation instructions [here](https://pip.pypa.io/en/stable/installation/). \
+Once `pip` is installed, you can install the project by running the following command:
+```bash
+pip install unpast
+```
+Run it:
+```bash
+run_unpast -h
+```
+**Dependencies**. To use this package, you will need to have R and the [WGCNA library](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/) installed. You can easily install these dependencies by running the following command after installing unpast:
+```bash
+python -m unpast.install_r_dependencies
+
+# or you can install it directly
+R -e "install.packages('BiocManager'); BiocManager::install('WGCNA')"
+```
+2. Installation using Poetry: \
+To install the package using Poetry, first make sure you have Poetry installed, clone the repo and then run:
+```bash
+poetry add unpast
+```
+Run it:
+```bash
+poetry run run_unpast -h
+```
+**Dependencies**. To use this package, you will need to have R and the [WGCNA library](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/) installed. You can easily install these dependencies by running the following command after installing unpast:
+```bash
+poetry run python -m unpast.install_r_dependencies
+
+# or you can install it directly
+R -e "install.packages('BiocManager'); BiocManager::install('WGCNA')"
+```
+3. Running with Docker: \
+You can also run the package using Docker. First, pull the Docker image:
+```bash
+docker pull freddsle/unpast:latest
+```
+Next, run the container:
+```bash
+docker run -v /your/data/path/:/user_data/ freddsle/unpast:latest --exprs /user_data/exprs.tsv --out_dir /user_data/out_dir/
+```
+
+## Examples
+* UnPaSt requires a tab-separated file with standardized expressions of genes (or transcripts) in rows, and samples in columns. Gene and sample names must be unique. 
+* A subset of 200 randomly chosen samples from TCGA-BRCA and UnPaSt output:
+[test data](https://unpast-backend.zbh.uni-hamburg.de/download_example)
+
+<pre>
+# running UnPaSt with default parameters and example data
+python ./unpast/run_unpast.py --exprs TCGA_200.exprs_z.tsv --basename TCGA_200_results
+
+# with different binarization and clustering methods
+python ./unpast/run_unpast.py --exprs TCGA_200.exprs_z.tsv --basename results --binarization ward --clustering WGCNA
+
+# help
+python ./unpast/run_unpast.py -h
+</pre>
+
+## Outputs
+* \<basename\>.bin=[GMM|Jenks],clust=[Louvain|WGCNA|DESMOND].biclusters.tsv - a .tsv table with found biclsuters, where 
+    - avgSNR is average SNR over all genes in the biclusters
+    - columns "n_genes" and "n_samples" provide the numbers of genes and samples, respectively 
+    - "gene","sample" contain gene and sample names respectively
+    - "gene_indexes" and  "sample_indexes" - 0-based gene and sample indexes in the input matrix.
+* binarized expressions, background distributions of SNR for each bicluster size and binarization statistics [if clustering is WGCNA,  or  '--save_binary' flag is added]
+* modules found by WGCNA [if clustering is WGCNA]
+
+# About 
+UnPaSt is an unconstrained version of DESMOND method ([repository](https://github.com/ozolotareva/DESMOND), [publication](https://academic.oup.com/bioinformatics/article/37/12/1691/6039116?login=true))
+
+Major modifications:
+ * it does not require the network of gene interactions 
+ * UnPaSt clusters individual genes instead of gene pairs
+ * uses Gaussian mixture models or Jenks method for binarization of individual gene expressions
+ * SNR threshold is authomatically determined; it depends on bicluster size in samples and user-defined p-value cutoff
+ 
+## License
+Free for non-for-profit use. For commercial use please contact the developers. 
+
+### Poster CDCS workshop'22
+![./poster/DESMOND2_poster_v5.png](https://github.com/ozolotareva/DESMOND2/blob/a26d8d7b2075d47a4edc8fc9ce7eca72a2dac7db/poster/DESMOND2_poster_v5.png?raw=true)
+### Poster ISMB and MCCMB'21
+![./poster/DESMOND2.pdf](https://github.com/ozolotareva/DESMOND2/blob/a26d8d7b2075d47a4edc8fc9ce7eca72a2dac7db/poster/DESMOND2.png?raw=true)
