@@ -1,0 +1,17 @@
+version: 3
+
+images:
+  base_image:
+    name: quay.io/centos/centos:stream9
+
+build_arg_defaults:
+  PKGMGR_PRESERVE_CACHE: always
+
+dependencies:
+  python_interpreter:
+    python_path: /usr/bin/python3.9
+    package_system: python3.9
+  system: bindep.txt
+
+options:
+  skip_ansible_check: yes
