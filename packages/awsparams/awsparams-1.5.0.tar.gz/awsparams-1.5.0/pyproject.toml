@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "awsparams"
+version = "1.5.0"
+description = "A simple CLI and Library for adding/removing/renaming/copying AWS Param Store Parameters"
+authors = ["Nate Peterson <ndpete@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/byu-oit/awsparams"
+repository = "https://github.com/byu-oit/awsparams"
+
+[tool.poetry.dependencies]
+python = ">=3.6,<4"
+boto3 = "^1.17.56"
+click = "^7.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.3"
+sphinx = "^2.2"
+sphinx-autobuild = "^0.7.1"
+moto = "^2.0.5"
+
+[tool.poetry.scripts]
+awsparams = 'awsparams.cli:main'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
