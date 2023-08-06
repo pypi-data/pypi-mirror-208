@@ -1,0 +1,3726 @@
+{
+    "types": [
+        {
+            "name": "Form",
+            "base": "Item",
+            "attributes": {
+                "icon": "ballot",
+                "form": "true",
+                "method": "post",
+                "types": ["Ctrl"],
+                "query": {"types": ["Ctrl"], "my_items": "true"},
+                "views": [
+                    {
+                        "name": "Controls",
+                        "type": "ListView"
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "ListView",
+                        "attributes": {
+                            "hidden": "true",
+                            "source": "attributes",
+                            "internal": "true",
+                            "columns": [
+                                {
+                                    "name": "Value",
+                                    "type": "Column",
+                                    "attributes": {
+                                        "target": "value",
+                                        "namespace": "attributes"
+                                    }
+                                }
+                            ],
+                            "menu": [
+                                {
+                                    "name": "Add Attribute",
+                                    "type": "MenuItem",
+                                    "attributes": {
+                                        "icon": "add",
+                                        "form": "AttributeCreateForm"
+                                    }
+                                },
+                                {
+                                    "name": "Add View",
+                                    "type": "MenuItem",
+                                    "attributes": {
+                                        "icon": "add_box",
+                                        "form": "ViewCreateForm"
+                                    }
+                                },
+                                {
+                                    "name": "Delete",
+                                    "type": "MenuItem",
+                                    "attributes": {
+                                        "icon": "delete",
+                                        "form": "DeleteForm"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "menu": [
+                    {
+                        "name": "Add Control",
+                        "type": "MenuItem",
+                        "attributes": {
+                            "icon": "add",
+                            "form": "CtrlCreateForm"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "DeleteForm",
+            "base": "Form",
+            "attributes": {
+                "delete": "true",
+                "title_prefix": "Delete",
+                "submit_text": "Delete",
+                "text": "If you are sure that you want to do this, click 'Delete'",
+                "_method": "delete",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "CreateForm",
+            "base": "Form",
+            "attributes": {
+                "add": "true",
+                "title_prefix": "Create",
+                "submit_text": "Create"
+            }
+        },
+        {
+            "name": "EditForm",
+            "base": "Form",
+            "attributes": {
+                "edit": "true",
+                "title_prefix": "Edit",
+                "submit_text": "Save",
+                "_method": "put",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "UploadForm",
+            "base": "Form",
+            "attributes": {
+                "upload": "true",
+                "title_prefix": "Upload",
+                "submit_text": "Upload",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "TypeUploadForm",
+            "base": "Form",
+            "attributes": {
+                "upload": "true",
+                "title_prefix": "Upload",
+                "submit_text": "Upload",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Target",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "target",
+                            "value": "type"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "CtrlCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Ctrl",
+                "path": "ctrls",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "types": ["Ctrl"]
+                        }
+                    },
+                    {
+                        "name": "Target",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "target"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FormCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Form",
+                "path": "forms",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "typenames": ["CreateForm", "EditForm", "DeleteForm"]
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ResourceCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Resource",
+                "path": "resources",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ResourceEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Resource",
+                "path": "resources",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FuncCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Func",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FileCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "File",
+                "upload": "true",
+                "path": "files",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ItemCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Item",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type"
+                        }
+                    },
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "TopItemCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Item",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "DuplicateItemForm",
+            "base": "CreateForm",
+            "attributes": {
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "Duplicate"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ItemCreateTypeForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Type",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "Type"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ItemEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Item",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AppCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "App",
+                "path": "apps",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Endpoint",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "endpoint"
+                        }
+                    },
+                    {
+                        "name": "Resource",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "resource"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "App"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AppEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "App",
+                "path": "apps",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Types",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "types",
+                            "multiple": "true"
+                        }
+                    },
+                    {
+                        "name": "Query",
+                        "type": "QueryCtrl",
+                        "attributes": {
+                            "target": "query"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "TypeCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "path": "types",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Resource",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "resource"
+                        }
+                    },
+                    {
+                        "name": "Base",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "base",
+                            "types": ["Type"]
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "TypeEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "path": "types",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Resource",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "resource"
+                        }
+                    },
+                    {
+                        "name": "Base",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "base",
+                            "types": ["Type"]
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "EndpointCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Endpoint",
+                "path": "endpoints",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "Endpoint"
+                        }
+                    },
+                    {
+                        "name": "resource",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "resource"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "EndpointEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Endpoint",
+                "path": "endpoints",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "Endpoint"
+                        }
+                    },
+                    {
+                        "name": "resource",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "resource"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FormCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Form",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "GroupCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Group",
+                "path": "groups",
+                "title_prefix": "Create Group", 
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "GroupDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "Group",
+                "path": "groups",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "RoleCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Role",
+                "path": "roles",
+                "title_prefix": "Create Role", 
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "RoleDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "Role",
+                "path": "roles",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "RoleAppCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "RoleApp",
+                "path": "roles",
+                "title_prefix": "Add Role App", 
+                "controls": [
+                    {
+                        "name": "RoleId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "App",
+                        "type": "ItemSelectCtrl",
+                        "attributes": {
+                            "target": "app_id",
+                            "query": {
+                                "types": ["App"],
+                                "any_level": "true"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "RoleAppDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "RoleApp",
+                "path": "roles",
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AccountCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Account",
+                "path": "accounts",
+                "title_prefix": "Create Account", 
+                "controls": [
+                    {
+                        "name": "Username",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "username"
+                        }
+                    },
+                    {
+                        "name": "Email",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "email"
+                        }
+                    },
+                    {
+                        "name": "Password",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "password",
+                            "password": "true"
+                        }
+                    },
+                    {
+                        "name": "Repeat Password",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "repeat_password",
+                            "password": "true"
+                        }
+                    },
+                    {
+                        "name": "Account Type",
+                        "type": "SelectCtrl",
+                        "attributes": {
+                            "target": "account_type",
+                            "options": ["person", "thing"]
+                        }
+                    },
+                    {
+                        "name": "Org Role",
+                        "type": "SelectCtrl",
+                        "attributes": {
+                            "target": "org_role",
+                            "options": ["superuser", "admin", "user", "visitor"]
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AccountDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "Account",
+                "path": "accounts",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AccountRoleCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "AccountRole",
+                "path": "accounts",
+                "title_prefix": "Add Account Role", 
+                "controls": [
+                    {
+                        "name": "AccountId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Role",
+                        "type": "ItemSelectCtrl",
+                        "attributes": {
+                            "target": "role_id",
+                            "query": {
+                                "types": ["Role"],
+                                "any_level": "true"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AccountRoleDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "AccountRole",
+                "path": "accounts",
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AccountGroupCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "AccountGroup",
+                "path": "accounts",
+                "title_prefix": "Add Account Group", 
+                "controls": [
+                    {
+                        "name": "AccountId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Group",
+                        "type": "ItemSelectCtrl",
+                        "attributes": {
+                            "target": "group_id",
+                            "query": {
+                                "types": ["Group"],
+                                "any_level": "true"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AccountGroupDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "AccountRole",
+                "path": "accounts",
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AuthCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Auth",
+                "path": "auths",
+                "title_prefix": "Create Auth", 
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "API base url",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "api_base_url"
+                        }
+                    },
+                    {
+                        "name": "Request token url",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "request_token_url"
+                        }
+                    },
+                    {
+                        "name": "Access token url",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "access_token_url"
+                        }
+                    },
+                    {
+                        "name": "Authorize url",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "authorize_url"
+                        }
+                    },
+                    {
+                        "name": "Client kwargs",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "client_kwargs"
+                        }
+                    },
+                    {
+                        "name": "Client ID",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "client_id"
+                        }
+                    },
+                    {
+                        "name": "Client Secret",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "client_secret"
+                        }
+                    },
+                    {
+                        "name": "UserInfo Endpoint",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "userinfo_endpoint"
+                        }
+                    },
+                    {
+                        "name": "Server Metadata URL",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "server_metadata_url"
+                        }
+                    },
+                    {
+                        "name": "Redirect url",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "redirect_url"
+                        }
+                    },
+                    {
+                        "name": "Scope",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "scope"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AuthDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "Auth",
+                "path": "auths",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ClientCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Client",
+                "path": "clients",
+                "title_prefix": "Create Client", 
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Uri",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "uri"
+                        }
+                    },
+                    {
+                        "name": "Scope",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "scope"
+                        }
+                    },
+                    {
+                        "name": "Authentication method",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "auth_method"
+                        }
+                    },
+                    {
+                        "name": "Grant types",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "grant_types"
+                        }
+                    },
+                    {
+                        "name": "Redirect uris",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "redirect_uris"
+                        }
+                    },
+                    {
+                        "name": "Response types",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "response_types"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ClientDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "Client",
+                "path": "clients",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "InstanceCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Instance",
+                "path": "types",
+                "title_prefix": "Add Instance", 
+                "controls": [
+                    {
+                        "name": "ParentTypeId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "types": ["Type"]
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "InstanceEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Instance",
+                "path": "types",
+                "title_prefix": "Edit", 
+                "controls": [
+                    {
+                        "name": "ParentTypeId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "types": ["Type"]
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AttributeCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "Attribute",
+                "path": "items",
+                "title_prefix": "Add Attribute", 
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "Attribute"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Value",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "value"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AttributeEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Attribute",
+                "path": "items",
+                "title_prefix": "Edit", 
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "Attribute"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Value",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "value"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AttributeDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "Attribute",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "MenuItemCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "MenuItem",
+                "path": "items",
+                "title_prefix": "Add MenuItem", 
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "MenuItem"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Form",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "form",
+                            "types": ["Form"]
+
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "MenuItemEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Attribute",
+                "path": "items",
+                "title_prefix": "Edit", 
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "MenuItem"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Form",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "form",
+                            "types": ["Form"]
+
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "MenuItemDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "MenuItem",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FormItemCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "MenuItem",
+                "path": "items",
+                "title_prefix": "Add MenuItem", 
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "FormItem"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Form",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "form",
+                            "types": ["Form"]
+
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FormItemEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Attribute",
+                "path": "items",
+                "title_prefix": "Edit", 
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "value": "FormItem"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Path",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "path"
+                        }
+                    },
+                    {
+                        "name": "Form",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "form",
+                            "types": ["Form"]
+
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FormItemDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "MenuItem",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "ParentId",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ViewCreateForm",
+            "base": "CreateForm",
+            "attributes": {
+                "type": "View",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "types": ["View"]
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Create",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ViewDeleteForm",
+            "base": "DeleteForm",
+            "attributes": {
+                "type": "View",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "id"
+                        }
+                    },
+                    {
+                        "name": "Name",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "name",
+                            "source": "view"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Delete",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ViewEditForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "View",
+                "path": "views",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "name",
+                            "source": "view"
+                        }
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "type",
+                            "types": ["View"],
+                            "source": "view"
+                        }
+                    },
+                    {
+                        "name": "Id",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "parent_id"
+                        }
+                    },
+                    {
+                        "name": "Method",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "_method",
+                            "source": "form"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "SettingsForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Item",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Name",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "name"
+                        }
+                    },
+                    {
+                        "name": "Icon",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "icon"
+                        }
+                    },
+                    {
+                        "name": "Types",
+                        "type": "TypeSelectCtrl",
+                        "attributes": {
+                            "target": "types",
+                            "multiple": "true"
+                        }
+                    },
+                    {
+                        "name": "Tags",
+                        "type": "TagsCtrl",
+                        "attributes": {
+                            "target": "tags",
+                            "multiple": "true"
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "LoginForm",
+            "base": "Form",
+            "attributes": {
+                "type": "Login",
+                "path": "login",
+                "controls": [
+                    {
+                        "name": "Username",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "username"
+                        }
+                    },
+                    {
+                        "name": "Password",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "password",
+                            "password": "true"
+                        }
+                    },
+                    {
+                        "name": "Response Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "response_type",
+                            "value": "token"
+                        }
+                    },
+                    {
+                        "name": "Grant Type",
+                        "type": "HiddenCtrl",
+                        "attributes": {
+                            "target": "grant_type",
+                            "value": "password"
+                        }
+                    },
+                    {
+                        "name": "Login",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Login",
+                            "order": "9"
+                        }
+                        
+                    }
+                ],
+                "views": [],
+                "menu": []
+            }
+        },
+        {
+            "name": "RegisterForm",
+            "base": "Form",
+            "attributes": {
+                "path": "register",
+                "controls": [
+                    {
+                        "name": "Username",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "username"
+                        }
+                    },
+                    {
+                        "name": "Email",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "email"
+                        }
+                    },
+                    {
+                        "name": "Password",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "password",
+                            "password": "true"
+                        }
+                    },
+                    {
+                        "name": "Repeat Password",
+                        "type": "EditCtrl",
+                        "attributes": {
+                            "target": "repeat_password",
+                            "password": "true"
+                        }
+                    },
+                    {
+                        "name": "Register",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Register",
+                            "order": "9"
+                        }
+                        
+                    }
+                ],
+                "views": [],
+                "menu": []
+            }
+        },
+        {
+            "name": "QueryForm",
+            "base": "EditForm",
+            "attributes": {
+                "type": "Query",
+                "path": "items",
+                "controls": [
+                    {
+                        "name": "Query",
+                        "type": "StepsCtrl",
+                        "attributes": {
+                            "controls": [
+                                {
+                                    "name": "General",
+                                    "type": "StepCtrl",
+                                    "attributes": {
+                                        "controls": [
+                                            {
+                                                "name": "View",
+                                                "type": "HiddenCtrl",
+                                                "attributes": {
+                                                    "target": "view",
+                                                    "source": "view"
+                                                }
+                                            },
+                                            {
+                                                "name": "Name",
+                                                "type": "EditCtrl",
+                                                "attributes": {
+                                                    "target": "name",
+                                                    "namespace": "query"
+                                                }
+                                            },
+                                            {
+                                                "name": "Id",
+                                                "type": "HiddenCtrl",
+                                                "attributes": {
+                                                    "target": "parent_id"
+                                                }
+                                            },
+                                            {
+                                                "name": "Type",
+                                                "type": "HiddenCtrl",
+                                                "attributes": {
+                                                    "target": "type",
+                                                    "value": "Query"
+                                                }
+                                            },
+                                            {
+                                                "name": "Types",
+                                                "type": "TypeSelectCtrl",
+                                                "attributes": {
+                                                    "target": "types",
+                                                    "multiple": "true",
+                                                    "namespace": "query"
+                                                }
+                                            },
+                                            {
+                                                "name": "Tags",
+                                                "type": "TagsCtrl",
+                                                "attributes": {
+                                                    "target": "tags",
+                                                    "multiple": "true",
+                                                    "namespace": "query"
+                                                }
+                                            },
+                                            {
+                                                "name": "Children",
+                                                "type": "CheckboxCtrl",
+                                                "attributes": {
+                                                    "target": "children",
+                                                    "namespace": "query"
+                                                }
+                                            },
+                                            {
+                                                "name": "Any level",
+                                                "type": "CheckboxCtrl",
+                                                "attributes": {
+                                                    "target": "any_level",
+                                                    "namespace": "query"
+                                                }
+                                            }
+                            
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "Time",
+                                    "type": "StepCtrl",
+                                    "attributes": {
+                                        "controls": [
+                                            {
+                                                "name": "Start",
+                                                "type": "DateCtrl",
+                                                "attributes": {
+                                                    "target": "valid_from",
+                                                    "field_name": "valid_from",
+                                                    "order": "1",
+                                                    "namespace": "query"
+                                                }
+                                            },
+                                            {
+                                                "name": "End",
+                                                "type": "DateCtrl",
+                                                "attributes": {
+                                                    "target": "valid_to",
+                                                    "field_name": "valid_to",
+                                                    "order": "2",
+                                                    "namespace": "query"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "Location",
+                                    "type": "StepCtrl",
+                                    "attributes": {
+                                        "controls": [
+                                            {
+                                                "name": "Location",
+                                                "type": "LocationCtrl",
+                                                "attributes": {
+                                                    "target": "location",
+                                                    "namespace": "query"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Cancel",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "close": "true",
+                            "order": "8",
+                            "is_cancel_button": "true"
+                        }
+                    },
+                    {
+                        "name": "Save",
+                        "type": "ButtonCtrl",
+                        "attributes": {
+                            "default": "true",
+                            "close": "true",
+                            "command": "Save",
+                            "order": "9"
+                        }
+                        
+                    }
+                ]
+            }
+        },
+        {
+            "name": "SharingForm",
+            "base": "Form"
+        },
+        {
+            "name": "CodeForm",
+            "base": "EditForm",
+            "attributes": {
+                "controls": [
+                    {
+                        "name": "Code",
+                        "type": "CodeView",
+                        "attributes": {
+                            "target": "code"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "name": "CtrlCreateForm",
+            "type": "CtrlCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "FormCreateForm",
+            "type": "FormCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "FileCreateForm",
+            "type": "FileCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "EndpointCreateForm",
+            "type": "EndpointCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "EndpointEditForm",
+            "type": "EndpointEditForm",
+            "public": "true"
+        },
+        {
+            "name": "ResourceCreateForm",
+            "type": "ResourceCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "ResourceEditForm",
+            "type": "ResourceEditForm",
+            "public": "true"
+        },
+        {
+            "name": "FuncCreateForm",
+            "type": "FuncCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AppCreateForm",
+            "type": "AppCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AppEditForm",
+            "type": "AppEditForm",
+            "public": "true"
+        },
+        {
+            "name": "ItemCreateForm",
+            "type": "ItemCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "ItemCreateTypeForm",
+            "type": "ItemCreateTypeForm",
+            "public": "true"
+        },
+        {
+            "name": "TopItemCreateForm",
+            "type": "TopItemCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "DuplicateItemForm",
+            "type": "DuplicateItemForm",
+            "public": "true"
+        },
+        {
+            "name": "ItemEditForm",
+            "type": "ItemEditForm",
+            "public": "true"
+        },
+        {
+            "name": "TypeViewCreateForm",
+            "type": "TypeViewCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "ViewCreateForm",
+            "type": "ViewCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "ViewEditForm",
+            "type": "ViewEditForm",
+            "public": "true"
+        },
+        {
+            "name": "TypeViewEditForm",
+            "type": "TypeViewEditForm",
+            "public": "true"
+        },
+        {
+            "name": "ViewDeleteForm",
+            "type": "ViewDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "TypeViewDeleteForm",
+            "type": "TypeViewDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "DeleteForm",
+            "type": "DeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "TypeCreateForm",
+            "type": "TypeCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "TypeEditForm",
+            "type": "TypeEditForm",
+            "public": "true"
+        },
+        {
+            "name": "InstanceCreateForm",
+            "type": "InstanceCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "InstanceEditForm",
+            "type": "InstanceEditForm",
+            "public": "true"
+        },
+        {
+            "name": "AttributeCreateForm",
+            "type": "AttributeCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AttributeEditForm",
+            "type": "AttributeEditForm",
+            "public": "true"
+        },
+        {
+            "name": "AttributeDeleteForm",
+            "type": "AttributeDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "MenuItemCreateForm",
+            "type": "MenuItemCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "MenuItemEditForm",
+            "type": "MenuItemEditForm",
+            "public": "true"
+        },
+        {
+            "name": "MenuItemDeleteForm",
+            "type": "MenuItemDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "FormItemCreateForm",
+            "type": "FormItemCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "FormItemEditForm",
+            "type": "FormItemEditForm",
+            "public": "true"
+        },
+        {
+            "name": "FormItemDeleteForm",
+            "type": "FormItemDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "RoleCreateForm",
+            "type": "RoleCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "RoleDeleteForm",
+            "type": "RoleDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "GroupCreateForm",
+            "type": "GroupCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "GroupDeleteForm",
+            "type": "GroupDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "AuthCreateForm",
+            "type": "AuthCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AuthDeleteForm",
+            "type": "AuthDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "ClientCreateForm",
+            "type": "ClientCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "ClientDeleteForm",
+            "type": "ClientDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountGroupCreateForm",
+            "type": "AccountGroupCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountGroupDeleteForm",
+            "type": "AccountGroupDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountCreateForm",
+            "type": "AccountCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountDeleteForm",
+            "type": "AccountDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountRoleCreateForm",
+            "type": "AccountRoleCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountRoleDeleteForm",
+            "type": "AccountRoleDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountGroupCreateForm",
+            "type": "AccountGroupCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "AccountGroupDeleteForm",
+            "type": "AccountGroupDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "RoleAppCreateForm",
+            "type": "RoleAppCreateForm",
+            "public": "true"
+        },
+        {
+            "name": "RoleAppDeleteForm",
+            "type": "RoleAppDeleteForm",
+            "public": "true"
+        },
+        {
+            "name": "SettingsForm",
+            "type": "SettingsForm",
+            "public": "true"
+        },
+        {
+            "name": "CodeForm",
+            "type": "CodeForm",
+            "public": "true"
+        },
+        {
+            "name": "QueryForm",
+            "type": "QueryForm",
+            "public": "true"
+        },
+        {
+            "name": "ViewQueryForm",
+            "type": "ViewQueryForm",
+            "public": "true"
+        },
+        {
+            "name": "SharingForm",
+            "type": "SharingForm",
+            "public": "true"
+        },
+        {
+            "name": "UploadForm",
+            "type": "UploadForm",
+            "public": "true"
+        },
+        {
+            "name": "TypeUploadForm",
+            "type": "TypeUploadForm",
+            "public": "true"
+        },
+        {
+            "name": "LoginForm",
+            "type": "LoginForm",
+            "public": "true",
+            "attributes": {
+                "client_id": "IEmf5XYQJXIHvWcQtZ5FXbLM",
+                "client_secret": "lDnD0E2aXlwvzuN38xLucBSB6EC4Qe4sIzOkyWywHxiDXYyf"
+            }
+        },
+        {
+            "name": "RegisterForm",
+            "type": "RegisterForm",
+            "public": "true"
+        }
+    ]
+}
