@@ -1,0 +1,130 @@
+Metadata-Version: 2.1
+Name: movia
+Version: 1.0.0b4
+Summary: video editing softwear
+Home-page: https://framagit.org/robinechuca/movia/-/blob/main/README.md
+Author: Robin RICHARD (robinechuca)
+Author-email: serveurpython.oz@gmail.com
+Project-URL: Source Repository, https://framagit.org/robinechuca/movia/
+Keywords: video,editing,ffmpeg,graphical
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Environment :: X11 Applications :: Qt
+Classifier: Intended Audience :: Customer Service
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Multimedia
+Classifier: Topic :: Multimedia :: Graphics :: Editors
+Classifier: Topic :: Multimedia :: Graphics :: Graphics Conversion
+Classifier: Topic :: Multimedia :: Sound/Audio
+Classifier: Topic :: Multimedia :: Sound/Audio :: Analysis
+Classifier: Topic :: Multimedia :: Sound/Audio :: Conversion
+Classifier: Topic :: Multimedia :: Sound/Audio :: Mixers
+Classifier: Topic :: Multimedia :: Sound/Audio :: Players
+Classifier: Topic :: Multimedia :: Video
+Classifier: Topic :: Multimedia :: Video :: Conversion
+Classifier: Topic :: Multimedia :: Video :: Display
+Classifier: Topic :: Multimedia :: Video :: Non-Linear Editor
+Classifier: Topic :: Scientific/Engineering :: Image Processing
+Requires-Python: >=3.9,<3.12
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: av
+Requires-Dist: click
+Requires-Dist: networkx
+Requires-Dist: numpy (>=1.22)
+Requires-Dist: opencv-contrib-python-headless
+Requires-Dist: sympy
+Requires-Dist: torch (>=1.8)
+Requires-Dist: tqdm
+Requires-Dist: unidecode
+Provides-Extra: gui
+Requires-Dist: black ; extra == 'gui'
+Requires-Dist: pdoc3 ; extra == 'gui'
+Requires-Dist: pygraphviz ; extra == 'gui'
+Requires-Dist: pyqt6 ; extra == 'gui'
+Provides-Extra: optional
+Requires-Dist: black ; extra == 'optional'
+Requires-Dist: pdoc3 ; extra == 'optional'
+Requires-Dist: pygraphviz ; extra == 'optional'
+Requires-Dist: pylint ; extra == 'optional'
+Requires-Dist: pyqt6 ; extra == 'optional'
+Requires-Dist: pytest ; extra == 'optional'
+
+.. rst syntax: https://deusyss.developpez.com/tutoriels/Python/SphinxDoc/
+.. icons: https://specifications.freedesktop.org/icon-naming-spec/latest/ar01s04.html or https://www.pythonguis.com/faq/built-in-qicons-pyqt/
+.. pyqtdoc: https://www.riverbankcomputing.com/static/Docs/PyQt6/
+
+*****
+Movia
+*****
+
+.. image:: https://github.com/pytest-dev/pytest/workflows/test/badge.svg
+    :target: https://github.com/pytest-dev/pytest/actions?query=workflow%3Atest
+
+.. image:: https://img.shields.io/badge/linting-pylint-yellowgreen
+    :target: https://github.com/PyCQA/pylint
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+
+
+Decsription
+-----------
+
+This software proposes a graphic interface powered by pyqt6 (run ``movia-qt``).
+The kernel is written in python and is easily integrated in other projects (module ``movia.core``).
+
+This software is **light**, **fast** and **highly configurable** for the following reasons:
+
+1. Based on ffmpeg, this software supports an incredible number of formats and codecs.
+2. Thanks to operations on the assembly graph, it is able to perform nbr_opti optimization operations.
+3. nbr_tests unit tests ensure an excelent kernel reliability.
+4. Unlike other software that offers a timeline, this one allows you to edit an editing graph. This representation is more general and thus allows a greater flexibility.
+5. A compiled version without graphical interface allows to allocate all the resources of the computer to the export.
+6. This software generates at the time of the export a python code which can be edited. This offers an infinite number of possibilities!
+
+
+Installation
+------------
+
+Movia has hard dependency on the pygraphviz library and on the ffmpeg package (version >= 4). You should install it first, please refer to the `pygraphviz installation guide <https://pygraphviz.github.io/documentation/stable/install.html>`_ and according to your Linux distribution, to the `FFmpeg download page <https://ffmpeg.org/download.html>`_.
+
+In many cases, these commands should work:
+
+.. code:: bash
+
+    $ sudo apt install ffmpeg
+    $ sudo apt install graphviz graphviz-dev
+
+Although it is installed automatically, it is better to install **av** manually to avoid redundancy. Please refer to the `PyAv installation guide <https://pyav.org/docs/develop/overview/installation.html>`_.
+
+In many cases, these commands should work:
+
+.. code:: bash
+
+    $ sudo apt install libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libswresample-dev libavfilter-dev
+    $ pip install av --no-binary av
+
+To install Movia using `PyPI <https://pypi.org/project/movia/>`_, run the following command:
+
+.. code:: bash
+
+    $ pip install movia[gui]
+
+To install Movia from `Framagit <https://framagit.org/robinechuca/movia>`_ source, clone Movia using ``git`` and install it using ``pip``.:
+
+.. code:: bash
+
+    git clone https://framagit.org/robinechuca/movia.git
+    cd movia/
+    pip install -e ./[optional]
+
+In a terminal, simply write the command ``movia-qt`` to launch the GUI and the command ``movia-test`` for launch the test banchmark.
+
+
+What's new ?
+------------
+
+For the complete list of changes, refer to the `git commits <https://framagit.org/robinechuca/movia/-/network/main?ref_type=heads>`_.
