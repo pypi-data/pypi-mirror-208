@@ -1,0 +1,6 @@
+__app_name__ = "LinkChecker-GUI"
+__version__ = "10.0.0b1"
+__release_date__ = "2023-05-15"
+__copyright_year__ = "2023"
+__author__ = "LinkChecker Authors"
+__url__ = "https://github.com/linkchecker/linkchecker-gui"
