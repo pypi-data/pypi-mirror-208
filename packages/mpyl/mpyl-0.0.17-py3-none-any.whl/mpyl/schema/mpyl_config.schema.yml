@@ -1,0 +1,289 @@
+"$schema": http://json-schema.org/draft-07/schema#
+"$ref": "#/definitions/Config"
+definitions:
+  Config:
+    type: object
+    additionalProperties: false
+    properties:
+      cvs:
+        "$ref": "#/definitions/CVS"
+      docker:
+        "$ref": "#/definitions/Docker"
+      whiteLists:
+        "$ref": "#/definitions/Whitelists"
+      kubernetes:
+        "$ref": "#/definitions/Kubernetes"
+      project:
+        "$ref": "#/definitions/Project"
+      jenkins:
+        "$ref": "#/definitions/Jenkins"
+      sbt:
+        "$ref": "#/definitions/Sbt"
+      slack:
+        "$ref": "#/definitions/Slack"
+      jira:
+        "$ref": "#/definitions/Jira"
+    required:
+      - cvs
+      - docker
+    title: MPyL global configuration
+  Whitelists:
+    type: object
+    required:
+      - default
+      - addresses
+    properties:
+      default:
+        description: "Default whitelist for all environments"
+        type: array
+        items:
+          minItems: 1
+          type: string
+      addresses:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - name
+            - values
+          properties:
+            name:
+              type: string
+            values:
+              type: array
+              items:
+                minItems: 1
+                type: string
+
+  Kubernetes:
+    type: object
+    additionalProperties: false
+    properties:
+      rancher:
+        type: object
+        additionalProperties: false
+        properties:
+          cluster:
+            "$ref": "#/definitions/RancherClusters"
+  RancherClusters:
+    type: object
+    additionalProperties: false
+    properties:
+      test:
+        "$ref": "#/definitions/RancherCluster"
+      acceptance:
+        "$ref": "#/definitions/RancherCluster"
+      production:
+        "$ref": "#/definitions/RancherCluster"
+  RancherCluster:
+    type: object
+    additionalProperties: false
+    properties:
+      clusterId:
+        type: string
+      projectId:
+        type: string
+      clusterEnv:
+        type: string
+      context:
+        type: string
+    required: [ clusterId, projectId, clusterEnv, context ]
+  CVS:
+    type: object
+    additionalProperties: false
+    properties:
+      git:
+        "$ref": "#/definitions/Git"
+      github:
+        "$ref": "#/definitions/Github"
+    required:
+      - git
+      - github
+    title: CVS
+  Git:
+    type: object
+    additionalProperties: false
+    properties:
+      mainBranch:
+        type: string
+    required:
+      - mainBranch
+    title: Git
+  Github:
+    type: object
+    additionalProperties: false
+    properties:
+      repository:
+        type: string
+      token:
+        type: [ string, null ]
+      app:
+        type: object
+        properties:
+          privateKeyPath:
+            description: Used to authenticate with github if the app is used (https://github.com/apps/mpyl-pipeline)
+            type: string
+          privateKeyBase64Encoded:
+            description: Used to authenticate with github if the app is used (https://github.com/apps/mpyl-pipeline)
+            type: [ string, null ]
+          appId:
+            description: The id of the github app (https://github.com/apps/mpyl-pipeline) that has permission to update checks
+            type: string
+            default: 295700
+        required:
+          - appId
+    required:
+      - repository
+    title: Github
+  Docker:
+    type: object
+    additionalProperties: false
+    properties:
+      registry:
+        "$ref": "#/definitions/Registry"
+      build:
+        "$ref": "#/definitions/Build"
+      compose:
+        type: object
+        properties:
+          periodSeconds:
+            description: "Polling interval for checking if containers are up"
+            type: integer
+            default: 2
+          failureThreshold:
+            description: "Maximum number of times to poll before considering 'docker-compose up' failed"
+            type: integer
+            default: 20
+        required: [ 'periodSeconds', 'failureThreshold' ]
+    required:
+      - registry
+    title: Docker
+  Build:
+    type: object
+    additionalProperties: false
+    properties:
+      rootFolder:
+        type: string
+      buildTarget:
+        description: "The target in the multi-stage docker file to build in the 'build' stage"
+        type: string
+      testTarget:
+        description: "The target in the multi-stage docker file to build in the 'test' stage"
+        type: string
+      dockerFileName:
+        type: string
+    required: [ rootFolder, buildTarget, dockerFileName ]
+  Registry:
+    type: object
+    additionalProperties: false
+    properties:
+      hostName:
+        type: [ string, null ]
+      userName:
+        type: string
+      password:
+        type: string
+    required:
+      - hostName
+      - password
+      - userName
+    title: Registry
+  Sbt:
+    type: object
+    additionalProperties: false
+    properties:
+      command:
+        type: string
+      clientCommand:
+        type: string
+      verbose:
+        default: false
+        type: boolean
+      testWithCoverage:
+        type: string
+      javaOpts:
+        type: string
+      sbtOpts:
+        type: string
+      clientMode:
+        type: object
+        additionalProperties: false
+        properties:
+          build:
+            type: boolean
+            default: true
+          test:
+            type: boolean
+            default: true
+    required:
+      - command
+      - clientCommand
+      - javaOpts
+      - sbtOpts
+    title: Sbt
+  Project:
+    type: object
+    additionalProperties: false
+    properties:
+      deployment:
+        type: object
+        additionalProperties: false
+        properties:
+          traefik:
+            "$ref": "project.schema.yml#/definitions/traefik"
+          kubernetes:
+            "$ref": "project.schema.yml#/definitions/kubernetes"
+  Slack:
+    type: object
+    additionalProperties: false
+    properties:
+      botToken:
+        type: [ string, null ]
+      icons:
+        type: object
+        properties:
+          building:
+            type: string
+          success:
+            type: string
+          failure:
+            type: string
+        required: [ 'success', 'failure', 'building' ]
+    required:
+      - botToken
+      - icons
+  Jenkins:
+    type: object
+    additionalProperties: false
+    required: [ 'url' ]
+    properties:
+      url:
+        type: [string]
+        format: url
+      pipelines:
+        type: object
+        additionalProperties: { "type": "string" }
+      defaultPipeline:
+        type: string
+  Jira:
+    type: object
+    additionalProperties: false
+    properties:
+      site:
+        description: "Only works with the cloud version of Jira"
+        type: [ string, null ]
+        format: uri
+      userName:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+      ticketPattern:
+        type: [ string, null ]
+        default: '[A-Za-z]{3,}-\\d+'
+        description: 'A pattern that extracts a ticket number from the branch name'
+    required:
+      - site
