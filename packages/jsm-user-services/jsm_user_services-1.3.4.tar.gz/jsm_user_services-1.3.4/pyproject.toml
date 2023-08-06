@@ -1,0 +1,73 @@
+[tool.poetry]
+name = "jsm-user-services"
+version = "1.3.4"
+description = "Middleware to intercept JWT auth token and more utils functions"
+authors = ["Juntos Somos Mais <labs@juntossomosmais.com.br>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "jsm_user_services"}]
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Framework :: Django :: 2.1",
+    "Environment :: Web Environment",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+PyJWT = "2.1.0"
+requests = "*"
+
+[tool.poetry.extras]
+flask = ["flask", "flask-log-request-id"]
+drf = ["djangorestframework", "request-id-django-log"]
+
+[tool.poetry.group.dev.dependencies]
+django = "*"
+PyJWT = "*"
+pluggy = "*"
+request-id-django-log = "*"
+djangorestframework = "*"
+flask = "*"
+flask-log-request-id = "*"
+
+pytest_django = "*"
+requests-mock = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+httpretty = "*"
+pre-commit = "v2.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+py36 = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+)/
+'''
