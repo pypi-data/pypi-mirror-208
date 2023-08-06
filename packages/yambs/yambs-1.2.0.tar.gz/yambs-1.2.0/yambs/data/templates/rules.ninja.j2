@@ -1,0 +1,37 @@
+include $include_dir/chips/$chip/chip.ninja
+include $include_dir/toolchains/$toolchain/toolchain.ninja
+
+cflags = $common_cflags -march=$architecture -mcpu=$cpu $
+         $board_extra_cflags $
+         $chip_extra_cflags $
+         $architecture_extra_cflags $
+         $toolchain_cflags
+
+{% if toolchain_prefix %}
+toolchain_prefix = {{toolchain_prefix}}
+{% else %}
+toolchain_prefix = {{toolchains_root}}/${toolchain}-
+{% endif %}
+
+tool = ${toolchain_prefix}{{cc}}
+
+rule cc
+  depfile = $out.d
+  deps = gcc
+  command = $tool -MD -MF $out.d $cflags -c $in -o $out
+
+ldflags = -T$include_dir/chips/$chip/chip.ld
+
+rule link
+  command = $tool $cflags $ldflags -Wl,-Map=$out.map $in -o $out
+
+rule bin
+  command = ${toolchain_prefix}objcopy -O binary $in $out
+
+rule hex
+  command = ${toolchain_prefix}objcopy -O ihex $in $out
+
+rule dump
+  command = ${toolchain_prefix}objdump -D $in > $out
+
+build_dir = {{build_root}}/$toolchain/$architecture/$cpu
