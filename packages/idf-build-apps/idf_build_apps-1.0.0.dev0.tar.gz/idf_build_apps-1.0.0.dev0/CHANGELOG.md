@@ -1,0 +1,158 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased - 1.0.0]
+
+## Added
+
+- Support keyword `depends_filepatterns` in the manfiest file
+
+## BREAKING CHANGES
+
+- Renames
+  - Members
+    - `App.requires_components` renamed to `App.depends_components`
+    - `FolderRule.requires_components` renamed to `FolderRule.depends_components`
+    - `Manifest.requires_components()` renamed to `Manifest.depends_components()`
+  - Parameters
+    - `App.build()` parameter `depends_on_components` renamed to `modified_components`
+    - `App.is_modified()` parameter `depends_on_components` renamed to `modified_components`
+    - `find_apps()`  parameter `depends_on_components` renamed to `modified_components`
+    - `find_apps()`  parameter `depends_on_files` renamed to `modified_files`
+    - `build_apps()`  parameter `depends_on_components` renamed to `modified_components`
+    - `build_apps()`  parameter `depends_on_files` renamed to `modified_files`
+  - CLI Options
+    - `--depends-on-components` renamed to `--modified-components`
+    - `--depends-on-files` renamed to `--modified-files`
+- Reorder Parameters
+  - `find_apps()`
+  - `build_apps()`
+
+## [0.6.1] (2023-05-10)
+
+### Fixed
+
+- Add missing dependency `pyyaml`. It's wrongly removed in 0.6.0.
+
+## [0.6.0] (2023-05-08) (yanked)
+
+### Added
+
+- Support configuration file with
+  - `tool.idf-build-apps` section under `pyproject.toml` file
+  - `.idf_build_apps.toml` file
+- Improve help message, include default value, config name, and config type
+- Improve help message, add DeprecationWarning to change the CLI call method from "specify multiple times" to "space-separated list" for the following CLI options. (will be removed in 1.0.0)
+  - `--exclude`
+  - `--config`
+  - `--manifest-file`
+  - `--ignore-warning-str`
+- Support placeholder `@p` for parallel index
+- Support expand placeholders for CLI options `--collect-app-info` and `--collect-size-info`
+- Support new keywords `CONFIG_NAME` in the manifest file
+
+### Fixed
+
+- Fix earlier python version pathlib does not support member function `expanduser` issue
+- Remove unused dependency `pyyaml`
+
+### Refactored
+
+- Move `utils.setup_logging()` to `log.setup_logging()`
+- Make CLI option `--default-build-targets` from comma-separated list to space-separated list (comma-separated list support will be removed in 1.0.0)
+
+## [0.5.2] (2023-04-07)
+
+### Fixed
+
+- Remove empty expanded sdkconfig files folder after build
+- Split up expanded sdkconfig files folder for different build
+
+## [0.5.1] (2023-04-06)
+
+### Fixed
+
+- Build with expanded sdkconfig file would respect the target-specific one under the original path
+
+## [0.5.0] (2023-03-29)
+
+### Added
+
+- Add an executable script `idf-build-apps`. Now this tool could be run via `idf-build-apps build ...` instead of `python -m idf_build_apps build ...`
+- Support specify `-DSDKCONFIG_DEFAULTS` for `idf.py build`
+  - via CLI option `--sdkconfig-defaults`
+  - via environment variable `SDKCONFIG_DEFAULTS`
+
+### Fixed
+
+- CLI option `-t`, `--target` is required, improve the error message
+
+## [0.4.1] (2023-03-15)
+
+### Fixed
+
+- Stop writing `app_info` and `size_info` if the build got skipped
+- `IDF_VERSION_MAJOR`, `IDF_VERSION_MINOR`, `IDF_VERSION_PATCH` now are integers
+- Skip exclude files while removing build directory if files not exist
+- Use log level `INFO` for ignored warnings
+- Can't use `and` in if clauses
+
+## [0.4.0] (2023-03-09)
+
+This is the last version to support ESP-IDF v4.1 since it's EOL on Feb. 24th, 2023.
+
+### Added
+
+- Support new keywords `IDF_VERSION_MAJOR`, `IDF_VERSION_MINOR`, `IDF_VERSION_PATCH` in the manifest file
+- Support colored output by default in UNIX-like systems
+  - Add `--no-color` CLI option
+- Support ignore check component dependencies based on changed files and specified file patterns
+  - Add `--ignore-component-dependencies-file-patterns` CLI option
+  - Add `--depends-on-files` CLI option
+
+### Fixed
+
+- Improve the readability of the generated logs
+
+## [0.3.2] (2023-03-08)
+
+### Fixed
+
+- `idf.py reconfigure` without setting `IDF_TARGET`
+- wrong log level on "Loading manifest file: ...". Set from `INFO` to `DEBUG`
+- wrong log level on "Building app \[ID\]: ...". Set from `DEBUG` to `INFO`
+
+## [0.3.1] (2023-02-20)
+
+### Fixed
+
+- Ralative path defined in the manifest files depend on the current work path
+
+  Added `manifest_rootpath` argument in `find_apps()`. Will use this value instead as the root folder for calculating absolute path
+
+## [0.3.0] (2023-01-10)
+
+### Added
+
+- `find_apps`, `build_apps` support `--depends-on-components`, will only find or build apps that require specified components
+- manifest file support `requires_components`
+
+### Fixed
+
+-  Wrong `App.verified_targets` when `CONFIG_IDF_TARGET` set in app's `sdkconfig.defaults` file
+
+## [0.2.1] (2022-09-02)
+
+### Fixed
+
+- Fix `--format json` incompatible issue for IDF branches earlier than 5.0
+- Fix type annotations incompatible issue for python versions earlier than 3.7
+- Fix f-string incompatible issue for python versions earlier than 3.7
+- Fix unpack dictionary ending comma syntax error for python 3.4
+
+## [0.2.0] (2022-08-31)
+
+### Added
+
+- Use `--format json` instead of `--json` with `idf_size.py`

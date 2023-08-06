@@ -1,0 +1,37 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [ '-f=lf' ]
+      - id: double-quote-string-fixer
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.4.2
+    hooks:
+      - id: insert-license
+        files: \.py$
+        args:
+          - --license-filepath
+          - license_header.txt        # defaults to: LICENSE.txt
+          - --use-current-year
+  - repo: https://github.com/pycqa/isort
+    rev: 5.11.5
+    hooks:
+      - id: isort
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4  # 6.x does not support type hint comment
+    hooks:
+      - id: flake8
+        # E1/W1 Indentation
+        # E2/W2 Whitespace
+        # E3/W3 Blank line
+        # E4/W4 Import
+        # E5/W5 Line Length
+        # E722 do not use bare 'except' (temporary workaround)
+        args: ['--ignore', 'E1,W1,E2,W2,E3,W3,E4,W4,E5,W5,E722']
