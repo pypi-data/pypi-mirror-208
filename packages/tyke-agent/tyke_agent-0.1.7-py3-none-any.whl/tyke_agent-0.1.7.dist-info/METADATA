@@ -1,0 +1,126 @@
+Metadata-Version: 2.1
+Name: tyke-agent
+Version: 0.1.7
+Summary: Tyke Python Agent
+Home-page: https://tyke.ai
+Author: TykeVision
+Author-email: tech@tyke.ai
+Project-URL: Bug Tracker, https://github.com/tykevision/python-agent/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: opentelemetry-api (==1.14.0)
+Requires-Dist: opentelemetry-exporter-otlp (==1.14.0)
+Requires-Dist: opentelemetry-exporter-zipkin (==1.14.0)
+Requires-Dist: opentelemetry-instrumentation (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-aiohttp-client (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-boto (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-botocore (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-wsgi (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-fastapi (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-flask (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-mysql (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-psycopg2 (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-requests (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-grpc (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-django (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-aws-lambda (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-pymongo (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-celery (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-asyncpg (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-asgi (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-aiopg (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-confluent-kafka (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-kafka-python (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-elasticsearch (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-httpx (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-pymysql (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-redis (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-remoulade (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-sklearn (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-sqlalchemy (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-urllib3 (==0.35b0)
+Requires-Dist: opentelemetry-instrumentation-urllib (==0.35b0)
+Requires-Dist: opentelemetry-propagator-b3 (==1.14.0)
+Requires-Dist: opentelemetry-sdk (==1.14.0)
+Requires-Dist: opentelemetry-util-http (==0.35b0)
+Requires-Dist: deprecated (==1.2.12)
+Requires-Dist: google (>=3.0.0)
+Requires-Dist: pyyaml
+Requires-Dist: protobuf (>=3.20.1)
+
+# Tyke Python Agent
+
+Tyke Python agent provides instrumentation for collecting traces data to be processed by [Tyke](https://tyke.ai/).
+
+This agent supports these frameworks and adds following capabilities:
+
+- capture request and response headers
+- capture request and response bodies
+- capture SQL queries
+- tracing context propagation
+
+Tyke python agent supports Python 3.6+
+
+| Library | Description | Supported Library Versions|
+|------|-------------| ---------------|
+| [flask](https://flask.palletsprojects.com/en/1.1.x/api)|A micro web framework written in Python.| 1.\*, 2.\*|
+| [django](https://docs.djangoproject.com/)|Python web framework | 1.10+|
+| [grpc](https://grpc.github.io/grpc/python/)|Python GRPC library.| 1.27+|
+| [mysql-connector](https://dev.mysql.com/doc/connector-python/en/)| Python MySQL database client library.| 8.\*|
+| [psycopg2/psycopg2-binary/postgresql](https://www.psycopg.org/docs/)|Python Postgresql database client library. | 2.7.3.1+ |
+| [requests](https://docs.python-requests.org/en/master/)|Python HTTP client library.| 2.\*|
+| [aiohttp](https://docs.aiohttp.org/en/stable/)|Python async HTTP client library.| 3.\*|
+| [pymongo](https://pymongo.readthedocs.io/en/stable/)|Python mongodb pymongo library.| >= 3.1+, < 5.0|
+
+## Getting started
+
+## Instrumentation
+
+Instrumentation requires editing your code to initialize an agent, and registering any applicable modules to be instrumented.
+
+- Install the tyke python agent:
+
+```bash
+pip install tyke-agent
+```
+
+- Create a YAML file with the name config.yaml in the application root directory and add below content
+
+```yaml
+    service_name: "Service Name"
+    resource_attributes: 
+        app.name: "Application Name"
+        service.identifier: Service unique identifier
+
+    reporting:
+        endpoint: http://localhost:4317
+```
+
+
+- Add the following to your app's entrypoint python file:
+
+```python
+from tyke.agent import Agent
+
+agent = Agent() # initialize the agent
+
+# Instrument a specific flask app + any other applicable libraries
+agent.instrument(app)
+
+# Instrument a flask app, additional libraries, except for mysql
+# the second argument tells the agent to skip these specific libraries from being instrumented
+agent.instrument(app, ['mysql'])
+
+
+# if you aren't using flask, you can pass None
+# and still provide skip libraries if needed
+agent.instrument(None, ['flask', 'mysql'])
+
+# Set config file location in environment variables 
+os.environ.setdefault("TYKE_CONFIG_FILE", "config.yaml")
+...
+```
