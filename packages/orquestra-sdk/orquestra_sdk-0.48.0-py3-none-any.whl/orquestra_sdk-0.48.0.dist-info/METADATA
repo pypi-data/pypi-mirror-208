@@ -1,0 +1,91 @@
+Metadata-Version: 2.1
+Name: orquestra-sdk
+Version: 0.48.0
+Summary: "Compose Orquestra workflows using a Python DSL"
+Home-page: https://github.com/zapatacomputing/orquestra-workflow-sdk
+Author: Zapata Computing Inc.
+Author-email: info@zapatacomputing.com
+License: Apache License 2.0
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown; charset=UTF-8
+License-File: LICENSE
+Requires-Dist: GitPython
+Requires-Dist: aiohttp (~=3.8)
+Requires-Dist: argcomplete
+Requires-Dist: click (~=8.0)
+Requires-Dist: cloudpickle (==2.2.1)
+Requires-Dist: cloup (~=2.0)
+Requires-Dist: dill (==0.3.6)
+Requires-Dist: filelock (>=3.3.2)
+Requires-Dist: graphviz
+Requires-Dist: importlib-metadata (~=4.0)
+Requires-Dist: inquirer (~=3.0)
+Requires-Dist: packaging (>=21)
+Requires-Dist: pip-api (==0.0.30)
+Requires-Dist: pydantic (<2)
+Requires-Dist: pygments (~=2.0)
+Requires-Dist: pyyaml
+Requires-Dist: requests (~=2.28)
+Requires-Dist: tabulate
+Requires-Dist: typing-extensions (>=4.1.0)
+Requires-Dist: wrapt
+Provides-Extra: all
+Requires-Dist: orquestra-sdk[ray] ; extra == 'all'
+Provides-Extra: dev
+Requires-Dist: diff-cover ; extra == 'dev'
+Requires-Dist: mypy (>=0.981) ; extra == 'dev'
+Requires-Dist: numpy ; extra == 'dev'
+Requires-Dist: orquestra-python-dev ; extra == 'dev'
+Requires-Dist: orquestra-sdk[all] ; extra == 'dev'
+Requires-Dist: pytest-dependency ; extra == 'dev'
+Requires-Dist: pytest-httpserver ; extra == 'dev'
+Requires-Dist: responses (~=0.20) ; extra == 'dev'
+Requires-Dist: scikit-learn ; extra == 'dev'
+Requires-Dist: types-PyYAML ; extra == 'dev'
+Requires-Dist: types-Pygments ; extra == 'dev'
+Requires-Dist: types-psutil ; extra == 'dev'
+Requires-Dist: types-requests ; extra == 'dev'
+Requires-Dist: types-tabulate ; extra == 'dev'
+Provides-Extra: ray
+Requires-Dist: pyarrow ; extra == 'ray'
+Requires-Dist: ray[default] (==2.3.0) ; extra == 'ray'
+
+# Orquestra Workflow SDK
+
+## What is it?
+
+`orquestra-sdk` is a Python library for expressing and executing computational workflows locally and on the [Orquestra](https://www.zapatacomputing.com/orquestra) platform.
+
+`orquestra-sdk` provides:
+
+- A Python DSL to express your workflows
+- An API for managing and using secrets inside workflows
+- An API for executing and managing your workflows
+- A CLI tool for executing and managing workflows
+
+## Installation
+
+Orquestra Workflow SDK is published to PyPI and should be installed from there via `pip`:
+
+```bash
+pip install "orquestra-sdk[all]"
+```
+
+## Usage
+
+Please refer to the [Orquestra Workflow SDK docs](https://docs.orquestra.io/docs/core/sdk/).
+
+## Bug Reporting
+
+If you'd like to report a bug/issue please create a [new issue using one of the templates](https://github.com/zapatacomputing/orquestra-workflow-sdk/issues).
+
+## Contributing
+
+Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for more information on contributing to Orquestra Workflow SDK.
+
+
