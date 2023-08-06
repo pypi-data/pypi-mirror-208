@@ -1,0 +1,15 @@
+cloud: txp-anyscale
+max_workers: 0  # https://docs.ray.io/en/latest/cluster/config.html#max-workers
+allowed_azs:
+  - us-central1-a
+  - us-central1-b
+  - us-central1-c
+head_node_type:
+  name: head_node_type
+  instance_type: n2-standard-8
+worker_node_types:
+- name: cpu_worker
+  instance_type: n2-standard-8
+  min_workers: 0
+  max_workers: 0
+

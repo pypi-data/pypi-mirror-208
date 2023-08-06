@@ -1,0 +1,150 @@
+[txp]
+base_directory_path="@format {env[HOME]}/txp"
+general_log_level="INFO"
+
+[gateway]
+# txp directory is expected to be on home directory
+base_directory_path = "@format {this.txp.base_directory_path}/gateway"
+credentials_path = "@format {this.gateway.base_directory_path}/credentials"
+resources_path = "@format {this.gateway.base_directory_path}/resources"
+queue_storage_path = "@format {this.gateway.resources_path}/queue_storage"
+queue_memory_size = 80
+queue_clean_old_spilled_packages = false
+queue_max_time_to_persist = 300  # 5 minutes
+service_account_path = "@format {this.gateway.credentials_path}/service_account.json"
+private_key_path = "@format {this.gateway.credentials_path}/rsa_private.pem"
+ca_certs = "@format {this.gateway.credentials_path}/roots.pem"
+cloud_region = "us-central1"
+streaming_mode = "REALTIME"
+
+global_state_persistence_path = "@format {this.gateway.base_directory_path}/global_state"
+initialized_marker_file = "@format {this.gateway.base_directory_path}/startup.txt"
+ready_marker_file =  "@format {this.gateway.base_directory_path}/ready.txt"
+
+# sampled_packges_path: path to store the pickled packages locally on disk
+sampled_packages_path = "@format {this.gateway.base_directory_path}/sampled_packages"
+
+# packages_to_disk_buffer_size: the number of packages per file persisted on disk.
+packages_to_disk_buffer_size = 10
+
+# A template to interpolate with the time to give name to the pickled files of packages.
+pickled_files_name_template = "samples_{}.pkl"
+
+# The format of the date preppended to the packages pickled files
+pickled_files_date_format = "%Y%m%d-%H%M%S"
+
+# wait_for_devices_startup_timeout: Timeout to wait for devices to repor connected at startup time.
+wait_for_devices_startup_timeout = 10
+
+# ngrok local server address
+ngrok_local_address = "http://localhost:4040/api/tunnels"
+
+# Timezone
+timezone = 'America/Mexico_City'
+
+# Telemetry activated
+offline_mode = false
+
+# The gateway metadata file contains:
+# 1. Device ID
+# 2. Device registry ID
+# 3. Project ID
+# 4. Project cloud region
+# TODO: Remove this. It was used for the mocked main to test the Raspberry OS image
+metadata_file_path = "@format {this.gateway.credentials_path}/metadata.json"
+
+[gateway.sampling]
+# default_observation_policy: is the policy to be applied when the system is
+#   sampling virtual Assets Packages.
+default_observation_policy="wait_x_time"
+
+# wait_x_time_seconds_interval: is the time to be used by the wait_x_time
+#   assets observation policy
+wait_x_time_seconds_interval = 10
+
+[gateway.tasks_scheduler]
+check_stop_event_interval = 10 # seconds
+# max_date_string is used for give the Telemetry Sender a end date far in the future
+# while we support deducting the end date of telemetry operations based on the Job Sampling Window.
+max_date_string = "2050-01-01 10:00:00"
+
+[gateway.mqtt]
+device_id_template='projects/{}/locations/{}/registries/{}/devices/{}'
+device_config_topic_template='/devices/{}/config'
+device_detach_topic_template='/devices/{}/detach'
+device_attach_topic_template='/devices/{}/attach'
+device_state_topic_template='/devices/{}/state'
+device_commands_topic_template='/devices/{}/commands/#'
+device_telemetry_topic_template='/devices/{}/events'
+device_error_topic_template='/devices/{}/errors'
+devices_pairing_topic_template='/devices/{}/events/txp-devices-pairing'
+telemetry_topic_realtime_template ='/devices/{}/events/txp-telemetry-realtime'
+telemetry_topic_batch_template ='/devices/{}/events/txp-telemetry-batch'
+
+config_timeout=180 # 3 minutes to receive the Gateway configuration.
+machines_timeout=180 # 3 minutes to receive the machines configuration.
+edges_timeout=360 # 4 minutes to receive the Edges Conf
+
+connection_timeout_secs=15
+attach_timeout_secs=5
+
+mqtt_bridge_hostname="mqtt.googleapis.com"
+mqtt_bridge_port=8883
+jwt_expires_hours = 22 # 20 hours for token to expire
+recover_disconnect_wait_min = 1 # minutes to wait when recovering from an unexpected disconnect
+
+# Keep Alive: https://cloud.google.com/iot/docs/how-tos/mqtt-bridge#keep-alive
+keep_alive_minutes = 4  # 4 minutes to send ping to the cloud
+
+
+[gateway.telemetry]
+
+# This interval is used by the telemetry sender to check every X seconds
+# if there are unacknowledged messages.
+unsent_packages_check_interval = 60
+
+
+[ux.startup]
+invalid_values_warning = "Hubo un error procesando los valores ingresados. Inténtelo nuevamente."
+invalid_private_key_cert = "La clave privada introducida no es válida."
+
+[ux.configuration_reception]
+gateway_config_not_received = "No se recibió la configuración del Gateway. Intentando nuevamente"
+
+[ux.preparing_devices]
+configuring_devices_info = "Configurando dispositivos"
+waiting_for_devices_to_connect = "Esperando a que los dispositivos se conecten"
+
+[ux.ready_state]
+gateway_is_ready = "El Gateway esta listo para capturar datos. Por favor ingrese una configuración valida."
+gateway_capturing_data = "Adquiriendo datos, por favor espere..."
+
+[ux.error]
+production_not_completed = "El gateway no completó la fase de producción. Reemplazar el Gateway."
+
+[testing]
+hello_world_message="Hello TXP!"
+
+
+[firestore]
+manual_configuration_edit_collection = "manual_configuration_edit"
+config_form_document = "config_form"
+machines_group_collection = "machines_groups"
+machines_collection = "machines"
+gateways_collection = "gateways"
+devices_collection = "devices"
+edges_collection = "edges"
+jobs_collection = "jobs"
+configurations_collection = "configurations"
+pending_signal_chunks_collection = "pending_signal_chunks"
+tenants_collection = 'tenants'
+ray_signals_segregator_doc_name = "signals_segregator"
+ray_state_controller_db_doc_name = "state_controller_db"
+ray_state_controller_history_doc_name = "state_controller_history"
+ray_state_manager_doc_name = "state_manager"
+
+[time]
+datetime_zoned_format = '%Y-%m-%d %H:%M:%S.%f%z'
+datetime_format = "%Y-%m-%d %H:%M:%S"
+date_format = "%Y-%m-%d"
+time_format = "%H:%M"

@@ -1,0 +1,8 @@
+name: "txp-model-serving-tasks"
+project_id: "prj_VkZpVNQYX72iBSM2HQkTM2sA"
+compute_config: txp-ml-cluster-0
+runtime_env:
+  working_dir: "gs://txp-model-serving/anyscale_runtime/txp-model-prediction-workdir.zip"
+cluster_env: txp-ml-env:22
+entrypoint: "python -u prediction_service.py --dataset='telemetry' --subscription_id='txp-model-serving-signals-sub' --events_and_states_dataset='ml_events_and_states' --notifications_topic='txp-notifications'"
+healthcheck_url: "/"

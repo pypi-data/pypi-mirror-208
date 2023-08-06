@@ -1,0 +1,79 @@
+[
+  {
+    "name": "data",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "description": "psd and frequency values per dimension",
+    "fields": [
+      {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+      },
+      {
+        "name": "psd",
+        "type": "FLOAT",
+        "mode": "REPEATED",
+        "description": "psd values (amplitude)"
+      },
+      {
+        "name": "frequency",
+        "type": "FLOAT",
+        "mode": "REPEATED",
+        "description": "frequency values"
+      }
+    ]
+  },
+  {
+    "name": "package_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "package creation"
+  },
+  {
+    "name": "perception_name",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "edge_logical_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "signal_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "sample creation"
+  },
+  {
+    "name": "configuration_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "firestore configuration id"
+  },
+  {
+    "name": "observation_timestamp",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "observation window timestamp"
+  },
+  {
+    "name": "partition_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "timestamp obtained from observation timestamp, this is the field which is going to partition the table."
+  },
+  {
+    "name": "tenant_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "table is going to be clustered by this field and edge_logical_id"
+  },
+  {
+    "name": "dataset_versions",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "annotation version tags"
+  }
+]

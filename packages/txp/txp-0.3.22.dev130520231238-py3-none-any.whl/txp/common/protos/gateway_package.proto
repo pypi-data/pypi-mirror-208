@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "gateway_config.proto";
+
+/**
+ * Rules:
+ *  1. Append the Proto suffix to messages. This will enable readability in
+ *    collaborative code between system classes and proto messages.
+ */
+
+/**
+  The message for a single dimension of samples.
+ */
+message DimensionSignalSamplesProto {
+  repeated float samples = 1;
+}
+
+/**
+  The Signal Proto.
+ */
+message SignalProto {
+  repeated DimensionSignalSamplesProto samples = 1;
+  string perception_name = 2;
+  repeated int32 perception_dimensions = 3;
+  optional float signal_frequency = 4;
+  int32 sampling_resolution = 5;
+  int64 timestamp = 6; //timestamp generated with time.time_ns()
+}
+
+/**
+The proto for the GatewayPackageMetadata
+ */
+message GatewayPackageMetadataProto {
+  EdgeDescriptorProto edge_descriptor = 1;
+  SamplingWindowProto sampling_window = 2;
+  string package_id = 3;
+  int32 previous_part_index = 4;
+  string tenant_id = 11;  /*11 to void conflicts with other branch*/
+}
+
+
+/**
+The Gateway Package Proto
+ */
+message GatewayPackageProto {
+  GatewayPackageMetadataProto metadata = 1;
+  repeated SignalProto signals = 2;
+  string configuration_id = 3;
+}
+

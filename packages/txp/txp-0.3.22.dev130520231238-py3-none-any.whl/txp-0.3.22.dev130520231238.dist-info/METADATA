@@ -1,0 +1,117 @@
+Metadata-Version: 2.1
+Name: txp
+Version: 0.3.22.dev130520231238
+Summary: Txp is the main Python Package from Tranxpert predictive maintenance solution
+Home-page: https://github.com/Traxpert/txp
+Keywords: IOT,IIOT,Predictive Maintenance
+Author: Tranxpert
+Requires-Python: >=3.7,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Provides-Extra: cloud
+Provides-Extra: dashboard
+Provides-Extra: dev
+Provides-Extra: gateway
+Provides-Extra: ml
+Requires-Dist: Markdown (>=3.3.6,<4.0.0)
+Requires-Dist: PyJWT (>=2.1.0,<3.0.0) ; extra == "gateway"
+Requires-Dist: black (>=21.6b0,<22.0) ; extra == "dev"
+Requires-Dist: colorama (>=0.4.5,<0.5.0)
+Requires-Dist: cronsim (>=2.3,<3.0) ; extra == "cloud"
+Requires-Dist: cryptography (>=35.0.0,<36.0.0) ; extra == "gateway"
+Requires-Dist: dash-bootstrap-components (>=1.4.1,<2.0.0) ; extra == "dashboard"
+Requires-Dist: dash-mantine-components (>=0.12.0,<0.13.0) ; extra == "dashboard"
+Requires-Dist: dash[diskcache] (>=2.9.3,<3.0.0) ; extra == "dashboard"
+Requires-Dist: debugpy (==1.6.6)
+Requires-Dist: deepdiff (>=5.7.0,<6.0.0) ; extra == "gateway"
+Requires-Dist: dynaconf (>=3.1.4,<4.0.0)
+Requires-Dist: fastapi (>=0.78.0,<0.79.0) ; extra == "ml"
+Requires-Dist: firebase-admin (>=5.2.0,<6.0.0)
+Requires-Dist: fpdf (>=1.7.2,<2.0.0) ; extra == "cloud"
+Requires-Dist: freezegun (>=1.1.0,<2.0.0) ; extra == "gateway"
+Requires-Dist: google (>=3.0.0,<4.0.0) ; extra == "dev"
+Requires-Dist: google-api-python-client (>=2.23.0,<3.0.0) ; extra == "dev"
+Requires-Dist: google-auth (>=2.2.1,<3.0.0) ; extra == "dev"
+Requires-Dist: google-auth-oauthlib (>=1.0.0,<2.0.0) ; extra == "dev"
+Requires-Dist: google-cloud-bigquery (>=2.31.0,<3.0.0) ; python_version >= "3.7" and python_version < "3.11"
+Requires-Dist: google-cloud-firestore (>=2.3.0,<3.0.0) ; extra == "dev"
+Requires-Dist: google-cloud-iot (>=2.3.0,<3.0.0) ; extra == "dev"
+Requires-Dist: google-cloud-pubsub (>=2.12.1,<3.0.0) ; extra == "dev"
+Requires-Dist: ifaddr (>=0.1.7,<0.2.0) ; extra == "gateway"
+Requires-Dist: jupyterlab (>=3.4.5,<4.0.0) ; extra == "dev"
+Requires-Dist: kaleido (==0.2.0) ; extra == "cloud" or extra == "ml"
+Requires-Dist: matplotlib
+Requires-Dist: mcp9600 (>=0.0.4,<0.0.5) ; extra == "gateway"
+Requires-Dist: nbmake (>=1.3.4,<2.0.0) ; extra == "dev"
+Requires-Dist: numpy (>=1.21.2,<2.0.0) ; python_version >= "3.7" and python_version < "3.11"
+Requires-Dist: opencv-python-headless (>=4.5.5,<5.0.0)
+Requires-Dist: paho-mqtt (>=1.5.1,<2.0.0) ; extra == "gateway"
+Requires-Dist: pandas (==1.3.5) ; python_full_version >= "3.7.1" and python_version < "4.0"
+Requires-Dist: plotly (>=5.6.0,<6.0.0)
+Requires-Dist: prophet (>=1.1,<2.0) ; extra == "cloud" or extra == "ml"
+Requires-Dist: protobuf (==3.20.0)
+Requires-Dist: psutil (>=5.8.0,<6.0.0) ; extra == "gateway"
+Requires-Dist: pydantic (>=1.9.1,<2.0.0)
+Requires-Dist: pyserial (>=3.5,<4.0)
+Requires-Dist: pytest (==6.2.5) ; extra == "dev"
+Requires-Dist: pytest-xdist (>=2.4.0,<3.0.0) ; extra == "dev"
+Requires-Dist: pytz (>=2022.1.0,<2023.0.0)
+Requires-Dist: pyudev (>=0.23.1,<0.24.0) ; extra == "gateway"
+Requires-Dist: queuelib (>=1.6.2,<2.0.0) ; extra == "gateway"
+Requires-Dist: ray (>=1.12.0,<2.0.0) ; extra == "ml"
+Requires-Dist: requests (>=2.26.0,<3.0.0) ; extra == "cloud" or extra == "gateway"
+Requires-Dist: schedule (>=1.1.0,<2.0.0) ; extra == "gateway"
+Requires-Dist: scipy (>=1.4.0,<2.0.0) ; extra == "cloud"
+Requires-Dist: six (>=1.13.0,<2.0.0) ; extra == "gateway"
+Requires-Dist: sklearn (>=0.0,<0.1) ; extra == "ml"
+Requires-Dist: streamlit (==1.4.0)
+Requires-Dist: streamlit-aggrid (>=0.2.3,<0.3.0) ; python_full_version >= "3.7.1" and python_version < "4.0"
+Requires-Dist: tabulate (>=0.8.9,<0.9.0)
+Requires-Dist: transitions (>=0.8.8,<0.9.0) ; extra == "gateway"
+Requires-Dist: xgboost (>=1.6.0,<2.0.0) ; extra == "ml"
+Project-URL: Repository, https://github.com/Traxpert/txp
+Description-Content-Type: text/markdown
+
+# TXP
+
+## Development
+The following tools are used for this project:
+
+- [Poetry](https://python-poetry.org/) is used for dependency and package managment
+- [Nox](https://nox.thea.codes/en/stable/) is used as automation tool, mainly for testing
+- [Black](https://black.readthedocs.io/en/stable/) is the mandatory formatter tool
+- [PyEnv](https://github.com/pyenv/pyenv) is recommended as a tool to handle multiple python versions in developers machines. 
+
+### Setup the development environment
+
+1. Install a supported Python version on your machine (compatible Python versions ^3.8). The recommended way is to use [PyEnv](https://github.com/pyenv/pyenv).
+
+2. Install the global Python required dependencies: 
+
+    ```
+    pip install poetry nox
+    ```
+
+3. Clone this repository, and execute the following command in the repository root folder:
+
+    ```
+    poetry install
+    ``` 
+    This will install all the dependencies for `txp` in a virtual enviroment created by Poetry for your project. 
+    All the required dependencies for development are installed in that virtual enviroment. 
+
+4. Configure your IDE to work with the virtual enviroment or the command line if you use an editor. 
+
+    To activate the virtual enviroment on your terminal (MacOS, Linux) you can execute:
+    ```
+    source /path/to/poetry/cache/virtualenvs/test-O3eWbxRl-py3.7/bin/activate
+    ```
+
+    The path to your virtual enviroment location can be found with `poetry env info` [command](https://python-poetry.org/docs/managing-environments#displaying-the-environment-information). 
+
+### Testing
+

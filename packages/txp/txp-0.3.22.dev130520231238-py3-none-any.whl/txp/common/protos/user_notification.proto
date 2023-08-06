@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message Notification {
+
+    enum NotificationType {
+        STATE_CHANGE = 0;
+    }
+
+    message Content {
+        string asset_id = 1;
+        string tenant_id = 2;
+        string predicted_condition = 3;
+        int64 observation_timestamp = 4;
+
+    }
+    Content content = 1;
+    NotificationType type = 2;
+}
