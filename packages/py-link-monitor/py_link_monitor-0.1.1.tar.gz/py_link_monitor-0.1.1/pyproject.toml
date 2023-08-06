@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "py-link-monitor"
+version = "0.1.1"
+description = "Link monitor written on Python that uses command line ping utility"
+authors = ["Mykhailo  Volkov <mvolkov83@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "link_monitor"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pingparsing = "1.4.1"
+
+[tool.poetry.scripts]
+py_link_monitor = 'link_monitor.cli:run_cli'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
