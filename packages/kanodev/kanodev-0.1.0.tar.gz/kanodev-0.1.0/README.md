@@ -1,0 +1,69 @@
+# KanoDev
+
+Use natural language to create a fully functional, tested and deployed cloud infrastructure with a single command!
+This project streamlines the creation and deployment of cloud infrastructure. Simply describe your problem using natural language, and the system will automatically build, test and deploy a cloud architecture based on your prompt.
+
+Error messages are forwarded back to GPT4 recursively and the system self-corrects itself until it passes all tests and gets deployed.
+
+Current capabilities:
+
+[✅] Test the proposed AWS architecture and deploy on a dev environement automatically. 🚀
+[✅] Test and deploy any cloud architecture with Terraform. python-terraform. ⚙️
+
+> ⚠️ Warning ⚠️ This project is in ALPHA developement and should NOT be used for direct deployments on the cloud. There are alot of security and monetary considerations.
+
+## Table of Contents
+
+- [KanoDev](#kanodev)
+  - [Table of Contents](#table-of-contents)
+  - [Requirements](#requirements)
+    - [Environment Variables](#environment-variables)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Generate Infrastructure](#generate-infrastructure)
+      - [Examples](#examples)
+
+## Requirements
+
+- OpenAI key with access to GPT-4
+- AWS Account
+- [Optional] Pinecone access
+
+### Environment Variables
+
+To use KanoDev, you will need to set up the following environment variables. These are required for the tool to interact with the OpenAI API, and your AWS account.
+
+```bash
+export OPENAI_API_KEY=<your key>
+export AWS_ACCESS_KEY_ID=<your key>
+export AWS_SECRET_ACCESS_KEY=<your key>
+export AWS_DEFAULT_REGION=<your region>
+```
+
+Remember to replace <your key> with your actual keys and <your region> with your AWS region (e.g., us-west-2). Do not share these keys publicly.
+
+Note: If you plan to use the optional Pinecone functionality, you might also need to include instructions for setting up Pinecone-related environment variables.
+
+## Installation
+
+```bash
+pip install kanodev
+```
+
+## Usage
+
+### Generate Infrastructure
+
+```bash
+kanodev generate --description "<your problem description>"
+```
+
+#### Examples
+
+```bash
+kanodev generate --description "I want to create a serverless architecture that can handle 1000 requests per second and store the data in a database"
+```
+
+```bash
+kanodev generate --description "I want to create a serverless architecture that can handle 1000 requests per second and store the data in a database" --localstack
+```
