@@ -1,0 +1,92 @@
+Metadata-Version: 2.1
+Name: django-flyio
+Version: 0.1.1
+Summary: A set of simple utilities for Django apps running on Fly.io
+Project-URL: Documentation, https://github.com/joshuadavidthomas/django-flyio#readme
+Project-URL: Issues, https://github.com/joshuadavidthomas/django-flyio/issues
+Project-URL: Source, https://github.com/joshuadavidthomas/django-flyio
+Author-email: Josh <josh@joshthomas.dev>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Requires-Python: >=3.7
+Requires-Dist: dj-database-url
+Requires-Dist: django>=3.2
+Provides-Extra: dev
+Requires-Dist: black; extra == 'dev'
+Requires-Dist: hatch; extra == 'dev'
+Requires-Dist: ruff; extra == 'dev'
+Provides-Extra: test
+Requires-Dist: coverage[toml]; extra == 'test'
+Requires-Dist: pytest; extra == 'test'
+Requires-Dist: pytest-asyncio; extra == 'test'
+Requires-Dist: pytest-django; extra == 'test'
+Provides-Extra: types
+Requires-Dist: django-stubs; extra == 'types'
+Requires-Dist: mypy; extra == 'types'
+Description-Content-Type: text/markdown
+
+# django-flyio
+
+[![PyPI - Version](https://img.shields.io/pypi/v/django-flyio.svg)](https://pypi.org/project/django-flyio)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-flyio.svg)](https://pypi.org/project/django-flyio)
+
+---
+
+A set of simple utilities for Django apps running on [Fly.io](https://fly.io).
+
+**Note:** This package is designed to work with [V2 Apps](https://fly.io/docs/reference/apps/). It has not been tested with V1 Apps.
+
+## Installation
+
+```shell
+pip install django-flyio
+```
+
+## Usage
+
+### Multi-Region Fly Postgres
+
+1.  Set your `DATABASES` settings to call `get_db_config` from `django_flyio.db`.
+
+    This function reads the `PRIMARY_REGION` and `FLY_REGION` environment variables to determine the Fly region the primary database is in and the Fly region the app is currently running in.
+
+2.  Add `django_flyio.routers.FlyDBReplicaRouter` to your `DATABASE_ROUTERS` settings.
+
+    This router reads whether the `DATABASES` setting has a `replica` key and, if so, routes reads to the replica database.
+
+```python
+# settings.py
+from django_flyio.db import get_db_config
+
+DATABASES = get_db_config()
+
+DATABASE_ROUTERS = ["django_flyio.routers.FlyDBReplicaRouter"]
+```
+
+### Middleware
+
+To set the `Fly-Server` header containing the Fly server and region that served the request, add `django_flyio.middleware.FlyResponseMiddleware` to your `MIDDLEWARE` settings.
+
+```python
+# settings.py
+MIDDLEWARE = [
+    # ...
+    'django_flyio.middleware.FlyResponseMiddleware',
+]
+```
+
+## License
+
+`django-flyio` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
