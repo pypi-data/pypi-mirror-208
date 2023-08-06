@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: lealnumeros
+Version: 0.0.5.1
+Summary: Trabalhe com formatação de números de uma maneira rápido e fácil.
+Author: José Rodolfo
+Author-email: silvaleal.ctt@gmail.com
+License: MIT License
+Keywords: lealnumeros
+Description-Content-Type: text/markdown
+License-File: LICENCE
+
+Trabalhe com formataÃ§Ã£o de nÃºmeros de uma maneira rÃ¡pido e fÃ¡cil.
+
+```python
+from lealNumeros import LealNumerosAPI
+
+# Colocar pontuaÃ§Ã£o nos nÃºmeros
+print(LealNumerosAPI.numerosPontuados(10000))
+# Saida: 10.000
+
+# Colocar simbolos      
+        # Formatos disponÃ­veis: (8) Mil
+        #                           M (MilhÃ£o)
+        #                           B (BilhÃ£o)
+        #                           T (TrilhÃ£o)
+        #                           Q (QuadrilhÃ£o)
+        #                           Qi (QuintilhÃ£o)
+        #                           Sx (SextilhÃ£o)
+        #                           Sp (SeptilhÃ£o)
+print(LealNumerosAPI.numerosSimbolos(10000))
+# Saida: 10Mil
+
+# Escrever o nome do nÃºmero (PT-BR)
+print(LealNumerosAPI.numerosNome(100))
+# Saida: Dez mil
+
+# Escrever diferenÃ§as entre nÃºmeros
+print(LealNumerosAPI.numerosDiferenca(5, 5))
+# Saida: 5
+
+# Escrever diferenÃ§as entre dias
+print(f'{LealNumerosAPI.dataDiferenca(1, 2, 2023)} Dias')
+
+# Calculadora
+conta = input('Qual a conta matemÃ¡tica? (ex.: 10 + 5)')
+resultado = LealNumerosAPI.numerosCalculadora(conta)
+print(resultado)
+```
+
+---
+
+Discord: silvaleal#7458
+Suporte: [https://discord.gg/394ChkbKrt](https://discord.gg/394ChkbKrt)
