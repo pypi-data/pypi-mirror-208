@@ -1,0 +1,112 @@
+[build-system]
+requires = ["hatchling>=1.10.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eindex"
+description = "A concept of multidimensional indexing for tensors"
+readme = "README.md"
+requires-python = ">=3.8"
+
+keywords = ['indexing', 'numpy', 'tensor', 'tensor indexing', 'eindex', 'einops']
+license = { text = 'MIT' }
+classifiers = [
+    'Intended Audience :: Science/Research',
+    'Programming Language :: Python :: 3',
+    'License :: OSI Approved :: MIT License',
+]
+dependencies = [
+    # no run-time dependencies,
+    # installation-time dependency is hatch
+]
+dynamic = ["version"]
+authors = [{ name = 'Alex Rogozhnikov' }]
+
+
+[project.urls]
+Homepage = 'https://github.com/arogozhnikov/eindex'
+
+[tool.setuptools]
+packages = ['eindex']
+
+[tool.hatch.version]
+path = "eindex/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/.idea",
+    "/.pytest_cache",
+    "/build",
+    "/dist",
+    "/docs",
+    "/docs_src",
+    "/log",
+]
+
+[tool.hatch.build.targets.wheel]
+# should use packages from main section
+
+
+[tool.hatch.envs.pypi.scripts]
+# hatch run pypi:deploy_test
+deploy_test = "hatch build --clean && hatch publish -r test"
+deploy = "hatch build --clean && hatch publish"
+
+
+[tool.hatch.envs.testing]
+dependencies = ['numpy', 'pytest']
+
+# currently using nightly numpy, so we need to add an additional index
+# fallback to standard pypi for other packages
+# allow pre-releases
+env-vars = { PIP_INDEX_URL = "https://pypi.anaconda.org/scipy-wheels-nightly/simple/", PIP_EXTRA_INDEX_URL = "https://pypi.org/simple/", PIP_PRE = "1" }
+# [tool.hatch.envs.testing.env-vars]
+
+# hatch run testing:test
+scripts = { test = "pytest tests" }
+
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+
+[tool.ruff]
+line-length = 120
+
+# this will be changed to true if there are useful auto-fixes available
+fix = true
+
+fixable = [
+    "I001", # isort-like sorting of imports
+]
+
+ignore = [
+    "E501",   # line too long
+    "E731",   # Do not assign a lambda expression
+    "C408",   # rewrite dict as literal
+    "C413",   # list around sorted
+    "C401",   # rewrite set( ) as set comprehension
+    "RUF100", # unused noqa.
+    "B905",   # `zip()` without an explicit `strict=` parameter - supported only in py3.10
+]
+
+select = [
+    "E",
+    "F",
+    "I",      # isort
+    "A001",   # variable shadows python built-in
+    "B",      # flake-bugbear, more advanced checks like non-mutable defaults
+    "RUF",    # ambiguous characters,
+    "RET501", # do not use return None if it is the only value
+    "RET502", # return None if can return anything else
+    "RET503", # return None if can return anything else
+    "W605",   # invalid escape sequence
+    "C4",     # flake8-comprehensions
+]
+
+exclude = [".git", "__pycache__", ".venv", '.vscode', '.pytest_cache']
+
+[tool.ruff.isort]
+known-first-party = ["eindex"]
