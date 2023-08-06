@@ -1,0 +1,93 @@
+% WARNING! This file was automatically generated; see slider/DTU_Beamer_files for original version.
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepackage{booktabs}
+\usepackage{siunitx}
+
+\usepackage[inkscape=true,inkscapeformat=pdf,inkscapelatex=true]{svg}
+\svgpath{osvgs/}
+
+\usepackage{url}
+\usepackage{pmboxdraw}
+\usepackage{amssymb}
+\usepackage{pgffor}
+	
+\usetheme[department=compute]{DTU}
+\newcommand{\tabitem}{{\color{dtured}$\bullet$} }
+\usepackage[absolute,overlay]{textpos}
+\textblockorigin{0mm}{0mm}
+
+\setlength{\TPHorizModule}{\paperwidth}
+\setlength{\TPVertModule}{\paperheight}
+
+% Latin Modern
+\usepackage{lmodern}
+\newcommand{\overlabel}[1]{ \begin{textblock}{1}(0,0) \url{#1} \end{textblock} }
+
+% Verdana font type
+%\usepackage{verdana}
+% Helvetica
+%\usepackage{helvet}
+% Times (text and math)
+%\usepackage{newtx, newtxmath}
+
+% \usetheme[department=compute]{DTU}
+
+\makeatletter
+
+\def\osvg{\@ifnextchar[{\@with}{\@without} }
+\def\@with[#1]#2{
+	\foreach[count=\n] \x in {#1}{
+		\iftoggle{overlabel_includesvgs}{
+			\IfFileExists{osvgs/x_do_not_edit_#2-l\n_nofonts.pdf}{
+			\begin{textblock}{1}(0,0)
+				\includegraphics<\x>[width=1.0\linewidth]{osvgs/x_do_not_edit_#2-l\n_nofonts}
+			\end{textblock}
+			}{ File: \url{osvgs/x_do_not_edit_#2-l\n_nofonts.pdf} does not exist; bad layer import? Check \url{osvgs/#2.svg} including layer information.
+			}
+		}
+	}
+	\olabel{#2}
+}
+\def\@without#1{
+	% Try to include first 10 layer files if they are there.
+	\foreach[count=\n] \x in {1,...,10}{
+		\iftoggle{overlabel_includesvgs}{
+			\IfFileExists{osvgs/x_do_not_edit_#1-l\n_nofonts.pdf}{
+				\begin{textblock}{1}(0,0)
+					\includegraphics<\n->[width=1.0\linewidth]{osvgs/x_do_not_edit_#1-l\n_nofonts}
+				\end{textblock}
+			}{
+		}
+	}
+	}
+	\olabel{#1}
+}
+\newcommand{\olabel}[1]{
+	\iftoggle{overlabel_includelabels}{
+		\begin{textblock}{1}(0,0) \url{#1} \end{textblock}
+	}{ 
+	\begin{textblock}{1}(0,0) 	{\color{white} \url{#1} } \end{textblock}
+	}
+}
+
+\makeatother
+
+\makeatother
+\ifdefined\bluem
+% nothing.
+\else
+
+\newcommand\bluem[1]{{\textcolor[rgb]{0.20, 0.40, 0.80}{ #1 }}}
+\newcommand\redm[1]{{\textcolor[rgb]{0.60, 0.00, 0.00}{ #1 }}}
+\newcommand\greenm[1]{{\textcolor[HTML]{398E00}{ #1 }}}
+\newcommand\yellowm[1]{{\textcolor[rgb]{1.00, 0.80, 0.00}{ #1 }}}
+				
+\newcommand\bluet[1]{{\textcolor[rgb]{0.20, 0.40, 0.80}{\textbf{#1}}}}
+\newcommand\redt[1]{{\textcolor[rgb]{0.60, 0.00, 0.00}{\textbf{#1}}}}
+\newcommand\greent[1]{{\textcolor[HTML]{398E00}{\textbf{#1}}}}
+\newcommand\yellowt[1]{{\textcolor[rgb]{1.00, 0.80, 0.00}{\textbf{#1}}}}
+\fi
