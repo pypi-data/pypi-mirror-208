@@ -1,0 +1,53 @@
+<!doctype html><html><head><title>上传静态文件</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<style>
+.upload-drop-zone {
+  height: 150px;
+  border-width: 2px;
+  margin-bottom: 20px;
+}
+.upload-drop-zone {
+  color: #ccc;
+  border-style: dashed;
+  border-color: #ccc;
+  line-height: 150px;
+  text-align: center
+}
+.upload-drop-zone.drop {
+  color: #222;
+  border-color: #222;
+}
+
+#filelist span{
+    margin: 2px;
+    padding: 2px;
+    font-size: 10px;
+    border-radius:5px;
+}
+#filelist span:hover{
+    cursor: pointer;
+}
+.fcss{background-color: #83c7e3}
+.fjs{background-color: #91a1e0}
+.fpng{background-color: #6e8665}
+.fobj{background-color: #c0a16b}
+.fnormal{border: 1px solid black}
+</style>
+</head>
+<body>
+<div class="container">
+  <form class='form-login' action="/echart/upload_file/" method="post" enctype="multipart/form-data" id="loginForm">
+      <div id="msg" class="alert alert-success">上传资源文件, 你可以使用ZIP打包上传(不要打包中文文件名)</div>
+      <div class="form-group">
+          <label for="id_file">请选择你的文件,或拖拽到下方:</label>
+          <input type="hidden" name="typename" id="id_typename">
+          <input type="hidden" name="s" value=1>
+          <input type="file" name="file" id="id_file">
+          <div class="upload-drop-zone" id="drop-zone">拖动文件到此处</div>
+      </div>
+      <button id="submitbut" type="button" class="btn btn-lg btn-primary btn-block" name="upload">提交</button>
+  </form>
+    <div id="filelist"></div>
+</div>
+</body>
+<script src="/static/smartchart/js/jquery-2.2.3.min.js"></script>
+<script src="/static/smartchart/editor/upload.js"></script>
