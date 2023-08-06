@@ -1,0 +1,96 @@
+[project]
+name = 'countess'
+dynamic = ["version"]
+readme = "README.md"
+authors = [
+    { name = "Nick Moore", email="nick@zoic.org" },
+    { name = "Alan Rubin", email="alan@rubin.id.au" },
+]
+maintainers = [
+    { name = "Nick Moore", email="nick@zoic.org" },
+]
+description = "CountESS"
+requires-python = ">=3.10"
+license = { text = "BSD-3-Clause" }
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: BSD License',
+    'Operating System :: OS Independent',
+    'Topic :: Scientific/Engineering :: Bio-Informatics',
+]
+dependencies = [
+    'fqfa~=1.2.3',
+    'more_itertools~=9.1.0',
+    'numpy~=1.24.2',
+    'pandas~=2.0.0',
+    'rapidfuzz~=2.15.1',
+    'ttkthemes~=3.2.2',
+]
+
+[project.optional-dependencies]
+dev = [
+    'black<24',
+    'build==0.10.0',
+    'mypy~=1.0.1',
+    'pylint~=2.16',
+    'types-ttkthemes~=3.2',
+    'twine==4.0.2',
+    'pandas-stubs~=2.0.0',
+    'pytest~=7.2',
+]
+
+hdf = [
+     'tables~=3.8.0',
+]
+
+[project.entry-points.countess_plugins]
+load_fastq = "countess.plugins.fastq:LoadFastqPlugin"
+load_hdf = "countess.plugins.hdf5:LoadHdfPlugin"
+load_csv = "countess.plugins.csv:LoadCsvPlugin"
+log_score = "countess.plugins.log_score:LogScorePlugin"
+group_by = "countess.plugins.group_by:GroupByPlugin"
+group_by_expr = "countess.plugins.group_by:GroupByExprPlugin"
+expression = "countess.plugins.expression:ExpressionPlugin"
+pivot = "countess.plugins.pivot:PivotPlugin"
+join = "countess.plugins.join:JoinPlugin"
+python = "countess.plugins.python:PythonPlugin"
+save_csv = "countess.plugins.csv:SaveCsvPlugin"
+sequence = "countess.plugins.sequence:SequencePlugin"
+regex_tool = "countess.plugins.regex:RegexToolPlugin"
+regex_reader = "countess.plugins.regex:RegexReaderPlugin"
+variants = "countess.plugins.variant:VariantPlugin"
+mutagenize = "countess.plugins.mutagenize:MutagenizePlugin"
+data_table = "countess.plugins.data_table:DataTablePlugin"
+
+[project.entry-points.gui_scripts]
+countess_gui = "countess.gui.main:main"
+
+[project.entry-points.console_scripts]
+countess_cmd = "countess.core.cmd:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "countess.VERSION" }
+readme = { file = "README.md", content-type="text/markdown" }
+
+[tool.pylint]
+disable = [
+    "consider-using-f-string",
+    "fixme",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "unused-argument",
+    "invalid-name",
+    "no-else-return",
+    "too-many-ancestors",
+    "too-many-arguments",
+    "too-many-branches",
+    "too-many-instance-attributes",
+    "too-many-locals",
+    "too-many-public-methods",
+    "unidiomatic-typecheck",
+]
+
+[tool.black]
+line-length = 100
