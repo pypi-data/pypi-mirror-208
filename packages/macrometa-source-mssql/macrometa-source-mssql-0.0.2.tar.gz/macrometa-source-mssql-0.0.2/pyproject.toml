@@ -1,0 +1,70 @@
+[build-system]
+requires = ["poetry-core", "wheel"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "macrometa-source-mssql"
+version='0.0.2'
+description = "Macrometa Source for extracting data from Microsoft SQL Server."
+license = "Apache-2.0"
+authors = ["Macrometa <info@macrometa.com>"]
+keywords = [
+    "ELT",
+    "Connectors",
+    "Workflows",
+    "Macrometa",
+    "MSSQL",
+    "Microsoft SQL Server",
+    "Source"
+]
+classifiers = [
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+]
+packages = [
+    { include = "macrometa_source_mssql" },
+    { include = "sync_strategies", from = "macrometa_source_mssql" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<3.11"
+pipelinewise-singer-python = "1.2.0"
+c8connector = ">=0.0.20"
+attrs = ">=16.3.0"
+pendulum = ">=1.2.0"
+pymssql = ">=2.2.1"
+backoff = ">=1.8.0"
+
+[tool.poetry.scripts]
+# CLI declaration
+macrometa-source-mssql = 'macrometa_source_mssql:main'
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/Macrometacorp/macrometa-source-mssql/issues"
+
+[tool.black]
+line-length = 88
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+skip = [
+    '.eggs', '.git', '.hg', '.mypy_cache', '.nox', '.pants.d', '.tox',
+    '.venv', '_build', 'buck-out', 'build', 'dist', 'node_modules', 'venv',
+]
+skip_gitignore = true
