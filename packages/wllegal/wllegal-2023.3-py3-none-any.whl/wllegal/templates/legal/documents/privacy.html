@@ -1,0 +1,93 @@
+{% load i18n %}
+{% load lawlinks %}
+
+{% law_link 679 2016 "EU" as law_679_2016 %}
+<p>
+{% blocktrans %}We comply with the Regulation No. {{ law_679_2016 }}, the General Data Protection Regulation, also known as GDPR. This document includes necessary specifications.{% endblocktrans %}
+</p>
+
+<h2>{% blocktrans %}Personal Data Controller{% endblocktrans %}</h2>
+
+<p>
+{% blocktrans with provider="Ing. Michal Čihař, Nábřežní 694, 471 54 Cvikov, CZ" reg_no="04705904" %}{{ provider }}, Reg. No. {{ reg_no }}{% endblocktrans %}
+</p>
+
+<p>{% blocktrans with privacy_contact="privacy@weblate.org" %}Weblate has appointed a data protection officer who may be reached via {{privacy_contact}}.{% endblocktrans %}</p>
+
+<h2>{% blocktrans %}Personal Data processed by Weblate{% endblocktrans %}</h2>
+
+<p>
+{% trans "Weblate only processes Personal Data the User provides by using it:" %}
+</p>
+
+<dl>
+
+<dt>{% trans "Name and e-mail address" %}</dt>
+<dd>{% trans "These are used to identify you in the VCS commits." %}</dd>
+<dd>{% trans "Additionally, e-mail is used for notification of watched events." %}</dd>
+
+<dt>{% trans "Password in hashed form" %}</dt>
+<dd>{% trans "Used to authenticate the User, if configured" %}</dd>
+<dd>{% trans "Passwords are stored hashed using Argon2." %}</dd>
+
+<dt>{% trans "IP address and browser name" %}</dt>
+<dd>{% trans "These are logged in case of important changes to your account (e.g. password change) to allow diagnosis in case your account is stolen." %}</dd>
+
+<dt>{% trans "Billing info" %}</dt>
+<dd>{% trans "Necessary details to issue an invoice is collected when purchasing a service from us." %}</dd>
+
+</dl>
+
+<h2>{% blocktrans %}Purpose and legal basis of processing Personal Data{% endblocktrans %}</h2>
+
+<p>{% blocktrans %}Your Personal Data will be used for the purposes of the Service:{% endblocktrans %}</p>
+
+<ul>
+    {% law_url 6 scope="GDPR" as url %}
+    <li>{% blocktrans %}for providing our services on the Service, to contact you in matters regarding our services (also by means of e-mails and messaging) and to ensure the technical functionality of our services fulfillment of contractual or pre-contractual obligations (<a href="{{ url }}">Article 6 (1) b. GDPR</a>){% endblocktrans %}</li>
+    <li>{% blocktrans %}to analyze your use of our services and improve our services (<a href="{{ url }}">Article 6 (1) b. and f. GDPR</a>){% endblocktrans %}</li>
+    <li>{% blocktrans %}with your express consent or instruction to carry out our business activities or send you newsletters (<a href="{{ url }}">Article 6 (1) a. GDPR</a>){% endblocktrans %}</li>
+</ul>
+
+<h2>{% blocktrans %}Access to the Personal Data{% endblocktrans %}</h2>
+
+<p>{% blocktrans %}The Controller has made all reasonable technical means to protect the Personal Data. Only authorized persons can access the Personal Data.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Third parties which can gain access to the Personal Data when necessary are:{% endblocktrans %}</p>
+
+<ul>
+    <li>{% blocktrans %}Persons which are contracted for technical assurance of the service.{% endblocktrans %}</li>
+    <li>{% blocktrans %}Payment processors when purchasing a service from us.{% endblocktrans %}</li>
+</ul>
+
+<p>{% blocktrans %}All Personal Data is stored in the European Union.{% endblocktrans %}</p>
+
+<h2>{% blocktrans %}Disclossure of the Personal Data{% endblocktrans %}</h2>
+
+<p>{% blocktrans %}The Personal Data might be disclosed to third parties in limited circumstances when the Controller has a good faith belief it is required by law, such as under a subpoena or other judicial or administrative order.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}In case the Controller is required by law to disclose the Personal Data, an attempt will be made to provide the User with prior notice by e-mail (unless the Controller is prohibited, or it would be futile) that a request for the Personal Data has been made to allow the User to object to the disclosure. If the User does not challenge the disclosure request, the Controller may be legally required to turn over the Personal Data.{% endblocktrans %}</p>
+
+<h2>{% blocktrans %}The Personal Data retention{% endblocktrans %}</h2>
+
+<p>{% blocktrans %}The Personal Data is stored in the Service until the User deletes their account on the service.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Access log info might be collected for a longer period for the purpose of establishing, exercising or defending legal claims.{% endblocktrans %}</p>
+
+<h2 id="rights">{% blocktrans %}Your rights{% endblocktrans %}</h2>
+
+<p>{% blocktrans %}The User provides use of Personal Data voluntarily. Without this Personal Data Weblate is not able to provide our services.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}We want you to always be in control of your Personal Data. To this end, you have certain rights that allow for it. Under certain conditions, you may:{% endblocktrans %}</p>
+
+<ul>
+    {% law_url 15 scope="GDPR" as url %}
+    <li>{% blocktrans %}Gain access to all your Personal Data that Weblate uses or processes, and even get a copy of all of it (<a href="{{ url }}">Article 15 GDPR</a>){% endblocktrans %}</li>
+    <li>{% blocktrans %}Correct the Personal Data that Weblate processes if you think that there are mistakes{% endblocktrans %}</li>
+    <li>{% blocktrans %}Order us to delete your Personal Data{% endblocktrans %}</li>
+    <li>{% blocktrans %}Restrict the Personal Data processing{% endblocktrans %}</li>
+    <li>{% blocktrans %}Object to processing{% endblocktrans %}</li>
+    <li>{% blocktrans %}Receive your Personal Data in a commonly used and machine-readable format or to transmit this Personal Data to a different provider.{% endblocktrans %}</li>
+</ul>
+
+<p>{% blocktrans %}The removal, correction, and retrieval of your Personal Data can be done from the account management, and is fully automated.{% endblocktrans %}</p>
