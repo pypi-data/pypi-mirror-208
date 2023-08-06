@@ -1,0 +1,22 @@
+{% load wagtailcore_tags %}
+
+<h2 class="section-title"><i class="{{ value.fa_icon }} mr-3"></i><span>{{ value.heading }}</span></h2>
+{% for post in value.posts %}
+<ul>
+  <li>
+    {% if post.block_type == "external_post" %}
+    <a href="{{ post.value.url }}">{{ post.value.title }}</a>
+    <p class="date post-date">
+      {{ post.value.date }}
+    </p>
+    {% else %}
+    {% with post.value.post as internal_post %}
+    <a href="{{ internal_post.url }}">{{ internal_post.title }}</a>
+    <p class="date post-date">
+      {{ internal_post.first_published_at|date:"M. d, Y" }}
+    </p>
+    {% endwith %}
+    {% endif %}
+  </li>
+</ul>
+{% endfor %}
