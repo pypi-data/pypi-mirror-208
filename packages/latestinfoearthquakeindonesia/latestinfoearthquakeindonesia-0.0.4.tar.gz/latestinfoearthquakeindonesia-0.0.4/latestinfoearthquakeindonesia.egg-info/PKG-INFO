@@ -1,0 +1,31 @@
+Metadata-Version: 2.1
+Name: latestinfoearthquakeindonesia
+Version: 0.0.4
+Summary: This package will get the latest earthquake from BMKG | Meteorological, Climatological, and Geophysical Agency.
+Home-page: https://github.com/TOSS-ID/latest-indonesia-earthquake
+Author: Hendra Go
+Author-email: hendrago91@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 5 - Production/Stable
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Latest Indonesia Earthquake
+This package will get the latest earthquake from BMKG | Meteorological, Climatological, and Geophysical Agency.
+
+##How to use ?
+```
+import gempaterkini
+
+if __name__ == '__main__':
+    result = gempaterkini.ekstraksi_data()
+    gempaterkini.tampilkan_data(result)
+```
+
+##How does it work ?
+This package will scrape from [BMKG](https://www.bmkg.go.id) to get latest earthquake information in Indonesia
+
+This package will use Beautifulsoup4 to produce output in the form of JSON which is ready to use in web or mobile application
