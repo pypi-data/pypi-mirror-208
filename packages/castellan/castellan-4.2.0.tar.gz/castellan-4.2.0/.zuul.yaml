@@ -1,0 +1,65 @@
+- job:
+    name: castellan-functional-vault
+    parent: openstack-tox-py310
+    description: |
+      Run tox functional-vault target
+    required-projects:
+      - name: openstack/castellan
+    vars:
+      tox_envlist: functional-vault-py310
+
+- job:
+    name: castellan-functional-devstack
+    parent: devstack
+    description: |
+      Run DevStack-based Castellan functional tests
+    pre-run: playbooks/devstack/pre.yaml
+    run: playbooks/devstack/run.yaml
+    post-run: playbooks/devstack/post.yaml
+    required-projects:
+      - name: openstack/castellan
+      - name: openstack/barbican
+      - name: openstack/python-barbicanclient
+    roles:
+      - zuul: openstack-infra/devstack
+    timeout: 9000
+    vars:
+      devstack_services:
+        # is there a way to disable all services?  I only want barbican
+        ceilometer-acentral: false
+        ceilometer-acompute: false
+        ceilometer-alarm-evaluator: false
+        ceilometer-alarm-notifier: false
+        ceilometer-anotification: false
+        ceilometer-api: false
+        ceilometer-collector: false
+        horizon: false
+        s-account: false
+        s-container: false
+        s-object: false
+        s-proxy: false
+      devstack_plugins:
+        barbican: https://opendev.org/openstack/barbican
+      tox_environment:
+        PYTHONUNBUFFERED: 'true'
+        tox_install_siblings: false # I don't know what this means
+      tox_envlist: functional
+      zuul_work_dir: src/opendev.org/openstack/castellan
+
+- project:
+    check:
+      jobs:
+        - castellan-functional-vault
+        - castellan-functional-devstack
+        - barbican-tempest-plugin-simple-crypto-castellan-src
+    gate:
+      jobs:
+        - castellan-functional-vault
+        - castellan-functional-devstack
+        - barbican-tempest-plugin-simple-crypto-castellan-src
+    templates:
+      - check-requirements
+      - openstack-python3-jobs
+      - periodic-stable-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
