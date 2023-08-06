@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    >
+
+  <adapter
+      name="session"
+      factory=".session_traversal.SessionTraversal"
+      />
+
+  <adapter
+      factory=".tree_item_traversal.TraversedSessionPublishTraverser"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      />
+
+  <adapter
+      factory=".tree_item_traversal.SurveyTreeItemPublishTraverser"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      />
+
+  <adapter factory=".json.SA2DictAdapter" />
+  <adapter factory=".json.SurveyTreeItem2DictAdapter" />
+  <adapter factory=".json.Risk2DictAdapter" />
+  <adapter factory=".json.SurveySession2DictAdapter" />
+
+</configure>
