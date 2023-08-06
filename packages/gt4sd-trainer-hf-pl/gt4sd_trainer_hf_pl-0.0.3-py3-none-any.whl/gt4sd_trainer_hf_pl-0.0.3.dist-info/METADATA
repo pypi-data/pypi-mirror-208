@@ -1,0 +1,104 @@
+Metadata-Version: 2.1
+Name: gt4sd-trainer-hf-pl
+Version: 0.0.3
+Summary: Transformers trainer submodule of GT4SD.
+Author: GT4SD team
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: charset-normalizer (>=2.0)
+Requires-Dist: datasets (>=1.11.0)
+Requires-Dist: importlib-metadata (>=1.7.0)
+Requires-Dist: importlib-resources (>=5.10.0)
+Requires-Dist: joblib (>=1.1.0)
+Requires-Dist: numpy (>=1.16.5)
+Requires-Dist: pytorch-lightning (<=1.9.5)
+Requires-Dist: pyyaml (>=5.4.1)
+Requires-Dist: regex (>=2.5.91)
+Requires-Dist: scikit-learn (>=1.0.0)
+Requires-Dist: scipy (>=1.0.0)
+Requires-Dist: sentencepiece (>=0.1.95)
+Requires-Dist: tensorboard (>=2.2.0)
+Requires-Dist: torch (<=1.13.1)
+Requires-Dist: torchmetrics (>=0.7.0)
+Requires-Dist: transformers (>=4.22.0)
+Requires-Dist: typing-extensions (>=3.7.4.3)
+Requires-Dist: wheel (>=0.26)
+
+# GT4SD's trainer submodule for HF transformers and PyTorch Lightning
+
+Train Language Models via HuggingFace transformers and PyTorch Lightning.
+
+
+### Development setup & installation
+
+Create any virtual or conda environment compatible with the specs in setup.cfg. Then run:
+```sh
+pip install -e ".[dev]" 
+```
+
+
+
+### Perform training via the CLI command
+
+GT4SD provides a trainer client based on the `gt4sd-lm-trainer` CLI command. 
+```console
+$ gt4sd-trainer-lm --help
+usage: gt4sd-trainer-lm [-h] [--configuration_file CONFIGURATION_FILE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --configuration_file CONFIGURATION_FILE
+                        Configuration file for the trainining. It can be used
+                        to completely by-pass pipeline specific arguments.
+                        (default: None)
+```
+
+To launch a training you have two options.
+
+You can either specify the path of a configuration file that contains the needed training parameters:
+
+```sh
+gt4sd-trainer-lm  --training_pipeline_name ${TRAINING_PIPELINE_NAME} --configuration_file ${CONFIGURATION_FILE}
+```
+
+Or you can provide directly the needed parameters as arguments:
+
+```sh
+gt4sd-trainer-lm --type mlm --model_name_or_path mlm --training_file /path/to/train_file.jsonl --validation_file /path/to/valid_file.jsonl
+```
+
+
+### Convert PyTorch Lightning checkpoints to HuggingFace model via the CLI command
+
+Once a training pipeline has been run via the `gt4sd-lm-trainer`, it's possible to convert the PyTorch Lightning checkpoint
+ to HugginFace model via `gt4sd-pl-to-hf`:
+
+```sh
+gt4sd-pl-to-hf --hf_model_path ${HF_MODEL_PATH} --training_type ${TRAINING_TYPE} --model_name_or_path ${MODEL_NAME_OR_PATH} --ckpt {CKPT} --tokenizer_name_or_path {TOKENIZER_NAME_OR_PATH}
+```
+
+
+
+### References
+
+If you use `gt4sd` in your projects, please consider citing the following:
+
+```bib
+@article{manica2022gt4sd,
+  title={GT4SD: Generative Toolkit for Scientific Discovery},
+  author={Manica, Matteo and Cadow, Joris and Christofidellis, Dimitrios and Dave, Ashish and Born, Jannis and Clarke, Dean and Teukam, Yves Gaetan Nana and Hoffman, Samuel C and Buchan, Matthew and Chenthamarakshan, Vijil and others},
+  journal={arXiv preprint arXiv:2207.03928},
+  year={2022}
+}
+```
+
+### License
+
+The `gt4sd` codebase is under MIT license.
+For individual model usage, please refer to the model licenses found in the original packages.
