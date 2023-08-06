@@ -1,0 +1,25 @@
+graft wes_palette
+
+include LICENSE
+include README.md
+
+include *.md
+include *.png
+include *.yaml
+recursive-include tests *.png
+
+include .bumpversion.cfg
+include pyproject.toml
+include Makefile
+
+prune .github
+exclude .gitignore
+exclude .gitattributes
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .git
+global-exclude .ipynb_checkpoints
+global-exclude .DS_Store
