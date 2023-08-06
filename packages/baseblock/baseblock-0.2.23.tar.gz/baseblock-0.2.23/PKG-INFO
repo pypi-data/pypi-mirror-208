@@ -1,0 +1,51 @@
+Metadata-Version: 2.1
+Name: baseblock
+Version: 0.2.23
+Summary: Base Block of Common Enterprise Python Utilities
+Home-page: https://github.com/craigtrim/climate-bot
+License: MIT
+Keywords: utility,helper,text,matching
+Author: Craig Trim
+Author-email: craigtrim@gmail.com
+Maintainer: Craig Trim
+Maintainer-email: craigtrim@gmail.com
+Requires-Python: >=3.8.5,<4.0.0
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: PyYAML (==6.0)
+Requires-Dist: cryptography (==38.0.1)
+Requires-Dist: unicodedata2
+Project-URL: Repository, https://github.com/craigtrim/climate-bot
+Description-Content-Type: text/markdown
+
+# Base Block (baseblock)
+
+Base Block of Common Enterprise Python Utilities
+
+
+## Crypto Base
+Usage
+```python
+from baseblock import CryptoBase
+
+key = CryptoBase.generate_private_key()
+```
+
+The `key` is used to both encrypt and decrypt text, like this:
+```python
+input_text = "Hello, World!"
+
+crypt = CryptoBase(key)
+
+x = crypt.encrypt_str(input_text)
+y = crypt.decrypt_str(x)
+
+assert input_text == y
+```
+
+The key can also be stored in the environment under **BASEBLOCK_CRYPTO_KEY**.
+
