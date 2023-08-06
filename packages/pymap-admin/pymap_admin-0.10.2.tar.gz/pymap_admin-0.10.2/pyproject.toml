@@ -1,0 +1,159 @@
+# Copyright (c) 2023 Ian C. Good
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+
+[build-system]
+requires = ['hatchling']
+build-backend = 'hatchling.build'
+
+[project]
+name = 'pymap-admin'
+dynamic = ['version']
+authors = [
+    { name = 'Ian Good', email = 'ian@icgood.net' },
+]
+description = 'Tool for administering running pymap instances.'
+license = { file = 'LICENSE.md' }
+readme = { file = 'README.md', content-type = 'text/markdown' }
+requires-python = '~=3.11'
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Topic :: Communications :: Email :: Post-Office',
+    'Topic :: Communications :: Email :: Post-Office :: IMAP',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3.11',
+]
+dependencies = [
+    'grpclib ~= 0.4',
+    'protobuf ~= 4.23',
+    'typing-extensions',
+]
+
+[project.optional-dependencies]
+error-details = ['googleapis-common-protos ~= 1.59']
+build = ['grpcio-tools', 'mypy-protobuf']
+
+[project.urls]
+'Homepage' = 'https://github.com/icgood/pymap-admin/'
+'API Documentation' = 'https://icgood.github.io/pymap-admin/'
+
+[project.scripts]
+pymap-admin = 'pymapadmin.main:main'
+
+[project.entry-points.'pymapadmin.commands']
+check = 'pymapadmin.commands.health:CheckCommand'
+save-args = 'pymapadmin.commands.system:SaveArgsCommand'
+login = 'pymapadmin.commands.system:LoginCommand'
+ping = 'pymapadmin.commands.system:PingCommand'
+append = 'pymapadmin.commands.mailbox:AppendCommand'
+get-user = 'pymapadmin.commands.user:GetUserCommand'
+set-user = 'pymapadmin.commands.user:SetUserCommand'
+delete-user = 'pymapadmin.commands.user:DeleteUserCommand'
+
+[tool.hatch.version]
+path = 'pymapadmin/__about__.py'
+
+[tool.hatch.build]
+exclude = ['/doc', '/.github']
+
+[tool.hatch.build.targets.wheel]
+packages = ['pymapadmin']
+
+[tool.mypy]
+strict = true
+files = ['pymapadmin', 'test']
+
+[[tool.mypy.overrides]]
+module = 'google.rpc.*'
+ignore_missing_imports = true
+
+[tool.ruff]
+select = ['ANN', 'B', 'E', 'F', 'N', 'S', 'W']
+ignore = ['ANN101', 'ANN102', 'ANN401', 'S101']
+line-length = 79
+exclude = [
+    'pymapadmin/grpc/*_pb2.py*',
+    'pymapadmin/grpc/*_grpc.py*',
+]
+
+[tool.ruff.per-file-ignores]
+"test/*" = ['ANN', 'S106', 'N802']
+
+[tool.autopep8]
+aggressive = 1
+exclude = '*/grpc/*'
+
+[tool.pytest.ini_options]
+testpaths = 'test'
+asyncio_mode = 'auto'
+norecursedirs = 'doc'
+
+[tool.coverage.report]
+fail_under = 90
+omit = ['*/__about__.py', '*/main.py', '*/config.py', '*/local.py', '*/grpc/*']
+exclude_lines = [
+    'pragma: no cover',
+    'NotImplemented',
+    '^\s*...\s*$',
+    'def __repr__',
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+    'mypy',
+    'pytest',
+    'pytest-asyncio',
+    'pytest-cov',
+    'ruff',
+    'pycodestyle',
+    'autopep8',
+    'types-protobuf',
+]
+
+[tool.hatch.envs.default.scripts]
+run-pytest = 'py.test --cov-report=term-missing --cov=pymapadmin'
+run-mypy = 'mypy pymapadmin test'
+run-ruff = 'ruff pymapadmin test'
+run-autopep8 = 'autopep8 --exit-code -dr pymapadmin test'
+check = ['run-pytest', 'run-autopep8', 'run-mypy', 'run-ruff']
+
+[[tool.hatch.envs.all.matrix]]
+python = ['3.11']
+
+[tool.hatch.envs.proto]
+features = ['build']
+
+[tool.hatch.envs.proto.scripts]
+update = "curl -o pymapadmin/grpc/health.proto 'https://raw.githubusercontent.com/grpc/grpc-proto/master/grpc/health/v1/health.proto'"
+build = ['update', "python -m grpc_tools.protoc '@pymapadmin/grpc/grpc_tools.protoc-args'"]
+
+[tool.hatch.envs.doc]
+dependencies = [
+    'sphinx',
+    'sphinx-autodoc-typehints',
+    'cloud_sptheme',
+]
+
+[tool.hatch.envs.doc.scripts]
+build = 'make -C doc html'
+browse = ['build', 'open doc/build/html/index.html']
