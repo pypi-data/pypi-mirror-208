@@ -1,0 +1,560 @@
+"""Resources that represent collections of predictors."""
+from functools import partial
+from typing import Any, Iterable, Optional, Union
+from uuid import UUID
+
+from gemd.enumeration.base_enumeration import BaseEnumeration
+
+from citrine._rest.resource import Resource
+from citrine._rest.paginator import Paginator
+from citrine._serialization import properties
+from citrine._session import Session
+from citrine.exceptions import Conflict
+from citrine.informatics.data_sources import DataSource
+from citrine.informatics.predictors import GraphPredictor
+from citrine.resources.module import AbstractModuleCollection
+from citrine.resources.status_detail import StatusDetail
+
+
+MOST_RECENT_VER = "most_recent"
+
+
+class AsyncDefaultPredictor(Resource["AsyncDefaultPredictor"]):
+    """Return type for async default predictor generation and retrieval."""
+
+    uid = properties.UUID('id', serializable=False)
+    """:UUID: Citrine Platform unique identifier for this task."""
+
+    predictor = properties.Optional(properties.Object(GraphPredictor), 'data', serializable=False)
+    """:Optional[GraphPredictor]:"""
+
+    status = properties.String('metadata.status', serializable=False)
+    """:str: short description of the resource's status"""
+
+    status_detail = properties.List(properties.Object(StatusDetail), 'metadata.status_detail',
+                                    default=[], serializable=False)
+    """:List[StatusDetail]: a list of structured status info, containing the message and level"""
+
+    @classmethod
+    def _pre_build(cls, data: dict) -> dict:
+        """Build an instance of this object from given data."""
+        if data.get("data"):
+            data["data"] = GraphPredictor.wrap_instance(data["data"]["instance"])
+        return data
+
+
+class AutoConfigureMode(BaseEnumeration):
+    """The format to use in building auto-configured assets.
+
+    * PLAIN corresponds to a single-row GEM table and plain predictor
+    * FORMULATION corresponds to a multi-row GEM table and formulations predictor
+    * INFER auto-detects the GEM table and predictor type
+    """
+
+    PLAIN = 'PLAIN'
+    FORMULATION = 'FORMULATION'
+    INFER = 'INFER'
+
+
+class _PredictorVersionPaginator(Paginator):
+    def _comparison_fields(self, entity: GraphPredictor) -> Any:
+        return (entity.uid, entity.version)
+
+    def paginate(self, *args, **kwargs) -> Iterable[GraphPredictor]:
+        # Since predictor versions have the same uid, and the paginate method uses uid alone to
+        # dedup, we have to disable deduplication in order to use it.
+        kwargs["deduplicate"] = False
+        return super().paginate(*args, **kwargs)
+
+
+class _PredictorVersionCollection(AbstractModuleCollection[GraphPredictor]):
+    _api_version = 'v3'
+    _path_template = '/projects/{project_id}/predictors/{uid}/versions'
+    _individual_key = None
+    _resource = GraphPredictor
+    _collection_key = 'response'
+    _paginator: Paginator = _PredictorVersionPaginator()
+
+    _SPECIAL_VERSIONS = ["latest", MOST_RECENT_VER]
+
+    def __init__(self, project_id: UUID, session: Session):
+        self.project_id = project_id
+        self.session: Session = session
+
+    def _construct_path(self,
+                        uid: Union[UUID, str],
+                        version: Optional[Union[int, str]] = None,
+                        action: str = None) -> str:
+        path = self._path_template.format(project_id=self.project_id, uid=str(uid))
+        if version is not None:
+            version_str = str(version)
+            if version_str not in self._SPECIAL_VERSIONS \
+                    and (not version_str.isdecimal() or int(version_str) <= 0):
+                raise ValueError("A predictor version must either be a positive integer, "
+                                 f"\"latest\", or \"{MOST_RECENT_VER}\".")
+
+            path += f"/{version_str}"
+            path += f"/{action}" if action else ""
+        return path
+
+    def _page_fetcher(self, *, uid: Union[UUID, str], **additional_params):
+        fetcher_params = {
+            "path": self._construct_path(uid),
+            "additional_params": additional_params
+        }
+        return partial(self._fetch_page, **fetcher_params)
+
+    def _train(self, uid: Union[UUID, str], version: Union[int, str]) -> GraphPredictor:
+        path = self._construct_path(uid, version, "train")
+        params = {"create_version": True}
+        entity = self.session.put_resource(path, {}, params=params, version=self._api_version)
+        return self.build(entity)
+
+    def build(self, data: dict) -> GraphPredictor:
+        """Build an individual Predictor."""
+        predictor: GraphPredictor = GraphPredictor.build(data)
+        predictor._session = self.session
+        predictor._project_id = self.project_id
+        return predictor
+
+    def get(self,
+            uid: Union[UUID, str],
+            *,
+            version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        path = self._construct_path(uid, version)
+        entity = self.session.get_resource(path, version=self._api_version)
+        return self.build(entity)
+
+    def list(self,
+             uid: Union[UUID, str],
+             *,
+             per_page: int = 100) -> Iterable[GraphPredictor]:
+        """List non-archived versions of the given predictor."""
+        page_fetcher = self._page_fetcher(uid=uid)
+        return self._paginator.paginate(page_fetcher=page_fetcher,
+                                        collection_builder=self._build_collection_elements,
+                                        per_page=per_page)
+
+    def list_archived(self,
+                      uid: Union[UUID, str],
+                      *,
+                      per_page: int = 20) -> Iterable[GraphPredictor]:
+        """List archived versions of the given predictor."""
+        page_fetcher = self._page_fetcher(uid=uid, filter="archived eq 'true'")
+        return self._paginator.paginate(page_fetcher=page_fetcher,
+                                        collection_builder=self._build_collection_elements,
+                                        per_page=per_page)
+
+    def archive(self,
+                uid: Union[UUID, str],
+                *,
+                version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        url = self._construct_path(uid, version, "archive")
+        entity = self.session.put_resource(url, {}, version=self._api_version)
+        return self.build(entity)
+
+    def restore(self,
+                uid: Union[UUID, str],
+                *,
+                version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        url = self._construct_path(uid, version, "restore")
+        entity = self.session.put_resource(url, {}, version=self._api_version)
+        return self.build(entity)
+
+    def convert_to_graph(self,
+                         uid: Union[UUID, str],
+                         *,
+                         version: Union[int, str] = MOST_RECENT_VER,
+                         retrain_if_needed: bool = False) -> Optional[GraphPredictor]:
+        path = self._construct_path(uid, version, "convert")
+        try:
+            entity = self.session.get_resource(path, version=self._api_version)
+        except Conflict as exc:
+            if retrain_if_needed:
+                self._train(uid, version)
+                return None
+            else:
+                raise exc
+        return self.build(entity)
+
+    def is_stale(self,
+                 uid: Union[UUID, str],
+                 *,
+                 version: Union[int, str] = MOST_RECENT_VER) -> bool:
+        path = self._construct_path(uid, version, "is-stale")
+        response = self.session.get_resource(path, version=self._api_version)
+        return response["is_stale"]
+
+    def retrain_stale(self,
+                      uid: Union[UUID, str],
+                      *,
+                      version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        path = self._construct_path(uid, version, "retrain-stale")
+        entity = self.session.put_resource(path, {}, version=self._api_version)
+        return self.build(entity)
+
+
+class PredictorCollection(AbstractModuleCollection[GraphPredictor]):
+    """Represents the collection of all predictors for a project.
+
+    Parameters
+    ----------
+    project_id: UUID
+        the UUID of the project
+
+    """
+
+    _api_version = 'v3'
+    _path_template = '/projects/{project_id}/predictors'
+    _individual_key = None
+    _resource = GraphPredictor
+    _collection_key = 'response'
+
+    def __init__(self, project_id: UUID, session: Session):
+        self.project_id = project_id
+        self.session: Session = session
+        self._versions_collection = _PredictorVersionCollection(project_id, session)
+
+    def build(self, data: dict) -> GraphPredictor:
+        """Build an individual Predictor."""
+        predictor: GraphPredictor = GraphPredictor.build(data)
+        predictor._session = self.session
+        predictor._project_id = self.project_id
+        return predictor
+
+    def get(self,
+            uid: Union[UUID, str],
+            *,
+            version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        """Get a predictor by ID and (optionally) version.
+
+        If version is omitted, the most recent version will be retrieved.
+        """
+        if uid is None:
+            raise ValueError("Cannot get when uid=None.  Are you using a registered resource?")
+        return self._versions_collection.get(uid=uid, version=version)
+
+    def register(self, predictor: GraphPredictor) -> GraphPredictor:
+        """Register and train a Predictor.
+
+        This predctor will be version 1, and its `draft` flag will be `True`. If training completes
+        successfully, the `draft` flag will be set to `False`. Otherwise, it will remain `False`.
+        """
+        created_predictor = super().register(predictor)
+
+        # If the initial response is invalid, just return it.
+        # If not, kick off training since we never exposed saving a model without it,
+        # so we should continue to do it automatically.
+        if created_predictor.failed():
+            return created_predictor
+        else:
+            return self._train(created_predictor.uid)
+
+    def update(self, predictor: GraphPredictor) -> GraphPredictor:
+        """Update and train a Predictor.
+
+        If the predictor is a draft, this will overwrite its contents, then begin training. If it's
+        not a draft, a new version will be created with the update, and then training will begin.
+
+        In either case, if training completes successfully, it will no longer be a draft.
+        """
+        updated_predictor = super().update(predictor)
+
+        # If the initial response is invalid, just return it
+        # If not, kick off training since we never exposed saving a model without training
+        # so we should continue to do it automatically
+        if updated_predictor.failed():
+            return updated_predictor
+        else:
+            return self._train(updated_predictor.uid)
+
+    def _train(self, uid: Union[UUID, str]) -> GraphPredictor:
+        path = self._get_path(uid, action="train")
+        params = {"create_version": True}
+        entity = self.session.put_resource(path, {}, params=params, version=self._api_version)
+        return self.build(entity)
+
+    def archive_version(
+            self,
+            uid: Union[UUID, str],
+            *,
+            version: Union[int, str]
+    ) -> GraphPredictor:
+        """Archive a predictor version."""
+        return self._versions_collection.archive(uid, version=version)
+
+    def restore_version(
+            self,
+            uid: Union[UUID, str],
+            *,
+            version: Union[int, str]
+    ) -> GraphPredictor:
+        """Restore a predictor version."""
+        return self._versions_collection.restore(uid, version=version)
+
+    def archive_root(self, uid: Union[UUID, str]):
+        """Archive a root predictor.
+
+        uid: Union[UUID, str]
+            Unique identifier of the predictor to archive.
+
+        """
+        path = self._get_path(uid=uid, action="archive")
+        self.session.put_resource(path, {}, version=self._api_version)
+
+    def restore_root(self, uid: Union[UUID, str]):
+        """Restore an archived root predictor.
+
+        uid: Union[UUID, str]
+            Unique identifier of the predictor to restore.
+
+        """
+        path = self._get_path(uid, action="restore")
+        self.session.put_resource(path, {}, version=self._api_version)
+
+    def root_is_archived(self, uid: Union[UUID, str]) -> bool:
+        """Determine if the predictor root is archived.
+
+        uid: Union[UUID, str]
+            Unique identifier of the predictor to check.
+        """
+        uid = str(uid)
+        return any(uid == str(archived_pred.uid) for archived_pred in self.list_archived())
+
+    def archive(self, uid: Union[UUID, str]):
+        """[UNSUPPORTED] Use archive_root or archive_version instead."""
+        raise NotImplementedError("The archive() method is no longer supported. You most likely "
+                                  "want archive_root(), or possibly archive_version().")
+
+    def restore(self, uid: Union[UUID, str]):
+        """[UNSUPPORTED] Use restore_root or restore_version instead."""
+        raise NotImplementedError("The restore() method is no longer supported. You most likely "
+                                  "want restore_root(), or possibly restore_version().")
+
+    def list_versions(self,
+                      uid: Union[UUID, str] = None,
+                      *,
+                      per_page: int = 100) -> Iterable[GraphPredictor]:
+        """List all non-archived versions of the given Predictor."""
+        return self._versions_collection.list(uid, per_page=per_page)
+
+    def list_archived(self, *, per_page: int = 20) -> Iterable[GraphPredictor]:
+        """List archived Predictors."""
+        fetcher = partial(self._fetch_page, additional_params={"filter": "archived eq 'true'"})
+        return self._paginator.paginate(page_fetcher=fetcher,
+                                        collection_builder=self._build_collection_elements,
+                                        per_page=per_page)
+
+    def list_archived_versions(self,
+                               uid: Union[UUID, str] = None,
+                               *,
+                               per_page: int = 20) -> Iterable[GraphPredictor]:
+        """List all archived versions of the given Predictor."""
+        return self._versions_collection.list_archived(uid, per_page=per_page)
+
+    def check_for_update(self, uid: Union[UUID, str]) -> Optional[GraphPredictor]:
+        """
+        Check if there are updates available for a predictor.
+
+        Typically these are updates to the training data. For example, a GEM Table may have
+        been re-built to include additional rows.
+
+        This check does not update the predictor; it just returns the update that is available.
+        To perform the update, the response should then be used to call PredictorCollection.update
+
+        Parameters
+        ----------
+        uid: Union[UUID, str]
+            Unique identifier of the predictor to check
+
+        Returns
+        -------
+        Optional[Predictor]
+            The update, if an update is available; None otherwise.
+
+        """
+        path = self._get_path(uid, action="update-check")
+        update_data = self.session.get_resource(path, version=self._api_version)
+        if update_data["updatable"]:
+            built = GraphPredictor.build(update_data)
+            built.uid = uid
+            return built
+        else:
+            return None
+
+    def create_default(self,
+                       *,
+                       training_data: DataSource,
+                       pattern: Union[str, AutoConfigureMode] = AutoConfigureMode.INFER,
+                       prefer_valid: bool = True) -> GraphPredictor:
+        """Create a default predictor for some training data.
+
+        This method will return an unregistered predictor generated by inspecting the
+        training data and attempting to automatically configure the predictor.
+
+        The configuration generated while using the `AutoConfigureMode.SIMPLE` pattern
+        includes featurizers for chemical formulas/molecular structures,
+        and `AutoMLPredictor`s for any variables identified as responses in the training data.
+        The configuration generated while using the `AutoConfigureMode.FORMULATION` pattern
+        includes these same components, as well as a `SimpleMixturePredictor`,
+        `LabelFractionsPredictor`, `IngredientFractionsPredictor`, and a series of
+        `MeanPropertyPredictor`s to handle featurization of formulation quantities
+        and ingredient properties.
+        The `AutoConfigureMode.INFER` pattern chooses an appropriate mode based on whether
+        the data source contains formulations data or not.
+
+        Parameters
+        ----------
+        training_data: DataSource
+            The data to configure the predictor to model.
+        pattern: AutoConfigureMode or str
+            The predictor pattern to use, either "PLAIN", "FORMULATION", or "INFER".
+            The "INFER" pattern auto-detects whether the `DataSource` contains formulations
+            data or not.
+            If it does, then a formulation predictor is created.
+            If not, then a plain predictor is created.
+        prefer_valid: Boolean
+            If True, enables filtering of sparse descriptors and trimming of
+            excess graph components in attempt to return a default configuration
+            that will pass validation.
+            Default: True.
+
+        Returns
+        -------
+        GraphPredictor
+            Automatically configured predictor for the training data
+
+        """
+        payload = PredictorCollection._create_default_payload(training_data, pattern, prefer_valid)
+        path = self._get_path(action="default")
+        data = self.session.post_resource(path, json=payload, version=self._api_version)
+        return self.build(GraphPredictor.wrap_instance(data["instance"]))
+
+    def create_default_async(self,
+                             *,
+                             training_data: DataSource,
+                             pattern: Union[str, AutoConfigureMode] = AutoConfigureMode.INFER,
+                             prefer_valid: bool = True) -> AsyncDefaultPredictor:
+        """Similar to PredictorCollection.create_default, except asynchronous.
+
+        This begins a long-running task to generate the predictor. The returned object contains an
+        ID which can be used to track its status and get the resulting predictor once complete.
+        PredictorCollection.get_default_async is intended for that purpose.
+
+        See PredictorCollection.create_default for more details on the generation process and
+        parameter specifics.
+
+        Parameters
+        ----------
+        training_data: DataSource
+            The data to configure the predictor to model.
+        pattern: AutoConfigureMode or str
+            The predictor pattern to use, either "PLAIN", "FORMULATION", or "INFER".
+            The "INFER" pattern auto-detects whether the `DataSource` contains formulations
+            data or not.
+            If it does, then a formulation predictor is created.
+            If not, then a plain predictor is created.
+        prefer_valid: Boolean
+            If True, enables filtering of sparse descriptors and trimming of
+            excess graph components in attempt to return a default configuration
+            that will pass validation.
+            Default: True.
+
+        Returns
+        -------
+        AsyncDefaultPredictor
+            Information on the long-running default predictor generation task.
+
+        """
+        payload = PredictorCollection._create_default_payload(training_data, pattern, prefer_valid)
+        path = self._get_path(action="default-async")
+        data = self.session.post_resource(path, json=payload, version=self._api_version)
+        return AsyncDefaultPredictor.build(data)
+
+    @staticmethod
+    def _create_default_payload(training_data: DataSource,
+                                pattern: Union[str, AutoConfigureMode] = AutoConfigureMode.INFER,
+                                prefer_valid: bool = True) -> dict:
+        # Continue handling string pattern inputs
+        if not isinstance(pattern, AutoConfigureMode):
+            pattern = AutoConfigureMode.get_enum(pattern)
+        pattern = pattern.value
+
+        return {"data_source": training_data.dump(), "pattern": pattern,
+                "prefer_valid": prefer_valid}
+
+    def get_default_async(self, *, task_id: Union[UUID, str]) -> AsyncDefaultPredictor:
+        """Get the current async default predictor generation result.
+
+        The status field will indicate if it's INPROGRESS, SUCCEEDED, or FAILED. While INPROGRESS,
+        the predictor will also be None. Once it's SUCCEEDED, it will be populated with a
+        GraphPredictor, which can then be registered to the platform. If it's FAILED, look to the
+        status_detail field for more information on what went wrong.
+        """
+        path = self._get_path(action=["default-async", task_id])
+        data = self.session.get_resource(path, version=self._api_version)
+        return AsyncDefaultPredictor.build(data)
+
+    def convert_to_graph(self,
+                         uid: Union[UUID, str],
+                         retrain_if_needed: bool = False,
+                         *,
+                         version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        """Given a predictor containing SimpleML nodes, get an equivalent Graph predictor.
+
+        Returns a Graph predictor with any SimpleML predictors converted to an equivalent AutoML
+        predictor. If it's not a SimpleML or Graph predictor, or it's not in the READY state, an
+        error is raised. SimpleML predictors are deprecated, so this is to aid in your migration.
+        Note this conversion is not performed in place! That is, the predictor returned is not
+        persisted on the platform. To persist it, pass the converted predictor to
+        :py:meth:`citrine.resources.project.PredictorCollection.update`. Or you can do this in
+        one step with :py:meth:`citrine.resources.project.PredictorCollection.convert_and_update`.
+        .. code:: python
+            converted = project.predictors.convert_to_graph(predictor_uid)
+            project.predictors.update(converted)
+            # is equivalent to
+            converted = project.predictors.convert_and_update(predictor_uid)
+        If a predictor needs to be retrained before conversion, it will raise an HTTP 409 Conflict
+        error. This may occur when the Citrine Platform has been updated since your predictor was
+        last trained. If `retrain_if_needed` is `True`, retraining will automatically begin, and
+        the method will return `None. Once retraining completes, call this method again to get the
+        converted predictor. For example:
+        .. code:: python
+            converted = project.predictors.convert_and_update(pred.uid, retrain_if_needed=True)
+            if converted is None:
+                predictor = project.predictors.get(pred.uid)
+                wait_while_validating(collection=project.predictors, module=predictor)
+                converted = project.predictors.convert_and_update(pred.uid)
+        """
+        return self._versions_collection.convert_to_graph(uid,
+                                                          version=version,
+                                                          retrain_if_needed=retrain_if_needed)
+
+    def convert_and_update(self,
+                           uid: Union[UUID, str],
+                           retrain_if_needed: bool = False,
+                           *,
+                           version: Union[int, str] = MOST_RECENT_VER) -> GraphPredictor:
+        """Given a SimpleML or Graph predictor, overwrite it with an equivalent Graph predictor.
+
+        See `PredictorCollection.convert_to_graph` for more detail.
+        """
+        new_pred = self.convert_to_graph(uid, version=version, retrain_if_needed=retrain_if_needed)
+        return self.update(new_pred) if new_pred else None
+
+    def is_stale(self, uid: Union[UUID, str], *, version: Union[int, str]) -> bool:
+        """Returns True if a predictor is stale, False otherwise.
+
+        A predictor is stale if it's in the READY state, but the platform cannot load the
+        previously trained object.
+        """
+        return self._versions_collection.is_stale(uid, version=version)
+
+    def retrain_stale(self, uid: Union[UUID, str], *, version: Union[int, str]) -> GraphPredictor:
+        """Begins retraining a stale predictor.
+
+        This can only be used on a stale predictor, which is when it's in the READY state, but the
+        platform cannot load the previously trained object. Using it on a non-stale predictor will
+        result in an error.
+        """
+        return self._versions_collection.retrain_stale(uid, version=version)
