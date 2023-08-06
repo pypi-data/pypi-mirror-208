@@ -1,0 +1,15 @@
+mutation InsertOrchestration($workspace_id: bigint!, $task_id: uuid, $sha: bpchar!, $file_name: String, $status: String!, $name: String) {
+  insert_orchestration_one(object: {workspace_id: $workspace_id, task_id: $task_id, sha: $sha, file_name: $file_name, status: $status, name: $name}, on_conflict: {constraint: orchestration_pkey}) {
+      id
+      name
+      file_name
+      owner_id
+      sha
+      status
+      task_id
+      workspace_id
+      created_at
+      updated_at
+  }
+}
+

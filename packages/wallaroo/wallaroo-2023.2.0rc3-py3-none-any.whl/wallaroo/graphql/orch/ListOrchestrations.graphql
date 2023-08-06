@@ -1,0 +1,18 @@
+query ListOrchestrations($workspace_id: bigint!)  {
+  orchestration(where: {
+        workspace_id: {
+            _eq:$workspace_id
+        }
+    }) {
+      id
+      name
+      file_name
+      owner_id
+      sha
+      status
+      task_id
+      workspace_id
+      created_at
+      updated_at
+    }
+}

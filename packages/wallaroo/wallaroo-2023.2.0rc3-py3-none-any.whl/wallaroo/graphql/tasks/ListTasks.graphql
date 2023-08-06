@@ -1,0 +1,30 @@
+query ListTasks($workspace_id: bigint!, $run_limit: Int!) {
+    task(where: {
+        workspace_id: {
+            _eq:$workspace_id,
+        },
+        killed: {
+            _eq: false
+        }
+    }) {
+        id
+        name
+        status
+        flavor
+        input_data
+        subject
+        task_type
+        next_attempt
+        workspace_id
+        event
+        killed
+        created_at
+        updated_at
+        task_runs(limit: $run_limit) {
+            pod_id
+            status
+            created_at
+            updated_at
+        }
+    }
+}

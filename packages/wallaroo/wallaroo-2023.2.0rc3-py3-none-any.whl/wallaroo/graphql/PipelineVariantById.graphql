@@ -1,0 +1,31 @@
+query PipelineVariantById($variant_id: bigint!) {
+    pipeline_version_by_pk(id: $variant_id) {
+        id
+        created_at
+        updated_at
+        version
+        definition
+        pipeline {
+            id
+        }
+        deployment_pipeline_versions {
+            created_at
+            updated_at
+            deployment {
+                id
+            }
+        }
+        deployment_model_configs {
+            model_config {
+            id
+            model {
+                id
+                model {
+                    id
+                    name
+                    }
+                }
+            }
+        }
+    }
+}

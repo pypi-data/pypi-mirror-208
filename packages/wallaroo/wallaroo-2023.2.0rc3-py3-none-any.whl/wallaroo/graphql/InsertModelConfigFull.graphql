@@ -1,0 +1,14 @@
+mutation InsertModelConfigFull($batch_config: String, $filter_threshold: float8, $input_schema: String, $model_id: bigint!, $output_schema: String, $runtime: String!, $tensor_fields: jsonb) {
+  insert_model_config(objects: {filter_threshold: $filter_threshold, input_schema: $input_schema, model_id: $model_id, output_schema: $output_schema, runtime: $runtime, tensor_fields: $tensor_fields, batch_config: $batch_config}) {
+    returning {
+      id
+      batch_config
+      input_schema
+      model_id
+      output_schema
+      runtime
+      tensor_fields
+      filter_threshold
+    }
+  }
+}

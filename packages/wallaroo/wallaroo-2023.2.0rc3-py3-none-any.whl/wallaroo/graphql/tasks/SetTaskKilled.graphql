@@ -1,0 +1,11 @@
+mutation SetTaskKilled(
+    $id: uuid!
+) {
+    update_task_by_pk(
+        pk_columns: { id: $id }
+        _set: { killed: true }
+    ) {
+        id
+        killed
+    }
+}

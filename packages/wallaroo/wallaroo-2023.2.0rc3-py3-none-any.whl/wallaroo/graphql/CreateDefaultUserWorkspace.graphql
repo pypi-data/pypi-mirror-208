@@ -1,0 +1,27 @@
+mutation CreateDefaultUserWorkspace($user_id: String!, $workspace_name: String!, $user_type: String) {
+    insert_workspace_one(
+        object: {
+            name: $workspace_name, 
+            created_by: $user_id, 
+            users: {
+                data: {
+                    user_id: $user_id, 
+                    user_type: $user_type
+                }
+            }, 
+            archived: false, 
+            user_default_workspaces: {
+                data: {
+                    user_id: $user_id
+                }
+            }
+        },
+        on_conflict: {
+            constraint: workspace_name_key,
+            update_columns: []
+        }
+    ) 
+    {
+        id
+    }
+}

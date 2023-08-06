@@ -1,0 +1,11 @@
+query GetTasksByStatusAndWorkSpaceId(
+    $status: task_status_enum!,
+    $workspace_id: bigint!
+) {
+    task(where: {status: {_eq: $status}, workspace_id: {_eq: $workspace_id}}, killed: {_eq: false}) {
+        id
+        flavor
+        subject
+        attempt
+    }
+}

@@ -1,0 +1,18 @@
+query ListWorkspacesByUser($user_id: String!) {
+  workspace(where: {users: {user_id: {_eq: $user_id}}}) {
+    id
+    name
+    created_at
+    created_by
+    archived
+    models {
+      models {
+        id
+      }
+    }
+    pipelines {
+      id
+    }
+  }
+}
+

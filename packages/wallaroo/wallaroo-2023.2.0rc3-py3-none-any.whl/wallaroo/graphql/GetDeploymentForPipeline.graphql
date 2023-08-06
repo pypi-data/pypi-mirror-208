@@ -1,0 +1,9 @@
+query GetDeploymentForPipeline($pipeline_id: bigint!) {
+    pipeline_by_pk(id: $pipeline_id) {
+        deployment {
+            id
+            deploy_id
+            deployed
+        }
+    }
+}
