@@ -1,0 +1,1 @@
+"""Init display module"""
