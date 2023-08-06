@@ -1,0 +1,45 @@
+[build-system]
+requires = [
+    "setuptools>=36.2.1", # environment markers
+    "setuptools_scm",
+    "wheel",
+]
+
+[tool.setuptools_scm]
+write_to = "src/ampform/version.py"
+
+[tool.black]
+exclude = '''
+/(
+    .*\.egg-info
+    | .*build
+    | \.eggs
+    | \.git
+    | \.pytest_cache
+    | \.tox
+    | \.venv
+    | \.vscode
+    | dist
+)/
+'''
+include = '\.pyi?$'
+preview = true
+target-version = [
+    "py310",
+    "py311",
+    "py37",
+    "py38",
+    "py39",
+]
+
+[tool.isort]
+known_third_party = "THIRDPARTY,sympy"
+profile = "black"
+src_paths = [
+    "src",
+    "tests",
+]
+
+[tool.nbqa.addopts]
+black = ["--line-length=85"]
+flake8 = ["--extend-ignore=E402,F821"]
