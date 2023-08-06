@@ -1,0 +1,39 @@
+name: ReleaseCI
+
+on:
+  release:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish-to-pypi:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: "x64"
+
+      - name: Install deps
+        run: |
+          pip install -r requirements/full_requirements.txt
+
+      - name: Build
+        run: |
+          python setup.py sdist
+          python setup.py bdist_wheel
+
+      - name: Install twine
+        run: |
+          pip install twine
+
+      - name: Publish
+        run: |
+          twine upload --skip-existing -u "${{ secrets.PYPI_USER }}" -p "${{ secrets.PYPI_PASSWORD }}" dist/*
