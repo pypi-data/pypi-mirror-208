@@ -1,0 +1,81 @@
+name: PyO3
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Symlink README
+      run: |
+        cd pyo3/
+        ln -s ../README.md ./
+    - uses: messense/maturin-action@v1
+      with:
+        manylinux: auto
+        command: build
+        args: --release --sdist -o pyo3/dist --find-interpreter -m pyo3/Cargo.toml
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: pyo3/dist
+
+  windows:
+    runs-on: windows-latest
+    if: "startsWith(github.ref, 'refs/tags/')"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Symlink README
+      run: |
+        cd pyo3/
+        ln -s ../README.md ./
+    - uses: messense/maturin-action@v1
+      with:
+        command: build
+        args: --release -o pyo3/dist --find-interpreter -m pyo3/Cargo.toml
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: pyo3/dist
+
+  macos:
+    runs-on: macos-latest
+    if: "startsWith(github.ref, 'refs/tags/')"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Symlink README
+      run: |
+        cd pyo3/
+        ln -s ../README.md ./
+    - uses: messense/maturin-action@v1
+      with:
+        command: build
+        args: --release -o pyo3/dist --universal2 --find-interpreter -m pyo3/Cargo.toml
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: pyo3/dist
+
+  release:
+    name: Release
+    environment: pypi
+    runs-on: ubuntu-latest
+    if: "startsWith(github.ref, 'refs/tags/')"
+    needs: [ macos, windows, linux ]
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: wheels
+      - name: Publish to PyPI
+        uses: messense/maturin-action@v1
+        env:
+          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        with:
+          command: upload
+          args: --skip-existing *
