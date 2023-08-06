@@ -1,0 +1,37 @@
+version: '2'
+
+rules:
+- id: avoid-too-many-statements
+  language: python
+  description: The function `${f}` has too many statements and should be refactored.
+  tags:
+  - default
+  - ai-powered
+  explanation: |
+    This rule counts every statement in a function (recursively) and triggers if there are more than 49.
+
+    In Python, examples of _statements_ are assignments, `if`-`then` blocks, `for` and `while` loops, and function
+    definitions. They are distinct from _expressions_, like function calls, boolean operators, or constants, from
+    which a value can be computed (though expressions can behave like statements in some cases).
+
+    The number of statements in a function is correlated closely with the function length, and the more statements
+    there are the more likely the function should be broken into smaller pieces. We've chosen the threshold 49 to
+    mirror `pylint`'s default threshold of 7 for `too-many-statements`, which counts the number of top-level statements
+    in a function: we allow ~7 nested statements per top-level statement, for a total of 49.
+
+    *Use Caution*
+    Because we cannot provide a deterministic refactoring for this rule, the fix is provided using AI. As a result, the
+    behaviour of your code may be changed - please check carefully. Ideally, ensure you have written a unit test for
+    this function.
+
+    *References:*
+    * Simple Statements: https://docs.python.org/3/reference/simple_stmts.html
+    * Compound Statements: https://docs.python.org/3/reference/compound_stmts.html
+    * `pylint` documentation for `too-many-statements`: https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-statements.html
+  pattern: |
+    def ${f}(...) -> ...:
+      ${body*}
+  condition: body.statement_count() > 49
+  instruction:
+    instruction: refactor the function `${f}` by extracting smaller functions
+    label: extract smaller functions from `${f}`
