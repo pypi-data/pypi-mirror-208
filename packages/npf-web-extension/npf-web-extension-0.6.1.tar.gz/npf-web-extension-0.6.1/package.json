@@ -1,0 +1,74 @@
+{
+  "name": "app",
+  "version": "0.6.1",
+  "private": true,
+  "homepage": ".",
+  "dependencies": {
+    "@basementuniverse/stats": "^1.1.0",
+    "@sgratzl/chartjs-chart-boxplot": "^4.2.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.12",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "chart.js": "^4.2.1",
+    "chartjs-chart-error-bars": "^4.2.0",
+    "copy-files-from-to": "^3.8.0",
+    "eslint-config-prettier": "^8.6.0",
+    "radash": "^10.8.1",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-papaparse": "^4.1.0",
+    "react-scripts": "5.0.1",
+    "react-select": "^5.7.2",
+    "sass": "^1.62.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "craco build",
+    "deploy": "npm run build && npx gulp && npx copy-files-from-to",
+    "test": "react-scripts test",
+    "coverage": "react-scripts test --coverage",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "gulp": "^4.0.2",
+    "gulp-inline-source": "^4.0.0",
+    "gulp-replace": "^1.1.4",
+    "tailwindcss": "^3.2.6"
+  },
+  "copyFiles": [
+    {
+      "from": "build/index.html",
+      "to": "python_src/npf_web_extension/template.html"
+    }
+  ],
+  "copyFilesSettings": {
+    "whenFileExists": "overwrite"
+  }
+}
