@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: xicorpy
+Version: 0.2
+Summary: Python implementation of Chatterjee's Rank Correlation, its modifications, and other offshoots
+Home-page: https://swarnakumar.github.io/xicorpy
+License: MIT
+Author: Swarna Vallabhaneni
+Author-email: swarnakumar@gmail.com
+Maintainer: Swarna Vallabhaneni
+Maintainer-email: swarnakumar@gmail.com
+Requires-Python: >=3.7.1,<3.11
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: docs
+Provides-Extra: typings
+Requires-Dist: mkdocs-material (>=8.1,<8.2) ; extra == "docs"
+Requires-Dist: mkdocstrings (>=0.17,<0.18) ; extra == "docs"
+Requires-Dist: mypy (==0.931) ; extra == "typings"
+Requires-Dist: numpy (>=1.17,<2.0)
+Requires-Dist: pandas (>=1.2,<2.0)
+Requires-Dist: scikit-learn (>=1.0.2,<2.0.0)
+Requires-Dist: scipy (>=1.7,<2.0)
+Project-URL: Repository, https://github.com/swarnakumar/xicorpy
+Description-Content-Type: text/markdown
+
+# Chatterjee's Xi, its Applications, and Offshoots
+
+XicorPy is a Python package implementing **Chatterjee's Xi**, and its various offshoots. You can use the package with raw python objects, NumPy arrays, or Pandas DataFrames.
+
+Please see the [Documentation][docs] for an introductory tutorial and a full
+user guide.
+
+## Features
+
+The package currently implements:   
+
+1. Chatterjee's Xi from [1]
+2. Modified Xi from [2]
+3. Codependence Coefficient from [3]
+4. Feature Ordering by Conditional Independence (FOCI) for Feature Selection from [3]
+
+
+## Usage
+
+The package is available on PyPI. You can install using pip: `pip install xicorpy`.
+
+
+```python
+import xicorpy
+
+x = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5]
+y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]
+xi = xicorpy.compute_xi_correlation(x, y)
+
+xi, p_value = xicorpy.compute_xi_correlation(x, y, get_p_values=True)
+
+```
+
+Refer to the [Docs][docs] for more details.
+
+## Contributing to XiCorPy
+
+Any help with the package is greatly appreciated! Pull requests and bug reports are greatly welcome!
+
+
+## Citations:
+
+1. [Chatterjee (2020). "A new coefficient of correlation"](https://arxiv.org/abs/1909.10140)
+2. [Lin and Han (2021). "On boosting the power of Chatterjee's rank correlation"](https://arxiv.org/abs/2108.06828)
+3. [Azadkia and Chatterjee (2021). "A simple measure of conditional dependence"](https://arxiv.org/abs/1910.12327)
+
+<!-- Links -->
+[docs]: https://swarnakumar.github.io/xicorpy/
+
