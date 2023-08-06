@@ -1,0 +1,31 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+"""Set up azureml-assets package."""
+
+from setuptools import setup, find_packages
+
+setup(
+   name="azureml-assets",
+   version="1.0.0",
+   description="Utilities for publishing assets to Azure Machine Learning system registries.",
+   author="Microsoft Corp",
+   packages=find_packages(),
+   install_requires=[
+      "GitPython>=3.1",
+      "ruamel.yaml==0.17.21",
+      "pip>=21",
+   ],
+   python_requires=">=3.8,<4.0",
+   license="MIT",
+   classifiers=[
+      "Development Status :: 5 - Production/Stable",
+      "Intended Audience :: Developers",
+      "Topic :: Software Development :: Build Tools",
+      "License :: OSI Approved :: MIT License",
+      "Programming Language :: Python :: 3.8",
+      "Programming Language :: Python :: 3.9",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.11",
+   ],
+)
