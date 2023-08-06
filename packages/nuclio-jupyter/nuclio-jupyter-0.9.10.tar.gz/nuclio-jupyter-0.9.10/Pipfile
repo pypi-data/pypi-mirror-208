@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+nbconvert = ">=6.4.5"
+notebook = ">=6.4"
+# pyyaml 6.0 added backwards incompatible change https://github.com/yaml/pyyaml/issues/576
+pyyaml = ">=3.13, <6.0.0"
+requests = ">=2.20.1"
+# nbconvert is not compatible with tornado 6 (which is in alpha)
+#tornado = ">=5"
+boto3 = ">=1.9"
+
+[dev-packages]
+flake8 = "*"
+pytest = "*"
+pyyaml = "*"
+# sphinx >= 4.4 requires importlib-metadata > 4.4.0 when python < 3.8, which isn't compatible with any flake8 versions
+sphinx = "~=4.3.0"
+twine = "*"
+wheel = "*"
