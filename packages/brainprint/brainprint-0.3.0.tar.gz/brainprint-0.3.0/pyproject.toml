@@ -1,0 +1,141 @@
+[build-system]
+requires = ['setuptools >= 61.0.0']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'brainprint'
+version = '0.3.0'
+description = 'A package to compute BrainPrint (shape descriptors) from FastSurfer/FreeSurfer MRI segmentations'
+readme = 'README.md'
+license = {file = 'LICENSE'}
+requires-python = '>=3.4'
+authors = [
+    {name = 'Martin Reuter', email = 'martin.reuter@dzne.de'},
+    {name = 'Kersten Diers', email = 'kersten.diers@dzne.de'},
+]
+maintainers = [
+    {name = 'Martin Reuter', email = 'martin.reuter@dzne.de'},
+]
+keywords = [
+    'neuroscience', 
+    'sMRI', 
+    'FreeSurfer'
+]
+classifiers = [
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: Unix',
+    'Operating System :: MacOS',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Natural Language :: English',
+    'License :: OSI Approved :: MIT License',
+    'Intended Audience :: Science/Research',
+]
+dependencies = [
+    'numpy',
+    'scipy',
+    'pandas',
+    'lapy'
+]
+
+[project.optional-dependencies]
+build = [
+    'build',
+    'twine',
+]
+style = [
+    'bibclean',
+    'black',
+    'codespell',
+    'isort',
+    'flake8',
+    'pydocstyle[toml]',
+]
+test = [
+    'pytest',
+    'pytest-cov',
+    'pytest-timeout',
+]
+all = [
+    'brainprint[build]',
+    'brainprint[doc]',
+    'brainprint[style]',
+    'brainprint[test]',
+]
+full = [
+    'brainprint[all]',
+]
+
+[project.urls]
+homepage = 'https://github.com/Deep-MI/BrainPrint'
+documentation = 'https://github.com/Deep-MI/BrainPrint'
+source = 'https://github.com/Deep-MI/BrainPrint'
+tracker = 'https://github.com/Deep-MI/BrainPrint/issues'
+
+[project.scripts]
+brainprint = 'brainprint.cli:main'
+brainprint-sys_info = 'brainprint.commands.sys_info:run'
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ['brainprint*']
+exclude = ['brainprint*tests']
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+(
+      __pycache__
+    | \.github
+    | setup.py
+    | data/
+    | examples/
+)
+'''
+
+[tool.isort]
+profile = 'black'
+multi_line_output = 3
+line_length = 88
+py_version = 38
+extend_skip_glob = [
+    'setup.py',
+    'data/*',
+    'examples/*',
+]
+
+[tool.pydocstyle]
+convention = 'numpy'
+ignore-decorators = '(copy_doc|property|.*setter|.*getter|pyqtSlot|Slot)'
+match = '^(?!setup|__init__|test_).*\.py'
+match-dir = '^brainprint.*'
+add_ignore = 'D100,D104,D107'
+
+[tool.pytest.ini_options]
+minversion = '6.0'
+addopts = '--durations 20 --junit-xml=junit-results.xml --verbose'
+filterwarnings = []
+
+[tool.coverage.run]
+branch = true
+cover_pylib = false
+omit = [
+    '**/__init__.py',
+    '**/brainprint/_version.py',
+    '**/brainprint/commands/*',
+    '**/tests/**',
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    'pragma: no cover',
+    'if __name__ == .__main__.:',
+]
+precision = 2
