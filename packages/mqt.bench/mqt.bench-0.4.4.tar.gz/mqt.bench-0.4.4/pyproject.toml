@@ -1,0 +1,160 @@
+[build-system]
+requires = [
+    "setuptools>=61",
+    "setuptools_scm[toml]>=7",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mqt.bench"
+description = "MQT Bench - A MQT tool for Benchmarking Quantum Software Tools"
+readme = "README.md"
+authors = [
+    { name = "Nils Quetschlich", email = "nils.quetschlich@tum.de" },
+    { name = "Lukas Burgholzer", email = "lukas.burgholzer@jku.at"},
+]
+keywords = ["MQT",  "quantum computing", "benchmarking", "performance", "testing"]
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+dynamic = ["version"]
+
+dependencies = [
+    "pytket-qiskit>=0.34.0,<0.40.0",  #  manages the dependencies for qiskit and tket in a combined fashion
+    "qiskit[all]",  # this is merely to get the [all] dependencies. The versioning is covered by pytket-qiskit
+    "pandas>=1.0.0",
+    "flask>=2.0.0",
+    "networkx>=2.0.0",
+    "pyscf>=2.1.0",
+    "packaging>=21.0",
+    "tqdm>=4.0.0",
+    "importlib_metadata>=3.6; python_version < '3.10'",
+    "importlib_resources>=5.9; python_version < '3.10'",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.2"]
+coverage = ["mqt.bench[test]", "pytest-cov[toml]"]
+dev = ["mqt.bench[coverage]"]
+
+[project.scripts]
+"mqt.bench" = "mqt.benchviewer.main:start_server"
+"create_mqt_bench_zip" = "mqt.bench.utils:create_zip_file"
+"generate_mqt_bench" = "mqt.bench.benchmark_generator:generate"
+
+[project.urls]
+Homepage = "https://github.com/cda-tum/mqtbench"
+"Bug Tracker" = "https://github.com/cda-tum/mqtbench/issues"
+Discussions = "https://github.com/cda-tum/mqtbench/discussions"
+Research = "https://www.cda.cit.tum.de/research/quantum/"
+
+[tool.setuptools_scm]
+
+[tool.pytest.ini_options]
+minversion = "7.2"
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--strict-config", "--showlocals"]
+log_cli_level = "INFO"
+xfail_strict = true
+
+[tool.coverage.run]
+source = ["mqt.bench", "mqt.benchviewer"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+precision = 1
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
+files = ["src", "tests", "setup.py"]
+python_version = "3.9"
+strict = true
+show_error_codes = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+warn_unreachable = true
+explicit_package_bases = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = ["pytket.*"]
+implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = ["qiskit.*", "qiskit_nature.*", "qiskit_machine_learning.*", "qiskit_finance.*","qiskit_optimization.*", "joblib.*", "networkx.*", "pandas.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+select = [
+    "E", "F", "W", # flake8
+    "A",           # flake8-builtins
+    "B",  "B904",  # flake8-bugbear
+    "I",           # isort
+    "ARG",         # flake8-unused-arguments
+    "C4",          # flake8-comprehensions
+    "EM",          # flake8-errmsg
+    "EXE",         # flake8-executable
+    "ICN",         # flake8-import-conventions
+    "ISC",         # flake8-implicit-str-concat
+    "PGH",         # pygrep-hooks
+    "PIE",         # flake8-pie
+    "PL",          # pylint
+    "PT",          # flake8-pytest-style
+    "PTH",         # flake8-use-pathlib
+    "Q",           # flake8-quotes
+    "RET",         # flake8-return
+    "RUF",         # Ruff-specific
+    "SIM",         # flake8-simplify
+    "TCH",         # flake8-type-checking
+    "UP",          # pyupgrade
+    "YTT",         # flake8-2020
+]
+ignore = [
+    "PLR2004", # Magic values
+    "PLR0913", # Too many arguments
+    "E501",    # Line too long (Black is enough)
+]
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "__init__.py",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+line-length = 120
