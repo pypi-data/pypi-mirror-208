@@ -1,0 +1,71 @@
+[tool.towncrier]
+package = "pulpcore.cli.ostree"
+filename = "CHANGES.md"
+directory = "CHANGES/"
+title_format = "## {version} ({project_date})"
+template = "CHANGES/.TEMPLATE.md"
+issue_format = "[#{issue}](https://github.com/pulp/pulp-cli-ostree/issues/{issue})"
+start_string = "[//]: # (towncrier release notes start)\n"
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "Features"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bugfixes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "doc"
+name = "Improved Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removal"
+name = "Deprecations and Removals"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "translation"
+name = "Translations"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "devel"
+name = "Developer Notes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "misc"
+name = "Misc"
+showcontent = false
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.pytest.ini_options]
+markers = [
+  "script: tests provided as shell scripts",
+  "help_page: tests that render help pages",
+  "pulp_ostree: pulp_ostree tests",
+]
+
+[tool.mypy]
+strict = true
+show_error_codes = true
+files = "pulpcore/**/*.py"
+namespace_packages = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = [
+  "click_shell.*",
+  "schema.*",
+]
+ignore_missing_imports = true
