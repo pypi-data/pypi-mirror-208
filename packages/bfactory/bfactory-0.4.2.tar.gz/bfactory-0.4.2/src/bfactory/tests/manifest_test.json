@@ -1,0 +1,40 @@
+{
+    "name":"Todo App",
+    "version": "1",
+    "auth": "jwt",
+    
+    "database":{
+        "type":"sqlite",
+        "name":"database.sqlite",
+        "username":"",
+        "password":"",
+        "host":"",
+        "port":""        
+    },
+    "schema":
+        [
+            {   
+                "name":"Tarea",
+                "attrs":[
+                    {
+                        "name":"descripcion",
+                        "type":"str",
+                        "req":true,
+                        "default":""
+                    },
+                    {
+                        "name":"realizada",
+                        "type":"bool",
+                        "req":false,
+                        "default":false
+                    },
+                    {
+                        "name":"usuario",
+                        "type":"owner",
+                        "req":true,
+                        "default":""
+                    }
+                ]
+            }
+        ]
+}
