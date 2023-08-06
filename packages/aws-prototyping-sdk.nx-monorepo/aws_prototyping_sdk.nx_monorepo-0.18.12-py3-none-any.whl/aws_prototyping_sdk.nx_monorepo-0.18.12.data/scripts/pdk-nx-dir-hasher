@@ -1,0 +1,16 @@
+#!python
+
+import jsii
+import sys
+
+__jsii_assembly__ = jsii.JSIIAssembly.load(
+    "@aws-prototyping-sdk/nx-monorepo",
+    "0.18.12",
+    "aws_prototyping_sdk.nx_monorepo",
+    "nx-monorepo@0.18.12.jsii.tgz",
+)
+
+exit_code = __jsii_assembly__.invokeBinScript(
+    "@aws-prototyping-sdk/nx-monorepo", "pdk-nx-dir-hasher", sys.argv[1:]
+)
+exit(exit_code)
