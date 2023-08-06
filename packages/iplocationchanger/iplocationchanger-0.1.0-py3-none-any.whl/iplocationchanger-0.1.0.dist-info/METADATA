@@ -1,0 +1,126 @@
+Metadata-Version: 2.1
+Name: iplocationchanger
+Version: 0.1.0
+Summary: Reliable IP location changer using OpenVPN and WhatIsMyIP
+Author-email: Faizudeen Kajogbola <faizudeen@codecreek.cc>
+License: MIT License
+        
+        Copyright (c) 2023 Faizudeen Kajogbola
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/Faaizz/iplocationchanger_python
+Keywords: ip,vpn,openvpn
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: MacOS
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests (==2.28.2)
+Provides-Extra: dev
+Requires-Dist: coverage (==7.2.1) ; extra == 'dev'
+
+# IP Location Changer
+
+![tests](https://github.com/faaizz/iplocationchanger_python/actions/workflows/test.yaml/badge.svg)
+
+Reliable IP location changer using [OpenVPN](https://openvpn.net/) and [WhatIsMyIP](https://www.whatismyip.com/).
+
+This package allows changing the IP of the host machine by using openvpn configuration files (and optionally credentials), and verifying the IP location change using WhatIsMyIP.
+
+## Usage
+```python
+from iplocationchanger.service.location_changer_service import LocationChangerService
+from iplocationchanger.exception.location_changer_service_exception import LocationChangerServiceException
+
+
+try:
+  lcs = LocationChangerService(
+    'reoiotiyotrkc77690543031b421b',
+    {
+      'TR': '/assets/NCVPN-TR-Istanbul-TCP.ovpn',
+    },
+    '/usr/local/openvpn',
+    '/assets/openvpncredentials',
+  )
+
+  country = 'TR'
+  try:
+    lcs.connect_region(country)
+    # Other code logic...
+
+  except LocationChangerServiceException as e:
+    # locaiton change failed
+    logging.error(e)
+    exit(1)
+finally:
+  lcs.disconnect_region()
+```
+### Standalone Execution
+```shell
+# Sample execution
+python3 src/iplocationchanger/__main__.py \ 
+  -w reoiotiyotrkc77690543031b421b \
+  -l TR -o "/usr/local/openvpn" \
+  -c "/assets/configmap.json" \
+  -u "ncpuser@namecheap" -p "PaSsWoRd"
+```
+
+
+## Requirements
+- Linux or macOS
+- `openvpn` is installed on the host PC
+- `openvpn` configuration files
+- (optional) `openvpn` credentials
+- WhatIsMyIP API Key
+- User with `sudo` permissions without password requirements for `killall` and `openvpn`.
+
+### Fulfilling `sudo` requirements without password prompt
+Granting `sudo` requirements to a user without having them supply a password can be approached by editing the `/etc/sudoers` file as such:
+```
+username		ALL = (ALL) NOPASSWD: /usr/bin/killall, /usr/bin/openvpn
+```
+
+## Environment Setup
+```shell
+python3 -m venv ./.venv
+source ./.venv/bin/activate
+
+python -m pip install -r requirements/dev.txt
+```
+
+## Run tests
+```shell
+coverage run --rcfile .coveragerc  -m unittest discover -t src/ -s src/tests/unit
+
+coverage report -m
+```
+
+## Config
+Config files are JSON-formatted files with 2-letter [ISO 3166](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes as `keys` and paths to corresponding OpenVPN configuration files as `values`.
+A sample config file is shown below:
+```json
+{
+  "TR": "/assets/NCVPN-TR-Istanbul-TCP.ovpn",
+  "AR": "/assets/NCVPN-AR-Buenos-Aires-TCP.ovpn"
+}
+```
