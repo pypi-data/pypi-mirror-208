@@ -1,0 +1,8 @@
+__title__ = "{{cookiecutter.name}}"
+__name__ = "{{cookiecutter.package_name}}"
+__version__ = "{{cookiecutter.version}}"
+__summary__ = "{{cookiecutter.short_description}}"
+__uri__ = "{{cookiecutter.url}}"
+__author__ = "{{cookiecutter.author}}"
+__email__ = "{{cookiecutter.email}}"
+__license__ = "{{cookiecutter.license}}"

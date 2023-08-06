@@ -1,0 +1,19 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
+
+[tool.black]
+extend_exclude = "prodigy-teams/recipes_cookiecutter/{{cookiecutter.package_name}}/setup.py"
+
+[tool.mypy]
+ignore_missing_imports = "true"
+plugins = "sqlmypy,pydantic.mypy"
+
+[[tool.mypy.overrides]]
+check_untyped_defs = "true"
+module = "prodigy_teams.tests"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]
