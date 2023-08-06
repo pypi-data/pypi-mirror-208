@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "bingwallpaperpy"
+version = "0.1.5"
+description = "Download script for Bing daily wallpapers."
+authors = ["Jens Korinth <jkorinth@gmx.net>"]
+repository = "https://github.com/jkorinth/bingwallpaper-py"
+license = "GPL-3.0-or-later"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2.28.2"
+black = "^23.3.0"
+pillow = "^9.4.0"
+
+[tool.poetry.scripts]
+bingwallpaper = "bingwallpaperpy.bingwallpaper:download"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
