@@ -1,0 +1,129 @@
+Metadata-Version: 2.1
+Name: fw-storage
+Version: 2.1.6
+Summary: Unified storage interface.
+Home-page: https://gitlab.com/flywheel-io/tools/lib/fw-storage
+License: MIT
+Keywords: Flywheel,file,object,storage
+Author: Flywheel
+Author-email: support@flywheel.io
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: all
+Provides-Extra: az
+Provides-Extra: dicom
+Provides-Extra: dicomweb
+Provides-Extra: gs
+Provides-Extra: s3
+Requires-Dist: azure-identity (>=1.11.0,<2.0.0) ; extra == "all" or extra == "az"
+Requires-Dist: azure-storage-blob (>=12.8.1,<13.0.0) ; extra == "all" or extra == "az"
+Requires-Dist: boto3 (>=1.17.7,<2.0.0) ; extra == "all" or extra == "s3"
+Requires-Dist: diskcache (>=5.2.1,<6.0.0)
+Requires-Dist: fw-file (>=1,<3)
+Requires-Dist: fw-http-client (>=1.2.0,<2.0.0)
+Requires-Dist: fw-utils (>=4.2.2,<5.0.0)
+Requires-Dist: google-cloud-storage (>=2.2.1,<3.0.0) ; extra == "all" or extra == "gs"
+Requires-Dist: memoization (>=0,<1)
+Requires-Dist: pydantic (>=1.8.1,<2.0.0)
+Requires-Dist: pydicom (>=2.1.2,<3.0.0) ; extra == "all" or extra == "dicomweb"
+Requires-Dist: pynetdicom (>=1.5.7,<2.0.0) ; extra == "all" or extra == "dicom"
+Project-URL: Documentation, https://gitlab.com/flywheel-io/tools/lib/fw-storage
+Project-URL: Repository, https://gitlab.com/flywheel-io/tools/lib/fw-storage
+Description-Content-Type: text/markdown
+
+# fw-storage
+
+Unified file storage interface tuned for simple filtering, memory-efficiency and
+performance to support processing large datasets in Flywheel imports and exports.
+
+Supported storage backends:
+
+- `fs://` - Local file-system
+- `s3://` - Amazon S3
+- `gs://` - Google Cloud Storage
+- `az://` - Azure Blob Storage
+
+## Installation
+
+Add as a `poetry` dependency to your project:
+
+```bash
+poetry add fw-storage
+```
+
+The local file-system storage backend has no extra package dependencies. To use
+any other backend, though, `fw-storage` needs to be installed with extras. For
+example, in order to access S3:
+
+```bash
+poetry add fw-storage --extras s3
+```
+
+Alternatively, install with `all` extras to get everything:
+
+```bash
+poetry add fw-storage --extras all
+```
+
+## Usage
+
+```python
+from fw_storage import create_storage_client
+
+# instantiate storage with URL
+fs = create_storage_client("fs:///tmp")
+
+# set objects from bytes, filepaths or open files
+fs.set("test/file1.dat", b"content")
+fs.set("test/file2.dat", "/tmp/test/file1.dat")
+fs.set("test/file3.dat", open("/tmp/test/file2.dat"))
+
+# list objects, filtering with expressions
+files = list(fs.ls("test", include=["size<1kB"], exclude=["path!~file3"]))
+len(files) == 2
+
+# get object info with path, size, created and modified
+info = fs.stat("test/file1.dat")
+info.size == 7
+
+# read object contents
+file = fs.get("test/file1.dat")
+file.read() == b"content"
+
+# remove one or more objects
+fs.rm("test", recurse=True)
+```
+
+## Configuration
+
+Credentials for cloud storage providers are loaded using the vendor SDKs to
+support every standard config file location and environment variable recommended
+by the provider:
+
+| Storage | Config docs |
+| ------- | ----------- |
+| `s3://` | <https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html>|
+| `gs://` | <https://google-auth.readthedocs.io/en/latest/reference/google.auth.html>|
+| `az://` | <https://docs.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential>|
+
+In addition, `az://` can be configured with the envvar `AZ_ACCESS_KEY`.
+
+## Development
+
+Install the project using `poetry` and enable `pre-commit`:
+
+```bash
+poetry install -E all
+pre-commit install
+```
+
+## License
+
+[![MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
