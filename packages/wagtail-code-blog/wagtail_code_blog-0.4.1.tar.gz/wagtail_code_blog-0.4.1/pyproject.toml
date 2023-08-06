@@ -1,0 +1,75 @@
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+name = "wagtail-code-blog"
+version = "0.4.1"
+license = "MIT"
+description = "A wagtail code blog"
+authors = ["Dani Hodovic <dani.hodovic@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/honeylogic-io/wagtail-code-blog"
+repository = "https://github.com/honeylogic-io/wagtail-code-blog"
+documentation = "https://github.com/honeylogic-io/wagtail-code-blog"
+include = ["wagtail_code_blog/static/wagtail_code_blog/output.css"]
+keywords = [
+  "wagtail",
+  "django",
+  "blog",
+  "cms"
+]
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.0",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+wagtail = "5.*"
+wagtail-metadata = "4.*"
+readtime = "^1.1.1"
+beautifulsoup4 = "4.8"
+django-json-ld = "^0.0.5 "
+django-model-utils = "^4.2.0"
+django = "4.*"
+
+[tool.poetry.group.dev.dependencies]
+pudb = "2022.1.2"
+pytest = "^7.3.1"
+pytest-django = "^3.8.0"
+pytest-gitignore = "^1.3"
+pytest-cov = "^2.8.1"
+coverage = "^5.0.2"
+django-stubs = "^1.4.0"
+black = "^23.3.0"
+mypy = "^1.3.0"
+beautifulsoup4 = "^4.6.0"
+django-extensions = "^3.2.1"
+wagtail-foliage = "^0.1.1"
+isort = "^5.7.0"
+pylint = "^2.17.4"
+pylint-django = "^2.5.3"
+werkzeug = "^1.0.0"
+wagtail-markdown = "^0.9.0"
+tox = "^3.14.5"
+django-browser-reload = "^1.3.0"
+
+[tool.isort]
+skip_glob = "**/migrations/*.py,**/fixtures/*.py,infra/**/*.py"
+# https://github.com/psf/black/issues/251#issuecomment-535187912
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
