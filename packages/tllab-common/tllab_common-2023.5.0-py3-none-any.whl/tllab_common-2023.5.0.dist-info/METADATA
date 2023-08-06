@@ -1,0 +1,62 @@
+Metadata-Version: 2.1
+Name: tllab-common
+Version: 2023.5.0
+Summary: Common code for the Lenstra lab.
+Home-page: https://github.com/Lenstralab/tllab_common
+License: GPLv3
+Keywords: burst,transcription
+Author: Lenstra lab NKI
+Author-email: t.lenstra@nki.nl
+Requires-Python: >=3.8,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Provides-Extra: bioformats
+Provides-Extra: test
+Provides-Extra: transforms
+Requires-Dist: colorcet
+Requires-Dist: czifile
+Requires-Dist: dill
+Requires-Dist: ipython
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: psutil
+Requires-Dist: pytest-xdist ; extra == "test"
+Requires-Dist: pyyaml
+Requires-Dist: roifile
+Requires-Dist: scipy
+Requires-Dist: tifffile
+Requires-Dist: tiffwrite
+Requires-Dist: tqdm
+Requires-Dist: untangle
+Project-URL: Repository, https://github.com/Lenstralab/tllab_common
+Description-Content-Type: text/markdown
+
+# Common Code
+Code that both LiveCellAnalysis and smFISH (or others) use and doesn't get major changes goes here. This code should be a submodule in smFISH and LiveCellAnalysis.
+
+# Command line tools:
+## wimread
+    wimread imagefile
+Displays information (pixel size, interval time etc.) about the image file.
+
+# Installation (Ubuntu)
+python-javabridge is required, which requires java, for ubuntu:
+
+    sudo apt install openjdk-8-jdk-headless
+
+Set java 8 as default java: 
+
+    sudo update-alternatives --config java
+
+Then this code can be installed as a package:
+
+    sudo pip install git+https://gitlab.rhpc.nki.nl/LenstraLab/tllab_common.git
+
+or editable:
+
+    git clone https://gitlab.rhpc.nki.nl/LenstraLab/tllab_common.git 
+    pip install -e tllab_common/ --user
