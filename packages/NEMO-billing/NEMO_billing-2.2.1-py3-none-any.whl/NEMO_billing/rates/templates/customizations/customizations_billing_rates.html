@@ -1,0 +1,27 @@
+{% load custom_tags_and_filters %}
+<div class="panel-body">
+    <h3 class="customization-section-title" id="rate">Rates settings</h3>
+    <form method="POST" action="{% url 'customize' 'billing_rates' %}" class="form-horizontal">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="control-label col-md-2">Rates table</label>
+            <div class="col-md-10">
+                <div class="checkbox">
+                    <label><input type="checkbox" name="rates_expand_table" {% if rates_expand_table %}checked{% endif %} value="enabled">Expand rates table in tool control</label><br/>
+                </div>
+            </div>
+			<label class="control-label col-md-2">Allow blank rate</label>
+            <div class="col-md-10">
+                <div class="checkbox">
+                    <label><input type="checkbox" name="allow_blank_rate" {% if allow_blank_rate %}checked{% endif %} value="enabled">Allow blank rates for categories</label><br/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2"></div>
+			<div class="col-md-5">
+				{% button type="save" value="Save settings" %}
+            </div>
+        </div>
+    </form>
+</div>

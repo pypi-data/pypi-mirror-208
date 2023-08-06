@@ -1,0 +1,72 @@
+{% load custom_tags_and_filters %}
+{% for project in projects %}
+	{% with billing_detail=project.projectbillingdetails %}
+		<div id="project_edit_button_{{ project.id }}" style="position: relative; display: inline; margin-left: 10px">
+			{% url 'invoices_edit_project' project.id as edit_project_url %}
+			{% button type="edit" size="xsmall" style="position: absolute" value="Edit" url=edit_project_url %}
+		</div>
+		<div id="project_{{ project.id }}">
+			{% if billing_detail.project_name and billing_detail.project_name != billing_detail.project.name %}
+			<div>
+				<label class="control-label">Billing name:</label>
+				<span class="grey">{{ billing_detail.project_name }}</span>
+			</div>
+			{% endif %}
+			{% if billing_detail.expires_on %}
+				<div>
+					<label class="control-label">Expires:</label>
+					<span class="grey">{{ billing_detail.expires_on|date }}</span>
+				</div>
+			{% endif %}
+			{% if rate_categories %}
+			<div>
+				<label class="control-label">Category:</label>
+				<span class="grey">{{ billing_detail.category }}</span>
+			</div>
+			{% endif %}
+			<div>
+				<label class="control-label">Contact:</label>
+				<span class="grey">{{ billing_detail.contact_name|default_if_none:'' }}</span>
+			</div>
+			<div>
+				<label class="control-label">Email:</label>
+				<span class="grey">{{ billing_detail.contact_email|join:', ' }}</span>
+			</div>
+			<div>
+				<label class="control-label">Phone:</label>
+				<span class="grey">{{ billing_detail.contact_phone|default_if_none:'' }}</span>
+			</div>
+			{% if billing_detail.no_charge %}
+			<div>
+				<label class="control-label">No charge:</label>
+				<span class="grey">Invoices will NOT be created for this project</span>
+			</div>
+			{% endif %}
+			{% if billing_detail.no_tax %}
+			<div>
+				<label class="control-label">No tax:</label>
+				<span class="grey">This project is tax exempt</span>
+			</div>
+			{% endif %}
+			<div>
+				<label class="control-label">Addressee:</label>
+				<div class="grey">{{ billing_detail.addressee|default_if_none:''|linebreaksbr }}</div>
+			</div>
+			{% if billing_detail.comments %}
+				<div>
+					<label class="control-label">Comments:</label>
+					<div class="grey">{{ billing_detail.comments|linebreaksbr }}</div>
+				</div>
+			{% endif %}
+			<div style="height:10px"></div>
+		</div>
+		<script>
+			let edit_button_{{ project.id }} = document.getElementById('project_edit_button_{{ project.id }}');
+			let project_chevron_{{ project.id }} = document.getElementById('project_{{ project.id }}_chevron');
+			project_chevron_{{ project.id }}.parentNode.parentNode.insertBefore(edit_button_{{ project.id }}, null);
+			let billing_detail_{{ project.id }} = document.getElementById('project_{{ project.id }}');
+			let add_user_{{ project.id }} = document.getElementById('add_user_to_project_{{ project.id }}');
+			add_user_{{ project.id }}.parentNode.insertBefore(billing_detail_{{ project.id }}, add_user_{{ project.id }});
+		</script>
+	{% endwith %}
+{% endfor %}
