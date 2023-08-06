@@ -1,0 +1,643 @@
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+# define Py_BUILD_CORE
+/* PyFrameObject */
+#  include <internal/pycore_frame.h>
+/* _PyLocals_GetKind */
+#  include <internal/pycore_code.h>
+# undef Py_BUILD_CORE
+#endif
+
+#include "structmember.h"
+#include "compile.h"
+#include "frameobject.h"
+#include "unicodeobject.h"
+
+#include "heapdef.h"
+#include "stdtypes.h"
+
+
+#define ALIGNMENT  sizeof(void *)
+#define ALIGN_MASK (ALIGNMENT - 1)
+#define ALIGN(z)   ((z + ALIGN_MASK) & ~ALIGN_MASK)
+
+#define GATTR(obj, name, rel) if ((PyObject *)(obj) == r->tgt &&        \
+    (r->visit(rel, PyUnicode_FromString(#name), r))) \
+        return 1;
+
+#define ATTR(name) GATTR(v->name, name, NYHR_ATTRIBUTE)
+#define RENAMEATTR(name, newname) GATTR(v->name, newname, NYHR_ATTRIBUTE)
+#define INTERATTR(name) GATTR(v->name, newname, NYHR_INTERATTR)
+
+extern PyObject *_hiding_tag__name;
+
+int
+dict_relate_kv(NyHeapRelate *r, PyObject *dict, int k, int v)
+{
+    PyObject *pk, *pv;
+    Py_ssize_t i = 0;
+    Py_ssize_t ix = 0;
+    if (!dict)
+        return 0;
+    while (PyDict_Next(dict, &i, &pk, &pv)) {
+        if (pk == r->tgt) {
+            if (r->visit(k, PyLong_FromSsize_t(ix), r))
+                return 0;
+        }
+        if (pv == r->tgt) {
+            Py_INCREF(pk);
+            if (r->visit(v, pk, r))
+                return 0;
+        }
+        ix++;
+    }
+    return 0;
+}
+
+static int
+dict_relate(NyHeapRelate *r)
+{
+    return dict_relate_kv(r, r->src, NYHR_INDEXKEY, NYHR_INDEXVAL);
+}
+
+static int
+dict_traverse(NyHeapTraverse *ta)
+{
+    PyObject *v = (void *)ta->obj;
+    if (PyDict_GetItem(v, _hiding_tag__name) == ta->_hiding_tag_)
+        return 0;
+    return Py_TYPE(v)->tp_traverse(ta->obj, ta->visit, ta->arg);
+}
+
+
+static int
+dictproxy_relate(NyHeapRelate *r)
+{
+    mappingproxyobject *v = (void *)r->src;
+    if (v->mapping == r->tgt) {
+        if (r->visit(NYHR_INTERATTR, PyUnicode_FromString("mapping"), r))
+            return 1;
+    }
+    return dict_relate_kv(r, v->mapping, NYHR_INDEXKEY, NYHR_INDEXVAL);
+}
+
+
+static int
+list_relate(NyHeapRelate *r)
+{
+    Py_ssize_t len = PyList_Size(r->src);
+    Py_ssize_t i;
+    for (i = 0; i < len; i++) {
+        PyObject *o = PyList_GET_ITEM(r->src, i);
+        if (o == r->tgt) {
+            PyObject *ix = PyLong_FromSsize_t(i);
+            int x;
+            if (!ix)
+                return -1;
+            x = r->visit(NYHR_INDEXVAL, ix, r);
+            if (x)
+                return 0;
+        }
+    }
+    return 0;
+}
+
+static int
+tuple_relate(NyHeapRelate *r)
+{
+    Py_ssize_t len = PyTuple_Size(r->src);
+    Py_ssize_t i;
+    for (i = 0; i < len; i++) {
+        PyObject *o = PyTuple_GetItem(r->src, i);
+        if (o == r->tgt) {
+            PyObject *ix = PyLong_FromSsize_t(i);
+            int x;
+            if (!ix)
+                return -1;
+            x = r->visit(NYHR_INDEXVAL, ix, r);
+            if (x)
+                return 0;
+        }
+    }
+    return 0;
+}
+
+static int
+set_relate(NyHeapRelate *r)
+{
+    PyObject *it = PyObject_GetIter(r->src);
+    PyObject *obj;
+
+    if (it == NULL) {
+        return -1;
+    }
+
+    Py_ssize_t i = 0;
+    while ((obj = PyIter_Next(it))) {
+        if (r->tgt == obj) {
+            r->visit(NYHR_INSET, PyLong_FromSsize_t(i++), r);
+            return 1;
+        }
+        Py_DECREF(obj);
+    }
+
+    Py_DECREF(it);
+
+    if (PyErr_Occurred())
+        return -1;
+    return 0;
+}
+
+static int
+function_relate(NyHeapRelate *r)
+{
+    PyFunctionObject *v = (void *)r->src;
+    RENAMEATTR(func_code, __code__)
+    RENAMEATTR(func_globals, __globals__)
+    RENAMEATTR(func_module, __module__)
+    RENAMEATTR(func_defaults, __defaults__)
+    RENAMEATTR(func_kwdefaults, __kwdefaults__)
+    RENAMEATTR(func_doc, __doc__)
+    RENAMEATTR(func_name, __name__)
+    RENAMEATTR(func_dict, __dict__)
+    RENAMEATTR(func_closure, __closure__)
+    RENAMEATTR(func_annotations, __annotations__)
+    RENAMEATTR(func_qualname, __qualname__)
+    return dict_relate_kv(r, v->func_dict, NYHR_HASATTR, NYHR_ATTRIBUTE);
+}
+
+static int
+module_relate(NyHeapRelate *r)
+{
+    PyObject *v = (void *)r->src;
+    PyObject *dct = PyModule_GetDict(v);
+    if (dct == r->tgt &&
+        (r->visit(NYHR_ATTRIBUTE, PyUnicode_FromString("__dict__"), r)))
+        return 1;
+    return dict_relate_kv(r, dct, NYHR_HASATTR, NYHR_ATTRIBUTE);
+}
+
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION < 11
+static int
+frame_locals(NyHeapRelate *r, PyObject *map, Py_ssize_t start, Py_ssize_t n, int deref)
+{
+    PyFrameObject *v = (void *)r->src;
+    Py_ssize_t i;
+    for (i = start; i < start + n; i++) {
+        if ((!deref && v->f_localsplus[i] == r->tgt) ||
+            (deref && PyCell_GET(v->f_localsplus[i]) == r->tgt)) {
+            PyObject *name;
+            if (PyTuple_Check(map) && (i - start) < PyTuple_Size(map)) {
+                name = PyTuple_GetItem(map, i - start);
+                Py_INCREF(name);
+            } else {
+                name = PyUnicode_FromString("?");
+            }
+            if (r->visit(deref? NYHR_CELL : NYHR_LOCAL_VAR, name, r))
+                return 1;
+        }
+    }
+    return 0;
+}
+#endif
+
+static int
+frame_relate(NyHeapRelate *r)
+{
+    PyFrameObject *v = (void *)r->src;
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    _PyInterpreterFrame *iv = v->f_frame;
+#else
+    PyFrameObject *iv = v;
+#endif
+    PyCodeObject *co = iv->f_code;
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION < 11
+    Py_ssize_t ncells = PyTuple_GET_SIZE(co->co_cellvars);
+    Py_ssize_t nlocals = co->co_nlocals;;
+    Py_ssize_t nfreevars = PyTuple_GET_SIZE(co->co_freevars);
+#endif
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    // Py 3.11 only holds f_back when FRAME_OWNED_BY_FRAME_OBJECT
+    PyFrameObject *next_frame = PyFrame_GetBack(v);
+    if ((PyObject *)next_frame == r->tgt && r->visit(
+            NYHR_ATTRIBUTE, PyUnicode_FromString("f_back"), r)) {
+        Py_XDECREF(next_frame);
+        return 1;
+    }
+    Py_XDECREF(next_frame);
+#endif
+    ATTR(f_back)
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    GATTR(iv->f_func, f_func, NYHR_INTERATTR)
+#endif
+    GATTR(iv->f_code, f_code, NYHR_ATTRIBUTE)
+    GATTR(iv->f_builtins, f_builtins, NYHR_ATTRIBUTE)
+    GATTR(iv->f_globals, f_globals, NYHR_ATTRIBUTE)
+    GATTR(iv->f_locals, f_locals, NYHR_ATTRIBUTE)
+    ATTR(f_trace)
+
+    /* locals */
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    Py_ssize_t i;
+    for (i = 0; i < co->co_nlocalsplus; i++) {
+        _PyLocals_Kind kind = _PyLocals_GetKind(co->co_localspluskinds, i);
+        PyObject *name = PyTuple_GET_ITEM(co->co_localsplusnames, i);
+
+        if (iv->localsplus[i] == r->tgt) {
+            Py_INCREF(name);
+            if (r->visit(NYHR_LOCAL_VAR, name, r))
+                return 1;
+        }
+
+        if (!(kind & CO_FAST_CELL) && !(kind & CO_FAST_FREE))
+            continue;
+
+        if (PyCell_GET(iv->localsplus[i]) == r->tgt) {
+            Py_INCREF(name);
+            if (r->visit(NYHR_CELL, name, r))
+                return 1;
+        }
+    }
+#else
+    if (
+        frame_locals(r, co->co_varnames, 0, nlocals, 0) ||
+        frame_locals(r, co->co_cellvars, nlocals, ncells, 0) ||
+        frame_locals(r, co->co_cellvars, nlocals, ncells, 1) ||
+        frame_locals(r, co->co_freevars, nlocals + ncells, nfreevars, 0) ||
+        frame_locals(r, co->co_freevars, nlocals + ncells, nfreevars, 1))
+        return 1;
+#endif
+
+    /* stack */
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    PyObject **p;
+    PyObject **s = iv->localsplus + co->co_nlocalsplus;
+    PyObject **e = iv->localsplus + iv->stacktop;
+    for (p = s; p < e; p++) {
+        if (*p == r->tgt) {
+            if (r->visit(NYHR_STACK, PyLong_FromSsize_t(p-s), r))
+                return 1;
+        }
+    }
+#elif PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 10
+    PyObject **p;
+    PyObject **l = v->f_valuestack + v->f_stackdepth;
+    for (p = v->f_valuestack; p < l; p++) {
+        if (*p == r->tgt) {
+            if (r->visit(NYHR_STACK, PyLong_FromSsize_t(p-v->f_valuestack), r))
+                return 1;
+        }
+    }
+#else
+    if (v->f_stacktop != NULL) {
+        PyObject **p;
+        for (p = v->f_valuestack; p < v->f_stacktop; p++) {
+            if (*p == r->tgt) {
+                if (r->visit(NYHR_STACK, PyLong_FromSsize_t(p-v->f_valuestack), r))
+                    return 1;
+            }
+        }
+    }
+#endif
+    return 0;
+}
+
+static int
+frame_traverse(NyHeapTraverse *ta) {
+    PyFrameObject *v = (void *)ta->obj;
+    visitproc visit = ta->visit;
+    void *arg = ta->arg;
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    _PyInterpreterFrame *iv = v->f_frame;
+#else
+    PyFrameObject *iv = v;
+#endif
+    PyCodeObject *co = iv->f_code;
+    int i;
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    for (i = 0; i < co->co_nlocalsplus; i++) {
+        _PyLocals_Kind kind = _PyLocals_GetKind(co->co_localspluskinds, i);
+        PyObject *name = PyTuple_GET_ITEM(co->co_localsplusnames, i);
+        if (kind & CO_FAST_LOCAL && strcmp(PyUnicode_AsUTF8(name), "_hiding_tag_") == 0) {
+            if (iv->localsplus[i] == ta->_hiding_tag_)
+                return 0;
+            else
+                break;
+        }
+    }
+#else
+    int nlocals = co->co_nlocals;
+    if (PyTuple_Check(co->co_varnames)) {
+        for (i = 0; i < nlocals; i++) {
+            PyObject *name = PyTuple_GET_ITEM(co->co_varnames, i);
+            if (strcmp(PyUnicode_AsUTF8(name), "_hiding_tag_") == 0) {
+                if (v->f_localsplus[i] == ta->_hiding_tag_)
+                    return 0;
+                else
+                    break;
+            }
+        }
+    }
+#endif
+
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    /* _PyFrame_Traverse is not exposed and CPython's frame_traverse only
+      calls it when FRAME_OWNED_BY_FRAME_OBJECT :( */
+    PyFrameObject *next_frame = PyFrame_GetBack(v);
+    Py_VISIT(next_frame);
+    Py_XDECREF(next_frame);
+
+    Py_VISIT(v->f_trace);
+    Py_VISIT(iv->f_func);
+    Py_VISIT(iv->f_code);
+    Py_VISIT(iv->f_builtins);
+    Py_VISIT(iv->f_globals);
+    Py_VISIT(iv->f_locals);
+
+    /* locals */
+    for (i = 0; i < co->co_nlocalsplus; i++)
+        Py_VISIT(iv->localsplus[i]);
+
+    return 0;
+#else
+    return Py_TYPE(v)->tp_traverse(ta->obj, visit, arg);
+#endif
+}
+
+
+static int
+traceback_relate(NyHeapRelate *r)
+{
+    PyTracebackObject *v = (void *)r->src;
+    ATTR(tb_next)
+    ATTR(tb_frame)
+    return 0;
+}
+
+static int
+cell_relate(NyHeapRelate *r)
+{
+    PyCellObject *v = (void *)r->src;
+    if (v->ob_ref == r->tgt &&
+        r->visit(NYHR_ATTRIBUTE, PyUnicode_FromString("cell_contents"), r))
+        return 1;
+    return 0;
+}
+
+static int
+meth_relate(NyHeapRelate *r)
+{
+    PyCFunctionObject *v = (void *)r->src;
+    RENAMEATTR(m_self, __self__);
+    RENAMEATTR(m_module, __module__);
+    return 0;
+}
+
+static int
+code_traverse(NyHeapTraverse *ta) {
+    PyCodeObject *co = (void *)ta->obj;
+    visitproc visit = ta->visit;
+    void *arg = ta->arg;
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    Py_VISIT(co->_co_code);
+#else
+    Py_VISIT(co->co_code);
+#endif
+    Py_VISIT(co->co_consts);
+    Py_VISIT(co->co_names);
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    Py_VISIT(co->co_exceptiontable);
+#endif
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    Py_VISIT(co->co_localsplusnames);
+    Py_VISIT(co->co_localspluskinds);
+#else
+    Py_VISIT(co->co_varnames);
+    Py_VISIT(co->co_freevars);
+    Py_VISIT(co->co_cellvars);
+#endif
+    Py_VISIT(co->co_filename);
+    Py_VISIT(co->co_name);
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    Py_VISIT(co->co_qualname);
+#endif
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 10
+    Py_VISIT(co->co_linetable);
+#else
+    Py_VISIT(co->co_lnotab);
+#endif
+    Py_VISIT(co->co_weakreflist);
+    return 0;
+}
+
+static int
+code_relate(NyHeapRelate *r)
+{
+    PyCodeObject *v = (void *)r->src;
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    RENAMEATTR(_co_code, co_code);
+#else
+    ATTR(co_code);
+#endif
+    ATTR(co_consts);
+    ATTR(co_names);
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    ATTR(co_exceptiontable);
+#endif
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    INTERATTR(co_localsplusnames);
+    INTERATTR(co_localspluskinds);
+#else
+    ATTR(co_varnames);
+    ATTR(co_freevars);
+    ATTR(co_cellvars);
+#endif
+    ATTR(co_filename);
+    ATTR(co_name);
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+    ATTR(co_qualname);
+#endif
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 10
+    ATTR(co_linetable);
+#else
+    ATTR(co_lnotab);
+#endif
+    ATTR(co_weakreflist);
+    return 0;
+}
+
+/* type_traverse adapted from typeobject.c from 2.4.2
+   except:
+   * I removed the check for heap type
+   * I added visit of tp_subclasses and slots
+ */
+
+static int
+type_traverse(NyHeapTraverse *ta)
+{
+    PyTypeObject *type=(void *)ta->obj;
+    visitproc visit = ta->visit;
+    void *arg = ta->arg;
+
+    Py_VISIT(type->tp_dict);
+    Py_VISIT(type->tp_cache);
+    Py_VISIT(type->tp_mro);
+    Py_VISIT(type->tp_bases);
+    Py_VISIT(type->tp_base);
+    Py_VISIT(type->tp_subclasses);
+
+    if (!(type->tp_flags & Py_TPFLAGS_HEAPTYPE))
+        return 0;
+    Py_VISIT(((PyHeapTypeObject *)type)->ht_slots ) ;
+    return 0;
+}
+
+
+
+
+static int
+type_relate(NyHeapRelate *r)
+{
+    PyTypeObject *type = (void *)r->src;
+    PyHeapTypeObject *et;
+#define v type
+    RENAMEATTR(tp_dict, __dict__);
+    INTERATTR(tp_cache);
+    RENAMEATTR(tp_mro, __mro__);
+    RENAMEATTR(tp_bases, __bases__);
+    RENAMEATTR(tp_base, __base__);
+    INTERATTR(tp_subclasses);
+#undef v
+    if (!(type->tp_flags & Py_TPFLAGS_HEAPTYPE))
+        return 0;
+    et = (PyHeapTypeObject *)type;
+#define v et
+    RENAMEATTR(ht_slots, __slots__);
+    return 0;
+#undef v
+}
+
+NyHeapDef NyStdTypes_HeapDef[] = {
+    {
+        0,             /* flags */
+        0,             /* type */
+        0,             /* size */
+        dict_traverse, /* traverse */
+        dict_relate    /* relate */
+    }, {
+        0,          /* flags */
+        0,          /* type */
+        0,          /* size */
+        0,          /* traverse */
+        list_relate /* relate */
+    }, {
+        0,           /* flags */
+        0,           /* type */
+        0,           /* size */
+        0,           /* traverse */
+        tuple_relate /* relate */
+    }, {
+        0,         /* flags */
+        0,         /* type */
+        0,         /* size */
+        0,         /* traverse */
+        set_relate /* relate */
+    }, {
+        0,         /* flags */
+        0,         /* type */
+        0,         /* size */
+        0,         /* traverse */
+        set_relate /* relate */
+    }, {
+        0,              /* flags */
+        0,              /* type */
+        0,              /* size */
+        0,              /* traverse */
+        function_relate /* relate */
+    }, {
+        0,            /* flags */
+        0,            /* type */
+        0,            /* size */
+        0,            /* traverse */
+        module_relate /* relate */
+    }, {
+        0,              /* flags */
+        0,              /* type */
+        0,              /* size */
+        frame_traverse, /* traverse */
+        frame_relate    /* relate */
+    }, {
+        0,               /* flags */
+        0,               /* type */
+        0,               /* size */
+        0,               /* traverse */
+        traceback_relate /* relate */
+    }, {
+        0,          /* flags */
+        0,          /* type */
+        0,          /* size */
+        0,          /* traverse */
+        cell_relate /* relate */
+    }, {
+        0,          /* flags */
+        0,          /* type */
+        0,          /* size */
+        0,          /* traverse */
+        meth_relate /* relate */
+    }, {
+        0,             /* flags */
+        0,             /* type */
+        0,             /* size */
+        code_traverse, /* traverse */
+        code_relate    /* relate */
+    }, {
+        0,             /* flags */
+        0,             /* type */
+        0,             /* size */
+        type_traverse, /* traverse */
+        type_relate    /* relate */
+    }, {
+        0,               /* flags */
+        0,               /* type */ /* To be patched-in from a dictproxy ! */
+        0,               /* size */
+        0,               /* traverse */
+        dictproxy_relate /* relate */
+    },
+
+/* End mark */
+    {0}
+};
+
+void
+NyStdTypes_init(void)
+{
+    /* Patch up the table for some types that were not directly accessible */
+    int x = 0;
+
+    NyStdTypes_HeapDef[x++].type = &PyDict_Type;
+    NyStdTypes_HeapDef[x++].type = &PyList_Type;
+    NyStdTypes_HeapDef[x++].type = &PyTuple_Type;
+    NyStdTypes_HeapDef[x++].type = &PySet_Type;
+    NyStdTypes_HeapDef[x++].type = &PyFrozenSet_Type;
+    NyStdTypes_HeapDef[x++].type = &PyFunction_Type;
+    NyStdTypes_HeapDef[x++].type = &PyModule_Type;
+    NyStdTypes_HeapDef[x++].type = &PyFrame_Type;
+    NyStdTypes_HeapDef[x++].type = &PyTraceBack_Type;
+    NyStdTypes_HeapDef[x++].type = &PyCell_Type;
+    NyStdTypes_HeapDef[x++].type = &PyCFunction_Type;
+    NyStdTypes_HeapDef[x++].type = &PyCode_Type;
+    NyStdTypes_HeapDef[x++].type = &PyType_Type;
+    NyHeapDef *dictproxy_def = &NyStdTypes_HeapDef[x++];
+
+    PyObject *d = PyDict_New();
+    if (d) {
+        PyObject *dp = PyDictProxy_New(d);
+        if (dp) {
+            dictproxy_def->type = (PyTypeObject *)Py_TYPE(dp);
+            Py_DECREF(dp);
+        }
+        Py_DECREF(d);
+    }
+}
