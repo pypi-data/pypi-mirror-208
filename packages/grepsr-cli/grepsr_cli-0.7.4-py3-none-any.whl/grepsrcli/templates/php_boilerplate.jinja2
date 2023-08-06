@@ -1,0 +1,63 @@
+<?php
+/**
+ * Name: {{plugin_name}}
+ * Description: {{plugin_name}}
+ * PID: {{pid}}
+ */
+//ini_set('memory_limit', '256M');
+
+class {{plugin_name}} extends Vtx_Service_Plugin
+{
+    private $colHeaders;
+    protected $baseUrl;
+    protected $domainUrl;
+    private $cache;
+
+    public function __construct()
+    {
+        parent::__construct();
+     
+        $this->colHeaders = array(
+        );
+        $this->baseUrl = "";
+        $this->domainUrl = "";
+        
+        //$this->cache = new Vtx_Service_Data_Cache(__CLASS__);
+        
+    }
+
+    private function newSession()
+    {
+        $this->resetCurl(true);
+        $this->resetHolaSuperProxy();
+
+        $this->useProxy = true;
+
+
+        $this->setHeaders('Accept-Encoding', 'gzip, deflate, br');
+        $this->setHeaders('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+        $this->setHeaders('Accept-Language', 'en-US,en;q=0.5');
+        $this->setHeaders('Connection', 'keep-alive');
+        $this->setHeaders('Upgrade-Insecure-Requests', '1');
+        $this->setHeaders('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36');
+        //$this->setHeaders('Host',"%Host%");
+
+        //$this->setCurlOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        //$this->setCurlOption(CURLOPT_CONNECTTIMEOUT, 180);
+        //$this->setCurlOption(CURLOPT_TIMEOUT, 180);
+    }
+
+    public function main($params)
+    {
+	    echo("Crawling : " . $this->domainUrl . PHP_EOL);
+	    $this->dataSet->setPageName(get_class($this) .'_%s' , [ date('Ymd') ]);
+        $this->dataSet->setColHeaders($this->colHeaders);
+	    $this->newSession();
+	    $this->switchProxy();
+
+        //$this->loadDocument($this->baseUrl);
+        echo("Happy Crawling ! \n-cli-helper \n");
+
+        return $this;
+    }
+}
