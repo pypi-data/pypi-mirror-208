@@ -1,0 +1,21 @@
+from cyberpay_utils.tinkoff.proto import get_bank_statement_pb2 as _get_bank_statement_pb2
+from cyberpay_utils.tinkoff.proto import get_deal_is_valid_pb2 as _get_deal_is_valid_pb2
+from cyberpay_utils.tinkoff.proto import get_deal_step_by_id_pb2 as _get_deal_step_by_id_pb2
+from cyberpay_utils.tinkoff.proto import get_incoming_transactions_pb2 as _get_incoming_transactions_pb2
+from cyberpay_utils.tinkoff.proto import get_virtual_accounts_balances_pb2 as _get_virtual_accounts_balances_pb2
+from cyberpay_utils.tinkoff.proto import accept_deal_pb2 as _accept_deal_pb2
+from cyberpay_utils.tinkoff.proto import add_deponent_to_deal_step_pb2 as _add_deponent_to_deal_step_pb2
+from cyberpay_utils.tinkoff.proto import add_recipient_to_deal_step_pb2 as _add_recipient_to_deal_step_pb2
+from cyberpay_utils.tinkoff.proto import complete_deal_step_pb2 as _complete_deal_step_pb2
+from cyberpay_utils.tinkoff.proto import create_beneficiary_bank_details_pb2 as _create_beneficiary_bank_details_pb2
+from cyberpay_utils.tinkoff.proto import create_deal_pb2 as _create_deal_pb2
+from cyberpay_utils.tinkoff.proto import create_step_in_deal_pb2 as _create_step_in_deal_pb2
+from cyberpay_utils.tinkoff.proto import edit_beneficiary_bank_details_pb2 as _edit_beneficiary_bank_details_pb2
+from cyberpay_utils.tinkoff.proto import identify_incoming_transaction_pb2 as _identify_incoming_transaction_pb2
+from cyberpay_utils.tinkoff.proto import edit_beneficiary_pb2 as _edit_beneficiary_pb2
+from cyberpay_utils.tinkoff.proto import json_data_pb2 as _json_data_pb2
+from google.protobuf import empty_pb2 as _empty_pb2
+from google.protobuf import descriptor as _descriptor
+from typing import ClassVar as _ClassVar
+
+DESCRIPTOR: _descriptor.FileDescriptor

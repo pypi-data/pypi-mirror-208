@@ -1,0 +1,41 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+// Request
+message GetIncomingTransactionsRequest {
+  optional string account_number = 1;
+  optional uint32 offset = 2;
+  optional uint32 limit = 3;
+}
+
+// Response
+message GetIncomingTransactionsResponse {
+  uint32 offset = 1;
+  uint32 limit = 2;
+  uint32 size = 3;
+  uint32 total = 4;
+  repeated IncomingTransactionListItem results = 5;
+}
+
+message IncomingTransactionListItem {
+  string account_number = 1;
+  string operation_id = 2;
+  float amount = 3;
+  string currency = 4;
+  float operation_amount = 5;
+  string operation_currency = 6;
+  string payer_bik = 7;
+  string payer_kpp = 8;
+  string payer_inn = 9;
+  string payer_bank_name = 10;
+  string payer_bank_swift_code = 11;
+  string payer_account_number = 12;
+  string payer_corr_account_number = 13;
+  string payer_name = 14;
+  string payment_purpose = 15;
+  string document_number = 16;
+  string charge_date = 17;
+  string authorization_date = 18;
+  string transaction_date = 19;
+  string draw_date = 20;
+}

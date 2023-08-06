@@ -1,0 +1,43 @@
+syntax = "proto3";
+package company_service.proto;
+
+import "cyberpay_utils/company/proto/company.proto";
+import "cyberpay_utils/company/proto/company_user.proto";
+import "google/protobuf/empty.proto";
+
+service CompanyService {
+  rpc SubscibeCompany(SubscibeCompanyRequest) returns (google.protobuf.Empty) {}
+  rpc GetCompanyUsers(GetCompanyUsersRequest)
+      returns (GetCompanyUsersResponse) {}
+  rpc GetCompanyById(GetCompanyByIdRequest) returns (Company) {}
+  rpc GetCompanyUserById(GetCompanyUserByIdRequest) returns (CompanyUser) {}
+  rpc GetCompanyUserContractMeta(GetCompanyUserContractMetaRequest)
+      returns (GetCompanyUserContractMetaResponse) {}
+  rpc SetCompanyUserIsActive(SetCompanyUserIsActiveRequest)
+      returns (google.protobuf.Empty) {}
+}
+
+// Requests
+message SubscibeCompanyRequest {
+  string code = 1;
+  uint64 user_id = 2;
+}
+message GetCompanyUsersRequest {
+  optional uint64 company_id = 1;
+  optional uint64 user_id = 2;
+  optional string state = 3;
+  optional string type = 4;
+  optional bool contract = 5;
+  optional bool is_active = 6;
+}
+message GetCompanyByIdRequest { uint64 id = 1; }
+message GetCompanyUserByIdRequest { uint64 id = 1; }
+message GetCompanyUserContractMetaRequest { uint64 company_user_id = 1; }
+message SetCompanyUserIsActiveRequest {
+  uint64 company_user_id = 1;
+  bool is_active = 2;
+}
+
+// Responses
+message GetCompanyUsersResponse { repeated CompanyUser company_users = 1; }
+message GetCompanyUserContractMetaResponse { string data = 1; }

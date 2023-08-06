@@ -1,0 +1,12 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+// Request
+message CreateDealRequest { string account_number = 1; }
+
+// Response
+message CreateDealResponse {
+  string deal_id = 1;
+  string account_number = 2;
+  string status = 3;
+}

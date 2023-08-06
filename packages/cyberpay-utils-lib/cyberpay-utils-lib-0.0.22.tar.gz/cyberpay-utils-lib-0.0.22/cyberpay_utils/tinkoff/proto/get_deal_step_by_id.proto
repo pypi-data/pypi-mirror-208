@@ -1,0 +1,17 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+// Request
+message GetDealStepByIDRequest {
+  string deal_id = 1;
+  string step_id = 2;
+}
+
+// Response
+message GetDealStepByIDResponse {
+  string deal_id = 1;
+  string step_id = 2;
+  uint32 step_number = 3;
+  string description = 4;
+  string status = 5;
+}

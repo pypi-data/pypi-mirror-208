@@ -1,0 +1,25 @@
+syntax = "proto3";
+package billing.proto;
+
+import "google/protobuf/empty.proto";
+import "cyberpay_utils/billing/proto/receipt.proto";
+
+service Billing {
+  rpc CreateReceipt(CreateReceiptRequest) returns (CreateReceiptResponse) {}
+  rpc GetAllReceipts(google.protobuf.Empty) returns (GetAllReceiptsResponse) {}
+  rpc GetCurrentReceipt(GetCurrentReceiptRequest)
+      returns (GetCurrentReceiptResponse) {}
+  rpc IncreaseActiveWorkers(IncreaseActiveWorkersRequest)
+      returns (IncreaseActiveWorkersResponse) {}
+}
+
+// Requests
+message CreateReceiptRequest { uint64 company_id = 1; }
+message GetCurrentReceiptRequest { uint64 company_id = 1; }
+message IncreaseActiveWorkersRequest { uint64 company_id = 1; }
+
+// Responses
+message CreateReceiptResponse { Receipt receipt = 1; }
+message GetAllReceiptsResponse { repeated Receipt receipts = 1; }
+message GetCurrentReceiptResponse { Receipt receipt = 1; }
+message IncreaseActiveWorkersResponse { Receipt receipt = 1; }

@@ -1,0 +1,52 @@
+syntax = "proto3";
+package tinkoff.proto;
+
+import "cyberpay_utils/tinkoff/proto/get_bank_statement.proto";
+import "cyberpay_utils/tinkoff/proto/get_deal_is_valid.proto";
+import "cyberpay_utils/tinkoff/proto/get_deal_step_by_id.proto";
+import "cyberpay_utils/tinkoff/proto/get_incoming_transactions.proto";
+import "cyberpay_utils/tinkoff/proto/get_virtual_accounts_balances.proto";
+import "cyberpay_utils/tinkoff/proto/accept_deal.proto";
+import "cyberpay_utils/tinkoff/proto/add_deponent_to_deal_step.proto";
+import "cyberpay_utils/tinkoff/proto/add_recipient_to_deal_step.proto";
+import "cyberpay_utils/tinkoff/proto/complete_deal_step.proto";
+import "cyberpay_utils/tinkoff/proto/create_beneficiary_bank_details.proto";
+import "cyberpay_utils/tinkoff/proto/create_deal.proto";
+import "cyberpay_utils/tinkoff/proto/create_step_in_deal.proto";
+import "cyberpay_utils/tinkoff/proto/edit_beneficiary_bank_details.proto";
+import "cyberpay_utils/tinkoff/proto/identify_incoming_transaction.proto";
+import "cyberpay_utils/tinkoff/proto/edit_beneficiary.proto";
+import "cyberpay_utils/tinkoff/proto/json_data.proto";
+import "google/protobuf/empty.proto";
+
+service Tinkoff {
+  rpc GetBankStatement(GetBankStatementRequest)
+      returns (GetBankStatementResponse) {}
+  rpc GetDealIsValid(GetDealIsValidRequest) returns (GetDealIsValidResponse) {}
+  rpc GetDealStepByID(GetDealStepByIDRequest)
+      returns (GetDealStepByIDResponse) {}
+  rpc GetIncomingTransactions(GetIncomingTransactionsRequest)
+      returns (GetIncomingTransactionsResponse) {}
+  rpc GetVirtualAccountsBalances(GetVirtualAccountsBalancesRequest)
+      returns (GetVirtualAccountsBalancesResponse) {}
+  rpc AcceptDeal(AcceptDealRequest) returns (google.protobuf.Empty) {}
+  rpc AddDeponentToDealStep(AddDeponentToDealStepRequest)
+      returns (AddDeponentToDealStepResponse) {}
+  rpc AddRecipientToDealStep(AddRecipientToDealStepRequest)
+      returns (AddRecipientToDealStepResponse) {}
+  rpc CompleteDealStep(CompleteDealStepRequest)
+      returns (google.protobuf.Empty) {}
+  rpc CreateDeal(CreateDealRequest) returns (CreateDealResponse) {}
+  rpc CreateStepInDeal(CreateStepInDealRequest)
+      returns (CreateStepInDealResponse) {}
+  rpc IdentifyIncomingTransaction(IdentifyIncomingTransactionRequest)
+      returns (google.protobuf.Empty) {}
+
+  rpc CreateBeneficiaryBankDetails(CreateBeneficiaryBankDetailsRequest)
+      returns (JsonData) {}
+  rpc EditBeneficiaryBankDetails(EditBeneficiaryBankDetailsRequest)
+      returns (JsonData) {}
+
+  rpc CreateBeneficiary(JsonData) returns (JsonData) {}
+  rpc EditBeneficiary(EditBeneficiaryRequest) returns (JsonData) {}
+}
