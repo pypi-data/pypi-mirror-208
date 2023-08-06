@@ -1,0 +1,70 @@
+Metadata-Version: 2.1
+Name: aws-prototyping-sdk.pdk-nag
+Version: 0.18.12
+Summary: @aws-prototyping-sdk/pdk-nag
+Home-page: https://github.com/aws/aws-prototyping-sdk
+Author: AWS APJ COPE<apj-cope@amazon.com>
+License: Apache-2.0
+Project-URL: Source, https://github.com/aws/aws-prototyping-sdk
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: JavaScript
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Typing :: Typed
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved
+Requires-Python: ~=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aws-cdk-lib (<3.0.0,>=2.78.0)
+Requires-Dist: cdk-nag (<3.0.0,>=2.26.15)
+Requires-Dist: constructs (<11.0.0,>=10.2.16)
+Requires-Dist: jsii (<2.0.0,>=1.80.0)
+Requires-Dist: publication (>=0.0.3)
+Requires-Dist: typeguard (~=2.13.3)
+
+## PDK Nag
+
+PDKNag ships with a helper utility that automatically configures CDKNag within your application.
+
+```python
+const app = PDKNag.app();
+const stack = new Stack(app, 'MyStack');
+...
+```
+
+As shown above, this will configure your application to have CDKNag run on synthesis.
+
+By default, CDK will trigger a failure on `synth` if any errors are encountered. To relax these, run the following:
+
+```shell
+cdk synth --ignore-errors
+```
+
+Conversely, CDK will not fail on synth if warnings are detected. To enforce that all warnings are resolved, run the following command:
+
+```shell
+cdk synth --strict
+```
+
+### Instrumenting custom NagPacks
+
+By default, when creating a PDKNag application the [AwsSolutions](https://github.com/cdklabs/cdk-nag/blob/main/RULES.md) NagPack is instrumented. In order to specify custom NagPacks to instrument, you can configure the PDKApp as follows:
+
+```python
+import { PDKNag, AwsPrototypingChecks } from "@aws-prototyping-sdk/pdk-nag";
+
+const app = PDKNag.app({
+    nagPacks: [new AwsPrototypingChecks()]
+});
+```
+
+In this example, the [AwsPrototypingChecks](https://github.com/aws/aws-prototyping-sdk/blob/mainline/packages/pdk-nag/src/packs/README.md) NagPack has been configured to run instead of the default. Multiple NagPacks can also be instrumented by adding NagPack instances to the `nagPacks` array;
+
+
