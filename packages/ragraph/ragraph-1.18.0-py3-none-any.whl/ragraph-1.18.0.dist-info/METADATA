@@ -1,0 +1,93 @@
+Metadata-Version: 2.1
+Name: ragraph
+Version: 1.18.0
+Summary: Ratio graph handling in Python.
+Home-page: https://ragraph.ratio-case.nl
+License: GPL-3.0-or-later
+Author: Ratio Innovations B.V.
+Author-email: info@ratio-case.nl
+Requires-Python: >=3.9,<4.0
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Provides-Extra: all
+Provides-Extra: esl
+Provides-Extra: plot
+Requires-Dist: dd (>=0.5.7,<0.6.0)
+Requires-Dist: kaleido (==0.2.1) ; extra == "plot" or extra == "all"
+Requires-Dist: lxml (>=4.8.0,<5.0.0)
+Requires-Dist: numpy (>=1.22.3,<2.0.0)
+Requires-Dist: plotly (>=5.7.0,<6.0.0)
+Requires-Dist: raesl ; extra == "esl" or extra == "all"
+Requires-Dist: ratio-genetic-py (>=0.3.0,<0.4.0)
+Requires-Dist: ruamel.yaml (>=0.17.21,<0.18.0)
+Project-URL: Documentation, https://ragraph.ratio-case.nl
+Project-URL: Repository, https://gitlab.com/ratio-case-os/python/ragraph
+Description-Content-Type: text/x-rst
+
+#######
+RaGraph
+#######
+
+RaGraph is a package to create, manipulate, and analyze graphs consisting of nodes and
+edges. Nodes usually represent (hierarchies of) objects and edges the dependencies or
+relationships between them.
+
+These graphs, or networks if you will, lend themselves well to applied analyses like
+clustering and sequencing, as well as analyses involving the calculation of various
+insightful metrics.
+
+
+**********
+Quickstart
+**********
+
+Installation
+============
+
+RaGraph can be installed using ``pip install ragraph[all]`` for any Python version >=3.9. Or,
+for Poetry managed projects, use ``poetry add ragraph -E all`` to add it as a dependency.
+
+
+Using RaGraph
+=============
+
+RaGraph's primary use is working with Graph objects that contain Nodes and Eges between
+Nodes. See the `usage documentation <https://ragraph.ratio-case.nl/usage/index.html>`_
+for more info!
+
+***************
+Developer guide
+***************
+
+Python packaging information
+============================
+
+This project is packaged using `poetry <https://python-poetry.org/>`_. Packaging
+information as well as dependencies are stored in `pyproject.toml <./pyproject.toml>`_.
+
+Installing the project and its development dependencies can be done using ``poetry install -E all``.
+
+Versioning
+==========
+
+This project uses `semantic versioning <https://semver.org>`_. Version increments are
+checked using `Raver <https://raver.ratio-case.nl>`_.
+
+Changelog
+=========
+
+Changelog format as described by https://keepachangelog.com/ has been adopted and can be reviewed `on this page <https://ragraph.ratio-case.nl/changelog.html>`.
+
+Tests
+=====
+
+Tests can be run using ``poetry run pytest``.
+
+Linting
+=======
+
+Linting config is included in `pyproject.toml <./pyproject.toml>`_ for both Black and Ruff.
+
