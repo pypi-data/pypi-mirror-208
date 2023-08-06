@@ -1,0 +1,133 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+
+
+[project]
+name = "solara"
+authors = [{name = "Maarten A. Breddels", email = "maartenbreddels@gmail.com"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+packages = [
+    { include = "solara" }
+]
+dependencies = [
+    "reacton>=1.6.0",
+    "ipywidgets",
+    "cachetools",
+    "filelock",
+    "markdown",
+    "pygments",
+    "pymdown-extensions",
+    "markdown-it-py",
+    "mdit-py-plugins",
+    "humanize",
+    "ipyvuetify>=1.8.10",
+    "ipyvue>=1.9.0",
+    "numpy",
+    "pillow",
+    "jinja2",
+    "MarkupSafe<2.1",
+    "pydantic",
+    "click>=7.1.0",
+    "rich_click",
+    "uvicorn",
+    "watchgod",
+    "websockets",
+    "starlette",
+    "nbconvert",
+    "jupyter_server",
+    "jupyter_client>=7.0.0",
+    "watchdog",
+    "requests",
+    "pygments==2.10; python_version < '3.7'",
+    "nbformat",
+    "ipykernel",
+]
+
+[tool.flit.external-data]
+directory = "prefix"
+
+[tool.flit.module]
+name = "solara"
+
+
+
+[project.optional-dependencies]
+dev = [
+    "python-dotenv",
+    "flake8",
+    "bqplot",
+    "bqplot-image-gl",
+    "vaex-core",
+    "vaex-hdf5",
+    "vaex-jupyter",
+    "black",
+    "mypy",
+    "plotly",
+    "types-requests",
+    "types-markdown",
+    "types-PyYAML",
+    "pytest",
+    "pytest-mock",
+    "pytest-cov",
+    "pytest-timeout",
+    "pre-commit",
+    "bump2version",
+    "dask[dataframe]; python_version < '3.7'",
+    "playwright; python_version > '3.6'",
+    "pytest-playwright; python_version > '3.6'",
+]
+assets = [
+    "solara-assets==1.13.0"
+]
+flask = [
+    "flask",
+    "flask-sock",
+]
+documentation = [
+    "numpy",
+    "bqplot",
+    "altair",
+    "ipycanvas",
+    "ipyleaflet",
+    "matplotlib",
+    "vega_datasets",
+    "plotly",
+    "vaex-core",
+    "vaex-hdf5",
+]
+pytest = [
+    "pytest",
+    "playwright; python_version > '3.6'",
+    "pytest-playwright; python_version > '3.6'",
+    "voila",
+    "jupyterlab",
+    "pillow",
+    "pixelmatch",
+]
+
+[project.urls]
+Home = "https://www.github.com/widgetti/solara"
+
+[project.scripts]
+solara = "solara.__main__:main"
+
+[project.entry-points.pytest11]
+solara = "solara.test.pytest_plugin"
+
+[tool.black]
+line-length = 160
+
+[tool.ruff]
+line-length = 160
+
+[tool.isort]
+profile = "black"
+
+
+[tool.pytest.ini_options]
+addopts = "--disable-warnings --ignore=tests/integration/app_widget.py  --ignore=tests/unit/solara_test_apps"
+timeout = 180
