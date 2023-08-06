@@ -1,0 +1,86 @@
+Metadata-Version: 2.1
+Name: murfey
+Version: 0.7.13
+Summary: Client-Server architecture hauling Cryo-EM data
+License: BSD
+Project-URL: Bug-Tracker, https://github.com/DiamondLightSource/python-murfey/issues
+Project-URL: Documentation, https://github.com/DiamondLightSource/python-murfey
+Project-URL: GitHub, https://github.com/DiamondLightSource/python-murfey
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic
+Requires-Dist: requests
+Requires-Dist: rich
+Provides-Extra: client
+Requires-Dist: procrunner ; extra == 'client'
+Requires-Dist: textual (==0.17.0) ; extra == 'client'
+Requires-Dist: websocket-client ; extra == 'client'
+Requires-Dist: xmltodict ; extra == 'client'
+Provides-Extra: server
+Requires-Dist: mysql-connector-python (<=8.0.29) ; extra == 'server'
+Requires-Dist: fastapi (>=0.86) ; extra == 'server'
+Requires-Dist: ispyb ; extra == 'server'
+Requires-Dist: jinja2 ; extra == 'server'
+Requires-Dist: packaging ; extra == 'server'
+Requires-Dist: uvicorn[standard] ; extra == 'server'
+Requires-Dist: werkzeug ; extra == 'server'
+Requires-Dist: zocalo ; extra == 'server'
+Requires-Dist: importlib-resources ; (python_version < "3.9") and extra == 'server'
+
+# Murfey
+
+A transporter for data from Diamond eBIC microscope and detector machines onto the Diamond network.
+
+
+### Who is Murfey?
+
+Murfey, the package, is named after [Eliza Murfey, the inventor](https://nationalrrmuseum.org/blog/mother-of-invention-women-railroad-innovators/):
+
+> Focusing on the mechanics of the railroad, inventor Eliza Murfey created devices designed
+> to improve the bearings on rail wheels. With sixteen patents for her lubrication system,
+> it was Murfey who designed the packings that would lubricate the axles with oil, aiding
+> in the reduction of derailments caused by seized axles and bearings.
+
+
+### How do I set up a development environment?
+
+We suggest you start with your favourite virtual environment (mamba/conda/python virtualenv/...),
+then install the dependencies listed in `requirements_dev.txt` with eg.
+
+```bash
+$ git clone git@github.com:DiamondLightSource/python-murfey.git
+$ cd python-murfey
+$ pip install -r requirements_dev.txt
+$ pip install -e .[client,server]
+```
+
+You will also want to set up pre-commits:
+```bash
+$ pip install pre-commit
+$ pre-commit install
+```
+
+Finally, you may want to set up an ISPyB mock database server and a Zocalo
+development environment. The instructions for this are out of scope here.
+
+You can then start the Murfey server with
+```bash
+$ murfey.server
+```
+
+and connect the client with
+```bash
+$ murfey --server http://127.0.0.1:8000
+```
+
+You can also install a client on a remote machine. This machine only needs to have
+a minimum Python installation and curl. Open the murfey server website in a browser
+on the client, and navigate to the bootstrap page. Then copy the displayed commands
+into a command line terminal.
