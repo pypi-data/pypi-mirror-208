@@ -1,0 +1,19 @@
+// Copyright (c) 2023, Tri Dao.
+
+// Splitting the different head dimensions to different files to speed up compilation.
+
+#include "flash_fwd_launch_template.h"
+
+template<>
+void run_mha_fwd_<192>(Flash_fwd_params &params, cudaStream_t stream) {
+    using elem_type = cutlass::half_t;
+    BOOL_SWITCH(params.p_dropout < 1.f, Is_dropout, [&] {
+        run_flash_loop_<Flash_fwd_kernel_traits<192, 64, 64, 4, false, false, elem_type>, Is_dropout>(params, stream);
+        // This one is slightly faster for causal?
+        // run_flash_loop_<Flash_fwd_kernel_traits<192, 128, 64, 8, false, elem_type>>(params, stream);
+        // run_flash_loop_<Flash_fwd_kernel_traits<192, 128, 32, 4, false, elem_type>>(params, stream);
+        // run_flash_loop_<Flash_fwd_kernel_traits<192, 128, 64, 4, false, elem_type>>(params, stream);
+        // run_flash_loop_<Flash_fwd_kernel_traits<192, 64, 128, 4, false, elem_type>>(params, stream);
+        // run_flash_loop_<Flash_fwd_kernel_traits<192, 128, 128, 8, false, elem_type>>(params, stream);
+    });
+}
