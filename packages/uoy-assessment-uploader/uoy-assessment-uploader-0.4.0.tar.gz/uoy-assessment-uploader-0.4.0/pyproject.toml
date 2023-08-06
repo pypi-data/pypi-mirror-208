@@ -1,0 +1,28 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "uoy-assessment-uploader"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "jmcb", email = "joelsgp@protonmail.com"}]
+license = {file = "LICENSE"}
+classifiers = [
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "selenium ~= 4.9.0",
+    "webdriver-manager ~= 3.8.6",
+    "keyring ~= 23.13.1",
+]
+dynamic = ["version", "description"]
+
+[project.urls]
+Home = "https://github.com/joelsgp/uoy-assessment-uploader"
+
+[project.scripts]
+uoy-assessment-uploader = "uoy_assessment_uploader:main"
