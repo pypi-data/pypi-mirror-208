@@ -1,0 +1,3 @@
+from os import environ
+
+CLUEDIN_REQUEST_TIMEOUT_IN_SECONDS = environ.get('CLUEDIN_REQUEST_TIMEOUT_IN_SECONDS', 60 * 5)
