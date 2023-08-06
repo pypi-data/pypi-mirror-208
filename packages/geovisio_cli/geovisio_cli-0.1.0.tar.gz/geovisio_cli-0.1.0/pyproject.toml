@@ -1,0 +1,43 @@
+[build-system]
+requires = ["flit_core ~= 3.8,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "geovisio_cli"
+authors = [
+    {name = "Antoine Desbordes", email = "antoine.desbordes@gmail.com"},
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+dependencies = [
+    "requests ~= 2.28.0",
+    "typer ~= 0.7.0",
+    "rich[all] ~= 13.3.0",
+    "toml ~= 0.10.2",
+]
+
+[project.urls]
+Home = "https://gitlab.com/geovisio/cli"
+
+[project.scripts]
+geovisio="geovisio_cli.main:app"
+
+[project.optional-dependencies]
+dev = [
+    "black ~= 22.8.0",
+    "mypy ~= 1.0.0",
+    "types-requests ~= 2.28.0",
+    "pytest ~= 7.2.0",
+    "testcontainers-compose ~= 0.0.1rc1",
+    "pytest-datafiles ~= 2.0.1",
+    "typer-cli ~= 0.0.13",
+    "types-toml ~= 0.10.8.6",
+]
+build = ["flit ~= 3.8.0"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]

@@ -1,0 +1,27 @@
+version: "3"
+# Docker-compose to run a geovisio in the integration tests
+services:
+  geovisio-api:
+    image: geovisio/api:develop
+    command: api
+    restart: always
+    ports:
+      - 5000
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_URL=postgres://gvs:gvspwd@db/geovisio
+      - PICTURE_PROCESS_DERIVATES_STRATEGY=ON_DEMAND
+
+  db:
+    image: postgis/postgis:13-3.2
+    environment:
+      - POSTGRES_USER=gvs
+      - POSTGRES_PASSWORD=gvspwd
+      - POSTGRES_DB=geovisio
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      interval: 5s
+      timeout: 5s
+      retries: 5
