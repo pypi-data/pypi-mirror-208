@@ -1,0 +1,88 @@
+[build-system]
+requires = ["flit_core >=3.7.1,<4"]
+build-backend = "flit_core.buildapi"
+
+
+[project]
+name = "mpservice"
+authors = [
+    {name = "Zepu Zhang", email = "zepu.zhang@gmail.com"},
+]
+dependencies = [
+    "asgiref",
+    "deprecation",
+    "psutil",
+    "typing-extensions",
+    "uvicorn[standard] >=0.15.0,<1.0",
+]
+requires-python = ">=3.8"
+readme = "README.rst"
+license = {file = "LICENSE"}
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = ['version', 'description']
+
+
+[project.urls]
+Source = "https://github.com/zpz/mpservice"
+
+
+[project.optional-dependencies]
+doc = [
+    "sphinx",
+    "numpydoc",
+    "pydata-sphinx-theme",
+]
+test = [
+    "coverage[toml]",
+    "Faker",
+    "httpx",
+    "mypy",
+    "pytest",
+    "pytest-asyncio",
+    "requests",
+    "starlette",
+    "zpz",
+    'ruff',
+]
+
+
+[tool.flit.module]
+name = "mpservice"
+
+
+# See https://beta.ruff.rs/docs/rules/
+[tool.ruff]
+target-version = "py38"
+select = ["E", "F", "S", "I001"]  # isort
+ignore = ["E501", "S101", "S102", "S103", "S104", "S108", "S301", "S311", "S603", "S607", "S608"]
+exclude = ["tests/manual", "tests/benchmarks", "tests/experiments", "tests/test_deprecated_imports.py"]
+
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402", "F401"]
+"util.py" = ["E402", "F401"]
+"server_process.py" = ["E402", "F401"]
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+addopts = "-sv --log-cli-level info -p no:cacheprovider --tb=short --ignore=benchmarks --ignore=tests/experiments --ignore=tests/manual --durations 3"
+
+# About exception hook in pytest:
+# https://github.com/pytest-dev/pytest/discussions/9193
+
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_empty = true
+
+
+[tool.coverage.run]
+source = ["mpservice"]
+data_file = "/tmp/.coverage"
