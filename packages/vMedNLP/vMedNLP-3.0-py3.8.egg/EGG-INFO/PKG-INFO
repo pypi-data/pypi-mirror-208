@@ -1,0 +1,333 @@
+Metadata-Version: 2.1
+Name: vMedNLP
+Version: 3.0
+Summary: Medical NLP Toolkit
+Author: vLife|Virtusa
+Author-email: vlife@virtusa.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+# vLife | Virtusa
+
+
+## Usage
+
+```
+from vMedNLP import medToolKit
+from medToolkit import *
+
+```
+
+
+
+# Section 1. Diagnosis and Procedure
+
+
+# I. Assertion status of clinical entities
+
+This function automatically detects the assertion status of any illness/disease, if present, in a given clinical text, along with entities such as the medical illness, the treatment suggested, the test procedure performed, etc. With this, one should be able to identify the current recovery status of a patient.
+
+> **Class name:** `DiagnosisAssertion`
+
+
+### I.I - info()
+
+This function gives the list of entities identified by this class, as well as their definitions
+
+> **Syntax:**
+> ` DiagnosisAssertion.info() `
+
+
+### I.II - call()
+
+This is the core function to identify the current recovery status of a patient.
+
+> **Syntax:**
+> ` DiagnosisAssertion.call() `
+
+#### Passing a raw text input
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+   
+> **Syntax:**
+> ` DiagnosisAssertion.call(text,entity)`
+
+
+#### Passing a file as input:
+> **Syntax:**
+> ` DiagnosisAssertion.call(path,entity,file=True)`
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+<p>The "file" parameter must be set to "True". By default, this parameter is "False"</p>
+
+
+    
+# II. Bodyparts and Symptoms
+
+This function automatically detects the body parts, internal organs, symptoms or diagnoses, if present, in a given clinical text.
+
+> **Class name:** `DiagnosisAnatomy`
+
+### II.I - info()
+
+This function gives the list of entities identified by this class, as well as their definitions
+
+> **Syntax:**
+> ` DiagnosisAnatomy.info() `
+
+
+### II.II - call()
+
+This is the core function to identify the body parts, internal organs, symptoms or diagnoses, if present, in a given clinical text.
+
+> **Syntax:**
+> ` DiagnosisAnatomy.call() `
+
+#### Passing a raw text input
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+   
+> **Syntax:**
+> ` DiagnosisAnatomy.call(text,entity)`
+
+
+#### Passing a file as input:
+> **Syntax:**
+> ` DiagnosisAnatomy.call(path,entity,file=True)`
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+<p>The "file" parameter must be set to "True". By default, this parameter is "False"</p>
+    
+
+    
+# Section 2. Drugs & Adverse Events
+
+# I. Drugs and prescription
+
+Automatically identify Drug, Dosage, Duration, Form, Frequency, Route, 
+and Strength details in clinical documents using our pretrained NLP clinical model.
+
+> **Class name:** `DrugsRx`
+
+
+### I.I - info()
+
+This function gives the list of entities identified by this class, as well as their definitions
+
+> **Syntax:**
+> `DrugsRx.info() `
+
+
+### I.II -  Call()
+
+This is the core fuction of identify the Drug, Dosage, Duration, Form, Frequency, Route, and Strength from the given clinical text
+
+> **Syntax:**
+> ` DrugsRx.call() `
+
+#### Passing a raw text input
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+   
+> **Syntax:**
+> `DrugsRx.call(text, entity)`
+
+
+#### Passing a file as input:
+> **Syntax:**
+> `DrugsRx.call(text, entity, file=True)`
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+
+The "file" parameter must be set to "True". By default, this parameter is "False"
+
+
+
+# II. Drugs And ADEs
+
+Automatically identify the drugs and adverse reactions caused by them in clinical documents using our pretrained NLP clinical model.
+
+> **Class name:** `DrugsADE`
+
+### II.I - info()
+
+This function gives the list of entities identified by this class, as well as their definitions
+
+> **Syntax:**
+> `DrugsADE.info()`
+
+
+### II.II -  Call()
+
+This is the core fuction of identify the Drugs and ADEs from the given clinical text
+
+> **Syntax:**
+> ` DrugsADE.call() `
+
+#### Passing a raw text input
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+   
+> **Syntax:**
+> `DrugsADE.call(text, entity)`
+
+
+#### Passing a file as input:
+
+> **Syntax:**
+> `DrugsADE.call(text, entity,file=True)`
+
+Mention the entity names as a list to be extracted from the given clinical text. By default, all entities will be extracted.
+
+
+
+
+# Section 3. Analyze Clinical Notes
+
+# I. AnatomicalReferences
+
+Anatomical terms are used to describe specific areas and movements of the body as well as the relation of body parts to each other.In order to interact with colleagues scientifically, it is effecient for health professionals. Health practitioners can accurately communicate on a national and international level  to their precise usage of anatomical terminologies.
+
+>**Class name:** `AnatomicalReferences`
+
+### I.I - info()
+
+This function gives the list of entities identified by this class, as well as their definitions
+
+> **Syntax:**
+> ` AnatomicalReferences.info() `
+
+
+
+### I.II - call()
+
+This is the core function to extract all the anatomical structures of body from the clinical text.
+
+> **Syntax:**
+> `AnatomicalReferences.call() `
+
+#### Passing a raw text input
+
+Mention the entity names as a list, to be extracted from the given medical text. By default, all entities will be extracted.
+   
+> **Syntax:**
+> ` AnatomicalReferences.call(text,entity)`
+
+
+#### Passing a file as input:
+
+> **Syntax:**
+> `AnatomicalReferences.call(path,entity,file=True)`
+
+Mention the entity names as a list to be extracted from the given medical text file. By default, all entities will be extracted.
+
+The "file" parameter must be set to "True". By default, this parameter is "False"
+
+
+
+# II. Clinical Acronymns
+
+This function maps the clinical abbreviations and acronyms to their long form from the given medical text.
+
+> **Class name:** `ClinicalAcronyms`
+
+### II.I - info()
+
+This function gives the definitions of this class
+
+> **Syntax:**
+> ` ClinicalAcronyms.info() `
+
+
+
+### II.II - call()
+
+This is the core function to resolve medical acronymns from the text
+
+#### Passing a raw text input
+
+provide the text in string format 
+   
+> **Syntax:**
+> ` ClinicalAcronyms.call(text)`
+
+
+#### Passing a file as input:
+
+> **Syntax:**
+> `ClinicalAcronyms.call(path,file=True)`
+
+Give the clinical file as input .By default, all entities will be extracted.
+
+The "file" parameter must be set to "True". By default, this parameter is "False"
+
+
+
+# III. Exctraction of Medical Definitions
+
+This function maps the clinical terms to their nearest medical definitions with their respected UML Id.
+
+> **Class name:** `MedDefinition`
+
+### III.I - info()
+
+This function gives definitions of the related UML terms.
+
+> **Syntax:**
+> ` MedDefinition.info() `
+
+### III.II - call()
+
+This is the core function extract the medical definitions
+
+#### Passing a raw text input
+
+provide the text in string format
+   
+> **Syntax:**
+> ` MedDefinition.call(text)`
+
+
+#### Passing a file as input:
+
+> **Syntax:**
+> `MedDefinition.call(path,file=True)`
+
+Give the clinical file as input for medical text. By default, all entities will be extracted.
+
+The "file" parameter must be set to "True". By default, this parameter is "False"
+
+
+
+# Section 4. Deidentification of Personally Identifiable Information
+
+>**Class name:** `class Deidentification`
+
+### I - info()
+
+> **Syntax:**
+> ` Deidentification.info() `
+
+### II - call()
+
+The call function must be invoked on an object of the deidentification Object.
+
+### II.I - PDF redaction:
+
+The function redacts the selected Personal Identifiable information from the PDF document provided. The pdf files must be passed to the function as a PyMuPdf filetype object.
+
+> **Syntax:**
+> ` d = Deidentification()
+ d.call(file_type,selected,doc)`
+ 
+
+### II.II - DICOM redaction:
+
+The function redacts PII from both the image as well as the associated metadata. The dicom images must be passed as pydicom image objects.
+
+> **Syntax:**
+> ` d = Deidentification()
+ d.call(file_type,"",filename)`
