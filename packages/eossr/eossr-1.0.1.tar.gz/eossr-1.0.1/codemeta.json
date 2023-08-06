@@ -1,0 +1,119 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "name": "eossr",
+    "description": "<p align=\"left\"><img src=\"docs/images/eossr_logo.png\" width=\"400px\" ></p><h1>The ESCAPE OSSR library</h1><p>The eOSSR Python library gathers all the developments made for the OSSR. In particular, it includes:- an API to programmatically access the OSSR, retrieve records and publish content- functions to map and crosswalk metadata between the CodeMeta schema adopted for the OSSR and Zenodo internal schema- functions to help developers automatically contribute to the OSSR, in particular using their continuous integration (see also code snippets)</p><p>Code: <a href=\"https://gitlab.in2p3.fr/escape2020/wp3/eossr\">https://gitlab.in2p3.fr/escape2020/wp3/eossr</a>Documentation: <a href=\"https://escape2020.pages.in2p3.fr/wp3/eossr/\">https://escape2020.pages.in2p3.fr/wp3/eossr/</a></p><p><a href=\"https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/commits/master\"><img alt=\"\" src=\"https://gitlab.in2p3.fr/escape2020/wp3/eossr/badges/master/pipeline.svg\" /></a><a href=\"https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/commits/master\"><img alt=\"\" src=\"https://gitlab.in2p3.fr/escape2020/wp3/eossr/badges/master/coverage.svg\" /></a><a href=\"https://bestpractices.coreinfrastructure.org/projects/5712\"><img alt=\"CII Best Practices\" src=\"https://bestpractices.coreinfrastructure.org/projects/5712/badge\" /></a><a href=\"https://opensource.org/licenses/MIT\"><img alt=\"\" src=\"https://img.shields.io/badge/License-MIT-blue.svg\" /></a><a href=\"https://doi.org/10.5281/zenodo.5524912\"><img alt=\"\" src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.5524912.svg\" /></a><a href=\"https://mybinder.org/v2/git/https%3A%2F%2Fgitlab.in2p3.fr%2Fescape2020%2Fwp3%2Feossr/HEAD?labpath=examples%2Fnotebooks%2Fossr_api-Explore_the_OSSR.ipynb\"><img alt=\"Binder\" src=\"https://mybinder.org/badge_logo.svg\" /></a></p><h2>Former stable versions</h2><ul><li>v0.6: <a href=\"https://doi.org/10.5281/zenodo.6475946\"><img alt=\"DOI\" src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.6475946.svg\" /></a></li><li>v0.5: <a href=\"https://doi.org/10.5281/zenodo.6352039\"><img alt=\"DOI\" src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.6352039.svg\" /></a></li><li>v0.4: <a href=\"https://doi.org/10.5281/zenodo.6326454\"><img alt=\"DOI\" src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.6326454.svg\" /></a></li><li>v0.3.3: <a href=\"https://doi.org/10.5281/zenodo.5592584\"><img alt=\"\" src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.5592584.svg\" /></a></li><li>v0.2 : <a href=\"https://doi.org/10.5281/zenodo.5524913\"><img alt=\"\" src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.5524913.svg\" /></a></li></ul><h2>Install</h2><p>Commands to be run in your terminal.</p><h3>For users</h3><pre><code>cd eossrpip install .</code></pre><p>You can also run it with docker:</p><pre><code>docker run -it gitlab-registry.in2p3.fr/escape2020/wp3/eossr:latest</code></pre><p><a href=\"https://gitlab.in2p3.fr/escape2020/wp3/eossr/container_registry\">Visit our registry</a> to see the available docker containers.</p><p>Note that <code>latest</code> tag always point to the latest stable released container.</p><h3>For developers</h3><pre><code>git clone https://gitlab.in2p3.fr/escape2020/wp3/eossr.gitcd eossrpip install -e .</code></pre><h4>Running tests</h4><p>To run tests locally, run:</p><pre><code>pip install -e &quot;.[tests]&quot;pytest eossr</code></pre><p>Some tests will be skiped if <code>SANDBOX_ZENODO_TOKEN</code> is not defined in your environment variables.If you want to run these tests, you will need to create a <a href=\"https://sandbox.zenodo.org/account/settings/applications/tokens/new/\">sandbox zenodo token</a> and add it to your env:</p><pre><code>export SANDBOX_ZENODO_TOKEN=&quot;your_sandbox_token&quot;</code></pre><h2>Online CodeMeta validator for the OSSR</h2><p>The eOSSR powers an online validator for your CodeMeta metadata and to convert it to Zenodo metadata.</p><p><a href=\"https://mybinder.org/v2/git/https%3A%2F%2Fgitlab.in2p3.fr%2Fescape2020%2Fwp3%2Feossr/HEAD?urlpath=voila%2Frender%2Fdocs%2Fmetadata%2Fvalidate_codemeta.ipynb\">Just follow this link (running on mybinder)</a></p><h2>License</h2><p>See <a href=\"LICENSE\">LICENSE</a></p><h2>Cite</h2><p>To cite this library, please cite our ADASS proceedings:</p><pre><code>@misc{https://doi.org/10.48550/arxiv.2212.00499,  doi = {10.48550/ARXIV.2212.00499},  url = {https://arxiv.org/abs/2212.00499},  author = {Vuillaume, Thomas and Garcia, Enrique and Tacke, Christian and Gal, Tamas},  keywords = {Instrumentation and Methods for Astrophysics (astro-ph.IM), FOS: Physical sciences, FOS: Physical sciences},  title = {The eOSSR library},  publisher = {arXiv},  year = {2022},  copyright = {arXiv.org perpetual, non-exclusive license}}</code></pre><p>If you used the library in a workflow, please cite the version used as well, using the cite section in <a href=\"https://zenodo.org/record/5592584#.YiALJRPMI-Q\">the Zenodo page</a> (right column, below the <code>Versions</code> section).</p>",
+    "license": "https://spdx.org/licenses/MIT",
+    "version": "v0.6.2.dev69+g173b668",
+    "softwareVersion": "v0.6.2.dev69+g173b668",
+    "codeRepository": "https://gitlab.in2p3.fr/escape2020/wp3/eossr",
+    "developmentStatus": "active",
+    "isAccessibleForFree": true,
+    "isPartOf": [
+        "https://gitlab.in2p3.fr/escape2020",
+        "https://projectescape.eu/"
+    ],
+    "referencePublication": "https://doi.org/10.48550/arxiv.2212.00499",
+    "contIntegration": "https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/pipelines",
+    "buildInstructions": "https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/blob/master/README.md",
+    "issueTracker": "https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/issues",
+    "readme": "https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/blob/master/README.md",
+    "programmingLanguage": [
+        {
+            "@type": "ComputerLanguage",
+            "name": "Python",
+            "url": "https://www.python.org/"
+        }
+    ],
+    "softwareRequirements": [
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "requests",
+            "name": "requests",
+            "softwareVersion": ">=3.6"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "pytest",
+            "name": "pytest",
+            "softwareVersion": ">=5.4.2"
+        }
+    ],
+    "keywords": [
+        "jupyter-notebook",
+        "zenodo"
+    ],
+    "runtimePlatform": "Python 3",
+    "downloadUrl": "https://gitlab.in2p3.fr/escape2020/wp3/eossr/-/archive/v0.6.2.dev69+g173b668/eossr-v0.6.2.dev69+g173b668.zip",
+    "releaseNotes": "",
+    "dateCreated": "2021-08-31",
+    "datePublished": "2023-01-17",
+    "dateModified": "2023-01-17",
+    "operatingSystem": "",
+    "maintainer": {
+        "@type": "Person",
+        "@id": "https://orcid.org/0000-0003-2224-4594",
+        "givenName": "Enrique",
+        "familyName": "Garcia",
+        "email": "garcia@lapp.in2p3.fr",
+        "affiliation": {
+            "@type": "Organization",
+            "name": "Univ. Savoie Mont Blanc, CNRS, LAPP"
+        }
+    },
+    "author": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-5686-2078",
+            "givenName": "Thomas",
+            "familyName": "Vuillaume",
+            "email": "vuillaume@lapp.in2p3.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Univ. Savoie Mont Blanc, CNRS, LAPP"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0003-2224-4594",
+            "givenName": "Enrique",
+            "familyName": "Garcia",
+            "email": "garcia@lapp.in2p3.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Univ. Savoie Mont Blanc, CNRS, LAPP"
+            }
+        }
+    ],
+    "contributor": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-5321-8404",
+            "givenName": "Christian",
+            "familyName": "Tacke",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "GSI"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0001-7821-8673",
+            "givenName": "Tam\u00e1s",
+            "familyName": "G\u00e1l",
+            "email": "tamas.gal@fau.de",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "ECAP, FAU (Nuremberg, Germany)"
+            }
+        }
+    ],
+    "funder": [
+        {
+            "@type": "Organization",
+            "name": "European Commission",
+            "@id": "https://doi.org/10.13039/501100000780"
+        }
+    ],
+    "funding": "824064"
+}
