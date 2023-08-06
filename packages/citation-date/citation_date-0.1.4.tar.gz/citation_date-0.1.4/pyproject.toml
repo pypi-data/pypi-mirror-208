@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "citation-date"
+version = "0.1.4"
+description = "Regex date formula and decoder - Philippine Supreme Court Decisions"
+authors = ["Marcelino G. Veloso III <mars@veloso.one>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://lawsql.com"
+repository = "https://github.com/justmars/citation-date"
+documentation = "https://justmars.github.io/citation-date"
+classifiers = [
+  "Topic :: Text Processing :: General",
+  "Programming Language :: Python :: 3.11",
+  "Typing :: Typed",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Legal Industry",
+  "Framework :: Pytest",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dateutil = "^2.8"
+types-python-dateutil = "^2.8.19"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2"
+pytest-cov = "^2.12.1"
+pre-commit = "^2.21"
+mkdocs = "^1.4.2"
+mkdocstrings = { extras = ["python"], version = "^0.20.0" }
+mkdocs-material = "^9.1"
+
+[tool.pytest.ini_options]
+minversion = "7.3"
+addopts = "-ra -q --cov --doctest-modules"
+filterwarnings = [
+  "ignore::DeprecationWarning", # DeprecationWarning: pkg_resources is deprecated as an API
+]
+testpaths = ["tests", "citation_date"]
+
+[tool.pytest]
+minversion = "7.2"
+addopts = "-ra -q --cov=citation_date tests/"
+testpaths = ["tests"]
+
+[tool.ruff]
+ignore = ["F401"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 79
+include_trailing_comma = 'True'
+
+[tool.black]
+line-length = 79
+include = '.pyi?$'
+exclude = '''
+/(
+    .git
+    | .hg
+    | .mypy_cache
+    | .tox
+    | .venv
+    | _build
+    | buck-out
+    | build
+    | dist
+)/
+'''
+
+[build-system]
+requires = ["poetry-core>=1.3.2"]
+build-backend = "poetry.core.masonry.api"
