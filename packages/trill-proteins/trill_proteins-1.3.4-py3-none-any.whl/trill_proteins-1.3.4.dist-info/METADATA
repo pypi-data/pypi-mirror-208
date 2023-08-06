@@ -1,0 +1,83 @@
+Metadata-Version: 2.1
+Name: trill-proteins
+Version: 1.3.4
+Summary: Sandbox for Computational Protein Design
+Home-page: https://github.com/martinez-zacharya/TRILL
+License: MIT
+Keywords: NLP,Natural Language Processing,Protein Design,ESM2,ESMFold,ProteinMPNN,ProtGPT2,ZymCTRL,RFDiffusion
+Author: Zachary Martinez
+Author-email: martinez.zacharya@gmail.com
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: GitPython (>=3.1.29,<4.0.0)
+Requires-Dist: SentencePiece (>=0.1.97,<0.2.0)
+Requires-Dist: accelerate (>=0.19.0,<0.20.0)
+Requires-Dist: biopython (>=1.81,<2.0)
+Requires-Dist: biotite (>=0.35.0,<0.36.0)
+Requires-Dist: bokeh (>=3.0.3,<4.0.0)
+Requires-Dist: cchardet (>=2.1.7,<3.0.0)
+Requires-Dist: chardet (>=5.1.0,<6.0.0)
+Requires-Dist: datasets (>=2.7.1,<3.0.0)
+Requires-Dist: deepspeed (>=0.8.3,<0.9.0)
+Requires-Dist: e3nn (>=0.5.1,<0.6.0)
+Requires-Dist: fair-esm (>=2.0.0,<3.0.0)
+Requires-Dist: fairscale (>=0.4.13,<0.5.0)
+Requires-Dist: hydra-core (>=1.3.2,<2.0.0)
+Requires-Dist: icecream (>=2.1.3,<3.0.0)
+Requires-Dist: llvmlite (>=0.40.0,<0.41.0)
+Requires-Dist: numpy (>=1.24.3,<2.0.0)
+Requires-Dist: omegaconf (>=2.3.0,<3.0.0)
+Requires-Dist: pandas (>=1.5.2,<2.0.0)
+Requires-Dist: pyfiglet (>=0.8.post1,<0.9)
+Requires-Dist: pyg-lib (==0.2.0)
+Requires-Dist: pytest (>=7.2.0,<8.0.0)
+Requires-Dist: pytorch-lightning (>=1.9.0,<2.0.0)
+Requires-Dist: rdkit (>=2022.9.5,<2023.0.0)
+Requires-Dist: spyrmsd (>=0.5.2,<0.6.0)
+Requires-Dist: torch (==1.13.0)
+Requires-Dist: torch-cluster (==1.6.1)
+Requires-Dist: torch-geometric (>=2.3.0,<3.0.0)
+Requires-Dist: torch-scatter (==2.1.1)
+Requires-Dist: torch-sparse (==0.6.17)
+Requires-Dist: torch-spline-conv (==1.2.2)
+Requires-Dist: transformers (>=4.25.1,<5.0.0)
+Requires-Dist: umap-learn (>=0.5.3,<0.6.0)
+Requires-Dist: urllib3 (==1.26.15)
+Requires-Dist: xgboost (>=1.7.5,<2.0.0)
+Project-URL: Documentation, https://trill.readthedocs.io/en/latest/home.html
+Project-URL: Repository, https://github.com/martinez-zacharya/TRILL
+Description-Content-Type: text/markdown
+
+                              _____________________.___.____    .____     
+                              \__    ___/\______   \   |    |   |    |    
+                                |    |    |       _/   |    |   |    |    
+                                |    |    |    |   \   |    |___|    |___ 
+                                |____|    |____|_  /___|_______ \_______ \
+                                                 \/            \/       \/
+
+[![pypi version](https://img.shields.io/pypi/v/trill-proteins?color=blueviolet&style=flat-square)](https://pypi.org/project/trill-proteins)
+![downloads](https://img.shields.io/pypi/dm/trill-proteins?color=blueviolet&style=flat-square)
+[![license](https://img.shields.io/pypi/l/trill-proteins?color=blueviolet&style=flat-square)](LICENSE)
+[![Documentation Status](https://readthedocs.org/projects/trill/badge/?version=latest&style=flat-square)](https://trill.readthedocs.io/en/latest/?badge=latest)
+![status](https://github.com/martinez-zacharya/TRILL/workflows/CI/badge.svg?style=flat-square&color=blueviolet)
+# Intro
+TRILL (**TR**aining and **I**nference using the **L**anguage of **L**ife) is a sandbox for creative protein engineering and discovery. As a bioengineer myself, deep-learning based approaches for protein design and analysis are of great interest to me. However, many of these deep-learning models are rather unwieldy, especially for non ML-practitioners due to their sheer size. Not only does TRILL allow researchers to perform inference on their proteins of interest using a variety of models, but it also democratizes the efficient fine-tuning of large-language models. Whether using Google Colab with one GPU or a supercomputer with many, TRILL empowers scientists to leverage models with millions to billions of parameters without worrying (too much) about hardware constraints. Currently, TRILL supports using these models as of v1.3.0:
+- ESM2 (Embed and Finetune all sizes, depending on hardware constraints [doi](https://doi.org/10.1101/2022.07.20.500902). Can also generate synthetic proteins from finetuned ESM2 models using Gibbs sampling [doi](https://doi.org/10.1101/2021.01.26.428322))
+- ESM-IF1 (Generate synthetic proteins from .pdb backbone [doi](https://doi.org/10.1101/2022.04.10.487779))
+- ESMFold (Predict 3D protein structure [doi](https://doi.org/10.1101/2022.07.20.500902))
+- ProtGPT2 (Finetune and generate synthetic proteins from seed sequence [doi](https://doi.org/10.1038/s41467-022-32007-7))
+- ProteinMPNN (Generate synthetic proteins from .pdb backbone [doi](https://doi.org/10.1101/2022.06.03.494563))
+- RFDiffusion (Diffusion-based model for generating synthetic proteins [doi](https://doi.org/10.1101/2022.12.09.519842))
+- DiffDock (Find best poses for protein-ligand binding [doi](https://doi.org/10.48550/arXiv.2210.01776))
+- ProtT5-XL (Embed proteins into high-dimensional space [doi](https://doi.org/10.1109/TPAMI.2021.3095381))
+- TemStaPro (Predict thermostability of proteins [doi](https://doi.org/10.1101/2023.03.27.534365))
+- ZymCTRL (Conditional language model for the generation of artificial functional enzymes [link](https://www.mlsb.io/papers_2022/ZymCTRL_a_conditional_language_model_for_the_controllable_generation_of_artificial_enzymes.pdf))
+
+## Documentation
+Check out the documentation and examples at https://trill.readthedocs.io/en/latest/index.html
+
