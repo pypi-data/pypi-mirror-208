@@ -1,0 +1,196 @@
+# Define the global data pipeline settings
+pipeline_settings:
+  dag_name: 'demo-dev-01'
+  dag_owner: 'dmeci'
+  sql_endpoint_name: 'airflowdbxsqlOperatorTesting'
+  sql_endpoint_http_path: '/sql/1.0/endpoints/35d7ad84256d7722'
+  conn_id: 'shantipole'
+  dag_schedule: "'@daily'"
+  dag_start_date: datetime(2021, 6, 11)
+  dbx_base_path: '/dbxworkspace/hau/'
+  dag_args:
+    catchup: True
+  operator_default_args:
+    depends_on_past: False
+    email: 'ccea-data-engineering@adobe.com'
+    email_on_failure: True
+    email_on_retry: False
+  retry_delay: timedelta(minutes=10)
+  retries: 3
+  tags:
+    - 'tag #1'
+    - 'tag #2'
+    - 'tag #3'
+  pull_fiscal_attributes: False
+
+  clusters:
+    - name: 'NEW_TRANSCIENT_CLUSTER001'
+      params:
+        spark_version: '9.1.x-scala2.12'
+        policy_id: 'C96203490C00011D'
+        spark_conf:
+            spark.hadoop.fs.azure.account.oauth2.client.secret.ariaprime.dfs.core.windows.net: "{{ '{{secrets/ids_platform/data_secret_clientsecret}}' }}"
+            spark.hadoop.fs.azure.account.oauth.provider.type.ariaprime.dfs.core.windows.net: "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider"
+            spark.hadoop.fs.azure.account.auth.type.ariaprime.dfs.core.windows.net: "OAuth"
+            spark.hadoop.fs.azure.account.oauth2.client.id.ariaprime.dfs.core.windows.net: "{{ '{{secrets/ids_platform/data_secret_clientid}}' }}"
+            spark.hadoop.fs.azure.account.oauth2.client.endpoint.ariaprime.dfs.core.windows.net: "https://login.microsoftonline.com/fa7b1b5a-7b34-4387-94ae-d2c178decee1/oauth2/token"
+
+    - name: 'NEW_TRANSCIENT_CLUSTER002'
+      params:
+        spark_version: '9.1.x-scala2.12'
+        policy_id: 'C96203490C00011D'
+        spark_conf:
+            spark.hadoop.fs.azure.account.oauth2.client.secret.ariaprime.dfs.core.windows.net: "{{ '{{secrets/ids_platform/data_secret_clientsecret}}' }}"
+            spark.hadoop.fs.azure.account.oauth2.client.endpoint.ariaprime.dfs.core.windows.net: "https://login.microsoftonline.com/fa7b1b5a-7b34-4387-94ae-d2c178decee1/oauth2/token"
+
+
+# Define Pre checks
+pre_checks:
+  - group_name: 'pre_check_gp_01'
+    is_sequential_execution: True
+    tasks:
+      - task_id: 'task_101'
+        arguments:
+          sql:
+            - 'drop table if exists default.my_airflow_table'
+            - 'create table default.my_airflow_table(id int, v string)'
+            - "insert into default.my_airflow_table values (1, 'test 1'), (2, 'test 2')"
+      
+      - task_id: 'task_102'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+      - task_id: 'task_103'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+      - task_id: 'task_104'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+      - task_id: 'task_105'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+  - group_name: 'pre_check_gp_02'
+    tasks:
+      - task_id: 'task_201'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+      - task_id: 'task_202'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+
+# Define Execs
+execs:
+  - group_name: 'exec_gp_01'
+    is_sequential_execution: True
+    tasks:
+      - task_id: 'task_101'
+        operator: 'DatabricksSqlOperator'
+        arguments:
+          sql: "insert into table 01"
+
+      - task_id: 'task_102'
+        operator: 'DatabricksRunNowOperator'
+        arguments:
+          job_id: 777
+          notebook_params:
+            Variable: 5
+
+      - task_id: 'task_103'
+        operator: 'DatabricksRunNowOperator'
+        arguments:
+          job_id: 777
+          notebook_params:
+            Variable: 5
+
+  - group_name: 'exec_gp_02'
+    is_sequential_execution: True
+    tasks:
+      - task_id: 'task_201'
+        operator: 'DatabricksSubmitRunOperator'
+        new_cluster: NEW_TRANSCIENT_CLUSTER001 # Required for SubmitRunOperator
+        arguments:
+          notebook_task:
+              notebook_path: '/Users/hnankam@adobe.com/testnotebook'
+          access_control_list:
+              group_name: 'Grp-PRD-DBX-COMPUTE-DMECI'
+              permission_level: 'CAN_MANAGE'
+
+      - task_id: 'task_202'
+        operator: 'TriggerDagRunOperator'
+        arguments:
+          trigger_dag_id: "example-dag-basic"
+          wait_for_completion: True
+
+
+# Define Post checks
+post_checks:
+  - group_name: 'post_check_gp_01'
+    is_sequential_execution: True
+    tasks:
+      - task_id: 'task_101'
+        arguments:
+          sql:
+            - 'drop table if exists default.my_airflow_table'
+            - 'create table default.my_airflow_table(id int, v string)'
+            - "insert into default.my_airflow_table values (1, 'test 1'), (2, 'test 2')"
+      
+      - task_id: 'task_102'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+      - task_id: 'task_103'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+  - group_name: 'post_check_gp_02'
+    tasks:
+      - task_id: 'task_201'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+      - task_id: 'task_202'
+        arguments:
+          sql: 'select * from default.my_airflow_table'
+
+
+# Define Data Quality Computations
+data_quality:
+  - id: 'hau_activeuse'
+    source_table: 'ccea_prod.hau_activeuse'
+    partition: 
+      col_name: 'period_name_desc'
+      col_value: '2022-34'
+    key_dimensions: ['status', 'subscription_type', 'cc_segment']
+    key_measures: ['mau', 'wau', 'avgdaumau', 'avgdauwau']
+    period_type: 'FISCAL_WK'
+    new_cluster: NEW_TRANSCIENT_CLUSTER001
+    metric_table: 'ccea_prod.dq_metrics'
+
+  - id: 'trial_member_subs_activity_agg'
+    source_table: 'ccea_prod.trial_member_subs_activity_agg'
+    partition: 
+      col_name: 'period_name_desc'
+      col_value: '2022-34'
+    extra_filters: 'source_system = "TESTSYS"'
+    key_dimensions: ['trial_type', 'subscription_type']
+    key_measures: ['install_7_days_subs', 'week_1_2plus_active_subs']
+    period_type: 'DAILY'
+    new_cluster: NEW_TRANSCIENT_CLUSTER001
+    metric_table: 'ccea_prod.dq_metrics'
+
+  - id: 'hybrid_user_activity'
+    source_table: 'dme_hybrid.user_activity'
+    partition: 
+      col_name: 'event_date'
+      col_value: '2022-08-04'
+    #extra_filters: 'source_system = "TESTSYS"'
+    key_dimensions: ['event_category', 'source_platform', 'source_system', 'source_name']
+    key_measures: ['num_events']
+    period_type: 'DAILY'
+    new_cluster: NEW_TRANSCIENT_CLUSTER001
+    metric_table: 'ccea_prod.dq_metrics'

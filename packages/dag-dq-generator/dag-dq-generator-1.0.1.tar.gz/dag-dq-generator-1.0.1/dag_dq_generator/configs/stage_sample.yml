@@ -1,0 +1,72 @@
+# Define the global data pipeline settings
+pipeline_settings:
+  dag_name: 'stage_test_001'
+  dag_owner: 'dmecistg'
+  conn_id: 'shantipolesql'
+  dag_schedule: None
+  dag_start_date: datetime(2022, 6, 11)
+  dbx_base_path: '/dbxworkspace/hau'
+  dag_args:
+    catchup: True
+  operator_default_args:
+    depends_on_past: False
+    email: 'ccea-data-engineering@adobe.com'
+    email_on_failure: True
+    email_on_retry: False
+  retry_delay: timedelta(minutes=10)
+  retries: 3
+  tags:
+    - 'tag #1'
+    - 'tag #2'
+    - 'tag #3'
+  pull_fiscal_attributes: True
+  
+  dynamic_attributes:
+    attribute_01: "SELECT fiscal_yr_and_wk_desc FROM ids_masterdata.dim_date WHERE date_date = '${ds}'"
+    attribute_02: "SELECT fiscal_yr_and_wk_desc FROM ids_masterdata.dim_date WHERE date_date = DATE_SUB(CURRENT_DATE, 14)"
+
+  clusters:
+    - name: 'NEW_TRANSCIENT_CLUSTER001'
+      params:
+        spark_version: '9.1.x-scala2.12'
+        policy_id: 'C96203490C0007C5'
+        spark_conf:
+            spark.hadoop.fs.azure.account.oauth2.client.secret.agamar.dfs.core.windows.net: "{{'{{secrets/DBX-CCEA-READWRITE/dmeci_clientsecret}}'}}"
+            spark.hadoop.fs.azure.account.oauth2.client.endpoint.agamar.dfs.core.windows.net: "https://login.microsoftonline.com/fa7b1b5a-7b34-4387-94ae-d2c178decee1/oauth2/token"
+            spark.hadoop.fs.azure.account.oauth2.client.secret.amethiaprime.dfs.core.windows.net: "{{'{{secrets/DBX-CCEA-READWRITE/dmeci_clientsecret}}'}}"
+            spark.hadoop.fs.azure.account.oauth2.client.id.agamar.dfs.core.windows.net: "{{'{{secrets/DBX-CCEA-READWRITE/dmeci_clientid}}'}}"
+            spark.hadoop.fs.azure.account.oauth.provider.type.agamar.dfs.core.windows.net: "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider"
+            spark.hadoop.fs.azure.account.oauth2.client.endpoint.amethiaprime.dfs.core.windows.net: "https://login.microsoftonline.com/fa7b1b5a-7b34-4387-94ae-d2c178decee1/oauth2/token"
+            spark.hadoop.fs.azure.account.auth.type.agamar.dfs.core.windows.net: "OAuth"
+            spark.hadoop.fs.azure.account.oauth2.client.id.amethiaprime.dfs.core.windows.net: "{{'{{secrets/DBX-CCEA-READWRITE/dmeci_clientid}}'}}"
+            spark.hadoop.fs.azure.account.auth.type.amethiaprime.dfs.core.windows.net: "OAuth"
+            spark.hadoop.fs.azure.account.oauth.provider.type.amethiaprime.dfs.core.windows.net: "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider"
+
+# Define Execs
+execs:
+
+  - group_name: 'compute_trials_to_paid'
+    is_sequential_execution: True
+    tasks:
+      - task_id: 'compute_model'
+        operator: 'DatabricksSqlOperator'
+        arguments:
+          sql: "SELECT COUNT(*) FROM ccea_stage.hn_ccmusage_dim_date WHERE date_date = \"${fiscal_wk_ending_date}\" AND fiscal_yr=\"${fiscal_yr}\""
+
+      - task_id: 'compute_activities'
+        operator: 'TriggerDagRunOperator'
+        arguments:
+          trigger_dag_id: "kbohra_test_sqloperator"
+          wait_for_completion: True
+
+# Define Data Quality Computations
+data_quality:
+  - id: 'hau_activeuse'
+    source_table: 'ccea_prod.hau_activeuse'
+    partition: 
+      col_name: 'period_name_desc'
+      col_value: '${fiscal_wk_ending_date}'
+    key_dimensions: ['status', 'subscription_type', 'cc_segment']
+    key_measures: ['mau', 'wau', 'avgdaumau', 'avgdauwau']
+    period_type: 'FISCAL_WK'
+    new_cluster: NEW_TRANSCIENT_CLUSTER001
