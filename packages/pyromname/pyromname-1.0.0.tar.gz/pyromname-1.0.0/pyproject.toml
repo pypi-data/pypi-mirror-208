@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "pyromname"
+version = "1.0.0"
+description = "pyromname is a command line tool to manage roms."
+authors = ["Mathieu <git@bigbisous.org>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+colorama = "^0.4.6"
+defusedxml = "^0.7.1"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.16.3"
+pytest = "^7.2.1"
+black = "^23.1.0"
+isort = "^5.12.0"
+mypy = "^1.0.1"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+pyromname = "pyromname.cli:main"
+pyrenascene = "pyromname.renascene:main" 
