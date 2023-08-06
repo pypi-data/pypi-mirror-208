@@ -1,0 +1,106 @@
+Metadata-Version: 2.1
+Name: halig
+Version: 0.3.1
+Summary: age-encrypted, file-based, note-taking CLI app
+Keywords: cli notes age rage encryption notebook
+Author-Email: cătălin <185504a9@duck.com>
+License: GPL-3.0-or-later
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Natural Language :: English
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Terminals
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Project-URL: Homepage, https://git.roboces.dev/catalin/halig
+Project-URL: Repository, https://git.roboces.dev/catalin/halig
+Project-URL: Documentation, https://git.roboces.dev/catalin/halig
+Project-URL: Changelog, https://git.roboces.dev/catalin/halig
+Requires-Python: >=3.10
+Requires-Dist: typer<1.0.0,>=0.6.1
+Requires-Dist: rich>=13.3.3
+Requires-Dist: pydantic>=1.10.7
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: pyrage>=1.0.3
+Requires-Dist: pendulum>=2.1.2
+Requires-Dist: httpx>=0.24.0
+Requires-Dist: platformdirs>=3.5.1
+Requires-Dist: httpx-cache>=0.9.0
+Requires-Dist: pytest>=7.2.2; extra == "testing"
+Requires-Dist: pytest-cov>=4.0.0; extra == "testing"
+Requires-Dist: pyfakefs>=5.1.0; extra == "testing"
+Requires-Dist: pytest-clarity>=1.0.1; extra == "testing"
+Requires-Dist: pytest-reportlog>=0.2.1; extra == "testing"
+Requires-Dist: pytest-duration-insights>=0.1.1; extra == "testing"
+Requires-Dist: pytest-pretty>=1.1.1; extra == "testing"
+Requires-Dist: pytest-mock>=3.10.0; extra == "testing"
+Requires-Dist: mock>=5.0.1; extra == "testing"
+Requires-Dist: black>=23.3.0; extra == "linting"
+Requires-Dist: ruff>=0.0.260; extra == "linting"
+Requires-Dist: pyright>=1.1.301; extra == "linting"
+Requires-Dist: mypy>=1.1.1; extra == "linting"
+Requires-Dist: types-PyYAML>=6.0.12.9; extra == "linting"
+Requires-Dist: mkdocs-material>=9.1.5; extra == "docs"
+Requires-Dist: mkdocstrings[python]>=0.20.0; extra == "docs"
+Provides-Extra: testing
+Provides-Extra: linting
+Provides-Extra: docs
+Description-Content-Type: text/markdown
+
+# halig
+
+![PyPI](https://img.shields.io/pypi/v/halig?logo=python)
+![PyPI - License](https://img.shields.io/pypi/l/halig)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/halig)
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+
+[(R)age](https://github.com/woodruffw/pyrage) encrypted note-taking CLI app.
+
+`halig` opens, using your favorite `$EDITOR`, an in-memory copy of a file and upon save-and-exit,
+it encrypts the new contents into an [age](https://github.com/FiloSottile/age) file that
+you can store, _relatively_ safe, anywhere.
+
+
+## Features
+
+- Simple notebooks management with paths autocompletion
+- Passphrase-less, fully-encrypted notes, compatible with existing SSH keys 
+- No external `age` binary needed
+- Almost all `age` advantages, like having multiple keys for encryption and decryption
+- Remote (HTTP) public keys import: e.g: github.com/<username>.keys
+
+## Install
+
+```shell
+pipx install halig # or pip
+```
+
+## Setup TLDR
+
+```shell
+set -e
+ssh-keygen -t ed25519
+mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/halig"
+cat << EOF > "${XDG_CONFIG_HOME:-$HOME/.config}/halig/halig.yml"
+---
+notebooks_root_path: ~/Documents/Notebooks
+identity_paths: 
+  - ~/.ssh/id_ed25519
+recipient_paths:
+  - ~/.ssh/id_ed25519.pub
+  - https://github.com/<username>.keys
+  - https://gitlab.com/<username>.keys
+EOF
+```
+
+## Usage TLDR
+
+```shell
+halig edit some_notebook     # edit today's note relative to <notebooks_root_path>/some_notebook
+halig edit some_notebook/foo # edit  <notebooks_root_path>/some_notebook/foo.age
+halig notebooks              # list current notebooks
+```
+
