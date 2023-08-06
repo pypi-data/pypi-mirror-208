@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2022 The Ikarus Developers mueller@ibb.uni-stuttgart.de
+# SPDX-License-Identifier: LGPL-3.0-or-later
+message(STATUS "${SKBUILD}")
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+
+option(DUNE_ENABLE_PYTHONBINDINGS "Enable Python bindings" ON)
+option(DUNE_PYTHON_ALLOW_GET_PIP "Allow dune-common to install pip into venv" ON)
+project(
+        ikarus
+  VERSION 0.3
+  LANGUAGES C CXX
+)
+
+add_definitions(-DDUNE_LOCALFEFUNCTIONS_USE_EIGEN=1)
+add_definitions(-DCMAKE_DISABLE_FIND_PACKAGE_Vc=1)
+add_definitions(-DCMAKE_DISABLE_FIND_PACKAGE_LATEX=1)
+add_definitions(-DBUILD_SHARED_LIBS=1)
+
+# find dune packages to make cmake modules available
+find_package(dune-common REQUIRED EXCLUDE_FROM_ALL)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules" ${dune-common_MODULE_PATH})
+include(DuneMacros)
+# set(CXX_MAX_STANDARD 20)
+dune_project()
+dune_enable_all_packages()
+
+add_subdirectory(ikarus)
+if(NOT SKBUILD)
+add_subdirectory(sandbox)
+add_subdirectory(tests)
+add_subdirectory(cmake/FormatTarget)
+endif()
+
+if(BUILD_DOCS)
+  message("Build docs locally target ENABLED")
+  add_subdirectory(docs/BuildLocally)
+endif()
+
+if(DUNE_ENABLE_PYTHONBINDINGS)
+  add_subdirectory(python)
+endif()
+
+# finalize the dune project, e.g. generating config.h etc.
+finalize_dune_project(GENERATE_CONFIG_H_CMAKE)
