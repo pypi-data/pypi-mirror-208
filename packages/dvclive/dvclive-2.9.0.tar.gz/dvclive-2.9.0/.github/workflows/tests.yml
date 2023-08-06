@@ -1,0 +1,95 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: "1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  test_full:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+          cache: 'pip'
+          cache-dependency-path: setup.cfg
+
+      - name: Upgrade pip
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip --version
+
+      - run: python -m pip install pre-commit
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit/
+          key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: pre-commit
+        run: |
+          pre-commit run --show-diff-on-failure --color=always --all-files
+
+      - name: Full install
+        run: pip install -e '.[dev]'
+
+      - name: mypy
+        run: |
+           python -m mypy --install-types --non-interactive
+
+      - name: Run tests
+        run: pytest -v tests --cov --cov-report=xml --cov-config=pyproject.toml
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3.1.1
+
+  test_core:
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macos-latest]
+        pyv: ["3.8", "3.9", "3.10"]
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ matrix.pyv }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.pyv }}
+          cache: 'pip'
+          cache-dependency-path: setup.cfg
+
+      - name: Upgrade pip
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip --version
+
+      - name: Install core
+        run: |
+          pip install -e '.[tests]'
+
+      - name: Run tests
+        run: pytest -v tests --ignore=tests/test_frameworks
