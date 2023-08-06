@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: django-ows-lib
+Version: 0.1.1
+Summary: Well layered ows lib with a client implementation to communicate with ogc services with django based objects, including xml mapper classes to serialize and deserialize ows xml files, such as capabilities.
+Home-page: https://github.com/mrmap-community/django-ows-lib
+Author: mrmap-community
+Author-email: jonas.kiefer@live.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Topic :: Software Development :: Libraries
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: camel-converter (==3.0.0)
+Requires-Dist: django-axis-order (==0.1.0)
+Requires-Dist: django (<4.3,>=3.0)
+Requires-Dist: eulxml (==1.1.3)
+Requires-Dist: isodate (==0.6.1)
+Requires-Dist: requests (<2.30.0,>=2.23.0)
+
+.. image:: https://readthedocs.org/projects/django-ows-lib/badge/?version=latest
+    :target: https://django-ows-lib.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://badge.fury.io/py/django-ows-lib.svg
+    :target: https://pypi.org/project/django-ows-lib/
+    :alt: PyPi version
+
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=mrmap-community_django-ows-lib&metric=coverage
+    :target: https://sonarcloud.io/project/overview?id=mrmap-community_django-ows-lib
+    :alt: Coverage
+
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=mrmap-community_django-ows-lib&metric=alert_status
+    :target: https://sonarcloud.io/project/overview?id=mrmap-community_django-ows-lib
+    :alt: Quality Gate
+
+
+
+django-ows-lib
+==============
+
+Well layered ows lib with a client implementation to communicate with ogc services with django based objects, 
+including xml mapper classes to serialize and deserialize ows xml files, such as capabilities.
+
+Features
+--------
+
+* `WMS <https://www.ogc.org/standard/wms/>`_ client
+* `WFS <https://www.ogc.org/standard/wfs/>`_ client
+* `CSW <https://www.ogc.org/standard/cat/>`_ client
+
+
+Quick-Start
+-----------
+
+Install it as any other django app to your project:
+
+.. code-block:: bash
+
+    $ pip install django-ows-lib
+
+.. warning::
+    As pre requirement you will need to install the `gdal and geos binaries <https://docs.djangoproject.com/en/4.2/ref/contrib/gis/install/geolibs/>`_ on your system first.
+    
+See the `documentation <https://django-ows-lib.readthedocs.io/en/latest/index.html>`_ for details.
+
+
