@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "mlflow-aws-rds-iam"
+version = "0.1.0"
+description = "MLflow plugins adding AWS RDS IAM auth for tracking and model registry stores"
+authors = ["Loris Zinsou <lzinsou@protonmail.com>"]
+readme = "README.md"
+keywords = ["mlflow", "plugin", "mlops", "aws", "rds", "iam", "postgresql", "mysql"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Plugins",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+repository = "https://gitlab.com/lzinsou/mlflow-aws-rds-iam"
+packages = [{include = "mlflow_aws_rds_iam"}]
+
+[tool.poetry.plugins."mlflow.tracking_store"]
+postgresql = "mlflow_aws_rds_iam.tracking:RDSIAMStore"
+
+[tool.poetry.plugins."mlflow.model_registry_store"]
+postgresql = "mlflow_aws_rds_iam.model_registry:RDSIAMStore"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mlflow = "~2"
+sqlalchemy = "~2"
+boto3 = ">=1.26.134,<2"
+StrEnum = { version = ">=0.4", allow-prereleases = true, python = "<3.11" }
+boto3-stubs = {extras = ["rds"], version = ">=1.26.134,<2"}
+
+[tool.poetry.dev-dependencies]
+flake8 = "^6.0.0"
+mypy = "^1.2.0"
+isort = "^5.12.0"
+black = "^23.3.0"
+pytest = "^7.3.1"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+strict = true
+
+[[tool.mypy.overrides]]
+module = "mlflow.store.model_registry.sqlalchemy_store"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "mlflow.store.tracking.sqlalchemy_store"
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
