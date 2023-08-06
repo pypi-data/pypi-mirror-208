@@ -1,0 +1,89 @@
+{# -*- engine:django -*- #}
+
+{% extends "core/base.html" %}
+{% load material_form i18n any_js static %}
+
+{% block browser_title %}{% blocktrans %}Edit seating plan{% endblocktrans %}{% endblock %}
+{% block page_title %}
+  <a href="{% url "seating_plans" %}"
+     class="btn-flat primary-color-text waves-light waves-effect">
+    <i class="material-icons left iconify" data-icon="mdi:chevron-left"></i> {% trans "Back" %}
+  </a>
+{% blocktrans %}Edit seating plan{% endblocktrans %}
+{% endblock %}
+
+{% block extra_head %}
+  {{ form.media.css }}
+  {% include_css "select2-materialize" %}
+  <link rel="stylesheet" href="{% static "css/stoelindeling/seating_plan.css" %}">
+{% endblock %}
+
+{% block content %}
+<form method="post" action="" id="seating-plan-form">
+  {% csrf_token %}
+  {% form form=form %}{% endform %}
+
+  {{ formset.management_form }}
+  {% for form in formset %}
+    {{ form.as_p }}
+  {% endfor %}
+
+  {% include "core/partials/save_button.html" %}
+</form>
+
+<div class="row card grey lighten-4 drag-area">
+  <div class="card-content">
+    <div class="card-title">{% trans "Available persons" %}</div>
+    <div id="not-used-seats">
+      {% for seat in seats_without_position %}
+        {% include "stoelindeling/partials/seat.html" with seat=seat %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row card grey lighten-4 drag-area" id="seats">
+  <div class="card-content">
+    <div class="card-title">{% trans "Seating plan" %}</div>
+    <div class="seat-grid-add-row">
+      <button class="btn waves-effect waves-light primary" id="seat-row-add-top">
+        <i class="material-icons center iconify" data-icon="mdi:table-row-plus-before"></i>
+      </button>
+    </div>
+    <div class="seat-grid">
+      <div class="seat-grid-add-col">
+        <button class="btn waves-effect waves-light primary" id="seat-col-add-left">
+          <i class="material-icons center iconify" data-icon="mdi:table-column-plus-before" data-height="1.5em"></i>
+        </button>
+      </div>
+      {% for x, x_items in start_grid.items %}
+        <div class="seat-grid-col">
+          {% for y, seat in x_items.items %}
+            <div class="seat-grid-cell" data-x="{{ x }}" data-y="{{ y }}">
+              {% if seat %}
+                {% include "stoelindeling/partials/seat.html" with seat=seat %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <div class="seat-grid-add-col">
+        <button class="btn waves-effect waves-light primary" id="seat-col-add-right">
+          <i class="material-icons center iconify" data-icon="mdi:table-column-plus-after" data-height="1.5em"></i>
+        </button>
+      </div>
+    </div>
+    <div class="seat-grid-add-row">
+      <button class="btn waves-effect waves-light primary" id="seat-row-add-bottom">
+        <i class="material-icons center iconify" data-icon="mdi:table-row-plus-after"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% include_js "select2-materialize" %}
+{{ form.media.js }}
+
+{% include_js "interactjs" %}
+<script src="{% static "js/stoelindeling/edit_seating_plan.js" %}"></script>
+{% endblock %}
