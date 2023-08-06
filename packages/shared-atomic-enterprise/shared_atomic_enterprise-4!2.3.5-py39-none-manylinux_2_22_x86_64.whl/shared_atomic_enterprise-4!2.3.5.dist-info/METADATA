@@ -1,0 +1,109 @@
+Metadata-Version: 2.1
+Name: shared-atomic-enterprise
+Version: 4!2.3.5
+Summary: Shared atomicity with multiprocessing or multiple threads
+Home-page: https://sharedatomic.top/
+Author: Xiquan Ren
+Author-email: xiquanren@yandex.com
+Requires-Python: >=3.6
+Requires-Dist: urwid (==2.1.2)
+
+This package provided a second way to access those shared data types with atomic operations.
+can be used on
+
+ - macOS x86_64,
+
+ - Microsoft Windows 10 x64, Windows Server 2019 x64
+
+ - Centos7,9/RHEL7,9 x86_64,
+
+ - Ubuntu Linux 18, 20, 22 x86_64 and
+
+ - Suse Linux Enterprise Server 12, 15 x86_84.
+
+
+This is copyright software, you should buy it at https://sharedatomic.top/enterprise/payment to get a licence to use it. For the price and details, please check
+https://sharedatomic.top/enterprise/payment.
+
+Included Datatypes
+
+ - atomic_int
+
+ - atomic_uint
+
+ - atomic_float
+
+ - atomic_bool
+
+ - atomic_bytearray
+
+ - atomic_string
+
+ - atomic_shared_memory
+
+ - atomic_set, package bitarray >= 2.4.0 is needed.
+
+ - atomic_list, package bitarray >= 2.4.0 is needed.
+
+LINUX/macOS
+
+ - CPython 3.6 - 3.11(3.11 not supported on ubuntu20 and ubuntu22),
+
+ - Pypy not supported
+
+ - The package requires libatomic installed on the Linux platform
+
+ - bitarray if you need to use atomic_set or atomic_list
+
+ - urwid==2.1.2 to activate the package
+
+Windows
+
+ - CPython 3.6 - 3.11
+
+ - Pypy not supported
+
+ - Microsoft Visual C++ 2019 Redistributable(X64)
+
+ - urwid==2.1.2 to activate the package
+
+ - bitarray if you need to use atomic_set or atomic_list
+
+ - windows-curses==2.3.1 on windows
+
+
+Installation
+
+To install shared_atomic, use pip:
+
+The binary distribution of the software is compiled and delivered in different epochs.
+
+ - macOS only x86_64 platform supported, silicon not supported
+        epoch 1: version 1!2.3.5
+
+ - Redhat or Centos Linux, only centos7,9/rhel7,9 on x86_64 platform supported.
+        epoch 2: version 2!2.3.5
+
+ - Ubuntu Linux 18, 20, 22 on x86_64 platform supported
+        epoch 3: version 3!2.3.5
+
+ - Suse Linux Enterprise Server 12, 15 on x86_64 platform supported
+        epoch 4: version 4!2.3.5
+
+ - Microsoft Windows x64, Windows 10 and Windows server 2019 supported
+        epoch 5: version 5!2.3.5
+
+On Linux, you need assistance from the root user,
+
+    If you are a root user, it is ok, then only root can run this package.
+    If you are not root user, in the activation process you will need assistance from the root user.
+
+    cd (the directory where the package is installed )
+    chown root shared_atomic/atomic_python_suid
+    chmod u+s shared_atomic/atomic_python_suid
+
+    then the user who installed the package can run the package.
+
+For documentation, please go to:
+
+ https://sharedatomic.top/
