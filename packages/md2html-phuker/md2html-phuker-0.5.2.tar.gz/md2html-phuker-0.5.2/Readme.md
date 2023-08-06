@@ -1,0 +1,176 @@
+# md2html
+
+Yet another markdown to html converter, generate an offline all-in-one single HTML file.
+
+This is a *feng-he-guai* program. Python code based on:
+
+- [Python-Markdown](https://python-markdown.github.io/) and its officially supported extensions
+- [Phuker/markdown_link_attr_modifier](https://github.com/Phuker/markdown_link_attr_modifier), my `Python-Markdown` extension to add attributes like `target="_blank"` to `<a>` tags
+- [Zopieux/py-gfm](https://github.com/Zopieux/py-gfm), a `Python-Markdown` extension to support some [GFM](https://github.github.com/gfm/) features
+
+CSS based on:
+
+- [sindresorhus/github-markdown-css](https://github.com/sindresorhus/github-markdown-css), the GitHub Markdown style, main theme
+- [Pygments](https://pygments.org/), style for Code highlight code blocks
+- Others copy & modify from [my blog](https://phuker.github.io/). The fonts are optimized for contents in Simplified Chinese.
+
+## Features
+
+### Generated HTML
+
+The principle is: keep it simple.
+
+- All-in-one single HTML file
+- Completely offline, no CDN, no web fonts
+- No JavaScript
+
+### Markdown syntax
+
+This is a Markdown dialect, similar but different from [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/).
+
+Default enabled Markdown features:
+
+- [Extra](https://python-markdown.github.io/extensions/extra/) extensions
+- [CodeHilite](https://python-markdown.github.io/extensions/code_hilite/)
+- [Table of Contents](https://python-markdown.github.io/extensions/toc/)
+- [New Line to Break](https://python-markdown.github.io/extensions/nl2br/)
+- [Admonition](https://python-markdown.github.io/extensions/admonition/)
+- `<a target="_blank"`
+- Part of GitHub Flavored Markdown
+
+For details, see `convert()` function of `md2html/md2html.py`, and the demo below.
+
+## Demo
+
+- Default style: [docs/demo-default.html](https://phuker.github.io/md2html/demo-default.html)
+- With addon `--style sidebar-toc`: [docs/demo-sidebar-toc.html](https://phuker.github.io/md2html/demo-sidebar-toc.html)
+- With addon `--style dark`: [docs/demo-dark.html](https://phuker.github.io/md2html/demo-dark.html)
+- With addon `--style sidebar-toc --style dark`: [docs/demo-sidebar-toc-dark.html](https://phuker.github.io/md2html/demo-sidebar-toc-dark.html)
+
+All above files are generated from [docs/demo.md](./docs/demo.md). You can view its content to see supported syntax.
+
+## Requirements
+
+- Python >= `3.6`, with `pip` installed
+
+## Install
+
+```bash
+python3 -m pip install -U md2html-phuker
+```
+
+There are too many similar projects with similar names in PyPI, `md2html`, `md-to-html`, `markdown2html`, `markdown-to-html`, `mrkdwn2html` ... I have to add a suffix to keep away from this war of naming.
+
+## Usage
+
+### Show help
+
+```console
+$ md2html --help
+usage: md2html [-h] [-t TITLE] [-f] [-o FILE] [--style PRESET] [--append-css FILE] [--head-insert HTML] [--head-append HTML] [--body-insert HTML] [--body-append HTML] [-V] [-v] [input_file]
+
+md2html 0.5.1
+Yet another markdown to html converter, generate an offline all-in-one single HTML file.
+https://github.com/Phuker/md2html
+
+positional arguments:
+  input_file            If omitted or "-", use stdin.
+
+options:
+  -h, --help            show this help message and exit
+  -t TITLE, --title TITLE
+                        If omitted, generate from input filename
+  -f, --force           Force overwrite if output file exists
+  -o FILE, --output-file FILE
+                        If omitted, auto decide. If "-", stdout.
+  --style PRESET        Preset style addons, choices: sidebar-toc, dark
+  --append-css FILE     Append embedded CSS files, may specify multiple times.
+  --head-insert HTML    HTML to insert to the start of <head>, may specify multiple times.
+  --head-append HTML    HTML to append to the end of <head>, may specify multiple times.
+  --body-insert HTML    HTML to insert to the start of <body>, may specify multiple times.
+  --body-append HTML    HTML to append to the end of <body>, may specify multiple times.
+  -V, --version         Show version and exit
+  -v, --verbose         Increase verbosity level (use -vv or more for greater effect)
+```
+
+If you are not sure about what will happen if you combine `[-o FILE]`, `[input_file]` and `[-t TITLE]`, see `test.py`, which contains tens of input cases and their intended behaviors.
+
+### Convert a file
+
+Generate `foo.html` in the same dir, with HTML title `foo`:
+
+```bash
+md2html foo.md
+```
+
+Force overwrite output file if it exists:
+
+```bash
+md2html -f foo.md
+```
+
+### Convert from pipe and/or to pipe
+
+Read from `stdin`, output to `stdout`, specify HTML title:
+
+```bash
+md2html --title 'baz' <foo.md >bar.html
+
+cat foo.md | md2html -t 'baz' >bar.html
+```
+
+Send output to the screen, and write the same contents to a file:
+
+```bash
+md2html foo.md -o - | tee bar.html
+```
+
+### Modify generated HTML file
+
+Append CSS files, embed their contents inside `<style>` tags:
+
+```bash
+md2html foo.md --append-css './css/bar.css' --append-css '../baz.css'
+```
+
+Add HTML snippets:
+
+```bash
+md2html --head-append '<script async src="https://example.com/analytics.js"></script>' foo.md
+```
+
+### Use preset style addons
+
+Use `md2html --help` to see all preset addons.
+
+Move table of contents to the sidebar if the window is wide enough: ([demo](https://phuker.github.io/md2html/demo-sidebar-toc.html)):
+
+```bash
+md2html --style sidebar-toc foo.md
+```
+
+Dark theme ([dark](https://phuker.github.io/md2html/demo-dark.html)):
+
+```bash
+md2html --style dark foo.md
+```
+
+Combine `sidebar-toc` and `dark` ([demo](https://phuker.github.io/md2html/demo-sidebar-toc-dark.html)):
+
+```bash
+md2html --style sidebar-toc --style dark foo.md
+```
+
+Note that compatibility is not guaranteed when combining multiple presets, and different ordering may result in different results.
+
+## Tests
+
+```bash
+make test
+```
+
+## FAQ
+
+## License
+
+This repo is licensed under the **GNU General Public License v3.0**
