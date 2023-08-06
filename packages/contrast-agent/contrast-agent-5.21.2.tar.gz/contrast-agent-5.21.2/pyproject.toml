@@ -1,0 +1,47 @@
+[tool.black]
+line-length = 88
+target-version = ['py37']
+exclude = '''
+(
+  /(
+    | src/contrast_vendor/*
+    | src/contrast/assess_extensions/*
+    | src/contrast/data/*
+    | tests/agent/data/*
+    | tests/extern/*
+    | .eggs/*
+    | build/*
+  )/ |
+  framework_test/django-2\.2\.1/app/view_definitions\.py |
+  framework_test/django-3\.0\.6/app/view_definitions\.py
+)
+'''
+
+[tool.pytest.ini_options]
+testpaths = "tests integration-tests/test-create-config-script"
+filterwarnings = [
+  "error::DeprecationWarning",
+  # for DeprecatedWarning which doesn't work for some reason if not like this
+  "error:.*Call to deprecated.*",
+  "error::PendingDeprecationWarning",
+  "error::pytest.PytestUnhandledThreadExceptionWarning",
+  "error::pytest.PytestUnhandledCoroutineWarning",
+  "error::pytest.PytestUnraisableExceptionWarning",
+  "error::RuntimeWarning:asyncio.*",
+  "ignore::DeprecationWarning:pip._vendor.*",
+  "ignore::DeprecationWarning:wrapt.*",
+  "ignore::DeprecationWarning:jinja2.*",
+  "ignore::DeprecationWarning:pyramid.*",
+  "ignore::DeprecationWarning:aiohttp.*",
+  # defusedxml was deprecated long ago but we still test it.
+  "ignore:.*defusedxml.lxml:DeprecationWarning",
+  # turn off YAMLLoadWarning about unsafe yaml since we have to test for unsafe use
+  "ignore:.*calling yaml.load.*as the default Loader is unsafe.*",
+  # we still test these functions
+  "ignore:.*'flask.helpers.safe_join' is deprecated.*",
+  "ignore:.*'utils.escape' is deprecated.*",
+  "ignore:.*unicode_internal codec has been deprecated.*",
+  "ignore:.*'cgi' is deprecated.*",
+]
+asyncio_mode = "auto"
+addopts = "--ignore=tests/performance"
