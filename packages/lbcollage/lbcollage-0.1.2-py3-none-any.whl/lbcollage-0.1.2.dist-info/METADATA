@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: lbcollage
+Version: 0.1.2
+Summary: Create a collage of album art from your ListenBrainz listening history
+Author-email: Thom Cameron <thomcameron98@protonmail.com>
+Description-Content-Type: text/markdown
+Requires-Dist: argparse
+Requires-Dist: pylistenbrainz
+Requires-Dist: musicbrainzngs
+Requires-Dist: pillow
+
+# lbcollage
+
+![An Example Collage](example_collage.jpg)
+
+Create a collage of album art from your ListenBrainz listening history.
+
+## Overview
+
+This is a simple pure-python command line tool which uses the ListenBrainz and MusicBrainz APIs to compile a collage of your scrobbled listening history. 
+
+## Installation
+
+This is available on [PyPI](https://pypi.org/project/lbcollage). It can be installed as follows:
+
+```
+> pip install lbcollage
+```
+
+If your path is configured correctly, the tool should be available to use from the command line immediately.
+
+## Usage
+
+The default behaviour of the script is to retrieve the last month of listening history. This is what happens when only a username is passed.
+
+```
+> lbcollage <username>
+```
+
+Different timespans and larger collages can be created using different specifiers. For example:
+
+```
+> lbcollage thumc -t year -s 5
+```
+
+Other options are available which can be listed using:
+
+```
+> lbcollage -h
+```
