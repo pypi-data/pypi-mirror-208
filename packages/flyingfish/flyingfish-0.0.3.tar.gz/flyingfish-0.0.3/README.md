@@ -1,0 +1,54 @@
+<img align="right" src="docs/logo.svg" alt="project logo" width="175"/>   
+
+[![CI](https://github.com/lenamueller/flyingfish/actions/workflows/hmpy.yml/badge.svg)](https://github.com/lenamueller/flyingfish/actions/workflows/hmpy.yml)
+[![pages-build-deployment](https://github.com/lenamueller/flyingfish/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/lenamueller/flyingfish/actions/workflows/pages/pages-build-deployment)
+
+[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+[![Python - 3.10.8](https://img.shields.io/static/v1?label=Python&message=3.10.8&color=yellow&logo=python)](https://)
+[![contributions & inspiration - welcome](https://img.shields.io/static/v1?label=contributions+%26+inspiration&message=welcome&color=9cf)](https://)
+
+
+
+
+
+An open source library for some common hydrological and meteorological issues.
+
+## Status
+The motivation for implementing this library grows out of my personal and academic projects where I face some typical problems repeatedly.
+The implementation of this library started in November 2022 and is currently in progress. 
+New functionalities are updated regularly.
+The library will be available at PyPI in future.
+
+## Documentation
+https://lenamueller.github.io/flyingfish/flyingfish.html
+
+
+## Modules
+| name | explaination  | 
+| :---:   | --- |
+| EDA | exploratory data analysis functionalities|
+| FDM | 2D groundwater flow equation using finite difference method and central difference for the space derivative |
+
+## installation and usage (in progress)
+1. Access the library 
+- `git clone git@github.com:lenamueller/flyingfish.git` 
+- `pip install flyingfish` (not yet).
+2. Set up a virtual environment based on the libraries' dependecies `requirements.txt`.
+3. Run example with `jupyter notebook` (not yet)
+
+## Bibliography
+#### outlier analysis
+- Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and Handle Outliers", The ASQC Basic References in Quality Control: Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.
+
+#### optimal bin number/ width
+- Doane, D. (1976). Aesthetic Frequency Classifications. The American Statistician, 30(4):181–183.
+- Freedman, D. und Diaconis, P. (1981). On this histogram as a density estimator: L2 theory. Zeitschrift für Wahrscheinlichkeitstheorie und verwandte Gebiete, 57:453–476.
+- Scott, D. (1979). On optimal and data-based histograms. Biometrika, 66:605–640.
+- Sturges, H. A. (1926). The Choice of a Class Interval. Journal of the American Statistical Association,
+21(153):65–66.
+
+#### plotting positions
+- Beard, L. (1943). Statistical analysis in hydrology. Trans. Am. Soc. Cir. Eng., 108:1110-1160.
+- Cunnane, C. (1978). Unbiased plotting positions — A review. Journal of Hydrology, 37(3-4):205–222.
+- Ologhadien, I. (2021). Evaluation of Plotting Position Formulae for Pearson Type 3 Distribution in Three Hydrological Stations on the Niger River. International Journal of Environment and Climate Change,  117–128.
+- Weibull, W. (1939). A Statistical Theory of the Strength of Materials. Generalstabens Litografiska Anstalts Förlag, Stockholm.
