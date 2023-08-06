@@ -1,0 +1,250 @@
+# Change Log
+
+All notable changes to this project will be documented here.
+
+## [1.0.4] - 2023-05-15
+### Bugfixes
+- Fix empty reason field when re-raising tornado.web.HTTPError
+
+## [1.0.3] - 2023-04-21
+### Bugfixes
+- Various string encoding fixes
+
+## [1.0.0] - 2023-03-02
+### Removed
+- Dropped Python 2.x support
+
+### Added
+- Added Python 3.6+ support
+
+### Changes
+- Renamed fn.async() decorator call into fn.bg() to make it
+  Python 3 compatible
+- Renamed clients.async module to clients.asyncache
+  (to make it Python 3 compatible)
+- Key/value picklers now **must** return bytes
+- Key/value picklers are now strategy instances instead
+  of namespaces. Check the new interface when migrating
+  code that passes custom picklers. New picklers must implement
+  the appropriate BasePickler subclass.
+- Futures no longer strip exception tracebacks by default.
+  This follows Python 3's new traceback handling behavior,
+  but it may cause additional memory leaks due to the way
+  tracebacks hold references to frames and all local variables.
+  It is recommended that stripping is re-enabled for production
+  code using `chorde.clients.asyncache.set_strip_tracebacks(True)`.
+
+## [0.9.0] - Unreleased
+### Removed
+- Lock pools and deadlock detection from chorde.serialize have
+  been removed (no longer used)
+
+### Bugfixes
+- Fixed high latency (50ms) of missing `async()()` calls
+- Fix alternative slot search in SharedCounter when the autoselected
+  slot is occupied.
+
+## [0.8.4] - 2021-09-29
+### Bugfixes
+- Apply TTL namespace variation on all code paths.
+  Some were neglected.
+
+## [0.8.3] - 2021-09-29
+### Changes
+- Consider TTL when computing automatic namespaces to avoid
+  mixing differently-configured entries, which can cause
+  TTL failures
+
+## [0.8.2] - 2021-04-08
+### Bugfixes
+- Automatically clean broken entries from files caches,
+  otherwise they can be left there indefinitely and prevent
+  correct cache operation
+
+## [0.8.1] - 2021-03-25
+### Improvements
+- Reduced stats tracking overhead when using Cython
+- Optimize code generation for the native platform by default
+
+## [0.8.0] - 2020-11-19
+### Changes
+- Use cLRU cuckoocache and lrucache
+
+### Improvements
+- Overrideable minimum and dynamic TTLs in dnsutils dynamic
+  resolving client.
+
+## [0.7.4] - 2020-05-15
+### Bugfixes
+- Add missing include file to MANIFEST.in
+
+## [0.7.3] - 2020-05-15
+### Bugfixes
+- Add MANIFEST.in to also include pxd files and others
+
+## [0.7.2] - 2020-05-15
+### Bugfixes
+- Fix setup.py to include requirements.txt in the source build
+
+## [0.7.1] - 2020-05-15
+### Bugfixes
+- Fix future().peek reporting of late (async) misses
+- Fix MemcachedStoreClient.set_multi when sockets become broken.
+  It would error out trying to unregister them from the poller.
+- Make tempfile cleanup in FilesCacheClient more robust
+- Fix ThreadPool.join's return value in some cases with multiple
+  joiners
+- Fix ElastiCacheClient to force-refresh its DNS endpoint even
+  when it points to a single server. EC should always be dynamic.
+
+## [0.7.0] - 2019-07-11
+### Improvements
+- Optimized threadpool implementation to lower queuing latency
+  and overall overhead. Simplified things considerably by
+  avoiding zero-copy slicing, something that's hard to get
+  right and actually incurred a significant latency penalty.
+  List slicing is quite fast anyway.
+
+## [0.6.0] - 2019-04-04
+### Added
+- Added strict_no_servers option to memcache clients. If passed,
+  it will raise NoServersError when no server can be reached,
+  instead of treating the condition as a miss.
+
+## [0.5.4] - 2018-09-24
+### Bugfixes
+- Fix threadpool.join's return value
+
+## [0.5.3] - 2018-08-23
+### Bugfixes
+- Fixed placeholder functionality on async() calls
+- Fix PyPy compatibility
+
+### Changed
+- CacheMissError is now a proper alias of KeyError rather
+  than a subclass. Keeping it as a subclass was cumbersome.
+
+## [0.5.2] - 2018-08-01
+### Improvements
+- Reduced GC pressure by cleaning up callback list on done
+  futures immediately after popping the callbacks for
+  execution. This breaks cycles and allows freeing objects
+  through RC instead of GC, especially since callbacks tend
+  to be closures referencing a lot of application state.
+
+## [0.5.1] - 2018-07-26
+### Bugfixes
+- Fixed packaging of pxd files
+
+## [0.5.0] - 2018-07-12
+### Added
+- Added setdefault and get to exported cython methods
+  in cuckoocache.pxd so external modules can optimally
+  interact with it using its dict interface
+
+### Improvements
+- Improved async latency by executing cleanup tasks
+  after notifying the results, rather than before.
+
+### Bugfixes
+- Fixed bug in clients.Base.get that could cause clients that
+  used the base implementation to return stale results when
+  invoked with a custom default.
+- Fixed coherence OOB updates, which in some circumstances
+  could renew a stale value instead of fetch a fresh shared
+  one.
+- Fix assorted thread safety issues in the lockless Threadpool
+  implementation
+
+## [0.4.2] - 2018-06-14
+### Changed
+- Compatibility with Cython 0.28
+- Cythonized decorators and some base clients to lower caching
+  overhead in the most commonly used patterns
+  NOTE: cythonized decorators aren't picklable, so client code
+  may have to be adapted to not depend on the picklability of
+  decorated functions
+
+### Improvements
+- Small performance improvements
+- Prevent busy looping in async waitkey in some corner cases
+
+## [0.4.1] - 2018-03-08
+### Bugfixes
+- Throttle coherence tics when trying to refresh stale pending
+  entries in the broker. Under some conditions (forgotten
+  tasks and very high timeouts), a very high rate of tic
+  requests could be generated, causing channel overload.
+
+### Changed
+- Added some useful debug logging to chorde.mq.coherence
+
+## [0.4.0] - 2018-02-19
+### Added
+- Add expire() calling mode to decorated functions to perform
+  an expire on the relevant key.
+
+### Bugfixes
+- Fix combined use of coherence and renew_ttl. Renew
+  would take precedence over the refresh operation,
+  perpetuating stale results
+
+## [0.3.1] - 2018-02-07
+### Bugfixes
+- Fix broker state listener states on some corner-case
+  error handling in coherence manager that might cause it
+  to have both listener and broker event listeners registered
+  with the ipsub channel
+
+## [0.3.0] - 2017-12-06
+### Bugfixes
+- Fix NamespaceMirrorWrapper.clear by properly proxying
+  writes on revision and revmark_ttl
+- Make LazyCuckooCache's rehash (resize) operation
+  atomic to avoid concurrent rehashing, which can cause
+  corruption and crashes in rare corner cases, most
+  notably with non-preallocated caches that grow very
+  rapidly from concurrent writer threads and cause
+  eviction callbacks due to hash collisions during
+  rehashing.
+
+### Changed
+- Each client has a different logger
+
+## [0.2.1] - 2017-10-12
+### Bugfixes
+- Fix TieredInclusiveClient's handling of REGET during
+  coherence. In cases where high load might make the
+  L1 expiration be missed by the time putnext gets
+  the REGET reply, the way REGET was implemented might
+  step on fresh values of the cache with old ones
+  inadvertantly. Check the values' TTL befure using it
+  in a REGET, inhibit caller's reget, and use promotion
+  logic instead.
+
+## [0.2.0] - 2017-09-20
+### Changed
+- Made ttl_skip not return default/CacheMissError when the
+  only available value is below the skip threshold. Instead,
+  return the available item as does TieredInclusiveCache.
+  The logic works better with lazy decorators and async
+  refresh in this way, and is more uniform across clients.
+- FastMemcachedClient: Refresh DNS in the bgwriter thread
+  to avoid latency spikes caused by DNS queries
+
+### Added
+- Support for getMulti and getTtlMulti to all clients,
+  with optimized versions for memcached
+- An option tcp_nodelay to MemcachedStoreClient to reduce
+  latency in latency-sensitive applications
+- Add a LazyCuckooCache implementing a lazy form of
+  cuckoo hashing (ie: without relocation) to implement a
+  quasi-LRU eviction strategy with O(1) reads and updates
+
+## [0.1.0]
+
+Initial release
+
+
+[Note]
+This changelog format is taken from http://keepachangelog.com/.
