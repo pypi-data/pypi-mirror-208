@@ -1,0 +1,82 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Test and publish Python 🐍 package 📦
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # Run everyday at 06:00 UTC
+    - cron:  '* 6 * * *'
+
+jobs:
+  test:
+    name: Run tests for Python ${{ matrix.python-version }}, Sphinx ${{ matrix.sphinx-version }},  Pygments ${{ matrix.pygments-version }}
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        sphinx-version: ["45", "53", "60", "latest"]
+        pygments-version: ["213", "latest"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: x64
+    - name: Run with Tox
+      run: |
+        pip install tox
+        tox -e "${{matrix.python-version}}-sphinx${{matrix.sphinx-version}}-pygments${{matrix.pygments-version}}"
+
+  check:
+    name: Run static analysis
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+        architecture: x64
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 sphinxcontrib --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 sphinxcontrib --count --exit-zero --exclude .git,__pycache__,.eggs --max-complexity=10 --max-line-length=127 --statistics
+        flake8 tests --count --exit-zero --exclude .git,__pycache__,.eggs --max-complexity=10 --max-line-length=127 --statistics
+
+
+  build-n-publish:
+    if: startsWith(github.ref, 'refs/tags')
+    name: Build and publish Python 🐍 distributions 📦 to PyPI
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    - name: Build a binary wheel and a source tarball
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install wheel
+        python setup.py sdist bdist_wheel
+    - name: Publish distribution 📦 to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
+    - name: Release to GitHub
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          sdist
+          bdist_wheel
