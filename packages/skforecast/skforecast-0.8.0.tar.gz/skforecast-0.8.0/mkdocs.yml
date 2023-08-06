@@ -1,0 +1,162 @@
+site_name: Skforecast Docs
+extra_css:
+  - stylesheets/extra.css
+repo_url: https://github.com/JoaquinAmatRodrigo/skforecast
+site_url: https://joaquinamatrodrigo.github.io/skforecast/
+site_description: Python library that eases using scikit-learn regressors as multi-step forecasters. It also works with any regressor compatible with the scikit-learn API (XGBoost, LightGBM, Ranger...).
+site_author: Joaquin Amat Rodrigo and Javier Escobar Ortiz
+use_directory_urls: false
+nav:
+  - Home:
+    - Welcome to skforecast: README.md
+    - Introduction to forecasting: introduction-forecasting/introduction-forecasting.md
+    - Quick start: user_guides/quick-start-skforecast.ipynb
+    - User Guides: user_guides/input-data.ipynb
+    - Examples and tutorials: examples/examples.md
+    - API Reference: api/ForecasterAutoreg.md
+    - FAQ and Tips: faq/faq.md
+    - Releases: releases/releases.md
+
+  - Introduction to forecasting: 
+    - Introduction to forecasting: introduction-forecasting/introduction-forecasting.md
+    - Forecaster Parameters: introduction-forecasting/forecaster-parameters.md
+    - Forecaster Attributes: introduction-forecasting/forecaster-attributes.ipynb
+
+  - Quick start: user_guides/quick-start-skforecast.ipynb
+
+  - User Guides:
+      - Input data: user_guides/input-data.ipynb
+      - Recursive multi-step forecasting: user_guides/autoregresive-forecaster.ipynb
+      - Direct multi-step forecasting: user_guides/direct-multi-step-forecasting.ipynb
+      - Independent multi-time series forecasting: user_guides/independent-multi-time-series-forecasting.ipynb
+      - Dependent multivariate series forecasting: user_guides/dependent-multi-series-multivariate-forecasting.ipynb
+      - Exogenous variables: user_guides/exogenous-variables.ipynb
+      - Custom predictors: user_guides/custom-predictors.ipynb
+      - Weighted time series forecasting: user_guides/weighted-time-series-forecasting.ipynb
+      - Backtesting forecaster: user_guides/backtesting.ipynb
+      - Hyperparameter tuning and lags selection: user_guides/hyperparameter-tuning-and-lags-selection.ipynb
+      - Scikit-learn Transformers and Pipelines: user_guides/sklearn-transformers-and-pipeline.ipynb
+      - Probabilistic forecasting: user_guides/probabilistic-forecasting.ipynb
+      - Feature importances: user_guides/feature-importances.ipynb
+      - Categorical features: user_guides/categorical-features.ipynb
+      - Forecasting with XGBoost and LightGBM: user_guides/forecasting-xgboost-lightgbm.ipynb
+      - Forecasting SARIMAX and ARIMA models: user_guides/forecasting-sarimax-arima.ipynb
+      - Save and load forecaster: user_guides/save-load-forecaster.ipynb
+      - Forecaster in production: user_guides/forecaster-in-production.ipynb
+      - Shap-values: user_guides/shap-values-skforecast.ipynb
+      - Skforecast in GPU: user_guides/skforecast-in-GPU.ipynb
+      - Plot forecaster residuals: user_guides/plot-forecaster-residuals.ipynb
+
+  - Examples and tutorials:
+      - Examples and tutorials: examples/examples.md
+
+  - API Reference:
+      - ForecasterAutoreg: api/ForecasterAutoreg.md
+      - ForecasterAutoregCustom: api/ForecasterAutoregCustom.md
+      - ForecasterAutoregDirect: api/ForecasterAutoregDirect.md
+      - ForecasterMultiSeries: api/ForecasterMultiSeries.md
+      - ForecasterMultiSeriesCustom: api/ForecasterMultiSeriesCustom.md
+      - ForecasterMultiVariate: api/ForecasterMultiVariate.md
+      - ForecasterSarimax: api/ForecasterSarimax.md
+      - model_selection: api/model_selection.md
+      - model_selection_multiseries: api/model_selection_multiseries.md
+      - model_selection_sarimax: api/model_selection_sarimax.md
+      - plot: api/plot.md
+      - utils: api/utils.md
+      - exceptions: api/exceptions.md
+
+  - FAQ and Tips:
+      - Table of contents: faq/faq.md
+      - Profiling skforecast: faq/profiling-skforecast.ipynb
+      - Avoid negative predictions when forecasting: faq/non-negative-predictions.ipynb
+      - Forecasting time series with missing values: faq/forecasting-time-series-with-missing-values.ipynb
+
+  - Releases: releases/releases.md
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: numpy
+            filters:
+              - "!^_"  # exclude all members starting with _
+          rendering:
+            show_root_heading: True
+            show_root_full_path: False
+            docstring_section_style: table
+  - mkdocs-jupyter:
+      ignore_h1_titles: True
+      include_source: True
+      execute: False
+      allow_errors: False
+  - search
+copyright: 
+theme:
+  name: material
+  custom_dir: docs/overrides
+  font:
+    text: Open Sans
+    code: Ubuntu Mono
+  logo: img/logo-skforecast-orange-no-backgound.png
+  highlightjs: true
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+  palette:    
+    # # Palette toggle for automatic mode
+    # - media: "(prefers-color-scheme)"
+    #   primary: custom
+    #   accent: custom
+    #   toggle:
+    #     icon: material/brightness-auto
+    #     name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme)"
+      scheme: light
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - codehilite
+  - pymdownx.inlinehilite
+  - pymdownx.details
+  - pymdownx.tabbed
+  - pymdownx.highlight:
+      use_pygments: true
+      linenums: true
+  - pymdownx.superfences
+  - pymdownx.magiclink
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - toc:
+      permalink: true
+extra:
+  version:
+    provider: mike
+  analytics:
+    provider: google
+    property: G-GR8X9Z9LKL
+  consent:
+    title: Cookie consent
+    description: >- 
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
