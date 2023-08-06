@@ -1,0 +1,71 @@
+{% extends "base/templates/layout.html" %}
+
+{% block page_name %}{{ model.verbose_name_plural }} / {% if func_name == 'store' %} Nuevo(a) {% endif %}
+    {% if func_name == 'update' %} Editar {% endif %} {% endblock %}
+{% block title %}{{ model.verbose_name_plural }} / {% if func_name == 'store' %} Nuevo(a) {% endif %}
+    {% if func_name == 'update' %} Editar {% endif %} {% endblock %}
+
+{% block content %}
+    {% load custom_tags %}
+    <form action="{% url 'core.model.route' model_id=model.internal_name func_name=func_name %}"
+          id="crud-form-{{ model.singular_name }}-create"
+          method="post" accept-charset="UTF-8"
+          class="crud-form crud-form-create">
+        {% if model.self.id %}
+            <input type="hidden" name="id" value="{{ model.self.id }}">
+        {% endif %}
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-elements">
+                    {% if func_name == 'store' %}
+                        <button type="submit" class="btn icon-btn btn-primary btn-action-save" data-toggle="tooltip"
+                                title="Guardar">
+                            <span class="fa fa-save"></span>
+                        </button>
+                    {% endif %}
+                    {% if func_name == 'update' %}
+                        <button type="submit" class="btn icon-btn btn-warning btn-action-update"
+                                data-toggle="tooltip"
+                                title="Editar">
+                            <span class="fas fa-pen"></span>
+                        </button>
+                    {% endif %}
+                    <a href="{% url 'core.model.route' model_id=model.internal_name func_name='list' %}"
+                       class="btn icon-btn btn-outline-primary btn-action-list"
+                       data-toggle="tooltip" title="Volver">
+                        <span class="fa fa-undo-alt"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body card-padding">
+                <div class="form-row">
+                    {% for field in form.fields.field %}
+                        <div class="form-group col-md-6">
+                            <label class="form-label">{{ field.verbose_name }}</label>
+                            {% if field.required %}<span class="text-danger">*</span>{% endif %}
+                            {% if field.type == 'char' %}
+                                <input type="text"
+                                       class="form-control form-control-sm"
+                                       value="{{ model.self|get_obj_attr:field.name }}"
+                                       name="{{ field.name }}" {% if field.required %}required{% endif %}>
+                            {% elif field.type == 'many2one' %}
+{#                                <select#}
+{#                                        class="form-control form-control-sm select-input searchable-ajax"#}
+{#                                        data-type="select-ajax"#}
+{#                                        data-url="{% url 'core.model.route' model_id=field.dataset_model func_name='search' %}"#}
+{#                                        data-dataset="{{ field.dataset }}"#}
+{#                                        data-dataset_search="{{ field.dataset_search }}"#}
+{#                                        data-dataset_text="{{ field.dataset_text }}"#}
+{#                                        name="{{ field.name }}" required>#}
+{#                                        {% if model.self|get_obj_attr:field.name %}#}
+{#                                            <option value="{{ model.self|get_obj_attr:field.name }}" selected>{{ model.self|get_obj_attr:field.many2one_field|get_obj_attr:field.dataset_text }}</option>#}
+{#                                            {% endif %}#}
+{#                                </select>#}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
