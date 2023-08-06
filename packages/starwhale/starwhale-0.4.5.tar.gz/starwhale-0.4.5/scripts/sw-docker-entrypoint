@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ "${SW_TASK_DISABLE_DEBUG}" != "1" ]; then
+    set -x
+fi
+
+ulimit -n 65535 || true
+
+CONDA_BIN="/opt/miniconda3/bin"
+PIP_CACHE_DIR=${SW_PIP_CACHE_DIR:=/"${SW_USER:-root}"/.cache/pip}
+VERBOSE="-vvvv"
+HANDLER=${SW_RUN_HANDLER:-""}
+STEP=${SW_TASK_STEP:-""}
+TASK_INDEX=${SW_TASK_INDEX:-0}
+TASK_NUM=${SW_TASK_NUM:-0}
+RUNTIME_RESTORED=${SW_USER_RUNTIME_RESTORED:-0}
+USE_PACKAGED_RUNTIME=${SW_USER_USE_PACKAGED_RUNTIME:-0}
+
+if [ "${USE_PACKAGED_RUNTIME}" = "1" ]; then
+    # TODO： add more validations for uri format
+    SW_RUNTIME_VERSION="model/${SW_MODEL_VERSION}"
+fi
+
+_update_python_alter() {
+    echo "-->[Preparing] set python/python3 to $1 ..."
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/$1 10
+    update-alternatives --install /usr/bin/python python /usr/bin/$1 10
+    python3 --version
+}
+
+pre_config() {
+    if [ "${SW_TASK_DISABLE_DEBUG}" = "1" ]; then
+        echo "-->[Preparing] debug config ..."
+        VERBOSE="-v"
+    fi
+
+    echo "-->[Preparing] config pypi and conda config ..."
+
+    if [ ${SW_PYPI_INDEX_URL} ] ; then
+        echo -e "\t ** use SW_PYPI_* env to config ~/.pip/pip.conf"
+        mkdir -p ~/.pip
+        cat > ~/.pip/pip.conf << EOF
+[global]
+index-url = ${SW_PYPI_INDEX_URL}
+extra-index-url = ${SW_PYPI_EXTRA_INDEX_URL}
+
+[install]
+trusted-host= ${SW_PYPI_TRUSTED_HOST}
+EOF
+        echo -e "\t ** current pip conf:"
+        echo "-------------------"
+        cat ~/.pip/pip.conf
+        echo "-------------------"
+    else
+        echo -e "\t ** use image builtin pip.conf"
+    fi
+}
+
+set_pip_cache() {
+    echo "\t ** set pip cache dir:"
+    python3 -m pip config set global.cache-dir ${PIP_CACHE_DIR} || true
+    python3 -m pip cache dir || true
+}
+
+set_py_and_sw() {
+    pre_config
+
+    if [ "${USE_PACKAGED_RUNTIME}" = "1" ]; then
+        echo "-->[Preparing] use packaged runtime ..."
+        _MANIFEST_RUNTIME=$(swcli -o json model info ${SW_MODEL_VERSION} -of manifest | jq -r ".packaged_runtime.manifest.environment.python") || exit 1
+        DETECTED_SW_VER=$(swcli -o json model info ${SW_MODEL_VERSION} -of manifest | jq -r ".packaged_runtime.manifest.environment.lock.starwhale_version") || exit 1
+    else
+        echo "-->[Preparing] use runtime ..."
+        _MANIFEST_RUNTIME=$(swcli -o json runtime info ${SW_RUNTIME_VERSION} -of manifest | jq -r ".manifest.environment.python") || exit 1
+        DETECTED_SW_VER=$(swcli -o json runtime info ${SW_RUNTIME_VERSION} -of manifest | jq -r ".manifest.environment.lock.starwhale_version") || exit 1
+    fi
+
+    _RUNTIME="python${_MANIFEST_RUNTIME}"
+    ORIGIN_SW_VER=$(swcli --version)
+    DETECTED_SW_VER=${DETECTED_SW_VER:-$ORIGIN_SW_VER}
+
+    echo "**** DETECT RUNTIME: python version: ${_RUNTIME}, starwhale version: ${DETECTED_SW_VER}"
+
+    # default python version
+    DEFAULT_PY_VER="python3.8"
+    PY_VER="$DEFAULT_PY_VER"
+    if [ "$_RUNTIME" = "python3.7" ] || [ "$_RUNTIME" = "python3.9" ] || [ "$_RUNTIME" = "python3.10" ] || [ "$_RUNTIME" = "python3.11" ] ; then
+        PY_VER="$_RUNTIME"
+    fi
+    _update_python_alter "$PY_VER"
+
+    set_pip_cache
+
+    if [ "$PY_VER" != "$_RUNTIME" ] || [ "$DETECTED_SW_VER" != "$ORIGIN_SW_VER" ]; then
+        # ignore the editable dev version
+        if [ "$DETECTED_SW_VER" != "0.0.0.dev0" ]; then
+          echo "-->[Preparing] start to install starwhale:${DETECTED_SW_VER}"
+          # install starwhale for current python
+          python3 -m pip install "starwhale==${DETECTED_SW_VER}" || exit 1
+        fi
+    fi
+}
+
+run() {
+    echo "-->[Running] start to run model: ${STEP}, use $(which swcli) cli ..."
+    if [ "${RUNTIME_RESTORED}" != "1" ]; then
+        runtime_args="--runtime ${SW_RUNTIME_VERSION}"
+
+    else
+        runtime_args="--forbid-packaged-runtime"
+    fi
+
+    swcli ${VERBOSE} model run --handler=${HANDLER} --step=${STEP} \
+        --task-index=${TASK_INDEX} --override-task-num=${TASK_NUM} \
+        --uri ${SW_MODEL_VERSION} --version=${SW_JOB_VERSION} \
+        --forbid-snapshot \
+        ${runtime_args} || exit 1
+}
+
+serve() {
+    echo "-->[Serving] start to serve, use $(which swcli) cli ..."
+    export
+    if [ "${RUNTIME_RESTORED}" != "1" ]; then
+        swcli ${VERBOSE} model serve --uri "${SW_MODEL_VERSION}" --runtime "${SW_RUNTIME_VERSION}" --host 0.0.0.0 || exit 1
+    else
+        swcli ${VERBOSE} model serve --uri "${SW_MODEL_VERSION}" --host 0.0.0.0 --forbid-packaged-runtime || exit 1
+    fi
+}
+
+welcome() {
+    echo "===================================="
+    echo "StarWhale Docker Entrypoint"
+    echo "Date: `date -u +%Y-%m-%dT%H:%M:%SZ`"
+    echo "Version: `swcli --version`"
+    echo "Run: $1 "
+    echo "Model Version: ${SW_MODEL_VERSION}"
+    echo "Runtime Version: ${SW_RUNTIME_VERSION}"
+    echo "Use Packaged Runtime: ${USE_PACKAGED_RUNTIME}"
+    echo "Local User: ${SW_USER:-root}"
+    echo "===================================="
+    if [ ! -z "${SW_USER}" ];
+    then
+      useradd -g ${SW_USER_GROUP_ID} -u ${SW_USER_ID} ${SW_USER}
+      su ${SW_USER}
+    fi
+}
+
+prepare(){
+    if [ "${SW_INSTANCE_URI}" != "local" ]
+    then
+        # only remote
+        echo '-->[Preparing] pulling model ...'
+        swcli instance login --token "${SW_TOKEN}" --alias server ${SW_INSTANCE_URI}
+        swcli model copy cloud://server/project/${SW_PROJECT}/model/${SW_MODEL_VERSION} .
+        if [ "${RUNTIME_RESTORED}" != "1" ] && [ "${USE_PACKAGED_RUNTIME}" != "1" ]; then
+            echo '-->[Preparing] pulling runtime ...'
+            swcli runtime copy cloud://server/project/${SW_PROJECT}/runtime/${SW_RUNTIME_VERSION} .
+        fi
+    fi
+    if [ "${RUNTIME_RESTORED}" != "1" ]; then
+        set_py_and_sw
+    else
+        $(bash "${SW_USER_RUNTIME_WORKDIR:-/opt/starwhale.user/runtime}"/activate.sw)
+    fi
+}
+
+welcome $1
+case "$1" in
+    pre_config)
+        pre_config
+        ;;
+    run|evaluation|fine_tune)
+        prepare $1 && run
+        ;;
+    serve|serving)
+        prepare $1 && serve
+        ;;
+    *)
+        prepare "starwhale" && exec "$@"
+        ;;
+esac
