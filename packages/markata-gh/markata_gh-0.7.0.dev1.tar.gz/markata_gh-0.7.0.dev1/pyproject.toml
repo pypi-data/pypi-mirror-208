@@ -1,0 +1,109 @@
+[build-system]
+requires = [
+ "hatchling",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "markata-gh"
+description = ""
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = []
+classifiers = [
+ "Development Status :: 4 - Beta",
+ "Programming Language :: Python",
+ "Programming Language :: Python :: 3.7",
+ "Programming Language :: Python :: 3.8",
+ "Programming Language :: Python :: 3.9",
+ "Programming Language :: Python :: 3.10",
+ "Programming Language :: Python :: 3.11",
+ "Programming Language :: Python :: Implementation :: CPython",
+ "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+ "markata",
+ "jinja2",
+]
+dynamic = [
+ "version",
+]
+[[project.authors]]
+name = "Waylon S. Walker"
+email = "waylon@waylonwalker.com"
+
+[project.urls]
+Documentation = "https://github.com/WaylonWalker/markata-gh#readme"
+Issues = "https://github.com/WaylonWalker/markata-gh/issues"
+Source = "https://github.com/WaylonWalker/markata-gh"
+
+[tool.hatch.version]
+path = "markata_gh/__about__.py"
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+ "markata_gh/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+ "no cov",
+ "if __name__ == .__main__.:",
+ "if TYPE_CHECKING:",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+ "black",
+ "flake8",
+ "isort",
+ "pytest",
+ "pytest-cov",
+ "seed-isort-config",
+]
+
+[tool.hatch.envs.dev]
+dependencies = [
+ "black",
+ "flake8",
+ "ipython",
+ "isort",
+ "pytest",
+ "pytest-cov",
+ "seed-isort-config",
+]
+
+[tool.hatch.envs.test]
+[[tool.hatch.envs.test.matrix]]
+python = [
+ "37",
+ "38",
+ "39",
+ "310",
+ "311",
+]
+
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=markata --cov=tests"
+no-cov = "cov --no-cov"
+lint = "flake8 markata_gh"
+format = "black --check markata_gh"
+sort-imports = "isort markata_gh"
+build-docs = "markata build"
+test-lint = [
+ "lint",
+ "format",
+ "seed-isort-config",
+ "sort-imports",
+ # "cov",
+]
+
+[project.entry-points."markata.jinja_md"]
+markta_gh = "markata_gh.repo_list:GhRepoListTopic"
+
+[tool.isort]
+profile = "black"
+known_third_party = ["jinja2"]
