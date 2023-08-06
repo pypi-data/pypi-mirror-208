@@ -1,0 +1,50 @@
+# !/bin/bash
+set +e
+
+function script_teardown() {
+  exit_status=${1:-1}
+  # cd ..
+  exit ${exit_status}
+}
+
+function detect_OS() {
+  if [[ $OSTYPE == 'darwin'* ]]; 
+  then
+    echo 'macOS detected'
+  else
+    echo 'Linux OS detected'
+  fi
+}
+
+function validate_node() {
+  if which node > /dev/null
+    then
+        echo "Prerequisite check passed: node is installed."
+    else
+        echo "Error. NPM is not installed. Exiting setup..." 1>&2
+        script_teardown 1
+  fi
+}
+
+function validate_launch_dir() {
+  FILE=./cucumber.js
+
+  if [[ ! -f ${FILE} ]]; then
+    echo "Please navigate to 'javascript' directory and relaunch."
+    script_teardown 1
+  fi
+}
+
+function regenearate_node_modules() {
+  # cd javascript/
+  rm -rf node_modules/
+  npm install
+  # cd ..
+}
+
+# cd javascript/
+validate_launch_dir
+# detect_OS
+validate_node
+regenearate_node_modules
+script_teardown 0
