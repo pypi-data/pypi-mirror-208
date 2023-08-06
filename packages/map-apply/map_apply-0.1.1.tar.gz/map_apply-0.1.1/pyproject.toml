@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "map_apply"
+version = "0.1.1"
+description = "Copies the input file and substitute one keyfield with another using 'map' file"
+authors = ["Smirnov Sergey"]
+license = "MIT"
+packages = [{include="map_apply"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+argparse = "^1.4.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+map_apply = "map_apply.scripts.map_apply:main"
