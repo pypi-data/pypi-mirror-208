@@ -1,0 +1,81 @@
+[tool.poetry]
+name = "ttrace"
+version = "0.1.8"
+description = "Makes use of strace"
+authors = ["Frans Fürst <frans.fuerst+gitlab@protonmail.com>"]
+repository = "https://projects.om-office.de/frans/ttrace.git"
+readme = "Readme.md"
+packages = [
+  {include = "ttrace"}
+]
+
+[tool.poetry.scripts]
+ttrace = 'ttrace:main'
+
+[tool.poetry.dependencies]
+python = "^3.10"
+treelib = "^1.6.1"
+aiofiles = "^23.1.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.6.0"
+isort = "^5.10.1"
+flake8 = "^4.0.1"
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+mypy = "^0.961"
+pylint = "^2.15.3"
+ipython = "^8.8.0"
+yamllint = "^1.29.0"
+types-aiofiles = "^22.1.0.8"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+include = '\.pyi?$'
+fast = true
+exclude = '''
+(
+  /(                        # exclude a few common directories in the
+    \.git                   # root of the project
+    | \.pytest_cache
+    | untracked
+    | \.venv
+  ))
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+strict="True"
+disallow_untyped_defs = "True"
+disallow_any_unimported = "True"
+no_implicit_optional = "True"
+check_untyped_defs = "True"
+warn_return_any = "True"
+warn_unused_ignores = "True"
+show_error_codes = "True"
+exclude = [
+    '\.venv',
+    'untracked',
+]
+
+[tool.pylint]
+ignore = [".venv", "untracked"]
+
+# Files or directories matching the regular expression patterns are skipped. The
+# regex matches against base names, not paths. The default value ignores Emacs
+# file locks
+ignore-patterns = ["^\\.#"]
+
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use, and will cap the count on Windows to
+# avoid hangs.
+jobs = 1
+
