@@ -1,0 +1,71 @@
+{% extends "stock/templates/layout.html" %}
+
+{% block page_name %} {{ model.verbose_name_plural }} / Importar {% endblock %}
+{% block title %} {{ model.verbose_name_plural }} / Importar {% endblock %}
+
+{% block content %}
+    {% load custom_tags %}
+    <form action="{% url 'core.model.route' model_id=model.internal_name func_name='import_data' %}"
+          id="crud-form-{{ model.singular_name }}-import"
+          data-forced_data_type="application/x-www-form-urlencoded"
+          data-redirect="{% url 'core.model.route' model_id=model.internal_name func_name='list' %}"
+          method="post" accept-charset="UTF-8"
+          class="crud-form crud-form-import">
+        <div class="card">
+            <div class="card-header with-elements">
+                <div class="card-header-elements">
+                    <button type="submit" onclick="onclickImportButton(this)"
+                            class="btn icon-btn btn-warning btn-action-import" data-toggle="tooltip"
+                            title="Importar">
+                        <span class="fas fa-upload"></span>
+                    </button>
+                    <input type="hidden" name="confirmed">
+                    <a href="{% url 'core.model.route' model_id=model.internal_name func_name='list' %}"
+                       class="btn icon-btn btn-outline-primary btn-action-list"
+                       data-toggle="tooltip" title="Volver">
+                        <span class="fa fa-undo-alt"></span>
+                    </a>
+                </div>
+                <div class="card-header-elements ml-md-auto">
+                    <a href="data:text/csv;charset=UTF-8,
+                            {% for field in import_view.fields.field %}{{ field.verbose_name|encode }};{% endfor %}"
+                       download="plantilla.csv"
+                       class="btn icon-btn btn-success btn-action-import" data-toggle="tooltip"
+                       title="Descargar plantilla">
+                        <span class="fas fa-file-csv"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body card-padding">
+                <label class="custom-file">
+                    <input type="file" class="custom-file-input" accept=".csv" required name="import">
+                    <span class="custom-file-label"></span>
+                </label>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body card-padding">
+                <table hidden id="table-import" class="table card-table table-sm">
+                    <thead>
+                    <tr>
+                        {% for field in import_view.fields.field %}
+                            <th data-attname="{{ field.name }}">{{ field.verbose_name }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {#  TODO: display import preview results #}
+                    {% for import_preview_result in import_preview_results %}
+                        <tr>
+                            {% for field in import_view.fields.field %}
+                                <td>{{ import_preview_result|get_obj_attr:field.name }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}
