@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: hg19genome
+Version: 1.0.1
+Summary: Python package hg19 genome annotation
+Home-page: https://github.com/kylessmith/hg19genome
+License: GPL-2.0-or-later
+Keywords: cython,annotation,hg19genome,c
+Author: Kyle S. Smith
+Author-email: kyle.smith@stjude.org
+Maintainer: Kyle S. Smith
+Maintainer-email: kyle.smith@stjude.org
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Cython
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: cython (>=0.29.32,<0.30.0)
+Requires-Dist: intervalframe (>=1.1.3,<2.0.0)
+Requires-Dist: numpy (>=1.23.5,<2.0.0)
+Requires-Dist: pandas (>=1.5.2,<2.0.0)
+Project-URL: Documentation, https://www.biosciencestack.com/static/hg19genome/docs/index.html
+Project-URL: Repository, https://github.com/kylessmith/hg19genome
+Description-Content-Type: text/markdown
+
+# hg19genome
+
+[![Build Status](https://travis-ci.org/kylessmith/hg19genome.svg?branch=master)](https://travis-ci.org/kylessmith/hg19genome) [![PyPI version](https://badge.fury.io/py/hg19genome.svg)](https://badge.fury.io/py/hg19genome)
+[![Coffee](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee&color=ff69b4)](https://www.buymeacoffee.com/kylessmith)
+
+A package to work with hg19 genomic intervals.
+
+
+## Install
+
+If you dont already have numpy and scipy installed, it is best to download
+`Anaconda`, a python distribution that has them included.  
+```
+    https://continuum.io/downloads
+```
+
+Dependencies can be installed by:
+
+```
+    pip install -r requirements.txt
+```
+
+PyPI install, presuming you have all its requirements installed:
+```
+    pip install hg19genome(not yet!!)
+```
+
+## Usage
+
+```python
+from hg19genome import Hg19Genome
+genome = Hg19Genome()
+genome.n_CpGs
+
+genome.n_bases
+
+genome.tss()
+
+genome.tss(upstream=1000, downstream=1000)
+
+```
+
+
