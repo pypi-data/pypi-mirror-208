@@ -1,0 +1,149 @@
+[build-system]
+requires = ["setuptools>=65.6.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bdfrx"
+description = "Downloads and archives content from reddit"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+keywords = ["reddit", "download", "archive",]
+authors = [{name = "OMEGARAZER", email = "bdfrx.python@gmail.com"}]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "appdirs>=1.4.4",
+    "beautifulsoup4>=4.10.0",
+    "cachetools>=5.3.0",
+    "click>=8.0.0",
+    "praw>=7.2.0",
+    "pyyaml>=5.4.1",
+    "requests>=2.30.0",
+    "yt-dlp>=2023.3.4",
+]
+dynamic = ["version"]
+
+[tool.setuptools]
+dynamic = {"version" = {attr = "bdfrx.__version__"}}
+packages = ["bdfrx", "bdfrx.site_downloaders", "bdfrx.site_downloaders.fallback_downloaders",]
+package-data = {"bdfrx" = ["default_config.cfg", "bdfrx.db",]}
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.3.0",
+    "pre-commit>=3.3.1",
+    "pytest>=7.3.1",
+    "ruff>=0.0.264",
+]
+
+[project.urls]
+"Homepage" = "https://omegarazer.github.io/bulk-downloader-for-reddit-x"
+"Source" = "https://github.com/OMEGARAZER/bulk-downloader-for-reddit-x"
+"Bug Reports" = "https://github.com/OMEGARAZER/bulk-downloader-for-reddit-x/issues"
+
+[project.scripts]
+bdfrx = "bdfrx.__main__:cli"
+bdfrx-download = "bdfrx.__main__:cli_download"
+
+[tool.black]
+preview = true
+line-length = 120
+
+[tool.flake8]
+exclude = ["scripts/tests"]
+max-line-length = 120
+show-source = true
+statistics = true
+
+[tool.isort]
+profile = "black"
+py_version = 39
+multi_line_output = 3
+line_length = 120
+indent = 4
+
+[tool.mypy]
+python_version = "3.9"
+show_column_numbers = true
+show_error_context = true
+
+[tool.pytest.ini_options]
+minversion = "7.1"
+addopts = "--strict-markers"
+testpaths = "tests"
+markers = [
+    "online: tests require a connection to the internet",
+    "reddit: tests require a connection to Reddit",
+    "slow: test is slow to run",
+    "authenticated: test requires an authenticated Reddit instance",
+]
+
+[tool.refurb]
+python_version = "3.9"
+
+[tool.ruff]
+extend-exclude = ["scripts/tests"]
+external = ["FURB123"]
+flake8-annotations = {"allow-star-arg-any" = true, "suppress-dummy-args" = true}
+flake8-pytest-style = {"parametrize-values-type" = "tuple", "mark-parentheses" = false}
+pylint = {"allow-magic-value-types" = ["bytes", "int", "str"], "max-args" = 7}
+format = "grouped"
+ignore = [
+    "ANN101",   # missing-type-self
+    "B904",     # raise-without-from-inside-except
+    "N818",     # error-suffix-on-exception-name
+]
+line-length = 120
+per-file-ignores = {"tests/*" = ["ANN", "FBT", "S101", "S105", "S106", "SLF"], "scripts/*" = ["INP", "S105", "S106"]}
+select = [
+    "A",    # flake8-builtins
+    "ANN",  # flake8-annotations
+    "B",    # flake8-bugbear
+    "BLE",  # flake8-blind-except
+    "C4",   # flake8-comprehensions
+    "COM",  # flake8-commas
+    "E",    # Pycodestyle
+    "ERA",  # eradicate
+    "EXE",  # flake8-executable
+    "F",    # Pyflakes
+    "FBT",  # flake8-boolean-trap
+    "I",    # Isort
+    "ICN",  # flake8-import-conventions
+    "INP",  # flake8-no-pep420
+    "ISC",  # flake8-implicit-str-concat
+    "N",    # pep8-naming
+    "PGH",  # pygrep-hooks
+    "PIE",  # flake8-pie
+    "PLC",  # Pylint Convention
+    "PLE",  # Pylint Error
+    "PLR",  # Pylint Refactor
+    "PLW",  # Pylint Warning
+    "PT",   # flake8-pytest-style
+    "PTH",  # flake8-use-pathlib
+    "Q",    # flake8-quotes
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "RUF",  # Ruff
+    "S",    # flake8-bandit
+    "SIM",  # flake8-simplify
+    "SLF",  # flake8-self
+    "T10",  # flake8-debugger
+    "TID",  # flake8-tidy-imports
+    "UP",   # pyupgrade
+    "W",    # Pycodestyle
+    "YTT",  # flake8-2020
+]
+show-fixes = true
+show-source = true
+target-version = "py39"
+task-tags = ["TODO","TOFIX"]
