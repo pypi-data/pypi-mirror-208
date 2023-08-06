@@ -1,0 +1,16 @@
+include README.rst INSTALLATION.txt LICENSE.txt MANIFEST.in CHANGES.txt
+include src/lsqfit/*.pyx src/lsqfit/*.py 
+include setup.cfg setup.py pyproject.toml makefile
+
+graft doc/html
+graft examples
+graft tests
+exclude examples/*.tmp
+exclude examples/*.pyc
+exclude examples/*.1.0
+exclude examples/*.1.1
+exclude tests/*.pyc
+exclude src/lsqfit/*.c 
+exclude src/lsqfit/*.pyc
+recursive-exclude tests/__pycache__ *
+recursive-exclude doc/source/_build *
