@@ -1,0 +1,37 @@
+{% load static fragments %}
+<!DOCTYPE html>
+<script src="{% static 'doTheme.js' %}"></script>
+<script src="{% static 'doDropCommon.js' %}"></script>
+<script src="{% static 'doDropSelect.js' %}"></script>
+<script src="{% static 'doDropMenu.js' %}"></script>
+<script>themeHTML()</script>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="https://unpkg.com/missing.css@1.0.9/dist/missing.min.css">
+    {% og_title 'django fragments sample' %}
+    {% og_desc 'demo of django-fragments' %}
+    {% og_img url="https://gravatar.com/mgv3" alt="Sample desc of image" %}
+    <style>
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    </style>
+  </head>
+  <body {% htmx_csrf %} class="container">
+    {% include './_nav.html' %}
+    <main>
+      {% block content %}
+      {% endblock content %}
+    </main>
+    {% block footer %}
+      {% include './msg.html' %}
+    {% endblock footer %}
+  </body>
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+  <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+</html>
