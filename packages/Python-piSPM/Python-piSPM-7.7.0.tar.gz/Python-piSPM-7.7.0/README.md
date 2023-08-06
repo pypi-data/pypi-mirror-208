@@ -1,0 +1,138 @@
+# Python SPM
+Python SPM is a Python wrapper for Pickering Switch Path Manager.
+
+**Pickering Switch Path Manager is needed for the wrapper to work**
+- [Switch Path Manager]https://downloads.pickeringtest.info/downloads/Switch%20Path%20Manager/
+
+## Changelog
+> - 1.1 - Added protection functions
+
+## Example usage
+```python
+import pi_spm
+import os
+import sys
+from msvcrt import getch
+
+spm = pi_spm.pi_spm()
+
+def error_handler(err):
+    if err:
+        print("Error - " + spm.error_getErrorMessage(err))
+        exit(0)
+    return 0
+
+def main():
+    # select whether the system should boot online or offline
+    hw_exists = False
+    # opens of closes the IDE window
+    show_ide = True
+    # if true then the SPM server will be stopped and removed from memory (if started from this application)
+    stop_server = False
+    project_path = "C:\\Program Files (x86)\\Pickering Interfaces Ltd\\Switch Path Manager" \
+                      "\\Projects\\Tutorial\\Tutorial.switchproj"
+    if not os.path.exists(project_path):
+        project_path = "C:\\Program Files\\Pickering Interfaces Ltd\\Switch Path Manager" \
+                      "\\Projects\\Tutorial\\Tutorial.switchproj"
+
+
+
+    # Start the SPM Server
+    error_handler(spm.server_start())
+
+    # Connects to the SPM Server. This has to be done first to be able to use other API methods
+    error_handler(spm.client_connect())
+
+    if show_ide:
+        error_handler(spm.app_showMainWindow())
+    else:
+        error_handler(spm.app_closeMainWindow())
+
+    # Opens a SPM Project from the specified file path.
+    error_handler(spm.project_open(project_path))
+
+    # Boots the Test System with the active System Setup into Driver Online State.
+    # This initialises all Device Drivers. This requires the System Hardware to be connected to the computer and
+    #  be powered on
+    if hw_exists:
+        error_handler(spm.system_bootOnline())
+    else:
+        error_handler(spm.system_bootOffline())
+
+    # Resets all switching modules to their initial state.
+    # If the Test System is booted in Online Mode this will be applied to the hardware.
+    error_handler(spm.system_resetFull())
+
+    print("Launch the SPM Soft Front Panel and press the Get Relay Status button\n\n")
+    os.system("pause")
+
+    # based on the Tutorial Program the following scenario takes place
+    # SCENARIO WITH CONTROLLED Y-BUS USE
+
+    # .1 Connect Power Supply to PS+/PS-
+    error_handler(spm.switch_connectEndpointsArr("bus2", ["PS+", "UUT_PS+"])) # controlled route via bus2
+    error_handler(spm.switch_connectEndpointsArr("bus3", ["GND", "UUT_PS-"])) # controlled route via bus3
+
+    # 2. Pull Down CTRL Pin (GND)
+    error_handler(spm.switch_connectEndpointsArr("bus3", ["GND", "UUT_PS-", "CTRL"])) # controlled route via bus3
+
+    # 3. Connect and Measure UUT1/UUT2 with Scope at the same time using ch1, ch2
+    error_handler(spm.switch_connectEndpointsCsv("UUT1", "ScopeCH1"))
+    error_handler(spm.switch_connectEndpointsCsv("UUT2", "ScopeCH2"))
+
+    # MEASURE HERE
+
+    error_handler(spm.switch_disconnectEndpointsCsv("UUT1", "ScopeCH1"))
+    error_handler(spm.switch_disconnectEndpointsCsv("UUT2", "ScopeCH2"))
+
+    # 4. Pull Up CTRL Pin (PS+)
+    error_handler(spm.switch_disconnectEndpointsCsv("bus3", "CTRL")) # controlled route via bus3
+    error_handler(spm.switch_disconnectEndpointsArr("bus2", ["PS+", "UUT_PS+"])) # controlled route via bus2
+
+    # 5. Connect and Measure UUT3/UUT4 with Scope at the same time using ch1, ch2
+    error_handler(spm.switch_connectEndpointsCsv("UUT3", "ScopeCH1"))
+    error_handler(spm.switch_connectEndpointsCsv("UUT4", "ScopeCH2"))
+
+    # MEASURE HERE
+
+    # 6. Disconnect All
+    error_handler(spm.switch_disconnectAll())
+
+    # based on the Tutorial Program the following scenario takes place
+    # SCENARIO WITH UNCONTROLLED USE OF Y-BUSS (auto selection of Y1 and Y2 for the first 2 routes
+
+    # 1. Connect Power Supply to PS+/PS-
+    error_handler(spm.switch_connectEndpointsCsv("PS+", "UUT_PS+"))
+    error_handler(spm.switch_connectEndpointsCsv("GND", "UUT_PS-"))
+
+    # 2. Pull Down CTRL Pin (GND)
+    error_handler(spm.switch_connectEndpointsArr("GND", ["UUT_PS-", "CTRL"]))
+
+    # 3. Connect and Measure UUT1/UUT2 with Scope at the same time using ch1, ch2
+    error_handler(spm.switch_connectEndpointsCsv("UUT1", "ScopeCH1"))
+    error_handler(spm.switch_connectEndpointsCsv("UUT2", "ScopeCH2"))
+
+    # MEASURE HERE
+
+    error_handler(spm.switch_disconnectEndpointsCsv("UUT1", "ScopeCH1"))
+    error_handler(spm.switch_disconnectEndpointsCsv("UUT2", "ScopeCH2"))
+
+    # 4. Pull Up CTRL Pin (PS+)
+    error_handler(spm.switch_disconnectEndpointsCsv("GND", "CTRL"))
+    error_handler(spm.switch_connectEndpointsArr("PS+", ["UUT_PS+", "CTRL"]))
+
+    # 5. Connect and Measure UUT3/UUT4 with Scope at the same time using ch1, ch2
+    error_handler(spm.switch_connectEndpointsCsv("UUT3", "ScopeCH1"))
+    error_handler(spm.switch_connectEndpointsCsv("UUT4", "ScopeCH2"))
+
+    # MEASURE HERE
+    # ...
+
+if __name__ == "__main__":
+    print("Launch the SPM Soft Front Panel and press the Get Relay Status button\n\n")
+    if sys.version_info < (3,0,0):
+        o = raw_input("Press 'Enter' to continue")
+    else:
+        o = input("Press 'Enter' to continue")
+    main()
+```
