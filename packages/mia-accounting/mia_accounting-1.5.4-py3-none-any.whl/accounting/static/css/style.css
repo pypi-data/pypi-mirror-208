@@ -1,0 +1,465 @@
+/* The Mia! Accounting Project
+ * style.css: The style sheet for the accounting application.
+ */
+
+/*  Copyright (c) 2023 imacat.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+/* Author: imacat@mail.imacat.idv.tw (imacat)
+ * First written: 2023/2/1
+ */
+
+.accounting-clickable {
+    cursor: pointer;
+}
+.form-floating > textarea.form-control {
+    height: 6rem;
+}
+.accounting-dragged {
+    color: #141619;
+    background-color: #D3D3D4;
+}
+.form-control.accounting-disabled {
+    background-color: #e9ecef;
+}
+
+/** The toolbar */
+.accounting-toolbar {
+    display: flex;
+}
+.accounting-toolbar-accounts {
+    max-height: 20rem;
+    overflow-y: scroll;
+}
+.accounting-toolbar .input-group > .input-group-text {
+    padding: 0;
+    background-color: transparent;
+    color: inherit;
+    border: 0;
+}
+.accounting-toolbar .input-group > .input-group-text > button {
+    background-color: transparent;
+    color: inherit;
+    border: 0;
+}
+.accounting-toolbar form.btn > .form-control {
+    min-height: calc(1.5em + 2px);
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+@media(min-width: 768px) {
+    .accounting-toolbar > .btn, .accounting-toolbar > .btn-group > .btn {
+        border-radius: 0;
+    }
+    .accounting-toolbar > .btn:first-child, .accounting-toolbar > .btn-group:first-child > .btn {
+        border-top-left-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+    }
+    .accounting-toolbar > .btn:last-child, .accounting-toolbar > .btn-group:last-child > .btn {
+        border-top-right-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+    }
+    .accounting-toolbar .btn.input-group {
+        width: 16rem;
+    }
+}
+@media(max-width:767px) {
+    .accounting-toolbar > .btn:not(form), .accounting-toolbar > .btn-group > .btn {
+        height: 3.2rem;
+        width: 3.2rem;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+    .accounting-toolbar > a.btn, .accounting-toolbar > .btn-group > a.btn {
+        padding-top: 0.7rem;
+    }
+    .accounting-toolbar > form.btn {
+        width: 12rem;
+        height: 2.6rem;
+        border-radius: 0.375rem;
+        margin-top: 0.3rem;
+        margin-left: 1rem;
+    }
+}
+
+/** The card layout */
+.accounting-card {
+    padding: 2em 1.5em;
+    margin: 1em;
+    background-color: #E9ECEF;
+    border-radius: 0.3em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.accounting-card-title {
+    font-size: 1.8rem;
+    font-weight: bolder;
+}
+.accounting-card-code {
+    font-size: 1.4rem;
+    color: #373b3e;
+}
+.accounting-sheet {
+    padding: 2em 1.5em;
+    margin: 1em;
+    background-color: #F8F9FA;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.accounting-sheet h2 {
+    border-bottom: thick double slategray;
+}
+
+/* Links between objects */
+.accounting-original-line-item {
+    border-top: thin solid darkslategray;
+    padding: 0.2rem 0.5rem;
+}
+.accounting-original-line-item a {
+    color: inherit;
+    text-decoration: none;
+}
+.accounting-original-line-item a:hover {
+    color: inherit;
+}
+.accounting-offset-line-items {
+    border-top: thin solid darkslategray;
+    padding: 0.2rem 0.5rem;
+}
+.accounting-offset-line-items ul li {
+    list-style: none;
+}
+.accounting-offset-line-items ul li a {
+    color: inherit;
+    text-decoration: none;
+}
+.accounting-offset-line-items ul li a:hover {
+    color: inherit;
+}
+
+/** The option selector */
+.accounting-selector-list {
+    height: 20rem;
+    overflow-y: scroll;
+}
+
+/** The journal entry management */
+.accounting-currency-control {
+    background-color: transparent;
+}
+.accounting-currency-content {
+    width: calc(100% - 3rem);
+}
+.accounting-line-item-content {
+    width: calc(100% - 3rem);
+    background-color: transparent;
+}
+.accounting-list-group-stripped .list-group-item:nth-child(2n+1) {
+    background-color: #f2f2f2;
+}
+.accounting-list-group-hover .list-group-item:hover {
+    background-color: #ececec;
+}
+.accounting-journal-entry-line-item {
+    border: none;
+}
+.accounting-journal-entry-line-item-header {
+    font-weight: bolder;
+    border-bottom: thick double slategray;
+}
+.list-group-item.accounting-journal-entry-line-item-total {
+    font-weight: bolder;
+    border-top: thick double slategray;
+}
+.accounting-line-item-editor-original-line-item-content {
+    width: calc(100% - 3rem);
+}
+
+/* The report table */
+.accounting-report-table-header, .accounting-report-table-footer {
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+.accounting-report-table-header {
+    border-bottom: thin solid slategray;
+}
+.accounting-report-table-footer {
+    font-style: italic;
+    border-top: thin solid slategray;
+}
+.accounting-report-table-row {
+    display: grid;
+}
+a.accounting-report-table-row {
+    color: inherit;
+    text-decoration: none;
+}
+.accounting-report-table-row > div {
+    padding: .5rem;
+}
+.accounting-report-table .accounting-amount {
+    text-align: right;
+}
+.accounting-report-table-body .accounting-amount {
+    font-style: italic;
+}
+.accounting-report-table-body .accounting-report-table-row {
+    background-color: #f8f9fa;
+}
+.accounting-report-table-body .accounting-report-table-row:nth-child(2n+1) {
+    background-color: #ecedee;
+}
+.accounting-report-table-body .accounting-report-table-row:hover {
+    background-color: #e5e6e7;
+}
+.accounting-report-table-body .accounting-report-table-row-danger {
+    background-color: #f8d7da;
+}
+.accounting-report-table-body .accounting-report-table-row-danger:nth-child(2n+1) {
+    background-color: #eccccf;
+}
+.accounting-report-table-body .accounting-report-table-row-danger:hover {
+    background-color: #e5c7ca;
+}
+.accounting-journal-table .accounting-report-table-row {
+    grid-template-columns: 1fr 1fr 2fr 4fr 1fr 1fr;
+}
+.accounting-ledger-real-table .accounting-report-table-row {
+    grid-template-columns: 1fr 4fr 1fr 1fr 1fr;
+}
+.accounting-ledger-real-table .accounting-report-table-footer .accounting-report-table-row {
+    grid-template-columns: 5fr 1fr 1fr 1fr;
+}
+.accounting-ledger-nominal-table .accounting-report-table-row {
+    grid-template-columns: 1fr 4fr 1fr 1fr;
+}
+.accounting-ledger-nominal-table .accounting-report-table-footer .accounting-report-table-row {
+    grid-template-columns: 5fr 1fr 1fr;
+}
+.accounting-income-expenses-table .accounting-report-table-row {
+    grid-template-columns: 1fr 2fr 4fr 1fr 1fr 1fr;
+}
+.accounting-income-expenses-table .accounting-report-table-footer .accounting-report-table-row {
+    grid-template-columns: 7fr 1fr 1fr 1fr;
+}
+.accounting-trial-balance-table .accounting-report-table-header {
+    border-bottom: thick double slategray;
+}
+.accounting-trial-balance-table .accounting-report-table-footer {
+    border-top: thick double slategray;
+}
+.accounting-trial-balance-table .accounting-report-table-row {
+    grid-template-columns: 3fr 1fr 1fr;
+}
+.accounting-income-statement-table .accounting-report-table-body {
+    border-top: thick double slategray;
+    border-bottom: thick double slategray;
+}
+.accounting-income-statement-table .accounting-report-table-row {
+    display: flex;
+    justify-content: space-between;
+}
+.accounting-income-statement-table .accounting-report-table-header .accounting-report-table-row {
+    display: block;
+}
+.accounting-income-statement-section, .accounting-income-statement-total {
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+.accounting-income-statement-subsection, .accounting-income-statement-subtotal {
+    font-size: 1.1rem;
+}
+.accounting-income-statement-subtotal {
+    border-top: thin solid darkslategray;
+}
+/* Indents */
+.accounting-income-statement-subsection {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+.accounting-income-statement-account, .accounting-income-statement-subtotal {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+/* A visual blank line between categories */
+.accounting-income-statement-section {
+    margin-top: 2rem;
+}
+.accounting-income-statement-section:first-child {
+    margin-top: 0;
+}
+.accounting-income-statement-total {
+    margin-bottom: 2rem;
+}
+.accounting-income-statement-total:last-child {
+    margin-bottom: 0;
+}
+.accounting-balance-sheet-section, .accounting-balance-sheet-total {
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+.accounting-balance-sheet-section {
+    border-bottom: thick double darkslategray;
+}
+.accounting-balance-sheet-total {
+    border-top: thick double darkslategray;
+}
+.accounting-balance-sheet-subtotal {
+    font-size: 1.1rem;
+    font-weight: bolder;
+    border-top: thick double darkslategray;
+}
+.accounting-balance-sheet-account {
+    margin-left: 0.5rem;
+}
+.accounting-balance-sheet-total .accounting-amount, .accounting-balance-sheet-subtotal, .accounting-amount {
+    font-style: italic;
+}
+.accounting-unapplied-table .accounting-report-table-row {
+    grid-template-columns: 1fr 5fr 1fr 1fr;
+}
+.accounting-unapplied-account-table .accounting-report-table-row {
+    display: flex;
+    justify-content: space-between;
+}
+.accounting-unapplied-account-table .accounting-report-table-header .accounting-report-table-row {
+    display: block;
+}
+.accounting-unmatched-table .accounting-report-table-row {
+    grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
+}
+.accounting-unmatched-account-table .accounting-report-table-row {
+    display: flex;
+    justify-content: space-between;
+}
+.accounting-unmatched-account-table .accounting-report-table-header .accounting-report-table-row {
+    display: block;
+}
+
+/* The accounting report */
+.accounting-mobile-journal-credit {
+    padding-left: 1rem;
+}
+
+/* The description editor */
+.accounting-description-editor-buttons {
+    max-height: 7rem;
+    overflow-y: scroll;
+}
+.accounting-description-editor-buttons .btn {
+    margin-bottom: 0.3rem;
+}
+
+/* The order of the journal entries in a same day */
+.accounting-journal-entry-order-item, .accounting-journal-entry-order-item:hover {
+    color: inherit;
+    text-decoration: none;
+}
+.accounting-journal-entry-order-item-currency {
+    margin-left: 0.5rem;
+    border-top: thin solid lightgray;
+    margin-top: 0.2rem;
+}
+
+/* The illustration of the description template for the recurring transactions */
+.accounting-recurring-description-template-illustration p {
+    margin: 0.2rem 0;
+}
+.accounting-recurring-description-template-illustration ul {
+    margin: 0;
+}
+
+/* The unmatched offsets */
+.accounting-unmatched-offset-pair-list {
+    height: 20rem;
+    overflow-y: scroll;
+}
+
+/* The Material Design text field (floating form control in Bootstrap) */
+.accounting-material-text-field {
+    position: relative;
+    min-height: calc(3.5rem + 2px);
+    padding-top: 1.625rem;
+}
+.accounting-material-text-field > .form-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(3.5rem + 2px);
+    padding: 1rem 0.75rem;
+    transform-origin: 0 0;
+    transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+}
+.accounting-material-text-field.accounting-not-empty > .form-label {
+    opacity: 0.65;
+    transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+}
+
+/* The Material Design floating action buttons */
+.accounting-material-fab {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    z-index: 10;
+    flex-direction: column-reverse;
+}
+.accounting-material-fab .btn {
+    border-radius: 50%;
+    transform: scale(1.5);
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0,0,0,.12);
+    display: block;
+    margin-top: 2.5rem;
+}
+.accounting-material-fab .btn:hover, .accounting-material-fab .btn:focus {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0,0,0,.12);
+}
+.accounting-btn-material-fab {
+    transition: transform .1s ease-in-out, right .1s ease-in-out, bottom .1s ease-in-out;
+}
+.show .accounting-btn-material-fab {
+    transform: scale(1.5) rotate(-45deg);
+}
+.accounting-material-fab-speed-dial-group {
+    position: absolute;
+    right: -2rem;
+    bottom: -7rem;
+    text-align: right;
+    opacity: 0;
+    transform: scale(0.1);
+    line-height: 5.5rem;
+    transition: opacity .1s ease-in-out, transform .1s ease-in-out, right .1s ease-in-out, bottom .1s ease-in-out;
+}
+.show .accounting-material-fab-speed-dial-group {
+    opacity: 1;
+    transform: scale(0.6);
+    right: -0.5rem;
+    bottom: 0.7rem;
+}
+.accounting-material-fab-speed-dial-group .btn {
+    background-color: white;
+    white-space: nowrap;
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+.accounting-material-fab-speed-dial-group .btn:hover, .accounting-material-fab-speed-dial-group .btn:focus {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0,0,0,.12);
+}
+
+/* The Material Design form switch */
+@media(max-width:767px) {
+    .form-switch {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,50 @@
+{#
+The Mia! Accounting Project
+income-expenses-row-mobile.html: The row in the income and expenses log for the mobile devices
+
+ Copyright (c) 2023 imacat.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+Author: imacat@mail.imacat.idv.tw (imacat)
+First written: 2023/3/5
+#}
+<div>
+  {% if line_item.date or line_item.account %}
+    <div class="text-muted small">
+      {% if line_item.date %}
+        {{ line_item.date|accounting_format_date }}
+      {% endif %}
+      {% if line_item.account %}
+        {{ line_item.account.title|title }}
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if line_item.description %}
+    <div>{{ line_item.description }}</div>
+  {% endif %}
+</div>
+
+<div class="text-nowrap">
+  {% if line_item.income %}
+    <span class="badge rounded-pill bg-success">+{{ line_item.income|accounting_format_amount }}</span>
+  {% endif %}
+  {% if line_item.expense %}
+    <span class="badge rounded-pill bg-warning">-{{ line_item.expense|accounting_format_amount }}</span>
+  {% endif %}
+  {% if line_item.balance < 0 %}
+    <span class="badge rounded-pill bg-danger">{{ line_item.balance|accounting_format_amount }}</span>
+  {% else %}
+    <span class="badge rounded-pill bg-primary">{{ line_item.balance|accounting_format_amount }}</span>
+  {% endif %}
+</div>

@@ -1,0 +1,65 @@
+{#
+The Mia! Accounting Project
+nav.html: The navigation menu for the accounting application.
+
+ Copyright (c) 2023 imacat.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+Author: imacat@mail.imacat.idv.tw (imacat)
+First written: 2023/1/26
+#}
+{# <ul> For SonarQube not to complain about incorrect HTML #}
+{% if accounting_can_view() %}
+  <li class="nav-item dropdown">
+    <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+      <i class="fa-solid fa-file-invoice-dollar"></i>
+      {{ A_("Accounting") }}
+    </span>
+    <ul class="dropdown-menu">
+      <li>
+        <a class="dropdown-item {% if request.endpoint and request.endpoint.startswith("accounting-report.") %} active {% endif %}" href="{{ url_for("accounting-report.default") }}">
+          <i class="fa-solid fa-book"></i>
+          {{ A_("Reports") }}
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item {% if request.endpoint and request.endpoint.startswith("accounting.account.") %} active {% endif %}" href="{{ url_for("accounting.account.list") }}">
+          <i class="fa-solid fa-clipboard"></i>
+          {{ A_("Accounts") }}
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item {% if request.endpoint and request.endpoint.startswith("accounting.base-account.") %} active {% endif %}" href="{{ url_for("accounting.base-account.list") }}">
+          <i class="fa-solid fa-list"></i>
+          {{ A_("Base Accounts") }}
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item {% if request.endpoint and request.endpoint.startswith("accounting.currency.") %} active {% endif %}" href="{{ url_for("accounting.currency.list") }}">
+          <i class="fa-solid fa-money-bill-wave"></i>
+          {{ A_("Currencies") }}
+        </a>
+      </li>
+      {% if accounting_can_admin() %}
+        <li>
+          <a class="dropdown-item {% if request.endpoint and request.endpoint.startswith("accounting.option.") %} active {% endif %}" href="{{ url_for("accounting.option.detail") }}">
+            <i class="fa-solid fa-gear"></i>
+            {{ A_("Settings") }}
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </li>
+{% endif %}
+{# </ul> For SonarQube not to complain about incorrect HTML #}

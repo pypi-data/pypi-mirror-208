@@ -1,0 +1,119 @@
+{#
+The Mia! Accounting Project
+income-statement.html: The income statement
+
+ Copyright (c) 2023 imacat.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+Author: imacat@mail.imacat.idv.tw (imacat)
+First written: 2023/3/7
+#}
+{% extends "accounting/base.html" %}
+
+{% block accounting_scripts %}
+  <script src="{{ url_for("accounting.static", filename="js/material-fab-speed-dial.js") }}"></script>
+  <script src="{{ url_for("accounting.static", filename="js/period-chooser.js") }}"></script>
+{% endblock %}
+
+{% block header %}{% block title %}{% if report.currency.code == accounting_default_currency_code() %}{{ A_("Balance Sheet %(period)s", period=report.period.desc|title) }}{% else %}{{ A_("Balance Sheet of %(currency)s %(period)s", currency=report.currency.name|title, period=report.period.desc|title) }}{% endif %}{% endblock %}{% endblock %}
+
+{% block content %}
+
+<div class="mb-3 accounting-toolbar">
+  {% with use_currency_chooser = true,
+          use_period_chooser = true %}
+    {% include "accounting/report/include/toolbar-buttons.html" %}
+  {% endwith %}
+</div>
+
+{% include "accounting/report/include/add-journal-entry-material-fab.html" %}
+
+{% include "accounting/report/include/period-chooser.html" %}
+
+{% include "accounting/report/include/search-modal.html" %}
+
+{% if report.has_data %}
+  <div class="accounting-sheet">
+    <div class="d-none d-sm-flex justify-content-center mb-3">
+      <h2 class="text-center">
+        {% if report.currency.code == accounting_default_currency_code() %}
+          {{ A_("Balance Sheet %(period)s", period=report.period.desc|title) }}
+        {% else %}
+          {{ A_("Balance Sheet of %(currency)s %(period)s", currency=report.currency.name|title, period=report.period.desc|title) }}
+        {% endif %}
+      </h2>
+    </div>
+
+    <div class="row accounting-report-table accounting-balance-sheet-table">
+      <div class="col-sm-6">
+        {% if report.assets.subsections %}
+          {% with section = report.assets %}
+            {% include "accounting/report/include/balance-sheet-section.html" %}
+          {% endwith %}
+          <div class="d-md-none d-flex justify-content-between accounting-report-table-row accounting-balance-sheet-total">
+            <div>{{ A_("Total") }}</div>
+            <div class="accounting-amount {% if report.assets.total < 0 %} text-danger {% endif %}">{{ report.assets.total|accounting_report_format_amount }}</div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="col-sm-6">
+        {% if report.liabilities.subsections %}
+          {% with section = report.liabilities %}
+            {% include "accounting/report/include/balance-sheet-section.html" %}
+          {% endwith %}
+          <div class="d-flex justify-content-between accounting-report-table-row accounting-balance-sheet-subtotal">
+            <div>{{ A_("Total") }}</div>
+            <div class="accounting-amount {% if report.liabilities.total < 0 %} text-danger {% endif %}">{{ report.liabilities.total|accounting_report_format_amount }}</div>
+          </div>
+        {% endif %}
+
+        {% if report.owner_s_equity.subsections %}
+          {% with section = report.owner_s_equity %}
+            {% include "accounting/report/include/balance-sheet-section.html" %}
+          {% endwith %}
+          <div class="d-flex justify-content-between accounting-report-table-row accounting-balance-sheet-subtotal">
+            <div>{{ A_("Total") }}</div>
+            <div class="accounting-amount {% if report.owner_s_equity.total < 0 %} text-danger {% endif %}">{{ report.owner_s_equity.total|accounting_report_format_amount }}</div>
+          </div>
+        {% endif %}
+
+        <div class="d-md-none d-flex justify-content-between accounting-report-table-row accounting-balance-sheet-total">
+          <div>{{ A_("Total") }}</div>
+          <div class="accounting-amount {% if report.liabilities.total < 0 %} text-danger {% endif %}">{{ (report.liabilities.total + report.owner_s_equity.total)|accounting_report_format_amount }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row d-none d-md-flex">
+      <div class="col-sm-6">
+        <div class="d-flex justify-content-between accounting-balance-sheet-total">
+          <div>{{ A_("Total") }}</div>
+          <div class="accounting-amount {% if report.assets.total < 0 %} text-danger {% endif %}">{{ report.assets.total|accounting_report_format_amount }}</div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="d-flex justify-content-between accounting-balance-sheet-total">
+          <div>{{ A_("Total") }}</div>
+          <div class="accounting-amount {% if report.liabilities.total + report.owner_s_equity.total < 0 %} text-danger {% endif %}">{{ (report.liabilities.total + report.owner_s_equity.total)|accounting_report_format_amount }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <p>{{ A_("There is no data.") }}</p>
+{% endif %}
+
+{% endblock %}
