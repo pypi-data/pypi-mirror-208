@@ -1,0 +1,78 @@
+Metadata-Version: 2.1
+Name: gyver
+Version: 2.1.1
+Summary: Toolbox for web development
+Home-page: https://github.com/guscardvs/gyver
+Author: Gustavo Correa
+Author-email: self.gustavocorrea@gmail.com
+Requires-Python: >=3.9,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Provides-Extra: cache
+Provides-Extra: db-mariadb
+Provides-Extra: db-mysql
+Provides-Extra: db-pg
+Provides-Extra: db-sqlite
+Requires-Dist: aiomysql (>=0.1.1,<0.2.0) ; extra == "db-mysql" or extra == "db-mariadb"
+Requires-Dist: aiosqlite (>=0.18.0,<0.19.0) ; extra == "db-sqlite"
+Requires-Dist: asyncpg (>=0.27.0,<0.28.0) ; extra == "db-pg"
+Requires-Dist: cryptography (>=40.0.2,<41.0.0)
+Requires-Dist: gyver-attrs (>=0.5.2,<0.6.0)
+Requires-Dist: orjson (>=3.8.1,<4.0.0)
+Requires-Dist: psycopg2 (>=2.9.5,<3.0.0) ; extra == "db-pg"
+Requires-Dist: pydantic[email] (>=1.10.2,<2.0.0)
+Requires-Dist: pymysql (>=1.0.2,<2.0.0) ; extra == "db-mysql" or extra == "db-mariadb"
+Requires-Dist: redis (>=4.5.5,<5.0.0) ; extra == "cache"
+Requires-Dist: sqlalchemy (>=2.0.4,<3.0.0) ; extra == "db-mysql" or extra == "db-mariadb" or extra == "db-pg" or extra == "db-sqlite"
+Requires-Dist: typing-extensions (>=4.4.0,<5.0.0)
+Requires-Dist: tzdata (>=2022.6,<2023.0) ; sys_platform != "linux"
+Project-URL: Repository, https://github.com/guscardvs/gyver
+Description-Content-Type: text/markdown
+
+# Gyver
+
+> Simple toolbox for python development to skip code boilerplate.
+
+[**Documentation**](https://guscardvs.github.io/gyver/)
+
+[**Source Code**](https://github.com/guscardvs/gyver)
+
+## Authors
+
+> [@guscardvs](https://github.com/guscardvs)
+
+## Requirements
+
+* Python 3.9+
+
+## Required
+
+* [OrJSON](https://github.com/ijl/orjson) for json parsing.
+* [Pydantic](https://docs.pydantic.dev) for data handling.
+* [Typing Extensions](https://github.com/python/typing_extensions) for compatibility.
+* [Cryptography](https://cryptography.io) to handle encryption.
+
+## Optional
+
+To use the database parts:
+* **Mysql/MariaDB:** AsyncMy, PyMySQL (use db-mysql or db-mariadb extras)
+* **Postgres:** AsyncPG, Psycopg2
+* **SQLite:** aiosqlite
+* **Redis:** redis
+* And **SQLAlchemy**
+
+## Installation
+
+```console
+$ pip install gyver
+```
+
+## Roadmap
+
+> Migrate from pydantic to dataclass/attrs for a lighter version of the library
+
+##  License
+
+This project is licensed under the terms of the MIT license.
