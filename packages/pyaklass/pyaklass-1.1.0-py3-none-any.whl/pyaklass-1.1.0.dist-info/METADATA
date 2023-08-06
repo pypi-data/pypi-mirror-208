@@ -1,0 +1,107 @@
+Metadata-Version: 2.1
+Name: pyaklass
+Version: 1.1.0
+Summary: Module for communicating with a russian education website - YaKlass.
+Home-page: https://codeberg.org/teapon/pyaklass
+License: MIT
+Keywords: library,module,client,python3,pyaklass,russian,russia,education,parse,parsing
+Author: Teapon
+Author-email: teapon@keemail.me
+Requires-Python: >=3.10,<4.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Framework :: AsyncIO
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: Russian
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Education
+Classifier: Topic :: Internet
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: httpx (>=0.24.0,<0.25.0)
+Requires-Dist: selectolax (>=0.3.13,<0.4.0)
+Project-URL: Repository, https://codeberg.org/teapon/pyaklass
+Description-Content-Type: text/markdown
+
+# PYaKlass
+
+Быстрый асинхронный модуль для работы с ЯКлассом.
+
+**Функции:**
+
+* Обход капчи
+* Получение активных работ
+* Получение всех работ (На данный момент только первой страницы)
+
+## Примеры
+
+### Получение активных работ
+```python
+from multiprocessing.managers import SyncManager
+
+from pyaklass import Account
+
+# Иначе: manager.start() и manager.shutdown()
+with SyncManager() as manager:
+    account = Account('login', 'password', manager)
+    await account.login()
+
+    testworks = await account.get_new_testworks()  # -> List[dict[str, Any]]
+    print(testworks)
+```
+
+### Работа с несколькими аккаунтами
+```python
+from pyaklass import Account
+from pyaklass.manager import AccountManager
+
+# Здесь не требуется указывать SyncManager, так как AccountManager создает его сам.
+# При различных менеджерах есть шанс блокировки вашего IP сервисом!
+manager = AccountManager(
+    Account('login1', 'password1'),
+    Account('login2', 'password2'),
+    Account('login3', 'password3'),
+)
+if not any(await manager.prepare()):
+    print('Не получилось войти ни в один аккаунт.')
+
+testworks_per_account = await manager.get_new_testworks()  # -> List[List[dict]]
+print(testworks)
+```
+
+### Получение результатов прошедших работ
+
+> **Примечание:**
+> Пользователь может получить только свои результаты.
+
+```python
+from multiprocessing.managers import SyncManager
+
+from pyaklass import Account
+
+# Иначе: manager.start() и manager.shutdown()
+with SyncManager() as manager:
+    account = Account('login', 'password', manager)
+    await account.login()
+
+    results = await account.get_results(testwork_id=..., result_id=...)
+    print(results)
+```
+
+## TODO
+
+Будет сделано при желании и возможности.
+
+- [ ] Брутфорс тестовых заданий
+- [ ] Парсинг результатов, времени прохождения, введенных ответов
+- [ ] Парсинг ФИО учителя, задавшего работу
+- [ ] Использовать API пагинации вместо парсинга списка работ
+  - [ ] `https://www.yaklass.ru/ajax/TestWork/GetStudentTestWorksAjax?type=FinishedTestWorks&page=1&from=%2FTestWork`
+
