@@ -1,0 +1,16 @@
+include LICENSE
+include NOTICE
+include CHANGELOG.md
+
+graft docs
+prune docs/_build
+
+graft tests
+prune tests/log
+
+include requirements.txt
+
+recursive-exclude * *.pyc *.pyo
+
+include misc/logo-tiny.png
+include misc/logo_medium.png
