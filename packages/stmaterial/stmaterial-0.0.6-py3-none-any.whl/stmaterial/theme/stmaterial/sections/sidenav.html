@@ -1,0 +1,33 @@
+<div class="sidenav-drawer">
+    <div class="sidenav-logo">
+        {%- include "brand-logo.html" %}
+    </div>
+    <div class="sidenav-header-items hide-on-large-only">
+        <div class="sidenav-header-items__center">
+            <div class="headnav-item">
+                <ul>
+                    {{ head_nav_html[1] }}
+                </ul>
+            </div>
+        </div>
+        <div class="sidenav-header-items__end">
+            <div class="headnav-item">
+                <ul>
+                    {{ _icon_declare.declare_icon_links(theme_header_icons) }}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% if theme_sidenav_icons %}
+    <div class="sidenav-icons">
+        <ul>
+            {{ _icon_declare.declare_icon_links(theme_sidenav_icons) }}
+        </ul>
+    </div>
+    {% endif %}
+    <div class="sidenav-menu">
+        {%- for sidebar_section in sidebars %}
+        {%- include sidebar_section %}
+        {%- endfor %}
+    </div>
+</div>

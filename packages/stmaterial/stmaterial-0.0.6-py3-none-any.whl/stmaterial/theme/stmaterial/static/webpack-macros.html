@@ -1,0 +1,27 @@
+<!--
+    AUTO-GENERATED from webpack.config.js, do **NOT** edit by hand.
+    These are re-used in layout.html
+-->
+{# Load Material icons #}
+{% macro head_pre_icons() %}
+    <link href="{{ pathto('_static/vendor/material-icons/1.13.3/iconfont/material-icons.css', 1) }}?digest=bd84f8d98a70d962ec32" rel="stylesheet" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ pathto('_static/vendor/material-icons/1.13.3/iconfont/material-icons.woff2', 1) }}" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ pathto('_static/vendor/material-icons/1.13.3/iconfont/material-icons.woff', 1) }}" />
+{% endmacro %}
+
+{% macro head_pre_assets() %}
+<!-- Loaded before other Sphinx assets -->
+<link href="{{ pathto('_static/styles/stmaterial.css', 1) }}?digest=bd84f8d98a70d962ec32" rel="stylesheet" />
+{% endmacro %}
+
+{% macro head_js_preload() %}
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link rel="preload" as="script" href="{{ pathto('_static/scripts/materialize.js', 1) }}?digest=bd84f8d98a70d962ec32" />
+<link rel="preload" as="script" href="{{ pathto('_static/scripts/stmaterial.js', 1) }}?digest=bd84f8d98a70d962ec32" />
+{% endmacro %}
+
+{% macro body_post() %}
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+<script src="{{ pathto('_static/scripts/materialize.js', 1) }}?digest=bd84f8d98a70d962ec32"></script>
+<script src="{{ pathto('_static/scripts/stmaterial.js', 1) }}?digest=bd84f8d98a70d962ec32"></script>
+{% endmacro %}
