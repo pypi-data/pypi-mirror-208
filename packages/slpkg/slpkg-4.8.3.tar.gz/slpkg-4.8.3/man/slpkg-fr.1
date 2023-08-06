@@ -1,0 +1,255 @@
+.TH slpkg 1 "Orestiada, Grèce" "slpkg 4.7.3" dslackw
+.SH NOM
+.P
+slpkg \- Package manager pour Slackware.
+.SH SYNOPSIS
+.P
+slpkg \c
+[\fICOMMAND\fR] [\fIOPTIONS\fR] [\fIFILELIST|PACKAGES...\fR]
+.P
+slpkg [-h|-v] [-u, update] [-U, upgrade] [-c, check-updates] [-I, repo-info] [-g, configs] [-L, clean-logs]
+[-D, clean-tmp] [-T, clean-data] [-b, build] [-i, install] [-d, download]
+[-R, remove] [-f, find] [-w, view] [-s, search] [-e, dependees] [-t, tracking] -y, --yes, -j, --jobs, -o, --resolve-off,
+-r, --reinstall, -k, --skip-installed, -E, --full-reverse, -S, --search, -n, --no-silent, -p, --pkg-version, -z,
+-G, --generate-only, -P, --parallel, -B, --bin-repo=[\fIPATH\fR], -z, --directory=[\fIPATH\fR]
+.SH DESCRIPTION
+.P
+\fBSlpkg\fP est un gestionnaire de paquets logiciels qui \fBinstalle\fP, \fBmet à jour\fP et \fBsupprime\fP les paquets pour les systèmes basés sur \fBSlackware\fP.
+Il calcule automatiquement \fBles dépendances\fP et détermine comment doit se dérouler l'installation des paquets.
+\fBSlpkg\fP facilite la maintenance de groupes de machines sans avoir à effectuer des mises à jour manuelles.
+.P
+\fBSlpkg\fP travaille en accord avec les standards du projet \fBSlackBuilds.org\fP pour construire des paquets.
+Il utilise également les instructions de \fBSlackware Linux\fP pour l'installation, la mise à jour ainsi que la suppression des paquets.
+.SH COMMANDES
+.P
+.B -u, update
+.RS
+Mettre à jour la liste des paquets et la base de données.
+.RE
+.P
+.B -U, upgrade
+.RS
+Mettre à niveau tous les paquets installés si une version plus récente existe dans le dépôt.
+.RE
+.P
+.B -c, check-updates
+.RS
+Vérifier si le fichier \fBChangeLog.txt\fP du SlackBuild contient des mises à jour.
+.RE
+.P
+.B -I, repo-info
+.RS
+Afficher les informations relatives aux dépôts, telles que les dépôts actifs, la date de leur mise à jour et le nombre de paquets qu'ils contiennent.
+.RE
+.P
+.B -L, clean-logs
+.RS
+Nettoyer les journaux de suivi de dépendances. \fBAttention\fP, après cette procédure vous devrez supprimer les dépendances à la main.
+.RE
+.P
+.B -T, clean-data
+.RS
+Il est parfois nécessaire de nettoyer toutes les données des dépôts de la base de données.  Exécutez cette commande pour supprimer toutes les données et exécutez \fB'slpkg update'\fP pour les recréer.
+.RE
+.P
+.B -D, clean-tmp
+.RS
+Supprimer tous les scripts et sources des SlackBuilds téléchargés.
+.RE
+.P
+.B -g, configs
+.RS
+Modifier le fichier de configuration \fB/etc/slpkg/slpkg.toml\fP.
+.RE
+.P
+.B -b, build
+.RS
+Construire les scripts des Slackbuilds et les ajouter au répertoire \fB/tmp\fP.
+.RE
+.P
+.B -i, install
+.RS
+Construire et installer les paquets dans l'ordre adéquat et enregistre également les paquets avec les dépendances à utiliser pour la suppression.
+.RE
+.P
+.B -d, download
+.RS
+Télécharger les scripts et les sources des SlackBuilds sans les construire ni les installer.
+.RE
+.P
+.B -R, remove
+.RS
+Supprimer les paquets avec leurs dépendances s'ils ont été installés avec la méthode \fB'slpkg install'\fP.
+Slpkg examine la configuration \fB'REPO_TAG'\fP pour trouver les paquets à supprimer.
+.RE
+.P
+.B -f, find
+.RS
+Trouver les paquets installés par \fBSBo\fP (taggés _SBo) sur votre distribution.
+.RE
+.P
+.B -w, view
+.RS
+Voir les paquets du dépôt et obtenir toutes les informations dans le terminal.
+.RE
+.P
+.B -s, search
+.RS
+Rechercher des paquets.
+.RE
+.P
+.B -e, dependees
+.RS
+Afficher les dépendances du paquet.
+.RE
+.P
+.B -t, tracking
+.RS
+Suivre les dépendances des paquets.
+.RE
+.SH OPTIONS
+.P
+.B -y, --yes
+.RS
+Répondre \fBOui\fP à toutes les questions. (à utiliser avec: \fB-u, update, -U, upgrade, -L, clean-logs, -b, build,
+-i, install, -R, remove, -d, download\fP)
+.RE
+.P
+.B -j, --jobs
+.RS
+Accélération des scripts SlackBuild. Lorsque l'indicateur \fB--jobs\fP est activé, slpkg détecte automatiquement le nombre de
+de processeurs et le saisit dans la variable \fBMAKEFLAGS\fP. Certains SlackBuilds échouent lorsque \fBMAKEFLAGS\fP est déclaré ou que
+le nombre de processeurs (-j) est supérieur à 1. (à utiliser avec: \fB-U, upgrade, build, -i, install\fP)
+.RE
+.P
+.B -o, --resolve-off
+.RS
+Désactiver la résolution des dépendances. (à utiliser avec: \fB-U, upgrade, -b, build, -i, install\fP)
+.RE
+.P
+.B -r, --reinstall
+.RS
+Utilisez cette option si vous voulez mettre à niveau tous les paquets même si la même version est déjà installée.
+Ne saute pas les paquets déjà installés. (à utiliser avec: \fB-U, upgrade, -i, install\fP)
+.RE
+.P
+.B -k, --skip-installed
+.RS
+Utilisez cette option si vous voulez éviter de construire et de réinstaller des paquets.
+Remarque : Cette option n'affecte que les dépendances. (à utiliser avec: \fB-i, install\fP)
+.RE
+.P
+.B -E, --full-reverse
+.RS
+Dépendances inverses complètes. Ne fonctionne qu'avec la commande \fB-e, dependees\fP et montre aussi les \fBRequires\fP.
+(à utiliser avec: -e, dependees)
+.RE
+.P
+.B -S, --search
+.RS
+Active l'utilitaire de dialogue pour rechercher des paquets dans le dépôt.
+Essayez par exemple : \fB`slpkg install python3 --search`\fP ou \fB`slpkg download python3 --search`\fP et ainsi de suite.
+(à utiliser avec: \fB-b, build, -i, install, -d, download, -R, remove, -f, find, -w, view,
+-s, search, -e, dependees, -t, tracking\fP)
+.RE
+.P
+.B -n, --no-silent
+.RS
+Désactiver le mode silencieux s'il est activé dans le fichier de configuration. (à utiliser avec: \fB-u, update, -U,upgrade, -b, build,
+-i, install, -d, download, -R, remove\fP)
+.RE
+.P
+.B -p, --pkg-version
+.RS
+Afficher la version du package du dépôt. (à utiliser avec: \fB-e, dependees, -t, tracking, -w, view\fP)
+.RE
+.P
+.B -G, --generate-only
+.RS
+N'est utilisé qu'avec le dépôt ponce et lorsque vous souhaitez générer uniquement le fichier SLACKBUILDS.TXT
+et mettre à jour la base de données, sans re-télécharger l'ensemble du référentiel. (à utiliser avec : \fB-u, update\fP)
+.RE
+.P
+.B -P, --parallel
+.RS
+Télécharger des fichiers en parallèle pour accélérer le processus.
+(à utiliser avec: \fB-u, update, -U, upgrade, -b, build, -i, install, -d, download\fP)
+.RE
+.P
+.BI "-B," "" " \-\-bin-repo=[" REPO "]
+.RS
+Passer aux dépôts de binaires et sélectionner un dépôt.
+Exemple: '\fIslpkg -i audacity --bin=repo=alien\fR'.
+Les options update, check et search supportent l'astérisque '*' pour l'appliquer à tous les dépôts, comme rechercher un paquet dans tous les dépôts binaires 'slpkg -s libreoffice --bin-repo='*''.  (à utiliser avec : \fB-u, update, -c, check-updates, -U, upgrade, -i, install, -d, download, -s, search, -t, tracking, -e, dependees, -w, view\fP)
+.RE
+.P
+.B -z, --directory=[PATH]
+.RS
+Définir le répertoire où seront enregistrés les fichiers téléchargés. (à utiliser avec: \fB-d, download\fP)
+.RE
+.P
+.B -h | --help
+.RS
+Afficher l'aide.
+.RE
+.P
+.B -v | --version
+.RS
+Afficher la version.
+.RE
+.SH OPTION SYNTAX
+.P
+En plus de la façon classique, vous pouvez mettre ensemble plusieurs options qui ne nécessitent pas d'arguments, comme par exemple :
+.PP
+.Vb 1.
+\&       slpkg -iPny [\fIPACKAGES...\fR]
+.Ve
+.RE
+.SH FILELIST|PACKAGES
+.P
+Au lieu de paquets, vous pouvez passer un fichier texte avec le suffixe '.pkgs' et les noms des paquets.  Exemple : 'slpkg install list.pkgs'.
+Éditer la configuration '/etc/slpkg/slpkg.toml' pour changer le suffixe si vous le souhaitez. Vous pouvez utiliser des listes provenant d'autres sources, avec des fichiers '.sqf'.
+.RE
+.SH A SAVOIR
+.P
+Il y a cinq indicateurs lorsque certaines commandes sont utilisées, par exemple :
+
+Cyan : Installer, Jaune : Pour construire, Gris : C'est installé, Violet : Pour la mise à jour, Rouge : Pour supprimer.
+
+Lorsque vous utilisez les commandes install, build, upgrade ou remove, vous devez savoir que si le paquet est installé, 
+sa couleur passera au gris, si le paquet peut être mis à niveau, il devient violet. Et s'il n'est pas installé alors 
+sa couleur sera cyan. De même, si vous essayez de supprimer un paquet, la couleur du paquet devient rouge.
+
+Exemple : Si le paquet est déjà installé, que la couleur de l'indicateur est grise et que l'option '\fB-r, --reinstall\fR' n'est pas appliquée,
+le paquetage ne sera pas installé et le message "(already installed)" s'affichera.
+Si le paquet peut être mis à niveau, l'installation se poursuivra et le paquet passera à la mise à niveau.
+
+Pour la commande de mise à niveau, vous devez savoir que vous pouvez mettre à niveau des paquets provenant de différents dépôts, si vous éditez
+le fichier '\fI/etc/slpkg/repositories.toml\fR' et supprimez la balise repository. Le slpkg ne peut alors pas reconnaître le dépôt des paquets.
+
+Avec la commande remove, il va supprimer les dépendances si le paquet a été installé avec la commande '\fIslpkg install\fR',
+sinon, le slpkg ne connaît pas les dépendances qui sont installées avec les paquets qu'il va supprimer.
+
+Vous pouvez appliquer l'astérisque '*' à la place d'un paquet, pour faire correspondre tous les paquets d'un dépôt. Vous ne pouvez pas appliquer
+un astérisque à l'option '\fB-B, --bin-repos=\fR', sauf pour les commandes '\fB-s, search\fR', '\fB-u, update\fR' et '\fB-c, check-updates\fR'.
+
+La commande clean-data supprime les données du référentiel local et de la base de données.
+
+Remarque : il n'existe actuellement aucune fonction permettant d'indiquer les paquets si les couleurs sont désactivées.
+.RE
+.SH FICHIERS DE CONFIGURATION
+.P
+Fichier de \fBconfiguration\fP : /etc/slpkg/slpkg.toml
+.P
+Fichier des \fBdépôts\fP : /etc/slpkg/repositories.toml
+.P
+Fichier \fBblacklist\fP : /etc/slpkg/blacklist.toml
+.P
+\fIslpkg_new-configs\fR permet de gérer les fichiers de configuration \fB.new\fP facilement et rapidement. Déplacez, copiez ou supprimez-les.
+.RE
+.SH RAPPORT DE BOGUES
+.P
+Veuillez signaler tout bogue trouvé à \fBhttps://gitlab.com/dslackw/slpkg/-/issues\fP.
+.SH AUTEUR
+.P
+\fBDimitris Zlatanidis\fP <dslackw@gmail.com>

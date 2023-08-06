@@ -1,0 +1,36 @@
+_slpkg_module()
+{
+        local cur prev OPTS
+        COMPREPLY=()
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        case $cur in
+            -*)
+                OPTS="
+                    --help
+                    --version
+                    help
+                    update
+                    upgrade
+                    check-updates
+                    repo-info
+                    configs
+                    clean-logs
+                    clean_data
+					clean-tmp
+                    build
+                    install
+                    download
+                    remove
+                    find
+                    view
+                    search
+                    dependees
+                    tracking
+                "
+                COMPREPLY=( $(compgen -W "${OPTS[*]}" -- $cur) )
+                return 0
+                ;;
+        esac
+        return 0
+}
+complete -F _slpkg_module slpkg

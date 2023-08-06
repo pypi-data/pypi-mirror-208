@@ -1,0 +1,232 @@
+# This is the general repositories configuration file of slpkg:
+# /etc/slpkg/repositories.toml
+# Date: 26/04/2023, Version: 4.8.2
+
+# Set 'true' to the variable {NAME}_REPO to enable a repository.
+
+# If you are going to use a local repository, set the repository:
+# as the example bellow:
+# ALIEN_REPO_LOCAL = ["file:///path/to/alien/repository/" ,"15.0/", "x86_64/"]
+# A binary local repository will must contain the files:
+#   ChangeLog.txt, PACKAGES.TXT and CHECKSUMS.md5
+# A SlackBuilds repository will must contain the files:
+#   SLACKBUILDS.TXT and ChangeLog.txt
+# After the mirror changed, you should update the database, run:
+# slpkg update
+
+# DO NOT CHANGE THE PATTERN OF THE MIRRORS, CHANGE ONLY WHAT YOU WANT.
+# For alien and Slackware -current users should be:
+#  ["https://slackware.nl/people/alien/sbrepos/", "current/", "x86_64/"]
+# and NOT:
+#  ["https://slackware.nl/people/alien/sbrepos/current/x86_64/"]
+
+# Note: Before using a repository, make sure you have read about it.
+#       Some repositories are for -current only. Change the mirror
+#       if it is necessary. The mirror or every part of the mirror
+#       should end with a slash '/'.
+
+[REPOSITORIES]
+
+# This is the DEFAULT REPOSITORY.
+# You can change it with one that you see below.
+# Make sure you have enabled it before.
+DEFAULT_REPOSITORY = "sbo"
+
+# SBo Repository for Slackware 15.0 stable.
+SBO_REPO = true
+SBO_REPO_NAME = "sbo"
+SBO_REPO_LOCAL = [""]
+SBO_REPO_MIRROR = ["https://slackbuilds.org/slackbuilds/15.0/"]
+SBO_REPO_SLACKBUILDS = "SLACKBUILDS.TXT"
+SBO_REPO_CHANGELOG = "ChangeLog.txt"
+SBO_REPO_TAG = "_SBo"  # Default repo TAG.
+SBO_REPO_PATCH_TAG = ""  # Patch the TAG.
+SBO_REPO_TAR_SUFFIX = ".tar.gz"
+
+# Ponce Repository for Slackware -current.
+PONCE_REPO = false
+PONCE_REPO_NAME = "ponce"
+PONCE_REPO_LOCAL = [""]
+PONCE_REPO_MIRROR = ["https://cgit.ponce.cc/slackbuilds/plain/"]
+PONCE_REPO_SLACKBUILDS = "SLACKBUILDS.TXT"
+PONCE_REPO_CHANGELOG = "ChangeLog.txt"
+PONCE_REPO_TAG = "_SBo"  # Default repo TAG.
+PONCE_REPO_PATCH_TAG = ""  # Patch the TAG.
+
+# Official repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://slackware.uk/slackware/slackware64-current/"]
+SLACK_REPO = false
+SLACK_REPO_NAME = "slack"
+SLACK_REPO_LOCAL = [""]
+SLACK_REPO_MIRROR = ["https://slackware.uk/slackware/slackware64-15.0/"]
+SLACK_REPO_PACKAGES = "PACKAGES.TXT"
+SLACK_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SLACK_REPO_CHANGELOG = "ChangeLog.txt"
+SLACK_REPO_TAG = ""
+
+# Official repository for Slackware patches x86_64 15.0 stable.
+# For Slackware patches x86_64 -current:
+# ["https://slackware.uk/slackware/slackware64-current/", "extra/"]
+SLACK_EXTRA_REPO = false
+SLACK_EXTRA_REPO_NAME = "slack_extra"
+SLACK_EXTRA_REPO_LOCAL = [""]
+SLACK_EXTRA_REPO_MIRROR = ["https://slackware.uk/slackware/slackware64-15.0/", "extra/"]
+SLACK_EXTRA_REPO_PACKAGES = "PACKAGES.TXT"
+SLACK_EXTRA_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SLACK_EXTRA_REPO_CHANGELOG = "ChangeLog.txt"
+SLACK_EXTRA_REPO_TAG = ""
+
+# Official repository for Slackware patches x86_64 15.0 stable.
+SLACK_PATCHES_REPO = false
+SLACK_PATCHES_REPO_NAME = "slack_patches"
+SLACK_PATCHES_REPO_LOCAL = [""]
+SLACK_PATCHES_REPO_MIRROR = ["https://slackware.uk/slackware/slackware64-15.0/", "patches/"]
+SLACK_PATCHES_REPO_PACKAGES = "PACKAGES.TXT"
+SLACK_PATCHES_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SLACK_PATCHES_REPO_CHANGELOG = "ChangeLog.txt"
+SLACK_PATCHES_REPO_TAG = "_slack15.0"
+
+# AlienBob Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["http://slackware.uk/people/alien/sbrepos/", "current/", "x86_64/"]
+ALIEN_REPO = false
+ALIEN_REPO_NAME = "alien"
+ALIEN_REPO_LOCAL = [""]
+ALIEN_REPO_MIRROR = ["https://slackware.nl/people/alien/sbrepos/", "15.0/", "x86_64/"]
+ALIEN_REPO_PACKAGES = "PACKAGES.TXT"
+ALIEN_REPO_CHECKSUMS = "CHECKSUMS.md5"
+ALIEN_REPO_CHANGELOG = "ChangeLog.txt"
+ALIEN_REPO_TAG = "alien"
+
+# Multilib Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://slackware.nl/people/alien/multilib/", current/"]
+MULTILIB_REPO = false
+MULTILIB_REPO_NAME = "multilib"
+MULTILIB_REPO_LOCAL = [""]
+MULTILIB_REPO_MIRROR = ["https://slackware.nl/people/alien/multilib/", "15.0/"]
+MULTILIB_REPO_PACKAGES = "PACKAGES.TXT"
+MULTILIB_REPO_CHECKSUMS = "CHECKSUMS.md5"
+MULTILIB_REPO_CHANGELOG = "ChangeLog.txt"
+MULTILIB_REPO_TAG = "alien"
+
+# Restricted Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://slackware.nl/people/alien/restricted_sbrepos/", "current/", "x86_64/"]
+RESTRICTED_REPO = false
+RESTRICTED_REPO_NAME = "restricted"
+RESTRICTED_REPO_LOCAL = [""]
+RESTRICTED_REPO_MIRROR = ["https://slackware.nl/people/alien/restricted_sbrepos/", "15.0/", "x86_64/"]
+RESTRICTED_REPO_PACKAGES = "PACKAGES.TXT"
+RESTRICTED_REPO_CHECKSUMS = "CHECKSUMS.md5"
+RESTRICTED_REPO_CHANGELOG = "ChangeLog.txt"
+RESTRICTED_REPO_TAG = "alien"
+
+# Gnome Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://reddoglinux.ddns.net/linux/gnome/43.x/x86_64/"]
+GNOME_REPO = false
+GNOME_REPO_NAME = "gnome"
+GNOME_REPO_LOCAL = [""]
+GNOME_REPO_MIRROR = ["https://reddoglinux.ddns.net/linux/gnome/41.x/x86_64/"]
+GNOME_REPO_PACKAGES = "PACKAGES.TXT"
+GNOME_REPO_CHECKSUMS = "CHECKSUMS.md5"
+GNOME_REPO_CHANGELOG = "ChangeLog.txt"
+GNOME_REPO_TAG = "gfs"
+
+# MATE Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://slackware.uk/msb/current/", "1.26/", "x86_64/"]
+MSB_REPO = false
+MSB_REPO_NAME = "msb"
+MSB_REPO_LOCAL = [""]
+MSB_REPO_MIRROR = ["https://slackware.uk/msb/", "15.0/", "1.26/", "x86_64/"]
+MSB_REPO_PACKAGES = "PACKAGES.TXT"
+MSB_REPO_CHECKSUMS = "CHECKSUMS.md5"
+MSB_REPO_CHANGELOG = "ChangeLog.txt"
+MSB_REPO_TAG = "msb"
+
+# Cinnamon Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://slackware.uk/csb/", "current/", "x86_64/"]
+CSB_REPO = false
+CSB_REPO_NAME = "csb"
+CSB_REPO_LOCAL = [""]
+CSB_REPO_MIRROR = ["https://slackware.uk/csb/", "15.0/", "x86_64/"]
+CSB_REPO_PACKAGES = "PACKAGES.TXT"
+CSB_REPO_CHECKSUMS = "CHECKSUMS.md5"
+CSB_REPO_CHANGELOG = "ChangeLog.txt"
+CSB_REPO_TAG = "csb"
+
+# Conraid Repository for Slackware x86_64 -current.
+CONRAID_REPO = false
+CONRAID_REPO_NAME = "conraid"
+CONRAID_REPO_LOCAL = [""]
+CONRAID_REPO_MIRROR = ["https://slack.conraid.net/repository/slackware64-current/"]
+CONRAID_REPO_PACKAGES = "PACKAGES.TXT"
+CONRAID_REPO_CHECKSUMS = "CHECKSUMS.md5"
+CONRAID_REPO_CHANGELOG = "ChangeLog.txt"
+CONRAID_REPO_TAG = "cf"
+
+# Slackonly Repository for Slackware x86_64 15.0 stable.
+# For Slackware x86_64 -current:
+# ["https://packages.slackonly.com/pub/packages/current-x86_64/"]
+SLACKONLY_REPO = false
+SLACKONLY_REPO_NAME = "slackonly"
+SLACKONLY_REPO_LOCAL = [""]
+SLACKONLY_REPO_MIRROR = ["https://packages.slackonly.com/pub/packages/15.0-x86_64/"]
+SLACKONLY_REPO_PACKAGES = "PACKAGES.TXT"
+SLACKONLY_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SLACKONLY_REPO_CHANGELOG = "ChangeLog.txt"
+SLACKONLY_REPO_TAG = "slonly"
+
+# Repository for Salix OS x86_64 15.0 stable.
+SALIXOS_REPO = false
+SALIXOS_REPO_NAME = "salixos"
+SALIXOS_REPO_LOCAL = [""]
+SALIXOS_REPO_MIRROR = ["https://download.salixos.org/x86_64/slackware-15.0/"]
+SALIXOS_REPO_PACKAGES = "PACKAGES.TXT"
+SALIXOS_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SALIXOS_REPO_CHANGELOG = "ChangeLog.txt"
+SALIXOS_REPO_TAG = ""
+
+# Repository for Salix OS x86_64 15.0 stable.
+SALIXOS_EXTRA_REPO = false
+SALIXOS_EXTRA_REPO_NAME = "salixos_extra"
+SALIXOS_EXTRA_REPO_LOCAL = [""]
+SALIXOS_EXTRA_REPO_MIRROR = ["https://download.salixos.org/x86_64/slackware-15.0/", "extra/"]
+SALIXOS_EXTRA_REPO_PACKAGES = "PACKAGES.TXT"
+SALIXOS_EXTRA_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SALIXOS_EXTRA_REPO_CHANGELOG = "ChangeLog.txt"
+SALIXOS_EXTRA_REPO_TAG = ""
+
+# Repository for Salix OS x86_64 15.0 stable.
+SALIXOS_PATCHES_REPO = false
+SALIXOS_PATCHES_REPO_NAME = "salixos_patches"
+SALIXOS_PATCHES_REPO_LOCAL = [""]
+SALIXOS_PATCHES_REPO_MIRROR = ["https://download.salixos.org/x86_64/slackware-15.0/", "patches/"]
+SALIXOS_PATCHES_REPO_PACKAGES = "PACKAGES.TXT"
+SALIXOS_PATCHES_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SALIXOS_PATCHES_REPO_CHANGELOG = "ChangeLog.txt"
+SALIXOS_PATCHES_REPO_TAG = "_slack15.0"
+
+# Repository for Slackel OS x86_64 -current.
+SLACKEL_REPO = false
+SLACKEL_REPO_NAME = "slackel"
+SLACKEL_REPO_LOCAL = [""]
+SLACKEL_REPO_MIRROR = ["http://www.slackel.gr/repo/x86_64/current/"]
+SLACKEL_REPO_PACKAGES = "PACKAGES.TXT"
+SLACKEL_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SLACKEL_REPO_CHANGELOG = "ChangeLog.txt"
+SLACKEL_REPO_TAG = "dj"
+
+# Slint Repository for Slackware x86_64 15.0 stable.
+SLINT_REPO = false
+SLINT_REPO_NAME = "slint"
+SLINT_REPO_LOCAL = [""]
+SLINT_REPO_MIRROR = ["https://slackware.uk/slint/x86_64/slint-15.0/"]
+SLINT_REPO_PACKAGES = "PACKAGES.TXT"
+SLINT_REPO_CHECKSUMS = "CHECKSUMS.md5"
+SLINT_REPO_CHANGELOG = "ChangeLog.txt"
+SLINT_REPO_TAG = "slint"

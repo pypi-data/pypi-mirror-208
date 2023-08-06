@@ -1,0 +1,269 @@
+.TH slpkg 1 "Orestiada, Greece" "slpkg 4.8.3" dslackw
+.SH NAME
+.P
+slpkg \- Package manager utility for Slackware.
+.SH SYNOPSIS
+.P
+slpkg \c
+[\fICOMMAND\fR] [\fIOPTIONS\fR] [\fIFILELIST|PACKAGES...\fR]
+.P
+slpkg [-h|-v] [-u, update] [-U, upgrade] [-c, check-updates] [-I, repo-info] [-g, configs]
+[-L, clean-logs] [-D, clean-tmp] [-T, clean-data] [-b, build] [-i, install] [-d, download]
+[-R, remove] [-f, find] [-w, view] [-s, search] [-e, dependees] [-t, tracking] -y, --yes, -j, --jobs, -O, --resolve-off,
+-r, --reinstall, -k, --skip-installed, -a, --install-data, -E, --full-reverse, -S, --search, -n, --no-silent, -p, --pkg-version,
+-P, --parallel, -o, --repository=\fINAME\fR, -z, --directory=\fIPATH\fR
+.SH DESCRIPTION
+.P
+Slpkg is a software package manager that installs, updates, and removes packages on Slackware based systems.
+It automatically computes dependencies and figures out what things should occur to install packages.
+Slpkg makes it easier to maintain groups of machines without having to manually update.
+.P
+Slpkg works in accordance with the standards of the organization SlackBuilds.org to build packages.
+Also uses the Slackware Linux instructions for installation, upgrading or removing packages.
+.SH COMMANDS
+.P
+.B -u, update
+.RS
+Updates the package list and the database.
+.RE
+.P
+.B -U, upgrade
+.RS
+Upgrade all the installed packages if the newer version exists in the repository.
+.RE
+.P
+.B -c, check-updates
+.RS
+Check if there is any news on the repositories ChangeLog.txt file.
+.RE
+.P
+.B -I, repo-info
+.RS
+View information related to repositories, such as which repositories are active, when they were upgraded,
+and how many packages they contain.
+.RE
+.P
+.B -L, clean-logs
+.RS
+Cleans dependencies log tracking. After that procedure you should remove dependencies by hand.
+.RE
+.P
+.B -T, clean-data
+.RS
+Sometimes is necessary to clean all the repositories data from the database.
+Run this command to delete all the data and run '\fIslpkg update\fR' to recreate.
+.RE
+.P
+.B -D, clean-tmp
+.RS
+Deletes all the downloaded SlackBuilds scripts and sources.
+.RE
+.P
+.B -g, configs
+.RS
+Edit the configuration /etc/slpkg/slpkg.toml file.
+.RE
+.P
+.B -b, build
+.RS
+Builds the Slackbuilds scripts and add the packages to the '/tmp' directory.
+.RE
+.P
+.B -i, install
+.RS
+Builds and installs the packages in the correct order, and also logs the packages with the dependencies for removal.
+.RE
+.P
+.B -d, download
+.RS
+Download the current SlackBuilds scripts and the sources without building or installing them.
+.RE
+.P
+.B -R, remove
+.RS
+Removes packages with dependencies if the packages was installed with '\fIslpkg install\fR' method.
+Slpkg looks at the 'REPO_TAG' configuration to find packages for removal by default, except if you are using \fB--file-pattern\fR option.
+.RE
+.P
+.B -f, find
+.RS
+Find your installed packages on your system.
+.RE
+.P
+.B -w, view
+.RS
+View information packages from the repository and get everything in your terminal.
+.RE
+.P
+.B -s, search
+.RS
+Search and match packages from the repository.
+.RE
+.P
+.B -e, dependees
+.RS
+Show which SlackBuilds depend on.
+.RE
+.P
+.B -t, tracking
+.RS
+Tracking the packages dependencies.
+.RE
+.SH OPTIONS
+.P
+.B -y, --yes
+.RS
+Answer Yes to all questions. (to be used with: -u, update, -U, upgrade, -L, clean-logs, -b, build,
+-i, install, -R, remove, -d, download,)
+.RE
+.P
+.B -j, --jobs
+.RS
+Acceleration of SlackBuild scripts. When the \fB--jobs\fR flag is set, slpkg automatically detects the number
+of processors and enters it into the MAKEFLAGS variable. Some SlackBuilds fail when MAKEFLAGS is declared or
+the number of processors (-j) is greater than one. (to be used with: -U, upgrade, -b, build, -i, install)
+.RE
+.P
+.B -O, --resolve-off
+.RS
+Turns off dependency resolving. (to be used with: -U, upgrade, -b, build, -i, install)
+.RE
+.P
+.B -r, --reinstall
+.RS
+Use this option if you want to upgrade all packages even if the same version is already installed.
+Do not skip installed packages. (to be used with: -U, upgrade, -i, install)
+.RE
+.P
+.B -k, --skip-installed
+.RS
+This a helpful option if you want to avoid building and reinstalling packages.
+Note: This option affects only the dependencies. (to be used with: -i, install)
+.RE
+.P
+.B -a, --install-data
+.RS
+Install the data into the database only, if when you don't want to re-download or re-synchronize the package lists,
+and you have already downloaded the repository, you can apply this options to install the data into the database.
+This is a helpful especially for locals repositories and for those who download the repositories manually.
+(to be used with: -u, update)
+.RE
+.P
+.B -E, --full-reverse
+.RS
+Full reverse dependency. Works only with -e, dependees command and show the requires too.
+(to be used with: -e, dependees)
+.RE
+.P
+.B -S, --search
+.RS
+Enable the dialog utility to search packages from the repository.
+Example try: '\fIslpkg install python3 --search\fR' or '\fIslpkg download python3 --search\fR' and etc.
+(to be used with: -b, build, -i, install, -d, download, -R, remove, -f, find, -w, view,
+-s, search, -e, dependees, -t, tracking)
+.RE
+.P
+.B -n, --no-silent
+.RS
+Disable silent mode, if it is enabled in the configuration file. (to be used with: -u, update, -U, upgrade, -b, build,
+-i, install, -R, remove)
+.RE
+.P
+.B -p, --pkg-version
+.RS
+Print the repository package version. (to be used with: -e, dependees, -t, tracking, -w, view)
+.RE
+.P
+.B -P, --parallel
+.RS
+Download files in parallel to speed up the process.
+(to be used with: -u, update, -U, upgrade, -b, build, -i, install, -d, download)
+.RE
+.P
+.BI "-o," "" " \-\--repository=" NAME "
+.RS
+Switches the default repository and set the repository you want to work with.
+Make sure that you have been enabling the repository in the file '/etc/slpkg/repositories.toml'.
+Repo pattern '*' supported only with: '-s, search' option.
+(to be used with: -u, update, -U, upgrade, -c, check-updates, -I, repo-info, -b, build, -i, install, -d, download, -s, search,
+-t, tracking, -e, dependees, -w, view)
+.RE
+.P
+.BI "-z," "" " \-\-directory=" PATH "
+.RS
+The directory is the path where the files will be saved. (to be used with: -d, download)
+.RE
+.P
+.B -h | --help
+.RS
+Show help information and exit.
+.RE
+.P
+.B -v | --version
+.RS
+Print version and exit.
+.RE
+.SH OPTION SYNTAX
+.P
+Away from the classical way, you may put several options that do not require arguments together, like:
+.PP
+.Vb 1.
+\&       slpkg -iPny [\fIPACKAGES...\fR]
+.Ve
+.RE
+.SH FILELIST|PACKAGES
+.P
+Instead of packages, you can pass a text file with suffix '.pkgs' and with the names of the packages. Example: '\fIslpkg install list.pkgs\fR'.
+Edit the config '/etc/slpkg/slpkg.toml' file to change the suffix if you want. You can use lists from others, like '.sqf' files.
+.RE
+.SH MUST YOU KNOW
+.P
+There are five indicators when some commands are used, for example:
+
+Cyan: To install, Yellow: To build, Grey: It's installed, Violet: For the upgrade, Red: To remove.
+
+When you use the install, build, upgrade or remove commands you should know that, if the package is installed then its
+color will change to gray, if the package is upgradeable then it will change to violet, and if it is not installed then
+its color will be cyan. Also, if you try to remove a package you will see the package color turns red.
+
+Example: If the package is already installed and the indicator color is grey and the option '\fB-r, --reinstall\fR' is not applied,
+the package will skip from the installation and you will see a message '(already installed)'.
+If the package is upgradeable, the installation will continue and the package will go to upgrade.
+
+For the upgrade command, you should know, that you can upgrade packages from different repositories, if you edit
+the '\fI/etc/slpkg/repositories.toml\fR' file and remove the repository tag. Then the slpkg can't recognize the repository of the packages.
+
+With the remove command, it's going to remove the dependencies if the package had installed with the '\fIslpkg install\fR' command,
+otherwise, the slpkg does not know the dependencies that are installed with the packages that going to remove.
+
+You can apply the asterisk '*' instead of a package, to matching all the packages from a repository. You can't apply
+an asterisk to the '\fB-o, --repository=\fR' option, except for the '\fB-s, search\fR', command.
+
+Note: There is currently no function to indicate the packages if the colors are disabled.
+.RE
+.SH EXIT STATUS
+.P
+0 Successful slpkg execution.
+.P
+1 Something wrong happened.
+.P
+20 No package found to be  downloaded,  installed,  reinstalled,  upgraded, or removed.
+.RE
+.SH CONFIGURATION FILES
+.P
+Configuration file in the /etc/slpkg/slpkg.toml file.
+.P
+Repositories file in the /etc/slpkg/repositories.toml file.
+.P
+Blacklist file in the /etc/slpkg/blacklist.toml file.
+.P
+\fIslpkg_new-configs\fR command it's managing the .new configuration files easily and fast. Move, copy or remove them.
+.RE
+.SH REPORT BUGS
+.P
+Please report any found to: https://gitlab.com/dslackw/slpkg/-/issues.
+.P
+Note: With the issue, please reference the log file you will find in the /tmp/slpkg/logs/slpkg.log path and paste it too.
+.SH AUTHOR
+.P
+Dimitris Zlatanidis <dslackw@gmail.com>

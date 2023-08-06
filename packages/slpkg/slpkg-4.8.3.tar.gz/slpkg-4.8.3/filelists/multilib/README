@@ -1,0 +1,24 @@
+Date: 04/04/2023
+
+Slackware for x86_64 - multilib packages & install instructions
+---------------------------------------------------------------
+
+Before proceeding with the installation, it is better to read Eric's instructions.
+You will find the file README.ERIC for this purpose, or refer directly to:
+http://www.slackware.com/~alien/multilib/
+
+In this folder, there are two lists, as Eric says, you should install first the glibc packages
+and then the 32-bit compatibility packages. First, edit the '/etc/slpkg/repositories.toml' file
+and enable the 'multilib' repository and then:
+
+  $ slpkg update --bin-repo=multilib
+
+  $ slpkg install glibc_packages.pkgs --reinstall --bin-repo=multilib
+
+  and
+
+  $ slpkg install compat32.pkgs --bin-repo=multilib
+
+Please read README.ERIC for more or visit the site as I say above.
+
+Enjoy!

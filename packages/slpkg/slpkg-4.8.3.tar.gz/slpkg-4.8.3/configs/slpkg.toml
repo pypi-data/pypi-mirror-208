@@ -1,0 +1,105 @@
+# This is the general configuration file of slpkg:
+# /etc/slpkg/slpkg.toml
+# Date: 24/04/2023, Version: 4.8.2
+
+[CONFIGS]
+
+# OS architecture by default.
+OS_ARCH = "x86_64"
+
+# Where the packages download.
+# This path working only with the command download.
+DOWNLOAD_ONLY_PATH = "/tmp/slpkg/"
+
+# File suffix for list packages.
+# Change here if you are going to use '.sqf' files.
+FILE_LIST_SUFFIX = ".pkgs"
+
+# Configs for displaying colorful menu. Default is true. [true/false]
+COLORS = true
+
+# Dialog is a program that will let you present a variety of questions or
+# display messages using dialog boxes from a shell script.
+# Default is true. [true/false]
+DIALOG = true
+
+# If silent mode is true, it does not print the commands as they are executed.
+# Default is true. [true/false]
+SILENT_MODE = true
+
+# Choose ascii printable characters.
+# If true, it uses the extended characters, otherwise the basic ones.
+# Default is true. [true/false].
+ASCII_CHARACTERS = true
+
+# Set false to all the questions. If set false, option --yes will not work.
+# Default is true. [true/false].
+ASK_QUESTION = true
+
+# Download sources in parallel. Default is false. [true/false]
+# Alternatively, you can use the option '--parallel'.
+PARALLEL_DOWNLOADS = false
+
+# Pass your file pattern here, if you want to work only with 'sbo' packages
+# add '*_SBo' pattern. Default is the '*'.
+FILE_PATTERN = "*"
+
+# Enable or disable the spinning bar. Default is true. [true/false]
+SPINNING_BAR = true
+
+# There are 5 predefined spinners for the progress bar.
+# Default is pixel. [spinner/pie/moon/line/pixel]
+PROGRESS_SPINNER = "pixel"
+
+# Choose color for the progress bar spinner.
+# Default is green. [green/violet/yellow/blue/cyan/grey/red]
+SPINNER_COLOR = "green"
+
+# Slackware command for install packages, instead, you can use 'installpkg'.
+# Normally upgradepkg only upgrades packages that are already installed
+# on the system, and will skip any packages that do not already have a
+# version installed. If --install- new is specified, the behavior is
+# modified to install new packages in addition to upgrading existing ones.
+# See manpage of the upgradepkg.
+INSTALLPKG = "upgradepkg --install-new"
+
+# Slackware command to reinstall packages.
+# Upgradepkg usually skips packages if the exact same package (matching name,
+# version, arch, and build number) is already installed on the system. Use
+# the --reinstall option if you want to upgrade all packages even if the same
+# version is already installed.
+REINSTALL = "upgradepkg --reinstall"
+
+# Slackware command to remove packages.
+#removepkg removes a previously installed Slackware package, while writing
+# a progress report to the standard output.  A package may be specified either
+# by the full package name (as you'd see listed in /var/lib/pkgtools/packages/),
+# or by the base package name. See manpage of the removepkg.
+REMOVEPKG = "removepkg"
+
+# You can choose a downloader among wget, curl and lftp.
+# Default is wget. [wget/wget2/curl/lftp]
+DOWNLOADER = "wget"
+
+# Wget downloader options.
+# -c, --continue: resume getting a partially-downloaded file.
+# -q, Turn off Wget's output.
+# --show-progress, Force wget to display the progress bar in any verbosity.
+WGET_OPTIONS = "-c -q --progress=bar:force:noscroll --show-progress"
+
+# Curl downloader options.
+CURL_OPTIONS = ""
+
+# Lftp donwloader options.
+LFTP_GET_OPTIONS = "-c get -e"
+
+# Lftp mirror options are used to synchronize with the repositories.
+LFTP_MIRROR_OPTIONS = "-c mirror --parallel=100 --only-newer"
+
+# If you are going to use a proxy server, try to fill in these variables.
+# Choose between http or socks proxy type.
+# For a socks proxy, you need to install the PySocks package.
+# https://urllib3.readthedocs.io/en/stable/advanced-usage.html#socks-proxies
+PROXY_ADDRESS = ""
+PROXY_USERNAME = ""
+PROXY_PASSWORD = ""
