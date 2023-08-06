@@ -1,0 +1,35 @@
+Metadata-Version: 2.1
+Name: checkify
+Version: 0.3
+Home-page: https://github.com/aditya0072001/checkify
+Project-URL: Download Statistics, https://pepy.tech/project/checkify/month
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# checkify
+
+checkify is a Python package that utilizes the GPT API to check for errors in code and explain the code.
+
+## Installation
+
+You can install checkify using pip:
+
+pip install checkify
+
+
+## Usage
+
+To use checkify, import the `check_code` function from the `code_checker` module:
+
+```python
+from checkify.code_checker import check_code
+
+code = """
+def greet(name):
+    print("Hello, " + name)
+
+greet("John")
+"""
+
+explanation = check_code(code)
+print(explanation)
