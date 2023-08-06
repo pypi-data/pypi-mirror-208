@@ -1,0 +1,208 @@
+# Part of the ROBOID project - http://hamster.school
+# Copyright (C) 2016 Kwang-Hyun Park (akaii@kw.ac.kr)
+# 
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General
+# Public License along with this library; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+# Boston, MA  02111-1307  USA
+
+import cv2 #line:19
+import numpy as np #line:20
+class CamRacer :#line:23
+    _LEFT =1 #line:24
+    _RIGHT =2 #line:25
+    _RED =3 #line:26
+    _GREEN =4 #line:27
+    _BLUE =5 #line:28
+    _BLOBS ={'left':1 ,'right':2 ,'red':3 ,'green':4 ,'blue':5 }#line:35
+    _COLORS ={'red':3 ,'green':4 ,'blue':5 }#line:40
+    def __init__ (OO0O0OO0OO0OO0OO0 ,red_h_range =(0 ,10 ,170 ,180 ),green_h_range =(40 ,80 ),blue_h_range =(100 ,140 ),s_range =(50 ,255 ),v_range =(50 ,255 ),lane_window_height =50 ):#line:42
+        OO0O0OO0OO0OO0OO0 ._h_range ={CamRacer ._RED :red_h_range ,CamRacer ._GREEN :green_h_range ,CamRacer ._BLUE :blue_h_range }#line:47
+        OO0O0OO0OO0OO0OO0 ._s_range =s_range #line:48
+        OO0O0OO0OO0OO0OO0 ._v_range =v_range #line:49
+        OO0O0OO0OO0OO0OO0 ._lane_window_height =lane_window_height #line:50
+        OO0O0OO0OO0OO0OO0 ._results ={}#line:51
+        OO0O0OO0OO0OO0OO0 ._clear ()#line:52
+        OO0O0OO0OO0OO0OO0 .set_lane_colors ('green','blue')#line:53
+    def _clear (O0O0000O0000000OO ):#line:55
+        O0O0000O0000000OO ._results [CamRacer ._LEFT ]=None #line:56
+        O0O0000O0000000OO ._results [CamRacer ._RIGHT ]=None #line:57
+        O0O0000O0000000OO ._results [CamRacer ._RED ]=None #line:58
+        O0O0000O0000000OO ._results [CamRacer ._GREEN ]=None #line:59
+        O0O0000O0000000OO ._results [CamRacer ._BLUE ]=None #line:60
+        O0O0000O0000000OO ._left_lane_dist =0 #line:61
+        O0O0000O0000000OO ._right_lane_dist =0 #line:62
+    def _find_blob (OO00O000OOO0O000O ,OOO00O0O00O0OO0O0 ,OOOOOO0O0OO00O000 ,O0OO00O00O0O0OOO0 ,OO0O0O000O0O0OOO0 ,OOOOO0O000O00OO00 ,OO0O000000OOO0000 ,O0OOOOO0O00O0O000 ,O0OO00O00000O0000 ):#line:64
+        O0OO0000OOOOO000O =OOO00O0O00O0OO0O0 [O0OOOOO0O00O0O000 :O0OO00O00000O0000 ,OOOOO0O000O00OO00 :OO0O000000OOO0000 ]#line:65
+        O00OO000OO00O0OOO =cv2 .cvtColor (O0OO0000OOOOO000O ,cv2 .COLOR_BGR2HSV )#line:66
+        O0OO0O0O00OOO0OOO =cv2 .inRange (O00OO000OO00O0OOO ,(OOOOOO0O0OO00O000 [0 ],O0OO00O00O0O0OOO0 [0 ],OO0O0O000O0O0OOO0 [0 ]),(OOOOOO0O0OO00O000 [1 ],O0OO00O00O0O0OOO0 [1 ],OO0O0O000O0O0OOO0 [1 ]))#line:68
+        if len (OOOOOO0O0OO00O000 )>=4 :#line:69
+            O0OO0O0O00OOO0OOO |=cv2 .inRange (O00OO000OO00O0OOO ,(OOOOOO0O0OO00O000 [2 ],O0OO00O00O0O0OOO0 [0 ],OO0O0O000O0O0OOO0 [0 ]),(OOOOOO0O0OO00O000 [3 ],O0OO00O00O0O0OOO0 [1 ],OO0O0O000O0O0OOO0 [1 ]))#line:70
+        OOO0000OO000000O0 =np .ones ((3 ,3 ),np .uint8 )#line:72
+        O0OO0O0O00OOO0OOO =cv2 .morphologyEx (O0OO0O0O00OOO0OOO ,cv2 .MORPH_OPEN ,OOO0000OO000000O0 )#line:73
+        O0OO0O0O00OOO0OOO =cv2 .morphologyEx (O0OO0O0O00OOO0OOO ,cv2 .MORPH_CLOSE ,OOO0000OO000000O0 )#line:74
+        O0O0O00OOOOOO0000 ,_O0O0OO0OO0OOOOO00 =cv2 .findContours (O0OO0O0O00OOO0OOO ,cv2 .RETR_LIST ,cv2 .CHAIN_APPROX_SIMPLE )#line:76
+        O0O0O00O0O0O00000 =[cv2 .contourArea (O0000OOOO0OO0OOOO )for O0000OOOO0OO0OOOO in O0O0O00OOOOOO0000 ]#line:77
+        if O0O0O00O0O0O00000 :#line:78
+            O0OO0000OO0OO000O =np .argmax (O0O0O00O0O0O00000 )#line:79
+            OO0OOO0O0OO00O0OO =int (O0O0O00O0O0O00000 [O0OO0000OO0OO000O ])#line:80
+            if OO0OOO0O0OO00O0OO >5 :#line:81
+                O00O0OO00O00O0OOO =O0O0O00OOOOOO0000 [O0OO0000OO0OO000O ]#line:82
+                O0000O00OO00O0OO0 ,OOOOOO0O0OO0OOOOO ,OO0O0O000OO00OOO0 ,OOO00O0000OO0O0OO =cv2 .boundingRect (O00O0OO00O00O0OOO )#line:83
+                OOOOO0O00OO00OOO0 ={'box':(O0000O00OO00O0OO0 +OOOOO0O000O00OO00 ,OOOOOO0O0OO0OOOOO +O0OOOOO0O00O0O000 ,O0000O00OO00O0OO0 +OO0O0O000OO00OOO0 +OOOOO0O000O00OO00 ,OOOOOO0O0OO0OOOOO +OOO00O0000OO0O0OO +O0OOOOO0O00O0O000 ),'width':OO0O0O000OO00OOO0 ,'height':OOO00O0000OO0O0OO ,'area':OO0O0O000OO00OOO0 *OOO00O0000OO0O0OO ,'pixels':OO0OOO0O0OO00O0OO }#line:90
+                O0OO00O0O000O00O0 =cv2 .moments (O00O0OO00O00O0OOO )#line:91
+                O000000O00000000O =O0OO00O0O000O00O0 ['m00']#line:92
+                if O000000O00000000O >0 :#line:93
+                    OOOOO0O00OO00OOO0 ['xy']=(int (O0OO00O0O000O00O0 ['m10']/O000000O00000000O )+OOOOO0O000O00OO00 ,int (O0OO00O0O000O00O0 ['m01']/O000000O00000000O )+O0OOOOO0O00O0O000 )#line:94
+                    return OOOOO0O00OO00OOO0 #line:95
+        return None #line:96
+    def _find_color (OOO0O00OO000OOOOO ,O0O00OO00OO0O00O0 ,O0000O00O00O0O0O0 ,OOO00O0OOOOO0O0OO ,OOOOOO0O0OO00OOO0 ,O0O000000OO00000O ,OO0OO0O00O000OO00 ):#line:98
+        O00OO000000O00OOO =OOO0O00OO000OOOOO ._h_range [O0000O00O00O0O0O0 ]#line:99
+        O0O00O00000O000O0 =OOO0O00OO000OOOOO ._s_range #line:100
+        O0O00OOOO000OO0O0 =OOO0O00OO000OOOOO ._v_range #line:101
+        if OOO0O00OO000OOOOO ._left_lane_color ==O0000O00O00O0O0O0 and OOO0O00OO000OOOOO ._right_lane_color ==O0000O00O00O0O0O0 :#line:103
+            O0O0O0000O000OO0O =OOO0O00OO000OOOOO ._find_blob (O0O00OO00OO0O00O0 ,O00OO000000O00OOO ,O0O00O00000O000O0 ,O0O00OOOO000OO0O0 ,0 ,O0O000000OO00000O ,OO0OO0O00O000OO00 ,OOOOOO0O0OO00OOO0 )#line:104
+            OOO0O0O0000O0OOO0 =OOO0O00OO000OOOOO ._find_blob (O0O00OO00OO0O00O0 ,O00OO000000O00OOO ,O0O00O00000O000O0 ,O0O00OOOO000OO0O0 ,O0O000000OO00000O ,OOO00O0OOOOO0O0OO ,OO0OO0O00O000OO00 ,OOOOOO0O0OO00OOO0 )#line:105
+            if O0O0O0000O000OO0O is not None and OOO0O0O0000O0OOO0 is not None :#line:106
+                OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=OOO0O0O0000O0OOO0 if OOO0O0O0000O0OOO0 ['pixels']>O0O0O0000O000OO0O ['pixels']else O0O0O0000O000OO0O #line:107
+                OOO0O00OO000OOOOO ._results [CamRacer ._LEFT ]=O0O0O0000O000OO0O #line:108
+                OOO0O00OO000OOOOO ._results [CamRacer ._RIGHT ]=OOO0O0O0000O0OOO0 #line:109
+            elif O0O0O0000O000OO0O is not None :#line:110
+                OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=O0O0O0000O000OO0O #line:111
+                OOO0O00OO000OOOOO ._results [CamRacer ._LEFT ]=O0O0O0000O000OO0O #line:112
+            elif OOO0O0O0000O0OOO0 is not None :#line:113
+                OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=OOO0O0O0000O0OOO0 #line:114
+                OOO0O00OO000OOOOO ._results [CamRacer ._RIGHT ]=OOO0O0O0000O0OOO0 #line:115
+            else :#line:116
+                OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=None #line:117
+        elif OOO0O00OO000OOOOO ._left_lane_color ==O0000O00O00O0O0O0 :#line:118
+            OO00O0000O0O000OO =OOO0O00OO000OOOOO ._find_blob (O0O00OO00OO0O00O0 ,O00OO000000O00OOO ,O0O00O00000O000O0 ,O0O00OOOO000OO0O0 ,0 ,OOO00O0OOOOO0O0OO ,OO0OO0O00O000OO00 ,OOOOOO0O0OO00OOO0 )#line:119
+            OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=OO00O0000O0O000OO #line:120
+            if OO00O0000O0O000OO is not None :#line:121
+                OOO0O00OO000OOOOO ._results [CamRacer ._LEFT ]=OO00O0000O0O000OO #line:122
+        elif OOO0O00OO000OOOOO ._right_lane_color ==O0000O00O00O0O0O0 :#line:123
+            OO00O0000O0O000OO =OOO0O00OO000OOOOO ._find_blob (O0O00OO00OO0O00O0 ,O00OO000000O00OOO ,O0O00O00000O000O0 ,O0O00OOOO000OO0O0 ,0 ,OOO00O0OOOOO0O0OO ,OO0OO0O00O000OO00 ,OOOOOO0O0OO00OOO0 )#line:124
+            OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=OO00O0000O0O000OO #line:125
+            if OO00O0000O0O000OO is not None :#line:126
+                OOO0O00OO000OOOOO ._results [CamRacer ._RIGHT ]=OO00O0000O0O000OO #line:127
+        else :#line:128
+            OOO0O00OO000OOOOO ._results [O0000O00O00O0O0O0 ]=OOO0O00OO000OOOOO ._find_blob (O0O00OO00OO0O00O0 ,O00OO000000O00OOO ,O0O00O00000O000O0 ,O0O00OOOO000OO0O0 ,0 ,OOO00O0OOOOO0O0OO ,0 ,OOOOOO0O0OO00OOO0 )#line:129
+    def detect (O00OO0O00O00000OO ,O000O00OO00O0OO00 ):#line:131
+        O00OO0O00O00000OO ._clear ()#line:132
+        if O000O00OO00O0OO00 is not None :#line:133
+            OO0OO00O0O0OOOOOO =O000O00OO00O0OO00 .shape [1 ]#line:134
+            O00OO0O0OO00OO000 =O000O00OO00O0OO00 .shape [0 ]#line:135
+            OO00OOO0000O0O0OO =OO0OO00O0O0OOOOOO //2 #line:136
+            O00OO0OOOO0O0O00O =O00OO0O0OO00OO000 -O00OO0O00O00000OO ._lane_window_height #line:137
+            O00OO0O00O00000OO ._find_color (O000O00OO00O0OO00 ,CamRacer ._RED ,OO0OO00O0O0OOOOOO ,O00OO0O0OO00OO000 ,OO00OOO0000O0O0OO ,O00OO0OOOO0O0O00O )#line:139
+            O00OO0O00O00000OO ._find_color (O000O00OO00O0OO00 ,CamRacer ._GREEN ,OO0OO00O0O0OOOOOO ,O00OO0O0OO00OO000 ,OO00OOO0000O0O0OO ,O00OO0OOOO0O0O00O )#line:140
+            O00OO0O00O00000OO ._find_color (O000O00OO00O0OO00 ,CamRacer ._BLUE ,OO0OO00O0O0OOOOOO ,O00OO0O0OO00OO000 ,OO00OOO0000O0O0OO ,O00OO0OOOO0O0O00O )#line:141
+            OOO00OOOO0O0OO0O0 =O00OO0O00O00000OO ._results [CamRacer ._LEFT ]#line:143
+            OO000O00OOOO0O00O =O00OO0O00O00000OO ._results [CamRacer ._RIGHT ]#line:144
+            O00OO0O00O00000OO ._left_lane_dist =abs (OO00OOO0000O0O0OO -OOO00OOOO0O0OO0O0 ['xy'][0 ])if OOO00OOOO0O0OO0O0 is not None else OO00OOO0000O0O0OO #line:145
+            O00OO0O00O00000OO ._right_lane_dist =abs (OO000O00OOOO0O00O ['xy'][0 ]-OO00OOO0000O0O0OO )if OO000O00OOOO0O00O is not None else OO0OO00O0O0OOOOOO -OO00OOO0000O0O0OO #line:146
+            return True #line:147
+        return False #line:148
+    def _draw (OO0OO000O00OOOO00 ,O0O000OO00OOO0OOO ,OO0OO0O0O0000O0O0 ,O0O000OO0OO0O0O0O ):#line:150
+        if OO0OO0O0O0000O0O0 is not None :#line:151
+            O0OOO00OO0O00OO00 ,O000OO00O0000OOO0 ,O0O00OOO0O00OO0OO ,O0O00OOOO0000O0O0 =OO0OO0O0O0000O0O0 ['box']#line:152
+            cv2 .rectangle (O0O000OO00OOO0OOO ,(O0OOO00OO0O00OO00 ,O000OO00O0000OOO0 ),(O0O00OOO0O00OO0OO ,O0O00OOOO0000O0O0 ),O0O000OO0OO0O0O0O ,3 )#line:153
+            OOOOO00O0O00OO000 ,OO000OO0OOOOO00OO =OO0OO0O0O0000O0O0 ['xy']#line:154
+            cv2 .putText (O0O000OO00OOO0OOO ,'x: {}px'.format (OOOOO00O0O00OO000 ),(O0OOO00OO0O00OO00 ,O000OO00O0000OOO0 -40 ),cv2 .FONT_HERSHEY_SIMPLEX ,0.5 ,(255 ,255 ,255 ),2 )#line:155
+            cv2 .putText (O0O000OO00OOO0OOO ,'y: {}px'.format (OO000OO0OOOOO00OO ),(O0OOO00OO0O00OO00 ,O000OO00O0000OOO0 -25 ),cv2 .FONT_HERSHEY_SIMPLEX ,0.5 ,(255 ,255 ,255 ),2 )#line:156
+            cv2 .putText (O0O000OO00OOO0OOO ,'pixel: {}'.format (OO0OO0O0O0000O0O0 ['pixels']),(O0OOO00OO0O00OO00 ,O000OO00O0000OOO0 -10 ),cv2 .FONT_HERSHEY_SIMPLEX ,0.5 ,(255 ,255 ,255 ),2 )#line:157
+    def _draw_color (OO0OO0000OO0O0OOO ,O0O00O0OO000O0O0O ,OO00OO000000O0O0O ,O0000O00O0OOOOOO0 ):#line:159
+        if OO0OO0000OO0O0OOO ._left_lane_color ==OO00OO000000O0O0O or OO0OO0000OO0O0OOO ._right_lane_color ==OO00OO000000O0O0O :#line:160
+            if OO0OO0000OO0O0OOO ._left_lane_color ==OO00OO000000O0O0O :#line:161
+                OO0OO0000OO0O0OOO ._draw (O0O00O0OO000O0O0O ,OO0OO0000OO0O0OOO ._results [CamRacer ._LEFT ],O0000O00O0OOOOOO0 )#line:162
+            if OO0OO0000OO0O0OOO ._right_lane_color ==OO00OO000000O0O0O :#line:163
+                OO0OO0000OO0O0OOO ._draw (O0O00O0OO000O0O0O ,OO0OO0000OO0O0OOO ._results [CamRacer ._RIGHT ],O0000O00O0OOOOOO0 )#line:164
+        else :#line:165
+            OO0OO0000OO0O0OOO ._draw (O0O00O0OO000O0O0O ,OO0OO0000OO0O0OOO ._results [OO00OO000000O0O0O ],O0000O00O0OOOOOO0 )#line:166
+    def draw_result (O0OO0OOOO00O00OOO ,O000OOO0O0OOO0OOO ,clone =False ):#line:168
+        if O000OOO0O0OOO0OOO is not None :#line:169
+            if clone :#line:170
+                O000OOO0O0OOO0OOO =O000OOO0O0OOO0OOO .copy ()#line:171
+            O0OO0OOOO00O00OOO ._draw_color (O000OOO0O0OOO0OOO ,CamRacer ._RED ,(0 ,0 ,255 ))#line:172
+            O0OO0OOOO00O00OOO ._draw_color (O000OOO0O0OOO0OOO ,CamRacer ._GREEN ,(0 ,255 ,0 ))#line:173
+            O0OO0OOOO00O00OOO ._draw_color (O000OOO0O0OOO0OOO ,CamRacer ._BLUE ,(255 ,0 ,0 ))#line:174
+        return O000OOO0O0OOO0OOO #line:175
+    def set_lane_colors (OOO0OOO00O00O000O ,OO0OOOO00O0OO0000 ,O0O0OO00OO0OOO0OO ):#line:177
+        if isinstance (OO0OOOO00O0OO0000 ,str ):#line:178
+            OO0OOOO00O0OO0000 =OO0OOOO00O0OO0000 .lower ()#line:179
+            if OO0OOOO00O0OO0000 in CamRacer ._COLORS :#line:180
+                OOO0OOO00O00O000O ._left_lane_color =CamRacer ._COLORS [OO0OOOO00O0OO0000 ]#line:181
+        if isinstance (O0O0OO00OO0OOO0OO ,str ):#line:182
+            O0O0OO00OO0OOO0OO =O0O0OO00OO0OOO0OO .lower ()#line:183
+            if O0O0OO00OO0OOO0OO in CamRacer ._COLORS :#line:184
+                OOO0OOO00O00O000O ._right_lane_color =CamRacer ._COLORS [O0O0OO00OO0OOO0OO ]#line:185
+    def get_lane_distance (O0OOOOOOO00OO0000 ):#line:187
+        return O0OOOOOOO00OO0000 ._left_lane_dist ,O0OOOOOOO00OO0000 ._right_lane_dist #line:188
+    def get_left_lane_distance (OOO0OOO00000OOOOO ):#line:190
+        return OOO0OOO00000OOOOO ._left_lane_dist #line:191
+    def get_right_lane_distance (OOO000OOO0OOOOO00 ):#line:193
+        return OOO000OOO0OOOOO00 ._right_lane_dist #line:194
+    def get_xy (O000000O000OO0OO0 ,O00O00000OOOO00O0 ):#line:196
+        if isinstance (O00O00000OOOO00O0 ,str ):#line:197
+            O00O00000OOOO00O0 =O00O00000OOOO00O0 .lower ()#line:198
+            if O00O00000OOOO00O0 in CamRacer ._BLOBS :#line:199
+                OO0OO0O0O00O0O0O0 =O000000O000OO0OO0 ._results [CamRacer ._BLOBS [O00O00000OOOO00O0 ]]#line:200
+                if OO0OO0O0O00O0O0O0 is not None :#line:201
+                    return OO0OO0O0O00O0O0O0 ['xy']#line:202
+        return -1 ,-1 #line:203
+    def get_x (OO0O0O00OO0O0OOO0 ,OOOO0O0O00O0O0O0O ):#line:205
+        O0000O0O0OO00000O ,_O000OO0O000OOOO00 =OO0O0O00OO0O0OOO0 .get_xy (OOOO0O0O00O0O0O0O )#line:206
+        return O0000O0O0OO00000O #line:207
+    def get_y (OOO00O0OOOOOO0O0O ,OO00000O00OO0OO0O ):#line:209
+        _O00OOO00000O0O000 ,O00O0000OOO000OO0 =OOO00O0OOOOOO0O0O .get_xy (OO00000O00OO0OO0O )#line:210
+        return O00O0000OOO000OO0 #line:211
+    def get_box (O0OO00OOO0O0OO00O ,OO000O0O0OOO0OO0O ):#line:213
+        if isinstance (OO000O0O0OOO0OO0O ,str ):#line:214
+            OO000O0O0OOO0OO0O =OO000O0O0OOO0OO0O .lower ()#line:215
+            if OO000O0O0OOO0OO0O in CamRacer ._BLOBS :#line:216
+                OO0OO0O0000OOO0O0 =O0OO00OOO0O0OO00O ._results [CamRacer ._BLOBS [OO000O0O0OOO0OO0O ]]#line:217
+                if OO0OO0O0000OOO0O0 is not None :#line:218
+                    return OO0OO0O0000OOO0O0 ['box']#line:219
+        return -1 ,-1 ,-1 ,-1 #line:220
+    def get_width (OO0OOOOO00O00O0OO ,O00OO0OO00O00O000 ):#line:222
+        if isinstance (O00OO0OO00O00O000 ,str ):#line:223
+            O00OO0OO00O00O000 =O00OO0OO00O00O000 .lower ()#line:224
+            if O00OO0OO00O00O000 in CamRacer ._BLOBS :#line:225
+                OO0000OO00OO0OOO0 =OO0OOOOO00O00O0OO ._results [CamRacer ._BLOBS [O00OO0OO00O00O000 ]]#line:226
+                if OO0000OO00OO0OOO0 is not None :#line:227
+                    return OO0000OO00OO0OOO0 ['width']#line:228
+        return 0 #line:229
+    def get_height (OOO000OOOO0O00OOO ,OO0OOO00OOOO000OO ):#line:231
+        if isinstance (OO0OOO00OOOO000OO ,str ):#line:232
+            OO0OOO00OOOO000OO =OO0OOO00OOOO000OO .lower ()#line:233
+            if OO0OOO00OOOO000OO in CamRacer ._BLOBS :#line:234
+                O0000OO0O00OO000O =OOO000OOOO0O00OOO ._results [CamRacer ._BLOBS [OO0OOO00OOOO000OO ]]#line:235
+                if O0000OO0O00OO000O is not None :#line:236
+                    return O0000OO0O00OO000O ['height']#line:237
+        return 0 #line:238
+    def get_area (OOO0O0O00OOO0O00O ,OO000O00O00000OOO ):#line:240
+        if isinstance (OO000O00O00000OOO ,str ):#line:241
+            OO000O00O00000OOO =OO000O00O00000OOO .lower ()#line:242
+            if OO000O00O00000OOO in CamRacer ._BLOBS :#line:243
+                OO0OOOOO0OO0O0O00 =OOO0O0O00OOO0O00O ._results [CamRacer ._BLOBS [OO000O00O00000OOO ]]#line:244
+                if OO0OOOOO0OO0O0O00 is not None :#line:245
+                    return OO0OOOOO0OO0O0O00 ['area']#line:246
+        return 0 #line:247
+    def get_pixels (OO00O00OOOOOOO0O0 ,OO0OO00O0000O0000 ):#line:249
+        if isinstance (OO0OO00O0000O0000 ,str ):#line:250
+            OO0OO00O0000O0000 =OO0OO00O0000O0000 .lower ()#line:251
+            if OO0OO00O0000O0000 in CamRacer ._BLOBS :#line:252
+                O0OOOO0O0OOOO0O00 =OO00O00OOOOOOO0O0 ._results [CamRacer ._BLOBS [OO0OO00O0000O0000 ]]#line:253
+                if O0OOOO0O0OOOO0O00 is not None :#line:254
+                    return O0OOOO0O0OOOO0O00 ['pixels']#line:255
+        return 0 #line:256
