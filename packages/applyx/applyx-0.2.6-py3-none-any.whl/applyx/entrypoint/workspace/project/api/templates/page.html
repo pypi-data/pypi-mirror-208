@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block meta_extra %}
+{% if request.state.is_mobile %}
+<!--
+<meta name="x5-orientation" content="landscape">
+<meta name="screen-orientation" content="landscape">
+-->
+{% endif %}
+{% endblock meta_extra %}
+
+{% block head_extra %}
+<script type="text/javascript" src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js"></script>
+<script type="module" src="{{ WEB.static }}common/resource.js?_rnd={{ range(0, 10000) | random }}"></script>
+{% endblock head_extra %}
+
+{% block page_body %}
+<div id="main" class="mx-auto min-vh-100"></div>
+{% if request.state.is_mobile %}
+<script type="module" src="{{ WEB.static }}domains/stock/m/{{ main }}?_rnd={{ range(0, 10000) | random }}"></script>
+{% else %}
+<script type="module" src="{{ WEB.static }}domains/stock/pc/{{ main }}?_rnd={{ range(0, 10000) | random }}"></script>
+{% endif %}
+{% endblock page_body %}
+

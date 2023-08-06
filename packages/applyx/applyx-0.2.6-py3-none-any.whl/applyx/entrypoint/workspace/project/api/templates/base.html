@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block page_title %}
+        <title>•</title>
+        {% endblock page_title %}
+
+        {% block page_icon %}
+        <link rel="shortcut icon" type="image/x-icon" href="{{ WEB.static }}public/images/favicon/favicon.ico" media="screen" />
+        {% endblock page_icon %}
+
+        <meta charset="utf-8" />
+        <meta http-equiv="Cache-Control" name="no-store" />
+        <meta http-equiv="Content-Type" content="text/html" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        {% block meta_viewport %}
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        {% endblock meta_viewport %}
+
+        {% block meta_keywords %}
+        <meta name="keywords" content="" />
+        {% endblock meta_keywords %}
+
+        {% block meta_description %}
+        <meta name="description" content="" />
+        {% endblock meta_description %}
+
+        {% block meta_extra %}{% endblock meta_extra %}
+
+        <script type="text/javascript">
+        var WEB = {
+            env: '{{ WEB.env }}',
+            ssl: {{ 'true' if WEB.ssl else 'false' }},
+            static: '{{ WEB.static }}',
+            cdn: '{{ WEB.cdn }}',
+            cache: '{{ WEB.cache }}',
+        };
+
+        if (window.location.host.indexOf(':') == -1) {
+            document.domain = '';
+        }
+        </script>
+
+        {% block head_extra %}{% endblock head_extra %}
+    </head>
+
+    <body>
+        {% block page_body %}{% endblock page_body %}
+    </body>
+</html>
