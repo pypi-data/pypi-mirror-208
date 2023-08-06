@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snakecan"
+requires-python = ">=3.10"
+dynamic = ["version"]
+authors = [
+  { name="OzxyBox", email="kieferstashu@gmail.com" },
+]
+description = "A subset of UNIX utilities"
+readme = "README.md"
+classifiers = [
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/ozxybox/snakecan"
+"Bug Tracker" = "https://github.com/ozxybox/snakecan/issues"
+
+[tool.setuptools.packages.find]
+	where = ["src"]
+	include = ["snakecan*"]
+
