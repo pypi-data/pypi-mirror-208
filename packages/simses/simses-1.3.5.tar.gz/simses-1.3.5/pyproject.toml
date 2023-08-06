@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simses"
+description = "Simulation for Stationary Storage Systems (SimSES)"
+authors = [{ email = "simses.ees@ed.tum.de" }]
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+keywords = ["simulation", "battery", "energy", "storage"]
+license = { text = "BSD-3-Clause" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "scipy",
+    "numpy",
+    "numpy_financial",
+    "pandas",
+    "plotly",
+    "matplotlib",
+    "pytz",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+tests = ["pytest"]
+
+[project.urls]
+source = "https://gitlab.lrz.de/open-ees-ses/simses"
+
+[tool.setuptools]
+# packages = ["simses"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+simses = ["*.csv", "*.gz", "*.defaults.ini"]
+
+[tool.setuptools.dynamic]
+version = { file = "simses/VERSION" }
