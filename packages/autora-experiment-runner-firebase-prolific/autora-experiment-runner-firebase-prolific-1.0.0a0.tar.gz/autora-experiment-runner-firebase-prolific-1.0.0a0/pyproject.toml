@@ -1,0 +1,33 @@
+[project]
+# UPDATE THIS BEFORE PUBLISHING
+name = "autora-experiment-runner-firebase-prolific"
+description = "AutoRA Firebase Prolific Experiment Runner provides experiment runners to run experiments with prolific and firebase"
+authors = [{ name = "Younes Strittmatter", email = "younes_strittmatter@brown.edu" }]
+dynamic = ["version"]
+
+readme = "README.md"
+license = { text = "MIT License" }
+requires-python = ">=3.8,<4"
+
+# ADD NEW DEPENDENCIES HERE
+dependencies = [
+    "autora-core",
+    "autora-experiment-runner-recruitment-manager-prolific",
+    "autora-experiment-runner-experimentation-manager-firebase",
+]
+
+[project.optional-dependencies]
+dev = [
+    "autora-core[dev]"
+]
+
+[project.urls]
+homepage = "http://www.empiricalresearch.ai"
+repository = "https://github.com/AutoResearch/autora-experiment-runner-firebase-prolific"
+documentation = "https://autoresearch.github.io/autora/"
+
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
