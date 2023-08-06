@@ -1,0 +1,58 @@
+# deale_shared_library
+
+deale_shared_library is a shared library for Deale microservices, providing easy-to-use interfaces to AWS services such as DynamoDB and Cognito.
+Installation
+
+You can install deale_shared_library via pip:
+
+``` python
+pip install deale_shared_library
+```
+
+
+### Usage
+
+Below are brief overviews and examples of how to use the DynamoDB and Cognito classes provided by this library.
+
+#### DynamoDB Class
+
+The DynamoDB class is a wrapper around the AWS Boto3 DynamoDB resource, providing methods to perform operations like scanning a table, querying a table, and putting items into a table.
+
+#### Example
+
+
+```python
+from deale_shared_library import DynamoDB
+
+# Initialize DynamoDB class
+ddb = DynamoDB()
+
+# Put an item into a table
+ddb.put_item("my_table", {"id": "1", "name": "John Doe", "email": "john@example.com"})
+
+# Scan a table
+response = ddb.scan("my_table")
+print(response["Items"])
+
+# Query a table
+response = ddb.query("my_table", KeyConditionExpression=Key('id').eq('1'))
+print(response["Items"])
+```
+
+
+#### Cognito Class
+
+The Cognito class provides methods to interact with AWS Cognito, such as fetching user details and user attributes.
+
+#### Example
+
+
+``` python
+from deale_shared_library import Cognito
+
+# Get Cognito user
+user = Cognito.get_cognito_user("username")
+
+# Get Cognito user attribute
+email = Cognito.get_cognito_user_attribute("username", "email")
+```
