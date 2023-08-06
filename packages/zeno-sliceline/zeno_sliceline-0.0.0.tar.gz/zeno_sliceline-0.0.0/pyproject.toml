@@ -1,0 +1,45 @@
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "zeno-sliceline"
+version = "0.0.0"
+description = "✂️ Fast slice finding for Machine Learning model debugging."
+authors = ["Antoine de Daran"]
+readme = "README.rst"
+license = "BSD-3-Clause"
+repository = "https://github.com/DataDome/sliceline"
+documentation = "https://sliceline.readthedocs.io/en/stable/"
+packages = [{ include = "sliceline" }]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+numpy = "^1.24.3"
+scikit-learn = "^1.2.2"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+flake8 = "^3.0.0"
+jupyter = "^1.0.0"
+nbconvert = "^6.5.0"
+optbinning = "^0.15.0"
+pandas = "^1.1.0"
+pytest = "^6.2.5"
+pytest-benchmark = "^3.4.1"
+pytest-cov = "^3.0.0"
+Sphinx = "^4.0.0"
+sphinx-rtd-theme = "^1.0.0"
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage.run]
+omit = [".*", "*/site-packages/*", "tests/*", "*/validation.py"]
+
+[tool.coverage.report]
+fail_under = 80
