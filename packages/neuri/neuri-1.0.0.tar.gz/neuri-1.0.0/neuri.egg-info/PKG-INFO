@@ -1,0 +1,123 @@
+Metadata-Version: 2.1
+Name: neuri
+Version: 1.0.0
+Summary: Python client library for the Neuri API
+Home-page: https://github.com/Neuri-ai/python-client
+Author: Neuri
+Author-email: support@neuri.ai
+License: MIT License
+        
+        Copyright (c) 2023 Neuri (https://github.com/Neuri-ai)
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Keywords: api client,neuri,neuri.ai,neuri api
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+==============
+Python Client Library for Neuri
+==============
+
+This is the official Python client library for Neuri. It allows you to easily integrate Neuri into your Python applications.
+
+++++++++++++
+Installation
+++++++++++++
+
+To get started with the Neuri Python Client Library, you need to first install the library using pip:
+
+.. code-block:: python
+
+  pip install neuri
+
++++++
+Import and initialize the library
++++++
+
+First you have to import the module and set up the client with your API key and service details, as shown below.
+.. code-block:: python
+
+    import neuri
+
+    config = {
+        "service": "translate",
+        "lang": "en",
+        "temperature": 0.5,
+        "api_key": "YOUR_API_KEY_HERE",
+        "translate_to": "es" # optional
+    }
+
+    client = neuri.initialize_client(config)
+
++++++
+Import and initialize the library
++++++
+
+The Neuri Client Library currently supports three services: **audio_file**, **audio_url**, and **text**. Each service has its own set of parameters and returns a JSON containing the results of the processing.
+
+* **neuri.audio_file()**: Audio File.
+* **neuri.audio_url()**: Audio URL.
+* **neuri.text()**: Text
+
++++++
+Audio File
++++++
+Process audio files stored locally on your system using the audio_file service.
+
+.. code-block:: python
+
+    result = client.audio_file(file_path=[
+        os.path.join(os.path.dirname(__file__), "examples/girl_phone_call.wav"),
+        os.path.join(os.path.dirname(__file__), "examples/noise_man_question.wav")
+    ])
+
+Replace the file paths in the file_path list with the actual paths to your audio files. The audio_file service will process the audio files and return the results in a JSON format.
+
++++++
+Audio URL
++++++
+
+Process audio files from a remote URL using the **audio_url** service.
+
+.. code-block:: python
+
+    result = client.audio_url(url="https://neuri-storage.s3.amazonaws.com/public_data/girl_phone_call.wav?AWSAccessKeyId=AKIAQFECGXRQOTIJ2FUV&Signature=GjrMz1NkMtQgFd0etJUCiQg4WNI%3D&Expires=1995267608")
+
+Replace the file paths in the url list with the actual paths to your audio files. The audio_url service will process the audio files and return the results in a JSON format.
+
++++++
+Text
++++++
+Process text using the text service.
+
+.. code-block:: python
+
+    result = client.text(text="Hello, how are you?")
+
+Replace the text in the text parameter with the actual text you want to process. The text service will process the text and return the results in a JSON format.
