@@ -1,0 +1,160 @@
+
+# Context
+
+Record Keeper (abbreviated to RK) is aimed at two broad goals:
+
+1. Explaining why something happened in your platform.
+   Common example that we want to support is: why event X happened at time T?
+   What Models were used? Who trained them, using training data ingested from which
+   datasources? It achieves it by creating graph of events.
+
+2. Recreating platform state at that time.
+
+# Basics
+
+RKClient library is used to create events (PEMS) and inform RK about them.
+
+You will need a running Record Keeper Event Receiver to be able to work with it.
+
+Recommended usage:
+
+```
+emitter_id = uuid.UUID('..some static uuid..')
+rk_host = os.environ.get('RK_HOST')
+
+rk_client = RKClientFactory.get(rk_host, emitter_id)
+```
+
+By using factory, automatically when `RK_MOCK=true` env variable will be defined, 
+the returned client will fake the connections and return only success codes. 
+
+# Details
+
+The Receiver will be configured with max PEM payload size. If your PEM exceeds 
+this limit, it will be rejected (with explanation).
+
+You can query for the PEM limit size in `get_info()`, in `pem_size_limit` field.
+
+# API
+
+RKClient:
+- prepare_pem
+- prepare_artifact
+- send_pem
+- get_info
+- get_tag
+- set_tag
+
+RKAdmin:
+- get_pems
+- get_pems_count
+- get_artifact
+- get_artifacts
+- get_artifacts_count
+- get_taxonomy_file
+- get_tags
+- get_tags_count
+- query_graph
+- clean_dbs
+
+
+# Authenticating
+
+If you want to do anything more than sending a PEM, you will need to pass a
+RK authentication credential when creating RKClient or RKAdmin.
+
+There are two types:
+1. User auth
+2. PUC auth
+
+First is available in Record Keeper Dashboard, in your user profile. It's intended 
+to be used in tests.
+
+Machine code on production should rather use PUC-auth, since it's user agnostic. 
+However, you will need to ask RK admin to create the PUC and send you its auth code.
+
+## RKClient from Python console
+
+```
+cd rkclient/
+python3
+>>> from rkclient import RKAdmin
+>>> rk = RKAdmin('http://127.0.0.1:8082/receiver/')
+>>> pems, msg, ok = rk.get_pems()
+>>> assert ok, msg
+>>> for pem in pems:
+>>>   print(pem)
+```
+## Changelog
+
+### Unreleased
+
+## [3.1.0] - 2023-04-06 and 2023-05-17
+- Improved error logging, by creating less irrelevant logs. 
+- Add default User-Agent to requests to be equal to `recordkeeper-client-{version}`.
+- RKAdmin supports /info and /verify endpoints of GraphBuilder.
+
+## [3.0.0] - 2023-02-06
+- Changed Artifact id field from uuid to string. This forces changes in many functions API.
+- Changed Emitter field from uuid to string.
+- RKClient get_artifacts() supports returning artifacts with properties, from graph.
+
+### [2.1.0] - 2022-12-20
+- Adjust default RK_HOST URLs to use shallower path: `<ip>:<port>/receiver/`, instead of `<ip>:<port>/recordkeeper/receiver/`
+- Removed ping() function.
+- Added deserialize_info() function for converting result of get_info() to Info class.
+- Removed postgres_enabled and neo4j_enabled flags from Info.
+
+### [2.0.0] - 2022-11-18
+- Make it possible to control GraphBuilder through RKAdmin. 
+- Refactor requests code.
+- RKAdmin new check_connections method.
+
+### [1.9.1] - 2022-09-20
+- Version updated to match other components
+
+### [1.9.0] - 2022-09-13
+- Added async test.
+
+### [1.8.0] - 2022-02-23
+- Support for PUC auth type. 
+- New function get_tags_count.
+
+### [1.7.0] - 2022-02-23
+- RKClient catches timeout exception. 
+- Artifact instances in python can be compared using equal operator.
+
+### [1.6.1] - 2022-01-26
+- PEM deduplicates uses artifacts. 
+- Fix for function behaviour in mocked RKClient.
+
+### [1.6.0] - 2022-01-17
+- Removed PEM User field, bumped PEM version to 1.0.1
+
+### [1.5.0] - 2021-12-21
+- Version updated to match other components
+
+### [1.4.0] - 2021-11-16
+- Version updated to match other components
+
+### [1.3.0] - 2021-09-06
+- Remove the requests dependency
+
+### [1.2.3] - 2021-08-26
+- Bump the requests version to 2.26.*
+
+### [1.2.2] - 2021-06-17
+- Option to disable SSL cert verification
+
+### [1.2.1] - 2021-06-8
+- Official release on Pypi, added license
+
+
+---
+RKClient is part of ERST Record Keeper repository.
+
+RKClient is licensed with GNU General Public License version 3 or later,
+see LICENSE file for details.
+
+Record Keeper is ERST's implementation of the Context Cartographer specification.
+
