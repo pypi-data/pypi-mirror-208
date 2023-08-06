@@ -1,0 +1,164 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "deepset-cloud-sdk"
+dynamic = ["version"]
+description = 'deepset cloud SDK'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "deepset", email = "rohan.janjua@deepset.ai" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "structlog==23.1.0",
+  "httpx==0.24.0",
+  "python-dotenv==1.0.0",
+  "typer==0.9.0",
+  "tenacity==8.2.2",
+  "aiohttp==3.8.4"
+]
+
+[project.urls]
+Documentation = "https://github.com/deepset-ai/deepset-cloud-sdk#readme"
+Issues = "https://github.com/deepset-ai/deepset-cloud-sdk/issues"
+Source = "https://github.com/deepset-ai/deepset-cloud-sdk"
+
+
+[project.scripts]
+deepset-cloud-cli  = "deepset_cloud_sdk.cli:run_packaged"
+
+[tool.hatch.version]
+path = "deepset_cloud_sdk/__about__.py"
+
+[tool.hatch.envs.default.scripts]
+tests-with-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=deepset_cloud_sdk tests/unit"
+tests-integration = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=deepset_cloud_sdk tests/integration"
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.10"]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "structlog==23.1.0",
+  "httpx==0.24.0",
+  "python-dotenv==1.0.0",
+  "tenacity==8.2.2",
+  "aiohttp==3.8.4",
+]
+
+[tool.hatch.envs.test.scripts]
+unit-with-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=deepset_cloud_sdk tests/unit"
+integration = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=deepset_cloud_sdk tests/integration"
+
+[tool.hatch.envs.test]
+template='default'
+dependencies = [
+  "pytest-cov==4.0.0",
+  "pytest==7.3.1",
+  "pytest-asyncio==0.21.0",
+]
+
+
+[tool.hatch.envs.code-quality]
+template='default'
+detached = false
+# Please keep these aligned with the versions defined in .pre-commit-config.yaml
+dependencies = [
+  "pylint==2.15.2",
+  "pydocstyle==6.3.0",
+  "black==23.3.0",
+  "isort==5.12.0",
+  "mypy==1.1.1",
+  "pre-commit==2.20.0",
+]
+
+[tool.hatch.envs.code-quality.scripts]
+types = "mypy deepset_cloud_sdk tests"
+format = "black deepset_cloud_sdk tests --check"
+format-fix = "black deepset_cloud_sdk tests"
+lint = "pylint deepset_cloud_sdk"
+sort = "isort --check --profile black ."
+hooks = "pre-commit install"
+docstrings = "pydocstyle deepset_cloud_sdk"
+
+[tool.hatch.envs.tools]
+detached = false
+# Please keep these aligned with the versions defined in .pre-commit-config.yaml
+dependencies = [
+  "pip-tools==6.13.0",
+]
+
+[tool.hatch.envs.tools.scripts]
+requirements = "pip-compile -o requirements.txt pyproject.toml"
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+omit = [
+  "deepset_cloud_sdk/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length=120
+disable = [
+  "fixme",
+  "c-extension-no-member",
+  "wrong-spelling-in-comment",
+  "wrong-spelling-in-docstring",
+  "missing-module-docstring"
+  ]
+[tool.pylint.'DESIGN']
+max-args=7
+
+[tool.pylint.'SIMILARITIES']
+min-similarity-lines=6
+
+[tool.pylint.'BASIC']
+good-names=[
+  "i",
+  "k",
+  "v",
+  "_",
+  "f1"
+  ]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/tests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["deepset_cloud_sdk"]
