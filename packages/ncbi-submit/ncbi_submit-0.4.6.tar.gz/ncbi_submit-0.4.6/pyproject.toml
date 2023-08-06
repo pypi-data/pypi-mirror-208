@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "ncbi-submit"
+version = "0.4.6"
+description = "A tool for submitting to NCBI (SRA, BioSample, & GenBank)."
+license = "MIT"
+authors = [
+    "Sam Kunkleman <skunklem@uncc.edu>",
+]
+maintainers = [
+    "Sam Kunkleman <skunklem@uncc.edu>",
+]
+repository = "https://github.com/enviro-lab/ncbi-submit"
+keywords = ["ncbi", "submission","upload"]
+readme = "README.md"
+packages = [
+    { include = "ncbi_submit" },
+    { include = "example" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+pandas = ">=1.5.*"
+biopython = ">=1.78"
+
+[tool.poetry.scripts]
+ncbi_submit = 'ncbi_submit.ncbi_submit:main'
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
