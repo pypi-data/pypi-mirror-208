@@ -1,0 +1,98 @@
+import os
+import logging
+import warnings
+
+from typing import Optional
+
+from vecdb import types
+from vecdb import errors
+from vecdb import constants
+
+from vecdb.api import api
+from vecdb.api import helpers
+import vecdb.collections.dataset
+
+
+logger = logging.getLogger(__name__)
+# logger.setLevel(logging.DEBUG)
+
+
+class Client:
+    def __init__(self, token: str = None, authenticate: bool = True) -> None:
+        if token is None:
+            token = os.getenv("VECDB_API_KEY")
+
+        self._credentials = helpers.process_token(token)
+        self._token = token
+        self._api = api.API(credentials=self.credentials)
+
+        if authenticate:
+            try:
+                self.list_datasets()["datasets"]
+            except:
+                raise errors.AuthException
+            else:
+                print(constants.WELCOME_MESSAGE.format(self.credentials.project))
+        else:
+            warnings.warn(
+                "You have opted to not authenticate on client instantiation. Your token may or may not be valid."
+            )
+
+    @property
+    def credentials(self):
+        return self._credentials
+
+    @property
+    def api(self) -> api.API:
+        return self._api
+
+    def list_datasets(self):
+        return self.api._list_datasets()
+
+    def create_dataset(
+        self, dataset_id: str, schema: Optional[types.Schema] = None, upsert: bool = True, expire: bool = False
+    ) -> vecdb.collections.dataset.Dataset:
+        self.api._create_dataset(
+            dataset_id=dataset_id, schema={} if schema is None else schema, upsert=upsert, expire=expire
+        )
+        return vecdb.collections.dataset.Dataset(api=self.api, dataset_id=dataset_id)
+
+    def delete_dataset(self, dataset_id: str) -> None:
+        return self.api._delete_dataset(dataset_id=dataset_id)
+
+    def insert_temp_local_media(self, file_path: str):
+        """
+        Insert temporary local media.
+        """
+        data = self.api._get_temp_file_upload_url()
+        upload_url = data["upload_url"]
+        download_url = data["download_url"]
+        with open(file_path, "rb") as fn_byte:
+            media_content = bytes(fn_byte.read())
+        response = self.api._upload_temporary_media(presigned_url=upload_url, media_content=media_content)
+        logger.debug(response.content)
+        return {"download_url": download_url}
+
+    def list_project_keys(self):
+        return self.api._list_project_keys()
+
+    def get_project_key(self, key: str, token: str):
+        return self.api._get_project_key(key=key, token=token)
+
+    def set_project_key(self, key: str, value: str):
+        return self.api._set_project_key(key=key, value=value)
+
+    def delete_project_key(self, key: str):
+        return self.api._delete_project_key(key=key)
+
+    def openai_completion(
+        self,
+        prompt: str,
+        model: str = "text-davinci-003",
+        workflows_admin_token: str = None,
+        max_tokens: int = 20,
+        temperature: float = 0.0,
+    ):
+        if workflows_admin_token is None:
+            workflows_admin_token = os.getenv("WORKFLOWS_ADMIN_TOKEN")
+        return self.api._openai_completion(workflows_admin_token, model, prompt, max_tokens, temperature)
