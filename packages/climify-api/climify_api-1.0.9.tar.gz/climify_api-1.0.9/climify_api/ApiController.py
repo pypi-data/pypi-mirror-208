@@ -1,0 +1,1 @@
+from climify_api.apis.v1 import ApiController as ApiControllerV1

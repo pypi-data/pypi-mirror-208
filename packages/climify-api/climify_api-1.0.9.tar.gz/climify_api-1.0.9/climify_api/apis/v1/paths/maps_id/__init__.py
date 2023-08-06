@@ -1,0 +1,1 @@
+from climify_api.apis.v1.paths.maps_id.get import GetMapById
