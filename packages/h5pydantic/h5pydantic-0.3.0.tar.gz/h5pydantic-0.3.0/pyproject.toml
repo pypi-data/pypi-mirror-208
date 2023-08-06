@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "h5pydantic"
+version = "0.3.0"
+description = "Pydantic models for HDF5 files."
+authors = ["Clinton Roy <clinton.roy@gmail.com>"]
+readme = "README.md"
+repository = "https://gitlab.com/clinton.roy/h5pydantic"
+documentation = "https://h5pydantic.readthedocs.io/"
+packages = [{include = "h5pydantic", from = "src"}]
+classifiers = [
+	    "Development Status :: 3 - Alpha",
+	    "Framework :: Pydantic",
+            "Natural Language :: English",
+	    "Topic :: File Formats",
+            "Topic :: Scientific/Engineering :: Information Analysis",
+            "Intended Audience :: Science/Research",
+            "License :: OSI Approved :: Python Software Foundation License",
+]
+[tool.poetry.dependencies]
+python = "~3.9"
+h5py = "^3.8.0"
+pydantic = "^1.10.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+ruff = "^0.0.265"
+hypothesis = "^6.75.2"
+
+[tool.poetry.group.doc.dependencies]
+sphinx-autodoc-typehints = "^1.23.0"
+sphinx-rtd-theme = "^1.2.0"
+sphinx = "6.2.1"
+towncrier = "^22.12.0"
+
+[tool.ruff]
+line-length = 120
+
+[tool.towncrier]
+package = "h5pydantic"
+package_dir = "src"
+filename = "docs/news.rst"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
