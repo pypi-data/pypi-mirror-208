@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+python_requires = ">=3.11"
+
+[tool.setuptools]
+python_requires = ">=3.11"
+
+
+[project]
+name = "py-tailwind-utils"
+maintainers = [
+ { name="Kabira K", email= "kabira@monallabs.in"}
+]
+readme= "README.md"
+license = { file="LICENSE" }
+dynamic = ["version", "description"]
+dependencies = [
+  'addict-tracking-changes == 1.0.2',
+  'aenum',
+]
+
+
+    
+[tool.hatch.version]
+path = "src/py_tailwind_utils/__init__.py"
+
+[project.urls]
+Home = "https://webworks.monallabs.in/ofjustpy/addict-tracking-changes"
+Documentation = "https://monallabs-org.github.io/py-tailwind-utils"
+Source = "https://github.com/monallabs-org/py-tailwind-utils"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+  "src/py_tailwind_utils",  
+]
