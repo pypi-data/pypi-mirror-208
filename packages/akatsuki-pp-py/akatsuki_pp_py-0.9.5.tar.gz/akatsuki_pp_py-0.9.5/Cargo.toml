@@ -1,0 +1,20 @@
+[package]
+name = "akatsuki-pp-py"
+version = "0.9.5"
+description = "osu! difficulty and pp calculation for all modes"
+authors = ["Max Ohn <ohn.m@hotmail.de>", "tsunyoku <tsunyoku@gmail.com>"]
+license = "MIT"
+edition = "2021"
+
+[lib]
+name = "akatsuki_pp_py"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.17", features = ["extension-module", "macros"] }
+akatsuki-pp = { git = "https://github.com/osuAkatsuki/akatsuki-pp-rs", rev = "764da0dbf42ed80441acf99d070aaedabaed4b75" }
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+strip = "debuginfo"
