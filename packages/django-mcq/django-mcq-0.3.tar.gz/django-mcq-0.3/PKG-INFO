@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: django-mcq
+Version: 0.3
+Summary: A configurable quiz app for Django.
+Home-page: https://github.com/suhailvs/django-mcq
+Author: Suhail VS
+Author-email: suhailvs@gmail.com
+License: MIT License
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Django Multiple Choice Question
+
+
+Installation
+------------
+Install django-mcq
+
+Run `pip install django-mcq`.
+
+Add `'quiz'` to your `INSTALLED_APPS` setting.
+
+    INSTALLED_APPS = (
+        ...
+        'quiz',
+        ...
+    )
+
+
+Add the following to your projects `urls.py` file.
+
+
+    urlpatterns = [
+        ...
+        path('quiz/', include('quiz.urls')),
+    ]
+
+
+Create a template `quiz_base.html` file in **templates** folder:
+
+    <!doctype html>
+    <html lang="en">
+        <head>
+            {% block quiz_css %}{% endblock %}
+        </head>
+        <body>
+            {% block quiz_body %}{% endblock %}
+            {% block quiz_js %}{% endblock %}
+        </body>
+    </html>
+
+Migrate database:
+
+    python manage.py migrate
+
+Load sample quizzes:
+
+    python manage.py loaddata sample_quizzes.json
+
+Now login a user and navigate to <http://127.0.0.1:8000/quiz/>
+
+
+Packaging pypi
+--------------
+
+* delete files in `dist` folder
+* increment the version number in your `setup.py` file
+* `$ python3 -m build`
+* `twine upload dist/*`

@@ -1,0 +1,99 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/dataTables.bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block content %}
+  {% include 'quiz/_header.html' with active='new' %}
+  <p class="text-muted">
+    Subjects:{% for subject in user.student.interests.all %} {{ subject.get_html_badge }}{% endfor %}
+    <a href="{% url 'quiz:student_interests' %}"><small>(update interests)</small></a>
+    | <a href="#" data-toggle="modal" data-target="#addQuizzes"><small>Add Quizzes</small></a>
+  </p>
+  <!-- Modal -->
+  <div class="modal fade" id="addQuizzes" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p class="lead">Add Quizzes</p>
+          <div class="form-group">
+            
+            <label>Quizzes as JSON</label>
+            <textarea class="form-control" id="txt_quizzes_json" rows="10"></textarea>
+            <label>Example JSON</label>
+            <pre><code>
+[{
+  "quiz": "World War 1", "subject": "History", "questions": [
+      {
+          "question":"When was the Treaty of Versailles signed?",
+          "answers":[
+              {"answer":"June 29 of 1919", "is_correct": "true"}
+          ]
+      }
+  ]
+}]
+              </code></pre>
+          </div>
+          <div id="quizzes_result"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn_save_quizzes">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-bordered mb-0" id="tb_quizlist" >
+    <thead>
+      <tr>
+        <th>Quiz</th>
+        <th class="d-none d-sm-table-cell">Subject</th>
+        <th class="d-none d-sm-table-cell">Questions</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for quiz in quizzes %}
+        <tr{% if quiz.subject.id in student_subjects %} style="background: #fdf7e3"{%endif%}>
+          <td class="align-middle">{{ quiz.name }}</td>
+          <td class="align-middle d-none d-sm-table-cell">{{ quiz.subject.get_html_badge }}</td>
+          <td class="align-middle d-none d-sm-table-cell">{{ quiz.questions_count }}</td>
+          <td class="text-right" data-orderable="false">
+            <a href="{% url 'quiz:take_quiz' quiz.pk %}" class="btn btn-primary">Start quiz</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td class="bg-light text-center font-italic" colspan="4">No quiz matching your interests right now.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'quiz/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="https://getbootstrap.com/docs/4.6/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#tb_quizlist').DataTable({"order": [[ 2, "desc" ]]});
+});
+
+$('#btn_save_quizzes').click(function(){
+  $.post("{% url 'quiz:create_quiz' %}",{
+    csrfmiddlewaretoken: '{{ csrf_token }}', 
+    txt_quizzes_json: $('#txt_quizzes_json').val()
+  }).done(function(data) {
+    $("#quizzes_result").empty().append(data.resp);
+  });
+})
+
+
+</script>
+{% endblock %}

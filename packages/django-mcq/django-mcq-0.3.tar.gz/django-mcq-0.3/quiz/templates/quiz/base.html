@@ -1,0 +1,32 @@
+{% extends 'quiz_base.html' %}
+{% load static %}
+{% block quiz_css %}
+  <link rel="stylesheet" href="{% static 'quiz/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'quiz/app.css' %}">
+  {% block css %}
+  {% endblock %}
+{% endblock %}
+
+{% block quiz_body %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-sm-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block quiz_js %}
+  {% block js %}
+  {% endblock %}
+{% endblock %}
