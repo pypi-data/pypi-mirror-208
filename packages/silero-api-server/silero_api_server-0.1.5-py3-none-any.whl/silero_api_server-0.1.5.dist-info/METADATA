@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: silero-api-server
+Version: 0.1.5
+Summary: A simple FastAPI server to host Silero TTS
+Project-URL: Homepage, https://github.com/ouoertheo/silero-api-server
+Project-URL: Bug Tracker, https://github.com/ouoertheo/silero-api-server/issues
+Author-email: Ouoertheo <ouoertheo@tomeofjamin.net>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Requires-Dist: fastapi==0.95.1
+Requires-Dist: loguru==0.7.0
+Requires-Dist: numpy
+Requires-Dist: pydantic==1.10.7
+Requires-Dist: python-dotenv==1.0.0
+Requires-Dist: soundfile
+Requires-Dist: torch==2.0.0
+Requires-Dist: torchaudio==2.0.1
+Requires-Dist: uvicorn
+Description-Content-Type: text/markdown
+
+# A simple FastAPI Server to run Silero TTS
+[Silero PyTorch Page](https://pytorch.org/hub/snakers4_silero-models_tts/)
+[Silero GitHub Page](https://github.com/snakers4/silero-models)
+
+## Installation
+`pip install silero-api-server`
+
+## Starting Server
+`py -m silero_api_server` will run on default ip and port (0.0.0.0:8001)
+
+```
+usage: silero_api_server [-h] [-o HOST] [-p PORT]
+
+Run Silero within a FastAPI application
+
+options:
+  -h, --help            show this help message and exit
+  -o HOST, --host HOST
+  -p PORT, --port PORT
+```
+
+On first run of server, two operations occur automatically. These may take a minute or two.
+1. The model will be downloaded 
+2. Voice samples will be generated generated. 
+
+# API Docs
+API Docs can be accessed from [http://localhost:8001/docs](http://localhost:8001/docs)
+
+# Voice Samples
+Samples are served statically by the web server at `/samples/{speaker}.wav` or callable from the API from `/tts/sample?speaker={speaker}` endpoint.
