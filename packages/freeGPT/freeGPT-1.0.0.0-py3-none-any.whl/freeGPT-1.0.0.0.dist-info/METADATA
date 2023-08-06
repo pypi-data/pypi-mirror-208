@@ -1,0 +1,85 @@
+Metadata-Version: 2.1
+Name: freeGPT
+Version: 1.0.0
+Summary: A Python package that provides free access to GPT3, GPT4, and more models.
+Home-page: https://github.com/Ruu3f/freeGPT
+Author: Ruu3f
+License: GPLv3
+Project-URL: Source, https://github.com/Ruu3f/freeGPT
+Project-URL: Issues, https://github.com/Ruu3f/freeGPT/issues
+Project-URL: Discussions, https://github.com/Ruu3f/freeGPT/discussions
+Keywords: artificial-intelligence,machine-learning,ai-models,freegpt,chatgpt,openai,gpt3gpt4gpt,ai
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic
+Requires-Dist: fake-useragent
+Requires-Dist: pymailtm
+Requires-Dist: requests
+
+[![PyPI version](https://badge.fury.io/py/freeGPT.svg)](https://badge.fury.io/py/freeGPT)
+[![Downloads](https://static.pepy.tech/personalized-badge/freeGPT?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=Downloads)](https://pepy.tech/project/freeGPT)
+# freeGPT
+A Python package that gives access to GPT3 &amp; GPT4 models for free.
+<br>
+*Get started by doing: `pip install freeGPT`*
+## Examples
+#### GPT-3
+```python
+from freeGPT import gpt3
+
+chat = []
+
+def send_prompt():
+    try:
+        prompt = input("> ")
+        response = gpt3.Completion.create(prompt=prompt, chat=chat)
+        print("Response:", response.text)
+        chat.append({"question": prompt, "answer": response.text})
+    except Exception as e:
+        print("Error:", str(e))
+
+while True:
+    send_prompt()
+```
+#### GPT-4
+```python
+from freeGPT import gpt4
+
+token = gpt4.Account.create(logging=True)
+print("Token:", token) 
+
+def send_prompt():
+    try:
+        prompt = input("> ")
+        for response in gpt4.StreamingCompletion.create(token=token, prompt=prompt, model="gpt-4"):
+            print("Response:", response.text, end="")
+    except Exception as e:
+        print("Error:", str(e))
+
+while True:
+    send_prompt()
+```
+## Source
+| Models        | Websites                                 |
+| ------------- | -----------------------------------------|
+| GPT-3         | [you.com](https://you.com)     |
+| GPT-4         | [forefront.ai](https://chat.forefront.ai)|
+## Conclusion
+### TODO-List:
+- [x] Add GPT-4
+- [ ] Make the library well-documented
+- [ ] Make the over-all library easier to use
+- [ ] Make the over-all library easier to understand
+### Star History
+[![Star History Chart](https://api.star-history.com/svg?repos=Ruu3f/freeGPT&type=Date)](https://github.com/Ruu3f/freeGPT/stargazers)
+#### Original by [xtekky](https://github.com/xtekky), currently maintained by Ruu3f.
+#### Completing the TODO-List when this repository hits 30 stars.
