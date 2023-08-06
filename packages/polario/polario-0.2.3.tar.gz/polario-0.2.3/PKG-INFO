@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: polario
+Version: 0.2.3
+Summary: Polars IO
+Home-page: https://bneijt.github.io/polario/
+License: Apache-2.0
+Author: Bram Neijt
+Author-email: bram@neijt.nl
+Requires-Python: >=3.9,<4.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: fsspec (>=2023.1.0,<2024.0.0)
+Requires-Dist: polars (>=0.16.8)
+Requires-Dist: pyarrow (>=11.0.0)
+Project-URL: Repository, https://github.com/bneijt/polario
+Description-Content-Type: text/markdown
+
+Polars IO utility library
+=================
+
+Helpers to make it easier to read and write Hive partitioned parquet dataset with Polars.
+
+It is meant to be a library to deal with datasets easily, but also contains a commandline interface
+which allows you to inspect parquet files and datasets more easily.
+
+Dataset
+=======
+Example of use of `polario.dataset.HiveDataset`
+```python
+
+from polario.dataset import HiveDataset
+import polars as pl
+df = pl.from_dicts(
+        [
+            {"p1": 1, "v": 1},
+            {"p1": 2, "v": 1},
+        ]
+    )
+
+ds = HiveDataset("file:///tmp/", partition_columns=["p1"])
+
+ds.write(df)
+
+for partition_df in ds.read_partitions():
+    print(partition_df)
+
+```
+
