@@ -1,0 +1,49 @@
+[build-system]
+requires = [
+    "setuptools >= 65",
+    "wheel >= 0.38"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chatcmd"
+version = "1.0.10"
+description = "ChatCMD is an AI-driven CLI-based command lookup using ChatGPT to lookup relevant CLI commands based on user input."
+authors = [
+    { name = "Naif Alshaye", email = "naif@naif.io" }
+]
+[project.license]
+text = "MIT"
+readme = "README.md"
+requires-python = ">=3.7.1"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Software Engineers :: Software Developers :: Web Developers :: System Administrator :: Linux Admin :: Command line Users :: Terminal Users",
+    "Natural Language :: English",
+    "Topic :: Software Development :: Build Tools :: Python Libraries :: Python Modules :: Command-line :: Terminal :: CLI :: CLI Commands Lookup :: Linux :: OS :: System :: Open Source :: MIT",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation",
+]
+keywords = [
+    "cli", "command", "command-line", "commandline", "terminal", "development","linux", "ai", "artificial-intelligence", "chatgpt", "lookup","open source","MIT"
+]
+dependencies = [
+    "pyperclip >=1.8.2",
+    "docopt >=0.6.2",
+    "openai >=0.6.4",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/naifalshaye/chatcmd"
+"Documentation" = "https://github.com/naifalshaye/chatcmd/blob/master/README.md"
+"Repository" = "https://github.com/naifalshaye/chatcmd.git"
+"Bug Tracker" = "https://github.com/naifalshaye/chatcmd/issues"
+
+[project.scripts]
+chatcmd = "chatcmd.chatcmd:main"
