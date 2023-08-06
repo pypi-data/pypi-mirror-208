@@ -1,0 +1,196 @@
+#
+#  This file is part of Sequana software
+#
+#  Copyright (c) 2016-2021 - Sequana Dev Team (https://sequana.readthedocs.io)
+#
+#  Distributed under the terms of the 3-clause BSD license.
+#  The full license is in the LICENSE file, distributed with this software.
+#
+#  Website:       https://github.com/sequana/sequana
+#  Documentation: http://sequana.readthedocs.io
+#  Contributors:  https://github.com/sequana/sequana/graphs/contributors
+##############################################################################
+
+"""nanomerge pipeline
+
+Author: Sequana Developers
+
+This pipeline is part of Sequana project (sequana.readthedocs.io)
+
+Execution:
+1. prepare the pipelie:
+
+    sequana_nanomerge --help
+
+2. exceute it either manually:
+
+    snakemake -s nanomerge.rules --forceall --stats stats.txt --cores 4
+
+or following the instructions from step 1.
+"""
+
+from pathlib import Path
+import pandas as pd
+from sequana_pipetools import snaketools as sm
+
+sequana_wrapper_branch = "main"
+# This must be defined before the include
+configfile: "config.yaml"
+
+
+# A convenient manager
+manager = sm.PipelineManager("nanomerge", config)
+
+# convenient aliases
+input_directory = Path(config["input_directory"])
+input_pattern = config["input_pattern"]
+
+
+# infer barcoded directories
+barcodes = [x.name for x in input_directory.glob("*") if x.is_dir()]
+
+class Sample():
+
+    def __init__(self, samplesheet, barcoded):
+        self.df = pd.read_csv(samplesheet)
+        self.barcoded = barcoded
+        if "sample" not in self.df.columns:
+            self.df['sample'] = self.df['samplename']
+
+    def get_barcode_from_sample(self, sample):
+        candidate = self.df.query("sample==@sample")['barcode'].values[0]
+        return candidate
+
+    def get_projects(self):
+        return self.df.project.unique()
+
+
+if len(barcodes) == 0:
+    samples = Sample(config['samplesheet'], barcoded=False)
+else:
+    samples = Sample(config['samplesheet'], barcoded=True)
+
+
+if config["summary"]:
+    qc_file = ["pyco/pyco.html"]
+else:
+    qc_file = []
+
+# ========================================================================= pipeline starts here
+expected_fastqs = expand("./{project}/{sample}.fastq.gz", zip, project=samples.df['project'],
+        sample=samples.df['sample'])
+
+
+rule pipeline:
+    input:
+        expected_fastqs,
+        svg = ".sequana/rulegraph.svg",
+        html="summary.html"
+
+
+def get_input_merge(wildcards):
+    if samples.barcoded:
+        barcode = samples.get_barcode_from_sample(wildcards.sample)
+        filenames = list((input_directory / barcode).glob("*.fastq.gz"))
+    else:
+        filenames = list((input_directory).glob(input_pattern))
+    return filenames
+
+def get_input_directory(wildcards):
+    if samples.barcoded:
+        barcode = samples.get_barcode_from_sample(wildcards.sample)
+        return input_directory / barcode
+    else:
+        return input_directory
+
+
+if config["summary"]:
+    rule pyco:
+        input:
+            config['summary']
+        output:
+            "pyco/pyco.html"
+        log:
+            "pyco/pyco.log"
+        params:
+            sample=config["pycoqc"]["subsample"]
+        container:
+            config["apptainers"]["pycoqc"]
+        shell:
+            """
+            pycoQC --summary_file {input} -o {output} --sample {params.sample} > {log} 2>&1
+            """
+
+
+rule merge:
+    input:
+        get_input_merge
+    output:
+        "./{project}/{sample}.fastq.gz"
+    params:
+        indir=get_input_directory
+    shell:
+        """
+        find {params.indir} -type f -name "*fastq.gz" -exec cat {{}} + > {output}
+        """
+
+
+rule rulegraph:
+    input:
+        workflow.snakefile
+    output:
+        "rulegraph/rulegraph.dot"
+    params:
+        configname = "config.yaml"
+    wrapper:
+        f"{sequana_wrapper_branch}/wrappers/rulegraph"
+
+
+rule dot2svg:
+    input:
+        "rulegraph/rulegraph.dot"
+    output:
+        ".sequana/rulegraph.svg"
+    container:
+        config['apptainers']['graphviz']
+    shell:
+        """dot -Tsvg {input} -o {output}"""
+
+
+rule html_report:
+    input:
+        list(expected_fastqs) + qc_file
+    output:
+        "summary.html"
+    run:
+        from sequana.modules_report.summary import SummaryModule2
+        from sequana_pipelines import nanomerge
+        os.makedirs("images", exist_ok=True)
+        data = {"name": "nanomerge",
+                 "rulegraph": ".sequana/rulegraph.svg",
+                 "pipeline_version": nanomerge.version}
+        manager.teardown(extra_files_to_remove=["pyco/pyco.log", "pyco/pyco.html"])
+
+        dirs = ",".join([f'<a href="{x}/">{x}</a>' for x in samples.get_projects()])
+        if config['summary']:
+            with open("pyco/pyco.html", "r") as fout:
+                pycodata = fout.read()
+                pycodata = '<div class="columns">' + pycodata.split('<div class="columns">')[-1].replace("</div>\n</body>\n</html>","")
+
+            s = SummaryModule2(data, f"""Your data are available in {dirs} directories. Please see the summary plots here below (if sequence summary was provided), generated with <a href="https://github.com/a-slide/pycoQC">pycoQC</a> software.""" + pycodata)
+        else:
+            s = SummaryModule2(data, f"no summary found. Please checkout the sub directories {dirs}. They should contain your final fastq files for each project.")
+
+# ======================================================================================== rulegraph
+
+
+onsuccess:
+
+    print("Once done, please clean up the directory using\n'make clean'")
+    shell("chmod -R g+w .")
+    shell("rm -rf pyco rulegraph")
+
+onerror:
+    from sequana_pipetools.errors import PipeError
+    p = PipeError("nanomerge")
+    p.status()
