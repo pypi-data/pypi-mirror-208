@@ -1,0 +1,170 @@
+Metadata-Version: 2.1
+Name: sap-ai-core-llm
+Version: 1.0.10
+Summary: content package for large language models for SAP AI Core
+Home-page: https://www.sap.com/
+Download-URL: https://pypi.python.org/pypi/sap-ai-core-llm
+Author: SAP SE
+License: SAP DEVELOPER LICENSE AGREEMENT
+Keywords: SAP AI Core,Large Language Models,LLM
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Legal Industry
+Classifier: Intended Audience :: Manufacturing
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+## content package for large language models for SAP AI Core
+
+## Objective
+A content package to deploy LLM workflows in AI Core.
+
+### User Guide
+
+#### 1. Deploy a proxy to your deployment in Azure OpenAI
+
+*Pre-requisites*
+
+1. Complete [AI Core Onboarding](https://help.sap.com/viewer/2d6c5984063c40a59eda62f4a9135bee/LATEST/en-US/8ce24833036d481cb3113a95e3a39a07.html)
+2. Access to the Git repository, Docker repository and S3 bucket onboarded to AI Core
+3. You have an Azure OpenAI account, created an API key to access this account and created a model deployment.
+
+*Steps*
+
+1. Install AI Core SDK
+```
+pip install ai-core-sdk[aicore_content]
+```
+2. Install this content package
+```
+pip install sap-ai-core-llm
+```
+3. Create a config file with the name proxy_serving_config.yaml with the following content.
+```
+.contentPackage: sap-ai-core-llm
+.dockerType: default
+.workflow: azure-openai-proxy
+annotations:
+  executables.ai.sap.com/description: <YOUR EXECUTABLE DESCRIPTION>
+  executables.ai.sap.com/name: <YOUR EXECUTABLE NAME>
+  scenarios.ai.sap.com/description: <YOUR SCENARIO DESCRIPTION>
+  scenarios.ai.sap.com/name: <YOUR SCENARIO NAME>
+image: <YOUR DOCKER IMAGE TAG>
+imagePullSecret: <YOUR DOCKER IMAGE PULL SECRET NAME>
+labels:
+  ai.sap.com/version: <YOUR SCENARIO VERSION>
+  scenarios.ai.sap.com/id: <YOUR SCENARIO ID>
+name: <YOUR SERVING TEMPLATE NAME>
+```
+4. Fill in the desired values in the config file. An example config file is shown below.
+```
+.contentPackage: sap-ai-core-llm
+.dockerType: default
+.workflow: azure-openai-proxy
+annotations:
+  executables.ai.sap.com/description: My Azure OpenAI Proxy
+  executables.ai.sap.com/name: my-azure-openai-proxy
+  scenarios.ai.sap.com/description: My Azure OpenAI Proxy Scenario
+  scenarios.ai.sap.com/name: my-azure-openai-scenario
+image: docker.io/YOUR_USER_NAME/my-proxy-image:1.0
+imagePullSecret: my-docker-secret
+labels:
+  ai.sap.com/version: 1.0
+  scenarios.ai.sap.com/id: my-azure-openai-scenario
+name: my-azure-openai-proxy
+```
+5. Generate a docker image
+```
+aicore-content create-image -p sap-ai-core-llm -w azure-openai-proxy proxy_serving_config.yaml
+```
+6. Generate a serving template
+```
+aicore-content create-template -p sap-ai-core-llm -w azure-openai-proxy proxy_serving_config.yaml -o './proxy-serving-template.yaml'
+```
+7. Push the docker image to your docker repository
+```
+docker push docker.io/YOUR_USER_NAME/my-proxy-image:1.0
+```
+8. Push the serving template to your git repository
+```
+cd <repo_path>
+git add <path_within_repo>/proxy-serving-template.yaml
+git commit -m 'updated template proxy-serving-template.yaml'
+git push
+```
+9. Obtain a client credentials token to AI Core
+```
+curl --location '<YOUR AUTH ENDPOINT URL>/oauth/token?grant_type=client_credentials' --header 'Authorization: Basic <YOUR AI CORE CREDENTIALS>'
+```
+10. Create a secret for your Azure OpenAI API key
+```
+curl --location '<YOUR AI CORE URL>/v2/admin/secrets' \
+--header 'AI-Resource-Group: <YOUR RESOURCE GROUP NAME>' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <CLIENT CREDENTAILS TOKEN>' \
+--data '{
+  "name": "azure-openai-key",
+  "data": {
+    "AzureAPIKey": "<YOUR AZURE OPENAI KEY ENCODED IN BASE64>"
+  }
+}'
+```
+11. Create a configuration and save the configuration id from the response.
+```
+curl --location '<YOUR AI CORE URL>/v2/lm/configurations' \
+--header 'AI-Resource-Group: <YOUR RESOURCE GROUP NAME>' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <CLIENT CREDENTAILS TOKEN>' \
+--data '{
+    "name": "<CONFIGURATION NAME>",
+    "executableId": "<YOUR EXECUTABLE ID>",
+    "scenarioId": "<YOUR SCENARIO ID>",
+    "versionId": "<YOUR SCENARIO VERSION>",
+    "parameterBindings": [
+        {
+            "key": "AzureDeploymentURL",
+            "value": "<YOUR AZURE OPENAI DEPLOYMENT URL>"
+        }
+    ]
+}'
+```
+12. Create a deployment and note down the deployment id from the response
+```
+curl --location --globoff --request POST '<YOUR AI CORE URL>/v2/lm/configurations/<YOUR CONFIGURATION ID>/deployments' \
+--header 'AI-Resource-Group: <YOUR RESOURCE GROUP NAME>' \
+--header 'Authorization: Bearer <CLIENT CREDENTAILS TOKEN>'
+```
+13. Check the status of the deployment. Note down the deployment URL after the status changes to RUNNING.
+```
+curl --location --globoff '<YOUR AI CORE URL>/v2/lm/deployments/<YOUR DEPLOYMENT ID>' \
+--header 'AI-Resource-Group: <YOUR RESOURCE GROUP NAME>' \
+--header 'Authorization: Bearer <CLIENT CREDENTAILS TOKEN>'
+```
+14. Use your deployment. The example shown below is for a davinci-003 text completions model
+```
+curl --location '<YOUR DEPLOYMENT URL>/v1/predict' \
+--header 'AI-Resource-Group: <YOUR RESOURCE GROUP NAME>' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <CLIENT CREDENTAILS TOKEN>' \
+--data '{
+    "prompt": "Who are you?",
+    "max_tokens": 100
+}'
+```
+
+### Security Guide
+See [Security in SAP AI Core](https://help.sap.com/docs/sap-ai-core/sap-ai-core-service-guide/security?locale=en-US) for general information about how SAP AI Core handles security.

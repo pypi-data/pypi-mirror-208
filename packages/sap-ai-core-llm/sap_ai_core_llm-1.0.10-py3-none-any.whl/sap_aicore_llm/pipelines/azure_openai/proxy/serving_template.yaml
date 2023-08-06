@@ -1,0 +1,50 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  annotations:
+    scenarios.ai.sap.com/name: "<SCENARIO-NAME>"
+    scenarios.ai.sap.com/description: "<SCENARIO-DESCRIPTION>"
+    executables.ai.sap.com/name: "<EXECUTABLE-NAME>"
+    executables.ai.sap.com/description: "<EXECUTABLE-DESCRIPTION>"
+  labels:
+    ai.sap.com/version: "<SCENARIO-VERSION>"
+    scenarios.ai.sap.com/id: "<SCENARIO-ID>"
+  name: <SERVING-EXECUTABLE-ID>
+spec:
+  inputs:
+    parameters:
+      - name: AzureDeploymentURL
+        type: string
+  template:
+    apiVersion: "serving.kserve.io/v1beta1"
+    metadata:
+      annotations: |
+        autoscaling.knative.dev/metric: concurrency   # condition when to scale
+        autoscaling.knative.dev/target: 1
+        autoscaling.knative.dev/targetBurstCapacity: 0
+      labels: |
+        ai.sap.com/resourcePlan: starter # computing power
+    spec: |
+      predictor:
+        imagePullSecrets:
+          - name: $imagePullSecret
+        minReplicas: 1
+        maxReplicas: 2    # how much to scale
+        containers:
+        - name: kserve-container
+          image: $image
+          ports:
+            - containerPort: 9001    # customizable port
+              protocol: TCP
+          command: ["/bin/sh", "-c"]
+          args:
+            - >
+              set -e && echo "Starting" && gunicorn --workers 4 --worker-class gevent --chdir /app/src main:app -b 0.0.0.0:9001 # filename `main` flask variable `app`
+          envFrom:
+            - secretRef:
+                name: azure-openai-key
+          env:
+            - name: AzureDeploymentURL # name of the environment variable inside Docker container
+              value: "{{inputs.parameters.AzureDeploymentURL}}" # value to set from local (to workflow) variable
+        timeout: 30
+      
