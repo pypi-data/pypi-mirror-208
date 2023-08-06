@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "odin_format"
+version = "0.1.1"
+description = ""
+authors = ["Alexandru Constantin Cardas"]
+readme = "README.md"
+packages = [{include = "odin_format", from = "src"}]
+[tool.poetry.dependencies]
+python = "^3.10"
+black = "^23.3.0"
+isort = "^5.12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+format = 'odin_format.formatter:call_black'
