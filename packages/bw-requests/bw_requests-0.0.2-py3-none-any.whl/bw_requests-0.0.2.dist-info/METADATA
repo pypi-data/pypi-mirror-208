@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: bw-requests
+Version: 0.0.2
+Summary: HTTP Requests Module
+Author-email: Rosario Sensale <pcassistenzatecnica@gmail.com>
+Project-URL: Homepage, https://pypi.org/user/AloneInTheDark/
+Project-URL: Bug Tracker, https://pypi.org/user/AloneInTheDark/
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests
+
+Simple Request class 
+
+
+## Usage
+
+``` python
+
+from bw_requests import Requests
+service=Requests('https://www.libero.it').get('',headers={"Content-Type": 'application/json; charset=UTF-8','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0'})
+
+print(service)
+
+service=Requests('https://www.libero.it').get('',headers={"Content-Type": 'application/json; charset=UTF-8'})
+
+print(service)
+
+```
+
