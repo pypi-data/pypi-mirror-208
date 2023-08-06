@@ -1,0 +1,111 @@
+[build-system]
+# These are the assumed default build requirements from pip:
+# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pglift"
+description = "Life-cycle management of production-ready PostgreSQL instances"
+readme = "README.md"
+requires-python = ">=3.9, <4"
+license = { text = "GPLv3" }
+authors = [{ name = "Dalibo SCOP", email = "contact@dalibo.com" }]
+keywords = [
+    "postgresql",
+    "deployment",
+    "administration",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Database",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Typing :: Typed",
+]
+dynamic = ["version"]
+
+dependencies = [
+    "attrs",
+    "humanize",
+    "pgtoolkit >= 0.23.0",
+    "pluggy",
+    "psycopg >= 3.1",
+    "pydantic >= 1.8",
+    "python-dateutil",
+    "requests",
+    "tenacity",
+    "typing-extensions",
+    "PyYAML >= 5.1",
+    # CLI requirements
+    "click >= 8.0.0, != 8.1.0",
+    "filelock >= 3.9.0",
+    "rich >= 11.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "patroni[etcd] >= 2.1.5",
+    "port-for",
+    "pytest",
+    "pytest-cov",
+    "requests",
+    "tenacity >= 8.0.0, != 8.2.0",
+]
+typing = [
+    "mypy >= 1.0.0",
+    "types-psutil",
+    "types-PyYAML >= 6.0.11",
+    "types-python-dateutil",
+    "types-requests",
+]
+docs = [
+    "furo",
+    "sphinx",
+]
+dev = [
+    "pglift[test,typing,docs]",
+    "autoflake",
+    "black >= 23.1.0",
+    "codespell",
+    "flake8",
+    "isort",
+    "pip-tools",
+    "pre-commit",
+    "pytest-accept",
+    "pyupgrade",
+    "sphinx-autobuild",
+    "towncrier",
+]
+
+[project.urls]
+Documentation = "https://pglift.readthedocs.io/"
+Source = "https://gitlab.com/dalibo/pglift/"
+Tracker = "https://gitlab.com/dalibo/pglift/-/issues/"
+
+[project.scripts]
+pglift = "pglift.cli:cli"
+
+[tool.autoflake]
+remove-unused-variables = true
+
+[tool.black]
+include = '(\.pyi?|\.bzl)$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+skip_gitignore = true
+
+[tool.setuptools.package-data]
+pglift = ["py.typed"]
+
+[tool.setuptools_scm]

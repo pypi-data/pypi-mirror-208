@@ -1,0 +1,24 @@
+---
+- name: my postgresql instances
+  hosts: localhost
+  tasks:
+    - name: production instance, dropped
+      dalibo.pglift.instance:
+        name: prod
+        state: absent
+        pgbackrest:
+          stanza: stanza_prod
+
+    - name: preproduction instance, dropped
+      dalibo.pglift.instance:
+        name: preprod
+        state: absent
+        pgbackrest:
+          stanza: stanza_preprod
+
+    - name: dev instance, dropped
+      dalibo.pglift.instance:
+        name: dev
+        state: absent
+        pgbackrest:
+          stanza: stanza_dev

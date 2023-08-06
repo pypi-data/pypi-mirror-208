@@ -1,0 +1,569 @@
+{
+  "options": {
+    "auth": {
+      "description": [
+        "auth"
+      ],
+      "options": {
+        "host": {
+          "choices": [
+            "trust",
+            "reject",
+            "md5",
+            "password",
+            "scram-sha-256",
+            "gss",
+            "sspi",
+            "ident",
+            "pam",
+            "ldap",
+            "radius",
+            "cert"
+          ],
+          "description": [
+            "Authentication method for local TCP/IP connections"
+          ]
+        },
+        "local": {
+          "choices": [
+            "trust",
+            "reject",
+            "md5",
+            "password",
+            "scram-sha-256",
+            "gss",
+            "sspi",
+            "ident",
+            "peer",
+            "pam",
+            "ldap",
+            "radius",
+            "cert"
+          ],
+          "description": [
+            "Authentication method for local-socket connections"
+          ]
+        }
+      },
+      "type": "dict"
+    },
+    "data_checksums": {
+      "description": [
+        "Enable or disable data checksums",
+        "If unspecified, fall back to site settings choice"
+      ],
+      "type": "bool"
+    },
+    "databases": {
+      "default": [],
+      "description": [
+        "Databases defined in this instance (non-exhaustive list)"
+      ],
+      "elements": "dict",
+      "options": {
+        "clone_from": {
+          "description": [
+            "Data source name of the database to clone into this one, specified as a libpq connection URI"
+          ],
+          "type": "str"
+        },
+        "extensions": {
+          "default": [],
+          "description": [
+            "List of extensions to create in the database"
+          ],
+          "elements": "dict",
+          "options": {
+            "name": {
+              "description": [
+                "Extension name"
+              ],
+              "required": true,
+              "type": "str"
+            },
+            "schema": {
+              "description": [
+                "Name of the schema in which to install the extension's object"
+              ],
+              "type": "str"
+            },
+            "state": {
+              "choices": [
+                "present",
+                "absent"
+              ],
+              "default": "present",
+              "description": [
+                "Extension state"
+              ]
+            },
+            "version": {
+              "description": [
+                "Version of the extension to install"
+              ],
+              "type": "str"
+            }
+          },
+          "type": "list"
+        },
+        "force_drop": {
+          "default": false,
+          "description": [
+            "Force the drop"
+          ],
+          "type": "bool"
+        },
+        "name": {
+          "description": [
+            "Database name"
+          ],
+          "required": true,
+          "type": "str"
+        },
+        "owner": {
+          "description": [
+            "The role name of the user who will own the database"
+          ],
+          "type": "str"
+        },
+        "schemas": {
+          "default": [],
+          "description": [
+            "List of schemas to create in the database"
+          ],
+          "elements": "dict",
+          "options": {
+            "name": {
+              "description": [
+                "Schema name"
+              ],
+              "required": true,
+              "type": "str"
+            },
+            "state": {
+              "choices": [
+                "present",
+                "absent"
+              ],
+              "default": "present",
+              "description": [
+                "Schema state"
+              ]
+            }
+          },
+          "type": "list"
+        },
+        "settings": {
+          "description": [
+            "Session defaults for run-time configuration variables for the database",
+            "Upon update, an empty (dict) value would reset all settings"
+          ],
+          "required": false,
+          "type": "dict"
+        },
+        "state": {
+          "choices": [
+            "present",
+            "absent"
+          ],
+          "default": "present",
+          "description": [
+            "Database state"
+          ]
+        }
+      },
+      "type": "list"
+    },
+    "encoding": {
+      "description": [
+        "Character encoding of the PostgreSQL instance"
+      ],
+      "type": "str"
+    },
+    "locale": {
+      "description": [
+        "Default locale"
+      ],
+      "type": "str"
+    },
+    "name": {
+      "description": [
+        "Instance name"
+      ],
+      "required": true,
+      "type": "str"
+    },
+    "patroni": {
+      "description": [
+        "Configuration for the Patroni service, if enabled in site settings"
+      ],
+      "options": {
+        "cluster": {
+          "description": [
+            "Name (scope) of the Patroni cluster"
+          ],
+          "required": true,
+          "type": "str"
+        },
+        "node": {
+          "description": [
+            "Name of the node (usually the host name)"
+          ],
+          "type": "str"
+        },
+        "postgresql_connect_host": {
+          "description": [
+            "Host or IP address through which PostgreSQL is externally accessible"
+          ],
+          "type": "str"
+        },
+        "restapi": {
+          "description": [
+            "REST API configuration"
+          ],
+          "options": {
+            "connect_address": {
+              "description": [
+                "IP address (or hostname) and port, to access the Patroni's REST API"
+              ],
+              "type": "str"
+            },
+            "listen": {
+              "description": [
+                "IP address (or hostname) and port that Patroni will listen to for the REST API",
+                "Defaults to connect_address if not provided"
+              ],
+              "type": "str"
+            }
+          },
+          "type": "dict"
+        }
+      },
+      "type": "dict"
+    },
+    "pgbackrest": {
+      "description": [
+        "Configuration for the pgBackRest service, if enabled in site settings"
+      ],
+      "options": {
+        "password": {
+          "description": [
+            "Password of PostgreSQL role for pgBackRest"
+          ],
+          "no_log": true,
+          "type": "str"
+        },
+        "stanza": {
+          "description": [
+            "Name of pgBackRest stanza",
+            "Something describing the actual function of the instance, such as 'app'"
+          ],
+          "required": true,
+          "type": "str"
+        }
+      },
+      "required": true,
+      "type": "dict"
+    },
+    "port": {
+      "default": 5432,
+      "description": [
+        "TCP port the postgresql instance will be listening to",
+        "If unspecified, default to 5432 unless a 'port' setting is found in 'settings'"
+      ],
+      "type": "int"
+    },
+    "powa": {
+      "default": {},
+      "description": [
+        "Configuration for the PoWA service, if enabled in site settings"
+      ],
+      "options": {
+        "password": {
+          "description": [
+            "Password of PostgreSQL role for PoWA"
+          ],
+          "no_log": true,
+          "type": "str"
+        }
+      },
+      "type": "dict"
+    },
+    "prometheus": {
+      "default": {
+        "port": 9187
+      },
+      "description": [
+        "Configuration for the Prometheus service, if enabled in site settings"
+      ],
+      "options": {
+        "password": {
+          "description": [
+            "Password of PostgreSQL role for Prometheus postgres_exporter"
+          ],
+          "no_log": true,
+          "type": "str"
+        },
+        "port": {
+          "default": 9187,
+          "description": [
+            "TCP port for the web interface and telemetry of Prometheus"
+          ],
+          "type": "int"
+        }
+      },
+      "type": "dict"
+    },
+    "replrole_password": {
+      "description": [
+        "Replication role password"
+      ],
+      "no_log": true,
+      "type": "str"
+    },
+    "restart_on_changes": {
+      "default": false,
+      "description": [
+        "Whether or not to automatically restart the instance to account for settings changes"
+      ],
+      "type": "bool"
+    },
+    "roles": {
+      "default": [],
+      "description": [
+        "Roles defined in this instance (non-exhaustive list)"
+      ],
+      "elements": "dict",
+      "options": {
+        "connection_limit": {
+          "description": [
+            "How many concurrent connections the role can make"
+          ],
+          "type": "int"
+        },
+        "createdb": {
+          "default": false,
+          "description": [
+            "Whether role can create new databases"
+          ],
+          "type": "bool"
+        },
+        "createrole": {
+          "default": false,
+          "description": [
+            "Whether role can create new roles"
+          ],
+          "type": "bool"
+        },
+        "drop_owned": {
+          "default": false,
+          "description": [
+            "Drop all PostgreSQL's objects owned by the role being dropped"
+          ],
+          "type": "bool"
+        },
+        "encrypted_password": {
+          "description": [
+            "Role password, already encrypted"
+          ],
+          "no_log": true,
+          "type": "str"
+        },
+        "in_roles": {
+          "default": [],
+          "description": [
+            "List of roles to which the new role will be added as a new member"
+          ],
+          "elements": "str",
+          "type": "list"
+        },
+        "inherit": {
+          "default": true,
+          "description": [
+            "Let the role inherit the privileges of the roles it is a member of"
+          ],
+          "type": "bool"
+        },
+        "login": {
+          "default": false,
+          "description": [
+            "Allow the role to log in"
+          ],
+          "type": "bool"
+        },
+        "name": {
+          "description": [
+            "Role name"
+          ],
+          "required": true,
+          "type": "str"
+        },
+        "password": {
+          "description": [
+            "Role password"
+          ],
+          "no_log": true,
+          "type": "str"
+        },
+        "reassign_owned": {
+          "description": [
+            "Reassign all PostgreSQL's objects owned by the role being dropped to the specified role name"
+          ],
+          "type": "str"
+        },
+        "replication": {
+          "default": false,
+          "description": [
+            "Whether the role is a replication role"
+          ],
+          "type": "bool"
+        },
+        "state": {
+          "choices": [
+            "present",
+            "absent"
+          ],
+          "default": "present",
+          "description": [
+            "Whether the role be present or absent"
+          ]
+        },
+        "superuser": {
+          "default": false,
+          "description": [
+            "Whether the role is a superuser"
+          ],
+          "type": "bool"
+        },
+        "validity": {
+          "description": [
+            "Date and time after which the role's password is no longer valid"
+          ],
+          "type": "str"
+        }
+      },
+      "type": "list"
+    },
+    "settings": {
+      "default": {},
+      "description": [
+        "Settings for the PostgreSQL instance"
+      ],
+      "type": "dict"
+    },
+    "standby": {
+      "description": [
+        "Standby information"
+      ],
+      "options": {
+        "password": {
+          "description": [
+            "Password for the replication user"
+          ],
+          "no_log": true,
+          "type": "str"
+        },
+        "primary_conninfo": {
+          "description": [
+            "DSN of primary for streaming replication"
+          ],
+          "required": true,
+          "type": "str"
+        },
+        "slot": {
+          "description": [
+            "Replication slot name",
+            "Must exist on primary"
+          ],
+          "type": "str"
+        },
+        "status": {
+          "choices": [
+            "demoted",
+            "promoted"
+          ],
+          "default": "demoted",
+          "description": [
+            "Instance standby state"
+          ]
+        }
+      },
+      "type": "dict"
+    },
+    "state": {
+      "choices": [
+        "stopped",
+        "started",
+        "absent",
+        "restarted"
+      ],
+      "default": "started",
+      "description": [
+        "Runtime state"
+      ]
+    },
+    "surole_password": {
+      "description": [
+        "Super-user role password"
+      ],
+      "no_log": true,
+      "type": "str"
+    },
+    "temboard": {
+      "default": {
+        "port": 2345
+      },
+      "description": [
+        "Configuration for the temBoard service, if enabled in site settings"
+      ],
+      "options": {
+        "password": {
+          "description": [
+            "Password of PostgreSQL role for temboard agent"
+          ],
+          "no_log": true,
+          "type": "str"
+        },
+        "port": {
+          "default": 2345,
+          "description": [
+            "TCP port for the temboard-agent API"
+          ],
+          "type": "int"
+        }
+      },
+      "type": "dict"
+    },
+    "version": {
+      "choices": [
+        "15",
+        "14",
+        "13",
+        "12",
+        "11"
+      ],
+      "description": [
+        "PostgreSQL version"
+      ]
+    }
+  },
+  "return values": {
+    "change_state": {
+      "choices": [
+        "created",
+        "changed",
+        "dropped"
+      ],
+      "description": [
+        "Define the change applied (created, changed or dropped) to a manipulated object"
+      ]
+    },
+    "pending_restart": {
+      "default": false,
+      "description": [
+        "Whether the instance needs a restart to account for settings changes"
+      ],
+      "type": "bool"
+    }
+  }
+}

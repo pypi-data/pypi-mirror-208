@@ -1,0 +1,28 @@
+---
+- name: primary instance
+  hosts: localhost
+  tasks:
+    - name: primary instance, dropped
+      dalibo.pglift.instance:
+        name: pg1
+        state: absent
+        patroni:
+          cluster: pgdemo
+          node: pg1
+          restapi:
+            connect_address: "{{ primary_rest_api }}"
+            listen: "{{ primary_rest_api }}"
+
+- name: replica instance
+  hosts: localhost
+  tasks:
+    - name: replica instance, dropped
+      dalibo.pglift.instance:
+        name: pg2
+        state: absent
+        patroni:
+          cluster: pgdemo
+          node: pg2
+          restapi:
+            connect_address: "{{ replica_rest_api }}"
+            listen: "{{ replica_rest_api }}"

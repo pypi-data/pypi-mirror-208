@@ -1,0 +1,72 @@
+---
+- name: my postgresql instances
+  hosts: localhost
+  tasks:
+    - name: production instance
+      dalibo.pglift.instance:
+        name: prod
+        port: 5433
+        state: started
+        restart_on_changes: true
+        settings:
+          max_connections: 100
+          shared_buffers: 1GB
+          unix_socket_directories: /tmp
+          shared_preload_libraries: "passwordcheck"
+        surole_password: "{{ postgresql_surole_password }}"
+        pgbackrest:
+          stanza: stanza_prod
+          password: "{{ backup_role_password }}"
+        prometheus:
+          password: "{{ prometheus_role_password }}"
+          port: 9186
+        temboard:
+          password: "{{ temboard_role_password }}"
+          port: 2344
+      register: prod
+
+    - name: db, dropped
+      dalibo.pglift.database:
+        name: db
+        state: absent
+        instance: prod
+
+    - name: role bob, dropped
+      dalibo.pglift.role:
+        name: bob
+        state: absent
+        instance: prod
+        drop_owned: true
+
+    - name: role peter, dropped
+      dalibo.pglift.role:
+        name: peter
+        state: absent
+        instance: prod
+        reassign_owned: postgres
+
+    - name: pre-production instance, now dropped
+      dalibo.pglift.instance:
+        name: preprod
+        state: absent
+        pgbackrest:
+          stanza: stanza_preprod
+
+    - name: dev instance, started, with SSL
+      dalibo.pglift.instance:
+        name: dev
+        port: 5455
+        state: started
+        settings:
+          max_connections: 42
+          unix_socket_directories: /tmp
+        surole_password: "{{ postgresql_surole_password }}"
+        pgbackrest:
+          stanza: stanza_dev
+          password: "{{ backup_role_password }}"
+        prometheus:
+          password: "{{ prometheus_role_password }}"
+          port: 9189
+        temboard:
+          password: "{{ temboard_role_password }}"
+          port: 2347

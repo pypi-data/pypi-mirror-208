@@ -1,0 +1,31 @@
+- name: promote standby
+  hosts: localhost
+  tasks:
+    - name: promote standby instance 14/pg2
+      dalibo.pglift.instance:
+        name: pg2
+        state: started
+        port: 5433
+        settings:
+          listen_addresses: '*'
+          shared_buffers: 1GB
+        standby:
+          primary_conninfo: host=127.0.0.1 user=replication port=5432
+          status: promoted
+
+    - name: delete 14/pg1 instance
+      dalibo.pglift.instance:
+        name: pg1
+        state: absent
+
+    - name: rebuild 14/pg1 instance as a standby
+      dalibo.pglift.instance:
+        name: pg1
+        state: started
+        port: 5432
+        settings:
+          listen_addresses: '*'
+          shared_buffers: 1GB
+        standby:
+          primary_conninfo: host=127.0.0.1 user=replication port=5433
+          password: "{{ replication_role_password }}"

@@ -1,0 +1,24 @@
+- name: standby setup
+  hosts: localhost
+  tasks:
+    - name: primary instance 14/pg1
+      dalibo.pglift.instance:
+        name: pg1
+        state: started
+        port: 5432
+        settings:
+          listen_addresses: '*'
+          shared_buffers: 1GB
+        replrole_password: "{{ replication_role_password }}"
+
+    - name: standby instance 14/pg2
+      dalibo.pglift.instance:
+        name: pg2
+        state: started
+        port: 5433
+        settings:
+          listen_addresses: '*'
+          shared_buffers: 1GB
+        standby:
+          primary_conninfo: host=127.0.0.1 user=replication port=5432
+          password: "{{ replication_role_password }}"

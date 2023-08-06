@@ -1,0 +1,33 @@
+---
+- name: primary instance
+  hosts: localhost
+  tasks:
+    - name: primary instance 14/main
+      dalibo.pglift.instance:
+        name: pg1
+        state: started
+        port: 5432
+        settings:
+          unix_socket_directories: /tmp
+        patroni:
+          cluster: pgdemo
+          node: pg1
+          restapi:
+            connect_address: "{{ primary_rest_api }}"
+            listen: "{{ primary_rest_api }}"
+
+- name: replica instance
+  hosts: localhost
+  tasks:
+    - name: replica instance 14/main
+      dalibo.pglift.instance:
+        name: pg2
+        state: started
+        port: 5433
+        settings:
+          unix_socket_directories: /tmp
+        patroni:
+          cluster: pgdemo
+          restapi:
+            connect_address: "{{ replica_rest_api }}"
+            listen: "{{ replica_rest_api }}"

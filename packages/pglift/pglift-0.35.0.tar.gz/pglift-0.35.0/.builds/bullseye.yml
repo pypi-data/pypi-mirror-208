@@ -1,0 +1,27 @@
+image: debian/bullseye
+repositories:
+  # key-id comes from the command: curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --armor
+  pgdg: http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+packages:
+  - etcd
+  - postgresql-common
+  - postgresql-15
+  - postgresql-15-pg-qualstats
+  - postgresql-15-pg-stat-kcache
+  - postgresql-15-powa
+  - pgbackrest
+  - prometheus-postgres-exporter
+  - python3-pip
+  - python3-psycopg2
+  - dbus-user-session
+  - systemd
+sources:
+  - https://git.sr.ht/~dalibo/pglift
+tasks:
+  - setup: |
+      python3 -m pip install "temboard-agent>=8"
+      python3 -m pip install tox
+  - tests: |
+      export PATH="$HOME/.local/bin:$PATH"
+      cd pglift
+      tox -e tests-func -- -x --systemd

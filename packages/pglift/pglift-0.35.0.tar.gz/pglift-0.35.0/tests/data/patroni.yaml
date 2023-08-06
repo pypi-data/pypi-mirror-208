@@ -1,0 +1,90 @@
+bootstrap:
+  dcs:
+    loop_wait: 10
+  initdb:
+  - locale: C
+  - encoding: UTF8
+  - data-checksums
+  pg_hba:
+  - local   all             postgres                                peer
+  - local   all             all                                     peer
+  - host    all             all             127.0.0.1/32            password
+  - host    all             all             ::1/128                 password
+  - local   replication     replication                              peer
+  - host    replication     replication      127.0.0.1/32            password
+  - host    replication     replication      ::1/128                 password
+  pg_ident:
+  - '# MAPNAME       SYSTEM-USERNAME         PG-USERNAME'
+etcd3:
+  cacert: /path/to/cacert.pem
+  cert: /path/to/host.pem
+  hosts:
+  - etcd1:123
+  - etcd2:456
+  key: /path/to/host.key
+  protocol: https
+name: pg1
+postgresql:
+  authentication:
+    replication:
+      password: rrr
+      username: replication
+    rewind:
+      username: postgres
+    superuser:
+      username: postgres
+  bin_dir: .
+  connect_address: pghost.test:5432
+  create_replica_methods:
+  - basebackup
+  data_dir: test-datadir
+  listen: '*:5432'
+  parameters:
+    archive_command: pgbackrest --config-path=/cfg/pgbackrest --stanza=test-stanza
+      --pg1-path=/pg/data archive-push %p
+    archive_mode: true
+    cluster_name: test
+    effective_cache_size: 4 GB
+    lc_messages: C
+    lc_monetary: C
+    lc_numeric: C
+    lc_time: C
+    log_checkpoints: true
+    log_connections: true
+    log_destination: syslog
+    log_directory: /tmp/log
+    log_disconnections: false
+    log_filename: patgres-%Y-%m-%d.log
+    log_min_duration_statement: 3s
+    logging_collector: true
+    shared_buffers: 257MB
+    shared_preload_libraries: passwordcheck, pg_qualstats, pg_stat_statements, pg_stat_kcache
+    syslog_ident: postgresql-15-test
+    unix_socket_directories: /tmp/tests
+    wal_level: replica
+  pg_hba:
+  - local   all             postgres                                peer
+  - local   all             all                                     peer
+  - host    all             all             127.0.0.1/32            password
+  - host    all             all             ::1/128                 password
+  - local   replication     replication                              peer
+  - host    replication     replication      127.0.0.1/32            password
+  - host    replication     replication      ::1/128                 password
+  pg_ident:
+  - '# MAPNAME       SYSTEM-USERNAME         PG-USERNAME'
+  pgpass: /path/to/patroni/test.pgpass
+  use_pg_rewind: false
+  use_unix_socket: true
+  use_unix_socket_repl: true
+restapi:
+  cafile: /path/to/cacert.pem
+  certfile: /path/to/host.pem
+  connect_address: localhost:8080
+  keyfile: /path/to/host.key
+  listen: localhost:8080
+  verify_client: optional
+scope: test-scope
+watchdog:
+  device: /dev/watchdog
+  mode: required
+  safety_margin: 5

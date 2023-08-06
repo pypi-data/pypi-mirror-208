@@ -1,0 +1,71 @@
+Metadata-Version: 2.1
+Name: pglift
+Version: 0.35.0
+Summary: Life-cycle management of production-ready PostgreSQL instances
+Author-email: Dalibo SCOP <contact@dalibo.com>
+License: GPLv3
+Project-URL: Documentation, https://pglift.readthedocs.io/
+Project-URL: Source, https://gitlab.com/dalibo/pglift/
+Project-URL: Tracker, https://gitlab.com/dalibo/pglift/-/issues/
+Keywords: postgresql,deployment,administration
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Topic :: System :: Systems Administration
+Classifier: Topic :: Database
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Typing :: Typed
+Requires-Python: <4,>=3.9
+Description-Content-Type: text/markdown
+Provides-Extra: test
+Provides-Extra: typing
+Provides-Extra: docs
+Provides-Extra: dev
+License-File: LICENSE
+
+# What is pglift?
+
+pglift is a solution aiming at deploying production-ready instances of
+PostgreSQL, set up, backed up and monitored.
+
+Here, the term "instance" means a plain PostgreSQL instance (aka a cluster)
+complemented with satellite services which are essential to ensure proper
+operation in a production context. These satellite components typically
+concern backup, monitoring, high-availability or migration.
+
+The project aims at supporting several tools for each category. At the moment,
+supported tools are:
+
+* Backup: [pgBackRest][]
+* Monitoring & insights: [Prometheus postgres\_exporter][], [temBoard][],
+  [PoWA][]
+* High availability: [Patroni][]
+
+[pgBackRest]: https://pgbackrest.org/
+[Prometheus postgres\_exporter]: https://github.com/prometheus-community/postgres_exporter
+[temBoard]: https://temboard.readthedocs.io/
+[PoWA]: https://temboard.readthedocs.io/
+[Patroni]: https://patroni.readthedocs.io/
+
+# Getting Started
+
+* walk through the [documentation][] for installation and tutorials
+* see also the [development and contributing guide][]
+
+[documentation]: https://pglift.readthedocs.io/
+[development and contributing guide]: https://pglift.readthedocs.io/en/latest/dev.html
+
+# Documentation
+
+The pglift documentation can be found at <https://pglift.readthedocs.io>.
+
+# License
+
+The code in this repository is developed and distributed under the GNU General
+Public License version 3. See [LICENSE](LICENSE) for details.
