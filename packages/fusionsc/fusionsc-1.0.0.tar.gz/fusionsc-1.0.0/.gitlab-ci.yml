@@ -1,0 +1,182 @@
+stages:
+  - build
+  - test
+  - pybuild
+  - doc
+  - pages
+
+# Build stage
+
+.jtpl: &job
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - when: manual
+
+.build: &build
+  <<: *job
+  stage: build
+  artifacts:
+    paths:
+    - build/
+
+.buildl: &build-linux
+  <<: *build
+  script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - cmake --build . --target tests
+
+.buildw: &build-windows
+  <<: *build
+  script:
+    - mkdir build
+    - cd build
+    - cmake -A x64 ..
+    - cmake --build . --target tests
+
+.test: &test
+  <<: *job
+  stage: test
+  script:
+    - cd build
+    - ctest . --no-tests=error
+  artifacts:
+    paths:
+      - build/tests/*.xml
+    reports:
+      junit: 
+        - build/tests/*.xml
+
+
+.linux: &linux
+  image: debian:bookworm
+  before_script:
+    - apt-get update --yes
+    - apt-get install --yes cmake python3 python3-pip python3-virtualenv libssl-dev clang-14
+
+.msvc: &msvc
+  tags:
+    - msvc2017
+  
+  # Currently we only have windows builds available only for protected branches
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+    #- if: '$CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
+      when: manual
+    - when: never
+
+.gcc: &gcc
+  <<: *linux
+  variables:
+    CC: gcc
+    CXX: g++
+
+.clang: &clang
+  <<: *linux
+  variables:
+    CC: clang-14
+    CXX: clang++-14
+
+build:gcc:
+  <<: *build-linux
+  <<: *gcc
+
+build:clang:
+  <<: *build-linux
+  <<: *clang
+
+build:msvc:
+  <<: *build-windows
+  <<: *msvc
+
+# Test stage
+
+test:gcc: 
+  <<: *test
+  <<: *gcc
+  needs:
+    - build:gcc
+
+test:clang: 
+  <<: *test
+  <<: *clang
+  needs:
+    - build:clang
+
+test:msvc: 
+  <<: *test
+  <<: *msvc
+  needs:
+    - build:msvc
+    
+# Python build
+
+pybuild:pybuild-manylinux:
+  <<: *job
+  
+  stage: pybuild
+  needs: []
+  
+  image: quay.io/pypa/manylinux2014_x86_64
+  parallel:
+    matrix:
+      - PYTHON: [cp38-cp38, cp39-cp39, cp310-cp310, cp311-cp311]
+  
+  rules:
+    - when: manual
+  
+  before_script:
+    - yum install -y openssl-static
+  script:
+    - /opt/python/$PYTHON/bin/python -m pip install build
+    - /opt/python/$PYTHON/bin/python -m build
+    - |+
+      for FILE in "dist/*.whl"
+      do
+        auditwheel show $FILE
+      done
+  
+
+# Documentation (stands separate from the compilation-related jobs)
+
+#doc:
+#  <<: *job
+#  stage: doc
+#  image: gcc
+#
+#  needs: []
+#
+#  script:
+#    - apt-get update --yes
+#    - apt-get install --yes doxygen graphviz
+#    - doxygen Doxyfile
+#  
+#  artifacts:
+#    paths:
+#      - gendocs
+
+pages:
+  <<: *clang
+  <<: *job
+  stage: pages
+  
+  needs: []
+  
+  script:
+  - python3 -m virtualenv build_venv
+  - source build_venv/bin/activate
+  - pip install sphinx myst_nb sphinx_rtd_theme numpy
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build . --target docs
+  - cd ..
+  - mkdir public
+  - cp -R build/docs/sphinx_docs public
+  
+  artifacts:
+    paths:
+      - public

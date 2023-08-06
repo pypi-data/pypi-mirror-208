@@ -1,0 +1,176 @@
+add_library(
+	fsc
+	
+	common.h
+	common.cpp
+	
+	typing.h
+	typing.cpp
+	
+	local.h
+	local.cpp
+	
+	store.h
+	store.cpp
+	
+	ssh.h
+	ssh.cpp
+	
+	streams.h
+	streams.cpp
+	
+	data.h
+	data.cpp
+	
+	yaml.h
+	yaml.cpp
+	
+	networking.h
+	networking.cpp
+	
+	cudata.h
+	cudata.cpp
+	
+	compression.h
+	compression.cpp
+	
+	jobs.h
+	jobs.cpp
+	jobs-unix.cpp
+	jobs-win32.cpp
+	jobs-slurm.cpp
+	
+	db.h
+	db.cpp
+	
+	odb.h
+	odb.cpp
+	
+	local-vat-network.h
+	local-vat-network.cpp
+	
+	index.h
+	index.cpp
+	
+	vmec.h
+	vmec.cpp
+	
+	efit.h
+	efit.cpp
+	
+	geometry.h
+	geometry.cpp
+	
+	magnetics.h
+	magnetics-kernels.h
+	magnetics.cpp
+	
+	device.h
+	device.cpp
+	
+	offline.h
+	offline.cpp
+	
+	flt.h
+	flt-kernels.h
+	flt.cpp
+	
+	kernels.h
+	kernels.cpp
+	
+	hfcam.h
+	hfcam.cpp
+	
+	poly.h
+	poly.cpp
+	
+	http.h
+	http.cpp
+	
+	devices/w7x.h
+	devices/w7x.cpp
+	
+	devices/jtext.h
+	devices/jtext.cpp
+	
+	grids.h
+	tensor.h
+	
+	services.h
+	services.cpp
+	
+	random.h
+	
+	interpolation.h
+	
+	fieldline-mapping.h
+	fieldline-mapping.cpp
+)
+
+target_link_libraries(fsc PUBLIC deps cupnp fsc-service-genapi)
+target_include_directories(
+	fsc
+	PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+if(BUILD_TESTING)
+	target_sources(
+		tests
+		PUBLIC
+		poly-tests.cpp
+		local-tests.cpp
+		jobs-tests.cpp
+		random-tests.cpp
+		data-tests.cpp
+		odb-tests.cpp
+		geometry-tests.cpp
+		magnetics-tests.cpp
+		http-tests.cpp
+		services-tests.cpp
+		flt-tests.cpp
+		interpolation-tests.cpp
+		fieldline-mapping-tests.cpp
+		
+		efit-tests.cpp
+		
+		devices/w7x-test.cpp
+		devices/jtext-test.cpp
+	)
+	target_link_libraries(tests PUBLIC fsc)
+endif()
+
+if(FSC_WITH_CUDA)
+	target_sources(
+		fsc
+		PRIVATE
+		
+		flt.cu
+		magnetics.cu
+	)
+	set_target_properties(fsc PROPERTIES CUDA_ARCHITECTURES "60")
+	set_target_properties(fsc PROPERTIES LINKER_LANGUAGE CUDA)
+	set_target_properties(fsc PROPERTIES CUDA_RESOLVE_DEVICE_SYMBOLS ON)
+	target_compile_options(fsc
+		PRIVATE
+		$<$<COMPILE_LANGUAGE:CUDA>:
+			-G
+		>
+	)
+	target_link_options(fsc
+		PRIVATE
+		$<$<LINK_LANGUAGE:CUDA>:
+			-G
+		>
+	)
+	
+	set_target_properties(tests PROPERTIES LINKER_LANGUAGE CUDA)
+endif()
+
+# Built in src/c++/fsc
+INSTALL(TARGETS deps EXPORT FSCTargets LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# FSC headers
+# - Source headers
+INSTALL(DIRECTORY src/c++/fsc/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.h")
