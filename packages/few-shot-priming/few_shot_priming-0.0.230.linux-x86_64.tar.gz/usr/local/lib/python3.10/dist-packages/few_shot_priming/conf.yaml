@@ -1,0 +1,33 @@
+dataset:
+  path-root: data/claim_stance_dataset_v1.csv
+
+experiment:
+  path-training: experiment/train.csv
+  path-validation: experiment/validation.csv
+  path-test: experiment/test.csv
+  path-few-shots: experiment/few-shots.csv
+
+few-shot-params:
+  batch-size : 8
+  learning-rate : 2e-5
+  model-name : "gpt2-xl"
+  model-type : "gpt2"
+  model-path: "/bigwork/nhwpajjy/pre-trained-models/gpt2-xl"
+  few-shot-size: 4
+  epochs: 1
+
+pre-trained-models:
+  path: "/bigwork/nhwpajjy/pre-trained-models"
+  models : ["t5-base", "bert-base-uncased", "gpt2", "opt", "gpt2-xl"]
+
+
+baseline-params:
+  #model-path: "/bigwork/nhwpajjy/pre-trained-models/microsoft/deberta-base"
+  model-path: "/bigwork/nhwpajjy/pre-trained-models/microsoft/deberta-base"
+  batch-size: 8
+  learning-rate: 1e-4
+  head-size: 30
+  epochs: 1
+  model-name: "microsoft/deberta-base"
+  api-key: "cc362e03e225e86476ac8d0a18460b40L05"
+
