@@ -1,0 +1,31 @@
+FROM python:3.9.14-slim
+
+RUN pip install wget
+RUN python -m wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda
+ENV CONDA_DIR /opt/conda
+ENV PATH=$CONDA_DIR/bin:$PATH
+
+RUN conda create -n testenv python==3.9 --yes && \
+    echo "conda activate testenv" >> ~/.bashrc && \
+    conda install -c conda-forge openjdk --yes && \
+    conda install pip --yes
+
+RUN mkdir -p /app && \
+    mkdir -p /app/src
+
+COPY src/modelid_serving.py /app/src/modelid_serving.py
+COPY requirements_modelid.txt requirements_modelid.txt
+ARG UID=1001
+ARG GID=1001
+RUN chown ${UID}:${GID} /app && \
+    chmod -R 777 /app/src
+
+RUN /opt/conda/envs/testenv/bin/pip install -r requirements_modelid.txt
+
+ENV JAVA_HOME /opt/conda/pkgs/openjdk-8.0.332-h166bdaf_0/jre
+EXPOSE 9001
+
+ENV PATH=$PATH:/opt/conda/envs/testenv/bin
+
+CMD gunicorn --chdir /app/src modelid_serving:app -b 0.0.0.0:9001

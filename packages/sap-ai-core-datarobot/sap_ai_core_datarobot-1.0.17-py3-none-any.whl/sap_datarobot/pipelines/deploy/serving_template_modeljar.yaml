@@ -1,0 +1,47 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  annotations:
+    scenarios.ai.sap.com/name: "<SCENARIO-NAME>"
+    executables.ai.sap.com/name: "<EXECUTABLE-NAME>"
+    executables.ai.sap.com/description: "<EXECUTABLE-DESCRIPTION>"
+    scenarios.ai.sap.com/description: "<SCENARIO-DESCRIPTION>"
+    artifacts.ai.sap.com/modeljar.kind: "model"
+  labels:
+    ai.sap.com/version: "<SCENARIO-VERSION>"
+    scenarios.ai.sap.com/id: "<SCENARIO-ID>"
+  name: <SERVING-EXECUTABLE-ID>
+spec:
+  inputs:
+    parameters:
+      - name: modelName
+        default: "drmodel"
+        type: string
+    artifacts:
+      - name: modeljar  
+  template:
+    apiVersion: "serving.kserve.io/v1beta1"
+    metadata:
+      labels: |
+        ai.sap.com/resourcePlan: "infer.s"
+    spec: |
+      predictor:
+        imagePullSecrets:
+          - name: $imagePullSecret
+        minReplicas: 1
+        containers:
+        - name: kserve-container
+          image: $image
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 9001
+             protocol: TCP
+          env:
+            - name: MODELS_STR
+              value: "{{inputs.parameters.modelName}}"
+            - name: MODEL_PATH
+              value: /mnt/models
+            - name: STORAGE_URI
+              value: "{{inputs.artifacts.modeljar}}"
+        timeout: 30
+      

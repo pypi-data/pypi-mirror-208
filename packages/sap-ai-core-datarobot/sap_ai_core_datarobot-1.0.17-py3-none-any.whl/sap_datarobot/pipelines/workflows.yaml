@@ -1,0 +1,12 @@
+model-jar-serving:
+    type: DeploymentYaml
+    dockerfile: deploy/Dockerfile.modeljar
+    yaml: deploy/serving_template_modeljar.yaml
+    description: >
+        Serve DataRobot Model with SAP AI Core.
+model-id-serving:
+    type: DeploymentYaml
+    dockerfile: deploy/Dockerfile.modelid
+    yaml: deploy/serving_template_modelid.yaml
+    description: >
+        Fetch the DataRobot model and serve the model with SAP AI Core.

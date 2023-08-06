@@ -1,0 +1,52 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  annotations:
+    scenarios.ai.sap.com/name: "<SCENARIO-NAME>"
+    executables.ai.sap.com/name: "<EXECUTABLE-NAME>"
+    executables.ai.sap.com/description: "<SCENARIO-DESCRIPTION>"
+  labels:
+    ai.sap.com/version: "<SCENARIO-VERSION>"
+    scenarios.ai.sap.com/id: "<SCENARIO-ID>"
+  name: <SERVING-EXECUTABLE-ID>
+spec:
+  inputs:
+    parameters:
+      - name: projectID
+        type: string
+      - name: modelID
+        type: string 
+  template:
+    apiVersion: "serving.kserve.io/v1beta1"
+    metadata:
+      labels: |
+        ai.sap.com/resourcePlan: "infer.s"
+    spec: |
+      predictor:
+        imagePullSecrets:
+          - name: <DOCKER-REGISTRY-SECRETS>
+        minReplicas: 1
+        containers:
+        - name: kserve-container
+          image: <SERVING-IMAGE-TAG>
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 9001
+             protocol: TCP
+          env:
+            - name: PROJECT_ID
+              value: "{{inputs.parameters.projectID}}"
+            - name: MODEL_ID
+              value: "{{inputs.parameters.modelID}}"
+            - name: ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                    name: <DATAROBOT-ENDPOINT-TOKEN>
+                    key: endpoint
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                    name: <DATAROBOT-ENDPOINT-TOKEN>
+                    key: token
+        timeout: 30
+      
