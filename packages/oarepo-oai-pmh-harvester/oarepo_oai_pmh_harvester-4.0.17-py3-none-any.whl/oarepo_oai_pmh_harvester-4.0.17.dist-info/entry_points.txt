@@ -1,0 +1,82 @@
+[invenio_assets.webpack]
+oai_batch_ui = oarepo_oaipmh_harvester.ui.oai_batch.theme.webpack:theme
+oai_harvester_ui = oarepo_oaipmh_harvester.ui.oai_harvester.theme.webpack:theme
+oai_record_ui = oarepo_oaipmh_harvester.ui.oai_record.theme.webpack:theme
+oai_run_ui = oarepo_oaipmh_harvester.ui.oai_run.theme.webpack:theme
+
+[invenio_base.api_apps]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.ext:OaiBatchExt
+oai_batch_ui = oarepo_oaipmh_harvester.ui.oai_batch.ext:OaiBatchExt
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.ext:OaiHarvesterExt
+oai_harvester_ui = oarepo_oaipmh_harvester.ui.oai_harvester.ext:OaiHarvesterExt
+oai_record = oarepo_oaipmh_harvester.oai_record.ext:OaiRecordExt
+oai_record_ui = oarepo_oaipmh_harvester.ui.oai_record.ext:OaiRecordExt
+oai_run = oarepo_oaipmh_harvester.oai_run.ext:OaiRunExt
+oai_run_ui = oarepo_oaipmh_harvester.ui.oai_run.ext:OaiRunExt
+oarepo_oaipmh = oarepo_oaipmh_harvester.ext:OARepoOAIHarvesterExt
+
+[invenio_base.api_blueprints]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.views:create_blueprint_from_app_oai_batch
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.views:create_blueprint_from_app_oai_harvester
+oai_record = oarepo_oaipmh_harvester.oai_record.views:create_blueprint_from_app_oai_record
+oai_run = oarepo_oaipmh_harvester.oai_run.views:create_blueprint_from_app_oai_run
+
+[invenio_base.apps]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.ext:OaiBatchExt
+oai_batch_ui = oarepo_oaipmh_harvester.ui.oai_batch.ext:OaiBatchExt
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.ext:OaiHarvesterExt
+oai_harvester_ui = oarepo_oaipmh_harvester.ui.oai_harvester.ext:OaiHarvesterExt
+oai_record = oarepo_oaipmh_harvester.oai_record.ext:OaiRecordExt
+oai_record_ui = oarepo_oaipmh_harvester.ui.oai_record.ext:OaiRecordExt
+oai_run = oarepo_oaipmh_harvester.oai_run.ext:OaiRunExt
+oai_run_ui = oarepo_oaipmh_harvester.ui.oai_run.ext:OaiRunExt
+oarepo_oaipmh = oarepo_oaipmh_harvester.ext:OARepoOAIHarvesterExt
+
+[invenio_base.blueprints]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.views:create_blueprint_from_app_oai_batchExt
+oai_batch_ui = oarepo_oaipmh_harvester.ui.oai_batch.views:create_blueprint
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.views:create_blueprint_from_app_oai_harvesterExt
+oai_harvester_ui = oarepo_oaipmh_harvester.ui.oai_harvester.views:create_blueprint
+oai_record = oarepo_oaipmh_harvester.oai_record.views:create_blueprint_from_app_oai_recordExt
+oai_record_ui = oarepo_oaipmh_harvester.ui.oai_record.views:create_blueprint
+oai_run = oarepo_oaipmh_harvester.oai_run.views:create_blueprint_from_app_oai_runExt
+oai_run_ui = oarepo_oaipmh_harvester.ui.oai_run.views:create_blueprint
+
+[invenio_db.alembic]
+oarepo_oaipmh_harvester = oarepo_oaipmh_harvester:alembic
+
+[invenio_db.models]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.records.models
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.records.models
+oai_record = oarepo_oaipmh_harvester.oai_record.records.models
+oai_run = oarepo_oaipmh_harvester.oai_run.records.models
+
+[invenio_i18n.translations]
+oarepo_oaipmh_harvester.oai_batch = oarepo_oaipmh_harvester.oai_batch
+oarepo_oaipmh_harvester.oai_harvester = oarepo_oaipmh_harvester.oai_harvester
+oarepo_oaipmh_harvester.oai_record = oarepo_oaipmh_harvester.oai_record
+oarepo_oaipmh_harvester.oai_run = oarepo_oaipmh_harvester.oai_run
+
+[invenio_jsonschemas.schemas]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.records.jsonschemas
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.records.jsonschemas
+oai_record = oarepo_oaipmh_harvester.oai_record.records.jsonschemas
+oai_run = oarepo_oaipmh_harvester.oai_run.records.jsonschemas
+
+[invenio_search.mappings]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.records.mappings
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.records.mappings
+oai_record = oarepo_oaipmh_harvester.oai_record.records.mappings
+oai_run = oarepo_oaipmh_harvester.oai_run.records.mappings
+
+[oarepo.models]
+oai_batch = oarepo_oaipmh_harvester.oai_batch.models:model.json
+oai_harvester = oarepo_oaipmh_harvester.oai_harvester.models:model.json
+oai_record = oarepo_oaipmh_harvester.oai_record.models:model.json
+oai_run = oarepo_oaipmh_harvester.oai_run.models:model.json
+
+[oarepo.ui]
+oarepo_oaipmh_harvester.oai_batch = oarepo_oaipmh_harvester.oai_batch.models:ui.json
+oarepo_oaipmh_harvester.oai_harvester = oarepo_oaipmh_harvester.oai_harvester.models:ui.json
+oarepo_oaipmh_harvester.oai_record = oarepo_oaipmh_harvester.oai_record.models:ui.json
+oarepo_oaipmh_harvester.oai_run = oarepo_oaipmh_harvester.oai_run.models:ui.json

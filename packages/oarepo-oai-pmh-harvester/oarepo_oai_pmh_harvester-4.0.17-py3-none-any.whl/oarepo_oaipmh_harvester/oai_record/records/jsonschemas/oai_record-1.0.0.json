@@ -1,0 +1,81 @@
+{
+    "type": "object",
+    "properties": {
+        "batch": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "@v": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "harvester": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "@v": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "local_identifier": {
+            "type": "string"
+        },
+        "oai_identifier": {
+            "type": "string"
+        },
+        "datestamp": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "O",
+                "W",
+                "E",
+                "S"
+            ]
+        },
+        "warnings": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "errors": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "entry": {
+            "type": "object"
+        },
+        "context": {
+            "type": "object"
+        },
+        "manual": {
+            "type": "boolean"
+        },
+        "id": {
+            "type": "string"
+        },
+        "created": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "$schema": {
+            "type": "string"
+        }
+    }
+}
