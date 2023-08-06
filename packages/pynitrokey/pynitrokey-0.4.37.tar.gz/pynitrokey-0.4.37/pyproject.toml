@@ -1,0 +1,139 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pynitrokey"
+authors = [
+  { name = "Nitrokey", email = "pypi@nitrokey.com" },
+]
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "License :: OSI Approved :: Apache Software License",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+  "certifi >= 14.5.14",
+  "cffi",
+  "click >=8.0.0,<9",
+  "cryptography >=3.4.4,<37",
+  "ecdsa",
+  "frozendict ~= 2.3.4",
+  "fido2 >=1.1.0,<2",
+  "intelhex",
+  "nkdfu",
+  "python-dateutil ~= 2.7.0",
+  "pyusb",
+  "requests",
+  "spsdk >=1.7.0,<1.8.0",
+  "tqdm",
+  "urllib3 ~= 1.26.7",
+  "tlv8",
+  "typing_extensions ~= 4.3.0",
+  "pyserial",
+  "protobuf >=3.17.3, < 4.0.0",
+]
+dynamic = ["version", "description"]
+
+[project.optional-dependencies]
+dev = [
+  "black >=22.1.0,<23",
+  "flake8",
+  "flit >=3.2,<4",
+  "ipython",
+  "isort",
+  "mypy >=1,<1.1",
+  "pyinstaller ==5.9.0",
+  "pyinstaller-versionfile ==2.1.1; sys_platform=='win32'",
+  "types-requests",
+  "types-tqdm",
+  "pytest",
+  "pytest-reporter-html1",
+  "oath"
+]
+pcsc = ["pyscard >=2.0.0,<3"]
+
+[project.urls]
+Source = "https://github.com/Nitrokey/pynitrokey"
+
+[project.scripts]
+nitropy = "pynitrokey.cli:main"
+
+[tool.black]
+target-version = ["py39"]
+extend-exclude = 'pynitrokey/nethsm/client'
+
+[tool.isort]
+py_version = "39"
+profile = "black"
+extend_skip = ["pynitrokey/nethsm/client"]
+
+[tool.mypy]
+mypy_path = "stubs"
+show_error_codes = true
+python_version = "3.9"
+
+# enable strict checks for new code
+[[tool.mypy.overrides]]
+module = [
+    "pynitrokey.cli.nk3.*",
+    "pynitrokey.nk3.*",
+    "pynitrokey.updates.*",
+]
+disallow_untyped_defs = true
+
+# pynitrokey.nethsm.client is auto-generated
+[[tool.mypy.overrides]]
+module = "pynitrokey.nethsm.client.*"
+ignore_errors = true
+
+# pynitrokey.nk3.bootloader.nrf52_upload is only temporary in this package
+[[tool.mypy.overrides]]
+module = "pynitrokey.nk3.bootloader.nrf52_upload.*"
+ignore_errors = true
+
+# libraries without annotations
+[[tool.mypy.overrides]]
+module = [
+    "cbor.*",
+    "cffi.*",
+    "click.*",
+    "ecdsa.*",
+    "intelhex.*",
+    "nacl.*",
+    "nkdfu.*",
+    "ruamel.*",
+    "serial.*",
+    "urllib3.*",
+    "usb.*",
+    "usb1.*",
+    "tlv8.*",
+    "pytest.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+log_cli = false
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)3s] %(message)s"
+log_cli_date_format = "%H:%M:%S"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    "venv",
+    "nethsm",
+    "start",
+    "nk3",
+]
+target-version = "py39"
