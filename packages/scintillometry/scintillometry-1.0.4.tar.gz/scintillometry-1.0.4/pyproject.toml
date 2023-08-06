@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scintillometry"
+version = "1.0.4"
+authors = [
+  { name="Scintillometry Contributors", email="" },
+]
+description = "Analyse data & 2D flux footprints from Scintec's BLS scintillometers."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Development Status :: 4 - Beta",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Environment :: Console",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+  "pandas >= 2.0",
+  "tqdm > 4.8",
+  "scipy >= 1.10",
+  "mpmath >= 1.2.1",
+  "numpy",
+  "matplotlib",
+  "kneed",
+]
+
+[project.optional-dependencies]
+tests=[
+  "pytest >= 7.0",
+  "pytest-dependency >= 0.5",
+  "coverage >= 7.1",
+]
+docs=[
+  "sphinx",
+  "sphinx-rtd-theme >= 1.1",
+]
+dev=[
+  "scintillometry[tests,docs]",
+  "hatchling >= 1.12",
+  "build >= 0.7",
+  "pylint >= 2.16.1",
+  "flake8 >= 6.0",
+  "black >= 23.1",
+  "isort",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/gampnico/scintillometry"
+"Bug Tracker" = "https://github.com/gampnico/scintillometry/issues"
+"Documentation" = "https://scintillometry.readthedocs.io/en/latest/"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
