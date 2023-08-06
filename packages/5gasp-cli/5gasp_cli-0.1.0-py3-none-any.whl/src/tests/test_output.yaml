@@ -1,0 +1,142 @@
+# -*- coding: utf-8 -*-
+# @Author: Eduardo Santos
+# @Date:   2023-03-14 12:24:50
+# @Last Modified by:   Rafael Direito
+# @Last Modified time: 2023-04-26 23:39:03
+test_info:
+  description: Validation tests for vOBU NetApp
+  netapp_id: OdinS-NetApp
+  network_service_id: vOBU
+  testbed_id: testbed_itav
+test_phases:
+  execution:
+  - batch_id: 1
+    executions:
+    - execution_id: 1
+      name: api_request_test
+      testcase_ids:
+      - 1
+      - 2
+    scope: operational
+  - batch_id: 2
+    executions:
+    - execution_id: 1
+      name: database_ready_test
+      testcase_ids:
+      - 3
+      - 4
+    scope: operational
+  - batch_id: 3
+    executions:
+    - execution_id: 1
+      name: obu_data_consumption_test
+      testcase_ids:
+      - 5
+    scope: operational
+  - batch_id: 4
+    executions:
+    - execution_id: 1
+      name: open_ports
+      testcase_ids:
+      - 6
+      - 7
+      - 8
+    scope: security
+  setup:
+    deployments:
+    - deployment_id: 1
+      descriptor: xyz_vnf1_vnfd
+      id: none
+      name: xyz_d1
+      parameters:
+      - key: ip_dest
+        value: 1.1.1.1
+    - deployment_id: 2
+      descriptor: xyz_vnf2_vnfd
+      id: none
+      name: xyz_vnf2
+      parameters:
+      - key: ip_source
+        value: 2.2.2.2
+    testcases:
+    - description: Tests the bandwidth between to VNFs. The results are in bits/sec
+      name: bandwidth
+      parameters:
+      - key: host1_ip
+        value: ''
+      - key: host1_username
+        value: ''
+      - key: host1_password
+        value: ''
+      - key: host2_ip
+        value: ''
+      - key: host2_username
+        value: ''
+      - key: host2_password
+        value: ''
+      - key: comparator
+        value: ''
+      - key: threshold
+        value: ''
+      scope: ' '
+      testcase_id: 1
+      type: Robot
+    - description: Tests the transmission speed between to VNFs. The results are in
+        ms
+      name: transmission speed
+      parameters:
+      - key: host1_ip
+        value: ''
+      - key: host1_username
+        value: ''
+      - key: host1_password
+        value: ''
+      - key: host2_ip
+        value: ''
+      - key: host2_username
+        value: ''
+      - key: host2_password
+        value: ''
+      - key: comparator
+        value: ''
+      - key: threshold
+        value: ''
+      scope: ' '
+      testcase_id: 2
+      type: Robot
+    - description: Tests the packet loss speed between to VNFs. The results are given
+        in %
+      name: packet loss
+      parameters:
+      - key: host1_ip
+        value: ''
+      - key: host1_username
+        value: ''
+      - key: host1_password
+        value: ''
+      - key: host2_ip
+        value: ''
+      - key: host2_username
+        value: ''
+      - key: host2_password
+        value: ''
+      - key: comparator
+        value: ''
+      - key: threshold
+        value: ''
+      scope: ' '
+      testcase_id: 3
+      type: Robot
+    - description: Validates the if a VM's open ports are the ones that should be
+        opened
+      name: open ports
+      parameters:
+      - key: host
+        value: ''
+      - key: expected_open_port
+        value: ''
+      - key: expected_protocol
+        value: ''
+      scope: ' '
+      testcase_id: 4
+      type: Robot

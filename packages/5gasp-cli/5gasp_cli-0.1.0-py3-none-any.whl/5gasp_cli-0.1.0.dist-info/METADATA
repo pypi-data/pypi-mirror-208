@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: 5gasp-cli
+Version: 0.1.0
+Summary: 5GASP CLI to generate testing descriptors.
+License: GNU General Public License v3.0
+Author: Eduardo Santos
+Author-email: eduardosantoshf@av.it.pt
+Requires-Python: >=3.8,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: PyYAML (==6.0)
+Requires-Dist: poetry (==1.4.2)
+Requires-Dist: pytest (==7.2.1)
+Requires-Dist: requests (==2.30.0)
+Requires-Dist: typer[all] (>=0.7.0,<0.8.0)
+Description-Content-Type: text/markdown
+
+# 5GASP CLI
+
+## How to run
+
+You can find the code inside the */5gasp-cli/src/* directory.
+To list all CLI commands, run:
+
+```
+5gasp-cli --help
+```
+
+To list all parameters of a command, run:
+```
+5gasp-cli COMMAND --help
+```
+
+### CLI Commands
+
+#### List all tests from a test bed
+
+```
+5gasp-cli list-testbeds
+```
+
+#### List all available tests
+
+```
+5gasp-cli list-available-tests
+```
+
+#### Generate a testing descriptor:
+
+```
+5gasp-cli create-testing-descriptor
+```
+
+This command has the following options:
+
+* One or more NSDs (Network Service Descriptors) can be passed to infer connection point tags from, using the following command:
+
+```
+5gasp-cli create-testing-descriptor --infer-tags-from-nsd <nsd_location>
+```
+
+* The path of the generated descriptor can be passed using:
+
+```
+5gasp-cli create-testing-descriptor --output-filepath <path_to_file>
+```
+
+> **_NOTE:_** Both options can be used simultaneously
