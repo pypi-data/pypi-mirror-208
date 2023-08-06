@@ -1,0 +1,107 @@
+Metadata-Version: 1.0
+Name: xpol
+Version: 1.6.1
+Summary: XPOL cross power-spectrum estimator
+Home-page: UNKNOWN
+Author: Matthieu Tristram
+Author-email: tristram@lal.in2p3.fr
+License: UNKNOWN
+Description: ====
+        Xpol
+        ====
+        
+        A code to compute angular power spectra based on cross-correlation between maps and covariance matrices.
+        
+        This is the generalisation to polarisation of `Tristram M. et al., 2005 MNRAS 358 833 <https://arxiv.org/abs/astro-ph/0405575>`_
+        
+        .. .. contents:: **Table of Contents** */
+        
+        
+        Install Python
+        ==============
+        
+        The easiest way to install ``Xpol`` is via ``pip``
+        
+        .. code:: shell
+        
+         pip install xpol [--user]
+        
+        
+        If you plan to develop the code, it is better to clone the repository
+        
+        .. code:: shell
+        
+         git clone https://gitlab.in2p3.fr/tristram/Xpol.git /where/to/clone
+        
+        
+        and install the python library
+        
+        .. code:: shell
+        
+          pip install -e /where/to/clone
+        
+        The -e option allow the developer to make changes within the Xpol directory without having
+        to reinstall at every changes. If you plan to just use the code and do not develop it, you can
+        remove the -e option.
+        
+        You can find a example of the module usage in test/script_xpol.py
+        
+        
+        Install C
+        =========
+        
+        The code is in C, fully MPI parallelized in CPU and memory (using spherical transform by s2hat).
+        
+        Librairies needed are :
+        
+        * HEALPix (http://healpix.jpl.nasa.gov/)
+        * cfitsio (http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html)
+        * s2hat (http://www.apc.univ-paris7.fr/APC_CS/Recherche/Adamis/MIDAS09/software/s2hat/s2hat.html)
+        
+        In addition you will need some BLAS/LAPACK optimized routines (MKL, NAG, ...)
+        
+        
+        Equations
+        =========
+        
+        `wiki is here <https://gitlab.in2p3.fr/tristram/Xpol/wikis/home>`_
+        
+        
+        Usage
+        =====
+        
+        You can use the python class (Xpol) to compute spectra based on a data.
+        
+        .. code:: shell
+        
+         import xpol
+         binning = xpol.Bins( lmins, lmaxs)
+         xp = xpol.Xpol( mask, bins=binning)
+         pcl,cl = xp.get_spectra( dT)
+        
+        see the file `examples/script_xpol.py <https://gitlab.in2p3.fr/tristram/Xpol/-/blob/master/examples/script_xpol.py>`_ for more detailed usage.
+        
+        For intensive computation and simulation you can alternatively use the MPI C version with a parameter file detailed `here <https://gitlab.in2p3.fr/tristram/Xpol/wikis/ParameterFile>`_
+        
+        
+        References
+        ==========
+        
+        ``Xpol`` have been used to derive power spectra for:
+        
+        * Archeops
+        
+          - CMB power spectra [Tristram+2005, A&A 436 785]
+          - Dust power spectra [Ponthieu+2005, A&A 444 327]
+        
+        * Planck: 
+        
+          - CMB power spectra [Planck 2015 results. XI, Couchot+2015]
+          - Dust power spectra [Planck Intermediate Paper XXX]
+          - CIB power spectra [Planck 2013 results. XXX]
+          - SZ power spectra [Planck 2013 results. XXI, Planck 2015 results XXII]
+          - SZ-CIB cross-power spectra [Planck 2015 results. XXIII]
+        
+        And many others !
+        
+Platform: UNKNOWN
