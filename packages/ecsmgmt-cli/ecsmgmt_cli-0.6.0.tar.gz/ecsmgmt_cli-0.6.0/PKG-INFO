@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: ecsmgmt-cli
+Version: 0.6.0
+Summary: Small CLI tool for interacting with the ECS Management API
+Home-page: https://gitlab.com/domrim/ecsmgmt-cli
+License: MPL-2.0
+Author: Dominik Rimpf
+Author-email: dev@drimpf.de
+Requires-Python: >=3.9,<4.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved
+Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: PyYAML (>=6.0,<7.0)
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: inquirer (>=3.1.3,<4.0.0)
+Requires-Dist: python-ecsclient (>=1.1.12,<2.0.0)
+Requires-Dist: tabulate (>=0.9.0,<0.10.0)
+Project-URL: Repository, https://gitlab.com/domrim/ecsmgmt-cli
+Description-Content-Type: text/markdown
+
+# ecsmgmt-cli
+
+Small CLI tool for interacting with the ECS Management API. ECS is Dell EMC's Object Storage (S3) Solution.
+
+## usage
+
+### config file
+**Warning: It's not recommended to store your credentials in an plaintext file. If you decide nevertheless to do so, please be sure to limit the access to the config file, for example with `chmod 600 $configfilepath`.**
+
+The config file is expected to be in the common config directories for the following platforms:
+* unix: `~/.config/ecsmgmt-cli/config.yml`
+* macOS: `~/Library/Application Support/ecsmgmt-cli/config.yml`
+* Windows: `C:\Users\<user>\AppData\Local\ecsmgmt-cli\config.yml`
+
+
