@@ -1,0 +1,94 @@
+Metadata-Version: 2.1
+Name: openscm-runner
+Version: 0.12.1
+Summary: Thin wrapper to run simple climate models (emissions driven runs only)
+Home-page: https://github.com/openscm/openscm-runner
+Author: Zeb Nicholls, Robert Gieseke, Jared Lewis, Sven Willner, Chris Smith
+Author-email: zebedee.nicholls@climate-energy-college.org, robert.gieseke@pik-potsdam.de, jared.lewis@climate-energy-college.org, sven.willner@pik-potsdam.de, c.j.smith1@leeds.ac.uk
+License: 3-Clause BSD License
+Keywords: openscm,runner,python,simple,climate,model
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.7
+Description-Content-Type: text/x-rst
+Requires-Dist: click
+Requires-Dist: openscm-units (>=0.5.0)
+Requires-Dist: pyam-iamc
+Requires-Dist: python-dotenv
+Requires-Dist: scmdata (>=0.7.4)
+Requires-Dist: tqdm
+Requires-Dist: importlib-metadata ; python_version < "3.8"
+Provides-Extra: ciceroscmpy
+Requires-Dist: ciceroscm ; extra == 'ciceroscmpy'
+Provides-Extra: dev
+Requires-Dist: bandit ; extra == 'dev'
+Requires-Dist: black (==22.3.0) ; extra == 'dev'
+Requires-Dist: black-nb ; extra == 'dev'
+Requires-Dist: flake8 ; extra == 'dev'
+Requires-Dist: isort (==5.10.1) ; extra == 'dev'
+Requires-Dist: mypy ; extra == 'dev'
+Requires-Dist: nbdime ; extra == 'dev'
+Requires-Dist: pydocstyle ; extra == 'dev'
+Requires-Dist: pylint (==2.14.5) ; extra == 'dev'
+Requires-Dist: sphinx (>=1.4) ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme ; extra == 'dev'
+Requires-Dist: sphinx-click ; extra == 'dev'
+Requires-Dist: ipywidgets ; extra == 'dev'
+Requires-Dist: notebook ; extra == 'dev'
+Requires-Dist: seaborn ; extra == 'dev'
+Requires-Dist: codecov ; extra == 'dev'
+Requires-Dist: coverage (>=7) ; extra == 'dev'
+Requires-Dist: nbval ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest (>=4.0) ; extra == 'dev'
+Requires-Dist: xlrd ; extra == 'dev'
+Requires-Dist: fair (<2) ; extra == 'dev'
+Requires-Dist: pymagicc (<3,>=2.0.0) ; extra == 'dev'
+Requires-Dist: ciceroscm ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: sphinx (>=1.4) ; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme ; extra == 'docs'
+Requires-Dist: sphinx-click ; extra == 'docs'
+Provides-Extra: fair
+Requires-Dist: fair (<2) ; extra == 'fair'
+Provides-Extra: magicc
+Requires-Dist: pymagicc (<3,>=2.0.0) ; extra == 'magicc'
+Provides-Extra: models
+Requires-Dist: fair (<2) ; extra == 'models'
+Requires-Dist: pymagicc (<3,>=2.0.0) ; extra == 'models'
+Requires-Dist: ciceroscm ; extra == 'models'
+Provides-Extra: notebooks
+Requires-Dist: ipywidgets ; extra == 'notebooks'
+Requires-Dist: notebook ; extra == 'notebooks'
+Requires-Dist: seaborn ; extra == 'notebooks'
+Provides-Extra: tests
+Requires-Dist: codecov ; extra == 'tests'
+Requires-Dist: coverage (>=7) ; extra == 'tests'
+Requires-Dist: nbval ; extra == 'tests'
+Requires-Dist: pytest-cov ; extra == 'tests'
+Requires-Dist: pytest (>=4.0) ; extra == 'tests'
+Requires-Dist: xlrd ; extra == 'tests'
+
+
+OpenSCM-Runner
+==============
+
+OpenSCM-Runner is a thin wrapper to run simple climate models with a
+unified interface.
+At present, it supports emissions driven runs only.
+This wrapper is implemented while
+`OpenSCM <https://github.com/openscm/openscm>`_ is still a work in
+progress.
+
