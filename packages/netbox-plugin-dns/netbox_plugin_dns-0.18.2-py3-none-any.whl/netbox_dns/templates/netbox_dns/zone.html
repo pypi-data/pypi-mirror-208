@@ -1,0 +1,140 @@
+{% extends 'netbox_dns/zone/base.html' %}
+{% load helpers %}
+{% load render_table from django_tables2 %}
+{% load view_helpers %}
+
+{% block content %}
+<div class="row">
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">
+                Zone
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ object.name }}</td>
+                    </tr>
+                    {% if unicode_name %}
+                        <tr>
+                            <th scope="row">IDN</th>
+                            <td>{{ unicode_name }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if object.view %}
+                    <tr>
+                        <th scope="row">View</th>
+                        <td>
+                            <a href="{% url 'plugins:netbox_dns:view' pk=object.view.pk %}">
+                                {{ object.view }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td>{{ object.status }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nameservers</th>
+                        <td>
+                            <table>
+                                {% for nameserver in object.nameservers.all %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'plugins:netbox_dns:nameserver' pk=nameserver.pk %}">
+                                            {{ nameserver }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    {% if nameserver_warnings %}
+                    <tr>
+                        <th class="text-warning" scope="row">Warnings</th>
+                        <td>
+                            <table>
+                                {% for warning in nameserver_warnings %}
+                                <tr>
+                                    <td class="text-warning">{{ warning }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if nameserver_errors %}
+                    <tr>
+                        <th class="text-danger" scope="row">Errors</th>
+                        <td>
+                            <table>
+                                {% for error in nameserver_errors %}
+                                <tr>
+                                    <td class="text-danger">{{ error }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    </tr>
+                    <tr>
+                        <th scope="row">Default TTL</th>
+                        <td>{{ object.default_ttl }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/custom_fields.html' %}
+    </div>
+    <div class="col col-md-6">
+        <div class="card">
+            <h5 class="card-header">Zone SOA</h5>
+            <div class="card-body">
+                <table class="table table-hover soa-table">
+                    <tr>
+                        <th scope="row">TTL</th>
+                        <td>{{ object.soa_ttl }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Primary Nameserver</th>
+                        <td><a href="{% url 'plugins:netbox_dns:nameserver' pk=object.soa_mname.pk %}">{{ object.soa_mname }}</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Responsible</th>
+                        <td>{{ object.soa_rname }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Serial</th>
+                        <td>{{ object.soa_serial }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Refresh</th>
+                        <td>{{ object.soa_refresh }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Retry</th>
+                        <td>{{ object.soa_retry }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Expire</th>
+                        <td>{{ object.soa_expire }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Minimum TTL</th>
+                        <td>{{ object.soa_minimum }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

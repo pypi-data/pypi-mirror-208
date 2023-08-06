@@ -1,0 +1,116 @@
+{% extends 'generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load render_table from django_tables2 %}
+{% load perms %}
+
+{% block controls %}
+{% if object.managed %}
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock controls %}
+
+{% block breadcrumbs %}
+{% if not object.managed %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block tabs %}
+{% if object.managed %}
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% if object.managed %}
+    <div class="col col-md-12">
+    {% else %}
+    <div class="col col-md-8">
+    {% endif %}
+        <div class="card">
+            <h5 class="card-header">Record</h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td style="word-break:break-all;">{{ object.name }}</td>
+                    </tr>
+                    {% if unicode_name %}
+                    <tr>
+                        <th scope="row">IDN</th>
+                        <td style="word-break:break-all;">{{ unicode_name }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row">Zone</th>
+                        {% if object.managed %}
+                        <td><a href="{% url 'plugins:netbox_dns:zone_managed_records' pk=object.zone.pk %}">{{ object.zone }}</a></td>
+                        {% else %}
+                        <td><a href="{% url 'plugins:netbox_dns:zone_records' pk=object.zone.pk %}">{{ object.zone }}</a></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td>{{ object.type }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Value</th>
+                        <td style="word-break:break-all;">{{ object.value }}</td>
+                    </tr>
+                    {% if unicode_value %}
+                    <tr>
+                        <th scope="row">Unicode Value</th>
+                        <td style="word-break:break-all;">{{ unicode_value }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row">TTL</th>
+                        <td>{{ object.ttl }}</td>
+                    </tr>
+                    {% if object.type == 'A' or object.type == 'AAAA' %}
+                    <tr>
+                        <th scope="row">Disable PTR</th>
+                        <td>{{ object.disable_ptr }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if object.ptr_record %}
+                    <tr>
+                        <th scope="row">PTR Record</th>
+                        <td><a href="{% url 'plugins:netbox_dns:record' pk=object.ptr_record.pk %}">{{ object.ptr_record }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if object.address_record %}
+                    <tr>
+                        <th scope="row">Address Record</th>
+                        <td><a href="{% url 'plugins:netbox_dns:record' pk=object.address_record.pk %}">{{ object.address_record }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if not object.managed %}
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td>{{ object.status }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td style="word-break:break-all;">{{ object.description }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        {% if not object.managed %}
+        {% include 'inc/panels/custom_fields.html' %}
+        {% endif %}
+    </div>
+    {% if not object.managed %}
+    <div class="col col-md-4">
+        {% include 'inc/panels/tags.html' %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
