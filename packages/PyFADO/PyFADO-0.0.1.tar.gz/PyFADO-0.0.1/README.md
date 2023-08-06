@@ -1,0 +1,69 @@
+# pyFADO
+
+in processing.... Beta version
+
+<p align="center">
+  <img align="center" src="https://github.com/neutrinomuon/AST4001-Extragalactic-Astronomy/blob/master/figures/FADO%20logo%20F-01.jpg?raw=true" width="260">
+</p>
+
+Description: This repository contains modules for reading and plotting the output files of FADO in python 3. It also contains a Jupyter Notebook with a <b>quickstart</b> guide on how to run the FADO spectral synthesis code.
+
+You can start by clicking at: <a href='FADO_QuickStartGuide-GITHUB.ipynb'>Quick Start Guide</a>
+
+pyFADO is a Python package for performing spectral synthesis analysis with FADO.
+
+Overview
+FADO is a popular code for performing stellar population synthesis modeling of galaxies. pyFADO extends FADO by providing a Python interface for constructing, fitting, and analyzing synthetic spectra.
+
+Some key features of pyFADO include:
+
+Efficient implementation of FADO's spectral synthesis algorithm in Python
+Ability to easily load and manipulate observational data
+Automatic parameter optimization using Markov Chain Monte Carlo (MCMC) methods
+Flexible and customizable model construction and fitting options
+Extensive plotting capabilities for visualizing model fits and results
+Installation
+To install pyFADO, simply clone the repository and install the required dependencies:
+
+bash
+Copy code
+git clone https://github.com/username/pyfado.git
+cd pyfado
+pip install -r requirements.txt
+Usage
+To use pyFADO, you will need to provide a set of observational data and a model grid of synthetic spectra. Once you have loaded your data and model, you can run the fitting algorithm using the pyfado.fit() function.
+
+Here's an example of how to use pyFADO to fit a model to some mock data:
+
+python
+Copy code
+import pyfado
+
+# Load observational data
+data = pyfado.load_data('data.fits')
+
+# Load model grid
+model = pyfado.load_model('model.fits')
+
+# Fit model to data
+result = pyfado.fit(data, model)
+
+# Plot the results
+result.plot()
+Documentation
+For more information on how to use pyFADO, please refer to the documentation. You can generate the documentation locally by running:
+
+go
+Copy code
+cd docs
+make html
+The documentation will then be available in docs/_build/html/index.html.
+
+Contributing
+If you would like to contribute to pyFADO, please submit a pull request with your changes. We welcome contributions of all kinds, including bug fixes, new features, and documentation improvements.
+
+License
+pyFADO is released under the MIT License. See the LICENSE file for details.
+
+author: Jean Michel Gomes<br>
+published: 04/06/2019
