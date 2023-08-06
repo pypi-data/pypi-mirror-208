@@ -1,0 +1,147 @@
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.masonry.api"
+
+[tool]
+[tool.poetry]
+name = "sheraf"
+version = "0.5.37"
+description = "Versatile ZODB abstraction layer"
+license = "MIT"
+keywords = ["zodb", "orm"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: ZODB",
+]
+authors = ["Yaal team <contact@yaal.coop>"]
+maintainers = [
+    "Éloi Rivard <eloi@yaal.coop>",
+]
+homepage = "https://sheraf.readthedocs.io/en/latest/"
+documentation = "https://sheraf.readthedocs.io/en/latest/"
+repository = "https://gitlab.com/yaal/sheraf"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.7, <4"
+zodb = ">=5"
+zodburi = "*"
+
+zeo = {version = "*", optional=true}
+
+recommonmark = {version = "*", optional=true}
+sphinx = {version = "*", optional=true}
+sphinx-rtd-theme = {version = "*", optional=true}
+sphinx-issues = {version = "*", optional=true}
+
+psycopg2 = {version = "*", optional=true}
+psycopg2cffi = {version = "*", optional=true}
+relstorage = {version = "*", optional=true}
+
+rich = ">=10"
+click = ">=7"
+legacycrypt = "^0.3"
+
+[tool.poetry.extras]
+all = [
+    "zeo",
+    "psycopg2",
+    "psycopg2cffi",
+    "relstorage",
+]
+relstorage_pg = [
+    "psycopg2",
+    "psycopg2cffi",
+    "relstorage",
+]
+zeo = [
+    "zeo",
+]
+doc = [
+    "recommonmark",
+    "sphinx",
+    "sphinx-rtd-theme",
+    "sphinx-issues",
+]
+
+[tool.poetry.dev-dependencies]
+coverage = "*"
+mock = "*"
+pdbpp = "*"
+portpicker = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-lazy-fixture = "*"
+pytest-libfaketime = "*"
+pytest-timeout = "*"
+pytest-xdist = "*"
+ptpython = "*"
+werkzeug = "*"
+wtforms = "*"
+toml = "*"
+tox = "*"
+unidecode = "*"
+
+[tool.poetry.scripts]
+sheraf = "sheraf.cli:cli"
+
+[options.entry_points.console_scripts]
+console_scripts = { sheraf = "sheraf.cli:cli" }
+
+[tool.coverage.run]
+source = [
+    "tests",
+    "sheraf",
+]
+
+omit = [
+    ".tox/*",
+    "*.virtualenv",
+    "tests/perf/*",
+    "**/perf_*",
+]
+
+[tool.pytest.ini_options]
+addopts = "-n auto --durations=10 --color=yes --showlocals --full-trace --timeout 10 --doctest-modules --doctest-glob='*.rst'"
+norecursedirs = "local.virtualenv nodes_modules media .tox tests/perf .eggs .hg .git build doc/build"
+doctest_optionflags= "ALLOW_UNICODE IGNORE_EXCEPTION_DETAIL ELLIPSIS"
+timeout = 0
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+envlist = style,doc,py37,py38,py39,py310,py311,coverage
+skipsdist=true
+
+[testenv]
+allowlist_externals = poetry
+commands =
+    poetry install --extras all
+    poetry run pytest {posargs}
+
+[testenv:doc]
+commands =
+    poetry install --extras all --extras doc
+    poetry run sphinx-build doc build/sphinx/html
+
+[testenv:coverage]
+commands =
+    poetry install --extras all
+    poetry run coverage erase
+    poetry run pytest --cov {posargs}
+    poetry run coverage html
+
+[testenv:style]
+deps = pre-commit
+skip_install = true
+commands = pre-commit run --all-files
+"""

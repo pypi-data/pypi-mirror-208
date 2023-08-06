@@ -1,0 +1,93 @@
+Metadata-Version: 2.1
+Name: sheraf
+Version: 0.5.37
+Summary: Versatile ZODB abstraction layer
+Home-page: https://sheraf.readthedocs.io/en/latest/
+License: MIT
+Keywords: zodb,orm
+Author: Yaal team
+Author-email: contact@yaal.coop
+Maintainer: Éloi Rivard
+Maintainer-email: eloi@yaal.coop
+Requires-Python: >=3.7,<4
+Classifier: Framework :: ZODB
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: all
+Provides-Extra: doc
+Provides-Extra: relstorage-pg
+Provides-Extra: zeo
+Requires-Dist: click (>=7)
+Requires-Dist: legacycrypt (>=0.3,<0.4)
+Requires-Dist: psycopg2 ; extra == "all" or extra == "relstorage-pg"
+Requires-Dist: psycopg2cffi ; extra == "all" or extra == "relstorage-pg"
+Requires-Dist: recommonmark ; extra == "doc"
+Requires-Dist: relstorage ; extra == "all" or extra == "relstorage-pg"
+Requires-Dist: rich (>=10)
+Requires-Dist: sphinx ; extra == "doc"
+Requires-Dist: sphinx-issues ; extra == "doc"
+Requires-Dist: sphinx-rtd-theme ; extra == "doc"
+Requires-Dist: zeo ; extra == "all" or extra == "zeo"
+Requires-Dist: zodb (>=5)
+Requires-Dist: zodburi
+Project-URL: Documentation, https://sheraf.readthedocs.io/en/latest/
+Project-URL: Repository, https://gitlab.com/yaal/sheraf
+Description-Content-Type: text/markdown
+
+# A versatile ZODB abstraction layer
+
+sheraf is a wrapper library around [ZODB](https://www.zodb.org) that provides models management and indexation. It aims to make the use of `ZODB` simple by providing ready-to-use tools and explicit tools. sheraf is currently compatible with `ZODB 5` and `python 3.7+`.
+
+You can expect sheraf to:
+
+- Do few things, but do them right;
+- Be simple enough so beginners can do a lot with a few lines;
+- Be powerful enough and tunable for python experts;
+- Have a simple and expressive code, that allows you to hack it if needed.
+
+## Installation
+
+sheraf is compatible with Python 3.7+
+
+    poetry add sheraf
+    # or
+    pip install sheraf
+
+If you need pytest fixtures for your project check out [pytest-sheraf](https://gitlab.com/yaal/pytest-sheraf). There are also [sheraf fixtures for unittest](https://gitlab.com/yaal/unittest-sheraf).
+
+    pip install pytest-sheraf
+
+## Contributing
+
+Bug reports and pull requests are highly encouraged!
+
+ - Test some code : `poetry run pytest` and `poetry run tox`
+ - Format code : `black`
+ - Generate documentation : `poetry run tox -e doc`
+
+## Documentation
+
+You can build it with the following commands, or read it on [readthedocs](https://sheraf.readthedocs.io/en/latest/).
+
+    poetry run tox -e doc
+    open build/sphinx/html/index.html
+
+## Development installation
+
+sheraf use poetry as its main build tool. Do not hesitate to check [the documentation](https://python-poetry.org/docs/).
+
+    poetry install --extras all
+
