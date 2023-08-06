@@ -1,0 +1,23 @@
+---
+
+classes:
+  ElevatorFeedforward:
+    force_type_casters:
+    - units::meters_per_second
+    - meters_per_second_squared
+    subpackage: controller
+    methods:
+      ElevatorFeedforward:
+        overloads:
+          "":
+          units::volt_t, units::volt_t, units::unit_t<kv_unit>, units::unit_t<ka_unit>:
+      Calculate:
+      MaxAchievableVelocity:
+      MinAchievableVelocity:
+      MaxAchievableAcceleration:
+      MinAchievableAcceleration:
+    inline_code: |
+        .def_readwrite("kS", &ElevatorFeedforward::kS)
+        .def_readwrite("kG", &ElevatorFeedforward::kG)
+        .def_readwrite("kV", &ElevatorFeedforward::kV)
+        .def_readwrite("kA", &ElevatorFeedforward::kA)
