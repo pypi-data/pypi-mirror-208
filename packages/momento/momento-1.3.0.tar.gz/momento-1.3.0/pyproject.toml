@@ -1,0 +1,147 @@
+[tool.poetry]
+name = "momento"
+version = "1.3.0"
+
+authors = ["Momento <hello@momentohq.com>"]
+description = "SDK for Momento"
+
+license = "Apache-2.0"
+
+documentation = "https://docs.momentohq.com/"
+homepage = "https://gomomento.com"
+readme = "README.md"
+repository = "https://github.com/momentohq/client-sdk-python"
+
+keywords = ["Momento", "caching", "key-value store", "serverless"]
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Operating System :: OS Independent",
+  "Framework :: AsyncIO",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Topic :: Internet",
+  "Natural Language :: English",
+  "Typing :: Typed",
+]
+
+exclude = ["src/momento/internal/codegen.py"]
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.12"
+
+momento-wire-types = "^0.60"
+grpcio = "^1.50.0"
+# note if you bump this presigned url test need be updated
+pyjwt = "^2.4.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.1.3"
+pytest-asyncio = "^0.19.0"
+pytest-describe = "^2.0.1"
+pytest-sugar = "^0.9.5"
+
+[tool.poetry.group.lint.dependencies]
+flake8 = "^5.0.4"
+mypy = "^0.971"
+types-setuptools = "^65.3.0"
+flake8-docstrings = "^1.7.0"
+
+[tool.poetry.group.format.dependencies]
+black = "^22.8.0"
+isort = "^5.10.1"
+
+
+[tool.poetry.group.codegen.dependencies]
+libcst = "^0.4.9"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = "3.7"
+
+# Increase our expectations
+check_untyped_defs          = true
+disallow_incomplete_defs    = true
+disallow_untyped_defs       = true
+no_implicit_optional        = true
+show_column_numbers         = true
+show_error_codes            = true
+strict_optional             = true
+warn_no_return              = true
+warn_redundant_casts        = true
+warn_return_any             = true
+warn_unreachable            = true
+warn_unused_ignores         = true
+disallow_any_decorated      = true
+disallow_any_explicit       = true
+disallow_any_expr           = true
+disallow_any_generics       = true
+disallow_untyped_calls      = true
+disallow_untyped_decorators = true
+strict_equality             = true
+
+# These are too strict for us at the moment
+disallow_any_unimported     = false
+disallow_subclassing_any    = false
+
+[[tool.mypy.overrides]]
+module = [
+  "momento_wire_types.*",
+  "grpc.*",
+  "google.*",
+  "pytest_describe"
+]
+ignore_missing_imports      = true
+
+[[tool.mypy.overrides]]
+module = [
+  "momento.errors.error_converter",
+  "momento.errors.error_details",
+  "momento.internal.synchronous._scs_control_client",
+  "momento.internal.synchronous._scs_data_client",
+  "momento.internal.synchronous._scs_grpc_manager",
+  "momento.internal.synchronous._add_header_client_interceptor",
+  "momento.internal.synchronous._retry_interceptor",
+  "momento.internal.common._data_client_ops",
+  "momento.internal.common._data_client_scalar_ops",
+  "momento.internal.aio._add_header_client_interceptor",
+  "momento.internal.aio._retry_interceptor",
+  "momento.internal.aio._scs_control_client",
+  "momento.internal.aio._scs_data_client",
+  "momento.internal.aio._scs_grpc_manager",
+  "momento.internal.aio._utilities",
+  "momento.responses.control.signing_key.*",
+]
+disallow_any_expr           = false
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_any_expr           = false
+disallow_any_decorated      = false
+disallow_untyped_decorators = false
+
+
+[tool.black]
+line-length = 120
+target-version = ["py37"]
+include = "\\.pyi?$"
+exclude = """
+/(
+  \\.git
+  | \\.mypy_cache
+  | \\.pytest_cache
+  | \\.venv
+  | dist
+)
+"""
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "tests"]
+extend_skip_glob = ["src/momento/errors/__init__.py"]
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
