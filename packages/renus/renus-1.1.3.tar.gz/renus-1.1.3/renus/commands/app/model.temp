@@ -1,0 +1,34 @@
+import typing
+from datetime import datetime
+from bson import ObjectId
+from renus.core.model import ModelBase
+from app.extension.renus.activity.service import ActivityService
+from app.extension.renus.crud.model import CRUD
+
+class _Base(dict):
+    _id: ObjectId
+    created_at: datetime
+    updated_at: datetime
+
+    def __init__(self, doc):
+        super().__init__(doc)
+        for k, v in doc.items():
+            setattr(self, k, v)
+
+
+class {name_camel}(ModelBase,CRUD):
+    collection_name="{name_db}"
+    document_model=_Base
+
+    def __init__(self,request) -> None:
+        super().__init__()
+        self.request=request
+
+    def get(self,police: bool = True) -> typing.List[document_model]:
+        return self._get(police)
+
+    def first(self,police: bool = True) -> typing.Union[document_model,None]:
+        return self._first(police)
+
+    def boot_event(self, typ: str, old, new):
+        ActivityService().handle(typ, old, new, self.request, self.collection_name)
