@@ -1,0 +1,54 @@
+Metadata-Version: 2.1
+Name: corpus-pax
+Version: 0.1.27
+Summary: Using Github API (to pull individuals, orgs, and article content), setup a local sqlite database, syncing images to Cloudflare.
+Home-page: https://lawsql.com
+License: MIT
+Author: Marcelino G. Veloso III
+Author-email: mars@veloso.one
+Requires-Python: >=3.11,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: Pydantic
+Classifier: Framework :: Pytest
+Classifier: Intended Audience :: Legal Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Text Processing :: General
+Classifier: Typing :: Typed
+Requires-Dist: cloudflare-images (>=0.0.4,<0.0.5)
+Requires-Dist: jinja2 (>=3.1.2,<4.0.0)
+Requires-Dist: python-frontmatter (>=1.0.0,<2.0.0)
+Requires-Dist: sqlpyd (>=0.1.7,<0.2.0)
+Requires-Dist: start-github (>=0.0.2,<0.0.3)
+Project-URL: Documentation, https://justmars.github.io/corpus-pax
+Project-URL: Repository, https://github.com/justmars/corpus-pax
+Description-Content-Type: text/markdown
+
+# corpus-pax
+
+![Github CI](https://github.com/justmars/corpus-pax/actions/workflows/main.yml/badge.svg)
+
+Using Github API (to pull individuals, orgs, and article content), setup a local sqlite database, syncing images to Cloudflarel utilized in the [LawSQL dataset](https://lawsql.com).
+
+## Documentation
+
+See [documentation](https://justmars.github.io/corpus-pax).
+
+## Development
+
+Checkout code, create a new virtual environment:
+
+```sh
+poetry add corpus-pax # python -m pip install corpus-pax
+poetry update # install dependencies
+poetry shell
+```
+
+Run tests:
+
+```sh
+pytest
+```
+
