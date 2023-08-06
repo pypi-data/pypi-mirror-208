@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "py-seasnake"
+packages = [
+    { include = "seasnake" },
+]
+version = "0.3.2"
+description = "A Python wrapper for accessing and managing MERMAID (Marine Ecological Research Management Aid) data with ease."
+authors = ["Dustin Sampson <gridcell@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://gridcell.github.io/py-seasnake/"
+repository = "https://github.com/gridcell/py-seasnake"
+documentation = "https://gridcell.github.io/py-seasnake/"
+keywords = ["MERMAID", "coral", "fish", "API"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+PyJWT = "^2.6.0"
+mkdocs-material = "^9.1.6"
+mkdocstrings = {extras = ["python"], version = "^0.21.2"}
+requests = "^2.28.2"
+geopandas = "^0.12.2"
+keyring = "^23.13.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2"
+black = "^23.3.0"
+isort = "^5.12.0"
+ruff = "^0.0.261"
+mypy = "^1.2.0"
+pytest-mypy = "^0.10.3"
+pandas-stubs = "^1.5.3"
+mkdocs = "^1.4.2"
+pytest-ruff = "^0.0.5"
+types-requests = "^2.28.11.17"
+requests-mock = "^1.10.0"
+
+[tool.poetry.group.examples.dependencies]
+jupyterlab = "^3.6.3"
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
