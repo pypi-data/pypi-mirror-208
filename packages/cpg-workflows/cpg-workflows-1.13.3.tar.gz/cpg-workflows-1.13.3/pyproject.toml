@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 88
+skip-string-normalization = true
+exclude = '''
+/(
+  seqr-loading-pipelines
+  | venv
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ['gnomad_methods', 'seqr-loading-pipelines']
