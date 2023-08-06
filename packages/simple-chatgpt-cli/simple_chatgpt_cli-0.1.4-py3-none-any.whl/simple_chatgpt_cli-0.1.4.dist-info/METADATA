@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: simple-chatgpt-cli
+Version: 0.1.4
+Summary: 
+Author: tailaiw
+Author-email: 29800495+tailaiw@users.noreply.github.com
+Requires-Python: >=3.10,<3.12
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: openai (>=0.27.6,<0.28.0)
+Requires-Dist: rich (>=13.3.5,<14.0.0)
+Description-Content-Type: text/markdown
+
+# Simple-ChatGPT-CLI
+
+A simple implementation of ChatGPT in terminal, so I can avoid using the ChatGPT website which is more expensive and less privacy-friendly.
+
+## Installation
+
+```bash
+pip install simple-chatgpt-cli
+```
+
+## Usage
+
+You can run the program with
+```bash
+chatgpt
+```
+
+You must either set/save the key following the CLI prompts (recommended) or set an environment variable `OPENAI_API_KEY`.
+
+![screenshot](screenshot.png)
+
+## Tips
+
+Use `#startover` to start a new conversation whenever you switch to a new topic and the bot doesn't need previous context anymore. This helps reduce your OpenAI bill.
+
+The program will remind you this if you come back to an idle conversation after more than 5 minutes.
+
+## Development
+
+This project was initialized by my [Python project boilerplate](https://github.com/tailaiw/python-boilerplate). So you will need all the prerequisites of that project.
+
