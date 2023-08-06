@@ -1,0 +1,129 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*- 
+# @Author    : Gavin
+# @DateTime  : 2022/6/10 16:33
+# @Contact   : guowenwhy@foxmail.com
+#
+# @Project   : TestToolBox
+# @File      : CMS_COMMON_ENUM.yml
+# @Describe  : CMS系统通用枚举值 - 接口请求准备
+# ————————————————————
+# @Version   : 0.1 
+#
+# update   : 2022/6/10
+# 1. 是否需要每次初始化时更新枚举值？ 加载配置 + 接口更新
+# 2. 
+# ————————————————————
+# update   :
+# 1.
+# 2.
+# ————————————————————
+
+
+# 全局通用枚举值 -- 业务影响枚举值
+Common:
+    broadcastType: ["LIVE","ORCHESTRATION"]
+    produceType: ["MODELESS","ACTION","KEYFRAME","MULTIPLE_MOVEMENT"]
+    # todo 类目与细分分类层级关联
+#    category: [[1], [2], [3], [7], [13], [15], [60], [62], [64],[67], [101], [104], [115], [118], [124]]
+    # 普通参数枚举
+    intensity: [0, 1, 2, 3]
+    language: ["zh_CN","en_US","ko_KR"]
+    externalDuration: [300000, 600000, 900000, 1200000, 1800000, 2700000, 3600000]
+
+    category&specificCategory:
+        keyName: [category, specificCategory]
+        keyValue:
+            1: [[73], [75]]     # 格斗训练
+            2: [[137], [138], [139], [140], [141]]   # 瑜伽
+            3: [[42], [131], [132]]     # 有氧舞
+            7: [[31]]   # Barre
+            13: [[32]]      # HIIT
+            15: [[28]]    # 体态纠正
+            60: [[142],[143],[144],[153],]    # 拉伸
+            62: [[72], [74], [77], [78]]  # 力量塑形
+            64: [[69], [70], [109]]    # 孕产专属
+            67: [[148], [149], [150], [151], [152], [154], [155], [156]]    # 普拉提
+            101: [[103]]   # 青少儿专属
+            104: [[105], [114], [157], [158], [159]]   # 武艺
+            115: [[41], [145], [146], [147], [160]]    # 舞蹈
+            118: [[119]]   # 损伤预防
+            124: [[129]]   # 冥想
+            
+
+# 通用内容业务规则
+ContentRule:
+    
+    Scene:
+        createProducePlan:  # 必填字段
+            [broadcastType, produceType]
+    
+    # 课程种类 直播/录播 -- 与课程类型关联关系
+    broadcastType:
+        LIVE:
+            produceType: [MODELESS]
+        ORCHESTRATION:
+            produceType: [MODELESS,ACTION,KEYFRAME,MULTIPLE_MOVEMENT]
+
+    # 课程类型 -- 类目关联关系
+    produceType:
+        MODELESS:
+            category: [[1], [2], [3], [7], [13], [15], [60], [62], [64], [67], [101], [104], [115], [118], [124]]
+        ACTION:
+            category: [[1], [2], [3], [7], [13], [15], [60], [62], [64], [67], [101], [104], [115], [118], [124]]
+        KEYFRAME:
+            category: [[3], [104], [115], [7], [101]]
+        MULTIPLE_MOVEMENT:
+            category: [[1]]
+    
+        
+
+# 配置函数
+FuncDemo:
+    randomData: lambda:random.choice(["zh_CN","en_US","ko_KR"])
+    start: lambda *args:f"{time.time()}"
+    end: lambda *args:int(time.time()*1000)
+
+# 树形结构规则
+producePlanRule:
+    #     key:
+    #        ?==\is\!=\>\<\in\if\regex\:
+    #            value:
+    #                (key:
+    #                    ?LOGIC:
+    #                        -   value
+    #                )
+
+    # 各字段内在业务逻辑关联 - ?遍历逻辑
+    broadcastType:
+        onlyIn:
+            LIVE:
+                produceType:
+                    ==:
+                        MODELESS:
+            ORCHESTRATION:
+                # 子条件 & 赋值枚举
+                produceType:
+                    onlyIn:
+                        MODELESS:
+                        ACTION:
+                        KEYFRAME:
+                            # l3
+                            category:
+                                In: # [1, 2, 3]
+                                    1:
+                                    2:
+                                    3:
+                                    22:
+                        MULTIPLE_MOVEMENT:
+                            category:
+                                In: # [33]
+                                    33:
+
+    # l4 - 同时验证数据枚举值 & 判断下层条件
+    specificCategory:
+        if:
+            44:
+                add_assistantCoachIds:
+                    except:
+                        coachId

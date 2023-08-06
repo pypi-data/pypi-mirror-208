@@ -1,0 +1,60 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*- 
+# @Author    : Gavin
+# @DateTime  : 2022/3/12 12:03
+# @Contact   : guowenwhy@foxmail.com
+#
+# @Project   : TestToolBox
+# @File      : Api_Template_Doc.yml
+# @Describe  : 接口文档模板
+# ————————————————————
+# @Version   : 0.1 
+#
+# update   : 2022/3/12
+# 1. 模板查询接口
+# 2. 
+# ————————————————————
+# update   : 04/08
+# 1.
+# 2.
+# ————————————————————
+# update   :
+# 1.
+# 2.
+# ————————————————————
+
+metaData:
+    HOST: &demo
+#        stable-cp-fcc-nt.qa.fiture.com
+        dog.ceo
+    Headers:
+        Authorization: &auth
+            "Bearer"
+
+
+
+# 接口模板
+templateApi:
+    DESC: 接口模板描述
+    ENUM:
+        temp: ["temp1", "temp2"]
+    REQUEST:
+        URL: https://dog.ceo/api/breeds/image/random
+        METHOD: GET
+#        METHOD: POST
+        HOST: *demo
+        PATH: /api/breeds/image/random
+        QUERY: {}
+        PARAM:
+        HEADERS:
+            Content-Type: application/json
+    RESPONSE:
+        httpCode: 200
+        status: SUCCESS
+        content:
+            records: []
+            current: 1
+            size: 10
+            total: 10
+        errorCode:
+        errorMsg:
