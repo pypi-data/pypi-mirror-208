@@ -1,0 +1,4 @@
+TEST_DUMMY_AGENT = "test_dummy_agent"
+TEST_DUMMY_WORLD_INSTANCE_ALIAS = "dw1__1"
+TEST_DUMMY_G_NODE_ALIAS = "dw1.testdummy"
+TEST_DUMMY_G_NODE_INSTANCE_ID = "c672a3ec-3fcd-46b8-8df5-30c5bc4ae13a"
