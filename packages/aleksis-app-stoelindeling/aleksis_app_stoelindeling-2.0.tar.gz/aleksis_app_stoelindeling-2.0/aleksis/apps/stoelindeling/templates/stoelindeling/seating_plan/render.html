@@ -1,0 +1,17 @@
+<div class="row card grey lighten-4 seats">
+  <div class="card-content">
+    <div class="seat-grid">
+      {% for x, x_items in seating_plan.get_all_seats.build_grid.items %}
+        <div class="seat-grid-col">
+          {% for y, seat in x_items.items %}
+            <div class="seat-grid-cell">
+              {% if seat %}
+                {% include "stoelindeling/partials/seat.html" with seat=seat %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

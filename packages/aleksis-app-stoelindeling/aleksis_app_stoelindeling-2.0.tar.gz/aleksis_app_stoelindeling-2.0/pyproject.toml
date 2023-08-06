@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "AlekSIS-App-Stoelindeling"
+version = "2.0"
+packages = [
+    { include = "aleksis" }
+]
+readme = "README.rst"
+include = [
+    { path = "aleksis/**/*.mo", format = ["sdist", "wheel"] },
+    { path = "*.rst", format = "sdist" },
+    { path = "tox.ini", format = "sdist" }
+]
+
+description = "AlekSIS (School Information System) — App Stoelindeling (Create and publish seating plans)"
+authors = ["Jonathan Weth <dev@jonathanweth.de>"]
+license = "EUPL-1.2-or-later"
+homepage = "https://aleksis.org"
+repository = "https://edugit.org/AlekSIS/official/AlekSIS-App-Stoelindeling"
+documentation = "https://aleksis.org/official/AlekSIS/docs/html/"
+classifiers = [
+    "Environment :: Web Environment",
+    "Intended Audience :: Education",
+    "Topic :: Education"
+]
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://edugit.org/api/v4/projects/461/packages/pypi/simple"
+secondary = true
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aleksis-core = "^3.0"
+aleksis-app-chronos = "^3.0"
+
+[tool.poetry.dev-dependencies]
+aleksis-builddeps = "*"
+
+[tool.poetry.plugins."aleksis.app"]
+stoelindeling = "aleksis.apps.stoelindeling.apps:DefaultConfig"
+
+[tool.black]
+line-length = 100
+exclude = "/migrations/"
+
+[tool.curlylint]
+include = '\.html'
+
+[tool.curlylint.rules]
+aria_role = true
+django_forms_rendering = true
+image_alt = true
+indent = 2
+meta_viewport = true
+no_autofocus = true
+tabindex_no_positive = true
+
+[build-system]
+requires = ["poetry>=1.0"]
+build-backend = "poetry.masonry.api"

@@ -1,0 +1,78 @@
+.seat {
+  width: 80px;
+  height: 80px;
+  margin: 2px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  font-size: 0.8em;
+  word-break: break-word;
+  position: relative;
+}
+
+.drag-area .seat {
+  cursor: grab;
+}
+
+#seats {
+  overflow: auto;
+  width: auto;
+}
+
+.seat-grid {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.seat-grid-col {
+  margin: 0;
+}
+
+.seat-grid-cell {
+  width: 86px;
+  height: 86px;
+  border: 1px dashed darkgrey;
+}
+
+#not-used-seats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.seat-grid-add-col {
+  padding: 0 5px;
+}
+
+.seat-grid-add-col button {
+  height: 100%;
+  padding: 0 5px;
+}
+
+.seat-grid-add-row {
+  padding: 5px 5px;
+  width: 100%;
+}
+
+.seat-grid-add-row button {
+  width: 100%;
+}
+
+.seat .clip-circle {
+  width: auto;
+  height: 60%;
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 5px;
+}
+
+.seat-name {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+}

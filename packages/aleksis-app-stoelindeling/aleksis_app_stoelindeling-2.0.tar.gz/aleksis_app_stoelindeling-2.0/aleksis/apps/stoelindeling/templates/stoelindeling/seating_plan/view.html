@@ -1,0 +1,38 @@
+{# -*- engine:django -*- #}
+
+{% extends "core/base.html" %}
+{% load i18n static rules %}
+
+{% block browser_title %}{% blocktrans %}Seating plan{% endblocktrans %}{% endblock %}
+
+{% block page_title %}
+  <a href="{% url "seating_plans" %}"
+     class="btn-flat primary-color-text waves-light waves-effect">
+    <i class="material-icons left iconify" data-icon="mdi:chevron-left"></i> {% trans "Back" %}
+  </a>
+  {% blocktrans with plan=object %}Seating plan: {{ plan }}{% endblocktrans %}
+{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static "css/stoelindeling/seating_plan.css" %}">
+{% endblock %}
+
+{% block content %}
+  {% has_perm "stoelindeling.edit_seatingplan_rule" user seating_plan as can_edit %}
+  {% has_perm "stoelindeling.delete_seatingplan_rule" user seating_plan as can_delete %}
+
+  {% if can_edit %}
+    <a class="btn waves-effect waves-light orange margin-bottom" href="{% url "edit_seating_plan" object.pk %}">
+      <i class="material-icons left iconify" data-icon="mdi:pencil-outline"></i>
+      {% trans "Edit" %}
+    </a>
+  {% endif %}
+  {% if can_delete %}
+    <a class="btn waves-effect waves-light red margin-bottom" href="{% url "delete_seating_plan" object.pk %}">
+      <i class="material-icons left iconify" data-icon="mdi:delete-outline"></i>
+      {% trans "Delete" %}
+    </a>
+  {% endif %}
+
+  {% include "stoelindeling/seating_plan/render.html" with seating_plan=object %}
+{% endblock %}
