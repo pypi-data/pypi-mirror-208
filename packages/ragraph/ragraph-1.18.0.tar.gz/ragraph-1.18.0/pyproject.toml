@@ -1,0 +1,94 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "ragraph"
+version = "1.18.0"
+description = "Ratio graph handling in Python."
+authors = ["Ratio Innovations B.V. <info@ratio-case.nl>"]
+license = "GPL-3.0-or-later"
+documentation = "https://ragraph.ratio-case.nl"
+readme = "README.rst"
+repository = "https://gitlab.com/ratio-case-os/python/ragraph"
+homepage = "https://ragraph.ratio-case.nl"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+dd = { version = "^0.5.7" }
+lxml = { version = "^4.8.0" }
+numpy = { version = "^1.22.3" }
+plotly = { version = "^5.7.0" }
+"ruamel.yaml" = "^0.17.21"
+kaleido = { version = "0.2.1", optional = true }
+raesl = { version = "*", optional = true }
+ratio-genetic-py = "^0.3.0"
+
+[tool.poetry.extras]
+esl = ["raesl"]
+plot = ["kaleido"]
+all = ["kaleido", "raesl"]
+
+[tool.poetry.group.lint.dependencies]
+black = "*"
+raver = { version = "^3.0.1" }
+ruff = "^0.0.261"
+
+[tool.poetry.group.experiment.dependencies]
+jupyterlab = "^3"
+pandas = "^1.4.3"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-doctestplus = "*"
+
+[tool.poetry.group.docs.dependencies]
+pydata-sphinx-theme = { version = "*" }
+pygments-csv-lexer = { version = "*" }
+Sphinx = { version = "*" }
+sphinx-autoapi = { version = "*" }
+sphinx-copybutton = { version = "*" }
+sphinx-prompt = { version = "*" }
+sphinxcontrib-bibtex = { version = "*" }
+sphinxemoji = { version = "*" }
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+
+[tool.pytest.ini_options]
+addopts = "-s --cov --cov-report xml:./.pytest_cache/coverage.xml --cov-report term-missing --doctest-plus --doctest-rst --basetemp ./tests/.temp"
+testpaths = ["docs", "tests"]
+markers = ["slow"]
+
+[tool.coverage.run]
+source = [
+    "ragraph",
+    "/usr/local/lib/python3.9/site-packages/ragraph",
+    "/home/ratio/.local/lib/python3.9/site-packages/ragraph",
+]
+disable_warnings = ["module-not-imported"]
+
+[tool.coverage.paths]
+source = [
+    "ragraph",
+    "/usr/local/lib/python3.9/site-packages/ragraph",
+    "/home/ratio/.local/lib/python3.9/site-packages/ragraph",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.raver]
+ref = "origin/main"
+changelog = "./docs/source/changelog.rst"
+
+[tool.ruff]
+line-length = 100
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+]
+target-version = "py39"
