@@ -1,0 +1,412 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Written by Lucas Sinclair and Paul Rougieux.
+
+JRC Biomass Project.
+Unit D1 Bioeconomy.
+
+Check the silviculture input tables for inconsistencies
+
+    >>> from eu_cbm_hat.core.continent import continent
+    >>> runner  = continent.combos['hat'].runners['AT'][-1]
+    >>> runner.silv.check()
+
+"""
+
+# Built-in modules #
+
+# Third party modules #
+import pandas
+
+# First party modules #
+from plumbing.cache import property_cached
+
+# Internal modules #
+
+def keep_clfrs_without_question_marks(df, classifiers):
+    """Check if there are questions mark in a classifier column
+    and return a list of index columns that:
+
+    :param (df) data frame of silviculture data
+    :param (classifiers) list of classifier columns to check
+    :output (list) list of classifiers that don't contain "?"
+
+    The function performs the following:
+
+    - keep a column if it contains no question marks
+
+    - return an error if a column contains a mixture of question marks and
+      other values
+
+    - remove the column from output list if there are only question marks in
+      that column
+
+    Example use (will only work after simulation start):
+
+        >>> from eu_cbm_hat.info.silviculture import keep_clfrs_without_question_marks
+        >>> from eu_cbm_hat.core.continent import continent
+        >>> runner  = continent.combos['hat'].runners['ZZ'][-1]
+        >>> irw_frac = runner.silv.irw_frac.get_year(2016)
+        >>> clfrs = list(runner.country.orig_data.classif_names.values())
+        >>> keep_clfrs_without_question_marks(irw_frac, clfrs)
+
+    """
+    # TODO: The error raised when there are a mixture of other values and
+    # question marks should be raised in the BaseSilvInfo.conv_clfrs() method.
+    # Why is this not the case for irw_frac and the events_template?
+    output_classifiers = []
+    for classif_name in classifiers:
+        values = df[classif_name].unique().tolist()
+        if len(values) > 1 and "?" in values:
+            msg =  "Mixture of question marks and other values"
+            msg += f"not allowed in, column {classif_name}.\n"
+            msg += f"The data frame contains the following columns:\n{df.columns}."
+            raise ValueError(msg)
+        # Remove classifiers that contain question marks only
+        if "?" in values:
+            continue
+        # Add classifiers that don't contain question marks
+        output_classifiers.append(classif_name)
+    return output_classifiers
+
+
+###############################################################################
+class Silviculture:
+    """
+    Access to silvicultural information pertaining to a given country.
+    This includes the following files:
+
+    * irw_frac_by_dist.csv
+    * vol_to_mass_coefs.csv
+    * events_templates.csv
+    * harvest_factors.csv
+
+    Each is accessed by its own corresponding attribute:
+
+    * `silv.irw_frac`
+    * `silv.coefs`
+    * `silv.events`
+    * `silv.harvest`
+
+    Loading this information will fail if you call `df` before a simulation is
+    launched, because we need the internal SIT classifier and disturbance
+    mapping. Before the simulation starts, it is only possible to load the raw
+    versions of the input data as such: `silv.harvest.raw`.
+    """
+
+    def __init__(self, runner):
+        # Default attributes #
+        self.runner = runner
+        # Shortcuts #
+        self.country = self.runner.country
+
+    @property_cached
+    def irw_frac(self):
+        return IRWFractions(self)
+
+    @property_cached
+    def coefs(self):
+        return VolToMassCoefs(self)
+
+    @property_cached
+    def events(self):
+        return EventsTemplates(self)
+
+    @property_cached
+    def harvest(self):
+        return HarvestFactors(self)
+
+    def check(self):
+        """Check the consistency of silviculture input files"""
+        self.events.check()
+        self.coefs.check()
+        self.harvest.check()
+        self.irw_frac.check()
+
+###############################################################################
+class BaseSilvInfo:
+    """
+    A class that contains methods common to all silvicultural information
+    files. You should inherit from this class.
+    """
+
+    def __init__(self, silv):
+        # Default attributes #
+        self.silv = silv
+        # Shortcuts #
+        self.runner  = self.silv.runner
+        self.country = self.silv.country
+        self.combo   = self.runner.combo
+        self.code    = self.country.iso2_code
+
+    #----------------------------- Properties --------------------------------#
+    @property_cached
+    def raw(self):
+        """Data frame available in the input data"""
+        return pandas.read_csv(self.csv_path,
+                               dtype = {c:'str' for c in self.cols})
+
+    @property_cached
+    def cols(self):
+        return list(self.country.orig_data.classif_names.values()) + \
+               ['disturbance_type']
+
+    @property_cached
+    def dup_cols(self):
+        return ['scenario'] + self.cols
+
+    def check(self):
+        """Perform various checks on the silviculture input tables"""
+        # Make a check of duplicated entries #
+        self.duplication_check()
+        # Optional extra checks #
+        if hasattr(self, 'extra_checks'): self.extra_checks()
+        # Make a consistency check between dist_name and dist_id #
+        if 'dist_type_name' in self.raw.columns:
+            self.consistency_check()
+
+    @property_cached
+    def df(self):
+        """Data frame with disturbance IDs and classifiers IDs converted to the
+        internal IDs
+        """
+        self.check()
+        # Load #
+        df = self.raw.copy()
+        # Drop the names which are useless #
+        if 'dist_type_name' in self.raw.columns:
+            df = df.drop(columns='dist_type_name')
+        # Convert the disturbance IDs to the real internal IDs #
+        df = self.conv_dists(df)
+        # Convert the classifier IDs to the real internal IDs #
+        df = self.conv_clfrs(df)
+        # Return #
+        return df
+
+    #------------------------------- Methods ---------------------------------#
+    def conv_dists(self, df):
+        """
+        Convert the disturbance IDs such as `20` and `22` into their
+        internal simulation ID numbers that are defined by SIT.
+        """
+        # Get the conversion mapping and invert it #
+        id_to_id = self.runner.simulation.sit.disturbance_id_map
+        id_to_id = {v:k for k,v in id_to_id.items()}
+        # Check that all IDs can be converted to an internal ID
+        cannot_convert = df['disturbance_type'].dropna().map(id_to_id).isna()
+        if any(cannot_convert):
+            msg = f"In the file {self.csv_path}, the disturbance type(s) "
+            msg += f"{df['disturbance_type'][cannot_convert].unique()} "
+            msg += "cannot be converted to an internal disturbance id, using the "
+            msg += "following mapping dictionary."
+            raise ValueError(msg, id_to_id)
+        # Apply the mapping to the dataframe #
+        df['disturbance_type'] = df['disturbance_type'].map(id_to_id)
+        # Return #
+        return df
+
+    def conv_clfrs(self, df):
+        """
+        Convert the classifier values such as `PA` and `QA` into their
+        internal simulation ID numbers that are defined by SIT.
+        """
+        # Get all the conversion mappings, for each classifier #
+        all_maps = self.runner.simulation.sit.classifier_value_ids.items()
+
+        # Apply each of them to the dataframe #
+        for classif_name, str_to_id in all_maps:
+            if classif_name not in df.columns:
+                continue
+
+            # Handle question marks
+            values = df[classif_name].unique()
+            if len(values) == 1 and values[0] == "?":
+                continue
+            if len(values) > 1 and "?" in values:
+                msg =  "Mixture of question marks and other values"
+                msg += f"not allowed in %s, column {classif_name}"
+                raise ValueError(msg % self)
+
+            # Convert classifiers to their internal id
+            df[classif_name] = df[classif_name].map(str_to_id)
+
+        # Return #
+        return df
+
+    def consistency_check(self):
+        # Get mapping dictionary from ID to full description #
+        id_to_name = self.country.orig_data['disturbance_types']
+        id_to_name = dict(zip(id_to_name['dist_type_name'],
+                              id_to_name['dist_desc_input']))
+        # Compare #
+        names = self.raw['disturbance_type'].map(id_to_name)
+        orig  = self.raw['dist_type_name']
+        comp  = orig == names
+        # Raise exception #
+        if not all(comp):
+            msg = "Names don't match IDs in '%s'.\n" % self.csv_path
+            msg += "Names derived from the IDs:\n"
+            msg += str(names[~comp])
+            msg += "\n\nNames in the user file:\n"
+            msg += str(orig[~comp])
+            raise Exception(msg)
+
+    def duplication_check(self):
+        # What columns are we going to check duplication on #
+        cols = self.dup_cols
+        # Get duplicated rows #
+        dups = self.raw.duplicated(subset=cols, keep=False)
+        # Assert #
+        if any(dups):
+            msg = "There are duplicated entries in the file '%s'."
+            msg += "\nThe duplicated rows are shown below:\n\n"
+            msg += str(self.raw.loc[dups, cols])
+            raise Exception(msg % self.csv_path)
+
+    def get_year(self, year):
+        # Case number 1: there is only a single scenario specified #
+        if isinstance(self.choices, str): scenario = self.choices
+        # Case number 2: the scenarios picked vary according to the year #
+        else: scenario = self.choices[year]
+        # Retrieve by query #
+        df = self.df.query("scenario == '%s'" % scenario)
+        # Drop the scenario column #
+        df = df.drop(columns='scenario')
+        # Check there is data left #
+        assert not df.empty
+        # Return #
+        return df
+
+###############################################################################
+class IRWFractions(BaseSilvInfo):
+    """
+    Gives access the industrial roundwood fractions, per disturbance type,
+    for the current simulation run.
+    """
+
+    @property
+    def choices(self):
+        """Choices made for `irw` fraction in the current combo."""
+        return self.combo.config['irw_frac_by_dist']
+
+    @property
+    def csv_path(self):
+        return self.country.orig_data.paths.irw_csv
+
+###############################################################################
+class VolToMassCoefs(BaseSilvInfo):
+    """
+    Gives access to the coefficients that enable the conversion from
+    wood volume to wood mass.
+    """
+
+    @property
+    def csv_path(self):
+        return self.country.orig_data.paths.vol_to_mass_csv
+
+    @property
+    def cols(self):
+        return ['forest_type']
+
+    @property
+    def dup_cols(self):
+        return self.cols
+
+    @property_cached
+    def df(self):
+        # Make a check of duplicated entries #
+        self.duplication_check()
+        # Load #
+        df = self.raw.copy()
+        # Convert the classifier IDs to the real internal IDs #
+        df = self.conv_clfrs(df)
+        # Return #
+        return df
+
+###############################################################################
+class EventsTemplates(BaseSilvInfo):
+    """
+    Gives access to the dynamic events that have to be generated to
+    satisfy the harvest.
+    """
+
+    @property
+    def choices(self):
+        """Choices made for the events templates in the current combo."""
+        return self.combo.config['events_templates']
+
+    @property
+    def csv_path(self):
+        return self.country.orig_data.paths.events_templates
+
+    @property
+    def dup_cols(self):
+        return list(self.country.orig_data.classif_names.values()) + \
+               ['scenario', 'sw_start', 'sw_end', 'hw_start', 'hw_end'] + \
+               ["last_dist_id"]
+
+    def extra_checks(self):
+        # Guarantee no difference between sw_start and hw_start #
+        assert all(self.raw['sw_start'] == self.raw['hw_start'])
+        # Guarantee no difference between sw_end and hw_end #
+        assert all(self.raw['sw_end'] == self.raw['hw_end'])
+        # Guarantee we don't use max_since_last_dist #
+        assert all(self.raw['max_since_last_dist'] == -1)
+
+###############################################################################
+class HarvestFactors(BaseSilvInfo):
+    """
+    Gives access to the data in the file `harvest_factors.csv`.
+    """
+
+    @property
+    def choices(self):
+        """Choices made for the harvest factors in the current combo."""
+        return self.combo.config['harvest_factors']
+
+    @property
+    def csv_path(self):
+        return self.country.orig_data.paths.harvest_factors
+
+    @property
+    def cols(self):
+        cols = ['forest_type', 'mgmt_type', 'disturbance_type', 'con_broad']
+        cols = cols + ['product_created', 'silv_practice']
+        return cols
+
+    @property
+    def join_cols(self):
+        """Keep only columns that are not empty as join columns"""
+        join_cols = []
+        for col in self.cols:
+            if not any(self.df[col].isna()):
+                join_cols.append(col)
+        return join_cols
+
+    def extra_checks(self):
+        """Check the raw data for empty columns, proportions that sum to one.
+
+        Check the raw data frame so it an be checked at the beginning of the simulation.
+        """
+        index = ["scenario", "product_created"]
+        cols = list(set(self.cols) - set(["product_created"]))
+        df_check = self.raw.groupby(index)[cols].agg(lambda x: len(x.isna().unique()))
+        for col in cols:
+            if any(df_check[col]>1):
+                df_wrong = df_check[df_check[col]>1]
+                msg = "For a given scenario and a given product, "
+                msg += "A join column can either be completely empty or full, "
+                msg += "but it cannot be incomplete i.e. "
+                msg += "with some missing values and some values."
+                msg += f"Check column: {col} in scenario {df_wrong.index.to_list()}"
+                raise ValueError(msg)
+        # Check that the skew factors sum to one by scenario and product group
+        df_long = self.raw.melt(id_vars = self.cols + ["scenario"])
+        index = ["scenario", "product_created", "variable"]
+        df_long["value_sum"] = df_long.groupby(index)["value"].transform(sum)
+        df_long_irw = df_long.query("product_created=='irw_and_fw'")
+        if not all(df_long_irw["value_sum"] == 1):
+            msg = "The following skew factors do not sum to one"
+            raise ValueError(msg, df_long_irw.query("value_sum !=1"))
