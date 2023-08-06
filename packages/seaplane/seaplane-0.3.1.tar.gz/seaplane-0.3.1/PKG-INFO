@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: seaplane
+Version: 0.3.1
+Summary: Seaplane Python SDK
+Home-page: https://github.com/seaplane-io/seaplane/tree/main/seaplane-sdk/python
+License: Apache License
+Author: Seaplane IO, Inc.
+Requires-Python: >=3.8,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: Flask-Cors (>=3.0.10,<4.0.0)
+Requires-Dist: Flask-SocketIO (>=5.3.4,<6.0.0)
+Requires-Dist: attrs (==21.4.0)
+Requires-Dist: certifi (==2022.6.15)
+Requires-Dist: charset-normalizer (==2.1.0)
+Requires-Dist: idna (==3.3)
+Requires-Dist: iniconfig (==1.1.1)
+Requires-Dist: packaging (==21.3)
+Requires-Dist: pluggy (==1.0.0)
+Requires-Dist: py (==1.11.0)
+Requires-Dist: pyparsing (==3.0.9)
+Requires-Dist: requests (==2.28.1)
+Requires-Dist: requests-mock (>=1.9.3,<2.0.0)
+Requires-Dist: returns (>=0.19.0,<0.20.0)
+Requires-Dist: simplejson (>=3.17.6,<4.0.0)
+Requires-Dist: tomli (==2.0.1)
+Requires-Dist: types-requests (>=2.28.0,<3.0.0)
+Requires-Dist: types-simplejson (>=3.17.7,<4.0.0)
+Requires-Dist: urllib3 (==1.26.9)
+Project-URL: Documentation, https://github.com/seaplane-io/seaplane/tree/main/seaplane-sdk/python
+Project-URL: Repository, https://github.com/seaplane-io/seaplane/tree/main/seaplane-sdk/python
+Description-Content-Type: text/markdown
+
+# Seaplane Python SDK
+[![PyPI](https://badge.fury.io/py/seaplane.svg)](https://badge.fury.io/py/seaplane)
+[![Python](https://img.shields.io/pypi/pyversions/seaplane.svg?style=plastic)](https://badge.fury.io/py/seaplane)
+
+Simple Python library to manage your resources at seaplane.
+
+## What is Seaplane?
+
+Seaplane is the global platform for building and scaling your application stack
+without the complexity of managing cloud infrastructure.
+
+It serves as a reference application for how our APIs can be utilized.
+
+Not sure where to go to quickly run a workload on Seaplane? See our [Getting
+Started] guide.
+
+To build and test this software yourself, see the CONTRIBUTING document that is a peer to this one.
+
+## Installation
+
+```shell
+pip install seaplane
+```
+
+## Configure your API KEY
+
+* Set `SEAPLANE_API_KEY` environment variable.
+* Use `config` object in order to set the api key.
+
+```python
+from seaplane import sea
+
+sea.config.set_api_key("your_api_key")
+```
+
+## License
+
+Licensed under the Apache License, Version 2.0, [LICENSE]. Copyright 2022 Seaplane IO, Inc.
+
+[//]: # (Links)
+
+[Seaplane]: https://seaplane.io/
+[CLI]: https://github.com/seaplane-io/seaplane/tree/main/seaplane-cli
+[SDK]: https://github.com/seaplane-io/seaplane/tree/main/seaplane
+[Getting Started]: https://github.com/seaplane-io/seaplane/blob/main/seaplane-sdk/python/docs/quickstart.md
+[CONTRIBUTING]: https://github.com/seaplane-io/seaplane/tree/main/seaplane-sdk/python/CONTRIBUTIONS.md
+[LICENSE]: https://github.com/seaplane-io/seaplane/blob/main/LICENSE
+
