@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spacepackets"
+description = "Various CCSDS and ECSS packet implementations"
+readme = "README.md"
+dynamic = ["version"]
+requires-python = ">=3.7"
+license = {text = "Apache-2.0"}
+authors = [
+  {name = "Robin Mueller", email = "robin.mueller.m@gmail.com"}
+]
+keywords = ["ccsds", "ecss", "space", "communication", "packet"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Communications",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering"
+]
+dependencies = [
+    "crcmod~=1.7",
+    "deprecation~=2.1"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/us-irs/spacepackets-py"
+
+[tool.setuptools.dynamic]
+version = {attr = "spacepackets.__version__"}
+
+[tool.setuptools.packages]
+find = {}
