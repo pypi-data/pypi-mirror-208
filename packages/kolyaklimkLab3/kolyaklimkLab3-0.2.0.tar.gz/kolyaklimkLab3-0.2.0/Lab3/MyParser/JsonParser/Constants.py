@@ -1,0 +1,14 @@
+INF_LITERAL = str(1E1000)
+NAN_LITERAL = str(1E1000 / 1E1000)
+TRUE_LITERAL = "true"
+FALSE_LITERAL = "false"
+NULL_LITERAL = "null"
+INT_PATTERN = fr"[+-]?\d+"
+FLOAT_PATTERN = fr"(?:[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?|[+-]?{INF_LITERAL}\b|{NAN_LITERAL}\b)"
+BOOL_PATTERN = fr"({TRUE_LITERAL}|{FALSE_LITERAL})\b"
+STRING_PATTERN = fr"\"(?:(?:\\\")|[^\"])*\""
+NULL_PATTERN = fr"\b{NULL_LITERAL}\b"
+ELEMENTARY_TYPES_PATTERN = fr"{FLOAT_PATTERN}|{INT_PATTERN}|{BOOL_PATTERN}|{STRING_PATTERN}|{NULL_PATTERN}"
+ARRAY_PATTERN = r"\[(?R)?(?:,(?R))*\]"
+OBJECT_PATTERN = r"\{(?:(?R):(?R))?(?:,(?R):(?R))*\}"
+VALUE_PATTERN = fr"\s*({ELEMENTARY_TYPES_PATTERN}|" + fr"{ARRAY_PATTERN}|{OBJECT_PATTERN})\s*"
