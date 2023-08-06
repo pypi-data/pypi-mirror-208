@@ -1,0 +1,831 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Azure Log Analytics",
+            "group": "azure",
+            "type": "connectorType"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$",
+            "default": "api.loganalytics.io"
+        },
+        "port": {
+            "type": "number",
+            "default": 443,
+            "min": 1,
+            "max": 65535
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources-sentinel.html"
+        },
+        "sni": {
+            "type": "text",
+            "optional": true
+        },
+        "workspaceId": {
+            "type": "text",
+            "optional": true
+        },
+        "selfSignedCert": {
+            "type": "password",
+            "optional": true
+        },
+        "options": {
+            "type": "fields",
+            "async_call": {
+                "type": "text",
+                "hidden": true,
+                "optional": true
+            },
+            "result_limit": {
+                "default": 10000,
+                "min": 1,
+                "max": 500000,
+                "type": "number",
+                "previous": "connection.resultSizeLimit"
+            },
+            "time_range": {
+                "default": 5,
+                "min": 1,
+                "max": 10000,
+                "type": "number",
+                "previous": "connection.timerange",
+                "nullable": true
+            },
+            "timeout": {
+                "default": 30,
+                "min": 1,
+                "max": 60,
+                "hidden": true,
+                "type": "number",
+                "previous": "connection.timeoutLimit"
+            },
+            "dialects": {
+                "type": "array",
+                "hidden": true,
+                "optional": true
+            },
+            "language": {
+                "type": "string",
+                "default": "stix",
+                "optional": true,
+                "hidden": true
+            },
+            "validate_pattern": {
+                "type": "boolean",
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.validate_pattern"
+            },
+            "stix_validator": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true,
+                "previous": "connection.stix_validator"
+            },
+            "mapping": {
+                "type": "json",
+                "optional": true,
+                "previous": "connection.mapping",
+                "default": {
+                    "SecurityAlert_from_stix_map": {
+                        "x-ibm-finding": {
+                            "fields": {
+                                "start": [
+                                    "StartTime",
+                                    "TimeGenerated"
+                                ],
+                                "end": [
+                                    "EndTime",
+                                    "ProcessingEndTime"
+                                ],
+                                "name": [
+                                    "AlertName"
+                                ],
+                                "time_observed": [
+                                    "TimeGenerated",
+                                    "EventTime"
+                                ]
+                            }
+                        },
+                        "x-oca-event": {
+                            "fields": {
+                                "created": [
+                                    "TimeGenerated"
+                                ],
+                                "provider": [
+                                    "ProviderName"
+                                ],
+                                "domain_ref": [
+                                    "DomainName"
+                                ]
+                            }
+                        },
+                        "x-azure-security-alert": {
+                            "fields": {
+                                "tenant_id": [
+                                    "TenantId"
+                                ],
+                                "subscription_id": [
+                                    "WorkspaceSubscriptionId"
+                                ],
+                                "resourceId": [
+                                    "_ResourceId"
+                                ],
+                                "alert_severity": [
+                                    "AlertSeverity"
+                                ],
+                                "description": [
+                                    "Description"
+                                ],
+                                "product_name": [
+                                    "ProductName"
+                                ],
+                                "vendor_name": [
+                                    "VendorName"
+                                ],
+                                "system_alertid": [
+                                    "SystemAlertId"
+                                ],
+                                "status": [
+                                    "Status"
+                                ],
+                                "extented_properties": [
+                                    "ExtentedProperties"
+                                ],
+                                "confidence_level": [
+                                    "ConfidenceLevel"
+                                ],
+                                "entities": [
+                                    "Entities"
+                                ],
+                                "display_name": [
+                                    "DisplayName"
+                                ],
+                                "workspace_resource_group": [
+                                    "WorkspaceResourceGroup"
+                                ],
+                                "compromised_entity": [
+                                    "CompromisedEntity"
+                                ]
+                            }
+                        }
+                    },
+                    "SecurityEvent_from_stix_map": {
+                        "ipv4-addr": {
+                            "fields": {
+                                "value": [
+                                    "IpAddress"
+                                ]
+                            }
+                        },
+                        "domain-name": {
+                            "fields": {
+                                "value": [
+                                    "TargetDomainName"
+                                ]
+                            }
+                        },
+                        "user-account": {
+                            "fields": {
+                                "account_login": [
+                                    "TargetUserName"
+                                ]
+                            }
+                        },
+                        "directory": {
+                            "fields": {
+                                "path": [
+                                    "HomeDirectory",
+                                    "HomePath"
+                                ]
+                            }
+                        },
+                        "file": {
+                            "fields": {
+                                "path": [
+                                    "FilePath"
+                                ],
+                                "hashes.'SHA-256'": [
+                                    "FileHash"
+                                ],
+                                "hashes.MD5": [
+                                    "FileHash"
+                                ],
+                                "hashes.'SHA-1'": [
+                                    "FileHash"
+                                ]
+                            }
+                        },
+                        "process": {
+                            "fields": {
+                                "name": [
+                                    "ProcessName",
+                                    "LogonProcessName"
+                                ],
+                                "parent_ref.name": [
+                                    "ParentProcessName"
+                                ],
+                                "command_line": [
+                                    "CommandLine"
+                                ],
+                                "pid": [
+                                    "ProcessId"
+                                ]
+                            }
+                        },
+                        "url": {
+                            "fields": {
+                                "value": [
+                                    "QuarantineHelpURL"
+                                ]
+                            }
+                        },
+                        "x-ibm-finding": {
+                            "fields": {
+                                "start": [
+                                    "TimeGenerated"
+                                ],
+                                "end": [
+                                    "PreviousTime"
+                                ],
+                                "name": [
+                                    "EventSourceName"
+                                ],
+                                "time_observed": [
+                                    "TimeGenerated"
+                                ],
+                                "src_ip_ref": [
+                                    "IpAddress"
+                                ],
+                                "dst_ip_ref": [
+                                    "ClientIPAddress"
+                                ]
+                            }
+                        },
+                        "x-oca-event": {
+                            "fields": {
+                                "created": [
+                                    "TimeGenerated"
+                                ],
+                                "code": [
+                                    "EventID"
+                                ],
+                                "provider": [
+                                    "Account"
+                                ],
+                                "url_ref": [
+                                    "QuarantineHelpURL"
+                                ],
+                                "process_ref": [
+                                    "ProcessName"
+                                ],
+                                "file_ref.hash": [
+                                    "FileHash"
+                                ],
+                                "file_ref.path": [
+                                    "FilePath"
+                                ],
+                                "file_ref.service": [
+                                    "ServiceFileName"
+                                ],
+                                "parent_process_ref": [
+                                    "ParentProcessName"
+                                ],
+                                "ip_refs.ip": [
+                                    "IpAddress"
+                                ],
+                                "ip_refs.clientIp": [
+                                    "ClientIPAddress"
+                                ]
+                            }
+                        },
+                        "x-azure-security-event": {
+                            "fields": {
+                                "title": [
+                                    "Title"
+                                ],
+                                "text": [
+                                    "Description",
+                                    "DeviceDescription"
+                                ],
+                                "device_name": [
+                                    "DeviceId"
+                                ],
+                                "source": [
+                                    "SourceSystem"
+                                ],
+                                "alert_type": [
+                                    "AlertName"
+                                ],
+                                "activity": [
+                                    "Activity"
+                                ],
+                                "computer": [
+                                    "Computer"
+                                ],
+                                "event_data": [
+                                    "EventData"
+                                ],
+                                "service_name": [
+                                    "ServiceName"
+                                ],
+                                "task": [
+                                    "Task"
+                                ],
+                                "user_parameter": [
+                                    "UserParameter"
+                                ],
+                                "member_name": [
+                                    "MemberName"
+                                ],
+                                "requester": [
+                                    "Requester"
+                                ]
+                            }
+                        }
+                    },
+                    "SecurityIncident_from_stix_map": {
+                        "url": {
+                            "fields": {
+                                "value": [
+                                    "IncidentUrl"
+                                ]
+                            }
+                        },
+                        "x-ibm-finding": {
+                            "fields": {
+                                "start": [
+                                    "FirstActivityTime",
+                                    "FirstModifiedTime",
+                                    "TimeGenerated"
+                                ],
+                                "end": [
+                                    "ClosedTime",
+                                    "LastActivityTime",
+                                    "LastModifiedTime"
+                                ],
+                                "name": [
+                                    "IncidentName"
+                                ],
+                                "time_observed": [
+                                    "TimeGenerated"
+                                ]
+                            }
+                        },
+                        "x-oca-event": {
+                            "fields": {
+                                "created": [
+                                    "CreatedTime"
+                                ],
+                                "provider": [
+                                    "ProviderName"
+                                ],
+                                "url_ref": [
+                                    "IncidentUrl"
+                                ],
+                                "domain_ref": [
+                                    "DomainName"
+                                ]
+                            }
+                        },
+                        "x-azure-security-incident": {
+                            "fields": {
+                                "incident_name": [
+                                    "IncidentName"
+                                ],
+                                "severity": [
+                                    "Severity"
+                                ],
+                                "owner": [
+                                    "Owner"
+                                ],
+                                "additional_data": [
+                                    "AdditionalData"
+                                ],
+                                "alertids": [
+                                    "AlertIds"
+                                ],
+                                "comments": [
+                                    "Comments"
+                                ],
+                                "description": [
+                                    "Description"
+                                ],
+                                "labels": [
+                                    "Labels"
+                                ],
+                                "modified_by": [
+                                    "ModifiedBy"
+                                ],
+                                "classification": [
+                                    "Classification"
+                                ]
+                            }
+                        }
+                    },
+                    "operators": {
+                        "ComparisonExpressionOperators.And": "and",
+                        "ComparisonExpressionOperators.Or": "or",
+                        "ComparisonComparators.Equal": "==",
+                        "ComparisonComparators.NotEqual": "!=",
+                        "ComparisonComparators.In": "in",
+                        "ComparisonComparators.Matches": "contains",
+                        "ComparisonComparators.Like": "startswith, endswith"
+                    },
+                    "to_stix_map": {
+                        "EventSourceName": {
+                            "key": "x-ibm-finding.name",
+                            "object": "finding"
+                        },
+                        "AlertName": [
+                            {
+                                "key": "x-ibm-finding.name",
+                                "object": "finding"
+                            },
+                            {
+                                "key": "x-azure-security-event.alert_type",
+                                "object": "msevent"
+                            }
+                        ],
+                        "IncidentName": [
+                            {
+                                "key": "x-ibm-finding.name",
+                                "object": "finding"
+                            },
+                            {
+                                "key": "x-azure-security-incident.incident_name",
+                                "object": "incident"
+                            }
+                        ],
+                        "TimeGenerated": [
+                            {
+                                "key": "x-ibm-finding.start",
+                                "object": "finding"
+                            },
+                            {
+                                "key": "x-oca-event.created",
+                                "object": "event"
+                            },
+                            {
+                                "key": "x-ibm-finding.time_observed",
+                                "object": "finding"
+                            }
+                        ],
+                        "EventTime": {
+                            "key": "x-ibm-finding.time_observed",
+                            "object": "finding"
+                        },
+                        "PreviousTime": {
+                            "key": "x-ibm-finding.start",
+                            "object": "finding"
+                        },
+                        "ProviderName": {
+                            "key": "x-oca-event.provider",
+                            "object": "event"
+                        },
+                        "EventID": {
+                            "key": "x-oca-event.code",
+                            "object": "event"
+                        },
+                        "IpAddress": [
+                            {
+                                "key": "x-ibm-finding.src_ip_ref",
+                                "object": "finding"
+                            },
+                            {
+                                "key": "ipv4-addr.value",
+                                "object": "ipv4-addr"
+                            },
+                            {
+                                "key": "x-oca-event.ip_refs",
+                                "object": "event"
+                            }
+                        ],
+                        "ClientIPAddress": [
+                            {
+                                "key": "x-ibm-finding.dst_ip_ref",
+                                "object": "finding"
+                            },
+                            {
+                                "key": "x-oca-event.ip_refs.clientIp",
+                                "object": "event"
+                            }
+                        ],
+                        "StartTime": {
+                            "key": "x-ibm-finding.start",
+                            "object": "finding"
+                        },
+                        "EndTime": {
+                            "key": "x-ibm-finding.end",
+                            "object": "finding"
+                        },
+                        "ProcessingEndTime": {
+                            "key": "x-ibm-finding.end",
+                            "object": "finding"
+                        },
+                        "FirstActivityTime": {
+                            "key": "x-ibm-finding.start",
+                            "object": "finding"
+                        },
+                        "FirstModifiedTime": {
+                            "key": "x-ibm-finding.start",
+                            "object": "finding"
+                        },
+                        "ClosedTime": {
+                            "key": "x-ibm-finding.end",
+                            "object": "finding"
+                        },
+                        "LastActivityTime": {
+                            "key": "x-ibm-finding.end",
+                            "object": "finding"
+                        },
+                        "LastModifiedTime": {
+                            "key": "x-ibm-finding.end",
+                            "object": "finding"
+                        },
+                        "CreatedTime": {
+                            "key": "x-oca-event.created",
+                            "object": "event"
+                        },
+                        "Account": {
+                            "key": "x-oca-event.provider",
+                            "object": "event"
+                        },
+                        "QuarantineHelpURL": [
+                            {
+                                "key": "x-oca-event.url_ref",
+                                "object": "event"
+                            },
+                            {
+                                "key": "url.name",
+                                "object": "url"
+                            }
+                        ],
+                        "IncidentUrl": [
+                            {
+                                "key": "x-oca-event.url_ref",
+                                "object": "event"
+                            },
+                            {
+                                "key": "url.name",
+                                "object": "url"
+                            }
+                        ],
+                        "ProcessName": [
+                            {
+                                "key": "process.name",
+                                "object": "process"
+                            },
+                            {
+                                "key": "x-oca-event.process_ref",
+                                "object": "event"
+                            }
+                        ],
+                        "CommandLine": {
+                            "key": "process.command_line",
+                            "object": "process"
+                        },
+                        "ProcessId": {
+                            "key": "process.pid",
+                            "object": "process"
+                        },
+                        "ParentProcessName": [
+                            {
+                                "key": "process.parent_ref",
+                                "object": "process"
+                            },
+                            {
+                                "key": "x-oca-event.parent_process_ref",
+                                "object": "event"
+                            }
+                        ],
+                        "FilePath": [
+                            {
+                                "key": "file.path",
+                                "object": "file"
+                            },
+                            {
+                                "key": "x-oca-event.file_ref.path",
+                                "object": "file"
+                            }
+                        ],
+                        "FileHash": [
+                            {
+                                "key": "file.hashes",
+                                "object": "event"
+                            },
+                            {
+                                "key": "x-oca-event.file_ref.path",
+                                "object": "event"
+                            }
+                        ],
+                        "ServiceFileName": {
+                            "key": "x-oca-event.file_ref.service",
+                            "object": "event"
+                        },
+                        "HomeDirectory": {
+                            "key": "directory.path",
+                            "object": "directory"
+                        },
+                        "HomePath": {
+                            "key": "directory.path",
+                            "object": "directory"
+                        },
+                        "TargetDomainName": {
+                            "key": "domain-name.value",
+                            "object": "domain-name"
+                        },
+                        "TargetUserName": {
+                            "key": "user-account.account_login",
+                            "object": "user-account"
+                        },
+                        "TenantId": {
+                            "key": "x-azure-security-alert.tenant_id",
+                            "object": "alert"
+                        },
+                        "WorkspaceSubscriptionId": {
+                            "key": "x-azure-security-alert.subscription_id",
+                            "object": "alert"
+                        },
+                        "_ResourceId": {
+                            "key": "x-azure-security-alert.resourceId",
+                            "object": "alert"
+                        },
+                        "AlertSeverity": {
+                            "key": "x-azure-security-alert.alert_severity",
+                            "object": "alert"
+                        },
+                        "Description": [
+                            {
+                                "key": "x-azure-security-alert.description",
+                                "object": "alert"
+                            },
+                            {
+                                "key": "x-azure-security-event.description",
+                                "object": "msevent"
+                            }
+                        ],
+                        "ProductName": {
+                            "key": "x-azure-security-alert.product_name",
+                            "object": "alert"
+                        },
+                        "VendorName": {
+                            "key": "x-azure-security-alert.vendor_name",
+                            "object": "alert"
+                        },
+                        "SystemAlertId": {
+                            "key": "x-azure-security-alert.cloudAppStates.system_alertid",
+                            "object": "alert"
+                        },
+                        "Status": {
+                            "key": "x-azure-security-alert.status",
+                            "object": "alert"
+                        },
+                        "ExtentedProperties": {
+                            "key": "x-azure-security-alert.extented_properties",
+                            "object": "alert"
+                        },
+                        "ConfidenceLevel": {
+                            "key": "x-azure-security-alert.confidence_level",
+                            "object": "alert"
+                        },
+                        "Entities": {
+                            "key": "x-azure-security-alert.entities",
+                            "object": "alert"
+                        },
+                        "DisplayName": {
+                            "key": "x-azure-security-alert.display_name",
+                            "object": "alert"
+                        },
+                        "WorkspaceResourceGroup": {
+                            "key": "x-azure-security-alert.workspace_resource_group",
+                            "object": "alert"
+                        },
+                        "CompromisedEntity": {
+                            "key": "x-azure-security-alert.compromised_entity",
+                            "object": "alert"
+                        },
+                        "eventId": {
+                            "key": "x-azure-security-event.event_id",
+                            "object": "msevent"
+                        },
+                        "Title": {
+                            "key": "x-azure-security-event.title",
+                            "object": "msevent"
+                        },
+                        "DeviceDescription": {
+                            "key": "x-azure-security-event.text",
+                            "object": "msevent"
+                        },
+                        "DeviceId": {
+                            "key": "x-oca-asset.device_id",
+                            "object": "asset"
+                        },
+                        "SourceSystem": {
+                            "key": "x-azure-security-event.source",
+                            "object": "msevent"
+                        },
+                        "Activity": {
+                            "key": "x-azure-security-event.activity",
+                            "object": "msevent"
+                        },
+                        "Computer": {
+                            "key": "x-azure-security-event.computer",
+                            "object": "msevent"
+                        },
+                        "EventData": {
+                            "key": "x-azure-security-event.event_data",
+                            "object": "msevent"
+                        },
+                        "LogonProcessName": {
+                            "key": "process.name",
+                            "object": "process"
+                        },
+                        "ServiceName": {
+                            "key": "x-azure-security-event.service_name",
+                            "object": "msevent"
+                        },
+                        "Task": {
+                            "key": "x-azure-security-event.task",
+                            "object": "msevent"
+                        },
+                        "UserParameter": {
+                            "key": "x-azure-security-event.user_parameter",
+                            "object": "msevent"
+                        },
+                        "MemberName": {
+                            "key": "x-azure-security-event.member_name",
+                            "object": "msevent"
+                        },
+                        "Requester": {
+                            "key": "x-azure-security-event.requester",
+                            "object": "msevent"
+                        },
+                        "Severity": {
+                            "key": "x-azure-security-incident.severity",
+                            "object": "incident"
+                        },
+                        "Owner": {
+                            "key": "x-azure-security-incident.owner",
+                            "object": "incident"
+                        },
+                        "AdditionalData": {
+                            "key": "x-azure-security-incident.additional_data",
+                            "object": "incident"
+                        },
+                        "AlertIds": {
+                            "key": "x-azure-security-incident.alertids",
+                            "object": "incident"
+                        },
+                        "Comments": {
+                            "key": "x-azure-security-incident.comments",
+                            "object": "incident"
+                        },
+                        "Description__incident": {
+                            "key": "x-azure-security-incident.description",
+                            "object": "incident"
+                        },
+                        "Labels": {
+                            "key": "x-azure-security-incident.labels",
+                            "object": "incident"
+                        },
+                        "ModifiedBy": {
+                            "key": "x-azure-security-incident.modified_by",
+                            "object": "incident"
+                        }
+                    }
+                }
+            },
+            "unmapped_fallback": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
+            },
+            "stix_2.1": {
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "hidden": true
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type": "fields",
+            "tenant": {
+                "type": "password"
+            },
+            "clientId": {
+                "type": "password"
+            },
+            "clientSecret": {
+                "type": "password"
+            }
+        }
+    }
+}
