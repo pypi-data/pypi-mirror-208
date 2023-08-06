@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" id="Complex" elementFormDefault="qualified">
+  <xs:complexType name="Complex">
+    <xs:sequence>
+      <xs:element name="a">
+        <xs:complexType>
+          <!--this is a dictionary!-->
+          <xs:sequence>
+            <xs:element name="dictitem" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="key">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <!--This is a tuple-->
+                        <xs:element name="tupleitem0" type="xs:integer"/>
+                        <xs:element name="tupleitem1" type="xs:string"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="val">
+                    <xs:complexType>
+                      <!--This is a list-->
+                      <xs:sequence>
+                        <xs:element name="listitem" minOccurs="0" maxOccurs="unbounded">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <!--This is a tuple-->
+                              <xs:element name="tupleitem0">
+                                <xs:complexType>
+                                  <!--this is a dictionary!-->
+                                  <xs:sequence>
+                                    <xs:element name="dictitem" minOccurs="0" maxOccurs="unbounded">
+                                      <xs:complexType>
+                                        <xs:sequence>
+                                          <xs:element name="key" type="xs:integer"/>
+                                          <xs:element name="val">
+                                            <xs:complexType>
+                                              <!--this is a union!-->
+                                              <xs:sequence>
+                                                <xs:element name="variantfloat" type="xs:decimal" minOccurs="0"/>
+                                                <xs:element name="variantstr" type="xs:string" minOccurs="0"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                        </xs:sequence>
+                                      </xs:complexType>
+                                    </xs:element>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
+                              <xs:element name="tupleitem1">
+                                <xs:complexType>
+                                  <!--This is a set-->
+                                  <xs:sequence>
+                                    <xs:element name="setitem" type="xs:boolean" minOccurs="0" maxOccurs="unbounded"/>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Complex" type="Complex"/>
+</xs:schema>
