@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "mb-cli"
+version = "1.0.0"
+description = "Majestic Bank CLI application"
+license = "GPL-3"
+authors = ["NotMtth <notmtth@xmpp.is>"]
+readme = "README.md"
+homepage = "https://notmtth.xyz"
+repository = "https://codeberg.org/NotMtth/mb-cli"
+packages = [{include = "mb_cli"}]
+keywords = ["majesticbank", "cryptocurrency", "monero", "cli"]
+
+[tool.poetry.scripts]
+mb-cli = "mb_cli.main:app"
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = "^0.9.0"
+httpx = "^0.24.0"
+python-dotenv = "^1.0.0"
+inquirerpy = "^0.3.4"
+socksio = "^1.0.0"
+rich = "^13.3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
