@@ -1,0 +1,116 @@
+Metadata-Version: 2.1
+Name: lokiunimore
+Version: 0.6.1
+Summary: Matrix room gatekeeper bot for the unofficial Unimore space
+Home-page: https://loki.steffo.eu/
+License: AGPL-3.0-or-later
+Keywords: bot,matrix,authentication,unimore,oauth2
+Author: Stefano Pigozzi
+Author-email: me@steffo.eu
+Maintainer: Stefano Pigozzi
+Maintainer-email: me@steffo.eu
+Requires-Python: >=3.10,<4.0
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Requires-Dist: Authlib (>=1.0.1,<2.0.0)
+Requires-Dist: Flask (>=2.2.2,<3.0.0)
+Requires-Dist: Flask-SQLAlchemy (>=2.5.1,<3.0.0)
+Requires-Dist: cfig[cli] (>=0.3.0,<0.4.0)
+Requires-Dist: coloredlogs (>=15.0.1,<16.0.0)
+Requires-Dist: gunicorn (>=20.1.0,<21.0.0)
+Requires-Dist: matrix-nio (>=0.20.1,<0.21.0)
+Requires-Dist: psycopg2 (>=2.9.3,<3.0.0)
+Requires-Dist: python-dotenv (>=0.21.0,<0.22.0)
+Requires-Dist: requests (>=2.28.1,<3.0.0)
+Project-URL: Repository, https://github.com/Steffo99/lokiunimore
+Description-Content-Type: text/markdown
+
+# Loki Bot
+
+Gatekeeper bot for the Unimore Informatica unofficial Matrix space
+
+\[ [**Website**](https://loki.steffo.eu) | [PyPI](https://pypi.org/project/lokiunimore/) \]
+
+> TIP: You may be looking for its predecessor, [Thor Bot](https://github.com/Steffo99/thorunimore).
+
+![](lokiunimore/web/static/opengraph.png)
+
+## Functionality
+
+This bot monitors a [pre-configured *public* Matrix space][config-public-space] for join events, sending a [welcome message][welcome-msg] to every new joiner.
+
+The [welcome message][welcome-msg] contains a link, which when clicked starts the user verification process:
+
+1. a page describing the bot is opened, and it allows users to login with a [pre-configured OpenID Connect Identity Provider][config-oidc-idp];
+2. the claims of the OIDC IdP are verified, and the user's email address is checked to verify that its domain matches a [pre-configured RegEx][config-email-regex]
+ with specific email requirements;
+3. if the email address fullfils all the requirements, an invitation to a different, [pre-configured *private* Matrix space][config-private-space] is sent to the user.
+
+Additionally, the bot monitors for leave events from both spaces, deleting user data if no longer needed to protect the user's privacy.
+
+[welcome-msg]: https://github.com/Steffo99/lokiunimore/blob/99f7101abc3f68472844cd2f1bac5119e41c1682/lokiunimore/matrix/templates/messages.py#L3-L23
+[config-public-space]: https://github.com/Steffo99/lokiunimore/blob/main/lokiunimore/config/config.py#L50-L60
+[config-oidc-idp]: https://github.com/Steffo99/lokiunimore/blob/main/lokiunimore/config/config.py#L147-L202
+[config-email-regex]: https://github.com/Steffo99/lokiunimore/blob/main/lokiunimore/config/config.py#L194-L202
+[config-private-space]: https://github.com/Steffo99/lokiunimore/blob/99f7101abc3f68472844cd2f1bac5119e41c1682/lokiunimore/config/config.py#L76-L86
+
+## Setting up a development environment
+
+### Dependencies
+
+This project uses [Poetry](https://python-poetry.org/) to manage the dependencies.
+
+To install all dependencies in a venv, run:
+
+```console
+$ poetry install
+```
+
+> TIP: For easier venv management, you may want to set:
+> 
+> ```console
+> $ poetry config virtualenvs.in-project true
+> ```
+
+To activate the venv, run:
+
+```console
+$ poetry shell
+```
+
+To run something in the venv without activating it, run:
+
+```console
+$ poetry run <COMMAND>
+```
+
+### Environment
+
+Loki requires a lot of environment variables to be set, therefore it makes use of [cfig](https://cfig.readthedocs.io/en/latest/) to simplify the setup.
+
+To view the current configuration, followed by a description of each variable, run:
+
+```console
+$ poetry run python -m lokiunimore.config
+```
+
+## Deploying in production
+
+Use the [pre-built Docker image](https://github.com/Steffo99/lokiunimore/pkgs/container/lokiunimore), or build it from the [provided Dockerfile](Dockerfile).
+
+Run the image without any command to view and validate the current configuration.
+
+Run the image with the `gunicorn -b 0.0.0.0:80 lokiunimore.web.app:rp_app` command to launch the production web server on local port 80, expecting to be behind a  reverse proxy.
+
+Run the image with the `lokiunimore.matrix` command to launch the Matrix bot.
+
+### Using Docker Compose
+
+Use the [given Docker Compose file](docker-compose.yml).
+
+Either use [Portainer](https://www.portainer.io/), or start it manually using `docker compose up -d && docker compose logs -f`.
+
