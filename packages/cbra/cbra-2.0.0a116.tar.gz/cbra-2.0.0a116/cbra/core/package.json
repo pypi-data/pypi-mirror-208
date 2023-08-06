@@ -1,0 +1,73 @@
+{
+  "description": "A class-based REStful API framework built on FastAPI",
+  "author": "Cochise Ruhulessin",
+  "author_email": "cochiseruhulessin@gmail.com",
+  "url": "https://docs.cochise.io/python/cbra/latest",
+  "licenses": "Proprietary",
+  "install_requires": [
+    "aiofiles",
+    "canonical>=0.47.0",
+    "ckms>=0.63.0",
+    "fastapi>=0.94.0",
+    "headless>=2.0.0a49",
+    "inflect",
+    "jinja2",
+    "gunicorn",
+    "pydantic>=1.10.7",
+    "python-multipart",
+    "uvicorn",
+    "unimatrix"
+  ],
+  "entry_points": {
+    "unimatrix.runtime.init": [
+      "cbra.ext.ioc = cbra.ext.ioc.runlevel:init",
+      "cbra.ext.service = cbra.ext.service.runlevel:init"
+    ]
+  },
+  "extras_require": {
+    "all": [
+      "aorta[all]>=3.0.0a9",
+      "google-cloud-datastore>=2.13.2",
+      "google-cloud-logging",
+      "google-cloud-secret-manager>=2.10.0",
+      "google-cloud-storage>=2.7.0",
+      "gunicorn",
+      "gunicorn",
+      "httpx",
+      "jwcrypto",
+      "google.auth",
+      "pyjwt",
+      "unimatrix.ext.kms[all]"
+    ],
+    "google": [
+      "aorta[google]>=3.0.0a9",
+      "ckms[google]>=0.61",
+      "google-api-python-client>=2.80.0",
+      "google-cloud-datastore>=2.13.2",
+      "google-cloud-logging",
+      "google-cloud-secret-manager>=2.10.0",
+      "google-cloud-storage>=2.7.0"
+    ],
+    "gunicorn": [
+      "gunicorn"
+    ],
+    "sendgrid": [
+      "sendgrid"
+    ]
+  },
+  "classifiers": [
+     "Development Status :: 4 - Beta",
+     "Environment :: Console",
+     "Environment :: Web Environment",
+     "Intended Audience :: Developers",
+     "License :: Other/Proprietary License",
+     "Operating System :: POSIX",
+     "Operating System :: POSIX :: Linux",
+     "Programming Language :: Python :: 3.10",
+     "Programming Language :: Python :: 3.11",
+     "Programming Language :: Python :: 3 :: Only",
+     "Topic :: Internet",
+     "Topic :: Internet :: WWW/HTTP :: Session",
+     "Topic :: Software Development :: Libraries"
+  ]
+}
