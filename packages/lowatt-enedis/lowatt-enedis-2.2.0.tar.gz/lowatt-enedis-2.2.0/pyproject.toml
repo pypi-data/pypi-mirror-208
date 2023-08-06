@@ -1,0 +1,19 @@
+[tool.black]
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.hg
+    | \.eggs
+    | \.tox
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+known_first_party = ["lowatt_enedis"]
