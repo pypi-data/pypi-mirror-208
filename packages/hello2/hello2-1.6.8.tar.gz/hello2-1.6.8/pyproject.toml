@@ -1,0 +1,35 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "hello2"
+authors = [{name = "Hejian", email = "flystarhe@qq.com"}]
+dynamic = ["version", "description"]
+readme = "hello/README.md"
+requires-python = ">=3.6"
+dependencies = [
+    "opencv-python",
+    "Pillow",
+    "scikit-image",
+    "scikit-learn",
+    "simplejson",
+    "onnx",
+]
+
+[project.urls]
+Home = "https://github.com/flystarhe/hello"
+
+[project.scripts]
+hello = "hello:main"
+hello-data = "hello.data:main"
+hello-fiftyone = "hello.fiftyone:main"
+hello-mmdet = "hello.mmdet:main"
+hello-mmlab = "hello.mmlab:main"
+hello-mmseg = "hello.mmseg:main"
+hello-nanodet = "hello.nanodet:main"
+hello-video = "hello.video:main"
+hello-x3m = "hello.x3m:main"
+
+[tool.flit.module]
+name = "hello"
