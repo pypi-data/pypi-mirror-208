@@ -1,0 +1,114 @@
+[project]
+name = "aec-cli"
+description = "AWS EC2 CLI"
+dynamic = ["version"]
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["AWS", "EC2", "command line", "cli"]
+classifiers = ["License :: OSI Approved :: MIT License"]
+requires-python = ">=3.7"
+dependencies = [
+    "boto3==1.26.106",
+    "importlib_resources==5.12.0",
+    "pytoml==0.1.21",
+    "pytz==2023.3",
+    "requests==2.28.2",
+    "rich==13.3.3",
+    "typing_extensions==4.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black~=23.1",
+    "build~=0.7",
+    "boto3-stubs[ec2,compute-optimizer,ssm,s3]",
+    "cogapp~=3.3",
+    "darglint~=1.8",
+    "moto[ec2]~=4.1",
+    "pre-commit~=2.20",
+    "pyfakefs~=5.1",
+    "pytest~=7.2",
+    "pytest-mock~=3.8",
+    "ruff~=0.0.259",
+    "twine~=4.0",
+]
+
+[project.scripts]
+aec = "aec.main:main"
+
+[project.urls]
+homepage = "https://github.com/seek-oss/aec"
+
+[build-system]
+requires = ["setuptools", "setuptools_scm[toml]", "wheel"]
+
+# enable setuptools_scm to set the version based on git tags
+[tool.setuptools_scm]
+
+# use PyCharm default line length of 120
+
+[tool.black]
+line-length = 120
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["src", "tests"]
+strictListInference = true
+strictDictionaryInference = true
+strictParameterNoneValue = true
+reportTypedDictNotRequiredAccess = false
+
+[tool.ruff]
+line-length = 120
+
+# rules to enable/ignore
+select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+    # type annotations
+    "ANN",
+    # pep8-naming
+    "N",
+    # bugbear
+    "B",
+    # isort
+    "I",
+    # flake8-unused-arguments
+    "ARG",
+    # pyupgrade
+    "UP",
+    # flake8-self
+    "SLF",
+    # ruff-specific
+    "RUF",
+]
+ignore = [
+    # allow untyped self and cls args, and no return type from dunder methods
+    "ANN101",
+    "ANN102",
+    "ANN204",
+    # allow == True because pandas dataframes overload equality
+    "E712",
+]
+# first-party imports for sorting
+src = ["src"]
+fix = true
+show-fixes = true
+
+[tool.ruff.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
+
+[tool.ruff.per-file-ignores]
+# test functions don't need return types
+"tests/*" = ["ANN201", "ANN202"]
+# main.py can have long lines
+"src/aec/main.py" = ["E501"]
+
+[tool.ruff.flake8-annotations]
+# allow *args: Any, **kwargs: Any
+allow-star-arg-any = true

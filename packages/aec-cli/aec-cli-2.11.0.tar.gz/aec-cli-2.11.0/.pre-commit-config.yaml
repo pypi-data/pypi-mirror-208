@@ -1,0 +1,46 @@
+# unless otherwise specified, hooks run on push only
+default_stages: [push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        stages: [push]
+      - id: end-of-file-fixer
+        stages: [push]
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.13.23
+    hooks:
+      - id: typos
+        stages: [push]
+  # vscode & the cli uses these too so they has been installed into the virtualenv
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: .venv/bin/black
+        language: system
+        types: [python]
+      - id: ruff
+        name: ruff
+        entry: .venv/bin/ruff
+        language: system
+        types: [python]
+  # these hooks require the project's virtualenv
+  - repo: local
+    hooks:
+      - id: pyright
+        name: pyright
+        entry: make pyright
+        # run on all files
+        pass_filenames: false
+        language: system
+        types: [python]
+      - id: test
+        name: test
+        entry: make test
+        # run on all files
+        pass_filenames: false
+        language: system
+        types: [python]

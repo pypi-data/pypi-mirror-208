@@ -1,0 +1,41 @@
+image: python:3.7-slim
+tasks:
+  packages-update:
+    command:
+      apt-get update && apt-get upgrade -y
+  packages-install:
+    dependencies:
+      - packages-update
+    command:
+      apt-get install -y gcc automake make git curl
+  install-node:
+    dependencies:
+      - packages-install
+    command: |
+      curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+      apt-get install -y nodejs
+  install:
+    dependencies:
+      - install-node
+    input_paths:
+      - Makefile
+      - setup.py
+      - pyproject.toml
+      - README.md
+      - package.json
+      - src/
+    environment:
+      CI: true
+    command:
+      make install
+  check-test:
+    dependencies:
+      - install
+    input_paths:
+      - .darglint
+      - pyrightconfig.json
+      - tests/
+    environment:
+      CI: true
+    command:
+      make check test
