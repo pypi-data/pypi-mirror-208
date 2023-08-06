@@ -1,0 +1,107 @@
+html[data-theme="light"] {
+    --pst-color-primary: #d25c5b;
+    --pst-color-secondary: #459db9;
+    --pst-color-link-hover: var(--pst-color-link);
+
+    --cean-color-header-text: #2c2c2c;
+    --cean-color-header-text-highlight: black;
+    /* match cean-color-header-text */
+    --cean-filter-header-icon: saturate(0) brightness(0.32);
+    --cean-color-table-odd: #f4f4f4;
+}
+
+html[data-theme="dark"] {
+    --pst-color-primary: #ed6c6b;
+    --pst-color-secondary: #459db9;
+    --pst-color-border: #aaa;
+    --pst-color-link-hover: var(--pst-color-link);
+
+    --cean-color-header-text: #d4d4d4;
+    --cean-color-header-text-highlight: #e5e5e5;
+    /* match cean-color-header-text */
+    --cean-filter-header-icon: saturate(0) brightness(1.56);
+    --cean-color-table-odd: var(--pst-color-on-background);
+}
+
+/* Code cells from nbsphinx */
+div.nbinput.container div.input_area{
+    border: none !important;
+    padding: 0.5rem !important;
+}
+
+/* Code blocks in sphinx (ReST/Markdown) */
+.highlight > pre {
+    border: none !important;
+    padding: 0.5rem;
+}
+
+code.literal {
+    border: none;
+    padding: .1rem .1rem;
+}
+
+.bd-header {
+    box-shadow: none;
+    border-bottom: solid var(--pst-color-primary) 0.4rem;
+}
+
+.bd-header .navbar-nav li a.nav-link {
+    color: var(--cean-color-header-text);
+}
+
+.bd-header .navbar-nav li a.nav-link .icon-link-image {
+    filter: var(--cean-filter-header-icon);
+}
+
+.bd-header .navbar-nav li a.nav-link .icon-link-image:hover {
+    /* match primary color */
+    filter: hue-rotate(-112deg) saturate(0.724) brightness(1);
+}
+
+.bd-header .navbar-nav > .active > .nav-link {
+    color: var(--pst-color-primary);
+}
+
+.search-button, .theme-switch-button a, label.sidebar-toggle {
+    color: var(--cean-color-header-text) !important;
+}
+
+.theme-switch-button span {
+    color: var(--cean-color-header-text);
+}
+
+.bd-header .navbar-nav .dropdown button {
+    color: var(--cean-color-header-text);
+}
+
+.theme-switch-button {
+    border: none;
+}
+
+footer.bd-footer {
+    background: var(--pst-color-on-background) !important;
+    background: linear-gradient(60deg, #1e4855 0%, #1e1e1e 8%, #1e1e1e 40%, #7a3636 100%) !important;
+    color: #cecece;
+}
+
+footer.bd-footer > div {
+    /* Make sure the text does not overlap the gradient */
+    margin-left: 0;
+    padding-left: 8%;
+}
+
+footer.bd-footer p {
+    color: #cecece;
+}
+
+.table td {
+    border-top: none;
+}
+
+.table .row-odd {
+    background-color: var(--cean-color-table-odd);
+}
+
+a.headerlink {
+    color: var(--pst-color-primary);
+}

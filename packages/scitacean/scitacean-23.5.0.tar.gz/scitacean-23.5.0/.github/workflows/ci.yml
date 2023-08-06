@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - release
+  pull_request:
+
+jobs:
+  formatting:
+    name: Formatting and static analysis
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements/ci.txt
+      - run: tox -e static
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply automatic formatting
+
+  tests:
+    name: Tests py${{ matrix.python }} ${{ matrix.os }}
+    needs: formatting
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - {python: '3.11', os: ubuntu-22.04, tox: py311-full}
+          - {python: '3.10', os: ubuntu-22.04, tox: py310-full}
+          - {python: '3.9', os: ubuntu-22.04, tox: py39-full}
+          - {python: '3.8', os: ubuntu-22.04, tox: py38-full}
+          - {python: '3.8', os: macos-12, tox: py38}
+          - {python: '3.8', os: windows-2022, tox: py38}
+    steps:
+      - run: sudo apt install --yes docker-compose
+        if: ${{ contains(matrix.variant.os, 'ubuntu') }}
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements/ci.txt
+      - run: tox -e ${{ matrix.tox }}
+
+  docs:
+    needs: tests
+    uses: ./.github/workflows/docs.yml
