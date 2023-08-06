@@ -1,0 +1,22 @@
+name: organelle-segmenter-plugin
+display_name: Infer sub-Cellular Object Npe2 plugin
+contributions:
+  commands:
+    - id: organelle-segmenter-plugin.get_reader
+      title: Read ".czi" or .tif files
+      python_name: organelle_segmenter_plugin._reader:napari_get_reader
+    - id: organelle-segmenter-plugin.make_batch_widget
+      python_name: organelle_segmenter_plugin._dock_widget:BatchProcessingWidget
+      title: Batch processing
+    - id: organelle-segmenter-plugin.make_workflow_widget
+      python_name: organelle_segmenter_plugin._dock_widget:WorkflowEditorWidget
+      title: Workflow Editor
+  readers:
+    - command: organelle-segmenter-plugin.get_reader
+      filename_patterns: ['*.xyz', '*.czi', '*.tif', '*.tiff']
+      accepts_directories: false
+  widgets:
+    - command: organelle-segmenter-plugin.make_batch_widget
+      display_name: Batch processing
+    - command: organelle-segmenter-plugin.make_workflow_widget
+      display_name: Workflow Editor
