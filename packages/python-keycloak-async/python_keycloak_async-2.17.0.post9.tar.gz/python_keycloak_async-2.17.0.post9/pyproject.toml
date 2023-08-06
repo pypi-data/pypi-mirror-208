@@ -1,0 +1,92 @@
+[tool.poetry]
+name = "python-keycloak-async"
+version = "v2.17.0-9"
+description = "python-keycloak-async is a Python package providing access to the Keycloak API."
+license = "MIT"
+readme = "README.md"
+keywords = [ "keycloak", "asyncio", "openid", "oidc" ]
+authors = [
+    "Quang Phan <quangpq.uit@gmail.com>",
+    "Marcos Pereira <marcospereira.mpj@gmail.com>",
+    "Richard Nemeth <ryshoooo@gmail.com>",
+]
+classifiers=[
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 3 - Alpha",
+    "Operating System :: MacOS",
+    "Operating System :: Unix",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Utilities",
+]
+packages = [
+    { include = "keycloak", from = "src/" },
+    { include = "keycloak/**/*.py", from = "src/" },
+]
+include = ["LICENSE", "CHANGELOG.md", "CONTRIBUTING.md"]
+
+[tool.poetry.urls]
+Documentation = "https://github.com/quangpq/python-keycloak-async"
+"Issue tracker" = "https://github.com/quangpq/python-keycloak-async/issues"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+httpx = "^0.24.0"
+aiofiles = "^23.1.0"
+python-jose = "^3.3.0"
+mock = {version = "^4.0.3", optional = true}
+alabaster = {version = "^0.7.12", optional = true}
+commonmark = {version = "^0.9.1", optional = true}
+recommonmark = {version = "^0.7.1", optional = true}
+Sphinx = {version = "^5.3.0", optional = true}
+sphinx-rtd-theme = {version = "^1.0.0", optional = true}
+readthedocs-sphinx-ext = {version = "^2.1.9", optional = true}
+m2r2 = {version = "^0.3.2", optional = true}
+sphinx-autoapi = {version = "^2.0.0", optional = true}
+requests-toolbelt = "^1.0.0"
+deprecation = "^2.1.0"
+
+[tool.poetry.extras]
+docs = [
+    "mock",
+    "alabaster",
+    "commonmark",
+    "recommonmark",
+    "sphinx",
+    "sphinx-rtd-theme",
+    "readthedocs-sphinx-ext",
+    "m2r2",
+    "sphinx-autoapi",
+]
+
+[tool.poetry.group.dev.dependencies]
+tox = "^4.4.12"
+pytest = "^7.3.0"
+pytest-asyncio = "^0.21.0"
+pytest-cov = "^3.0.0"
+wheel = "^0.40.0"
+pre-commit = "^3.2.2"
+isort = "^5.12.0"
+black = "^23.3.0"
+flake8 = "^6.0.0"
+flake8-docstrings = "^1.7.0"
+commitizen = "^2.42.1"
+cryptography = "^40.0.1"
+codespell = "^2.2.4"
+darglint = "^1.8.1"
+twine = "^4.0.2"
+freezegun = "^1.2.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 99
+
+[tool.isort]
+line_length = 99
+profile = "black"
+
+[tool.darglint]
+enable = "DAR104"
