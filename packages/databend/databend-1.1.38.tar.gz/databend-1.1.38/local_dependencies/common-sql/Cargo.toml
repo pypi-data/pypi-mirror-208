@@ -1,0 +1,81 @@
+[package]
+name = "common-sql"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[features]
+default = []
+
+z3-prove = ["common-constraint", "z3"]
+
+[dependencies] # In alphabetical order
+# Workspace dependencies
+common-ast = { path = "../common-ast" }
+common-base = { path = "../common-base" }
+common-catalog = { path = "../common-catalog" }
+common-config = { path = "../common-config" }
+common-constraint = { path = "../common-constraint", optional = true }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-functions = { path = "../common-functions" }
+common-meta-app = { path = "../common-meta-app" }
+common-meta-types = { path = "../common-meta-types" }
+common-profile = { path = "../common-profile" }
+
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-pipeline-sources = { path = "../common-pipeline-sources" }
+common-pipeline-transforms = { path = "../common-pipeline-transforms" }
+
+common-settings = { path = "../common-settings" }
+common-storage = { path = "../common-storage" }
+common-storages-parquet = { path = "../common-storages-parquet" }
+common-storages-result-cache = { path = "../common-storages-result-cache" }
+common-storages-view = { path = "../common-storages-view" }
+common-users = { path = "../common-users" }
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+
+# GitHub dependencies
+
+# Crates.io dependencies
+ahash = { version = "0.8.2", features = ["no-rng"] }
+anyhow = { version = "1.0.65" }
+async-backtrace = "0.2.2"
+async-recursion = "1.0.0"
+async-trait = { version = "0.1.57", package = "async-trait-fn" }
+chrono = { version = "0.4.24", features = ["serde"] }
+chrono-tz = "0.6.3"
+ctor = "0.1.26"
+dashmap = "5.4"
+educe = "0.4"
+enum-as-inner = "0.5"
+globiter = "0.1"
+itertools = "0.10.5"
+num-derive = "0.3.3"
+num-traits = "0.2.15"
+once_cell = "1.15.0"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+ordered-float = { version = "3.6.0", default-features = false }
+parking_lot = "0.12.1"
+percent-encoding = "2"
+regex = "1.8.1"
+roaring = "0.10.1"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+simsearch = "0.2"
+time = "0.3.14"
+tracing = "0.1.36"
+url = { version = "2.3" }
+z3 = { version = "0.11.2", features = ["static-link-z3"], optional = true }

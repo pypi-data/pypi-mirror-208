@@ -1,0 +1,40 @@
+[package]
+name = "common-storages-result-cache"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+common-arrow = { path = "../common-arrow" }
+common-catalog = { path = "../common-catalog" }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-meta-app = { path = "../common-meta-app" }
+common-meta-kvapi = { path = "../common-meta-kvapi" }
+common-meta-store = { path = "../common-meta-store" }
+common-meta-types = { path = "../common-meta-types" }
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-pipeline-sinks = { path = "../common-pipeline-sinks" }
+common-pipeline-sources = { path = "../common-pipeline-sources" }
+common-storage = { path = "../common-storage" }
+storages-common-blocks = { path = "../storages-common-blocks" }
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+
+async-backtrace = "0.2.2"
+async-trait = { version = "0.1.57", package = "async-trait-fn" }
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+sha2 = "0.10.6"
+uuid = { version = "1.1.2", features = ["serde", "v4"] }

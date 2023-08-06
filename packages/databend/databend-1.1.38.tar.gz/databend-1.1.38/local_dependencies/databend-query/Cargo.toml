@@ -1,0 +1,206 @@
+[package]
+name = "databend-query"
+description = "A real-time Cloud Distributed Query Engine"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[features]
+default = ["simd", "z3-prove"]
+simd = ["common-arrow/simd"]
+
+z3-prove = ["common-sql/z3-prove"]
+disable_initial_exec_tls = ["common-base/disable_initial_exec_tls"]
+
+tokio-console = ["common-tracing/console", "common-base/tracing"]
+memory-profiling = ["common-base/memory-profiling", "common-http/memory-profiling"]
+storage-hdfs = ["opendal/services-hdfs", "common-storage/storage-hdfs"]
+hive = [
+    "storage-hdfs",
+    "common-config/hive",
+    "common-storages-hive",
+    "common-meta-app/storage-hdfs",
+]
+io-uring = [
+    # "common-meta-embedded/io-uring",
+    "common-meta-store/io-uring",
+    # "common-meta-sled-store/io-uring",
+    # "common-meta-raft-store/io-uring",
+]
+
+enable-histogram-metrics = [
+    "default",
+    "common-metrics/enable-histogram",
+    "common-storages-fuse/enable-histogram-metrics",
+    "common-storages-system/enable-histogram-metrics",
+    "metrics/enable-histogram",
+    "storages-common-cache/enable-histogram-metrics",
+]
+
+[dependencies]
+# Workspace dependencies
+common-arrow = { path = "../common-arrow" }
+common-ast = { path = "../common-ast" }
+common-base = { path = "../common-base" }
+common-cache = { path = "../common-cache" }
+common-catalog = { path = "../common-catalog" }
+common-compress = { path = "../common-compress" }
+common-config = { path = "../common-config" }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-formats = { path = "../common-formats" }
+common-functions = { path = "../common-functions" }
+common-grpc = { path = "../common-grpc" }
+common-hashtable = { path = "../common-hashtable" }
+common-http = { path = "../common-http" }
+common-io = { path = "../common-io" }
+common-management = { path = "../common-management" }
+common-meta-api = { path = "../common-meta-api" }
+common-meta-app = { path = "../common-meta-app" }
+jsonb = { version = "0.2.2" }
+# common-meta-embedded = { path = "../../meta/embedded" }
+common-license = { path = "../common-license" }
+common-meta-store = { path = "../common-meta-store" }
+common-meta-types = { path = "../common-meta-types" }
+common-metrics = { path = "../common-metrics" }
+common-openai = { path = "../common-openai" }
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-pipeline-sinks = { path = "../common-pipeline-sinks" }
+common-pipeline-sources = { path = "../common-pipeline-sources" }
+common-pipeline-transforms = { path = "../common-pipeline-transforms" }
+common-profile = { path = "../common-profile" }
+common-settings = { path = "../common-settings" }
+common-sharing = { path = "../common-sharing" }
+common-sql = { path = "../common-sql" }
+common-storage = { path = "../common-storage" }
+common-storages-factory = { path = "../common-storages-factory" }
+common-storages-fuse = { path = "../common-storages-fuse" }
+common-storages-hive = { path = "../common-storages-hive", optional = true }
+common-storages-iceberg = { path = "../common-storages-iceberg" }
+common-storages-information-schema = { path = "../common-storages-information-schema" }
+common-storages-null = { path = "../common-storages-null" }
+common-storages-parquet = { path = "../common-storages-parquet" }
+common-storages-result-cache = { path = "../common-storages-result-cache" }
+common-storages-share = { path = "../common-storages-share" }
+common-storages-stage = { path = "../common-storages-stage" }
+common-storages-system = { path = "../common-storages-system" }
+common-storages-view = { path = "../common-storages-view" }
+common-tracing = { path = "../common-tracing" }
+common-users = { path = "../common-users" }
+storages-common-cache = { path = "../storages-common-cache" }
+
+storages-common-blocks = { path = "../storages-common-blocks" }
+storages-common-cache-manager = { path = "../storages-common-cache-manager" }
+storages-common-index = { path = "../storages-common-index" }
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+vacuum-handler = { path = "../vacuum-handler" }
+
+# GitHub dependencies
+
+# Crates.io dependencies
+aho-corasick = { version = "0.7.20" }
+arrow-array = { version = "37.0.0" }
+arrow-flight = { version = "37.0.0", features = ["flight-sql-experimental", "tls"] }
+arrow-ipc = { version = "37.0.0" }
+arrow-schema = { version = "37.0.0" }
+async-backtrace = "0.2.2"
+async-channel = "1.7.1"
+async-stream = "0.3.3"
+async-trait = { version = "0.1.57", package = "async-trait-fn" }
+base64 = "0.21.0"
+bincode = "1.3.3"
+bumpalo = "3.12.0"
+byteorder = "1.4.3"
+chrono = { version = "0.4.24", features = ["serde"] }
+chrono-tz = "0.6.3"
+ctor = "0.1.26"
+dashmap = "5.4"
+ethnum = { version = "1.3.2" }
+futures = "0.3.24"
+futures-util = "0.3.24"
+h2 = "0.3.17"
+headers = "0.3.8"
+http = "0.2.8"
+humantime = "2.1.0"
+itertools = "0.10.5"
+jwt-simple = "0.11.0"
+lz4 = "1.24.0"
+match-template = "0.0.1"
+metrics = "0.20.1"
+naive-cityhash = "0.2.0"
+once_cell = "1.15.0"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+opensrv-mysql = { git = "https://github.com/datafuselabs/opensrv", rev = "5e37788" }
+parking_lot = "0.12.1"
+paste = "1.0.9"
+petgraph = "0.6.2"
+pin-project-lite = "0.2.9"
+poem = { version = "1", features = ["rustls", "multipart", "compression"] }
+prost = { version = "0.11", default-features = false }
+rand = "0.8.5"
+regex = "1.8.1"
+reqwest = { version = "0.11", default-features = false, features = [
+    "json",
+    "rustls-tls",
+    "rustls-tls-native-roots",
+    "trust-dns",
+] }
+scopeguard = "1.1.0"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+serde_urlencoded = "0.7.1"
+socket2 = "0.4.7"
+strength_reduce = "0.2.4"
+tempfile = "3.4.0"
+time = "0.3.14"
+tokio-stream = { version = "0.1.10", features = ["net"] }
+tonic = { version = "0.9.2", features = ["transport", "codegen", "prost", "tls-roots", "tls"] }
+tracing = "0.1.36"
+typetag = "0.2.3"
+unicode-segmentation = "1.10.1"
+uuid = { version = "1.1.2", features = ["serde", "v4"] }
+walkdir = "2.3.2"
+
+[dev-dependencies]
+arrow-cast = { version = "37.0.0", features = ["prettyprint"] }
+common-meta-embedded = { path = "../../meta/embedded" }
+ordered-float = { workspace = true }
+
+base64 = "0.21.0"
+criterion = "0.4"
+goldenfile = "1.4"
+hex = "0.4.3"
+jwt-simple = "0.11.0"
+maplit = "1.0.2"
+mysql_async = { version = "0.31", default-features = false, features = ["rustls-tls"] }
+num = "0.4.0"
+p256 = "0.13"
+pretty_assertions = "1.3.0"
+reqwest = { workspace = true }
+sysinfo = "0.28.3"
+temp-env = "0.3.0"
+tempfile = "3.4.0"
+toml = { version = "0.7.3", default-features = false }
+tower = "0.4.13"
+url = "2.3.1"
+walkdir = "2.3.2"
+wiremock = "0.5.14"
+
+[build-dependencies]
+common-building = { path = "../common-building" }
+
+[package.metadata.cargo-machete]
+ignored = ["match-template"]

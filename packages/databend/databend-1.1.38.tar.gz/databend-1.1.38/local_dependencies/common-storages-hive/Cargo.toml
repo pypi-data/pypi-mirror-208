@@ -1,0 +1,51 @@
+[package]
+name = "common-storages-hive"
+version = "0.1.0"
+edition = "2021"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+common-arrow = { path = "../common-arrow" }
+common-base = { path = "../common-base" }
+common-catalog = { path = "../common-catalog" }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-functions = { path = "../common-functions" }
+common-hive-meta-store = { path = "../common-hive-meta-store" }
+common-meta-app = { path = "../common-meta-app" }
+common-meta-types = { path = "../common-meta-types" }
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-pipeline-sources = { path = "../common-pipeline-sources" }
+common-sql = { path = "../common-sql" }
+common-storage = { path = "../common-storage" }
+
+storages-common-cache = { path = "../storages-common-cache" }
+storages-common-cache-manager = { path = "../storages-common-cache-manager" }
+storages-common-index = { path = "../storages-common-index" }
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+
+async-backtrace = "0.2.2"
+async-recursion = "1.0.0"
+async-trait = "0.1.57"
+chrono = { version = "0.4.24", features = ["serde"] }
+futures = "0.3.24"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+ordered-float = { version = "3.6.0", default-features = false }
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+thrift = { package = "databend-thrift", version = "0.17.0" }
+tracing = "0.1.36"
+typetag = "0.2.3"

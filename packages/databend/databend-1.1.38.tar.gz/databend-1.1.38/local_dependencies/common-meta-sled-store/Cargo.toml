@@ -1,0 +1,38 @@
+[package]
+name = "common-meta-sled-store"
+description = "Sled store backend for raft state machine"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[features]
+io-uring = ["sled/io_uring"]
+
+[dependencies]
+common-meta-stoerr = { path = "../common-meta-stoerr" }
+common-meta-types = { path = "../common-meta-types" }
+
+openraft = { git = "https://github.com/drmingdrmer/openraft", tag = "v0.8.4-alpha.3", features = ["compat-07"] }
+sled = { git = "https://github.com/datafuse-extras/sled", tag = "v0.34.7-datafuse.1", default-features = false }
+
+anyerror = { version = "=0.1.8" }
+byteorder = "1.4.3"
+once_cell = "1.15.0"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+tempfile = "3.4.0"
+thiserror = { version = "1" }
+tracing = "0.1.36"
+
+[dev-dependencies]
+common-base = { path = "../../common/base" }
+common-tracing = { path = "../../common/tracing" }
+
+anyhow = { workspace = true }
+pretty_assertions = "1.3.0"

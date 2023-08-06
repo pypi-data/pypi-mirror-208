@@ -1,0 +1,45 @@
+[package]
+name = "common-sharing"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+
+[dependencies]
+anyhow = { version = "1.0.65" }
+async-trait = "0.1"
+bytes = "1"
+common-auth = { path = "../common-auth" }
+common-base = { path = "../common-base" }
+common-config = { path = "../common-config" }
+common-exception = { path = "../common-exception" }
+common-meta-api = { path = "../common-meta-api" }
+common-meta-app = { path = "../common-meta-app" }
+common-storage = { path = "../common-storage" }
+common-users = { path = "../common-users" }
+
+async-backtrace = "0.2.2"
+http = "0.2"
+log = "0.4"
+moka = "0.10"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+reqwest = { version = "0.11", default-features = false, features = [
+    "json",
+    "rustls-tls",
+    "rustls-tls-native-roots",
+    "trust-dns",
+] }
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+tracing = "0.1.36"

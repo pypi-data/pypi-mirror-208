@@ -1,0 +1,66 @@
+[package]
+name = "common-storages-fuse"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[features]
+enable-histogram-metrics = ["metrics/enable-histogram", "storages-common-cache/enable-histogram-metrics"]
+
+[dependencies]
+common-arrow = { path = "../common-arrow" }
+common-base = { path = "../common-base" }
+common-cache = { path = "../common-cache" }
+common-catalog = { path = "../common-catalog" }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-functions = { path = "../common-functions" }
+common-io = { path = "../common-io" }
+common-meta-app = { path = "../common-meta-app" }
+common-meta-types = { path = "../common-meta-types" }
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-pipeline-sources = { path = "../common-pipeline-sources" }
+common-pipeline-transforms = { path = "../common-pipeline-transforms" }
+common-sharing = { path = "../common-sharing" }
+common-sql = { path = "../common-sql" }
+common-storage = { path = "../common-storage" }
+jsonb = { version = "0.2.2" }
+
+storages-common-blocks = { path = "../storages-common-blocks" }
+storages-common-cache = { path = "../storages-common-cache" }
+storages-common-cache-manager = { path = "../storages-common-cache-manager" }
+storages-common-index = { path = "../storages-common-index" }
+storages-common-pruner = { path = "../storages-common-pruner" }
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+
+async-backtrace = "0.2.2"
+async-trait = { version = "0.1.57", package = "async-trait-fn" }
+backoff = { version = "0.4.0", features = ["futures", "tokio"] }
+chrono = { version = "0.4.24", features = ["serde"] }
+futures = "0.3.24"
+futures-util = "0.3.24"
+metrics = "0.20.1"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+parquet-format-safe = "0.2"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+sha2 = "0.10.6"
+siphasher = "0.3.10"
+streaming-decompression = "0.1.2"
+tracing = "0.1.36"
+typetag = "0.2.3"
+uuid = { version = "1.1.2", features = ["serde", "v4"] }

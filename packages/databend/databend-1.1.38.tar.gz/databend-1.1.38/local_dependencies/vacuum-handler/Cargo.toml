@@ -1,0 +1,28 @@
+[package]
+name = "vacuum-handler"
+description = "vacuum handler"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+# Workspace dependencies
+common-base = { path = "../common-base" }
+common-catalog = { path = "../common-catalog" }
+common-exception = { path = "../common-exception" }
+common-storages-fuse = { path = "../common-storages-fuse" }
+
+async-backtrace = "0.2.2"
+async-trait = "0.1.57"
+chrono = { version = "0.4.24", features = ["serde"] }
+
+[build-dependencies]
+
+[package.metadata.cargo-machete]
+ignored = ["match-template"]

@@ -1,0 +1,28 @@
+[package]
+name = "common-meta-store"
+description = "MetaStore is impl with either a local embedded meta store, or a grpc-client of metasrv"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[features]
+io-uring = ["common-meta-embedded/io-uring"]
+
+[dependencies]
+# Workspace dependencies
+common-grpc = { path = "../common-grpc" }
+common-meta-client = { path = "../common-meta-client" }
+common-meta-embedded = { path = "../common-meta-embedded" }
+common-meta-kvapi = { path = "../common-meta-kvapi" }
+common-meta-types = { path = "../common-meta-types" }
+
+# Crates.io dependencies
+async-trait = "0.1.57"
+tokio-stream = "0.1.11"
+tracing = "0.1.36"
