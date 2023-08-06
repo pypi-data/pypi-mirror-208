@@ -1,0 +1,109 @@
+{# -*- engine:django -*- #}
+{% extends "core/base.html" %}
+{% load i18n static rules %}
+
+{% block browser_title %}{% blocktrans %}My groups{% endblocktrans %}{% endblock %}
+
+{% block page_title %}
+  {% blocktrans %}My groups{% endblocktrans %}
+{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/alsijil/alsijil.css' %}"/>
+{% endblock %}
+
+{% block content %}
+  <table class="highlight responsive-table hide-on-med-and-down">
+    <thead>
+    <tr>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Students" %}</th>
+      <th></th>
+    </tr>
+    </thead>
+    {% for group in groups %}
+      <tr>
+        <td>
+          {{ group }}
+        </td>
+        <td>{{ group.students_count }}</td>
+        <td>
+          <div class="right">
+            <a class="btn primary-color waves-effect waves-light" href="{% url "students_list" group.pk %}">
+              <i class="material-icons iconify left" data-icon="mdi:account-multiple-outline"></i>
+              {% trans "Students list" %}
+            </a>
+            <a class="btn secondary-color waves-effect waves-light" href="{% url "week_view" "group" group.pk %}">
+              <i class="material-icons iconify left" data-icon="mdi:view-week-outline"></i>
+              {% trans "Week view" %}
+            </a>
+            {% has_perm "alsijil.view_assigned_grouproles_rule" user group as can_view_assigned_group_roles %}
+            {% if can_view_assigned_group_roles %}
+              <a class="btn primary waves-effect waves-light" href="{% url 'assigned_group_roles' group.pk %}">
+                <i class="material-icons iconify left" data-icon="mdi:clipboard-account-outline"></i>
+                {% trans "Roles" %}
+              </a>
+            {% endif %}
+            <a class="btn primary waves-effect waves-light" href="{% url "full_register_group" group.pk %}"
+               target="_blank">
+              <i class="material-icons iconify left" data-icon="mdi:printer-outline"></i>
+              {% trans "Generate printout" %}
+            </a>
+          </div>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td class="flow-text" colspan="3">
+          {% blocktrans %}No groups available.{% endblocktrans %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <div class="hide-on-large-only">
+    <ul class="collection">
+      {% for group in groups %}
+        <li class="collection-item">
+          <span class="title">{{ group }}</span>
+          <p>
+            {{ group.students_count }} {% trans "students" %}
+          </p>
+          <p>
+            <a class="btn primary-color waves-effect waves-light" href="{% url "week_view" "group" group.pk %}">
+              <i class="material-icons iconify left" data-icon="mdi:account-multiple-outline"></i>
+              {% trans "Students list" %}
+            </a>
+          </p>
+          <p>
+            <a class="btn secondary-color waves-effect waves-light" href="{% url "week_view" "group" group.pk %}">
+              <i class="material-icons iconify left" data-icon="mdi:view-week-outline"></i>
+              {% trans "Week view" %}
+            </a>
+          </p>
+          {% has_perm "alsijil.view_assigned_grouproles_rule" user group as can_view_assigned_group_roles %}
+          {% if can_view_assigned_group_roles %}
+            <p>
+              <a class="btn primary waves-effect waves-light" href="{% url 'assigned_group_roles' group.pk %}">
+                <i class="material-icons iconify left" data-icon="mdi:clipboard-account-outline"></i>
+                {% trans "Roles" %}
+              </a>
+            </p>
+          {% endif %}
+          <p>
+            <a class="btn primary waves-effect waves-light" href="{% url "full_register_group" group.pk %}"
+               target="_blank">
+              <i class="material-icons iconify left" data-icon="mdi:printer-outline"></i>
+              {% trans "Generate printout" %}
+            </a>
+          </p>
+        </li>
+      {% empty %}
+          <li class="collection-item flow-text">
+            {% blocktrans %}No groups available.{% endblocktrans %}
+          </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "AlekSIS-App-Alsijil"
+version = "3.0"
+packages = [
+    { include = "aleksis" }
+]
+readme = "README.rst"
+include = [
+    { path = "aleksis/**/*.mo", format = ["sdist", "wheel"] },
+    { path = "*.rst", format = "sdist" },
+    { path = "docs/*", format = "sdist" },
+    { path = "docs/**/*", format = "sdist" },
+    { path = "conftest.py", format = "sdist" },
+    { path = "tox.ini", format = "sdist" }
+]
+
+description = "AlekSIS (School Information System) — App كتاب السجل (class register and school records)"
+authors = [
+    "Dominik George <dominik.george@teckids.org>",
+    "Julian Leucker <leuckeju@katharineum.de>",
+    "Jonathan Weth <dev@jonathanweth.de>",
+    "Hangzhi Yu <yuha@katharineum.de>",
+    "Lloyd Meins <meinsll@katharineum.de>",
+    "mirabilos <thorsten.glaser@teckids.org>",
+    "Tom Teichler <tom.teichler@teckids.org>"
+]
+maintainers = [
+    "Dominik George <dominik.george@teckids.org>",
+    "Jonathan Weth <dev@jonathanweth.de>",
+]
+license = "EUPL-1.2"
+homepage = "https://aleksis.org/"
+repository = "https://edugit.org/AlekSIS/official/AlekSIS-App-Alsijil"
+documentation = "https://aleksis.edugit.io/AlekSIS/docs/html/"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django :: 4.0",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Typing :: Typed",
+]
+
+[[tool.poetry.source]]
+name = "gitlab"
+url = "https://edugit.org/api/v4/projects/461/packages/pypi/simple"
+secondary = true
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aleksis-core = "^3.0"
+aleksis-app-chronos = "^3.0"
+aleksis-app-stoelindeling = { version = "^2.0", optional = true }
+
+[tool.poetry.dev-dependencies]
+aleksis-builddeps = "*"
+
+[tool.poetry.extras]
+seatingplans = ["aleksis-app-stoelindeling"]
+
+[tool.poetry.plugins."aleksis.app"]
+alsijil = "aleksis.apps.alsijil.apps:AlsijilConfig"
+
+[tool.black]
+line-length = 100
+exclude = "/migrations/"
+
+[build-system]
+requires = ["poetry>=1.0"]
+build-backend = "poetry.masonry.api"

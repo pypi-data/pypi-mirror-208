@@ -1,0 +1,142 @@
+{% load i18n material_form_internal material_form time_helpers %}
+
+{% include "alsijil/partials/lesson/prev_next.html" with with_save=1 %}
+
+{% if not blocked_because_holidays %}
+  {% if can_edit_lesson_documentation or can_edit_register_object_personalnote %}
+    <button type="submit"
+            class="btn waves-effect waves-light green margin-bottom hundred-percent hide-on-med-and-up">
+      <i class="material-icons iconify left" data-icon="mdi:content-save-outline"></i> {% trans "Save" %}
+    </button>
+  {% endif %}
+{% endif %}
+
+{% if can_edit_register_object_personalnote %}
+  {% form form=personal_note_formset.management_form %}{% endform %}
+{% endif %}
+
+<div class="card no-mobile-card">
+  <div class="card-content">
+    <span class="card-title">
+      {% blocktrans %}Personal notes{% endblocktrans %}
+    </span>
+
+    <table class="striped alsijil-table horizontal-on-small">
+      <thead>
+      <tr>
+        <th>{% blocktrans %}Person{% endblocktrans %}</th>
+        <th>{% blocktrans %}Absent{% endblocktrans %}</th>
+        <th>{% blocktrans %}Tardiness{% endblocktrans %}</th>
+        <th>{% blocktrans %}Excused{% endblocktrans %}</th>
+        <th>{% blocktrans %}Excuse type{% endblocktrans %}</th>
+        <th>{% blocktrans %}Extra marks{% endblocktrans %}</th>
+        <th>{% blocktrans %}Remarks{% endblocktrans %}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for form in personal_note_formset %}
+        {% if can_edit_register_object_personalnote %}
+          <tr>
+            {{ form.id }}
+            <td class="person-name">{{ form.person_name }}{{ form.person_name.value }}
+              <p>
+                {% for assignment in form.instance.person.group_roles.all %}
+                  {% include "alsijil/group_role/chip.html" with role=assignment.role %}
+                {% endfor %}
+              </p>
+            </td>
+            <td class="center-align">
+              <label>
+                {{ form.absent }}
+                <span><span class="hide-on-large-only">{{ form.absent.label }}</span></span>
+              </label>
+            </td>
+            <td>
+              <div class="input-field">
+                {{ form.tardiness }}
+                <label for="{{ form.absent.id_for_label }}">
+                  {% trans "Tardiness (in m)" %}
+                </label>
+              </div>
+            </td>
+            <td class="center-align">
+              <label>
+                {{ form.excused }}
+                <span><span class="hide-on-large-only">{{ form.excused.label }}</span></span>
+              </label>
+            </td>
+            <td>
+              <div class="input-field">
+                {{ form.excuse_type }}
+                <label for="{{ form.excuse_type.id_for_label }}">
+                  {% trans "Excuse type" %}
+                </label>
+              </div>
+            </td>
+            <td>
+              {% for group, items in form.extra_marks|select_options %}
+                {% for choice, value, selected in items %}
+                  <label class="{% if selected %} active{% endif %} alsijil-check-box">
+                    <input type="checkbox"
+                           {% if value == None or value == '' %}disabled{% else %}value="{{ value }}"{% endif %}
+                        {% if selected %} checked="checked"{% endif %}
+                           name="{{ form.extra_marks.html_name }}">
+                    <span>{{ choice }}</span>
+                  </label>
+                {% endfor %}
+              {% endfor %}
+            </td>
+            <td>
+              <div class="input-field">
+                {{ form.remarks }}
+                <label for="{{ form.remarks.id_for_label }}">
+                  {% trans "Remarks" %}
+                </label>
+              </div>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td>{{ form.person_name.value }}
+              <p>
+                {% for assignment in form.instance.person.group_roles.all %}
+                  {% include "alsijil/group_role/chip.html" with role=assignment.role %}
+                {% endfor %}
+              </p>
+            </td>
+            <td>
+              <i class="material-icons iconify center" data-icon="mdi:{{ form.absent.value|yesno:"check,close" }}"></i>
+            </td>
+            <td>
+              <i class="material-icons iconify center" data-icon="mdi:{{ form.tardiness.value|yesno:"check,close" }}"></i>
+              <span class="alsijil-tardiness-text">
+                {% if form.tardiness.value %}{{ form.tardiness.value|to_time|time:"i\m" }}{% endif %}
+              </span>
+            </td>
+            <td>
+              <i class="material-icons iconify center" data-icon="mdi:{{ form.excused.value|yesno:"check,close" }}"></i>
+              </td>
+            <td>{% firstof form.instance.excuse_type "–" %}</td>
+            <td>
+              {% for extra_mark in form.instance.extra_marks.all %}
+                {{ extra_mark }}{% if not forloop.last %},{% endif %}
+              {% empty %}
+                –
+              {% endfor %}
+            </td>
+            <td>{% firstof form.remarks.value "–" %}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if not blocked_because_holidays %}
+  {% if can_edit_lesson_documentation or can_edit_register_object_personalnote %}
+    <button type="submit"
+            class="btn waves-effect waves-light green margin-bottom hundred-percent hide-on-med-and-up">
+      <i class="material-icons iconify left" data-icon="mdi:content-save-outline"></i> {% trans "Save" %}
+    </button>
+  {% endif %}
+{% endif %}

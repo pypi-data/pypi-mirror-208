@@ -1,0 +1,443 @@
+{# -*- engine:django -*- #}
+
+{% extends "core/base.html" %}
+{% load material_form i18n week_helpers static data_helpers rules time_helpers %}
+
+{% block browser_title %}{% blocktrans %}Week view{% endblocktrans %}{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/alsijil/alsijil.css' %}"/>
+  <link rel="stylesheet" href="{% static 'css/alsijil/week_view.css' %}"/>
+{% endblock %}
+
+{% block content %}
+  <script type="text/javascript" src="{% static "js/helper.js" %}"></script>
+  {{ week_select|json_script:"week_select" }}
+  <script type="text/javascript" src="{% static "js/chronos/week_select.js" %}"></script>
+  <div class="row">
+    <div id="toggle-row" class="col s12 m8 l10 {% if lesson_periods %}pre-hidden{% endif %}">
+      <form method="post" action="">
+        {% csrf_token %}
+        {% form form=select_form %}{% endform %}
+        <button type="submit" class="btn waves-effect waves-light primary-color">
+          <i class="material-icons iconify left" data-icon="mdi:check"></i>
+          {% blocktrans %}Select{% endblocktrans %}
+        </button>
+      </form>
+    </div>
+    <div class="col s12 m4 l2 right">
+      <button type="button" class="btn waves-effect waves-light hundred-percent" id="toggle-button">
+        <i class="material-icons iconify left" data-icon="mdi:filter-outline"></i> {% trans "Toggle filters" %}
+      </button>
+    </div>
+  </div>
+
+
+  <div class="row no-margin">
+    <h4 class="col s12 m6">{% blocktrans with el=el week=week.week %}CW {{ week }}:
+      {{ instance }}{% endblocktrans %} </h4>
+    {% include "chronos/partials/week_select.html" with wanted_week=week %}
+  </div>
+
+  {% if group %}
+    <p class="hide-on-med-and-down">
+      <a class="btn primary-color waves-effect waves-light" href="{% url "students_list" group.pk %}">
+        <i class="material-icons iconify left" data-icon="mdi:account-multiple-outline"></i>
+        {% trans "Students list" %}
+      </a>
+      <a class="btn waves-effect waves-light" href="{% url "full_register_group" group.pk %}" target="_blank">
+        <i class="material-icons iconify left" data-icon="mdi:printer-outline"></i>
+        {% trans "Generate printout" %}
+      </a>
+    </p>
+
+    <p class="hide-on-med-and-up">
+      <a class="btn primary-color waves-effect waves-light hundred-percent"
+         href="{% url "students_list" group.pk %}">
+        <i class="material-icons iconify left" data-icon="mdi:account-multiple-outline"></i>
+        {% trans "Students list" %}
+      </a>
+    </p>
+    <p class="hide-on-med-and-up">
+      <a class="btn waves-effect waves-light hundred-percent" href="{% url "full_register_group" group.pk %}"
+         target="_blank">
+        <i class="material-icons iconify left" data-icon="mdi:printer-outline"></i>
+        {% trans "Generate printout" %}
+      </a>
+    </p>
+  {% endif %}
+
+  {% if lesson_periods %}
+  <div class="col s12 margin-bottom">
+    <ul class="tabs tabs-icons tabs-fixed-width">
+      <li class="tab col">
+        <a class="active" href="#week-overview">
+          <i class="material-icons iconify" data-icon="mdi:message-bulleted"></i>
+          {% trans "Lesson documentations" %}
+        </a>
+      </li>
+      <li class="tab col">
+        <a href="#personal-notes">
+          <i class="material-icons iconify" data-icon="mdi:account-multiple-outline"></i>
+          {% trans "Persons" %}
+        </a>
+      </li>
+      {% if group_roles %}
+        <li class="tab col">
+          <a href="#group-roles">
+            <i class="material-icons iconify" data-icon="mdi:clipboard-account-outline"></i>
+            {% trans "Group roles" %}
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if lesson_periods %}
+    <div class="row">
+      <div class="col s12" id="week-overview">
+        {% for weekday, objects in regrouped_objects.items %}
+          {% with weekdays|get_dict:objects.0.weekday as advanced_weekday %}
+            {% if advanced_weekday.holiday and not request.site.preferences.alsijil__allow_entries_in_holidays %}
+              <div class="card">
+                <div class="card-content">
+                    <span class="card-title">
+                      {{ advanced_weekday.name }}, {{ advanced_weekday.date }} <span
+                      class="badge new blue no-float">{{ advanced_weekday.holiday }}</span>
+                    </span>
+                </div>
+              </div>
+            {% else %}
+              <div class="card show-on-extra-large">
+                <div class="card-content">
+                    <span class="card-title">
+                      {{ advanced_weekday.name }}, {{ advanced_weekday.date }}
+                    </span>
+                  <table class="striped datatable">
+                    <thead>
+                    <tr>
+                      <th></th>
+                      <th>{% blocktrans %}Period{% endblocktrans %}</th>
+                      {% if not group %}
+                        <th>{% blocktrans %}Groups{% endblocktrans %}</th>
+                      {% endif %}
+                      <th>{% blocktrans %}Subject{% endblocktrans %}</th>
+                      <th>{% blocktrans %}Teachers{% endblocktrans %}</th>
+                      <th>{% blocktrans %}Lesson topic{% endblocktrans %}</th>
+                      <th>{% blocktrans %}Homework{% endblocktrans %}</th>
+                      <th>{% blocktrans %}Group note{% endblocktrans %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for register_object in objects %}
+                      {% has_perm "alsijil.view_lessondocumentation_rule" user register_object as can_view_lesson_documentation %}
+                      {% if can_view_lesson_documentation %}
+                        <tr>
+                          <td class="center-align">
+                            {% include "alsijil/partials/lesson_status.html" with register_object=register_object %}
+                          </td>
+                          <td class="tr-link">
+                            <a class="tr-link"
+                               href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                              {% if register_object.period %}
+                                {{ register_object.period.period }}.
+                              {% else %}
+                                {{ register_object.period_from_on_day }}.–
+                                {{ register_object.period_to_on_day }}.
+                              {% endif %}
+                            </a>
+                          </td>
+                          {% if not group %}
+                            <td>
+                              <a class="tr-link"
+                                 href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                                {% if register_object.lesson %}
+                                  {{ register_object.lesson.group_names }}
+                                {% else %}
+                                  {{ register_object.group_names }}
+                                {% endif %}
+                              </a>
+                            </td>
+                          {% endif %}
+                          <td>
+                            <a class="tr-link"
+                               href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                              {% if register_object.get_subject %}
+                                {{ register_object.get_subject.name }}
+                              {% elif register_object.subject %}
+                                {{ register_object.subject }}
+                              {% else %}
+                                {% trans "Event" %} ({{ register_object.title }})
+                              {% endif %}
+                            </a>
+                          </td>
+                          <td>
+                            <a class="tr-link"
+                               href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                              {{ register_object.teacher_names }}
+                            </a>
+                          </td>
+                          <td>
+                            <a class="tr-link"
+                               href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                              {% firstof register_object.get_lesson_documentation.topic "–" %}
+                            </a>
+                          </td>
+                          <td>
+                            <a class="tr-link"
+                               href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                              {% firstof register_object.get_lesson_documentation.homework "–" %}
+                            </a>
+                          </td>
+                          <td>
+                            <a class="tr-link"
+                               href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                              {% firstof register_object.get_lesson_documentation.group_note "–" %}
+                            </a>
+                          </td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <ul class="collapsible hide-on-extra-large-only hide-on-small-only">
+                <li class="">
+                  <div class="collapsible-header flow-text">
+                    {{ advanced_weekday.name }}, {{ advanced_weekday.date }} <i
+                    class="material-icons iconify collapsible-icon-right" data-icon="mdi:unfold-more-horizontal"></i>
+                  </div>
+                  <div class="collapsible-body">
+                    <div class="collection">
+                      {% for register_object in objects %}
+                        {% has_perm "alsijil.view_lessondocumentation_rule" user register_object as can_view_lesson_documentation %}
+                        {% if can_view_lesson_documentation %}
+                          <a class="collection-item avatar"
+                             href="{{ register_object.alsijil_url }}?back={{ back_url }}">
+                            {% include "alsijil/partials/lesson_status.html" with register_object=register_object css_class="materialize-circle" color_suffix=" " %}
+                            <table>
+                              <tr>
+                                <th>{% trans "Subject" %}</th>
+                                <td>
+                                  {% if register_object.period %}
+                                    {{ register_object.period.period }}.
+                                  {% else %}
+                                    {{ register_object.period_from_on_day }}.–
+                                    {{ register_object.period_to_on_day }}.
+                                  {% endif %}
+                                  {% if register_object.get_subject %}
+                                    {{ register_object.get_subject.name }}
+                                  {% elif register_object.subject %}
+                                    {{ register_object.subject }}
+                                  {% else %}
+                                    {% trans "Event" %}
+                                  {% endif %}
+                                </td>
+                              </tr>
+                              {% if not group %}
+                                <tr>
+                                  <th>{% trans "Groups" %}</th>
+                                  <td>
+                                    {% if register_object.lesson %}
+                                      {{ register_object.lesson.group_names }}
+                                    {% else %}
+                                      {{ register_object.group_names }}
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                              {% endif %}
+                              <tr>
+                                <th>{% trans "Teachers" %}</th>
+                                <td>
+                                  {{ register_object.teacher_names }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>{% trans "Lesson topic" %}</th>
+                                <td>{% firstof register_object.get_lesson_documentation.topic "–" %}</td>
+                              </tr>
+                              {% with register_object.get_lesson_documentation as lesson_documentation %}
+                                {% if lesson_documentation.homework %}
+                                  <tr>
+                                    <th>{% trans "Homework" %}</th>
+                                    <td>{% firstof register_object.get_lesson_documentation.homework "–" %}</td>
+                                  </tr>
+                                {% endif %}
+                                {% if lesson_documentation.group_note %}
+                                  <tr>
+                                    <th>{% trans "Group note" %}</th>
+                                    <td>{% firstof register_object.get_lesson_documentation.group_note "–" %}</td>
+                                  </tr>
+                                {% endif %}
+                              {% endwith %}
+                            </table>
+                          </a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <div class="hide-on-med-and-up">
+                <h3>{{ advanced_weekday.name }}</h3>
+                <p class="subtitle">
+                  <span>{{ advanced_weekday.date }}</span>
+                  <button class="btn-superflat right waves-effect unfold-trigger">
+                    {% trans "Unfold" %}
+                    <i class="material-icons iconify" data-icon="mdi:unfold-less-horizontal"></i>
+                  </button>
+                </p>
+                <div class="horizontal-scroll-container">
+                  {% for register_object in objects %}
+                    <div class="card horizontal-scroll-card">
+                      <div class="card-content">
+                        <span class="card-title">
+                          <span class="period">
+                            {% if register_object.period %}
+                              {{ register_object.period.period }}.
+                            {% else %}
+                              {{ register_object.period_from_on_day }}.–{{ register_object.period_to_on_day }}.
+                            {% endif %}
+                          </span>
+                          <span class="subject">
+                            {% if register_object.get_subject %}
+                              {{ register_object.get_subject.name }}
+                            {% elif register_object.subject %}
+                              {{ register_object.subject }}
+                            {% else %}
+                              {% trans "Event" %}
+                            {% endif %}
+                          </span>
+                          <span class="lesson-icon">
+                            {% include "alsijil/partials/lesson_status.html" with register_object=register_object %}
+                          </span>
+                        </span>
+                        <dl>
+                          <div class="one-line">
+                            {% if not group %}
+                              <dt>{% trans "Groups" %}</dt>
+                              <dd>
+                                {% if register_object.lesson %}
+                                  {{ register_object.lesson.group_names }}
+                                {% else %}
+                                  {{ register_object.group_names }}
+                                {% endif %}
+                              </dd>
+                            {% endif %}
+
+                            <dt>{% trans "Teachers" %}</dt>
+                            <dd>
+                              {{ register_object.teacher_names }}
+                            </dd>
+                          </div>
+
+                          <dt>{% trans "Lesson topic" %}</dt>
+                          <dd>{% firstof register_object.get_lesson_documentation.topic "–" %}</dd>
+
+                          {% with register_object.get_lesson_documentation as lesson_documentation %}
+                            {% if lesson_documentation.homework %}
+                              <dt>{% trans "Homework" %}</dt>
+                              <dd>{% firstof register_object.get_lesson_documentation.homework "–" %}</dd>
+                            {% endif %}
+                            {% if lesson_documentation.group_note %}
+                              <dt>{% trans "Group note" %}</dt>
+                              <dd>{% firstof register_object.get_lesson_documentation.group_note "–" %}</dd>
+                            {% endif %}
+                          {% endwith %}
+                        </dl>
+                      </div>
+                      <div class="card-action">
+                        <a href="{{ register_object.alsijil_url }}?back={{ back_url }}"
+                           class="">
+                          {% trans "Visit lesson overview" %}
+                        </a>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+      <div class="col s12" id="personal-notes">
+        <div class="card">
+          <div class="card-content">
+              <span class="card-title">
+                {% blocktrans %}Personal notes{% endblocktrans %}
+              </span>
+            {% for person in persons %}
+              <h5 class="card-title">
+                <a href="{% url "overview_person" person.person.pk %}">{{ person.person.full_name }}</a>
+                {% has_perm "alsijil.register_absence_rule" user person.person as can_register_absence %}
+                {% if can_register_absence %}
+                  <a class="btn primary-color waves-effect waves-light right"
+                     href="{% url "register_absence" person.person.pk %}">
+                    <i class="material-icons iconify left" data-icon="mdi:message-draw"></i>
+                    {% trans "Register absence" %}
+                  </a>
+                {% endif %}
+              </h5>
+              {% if group_roles %}
+                <p>
+                  {% for assignment in person.group_roles %}
+                    {% include "alsijil/group_role/chip.html" with role=assignment.role small=assignment.date_range %}
+                  {% endfor %}
+                </p>
+              {% endif %}
+              <p class="card-text">
+                {% trans "Absent" %}: {{ person.person.absences_count }}
+                ({{ person.person.unexcused_count }} {% trans "unexcused" %})
+              </p>
+              <p class="card-text">
+                {% trans "Summed up tardiness" %}: {% firstof person.person.tardiness_sum|to_time|time:"H\h i\m" "–" %}
+              </p>
+              <p class="card-text">
+                {% trans "Count of tardiness" %}: {{ person.person.tardiness_count }} &times;
+              </p>
+              {% for extra_mark in extra_marks %}
+                <p class="card-text">
+                  {{ extra_mark.name }}: {{ person.person|get_dict:extra_mark.count_label }}
+                </p>
+              {% endfor %}
+              {% for note in person.personal_notes %}
+                <blockquote>
+                  {{ note.remarks }}
+                  <em class="right">
+                    <a href="{{ note.register_object.alsijil_url }}">
+                      {{ note.date_formatted }}, {{ note.register_object.get_subject.name }}
+                    </a>
+                  </em>
+                </blockquote>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% if group_roles %}
+        <div class="col s12" id="group-roles">
+          {% include "alsijil/group_role/partials/assigned_roles.html" with roles=group_roles group=group back_url=back_url %}
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          <i class="material-icons iconify red-text left" data-icon="mdi:alert-outline"></i>
+          {% blocktrans %}No lessons available{% endblocktrans %}
+        </span>
+        <p>
+          {% blocktrans %}
+            There are no lessons for the selected group or teacher in this week.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+
+  <script src="{% static 'js/alsijil/week_view.js' %}" type="text/javascript"></script>
+{% endblock %}

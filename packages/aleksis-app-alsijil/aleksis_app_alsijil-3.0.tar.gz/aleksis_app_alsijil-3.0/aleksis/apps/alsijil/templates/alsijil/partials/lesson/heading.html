@@ -1,0 +1,110 @@
+{% load i18n %}
+
+{% if next_lesson_person or prev_lesson_person or back_to_week_url %}
+  <div class="row margin-bottom alsijil-nav-header">
+    <div class="col s12 no-padding">
+      {# Back to week view #}
+      {% if back_to_week_url %}
+        <a href="{{ back_to_week_url }}"
+           class="btn secondary-color waves-light waves-effect margin-bottom {% if prev_lesson_person or next_lesson_person %}hide-on-extra-large-only{% endif %}">
+          <i class="material-icons iconify left" data-icon="mdi:chevron-left"></i> {% trans "Week view" %}
+        </a>
+      {% endif %}
+
+      {% if prev_lesson_person or next_lesson_person %}
+        <div class="col s12 no-padding center alsijil-nav">
+          {% if back_to_week_url %}
+            <a href="{{ back_to_week_url }}"
+               class="btn-flat secondary-color-text waves-light waves-effect left hide-on-med-and-down hide-on-large-only show-on-extra-large">
+              <i class="material-icons iconify left" data-icon="mdi:chevron-left"></i> {% trans "Week view" %}
+            </a>
+          {% endif %}
+
+          {# Previous lesson #}
+          <a class="btn-flat waves-effect waves-light left primary-color-text {% if not prev_lesson_person %}disabled{% endif %}"
+             title="{% trans "My previous lesson" %}"
+              {% if prev_lesson_person %}
+             href="{% url "lesson_period" prev_lesson_person.week.year prev_lesson_person.week.week prev_lesson_person.id %}"
+              {% endif %}
+          >
+            <i class="material-icons iconify left" data-icon="mdi:chevron-left"></i>
+            <span class="hide-on-small-only">{% trans "My previous lesson" %}</span>
+            <span class="hide-on-med-and-up">{% trans "Previous" %}</span>
+          </a>
+          {# Next lesson #}
+          <a class="btn-flat waves-effect waves-light right primary-color-text {% if not next_lesson_person %}disabled{% endif %}"
+             title="{% trans "My next lesson" %}"
+              {% if next_lesson_person %}
+             href="{% url "lesson_period" next_lesson_person.week.year next_lesson_person.week.week next_lesson_person.id %}"
+              {% endif %}
+          >
+            <i class="material-icons iconify right" data-icon="mdi:chevron-right"></i>
+            <span class="hide-on-small-only">{% trans "My next lesson" %}</span>
+            <span class="hide-on-med-and-up">{% trans "Next" %}</span>
+          </a>
+          <span class="truncate">{{ request.user.person }}</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+<h1>
+  <span class="right hide-on-small-only">
+    {% include "alsijil/partials/lesson_status.html" with register_object=register_object css_class="medium" %}
+  </span>
+
+  <a class="btn-flat waves-effect waves-light primary-color-text left alsijil-header-nav-button hide-on-med-and-up {% if not prev_lesson %}disabled{% endif %}"
+      {% if prev_lesson %}
+     href="{% url "lesson_period" prev_lesson.week.year prev_lesson.week.week prev_lesson.id %}"
+      {% endif %}
+  >
+    <i class="material-icons iconify center" data-icon="mdi:chevron-left"></i>
+  </a>
+  <a class="btn-flat waves-effect waves-light primary-color-text right alsijil-header-nav-button hide-on-med-and-up {% if not next_lesson %}disabled{% endif %}"
+      {% if next_lesson %}
+     href="{% url "lesson_period" next_lesson.week.year next_lesson.week.week next_lesson.id %}"
+      {% endif %}
+  >
+    <i class="material-icons iconify center" data-icon="mdi:chevron-right"></i>
+  </a>
+
+  <span class="alsijil-time-head">
+    {% if register_object.label_ == "event" %}
+      {% if register_object.date_start == register_object.date_end %}
+        {% if register_object.period_from.period == register_object.period_to.period %}
+          {{ register_object.date_start|date:"SHORT_DATE_FORMAT" }},
+          {% blocktrans with period=register_object.period_from.period %}{{ period }}. period{% endblocktrans %}
+        {% else %}
+          {{ register_object.date_start|date:"SHORT_DATE_FORMAT" }},
+          {% blocktrans with period_from=register_object.period_from.period  period_to=register_object.period_to.period %}
+            {{ period_from }}.–{{ period_to }}.  period
+          {% endblocktrans %}
+        {% endif %}
+      {% else %}
+        {{ register_object.date_start|date:"SHORT_DATE_FORMAT" }},
+        {{ register_object.period_from.period }}.–{{ register_object.date_end|date:"SHORT_DATE_FORMAT" }},
+        {{ register_object.period_to.period }}.
+      {% endif %}
+    {% else %}
+      {{ day|date:"SHORT_DATE_FORMAT" }},
+      {% blocktrans with period=register_object.period.period %}{{ period }}. period{% endblocktrans %}
+    {% endif %}
+  </span>
+
+  <span class="alsijil-object-head">
+    {{ register_object.group_names }},
+
+    {% if register_object.label_ == "event" %}
+      {% trans "Event" %} ({{ register_object.title }}),
+    {% else %}
+      {{ register_object.get_subject.short_name }},
+    {% endif %}
+
+    {{ register_object.teacher_short_names }}
+  </span>
+</h1>
+
+<div class="hide-on-med-and-up margin-bottom">
+  {% include "alsijil/partials/lesson_status.html" with register_object=register_object chip=1 css_class="hundred-percent center" %}
+</div>

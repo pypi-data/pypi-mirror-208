@@ -1,0 +1,65 @@
+{% load i18n material_form_internal material_form %}
+
+{% include "alsijil/partials/lesson/prev_next.html" with with_save=0 %}
+
+<div class="hide-on-med-and-up margin-bottom">
+  {% if not blocked_because_holidays %}
+    {% if can_edit_lesson_documentation or can_edit_register_object_personalnote %}
+      {% include "core/partials/save_button.html" %}
+    {% endif %}
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-content">
+    <span class="card-title">
+      {% blocktrans %}Lesson documentation{% endblocktrans %}
+    </span>
+
+    {% if can_edit_lesson_documentation %}
+      {% form form=lesson_documentation_form %}{% endform %}
+    {% elif can_view_lesson_documentation %}
+      <table>
+        <tr>
+          <th>
+            {% trans "Lesson topic" %}
+          </th>
+          <td>
+            {{ lesson_documentation.topic }}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            {% trans "Homework" %}
+          </th>
+          <td>
+            {{ lesson_documentation.homework }}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            {% trans "Group note" %}
+          </th>
+          <td>
+            {{ lesson_documentation.group_note }}
+          </td>
+        </tr>
+      </table>
+    {% endif %}
+  </div>
+  <div class="card-action-light hide-on-small-only">
+    {% if not blocked_because_holidays %}
+      {% if can_edit_lesson_documentation or can_edit_register_object_personalnote %}
+        {% include "core/partials/save_button.html" %}
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<div class="hide-on-med-and-up">
+  {% if not blocked_because_holidays %}
+    {% if can_edit_lesson_documentation or can_edit_register_object_personalnote %}
+      {% include "core/partials/save_button.html" %}
+    {% endif %}
+  {% endif %}
+</div>

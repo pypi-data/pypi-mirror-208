@@ -1,0 +1,89 @@
+{% load i18n material_form_internal material_form time_helpers rules %}
+
+
+{% if seating_plan %}
+  <div class="card no-mobile-card">
+    <div class="card-content">
+      <div class="card-title margin-bottom">
+        {% blocktrans with group=seating_plan.group room=seating_plan.room %}Seating plan for {{ group }} in
+          {{ room }}{% endblocktrans %}
+      </div>
+      {% if seating_plan_parent %}
+        <figure class="alert primary">
+          <i class="material-icons iconify left" data-icon="information-outline"></i>
+          {% blocktrans with child_group=first_group %}
+            This seating plan is taken from the parent group of {{ child_group }}.
+            If you want, you can take it over for your group and then customize it.
+          {% endblocktrans %}
+        </figure>
+      {% endif %}
+
+      <div class="row margin-bottom no-padding">
+        <div class="col s12 no-padding">
+          {% has_perm "stoelindeling.edit_seatingplan_rule" user seating_plan as can_edit %}
+          {% has_perm "stoelindeling.copy_seatingplan_for_group_rule" user first_group as can_copy %}
+
+          {% if can_edit %}
+            <a class="btn orange waves-effect waves-light"
+               href="{% url "edit_seating_plan" seating_plan.pk %}?next={{ back_url }}#seating-plan">
+              <i class="material-icons iconify left" data-icon="mdi:pencil-outline"></i>
+              {% trans "Edit seating plan" %}
+            </a>
+          {% endif %}
+          {% if can_copy and seating_plan_parent %}
+            <a class="btn orange waves-effect waves-light"
+               href="{% url "copy_seating_plan" seating_plan.pk %}?next={{ back_url }}#seating-plan">
+              <i class="material-icons iconify left" data-icon="mdi:content-copy"></i>
+              {% trans "Copy plan and edit" %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          {% include "stoelindeling/seating_plan/render.html" %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div class="container">
+    <div class="card">
+      <div class="card-content">
+        <div class="card-title">
+          <i class="material-icons iconify left small orange-text" data-icon="mdi:alert-outline"></i>
+          {% trans "There is no seating plan for this lesson." %}
+        </div>
+        {% has_perm "stoelindeling.create_seatingplan_rule" user first_group as can_add %}
+        {% if can_add %}
+          <div class="row margin-bottom">
+            <div class="col s12">
+              <a class="btn waves-effect waves-light" href="{% url "create_seating_plan" %}?group={{ first_group.pk }}&subject={{ register_object.get_subject.pk }}&room={{ register_object.get_room.pk }}&next={{ back_url }}#seating-plan">
+                <i class="material-icons iconify left" data-icon="mdi:plus"></i>
+                {% blocktrans with group=first_group.name subject=register_object.get_subject.name room=register_object.get_room.name %}
+                  Create a new seating plan for {{ group }} ({{ subject }}) in {{ room }}
+                {% endblocktrans %}
+              </a>
+            </div>
+          </div>
+        {% endif %}
+        {% for parent_group in first_group.parent_groups.all %}
+          {% has_perm "stoelindeling.create_seatingplan_rule" user parent_group as can_add %}
+          {% if can_add %}
+            <div class="row">
+              <div class="col s12">
+                <a class="btn waves-effect waves-light" href="{% url "create_seating_plan" %}?group={{ parent_group.pk }}&subject={{ register_object.get_subject.pk }}&room={{ register_object.get_room.pk }}&next={{ back_url }}#seating-plan">
+                  <i class="material-icons iconify left" data-icon="mdi:plus"></i>
+                  {% blocktrans with group=parent_group.name room=register_object.get_room.name %}
+                    Create a new seating plan for {{ group }} in {{ room }}
+                  {% endblocktrans %}
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
