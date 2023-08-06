@@ -1,0 +1,119 @@
+digraph algo_stable {
+	nodesep=0.15;
+	ranksep=0.15;
+
+	{
+		nodesep=0.15;
+		ranksep=0.15;
+
+		node [shape=box,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000"];
+	
+		init[label="set particle i to be the first particle"];
+	
+		vicinity[label="Find all particles j within distance 2R of i and for each\n\
+			j identify the two circles defined by i and j.  For each circle,\n\
+			compute the angle of its center C relative to i, \n\
+			(zeta = atan(d phi_{iC}/d y_{iC}))"];
+	
+		sort[label="Sort the circles into increasing angle zeta"];
+	
+		init_cone[label="For the first circle in this order, calculate the total\n\
+			momentum and checkxor for the cones that it defines.\n\
+			Consider all 4 permutations of edge points being included\n\
+			or excluded. Call these the 'current cones'"];
+	
+		node [shape=polygon,sides=2,orientation=45];
+		browse_current[label = "for each of the 4 current cones"];	
+		node [shape=box,orientation=0,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000"];
+
+		test_cone1[label="this cone has not yet been found add\nit to the list of distinct cones"];
+	
+		test_cone2[label="if this cone has not yet been labelled as unstable, establish\n\
+			if the in/out status of the edge particles (with respect to the cone\n\
+			momentum axis) is the same as when defining the cone; if it is\n\
+			not, label the cone as unstable"];
+	
+		node [style="invis",fixedsize=true];
+		end_current[width=0,height=0];
+
+		node [shape=box,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000",fixedsize=false];
+		update_cone[label="Move to the next circle in order. It differs from the previous\n\
+		                   one either by a particle entering the circle, or one leaving the\n\
+				   circle. Calculate the momentum for the new circle by adding (or\n\
+				   removing) the momentum of the particle that has entered (left); the\n\
+				   checkxor can be updated by XORing with the label of that particle."];
+	
+		node [shape=polygon,sides=4,orientation=45];
+		until[label="test if all circles are considered"];
+		node [shape=box,orientation=0,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000"];
+
+		node [shape=polygon,sides=4,orientation=45];
+		next_particle[label="move to the next particle: increment i, if possible"];
+		node [shape=box,orientation=0,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000"];
+
+		node [shape=polygon,sides=2,orientation=45];
+		browse_proto[label = "for each of the cones labelled as unstable"];	
+		node [shape=box,orientation=0,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000"];
+
+		node [shape=polygon,sides=4,orientation=45];
+		final_check[label="Explicitly check if the cone is stable"];
+		node [shape=box,sides=4,orientation=0];
+		check_ok[label="add it to the list of stable cones (protojets)"];
+
+		node [style="invis",fixedsize=true];
+		end_proto[width=0,height=0];
+	
+		edge [arrowsize=0.7];
+
+		init -> vicinity -> sort -> init_cone -> browse_current -> test_cone1 -> test_cone2;
+		test_cone2 -> end_current[dir=none];
+		end_current -> update_cone -> until -> next_particle -> browse_proto -> final_check;
+		final_check -> check_ok[label="yes"];
+		check_ok -> end_proto[dir=none];
+	}
+	// virtual nodes
+	/////////////////
+	{
+		node [style="invis",fixedsize=true];
+
+		vicinity_p[width=0,height=0];
+		init_cone_p[width=0,height=0];
+		browse_current_p[width=0,height=0];
+		end_current_p[width=0,height=0];
+		until_p[width=0,height=0];
+		next_particle_p[width=0,height=0];
+		browse_proto_p[width=0,height=0];
+		final_p[width=0,height=0];
+		end_proto_p[width=0,height=0];
+	}
+
+	{ rank="same"; vicinity;       vicinity_p; }
+	{ rank="same"; init_cone;      init_cone_p; }
+	{ rank="same"; browse_current; browse_current_p; }
+	{ rank="same"; end_current;    end_current_p; }
+	{ rank="same"; until;          until_p; }
+	{ rank="same"; next_particle;  next_particle_p; }
+	{ rank="same"; browse_proto;   browse_proto_p; }
+	{ rank="same"; final_check;    final_p; }
+	{ rank="same"; end_proto;      end_proto_p; }
+
+	edge [arrowsize=0.7];
+
+	end_current->end_current_p[weight=0,dir=none];
+	browse_current->browse_current_p[weight=0,dir=back];
+	end_current_p->browse_current_p[samehead,sametail,dir=none];
+
+	until->until_p[weight=0,dir=none];
+	init_cone->init_cone_p[weight=0,dir=back];
+	until_p->init_cone_p[label=" no",samehead,sametail,dir=none];
+
+	next_particle->next_particle_p[weight=0,dir=none];
+	vicinity->vicinity_p[weight=0,dir=back];
+	next_particle_p->vicinity_p[label=" yes",samehead,sametail,dir=none];
+
+	end_proto->end_proto_p[weight=0,dir=none];
+	final_check->final_p[headlabel="no",weight=0];
+	browse_proto->browse_proto_p[weight=0,dir=back];
+	end_proto_p->final_p[samehead,sametail,dir=none];
+	final_p->browse_proto_p[samehead,sametail,dir=none];
+}

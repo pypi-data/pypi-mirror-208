@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>SISCone: Usage</title>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<!------------>
+<!-- Header -->
+<!------------>
+<h1 align="center">SISCone Documentation</h1>
+<p>
+<a name="top"></a>
+<h3 align="center">Version 3.0.5</h3>
+</p>
+<hr size="1">
+
+
+<!---------->
+<!-- Menu -->
+<!---------->
+<p>
+<a href="index.html"><img src="home.png" align="right" alt="home"></a>
+SISCone is written in C++ and is provided as a library. We describe below 3 ways of using it:
+<ul>
+<li> Using the <a href="#appli">sample application</a> </li>
+<li> Using the <a href="#lib">library</a> (from source code)</li>
+<li> Using the <a href="#fjp">FastJet plugin</a> </li>
+<li> Using <a href="#sph">SISCone in spherical coordinates</a> (<i>e<sup>+</sup>e<sup>-</sup></i> collisions) </li>
+<li> Using <a href="#sPR">SISCone with progressive removal</a> </li>
+</ul>
+</p>
+<p>
+For the <i>e<sup>+</sup>e<sup>-</sup></i> events, we provide an
+implementation of SISCone in spherical
+coordinates. See <a href="#sph">here</a> for details on how to use it.
+</p>
+<hr size="1">
+
+<!----------------------------->
+<!-- Application description -->
+<!----------------------------->
+<p>
+<a href="index.html"><img src="home.png" align="right" alt="home"></a>
+<h2><a name="appli">Using the sample application</a></h2>
+</p>
+<p>
+For simple applications, SISCone comes with a command-line application
+<table class="code">
+<tr><td><pre class="fragmant">
+Usage: ./siscone &lt;args&gt;
+
+Here is an exhaustive list of the arguments:
+Parameters control (with default values):
+  -n &lt;val&gt;, --number=&lt;val&gt;  : set the maximum number of particles allowed (all)
+  -R &lt;val&gt;, --radius=&lt;val&gt;  : set the radius (0.7)
+  -f &lt;val&gt;, --fraction=&lt;val&gt;: set the overlap parameter (0.5)
+  -p &lt;val&gt;, --ptmin=&lt;val&gt;   : set the minimal pT for protojets (0)
+  -e &lt;val&gt;, --event=&lt;val&gt;   : set the event filename (events/single-event.dat)
+  -n &lt;val&gt;, --npass=&lt;val&gt;   : set the number of passes (0 for infinity) (0)
+  -s &lt;val&gt;, --sm=&lt;val&gt;      : set the variable for split-merge (pttilde)
+
+Output flags:
+  --version    : show version information
+  -h, --help   : show this message
+  -v, --verbose: be verbose (on by default)
+  -q, --quiet  : be quiet
+</pre>
+</td></tr>
+</table>
+</p>
+<p>
+The program outputs two files:
+<ul>
+<li> <tt>particles.dat</tt>: the list of particles as a two-column file giving the rapidity <em>y</em> and azimuthal angle &phi; for each particle</li>
+<li> <tt>jets.dat</tt>: the first line gives the number of jets. Then comes the list of jets within 4 columns giving, for each jet, the (<em>y</em>, &phi;) coordinates of its centre, its <em>p<sub>T</sub></em> and the number of particles it contains. The remaining part of the file lists the jet content. This is again given in 4 columns: the (<em>y</em>, &phi;) coordinates of the particle, its index in the initial list and the index of the jet to which it belongs.</li>
+</ul>
+</p>
+<p><a href="#top">Back to top</a></p>
+<hr size="1">
+
+
+<!------------------------->
+<!-- Library description -->
+<!------------------------->
+<p>
+<a href="index.html"><img src="home.png" align="right" alt="home"></a>
+<h2><a name="lib">Using the library</a></h2>
+</p>
+<p>
+SISCone can be more conveniently used directly in C++ program linked against the SISCone library.
+There are basically two objects that are important for users:
+</p>
+
+<h3><code>Cmomentum</code>: the 4-momentum class</h3> (see <tt><a class="code" href="../devel/html/momentum_8h_source.html">momentum.h</a></tt> for details)<br>
+
+<p>
+This class is used to store the property of one particle. It is defined through the 4-momentum coordinates of the particle e.g., to create a particle of momentum <tt>px</tt> <tt>py</tt> <tt>pz</tt> and energy <tt>E</tt><br>
+<table class="code">
+<tr><td>
+<pre class="fragment">
+  <a class="code" href="../devel/html/classsiscone_1_1Cmomentum.html">Cmomentum</a> particle=<a class="code" href="../devel/html/classsiscone_1_1Cmomentum.html">Cmomentum</a>(px, py, pz, E);
+</pre>
+</td></tr>
+</table>
+</p>
+
+<h3><code>Csiscone</code>: the SISCone jet finder</h3> (see <tt><a class="code" href="../devel/html/siscone_8h_source.html">siscone.h</a></tt> for details)<br>
+
+<p>
+The <a class="code" href="../devel/html/classsiscone_1_1Csiscone.html">Csiscone</a> class is the main class of interest of the algorithm. It is the one that you want to use to calculate the jets from a given set of particles. The algorithm is called through the following members:
+<table class="code">
+<tr><td><pre class="fragment">
+  int Csiscone::compute_jets(vector&lt;Cmomentum&gt; &#38;particles,
+                             double R, double f, int n_pass_max=0, double ptmin=0.0,
+                             Esplit_merge_scale _split_merge_scale=SM_pttilde);
+  int Csiscone::recompute_jets(double f, double ptmin=0.0,
+                               Esplit_merge_scale _split_merge_scale=SM_pttilde);
+</pre></td></tr>
+</table>
+</p>
+<p>
+The first of those methods takes the following information as argument:
+<ul>
+<li> <tt>particles</tt>: the list of particles to deal with under the form of a <a href="http://www.sgi.com/tech/stl/">STL</a> vector of particles.</li>
+<li> <tt>R</tt>: the radius of the cone used to scan for stable cones (protocones)</li>
+<li> <tt>f</tt>: the overlap parameter. When splitting and merging protocones, two overlapping cones are split (resp. merged) when their overlapping <em>p<sub>T</sub></em> is smaller (resp. larger) than a fraction <tt>f</tt> of the smallest <em>p<sub>T</sub></em> of the parents. </li>
+<li> <tt>n_pass_max</tt>: maximum number of passes. When computing protocones, it happens that some particles do not enter into jet. We can therefore re-run the algorithm with those particles only. This parameter controls the number of such passes. It has been set to 1 by default. If you want to run the algorithm until all particles are associated with a jet or no new stable cone are found, set it to 0.</li>
+<li> <tt>ptmin</tt>: minimal <i>p<sub>T</sub></i> for the protojets included in the split-merge process. At each step of the split-merge process, we remove jet candidates which have a <i>p<sub>T</sub></i> less than <tt>ptmin</tt>.</li>
+<li> <tt>split_merge_scale</tt>: variable to use for split-merge (ordering and overlap fraction computation). This can be <tt>SM_pttilde</tt>, <tt>SM_Et</tt>, <tt>SM_mt</tt> or <tt>SM_pt</tt>, respectively corresponding to a p-scheme <i>p<sub>T</sub></i>, the transverse energy <i>E<sub>T</sub></i>, the transverse mass <i>m<sub>T</sub></i> or the transverse momentum <i>p<sub>T</sub></i>. We highly recommand to keep the default value <tt>SM_pttilde</tt> (see <a href="sm_issue.html">this note</a> for details)</li>
+</ul>
+The second member (<tt>recompute_jets</tt>) allows you to rerun the split/merge algorithm with a different overlap parameter.
+</p>
+<p>
+<b>Remark:</b> The algorithm has been placed inside the <tt>namespace siscone</tt>. Hence, you should either add the line <tt>using namespace siscone;</tt> on top of your applications, or prefix any call to the siscone library by <tt>siscone::</tt>.
+</p>
+
+<h3>Output</h3>
+<p>
+The result of calling <tt>compute_jets(...)</tt> or <tt>recompute_jets(...)</tt> is stored in the vector
+<table class="code">
+<tr><td><pre class="fragment">
+vector&lt;Cjet&gt; Csiscone::jets;
+</pre></td></tr>
+</table>
+The elements of that vector contain all necessary information concerning the jets:
+<ul>
+<li> <tt>Cjet::v</tt>: 4-momentum of the jet.</li>
+<li> <tt>Cjet::n</tt>: number of particles in the jet.</li>
+<li> <tt>Cjet::contents</tt>: jet contents. It is stored as a <tt>vector&lt;int&gt;</tt> listing the indices of the particles contained in the jet.</li>
+<li> <tt>Cjet::pass</tt> : pass at which the jet has been found (0 is the first, -1 means that the particle has not been included in the analysis <em>i.e.</em> it has infinite rapidity).</li>
+</ul>
+</p>
+
+<h3>an illustrative example</h3>
+<p>
+Here follows an example which illustrates the usage of those objects (see also <tt>main.cpp</tt> in the scones tree)
+<table class="code">
+<tr><td>
+<pre class="fragment">
+01 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
+02 <span class="preprocessor">#include &lt;iostream&gt;</span>
+03 <span class="preprocessor">#include "siscone/momentum.h"</span>
+04 <span class="preprocessor">#include "siscone/siscone.h"</span>
+05 
+06 <span class="preprocessor">#define R     0.7</span>
+07 <span class="preprocessor"></span><span class="preprocessor">#define f     0.5</span>
+08 <span class="preprocessor"></span><span class="preprocessor">#define f_alt 0.75</span>
+09 <span class="preprocessor"></span>
+10 <span class="keyword">using namespace </span>std;
+11 <span class="keyword">using namespace </span>siscone;
+12 
+13 <span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[]){
+14   vector&lt;Cmomentum&gt; particles;    <span class="comment">// list of particles</span>
+15   <a class="code" href="../devel/html/classsiscone_1_1Csiscone.html">Csiscone</a> siscone;               <span class="comment">// main object for the cone algorithm</span>
+16   <span class="keywordtype">int</span> i;                          <span class="comment">// loop index</span>
+17   <span class="keywordtype">int</span> N;                          <span class="comment">// number of particles</span>
+18   <span class="keywordtype">double</span> px,py,pz,E;              <span class="comment">// particles 4-momentum</span>
+19   <span class="keywordtype">char</span> fline[512];                <span class="comment">// line to read from a file</span>
+20 
+21   <span class="comment">// read particles</span>
+22   FILE *flux;
+23   flux = fopen(<span class="stringliteral">"events/single-event.dat"</span>, <span class="stringliteral">"r"</span>);
+24   <span class="keywordflow">if</span> (flux==NULL){
+25     cerr &lt;&lt; <span class="stringliteral">"cannot read event"</span> &lt;&lt; endl;
+26     <span class="keywordflow">return</span> 1;
+27   }
+28 
+29   N=0;
+30   <span class="keywordflow">while</span> (fgets(fline, 512, flux)!=NULL){
+31     <span class="keywordflow">if</span> (fline[0]!=<span class="charliteral">'#'</span>){ <span class="comment">// skip lines beginning with '#'</span>
+32       <span class="keywordflow">if</span> (sscanf(fline, <span class="stringliteral">"%le%le%le%le"</span>, &amp;px, &amp;py, &amp;pz, &amp;E)==4){
+33         particles.push_back(<a class="code" href="../devel/html/classsiscone_1_1Cmomentum.html">Cmomentum</a>(px, py, pz, E));
+34         N++;
+35       } <span class="keywordflow">else</span> {
+36         cout &lt;&lt; <span class="stringliteral">"error in reading event file Giving up."</span> &lt;&lt; endl;
+37         fclose(flux);
+38         <span class="keywordflow">return</span> 2;
+39       }
+40     }
+41   }
+42   fclose(flux);
+43 
+44   <span class="comment">// compute jets</span>
+45   <span class="comment">// first compute with multiple passes (default)</span>
+46   i=siscone.<a class="code" href="../devel/html/classsiscone_1_1Csiscone.html#a259669f7c1f86fd220d1024fe44dba45">compute_jets</a>(particles, R, f);
+47   cout &lt;&lt; <span class="stringliteral">"  "</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">" jets found in multi-pass run"</span> &lt;&lt; endl;
+48 
+49   <span class="comment">// then, recompute it with a different f</span>
+50   i=siscone.<a class="code" href="../devel/html/classsiscone_1_1Csiscone.html#a3bb2362bcc9bed2ae8903afefd6646a0">recompute_jets</a>(f_alt);
+51   cout &lt;&lt; <span class="stringliteral">"  "</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">" jets found with alterntive f"</span> &lt;&lt; endl;
+52 
+53   <span class="comment">// compute jets with a single pass</span>
+54   i=siscone.<a class="code" href="../devel/html/classsiscone_1_1Csiscone.html#a259669f7c1f86fd220d1024fe44dba45">compute_jets</a>(particles, R, f, 1);
+55   cout &lt;&lt; <span class="stringliteral">"  "</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">" jets found in single-pass run"</span> &lt;&lt; endl;
+56 
+57   <span class="comment">// show jets</span>
+58   vector&lt;Cjet&gt;::iterator it_j;
+59   <span class="keywordtype">int</span> i1;
+60   fprintf(stdout, <span class="stringliteral">"#             pT        eta"</span>);
+61   fprintf(stdout, <span class="stringliteral">"      phi       px         py         pz         E    \n"</span>);
+62   <span class="keywordflow">for</span> (it_j = siscone.<a class="code" href="../devel/html/classsiscone_1_1Csplit__merge.html#ad01c675d4c79de395656cf25fadc8cc1">jets</a>.begin(), i1=0 ; 
+63        it_j != siscone.<a class="code" href="../devel/html/classsiscone_1_1Csplit__merge.html#ad01c675d4c79de395656cf25fadc8cc1">jets</a>.end() ; it_j++, i1++){
+64     fprintf(stdout, <span class="stringliteral">"Jet %3d: %10.3f %8.3f %8.3f"</span>,
+65             i1, it_j-&gt;v.perp(), it_j-&gt;v.eta, it_j-&gt;v.phi);
+66     fprintf(stdout, <span class="stringliteral">" %10.3f %10.3f %10.3f %10.3f\n"</span>,
+67             it_j-&gt;v.px, it_j-&gt;v.py,  it_j-&gt;v.pz,  it_j-&gt;v.E);
+68   }
+69 
+70   <span class="keywordflow">return</span> 0;
+71 }</pre>
+</td></tr>
+</table>
+</p>
+<p><a href="#top">Back to top</a></p>
+<hr size="1">
+
+
+<!--------------------------------------->
+<!-- description of the FastJet plugin -->
+<!--------------------------------------->
+<p>
+<a href="index.html"><img src="home.png" align="right" alt="home"></a>
+<h2><a name="fjp">Using the FastJet plugin</a></h2>
+</p>
+<p>
+SISCone is available as a plugin of the FastJet project. The plugin is
+named <a class="code" href="http://fastjet.fr/repo/doxygen-3.1.3/classfastjet_1_1SISConePlugin.html"><code>SISConePlugin</code></a>. Note that it requires at least
+version 2.1 of FastJet.  See
+the <a href="http://fastjet.fr">FastJet website</a> for details.
+</p>
+<p><a href="#top">Back to top</a></p>
+
+
+<!--------------------------------------->
+<!-- The spherical implementation      -->
+<!--------------------------------------->
+
+<hr size="1">
+<p>
+<a href="index.html"><img src="home.png" align="right" alt="home"></a>
+<h2><a name="sph">The spherical version of SISCone</a></h2>
+</p>
+<p>
+To allow clustering of <i>e<sup>+</sup>e<sup>&ndash;</sup></i> events, an
+implementation of SISCone in spherical coordinates is available (as of
+version 2.0 of SISCone).
+</p>
+<p>
+Its usage is very similar to that of the basic implementation of SISCone,
+so we just highlight the few differences here:
+
+<ul>
+<li>The spherical version, uses energy <i>E</i> and normal angles,
+rather than the longitudinally boost-invariant <i>p<sub>t</sub></i>,
+rapidity and azimuth.  Specifically:
+    <ul>
+    <li>The distance between a pair of particle is the angle between
+        the pair particles (equivalently the the distance on the
+        surface of a unit sphere). Similarily, the cone
+        radius <i>R</i> is also defined as the cone half-opening
+        angle.</li>
+    <li>During the split--merge step, we use the energy of the
+        particles rather than their transverse momentum. However, as
+        in the standard situation where ordering the protojets
+        in <i>p<sub>t</sub></i> led to infrared-unsafeties, ordering
+        the protojets in energy in the spherical case also leads to
+        infrared unsafeties. To solve that problem, we introduce the
+        new variable<br>
+        <img align="center" src="etilde.jpg" alt="Etilde"><br>
+        and use it to order the protojets. Note that to compute the
+        overlap fraction, we keep using the plain energy (which is
+        perfectly safe in this case). In practice, when invoking the
+        clustering, this corresponds to the default choice
+        of <code>SM_Etilde</code> for the split--merge scale. If one
+        rather wants to use <i>E</i> despite its infrared-unsafety
+        problems, one can specify <code>SM_E</code> instead.</li>
+</ul></li>
+<li>The structure remains the same as for the basic implementation but
+    the class names have been prefixed by <code>CSph</code> instead of
+    just <code>C</code>. For example, the list of 4-momenta should be
+    of the <a class="code" href="../devel/html/classsiscone__spherical_1_1CSphmomentum.html"><code>CSphmomentum</code></a>
+    type <sup><font size="-2">(<a href="#type_explain">1</a>)</font></sup>,
+    the clustering is done using <a class="code" href="../devel/html/classsiscone__spherical_1_1CSphsiscone.html"><code>CSphsiscone</code></a> and the jets
+    are stored in <a class="code" href="../devel/html/classsiscone__spherical_1_1CSphjet.html"><code>CSphjet</code></a> objects.</li>
+<li>The classes for the spherical implementation are placed under
+    the <code>siscone_spherical</code> namespace.</li>
+<li>The library is called <code>libsiscone_spherical.{a,so}</code>
+    rather than <code>libsiscone.{a,so}</code>.</li>
+<li>The spherical version of SISCone is available as a FastJet plugin
+    named <a class="code" href="http://fastjet.fr/repo/doxygen-3.1.3/classfastjet_1_1SISConeSphericalPlugin.html"><code>SISConeSphericalPlugin</code></a>.</li>
+</ul>
+
+
+<font size="-2"><sup>(<a name="type_explain">1</a>)</sup>The main reason for having
+two classes for the 4-momenta is that SISCone is internally optimised
+to avoid repeated computation of expensive quantities like the
+rapidity. Since the spherical version makes use of the polar angle
+&theta; instead of the rapidity <i>y</i>, having 2 separate classes
+allows to optimise both situations.</font>
+</p>
+
+<!--------------------------------------->
+<!-- SISCone with progressive removal  -->
+<!--------------------------------------->
+
+<hr size="1">
+<p>
+<a href="index.html"><img src="home.png" align="right" alt="home"></a>
+<h2><a name="sPR">SISCone with progressive removal</a></h2>
+</p>
+<p>
+Since version 3.0.0, SISCone with progressive removal provides an
+alternative to the standard split--merge algorithm used by default with
+SISCone. The SISCone-PR algorithm works as follows
+
+<ol>
+<li> search for stable cones.</li>
+<li> declare the hardest stable cone a jet and remove its particles from the list of remaining particles.</li>
+<li> if there are some remaining particles, go back to 1.</li>
+</ol>
+
+In practice, jets are obtained by creating a <tt>Csiscone</tt>
+(or <tt>CSphsiscone</tt> object) as described above and calling
+<br>
+<br>
+<table class="code">
+<tr><td><pre class="fragment">
+  int Csisscone::compute_jets_progressive_removal(vector&lt;Cmomentum&gt; &#38;particles,
+                                                  double R, int n_pass_max=0, double ptmin=0.0,
+                                                  Esplit_merge_scale _split_merge_scale=SM_pttilde);
+</pre></td></tr>
+</table>
+<br>
+
+This results in circular hard jets (analogously to 
+anti-kt). The complexity of the algorithm is <i>N<sup>2</sup></i>
+log(<i>N</i>).
+
+The scale used to decide which stable cone is the hardest can be
+chosen in the same way as the ordering scale for the split--merge
+procedure. The default (SM_pttilde for the standard, <i>pp</i>,
+version of SISCone; SM_Etilde for the version in spherical
+coordinates) is recommended. Alternatively, a user-defined scale
+choice can be provided: the user has to derive their favourite scale
+choice from <a class="code"
+href="../devel/html/classsiscone_1_1Csplit__merge_1_1Cuser__scale__base.html"><code>Csiscone::Cscale_choice</code></a>
+and then use <a class="code"
+href="../devel/html/classsiscone_1_1Csplit__merge.html#a6d7c9a22f5a0f9b0a329336aa463e92b"><code>Csiscone::set_user_scale()</code></a>
+with a pointer to an instance of that class to activate the
+user-defined choice.
+</p>
+
+<p><a href="#top">Back to top</a></p>
+
+
+<!------------>
+<!-- footer -->
+<!------------>
+<hr size="1">
+<a href="index.html">Home</a><br>
+Contacts: &nbsp;<a href="mailto:soyez@fastjet.fr">Gregory Soyez</a>
+&nbsp;<a href="mailto:gavin.salam@physics.ox.ac.uk">Gavin Salam</a>
+
+</body>
+</html>

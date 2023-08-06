@@ -1,0 +1,29 @@
+digraph algo_main {
+	nodesep=0.15;
+	ranksep=0.15;
+	node [shape=box,style=filled,fillcolor="#CCCCFF",color=blue,fontcolor="#880000"];
+	intro [label="Put the set of current particles\nequal to the set of all particles in the event"];
+	proto [label="Find all stable cones for the current set of particles"]
+	add_proto [label="Add each stable cone (defined by the set\nof particles contained in the cone)\nto the list of protojets"];
+	remove [label="Remove all particles that are in stable cones\nfrom the list of current particles"];
+	end_algo [label="Run the Tevatron Run-II split-merge procedure\non the full list of protojets, with overlap parameter f",height=0.5];
+
+	node [shape=polygon,sides=4,orientation=45];
+	end_loop [label="No new stable cones have been found\nOR one has gone around the loop Npass times"];
+
+	node [style="invis",fixedsize=true];
+	proto_partner [width=0,height=0];
+	end_loop_partner [width=0,height=0];
+
+	{ rank="same"; proto; proto_partner; }
+	{ rank="same"; end_loop; end_loop_partner; }
+
+	edge [arrowsize=0.7];
+
+	intro -> proto -> add_proto -> remove -> end_loop;
+	end_loop -> end_algo [label=" yes"];
+	
+	end_loop -> end_loop_partner[weight=0,dir=none];
+	proto -> proto_partner[weight=0,dir=back];
+	end_loop_partner -> proto_partner[label=" no",samehead,sametail,dir=none];
+}
