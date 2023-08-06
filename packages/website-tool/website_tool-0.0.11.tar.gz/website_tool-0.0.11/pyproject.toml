@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "website_tool"
+version = "0.0.11"
+description = "A tool to make it simpler to maintain a website against the increasing entropy on the web."
+authors = ["CSDUMMI <CSDUMMI.MISQUALITY@SIMPLELOGIN.CO>"]
+license = "AGPL-3.0-or-later"
+readme = "README.md"
+packages = [{include = "website_tool"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.28.2"
+aiohttp = "^3.8.4"
+pyyaml = "^6.0"
+tqdm = "^4.65.0"
+pyvis = "^0.3.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
