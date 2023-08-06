@@ -1,0 +1,130 @@
+[project]
+name = "ichika"
+requires-python = ">=3.8"
+description = "基于 RICQ 的轻量级 Python QQ 自动化框架。"
+readme = "README.md"
+keywords = ["graia", "bot", "qq", "framework", "ricq", "ichika"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Natural Language :: Chinese (Simplified)",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Communications",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+
+dependencies = [
+    "loguru~=0.6.0",
+    "dacite>=1.6.0",
+    "graia-amnesia>=0.7.0",
+    "aiohttp>=3.8.3",
+]
+
+dynamic = ["version"]
+[project.optional-dependencies]
+graia = [
+    "graia-broadcast>=0.19.2",
+    "launart>=0.6.3",
+    "creart>=0.2.2",
+    "creart-graia>=0.1.5",
+    "graiax-shortcut>=0.2.1",
+]
+
+[build-system]
+requires = ["maturin>=0.14.16,<0.15"]
+build-backend = "maturin"
+
+[tool.maturin]
+python-source = "python"
+module-name = "ichika.core"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+py_version = 38
+known_first_party = ["ichika"]
+extra_standard_library = ["typing_extensions"]
+
+[tool.pyright]
+reportMissingModuleSource = false
+pythonVersion = "3.8"
+
+[tool.towncrier]
+directory = "news"
+filename = "CHANGELOG.md"
+start_string = "<!-- towncrier release notes start -->\n"
+underlines = ["", "", ""]
+template = "news/template.jinja"
+title_format = "## [{version}](https://github.com/BlueGlassBlock/ichika/tree/{version}) - {project_date}"
+issue_format = "([#{issue}](https://github.com/BlueGlassBlock/ichika/issues/{issue}))"
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "移除"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "弃用"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "新增"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "更改"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "修复"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "misc"
+name = "其他"
+showcontent = true
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+lint = [
+    "black>=23.1.0",
+    "isort>=5.12.0",
+    "pre-commit>=3.2.1",
+]
+release = [
+    "towncrier>=22.12.0",
+    "maturin>=0.14.16",
+    "tomlkit>=0.11.6",
+    "actions-toolkit>=0.1.15",
+]
+docs = [
+    "mkdocs-material~=9.1",
+    "mkdocstrings[python]~=0.21",
+    "mkdocs-exclude~=1.0",
+    "mkdocs-gen-files~=0.4",
+    "mkdocs-section-index~=0.3",
+    "mkdocs-literate-nav~=0.6",
+    "markdown-exec[ansi]>=1.4.0",
+    "mkdocs-include-markdown-plugin>=3.9.1",
+]
+dev = [
+    "maturin>=0.14.16",
+    "pip>=23.0.1",
+    "graia-saya>=0.0.17",
+    "graiax-shortcut>=0.2.1",
+]
+[tool.pdm.scripts]
+develop.cmd = "maturin develop"
+build-docs.cmd = "mkdocs build"
+view-docs.cmd = "mkdocs serve"
