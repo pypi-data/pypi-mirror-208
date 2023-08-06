@@ -1,0 +1,94 @@
+Metadata-Version: 2.1
+Name: btweb
+Version: 0.1.0
+Summary: Utilit library for fronting requests functionality
+Home-page: https://github.com/berttejeda/bert.webadapter.git
+Author: Engelbert Tejeda
+Author-email: berttejeda@gmail.com
+Keywords: requests,https,get,python,remote,file,download
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=2.7
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Provides-Extra: tests
+Requires-Dist: pytest ; extra == 'tests'
+Requires-Dist: pytest-cov ; extra == 'tests'
+Requires-Dist: coveralls ; extra == 'tests'
+Requires-Dist: flake8 ; extra == 'tests'
+Requires-Dist: mypy ; extra == 'tests'
+
+<a name="top"></a>
+<a name="overview"></a>
+
+# Overview
+
+This module wraps around the get method for the python requests library.
+
+I'm only using it to download files for now.
+
+The reason for this package is for me to reuse it across all my projects.
+
+I'll likely build upon it in the future.
+
+# Prerequisites:
+
+- Python 2.7+
+
+# Installation
+
+* From pypi: `pip3 install btweb`
+* From this git repo: `pip3 install git+https://github.com/berttejeda/bert.webadapter.git`<br />
+  Note: To install a specific version of the library from this git repo, <br />
+  suffix the git URL in the above command with @{ tag name }, e.g.: <br />
+  git+https://github.com/berttejeda/bert.webadapter.git@0.0.1
+
+# Usage Examples
+
+## Download a file from a URL using Basic HTTP Authentication
+
+```python
+
+from btweb import WebAdapter
+
+webadapter = WebAdapter()
+res = webadapter.get(url, 
+  username=username,
+  password=password)
+```
+
+## Download a file from a URL using Basic HTTP Authentication, caching the result for 30 minutes
+
+```python
+
+from btweb import WebAdapter
+
+webadapter = WebAdapter()
+res = webadapter.get(url, 
+  username=username,
+  password=password,        
+  cache=True,
+  cache_path='.',
+  cache_time=30)
+```
+
+# Keyword Args
+
+```
+Keyword                                      | Type                    | Possible Values        | Effect                           | Example
+-------------------------------------------- | ----------------------- | --------------------------------------------------------------
+fail_on_errors                               | bool                    | [True, False]          | Raise an error instead           | webadapter = WebAdapter(fail_on_errors=True)
+                                                                       |                        | of ignoring and                  |
+                                                                       |                        | returning 'None' or empty string |
+```
+
