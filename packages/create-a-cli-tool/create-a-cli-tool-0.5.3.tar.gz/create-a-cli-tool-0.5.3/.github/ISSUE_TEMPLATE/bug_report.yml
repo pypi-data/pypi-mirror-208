@@ -1,0 +1,54 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    id: Code
+    attributes:
+      label: Your Code
+      description: Put the code that you wrote here.
+    validations:
+      required: true
+  - type: input
+    id: Python-version
+    attributes:
+      label: Python version
+      description: Your python version
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you running?
+      options:
+        - 0.1.0
+        - 0.1.1
+        - 0.1.2
+        - 0.2.5
+        - 0.2.6
+        - 0.3.3
+        - 0.3.4
+        - 0.3.5 (Latest)
+    validations:
+      required: true
