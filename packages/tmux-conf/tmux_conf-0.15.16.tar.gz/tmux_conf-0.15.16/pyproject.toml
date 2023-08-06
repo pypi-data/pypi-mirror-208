@@ -1,0 +1,72 @@
+[project]
+name = "tmux_conf"
+version = "0.15.16"
+authors = [
+  { name="Jacob Lundqvist", email="Jacob.Lundqvist@gmail.com" },
+]
+description = "Generates version checked tmux conf"
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["tmux", "automation"]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/jaclu/tmux-conf"
+documentation = "https://github.com/jaclu/tmux-conf"
+repository = "https://github.com/jaclu/tmux-conf"
+"Bug Tracker" = "https://github.com/jaclu/tmux-conf/issues"
+
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | test
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
+[tool.pytest.ini_options]
+addopts = "--cov=src/tmux_conf --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+
+[tool.mypy]
+mypy_path = "src"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+
+warn_redundant_casts = true
+warn_return_any = true
+
+warn_unreachable = true
+warn_unused_configs = true
+no_implicit_reexport = true
