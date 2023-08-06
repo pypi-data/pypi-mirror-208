@@ -1,0 +1,20 @@
+[package]
+name = "common-building"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+anyhow = { version = "1.0.65" }
+cargo-license = "0.5.1"
+cargo_metadata = "0.15.0"
+gix = "0.42.0"
+tracing = "0.1.36"
+# TODO(xuanwo): version > 8.0.0-beta.5 requires time > 0.3.17 which is not compatible with opendal
+vergen = { version = "<=8.0.0-beta.5", features = ["build", "cargo", "git", "rustc", "gix"] }

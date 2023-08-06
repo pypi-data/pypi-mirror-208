@@ -1,0 +1,20 @@
+[package]
+name = "common-meta-stoerr"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+
+anyerror = { version = "=0.1.8" }
+prost = { version = "0.11.0" }
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+sled = { git = "https://github.com/datafuse-extras/sled", tag = "v0.34.7-datafuse.1", default-features = false }
+thiserror = { version = "1" }

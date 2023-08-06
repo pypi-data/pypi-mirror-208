@@ -1,0 +1,36 @@
+[package]
+name = "common-catalog"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+common-arrow = { path = "../common-arrow" }
+common-base = { path = "../common-base" }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-io = { path = "../common-io" }
+common-meta-app = { path = "../common-meta-app" }
+common-meta-types = { path = "../common-meta-types" }
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-settings = { path = "../common-settings" }
+common-storage = { path = "../common-storage" }
+
+async-backtrace = "0.2.2"
+async-trait = "0.1.57"
+chrono = { version = "0.4.24", features = ["serde"] }
+dashmap = "5.4"
+dyn-clone = "1.0.9"
+parking_lot = "0.12"
+rand = "0.8.5"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+sha2 = "0.10.6"
+typetag = "0.2.3"
+
+[dev-dependencies]
+goldenfile = "1.4"

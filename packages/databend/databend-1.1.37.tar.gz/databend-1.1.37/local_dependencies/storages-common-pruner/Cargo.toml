@@ -1,0 +1,24 @@
+[package]
+name = "storages-common-pruner"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-functions = { path = "../common-functions" }
+
+storages-common-index = { path = "../storages-common-index" }
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+tracing = "0.1.36"
+typetag = "0.2.3"

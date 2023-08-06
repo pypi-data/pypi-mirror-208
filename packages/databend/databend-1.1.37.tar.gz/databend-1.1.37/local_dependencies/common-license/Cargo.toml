@@ -1,0 +1,19 @@
+[package]
+name = "common-license"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+# Workspace dependencies
+common-base = { path = "../common-base" }
+common-exception = { path = "../common-exception" }
+common-settings = { path = "../common-settings" }
+jwt-simple = "0.11.0"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }

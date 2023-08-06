@@ -1,0 +1,39 @@
+[package]
+name = "bendpy"
+version = "1.1.37"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[build-dependencies]
+pyo3-build-config = "0.18.3"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "databend"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.18.1", features = ["extension-module", "abi3", "abi3-py37"] }
+# Workspace dependencies
+arrow = { version = "37.0.0", features = ["pyarrow"] }
+arrow-schema = "37.0.0"
+
+# common-base = { path = "../common/base", features = ["jemalloc", "disable_initial_exec_tls"] }
+common-config = { path = "local_dependencies/common-config" }
+common-exception = { path = "local_dependencies/common-exception" }
+common-expression = { path = "local_dependencies/common-expression" }
+common-meta-app = { path = "local_dependencies/common-meta-app" }
+databend-query = { path = "local_dependencies/databend-query", features = [
+    "simd",
+    "disable_initial_exec_tls",
+], default-features = false }
+
+# # Crates.io dependencies
+# comfy-table = "6.1.3"
+# opendal = { workspace = true }
+# serde = { workspace = true }
+ctor = "0.1.26"
+tokio = { version = "1.24", features = ["macros", "rt", "rt-multi-thread", "sync"] }
+tokio-stream = "0.1.10"

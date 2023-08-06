@@ -1,0 +1,36 @@
+[package]
+name = "common-storages-share"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[dependencies]
+chrono = { version = "0.4.24", features = ["serde"] }
+common-exception = { path = "../common-exception" }
+common-meta-app = { path = "../common-meta-app" }
+enumflags2 = { version = "0.7.7", features = ["serde"] }
+
+storages-common-table-meta = { path = "../storages-common-table-meta" }
+
+async-backtrace = "0.2.2"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+
+[dev-dependencies]
+goldenfile = "1.4"
+tempfile = "3.4.0"

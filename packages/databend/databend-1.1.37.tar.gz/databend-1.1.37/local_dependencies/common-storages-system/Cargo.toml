@@ -1,0 +1,53 @@
+[package]
+name = "common-storages-system"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+doctest = false
+test = false
+
+[features]
+enable-histogram-metrics = ["common-metrics/enable-histogram"]
+
+[dependencies]
+common-base = { path = "../common-base" }
+common-catalog = { path = "../common-catalog" }
+common-config = { path = "../common-config" }
+common-exception = { path = "../common-exception" }
+common-expression = { path = "../common-expression" }
+common-functions = { path = "../common-functions" }
+common-meta-app = { path = "../common-meta-app" }
+common-metrics = { path = "../common-metrics" }
+common-pipeline-core = { path = "../common-pipeline-core" }
+common-pipeline-sources = { path = "../common-pipeline-sources" }
+common-sql = { path = "../common-sql" }
+common-storages-fuse = { path = "../common-storages-fuse" }
+common-storages-result-cache = { path = "../common-storages-result-cache" }
+common-storages-view = { path = "../common-storages-view" }
+common-users = { path = "../common-users" }
+jsonb = { version = "0.2.2" }
+storages-common-cache = { path = "../storages-common-cache" }
+storages-common-cache-manager = { path = "../storages-common-cache-manager" }
+
+async-backtrace = "0.2.2"
+async-trait = { version = "0.1.57", package = "async-trait-fn" }
+chrono = { version = "0.4.24", features = ["serde"] }
+itertools = "0.10.5"
+once_cell = "1.15.0"
+parking_lot = "0.12.1"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+serde_repr = "0.1.9"
+snailquote = "0.3.1"
+tikv-jemalloc-ctl = { version = "0.5.0", features = ["use_std"] }
+tracing = "0.1.36"
+typetag = "0.2.3"
+walkdir = "2.3.2"
+
+[build-dependencies]
+common-building = { path = "../common-building" }

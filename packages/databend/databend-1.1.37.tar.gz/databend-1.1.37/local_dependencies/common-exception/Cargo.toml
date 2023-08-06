@@ -1,0 +1,39 @@
+[package]
+name = "common-exception"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[dependencies] # In alphabetical order
+common-arrow = { path = "../common-arrow" }
+common-meta-stoerr = { path = "../common-meta-stoerr" }
+common-meta-types = { path = "../common-meta-types" }
+
+# GitHub dependencies
+# TODO: Use the version from crates.io once
+# https://github.com/brendanzab/codespan/pull/331 is released.
+codespan-reporting = { git = "https://github.com/brendanzab/codespan", rev = "c84116f5" }
+
+anyhow = { version = "1.0.65" }
+bincode = { version = "2.0.0-rc.1", features = ["serde", "std", "alloc"] }
+http = "0.2"
+opendal = { version = "0.34", features = [
+    "layers-tracing",
+    "layers-metrics",
+    "services-ipfs",
+    "services-moka",
+    "services-redis",
+    "trust-dns",
+] }
+paste = "1.0.9"
+prost = { version = "0.11.0" }
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+thiserror = { version = "1" }
+tonic = { version = "0.9.2", features = ["transport", "codegen", "prost", "tls-roots", "tls"] }

@@ -1,0 +1,48 @@
+[package]
+name = "common-meta-raft-store"
+description = "Raft state machine"
+version = "0.1.0"
+authors = ["Databend Authors <opensource@datafuselabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+doctest = false
+test = false
+
+[features]
+io-uring = ["common-meta-sled-store/io-uring"]
+
+[dependencies]
+common-exception = { path = "../common-exception" }
+common-grpc = { path = "../common-grpc" }
+common-meta-api = { path = "../common-meta-api" }
+common-meta-kvapi = { path = "../common-meta-kvapi" }
+common-meta-sled-store = { path = "../common-meta-sled-store" }
+common-meta-stoerr = { path = "../common-meta-stoerr" }
+common-meta-types = { path = "../common-meta-types" }
+common-tracing = { path = "../common-tracing" }
+
+openraft = { git = "https://github.com/drmingdrmer/openraft", tag = "v0.8.4-alpha.3", features = ["compat-07"] }
+
+# crates.io deps
+anyhow = { version = "1.0.65" }
+async-trait = "0.1.57"
+byteorder = "1.4.3"
+chrono = { version = "0.4.24", features = ["serde"] }
+derive_more = "0.99.17"
+hostname = "0.3.1"
+maplit = "1.0.2"
+num = "0.4.0"
+once_cell = "1.15.0"
+serde = { version = "=1.0.152", features = ["derive", "rc"] }
+serde_json = { version = "1.0.85", default-features = false, features = ["preserve_order"] }
+tracing = "0.1.36"
+
+[dev-dependencies]
+common-base = { path = "../../common/base" }
+
+async-entry = "0.3.1"
+pretty_assertions = "1.3.0"
+tempfile = "3.4.0"
