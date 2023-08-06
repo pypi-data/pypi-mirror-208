@@ -1,0 +1,53 @@
+Metadata-Version: 2.1
+Name: httpbinx
+Version: 1.2.3
+Summary: HTTP Request & Response Service, written in Python + FastAPI.
+Home-page: https://github.com/imleowoo/httpbinx
+Author: Leo
+Author-email: imleowoo@outlook.com
+Maintainer: Leo
+Maintainer-email: imleowoo@outlook.com
+License: MIT
+Project-URL: Source, https://github.com/imleowoo/httpbinx
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fastapi
+Requires-Dist: pydantic
+Requires-Dist: uvicorn
+Requires-Dist: starlette
+Requires-Dist: jinja2
+Requires-Dist: brotli
+
+![cover](httpbinx/static/images/httpbinx_cover.png)
+
+# httpbinx
+HTTP Request & Response Service, written in Python + FastAPI.
+
+## Reference project
+
+A  [Kenneth Reitz](http://kennethreitz.org/bitcoin) Project. See https://github.com/postmanlabs/httpbin
+
+## Quick Start
+
+### Run directly
+
+```shell
+$ python setup.py install
+$ uvicorn httpbinx:app --host=0.0.0.0 --port=80
+```
+
+### Run with Docker
+
+```shell
+$ docker pull leowoo/httpbinx:latest
+$ docker run -p 80:80 --name httpbinx leowoo/httpbinx:latest
+```
