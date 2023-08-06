@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# autoflake is used for autoformatting Python code
+#
+# ref: https://github.com/PyCQA/autoflake#readme
+#
+[tool.autoflake]
+ignore-init-module-imports = true
+remove-all-unused-imports = true
+remove-duplicate-keys = true
+remove-unused-variables = true
+
+# black is used for autoformatting Python code
+#
+# ref: https://black.readthedocs.io/en/stable/
+#
+[tool.black]
+skip-string-normalization = true
+# target-version should be all supported versions, see
+# https://github.com/psf/black/issues/751#issuecomment-473066811
+target_version = [
+    "py38",
+    "py39",
+    "py310",
+    "py311",
+]
+exclude = '''
+/(
+  .git
+| build
+| dist
+| _version\.py
+| versioneer\.py
+| docs/source/conf.py
+| docs/sphinxext/autodoc_traits.py
+)
+'''
+
+# isort is used for autoformatting Python code
+#
+# ref: https://pycqa.github.io/isort/x
+#
+[tool.isort]
+profile = "black"
+
+# pytest is used for running Python based tests
+#
+# ref: https://docs.pytest.org/en/stable/
+#
+[tool.pytest.ini_options]
+addopts = "--verbose --color=yes --durations=10"
+asyncio_mode = "auto"
+# Ignore thousands of tests in dependencies installed in a virtual environment
+norecursedirs = "lib lib64"
+
+[tool.tbump]
+github_url = "https://github.com/jupyterhub/traefik-proxy"
+
+[tool.tbump.version]
+current = "1.0.0"
+
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  (?P<pre>((a|b|rc)\d+)|)
+  \.?
+  (?P<dev>(?<=\.)dev\d*|)
+  '''
+
+[tool.tbump.git]
+message_template = "Bump to {new_version}"
+tag_template = "{new_version}"
+
+[[tool.tbump.file]]
+src = "jupyterhub_traefik_proxy/__init__.py"
+
+[[tool.tbump.file]]
+src = "setup.py"
