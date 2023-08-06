@@ -1,0 +1,59 @@
+Metadata-Version: 2.1
+Name: click-aliasing
+Version: 1.0.0
+Summary: Enable aliasing and unique matching for Click
+License: MIT
+Author: tjzegmott
+Author-email: tzegmott@gmail.com
+Requires-Python: >=3.8,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Description-Content-Type: text/markdown
+
+# click-aliasing
+
+Add (multiple) aliasing to a click_ group or command.
+
+In your [click](http://click.pocoo.org/) app:
+
+``` python
+import click
+from click_aliasing import ClickAliasedGroup
+
+
+@click.group(cls=ClickAliasedGroup)
+def cli():
+    pass
+
+
+@cli.command(aliases=["bar", "baz", "qux"])
+def foo():
+    """Run a command."""
+    click.echo("foo")
+```
+
+Will result in:
+
+``` bash
+Usage: cli [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  foo (bar,baz,qux)  Run a command.
+```
+
+Command can also be called with a unique short match:
+
+``` bash
+cli f
+
+>>foo
+```
+
