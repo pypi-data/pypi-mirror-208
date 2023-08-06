@@ -1,0 +1,268 @@
+Metadata-Version: 2.1
+Name: ts-sdk
+Version: 2.0.0rc5
+Summary: Tetrascience Python SDK
+Home-page: https://developers.tetrascience.com
+Author: tetrascience
+Author-email: developers@tetrascience.com
+License: Apache License 2.0
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: boto3 (<2,>=1.16.3)
+Requires-Dist: botocore (<2,>=1.19.3)
+Requires-Dist: colorama (<1,>=0.4.4)
+Requires-Dist: jsonschema (>=3.2.0)
+Requires-Dist: loguru
+Requires-Dist: query-string (<2021,>=2020.7.1)
+Requires-Dist: requests (<3,>=2.22.0)
+Requires-Dist: simplejson (<4,>=3.17.6)
+Requires-Dist: smart-open[s3] (<7,>=6)
+Requires-Dist: tenacity
+Requires-Dist: ts-ids-validator (<1,>=0.9.4)
+Requires-Dist: typing-extensions (>=3.10.0.2)
+
+# ts-sdk <!-- omit in toc -->
+
+Tetrascience Python SDK
+
+## Version <!-- omit in toc -->
+
+v2.0.0
+
+## Table of Contents <!-- omit in toc -->
+
+- [Install](#install)
+- [Usage](#usage)
+  - [Init a new protocol](#init-a-new-protocol)
+  - [Upload artifact](#upload-artifact)
+  - [IDS Validation](#ids-validation)
+- [Task Script](#task-script)
+  - [Config.json](#configjson)
+    - [Overview](#overview)
+    - [Allowed IDS](#allowed-ids)
+- [Changelog](#changelog)
+  - [v1.4.0](#v140)
+  - [v1.3.10](#v1310)
+  - [v1.3.9](#v139)
+    - [CLI Improvements](#cli-improvements)
+    - [Context Function Improvements](#context-function-improvements)
+    - [Other](#other)
+  - [v1.3.8](#v138)
+  - [v1.3.7](#v137)
+  - [v1.3.6](#v136)
+  - [v1.3.5](#v135)
+  - [v1.3.2](#v132)
+
+## Install
+
+```
+pip3 install ts-sdk
+```
+
+## Usage
+
+### Init a new protocol
+
+```bash
+ts-sdk init -o <org> -p <protocol-slug> -t <task-script-slug> -f <protocol-folder>
+cd <protocol-folder>/task-script
+pipenv install --dev
+# task-script code modifications...
+pipenv run pytest
+```
+
+### Upload artifact
+
+```bash
+export TS_ORG=<your-org-slug>
+export TS_API_URL=https://api.tetrascience.com/v1
+export TS_AUTH_TOKEN=<token>
+ts-sdk put <ids|protocol|task-script> <namespace> <slug> <version> <artifact-folder>
+```
+
+It's also possible to use the configuration JSON file (`cfg.json`):
+
+```bash
+{
+    "api_url": "https://api.tetrascience.com/v1",
+    "auth_token": "your-token",
+    "org": "your-org",
+    "ignore_ssl": false
+}
+```
+
+Usage: `ts-sdk put <ids|protocol|task-script> <namespace> <slug> <version> <artifact-folder> -c cfg.json`
+
+### IDS Validation
+
+When uploading IDS artifact, validation will be performed using `ts-ids-validator` package.
+Validation failures for IDS will be printed on the console.
+
+## Task Script
+
+### Config.json
+
+#### Overview
+
+All Task Scripts have a `config.json` file that describes:
+
+- what `language` a Task Script is written in
+- the `functions` a Task Script has available for a Protocol to use
+- the `runnerType`, an optional field that is only used when letting the artifact builder know a Windows script (identified by using the value “windows-script”) is being built
+- the `maxCount` of container instances that will be used by the task
+- and an optional field describing the amount of memory a task will need, `memoryInMB`
+
+#### Allowed IDS
+
+Within the `functions` object of the configuration, the optional field `allowedIds` describes the IDS types a Task Script can produce.
+
+The `allowedIds` field is used by the Context API's [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) (when writing an IDS) and [context.write_ids](https://developers.tetrascience.com/docs/context-api#contextwrite_ids) functions to validate that the ids parameter of either function is allowed before writing an IDS.
+
+`allowedIds` can be used in the following ways:
+
+1. A single object with three properties: `namespace`, `slug`, `version`
+
+   - When a function only generates one kind of IDS
+   - The `ids` parameter of the [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) and [context.write_ids](https://developers.tetrascience.com/docs/context-api#contextwrite_ids) functions are optional since there is only one value in the `allowedIds` field
+   - Example:
+
+     ```json
+     "functions": [
+       {
+         "slug": "generates-ids",
+         "function": "main.generate_ids",
+         "allowedIds": {
+           "namespace": "common",
+           "slug": "my-ids",
+           "version": "v1.0.0"
+         }
+       }
+     ]
+     ```
+
+2. An array of those objects with the three properties: `namespace`, `slug`, `version`
+
+   - When a function can generate multiple IDS types
+   - The `ids` parameter of the [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) and [context.write_ids](https://developers.tetrascience.com/docs/context-api#contextwrite_ids) functions is required and will be validated against the `allowedIds` to confirm the task script is allowed to write that IDS
+   - Example:
+
+     ```json
+     "functions": [
+       {
+         "slug": "generates-ids",
+         "function": "main.generate_ids",
+         "allowedIds": [
+           {
+            "namespace": "common",
+            "slug": "my-ids",
+            "version": "v1.0.0"
+           },
+           {
+            "namespace": "common",
+            "slug": "my-ids",
+            "version": "v1.1.0"
+           },
+           {
+            "namespace": "common",
+            "slug": "my-other-ids",
+            "version": "v1.0.0"
+           }
+         ]
+       }
+     ]
+     ```
+
+3. `null`
+
+   - When a function does not generate any IDS
+   - Calls to [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) (when `file_category` is “IDS”) and [context.write_ids](https://developers.tetrascience.com/docs/context-api#contextwrite_ids) will raise an exception
+     - When the `file_category` parameter is not "IDS", then [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) is not writing an IDS and therefore will not raise an exception
+   - Example:
+
+     ```json
+     "functions": [
+       {
+         "slug": "generates-ids",
+         "function": "main.generate_ids",
+         "allowedIds": null
+       }
+     ]
+     ```
+
+4. `allowedIds` not defined
+
+   - Any IDS JSON can be written via [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) or [context.write_ids](https://developers.tetrascience.com/docs/context-api#contextwrite_ids)
+     - no allowed IDSs are specified, so no check is performed
+   - Any IDS JSON passed to the [context.write_file](https://developers.tetrascience.com/docs/context-api#contextwrite_file) or [context.write_ids](https://developers.tetrascience.com/docs/context-api#contextwrite_ids) still has to pass validation against the IDS specified by the `ids` parameter
+
+## Changelog
+
+### v2.0.0
+
+- Secure mode + bug fixes
+
+### v1.4.2
+
+- upgrade `smart_open` (`v4.2.0` &rarr; `v6.3.0`)
+
+### v1.4.1
+
+- Make `allowedIDS` non-mandatory for task-script, to maintain backward compatibility
+
+### v1.4.0
+
+- Added functionality to support `allowedIds` feature
+
+### v1.3.10
+
+- Internal fixes (`/update-status` API call retry)
+
+### v1.3.9
+
+#### CLI Improvements
+
+- Make artifact build failure more evident to the user
+- `ts-sdk put` will check for `requirements.txt` file before uploading
+
+#### Context Function Improvements
+
+- Add support to `write_file` to receive a dictionary instead of only strings
+- Validate dictionary inputs to `write_file` against IDS
+- Enforce IDS input to `write_ids` must be a dictionary
+- Validate length of the name and value of labels
+- Validate labels more thoroughly, in more places
+- Add a new DataClass for better label definition
+
+#### Other
+
+- All code formatted with `black`
+- Adjust abstract dependencies in `setup.py` to be less strict so that it will work better within task scripts
+- Replace `json` library with `simplejson`for speed and usability
+
+### v1.3.8
+
+- Internal fixes (secrets handling)
+
+### v1.3.7
+
+- Add `--exclude-folders` argument to `ts-sdk put task-script` that excludes common folders that generally do not need to be part of the uploaded task script (e.g. `.git`, `example-input`, `__tests__`)
+- Add local check to prevent uploading artifacts using `ts-sdk put` that would be rejected by the server for being too large
+- Improve error messages for adding invalid labels to files
+
+### v1.3.6
+
+- Add new s3 meta:
+  - DO_NOT_INHERIT_LABELS
+  - CONTENT_CREATED_FROM_FILE_ID
+
+### v1.3.5
+
+- Fix bug where datalake file_key was incorrectly generated
+
+### v1.3.2
+
+- Update `context.write_file()` to validate file upload path
+- Fix logging issues
+- Improve namespace validation
+- Update `print` functionality to be more accurate and group arguments to the same call together

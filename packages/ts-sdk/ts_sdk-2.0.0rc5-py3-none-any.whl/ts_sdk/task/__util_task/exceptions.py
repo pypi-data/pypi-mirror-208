@@ -1,0 +1,6 @@
+class ContainerStoppedException(Exception):
+    ...
+
+
+class TaskUpdateConflictException(Exception):
+    ...
