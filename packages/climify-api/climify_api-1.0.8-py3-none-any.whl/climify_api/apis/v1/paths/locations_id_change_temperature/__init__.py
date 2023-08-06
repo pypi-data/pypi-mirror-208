@@ -1,0 +1,1 @@
+from climify_api.apis.v1.paths.locations_id_change_temperature.post import SetLocationTemperatureById
