@@ -1,0 +1,79 @@
+Metadata-Version: 2.1
+Name: pybdsim
+Version: 3.3.1
+Summary: Python utilities for the Monte Carlo Particle accelerator code BDSIM.
+Author-email: "JAI@RHUL" <laurie.nevay@cern.ch>
+Maintainer-email: Laurie Nevay <laurie.nevay@cern.ch>
+Project-URL: homepage, http://www.pp.rhul.ac.uk/bdsim/pybdsim
+Project-URL: documentation, http://www.pp.rhul.ac.uk/bdsim/pybdsim
+Project-URL: repository, https://bitbucket.org/jairhul/pybdsim
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Software Development
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: uproot
+Provides-Extra: boost_histogram
+Provides-Extra: cpymad
+Provides-Extra: pysad
+Provides-Extra: pymad8
+Provides-Extra: all
+Provides-Extra: dev
+License-File: LICENSE.txt
+License-File: COPYING.txt
+
+# pybdsim #
+
+A python package containing both utilities for preparing and analysing BDSIM input and output as well as controlling BDSIM.
+
+## Authors ##
+
+L. Nevay
+A. Abramov
+S. Alden
+S. Boogert
+M. Deniaud
+C. Hernalsteens
+W. Parker
+E. Ramoisiaux
+W. Shields
+J. Snuverink
+R. Tesse
+S. Walker
+
+
+## Setup ##
+
+pip install pybdsim
+
+Or from source, from the main directory:
+
+$ make install
+
+or for development where the local copy of the repository is used and can
+be reloaded with local changes:
+
+$ make develop
+
+Look in the Makefile for the various pip commands (e.g. for with a venv)
+
+
+```
+python
+>>> import pybdsim
+>>> d = pybdsim.Data.Load("output.root")
+>>> eventTree = a.GetEventTree()
+>>> for event in eventTree:
+        print(event.Summary.nTracks)
+>>> dh = pybdsim.Data.Load("analysis_histograms.root")
+>>> pybdsim.Plot.Histogram1D(dh.histogramspy["Event/MergedHistograms/PlossHisto"])
+```
