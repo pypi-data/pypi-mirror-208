@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "const.store"
+authors = [{name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"}]
+description = "Load const objects in Python functions"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/ntessore/const"
+Issues = "https://github.com/ntessore/const/issues"
+
+[tool.setuptools]
+py-modules = ["const"]
+
+[tool.setuptools.dynamic]
+version = {attr = "const.__version__"}
