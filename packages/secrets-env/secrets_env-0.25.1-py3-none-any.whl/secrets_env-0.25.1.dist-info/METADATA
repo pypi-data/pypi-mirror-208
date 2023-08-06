@@ -1,0 +1,59 @@
+Metadata-Version: 2.1
+Name: secrets-env
+Version: 0.25.1
+Summary: Bridge between Vault and your app
+Home-page: https://github.com/tzing/secrets.env
+License: Apache-2.0
+Keywords: vault,environment variables
+Author: tzing
+Author-email: tzingshih@gmail.com
+Requires-Python: >=3.8.1,<4.0.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Security
+Classifier: Topic :: Utilities
+Provides-Extra: all
+Provides-Extra: keyring
+Provides-Extra: yaml
+Requires-Dist: PyYAML (>=5.1.2,<7) ; extra == "all" or extra == "yaml"
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: httpx (>=0.23.1,<0.24.0)
+Requires-Dist: keyring (>=23.3.0,<24.0.0) ; extra == "all" or extra == "keyring"
+Requires-Dist: tomli (>=1.1.0,<3) ; python_version < "3.11"
+Project-URL: Documentation, https://tzing.github.io/secrets.env/
+Project-URL: Repository, https://github.com/tzing/secrets.env
+Description-Content-Type: text/x-rst
+
+Secrets.env
+===========
+
+Secrets.env is the bridge between `Vault <https://www.vaultproject.io/>`_ and your app.
+
+It put values from Vault KV engine to environment variables like a ``.env`` loader, without landing credentials on disk.
+
+.. code-block:: bash
+
+   $ cat .secrets-env.yaml
+   source:
+     url: http://localhost:8200
+     auth: token
+
+   secrets:
+     EXAMPLE:
+       path: secrets/example
+       field: foo
+
+   $ secrets.env run sh -c 'echo \$EXAMPLE = $EXAMPLE'
+   [secrets_env] Read secrets.env config from /Users/tim_shih/.secrets-env.yaml
+   [secrets_env] 🔑 1 secrets loaded
+   $EXAMPLE = hello
+
+Security is important, but don't want it to be a stumbling block. We love secret manager, but the practice of getting secrets for local development could be a trouble.
+
+This app is built to *plug in* secrets into development without landing data on disk, easily reproduce the environment, and reduce the risk of uploading the secrets to the server.
+
