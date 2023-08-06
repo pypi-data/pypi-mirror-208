@@ -1,0 +1,7 @@
+from dataclasses import dataclass
+from bytez.tasks.text_summarization._models.chriskhanhtran_bert_extractive_summarization import ChriskhanhtranBertExtractiveSummarizationModel
+
+
+@dataclass
+class TextSummarizationModels:
+    chriskhanhtran_bert_extractive_summarization = ChriskhanhtranBertExtractiveSummarizationModel().inference
