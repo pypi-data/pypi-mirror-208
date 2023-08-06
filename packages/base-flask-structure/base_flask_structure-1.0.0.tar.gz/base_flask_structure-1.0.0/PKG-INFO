@@ -1,0 +1,81 @@
+Metadata-Version: 2.1
+Name: base_flask_structure
+Version: 1.0.0
+Summary: Easily include basic functions on your apps.
+Author-email: Jodagito <jodagito@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2023 Dagito
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/Jodagito/base_flask_structure
+Keywords: flask,sqlalchemy,dotenv,base
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+License-File: LICENSE
+
+# Base Flask Structure
+
+Easily include basic functions on your apps.
+
+## What Is?
+
+A collection of basic modules needed for almost every flask application.
+
+### Settings Module
+
+This module contains a way to load a .env file and set different environment vars useful during the app runtime.
+
+#### .env file
+
+This file should contain those environment variables which are going to be declared on the Settings class.
+
+### Database Module
+
+This module contains an abstract class which uses SQLAlchemy to establish connection to a database.
+
+## How to install?
+
+Can be easily installed via pip.
+
+    pip install base_flask_structure
+
+## How to use?
+
+    from bfs.config import Settings
+    from bfs.database import AbstractDataBase
+
+    settings = Settings()  # Calls singleton class Settings
+
+    class DataBase(AbstractDataBase):
+        def init_db(self):
+            """
+            Implements init_db method to initialize 
+            the database and create all the tables.
+            """
+            self.Base.metadata.create_all(bind=self.engine)
+
+## Version
+
+1.0.0

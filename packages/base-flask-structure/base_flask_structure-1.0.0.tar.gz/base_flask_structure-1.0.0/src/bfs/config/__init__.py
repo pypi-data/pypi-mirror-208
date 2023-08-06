@@ -1,0 +1,1 @@
+from bfs.config.settings import Settings
