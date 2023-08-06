@@ -1,0 +1,153 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "krisi"
+version = "1.0.1"
+authors = [
+  { name="Mark Szulyovszky", email="mark@dreamfaster.ai" },
+  { name="Daniel Szemerey", email="daniel@dreamfaster.ai" },
+]
+description = "Testing and Reporting framework for Time Series Analysis"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  # Base libraries
+  "pytest",
+  "numpy",
+  "pandas",
+  "dill",
+  "typing-extensions",
+
+  #Plotting libraries
+  "rich",
+  "tqdm",
+  "plotext",
+
+  #TS and Modeling libraries
+  "statsmodels >=0.12.1",
+  "scikit-learn"
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project.urls]
+Documentation = "https://dream-faster.github.io/krisi"
+Issues = "https://github.com/dream-faster/krisi/issues"
+Source = "https://github.com/dream-faster/krisi"
+
+[tool.hatch.version]
+path = "src/krisi/__init__.py"
+
+
+[project.optional-dependencies]
+quality = [
+  "black~=22.10.0",
+  "flake8~=4.0.1",
+  "isort~=5.10.1",
+  "pre-commit~=2.20.0",
+
+]
+tests = [
+  "pytest~=7.1.2",
+  "pytest-cov>=4.0",
+]
+docs = [
+  "mkdocs-material",
+  "mkdocstrings-python",
+  "mkdocs-include-markdown-plugin",
+  "mkdocs-autorefs",
+  "mkdocs-jupyter",
+  "image",
+  "mkdocs-gallery==0.7.6",
+  "mkdocs-glightbox>=0.3"
+]
+plotting = [
+  "plotly",
+  "dash",
+  "jupyter_dash",
+  "weasyprint",
+  "kaleido",
+  "pangocffi",
+  "matplotlib",
+  "networkx"
+]
+
+[tool.hatch.envs.quality]
+dependencies = [
+  "krisi[quality]"
+]
+detached = true
+
+[tool.hatch.envs.quality.scripts]
+check = [
+  "flake8 src tests",
+  "black --check --diff --preview src tests",
+  "isort --check-only --diff src tests",
+]
+format = [
+  "isort src tests",
+  "black --preview src tests",
+  "check",
+]
+
+
+[tool.hatch.envs.test]
+dependencies = ["krisi[tests]"]
+
+[tool.hatch.envs.test.scripts]
+run = "pytest tests/ --durations 0 -s"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["37", "38", "39", "310"]
+
+[tool.isort]
+profile = "black"
+
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+  "/.devcontainer",
+  "/.pre-commit-config.yaml",
+  "/.gitignore",
+  "/tests",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src",
+  ".",
+]
+testpaths = ["tests"] 
+
+# bumpver command: ``bumpver update --patch``
+[tool.bumpver]
+current_version = "1.0.1"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "chore(Release): Bump version from {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"'
+]
