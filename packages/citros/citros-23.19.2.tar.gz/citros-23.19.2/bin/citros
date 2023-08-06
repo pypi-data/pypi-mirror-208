@@ -1,0 +1,324 @@
+#!/usr/bin/env python3
+import time
+from citros import Citros, __version__ as citros_version
+import argparse
+from getpass import getpass
+import os
+import sys        
+import traceback
+from decouple import config
+import json
+
+def print_citros():
+    print ("""
+==============================================
+ ██████╗██╗████████╗██████╗  ██████╗ ███████╗
+██╔════╝██║╚══██╔══╝██╔══██╗██╔═══██╗██╔════╝
+██║     ██║   ██║   ██████╔╝██║   ██║███████╗
+██║     ██║   ██║   ██╔══██╗██║   ██║╚════██║
+╚██████╗██║   ██║   ██║  ██║╚██████╔╝███████║
+ ╚═════╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+==============================================
+CiTROS CLI tool for interaction with CiTROS system. V[{citros_version}]
+    """)
+
+def login(args, argv):        
+    citros = Citros()    
+    username, password = args.username, args.password        
+    if not citros.isAuthenticated() and (args.username is None or args.password is None):        
+        username = input("email: ")        
+        password = getpass()            
+    resp = citros.login(username, password) 
+    if resp:
+        print("Logged in.")
+    else:
+        print("Failed. please try again.")
+    # print("citros.user: ", citros.user)
+    
+def authenticate(args, argv):
+    citros = Citros()   
+    key = args.key
+    if not key:
+        print("Please provide a valid key.")
+    token = citros.authenticate_with_key(key)  
+    # print("token: ", token)
+    
+def logout(args, argv):
+    citros = Citros()  
+    citros.logout()        
+
+def sync_project(args, argv):             
+    citros = Citros()   
+    if not citros.isAuthenticated():
+        print("sync_project: please log in first!")
+        return
+    project_data = citros.parser_ros2.parse(args.dir, args.name, args.ws)
+    # print("sync_project:project: ", json.dumps(project_data, indent=2))
+    citros.integration.sync_project(project_data)
+
+def run_simulation(args, argv):    
+    print_citros()       
+        
+    citros = Citros()   
+    if args.key:
+        loggedin = citros.authenticate_with_key(args.key)
+        if not loggedin:
+            sys.exit("run_ros2_project.authenticate_with_key: please log in first!") 
+    
+    if not citros.isAuthenticated():
+        sys.exit("run_simulation: please log in first!")      
+        
+    # create new batch for this simulation
+    batch_run_id = citros.batch.create_manual_batch(args.simulation_id, args.completions)
+    print(f"created new batch_run_id: {batch_run_id}")
+    run_batch(batch_run_id, 10*60)
+    sys.exit(0)
+    
+def run_batch(batch_run_id, timeout):
+    batch = Citros().batch.get_batch(batch_run_id)
+    
+    completions = 1
+    try:
+        completions = int(batch["batchRun"]["completions"]) + 1
+    except Exception as e:
+        print(e)
+    print(f" + running batch [{batch_run_id}], repeating simulations: [{completions - 1}]")
+    for sid in range(1, completions):
+        try:
+            run_simulation_run(batch_run_id, sid, timeout)                        
+            time.sleep(1)
+        except Exception as e:
+            print("------------------------")   
+            print (e)
+            traceback.print_exc()
+            print("------------------------")
+            continue
+    print(f" - Finished [{batch_run_id}] batch.")    
+        
+def run_simulation_run(batch_run_id, sid, timeout):    
+    print(f" + + running simulation [{sid}]")
+    from launch import LaunchService 
+    from citros.launches import generate_launch_description    
+    
+    launch_description = generate_launch_description(batch_run_id, sid, str(timeout))
+    if launch_description is None:
+        sys.exit(f'couldnt run sid:[{sid}]. something is went wrong. probably with connection to CITROS. ')    
+    launch_service = LaunchService(debug=True)
+    launch_service.include_launch_description(launch_description)
+    ret = launch_service.run()    
+    print(f" - - Finished simulation sid = [{sid}] with return code [{ret}].")    
+    
+
+def run_ros2_project(args, argv):  
+    """
+    args.batch_run_id
+    args.sid
+    args.timeout
+    """
+    print_citros()
+    
+    citros = Citros()
+    if args.key:
+        loggedin = citros.authenticate_with_key(args.key)
+        if not loggedin:
+            sys.exit("run_ros2_project.authenticate_with_key: please log in first!")            
+        
+    if not citros.isAuthenticated():
+        sys.exit("run_ros2_project: please log in first!")             
+    
+    # k8s indexed batch job is passing the index with JOB_COMPLETION_INDEX env variable.
+    if args.sid == "JOB_COMPLETION_INDEX":
+        args.sid = config("JOB_COMPLETION_INDEX", "bad-value-from-k8s")
+        print(f"got JOB_COMPLETION_INDEX={args.sid} from k8s.")
+    
+    if (args.sid == ''):
+        # run batch... 
+        print(f"running batch [{args.batch_run_id}]")
+        run_batch(args.batch_run_id, str(args.timeout))
+        sys.exit(0)        
+    
+    print("running simulation...")
+    run_simulation_run(args.batch_run_id, args.sid, str(args.timeout))
+    sys.exit(0)
+    
+# experimental:
+def load_params(args, argv):
+    citros = Citros()
+    if not citros.isAuthenticated():
+        print("load_params: please log in first!")
+        return
+    # TODO: source the ros project to env terminal
+    citros.params.init_params(args.batch_run_id, args.sid)
+
+# experimental:
+def upload_bag(args, argv): 
+    # print("upload_bag")
+    citros = Citros()
+    if not citros.isAuthenticated():
+        print("upload_bag: please log in first!")
+        return
+    bag_resp, batch_text, resp_json = citros.bag.emit(args.bag, args.batch_run_id, args.sid)        
+    print("bag_resp, ", bag_resp)
+    print("batch_text", batch_text)
+    print("resp_json", resp_json)
+    
+def docker_login(argx, argv):
+    citros = Citros()
+    google_access_token = citros.get_access_token()
+    if google_access_token is None:
+        print("failed to authenticate to SA.")
+        return 
+    
+    # print( 'echo ' + google_access_token + ' | docker login -u oauth2accesstoken --password-stdin https://europe-west2-docker.pkg.dev')
+    os.system('echo ' + google_access_token + ' | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev')                        
+    
+def docker(args, argv):
+    # TODO: login to docker first
+    # print(args, argv)
+    import os
+    # print('docker ' + ' '.join(argv))
+    os.system('docker ' + ' '.join(argv))
+  
+def stress_user_db(args, argv):
+    """
+    args.runs - how many query's to send,
+    args.sleep - how much sleep between sends. 
+    """      
+    print("Starting stress test for citros.")
+    
+    citros = Citros(batch_run_id=args.batch_run_id, simulation_run_id=args.sid)    
+    if not citros.isAuthenticated():
+        print("stress_user_db: please log in first!")
+        return
+    
+    print(f"sending {args.runs} log messages.")
+    for i in range(1, int(args.runs) + 1):
+        # print(f"sending {i} message.")
+        citros.events.creating("72311c81-5992-431a-9373-81aa2bdb3fe1", "2", "vova", "stress test", "")
+        # citros.log.debug(f"{i} - sending message.")
+        if float(args.sleep) > 0:
+            time.sleep(float(args.sleep))    
+    citros.close()
+    print("Done.")    
+
+
+
+def main():    
+    parser = argparse.ArgumentParser(
+        prog='CiTROS ROS parser',
+        description=f'''
+==============================================
+ ██████╗██╗████████╗██████╗  ██████╗ ███████╗
+██╔════╝██║╚══██╔══╝██╔══██╗██╔═══██╗██╔════╝
+██║     ██║   ██║   ██████╔╝██║   ██║███████╗
+██║     ██║   ██║   ██╔══██╗██║   ██║╚════██║
+╚██████╗██║   ██║   ██║  ██║╚██████╔╝███████║
+ ╚═════╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+==============================================
+CiTROS CLI tool for interaction with CiTROS system. V[{citros_version}]
+        ''',
+        epilog='''
+-----------------------------------------  
+\t Powered by Lulav Space
+
+        ''',
+        formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument('-V', "--version",
+                        action="version",
+                        version="%(prog)s " + citros_version)
+    
+    subparsers = parser.add_subparsers(title="commands", help="CiTROS commands", dest='command', required=True)
+
+    # -----------------------------------------
+    build_parser = subparsers.add_parser("login", help="log in to citros")
+    build_parser.add_argument("-username", default=None, help="username")
+    build_parser.add_argument("-password", default=None, help="password")
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")
+    build_parser.set_defaults(func=login)
+    
+    # -----------------------------------------
+    build_parser = subparsers.add_parser("authenticate", help="log in to citros using key")
+    build_parser.add_argument("key", help="The key provided by CiTROS system.")
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")
+    build_parser.set_defaults(func=authenticate)
+    
+    # -----------------------------------------
+    build_parser = subparsers.add_parser("logout", help="log out of the system")   
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api") 
+    build_parser.set_defaults(func=logout)
+    
+    # -----------------------------------------
+    current_folder_name = os.path.abspath(".").split("/")[-1]
+    
+    build_parser = subparsers.add_parser("sync", help="sync the ros project to citros")
+    build_parser.add_argument("-dir", default=".", help="The working dir of the project")
+    build_parser.add_argument("-name", default=current_folder_name, help="The project name of the project")
+    build_parser.add_argument('-w','--ws', action='append', default=["ros_ws"], help='workspaces list')
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")
+    
+    build_parser.set_defaults(func=sync_project)
+
+    # experimental
+    # -----------------------------------------
+    build_parser = subparsers.add_parser("params", help="generating parameters to the project")
+    build_parser.add_argument("batch_run_id", help="Batch run id")
+    build_parser.add_argument("sid", help="simulation run id")    
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")
+    build_parser.set_defaults(func=load_params)
+        
+    # -----------------------------------------
+    # runs the [batch_run, simulation_run]
+    build_parser = subparsers.add_parser("run", help="run ros2 project")
+    build_parser.add_argument("batch_run_id", help="Batch run id")
+    build_parser.add_argument("sid", nargs='?', default='', help="simulation run id")    
+    build_parser.add_argument("-timeout", default=60*60, help="simulation timeout")    
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")
+    build_parser.add_argument("--key", help="jwt ket of the user")
+    build_parser.set_defaults(func=run_ros2_project)
+    
+    # -----------------------------------------
+    build_parser = subparsers.add_parser("run_simulation", help="create new batch and run it")
+    build_parser.add_argument("simulation_id", help="Simulation run id")
+    build_parser.add_argument("completions", default=1, help="how many tiumes to run the simulation")
+    build_parser.add_argument("-timeout", default=60*60, help="simulation timeout")
+    build_parser.add_argument("--key", help="jwt ket of the user")
+    build_parser.set_defaults(func=run_simulation)
+     
+    # experimental
+    # -----------------------------------------
+    # runs the [batch_run, simulation_run]
+    build_parser = subparsers.add_parser("upload_bag", help="upload bag to citros")
+    build_parser.add_argument("bag", help="bag file")
+    build_parser.add_argument("batch_run_id", help="Batch run id")
+    build_parser.add_argument("sid", help="simulation run id")    
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")    
+    build_parser.set_defaults(func=upload_bag)
+    
+    # experimental
+    # -----------------------------------------
+    # runs the [batch_run, simulation_run]
+    build_parser = subparsers.add_parser("stress", help="stress test the system")
+    build_parser.add_argument("--batch_run_id", help="Batch run id")
+    build_parser.add_argument("--sid", help="simulation run id")
+    build_parser.add_argument("--runs", default=100,help="how many runs to perform")
+    build_parser.add_argument("--sleep", default=0.0, help="how much sleep between runs")  
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")       
+    build_parser.set_defaults(func=stress_user_db)
+    
+    # -----------------------------------------
+    build_parser = subparsers.add_parser("docker-login", help="Builds the project")
+    build_parser.set_defaults(func=docker_login)
+    
+    build_parser = subparsers.add_parser("docker", help="Builds the project")
+    build_parser.add_argument("-d", default="Dockerfile", help="The docker to build")
+    build_parser.add_argument("--url", default="https://db.citros.dev:5555", help="entry point for citros gql api")
+    build_parser.set_defaults(func=docker)
+
+    # args = parser.parse_args()
+    args, argv = parser.parse_known_args()
+    
+    args.func(args, argv)     
+
+if __name__ == "__main__":
+    main()
