@@ -1,0 +1,337 @@
+4.13
+====
+
+Changes
+-------
+
+- Added ext_block_list to allow for blocking of extensions to CliApplication.
+
+- Allow ext_allow_list and ext_block_list to include glob patterns.
+
+Pending Deprecations
+--------------------
+
+- Deprecated the use of ``ext_white_list`` in favour of ``ext_allow_list``.
+
+
+4.12
+====
+
+Changes
+-------
+
+- Introduction of typed_settings, providing a cleaner way to access default settings
+  that supports auto-completion and type inference. And preparing the way for more
+  in-depth checks that ensure settings values match the expected types.
+
+- Support ``Literal`` types in CLI. Maps str and int literals to choices.
+
+- Support sequences of Enum values in the CLI. This is implemented via the
+  ``AppendEnumValue`` and ``AppendEnumName`` actions.
+
+- Migrate from pkg_resources to the standardised builtin importlib.metadata.
+
+- Fix for handling events/callbacks on classes where the parent has __slots__ defined.
+
+
+4.11.0
+======
+
+Changes
+-------
+
+- Self is now ignored in command handlers if it is the first argument. This covers
+  the case where a non ``staticfunction`` is used as a handler when grouped as part
+  of a command group.
+
+- Allow CLI entry points to define an argument as a date, time or datetime type
+  which will accept an valid ISO8601 string.
+
+- Add pre_dispatch, post_dispatch and dispatch_error events to CliApplication
+
+
+4.10.1
+======
+
+Changes
+-------
+
+- Fix issue with docs build related to Poetry and RTD
+
+
+4.10.0
+======
+
+Changes
+-------
+
+- Add implementation of ``multiprocessing.Pool`` that ensures that settings are
+  mirrored into any worker process.
+
+- Include pytest plugin to provide fixtures
+
+
+4.9.0
+=====
+
+Changes
+-------
+
+- Changed settings to be support being pickled.
+
+- Added feature to export and restore settings into a serialised form for
+  use-cases where settings need to be duplicated (eg deploying tasks into a
+  spark cluster where settings are required).
+
+
+4.8.2
+=====
+
+Changes
+-------
+
+- Extend change to RegexType to allow for any custom ArgumentType by extending
+  the ArgumentType ABC.
+
+- Allow CLI entry points to define an argument as Sequence[Enum] and obtain a
+  list of enum values.
+
+
+4.8.1
+=====
+
+Changes
+-------
+
+- Fix bug with RegexType argument where regex searched input string not raising
+  an invalid argument if the input _contained_ a valid string.
+
+- Support RegexType in type annotations for command line generation.
+
+
+4.8.0
+=====
+
+Changes
+-------
+
+- Dropping official support for Python 3.6 and 3.7
+
+- Fix bug in NamedSingletonFactory and ThreadLocalNamedSingletonFactory classes
+  that skipped the singleton wrapper causing a new instance to be generated each
+  time.
+
+
+4.7.2
+=====
+
+Changes
+--------
+
+- Fix feature_flags.if_enabled to ensure doc string and function name are passed
+  to the decorator wrapper.
+
+
+4.7.1
+=====
+
+Changes
+-------
+
+- Improve the settings reset to properly apply the base-settings after reset.
+  These are the basic settings required for the application to operate
+  correctly.
+
+
+4.7.0
+=====
+
+Features
+--------
+
+- Add reset option to settings modify context to allow settings to be completely
+  cleared during testing. This is particularly useful for testing CLI methods.
+
+
+4.6.0
+=====
+
+Features
+--------
+
+- Builtin feature flags support for enabling functionality at runtime
+
+Changes
+-------
+
+- Change to initial logger so early log commands are replayed to the entire
+  logging framework after logging has been configured. This could cause initial
+  log messages to be displayed subtly different however log messages will follow
+  the rules defined in your logging configuration.
+
+
+4.5.0
+=====
+
+Features
+--------
+
+- Add TOML support for remote configuration.
+
+
+Security Updates
+----------------
+
+- By default require TLS 1.2 for HTTPS connections to fetch remote configuration.
+
+
+4.4.0
+=====
+
+Features
+--------
+
+- Delayed logging on startup, initial log messages are stored (critical messages
+  are still displayed) to allow for logging to be configured before the stored
+  messages are replayed for the now active logger. This also opens up the option
+  of file only based logging.
+
+- Command signature can now accept the Optional values for both positional are
+  optional arguments, this allows for optional positional arguments.
+
+- Argument grouping support enable, with builtin CLI commands grouped.
+
+- Single file scripts. A single script can now be used with pyApp, allowing even
+  quick scripts to take advantage of pyApp features and extensions.
+
+- Command signature generation. CLI arguments are generated from the arguments
+  signature of the command function.
+
+- Improvements to checks to handle unexpected exceptions. Rather than checks
+  outright failing errors are caught and reported along with a stack trace.
+
+- Switch to using poetry
+
+
+Bug fixes
+---------
+
+- Custom logging configuration was not being applied for logging defined in settings
+
+- Using an _ in a positional argument signature caused an exception in argparse
+
+- Positional arguments caused an exception in argparse, a entire new suit of tests
+  was added to address this issue.
+
+
+4.3.0
+=====
+
+Features
+--------
+
+- Async commands, ``app.command`` can not be applied to async functions and
+  handle the event loop.
+
+- ``app.default`` now returns a Command Proxy supporting async and additional
+  command line arguments.
+
+
+4.2.0
+=====
+
+Features
+--------
+
+- Added Object config loader, to aid in integration into other frameworks eg
+  Django.
+
+- Add argument action for handling Enums
+
+- Add argument type for validation with regex
+
+
+Fixes
+-----
+
+- Utilisation of pylint to improve and maintain code quality.
+
+- Use `sys.exit` instead of the `exit`.
+
+- Fix command aliases not being resolved at run-time bug.
+
+
+Backwards Compatibility
+-----------------------
+
+- The ``inject_into`` decorator has been removed use the simpler ``inject``
+  decorator in it's place.
+
+
+4.1.0
+=====
+
+Features
+--------
+
+- Coloured log output be default (for ttys)
+- Root module no longer required for CliApplication, is auto resolved (most of
+  the time)
+- Added compatibility tools for marking methods to be deprecated.
+
+Fixes
+-----
+
+- Change ``exit`` to ``sys.exit`` for compatibility with `pyinstaller`_.
+- Greatly improved documentation, some sections re-written to improve clarity.
+- Correct when event bindings are stored.
+
+.. _pyinstaller: https://www.pyinstaller.org/
+
+Deprecated
+----------
+
+- Migrate from ``pyapp.injection.inject_into`` to plain ``pyapp.injection.inject``
+  will be removed in 4.2.0.
+
+
+4.0.6
+=====
+
+Features
+--------
+
+- Aliases for NamedPluginFactory entries
+
+Changes
+-------
+
+- Generate explicit CannotImport exception if an invalid object is specified to
+  a NamedFactory.
+- Have checks handle import errors
+
+
+4.0.4
+=====
+
+Features
+--------
+
+- Added callbacks in addition to events
+- Added specific exceptions for NamedFactories
+- Added NoDefault mode
+- Updated extension report to report code (so extensions that register multiple
+  items don't just look like duplicates)
+- Shorted name of inject_into to inject (left alias of inject_into)
+- Shorted name of FactoryArgs to Args (left alias of FactoryArgs)
+- Added registration of factories into CliApplication, initially supports the
+  asyncio event loop.
+
+
+4.0.2
+=====
+
+Features
+--------
+- Added events support
+
