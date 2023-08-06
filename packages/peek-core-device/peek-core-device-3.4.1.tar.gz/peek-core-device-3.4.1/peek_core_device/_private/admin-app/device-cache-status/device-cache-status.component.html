@@ -1,0 +1,36 @@
+<div *ngIf="combinedStatus$ | async as combinedStatus; else emptyTpl">
+    <div>
+        <h4>Offline Cache Service</h4>
+        <p *ngIf="combinedStatus.offlineCacheStatus as status">
+            State Machine State : <b>{{ status.stateString }}</b> Next State :
+            <b>{{ status.nextStateString || "None" }}</b> Timer :
+            <b>{{ status.secondsUntilNextStateCheckString || "None" }}</b
+            ><br />
+            Last Bandwidth Metric :
+            <b>{{ status.lastMetric || "None" }}</b> Is Slow Network :
+            <b>{{ status.isSlowNetwork?.toString() || "None" }}</b
+            ><br />
+            <!--            Last Cache Check Date : {{status.lastCachingCheckDate | date:-->
+            <!--            'medium'}}<br />-->
+            Last Cache Start Date :
+            {{ status.lastCachingStartDate | date : "medium" }}<br />
+            Last Cache Complete Date :
+            {{ status.lastCachingCompleteDate | date : "medium" }}<br />
+            Last Cache Abort Date :
+            {{ status.lastCachingAbortDate | date : "medium" }}<br />
+        </p>
+    </div>
+    <div *ngFor="let status of combinedStatus.loaderStatusList">
+        <h4>{{ status.pluginName }} - {{ status.indexName }}</h4>
+        <p>
+            Load Progress : <b>{{ status.percentCompleteString }}</b
+            >, loading <b>{{ status.loadingQueueCount }}</b> chunks, server has
+            <b>{{ status.totalLoadedCount || "?" }}</b> chunks, Has Completed
+            Once : <b>{{ status.initialFullLoadComplete }}</b> ><br />
+        </p>
+    </div>
+</div>
+
+<ng-template #emptyTpl>
+    <nz-empty></nz-empty>
+</ng-template>
