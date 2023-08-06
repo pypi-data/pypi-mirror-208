@@ -1,0 +1,170 @@
+Metadata-Version: 2.1
+Name: dql-alpha
+Version: 0.21.0
+Summary: DQL
+Home-page: https://github.com/iterative/dql
+Maintainer-email: support@dvc.org
+License: Apache-2.0
+Platform: any
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Development Status :: 2 - Pre-Alpha
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: pyyaml
+Requires-Dist: tomlkit
+Requires-Dist: tqdm
+Requires-Dist: reflink
+Requires-Dist: python-dateutil (>=2)
+Requires-Dist: attrs (>=21.3.0)
+Requires-Dist: s3fs (>=2023.3.0)
+Requires-Dist: gcsfs (>=2023.3.0)
+Requires-Dist: azure-core (<2.0.0,>=1.23.1)
+Requires-Dist: azure-datalake-store (<0.1,>=0.0.46)
+Requires-Dist: azure-identity
+Requires-Dist: azure-storage-blob (>=12.12.0)
+Requires-Dist: aiohttp (>=3.7.0)
+Requires-Dist: dvc-data (>=0.29.0)
+Requires-Dist: shtab (<2,>=1.3.4)
+Requires-Dist: sqlalchemy (<1.5,>=1.4.24)
+Provides-Extra: dev
+Requires-Dist: msgpack (<2,>=1.0.4) ; extra == 'dev'
+Requires-Dist: requests (>=2.22.0) ; extra == 'dev'
+Requires-Dist: pytest (==7.2.0) ; extra == 'dev'
+Requires-Dist: pytest-sugar (==0.9.6) ; extra == 'dev'
+Requires-Dist: pytest-cov (==3.0.0) ; extra == 'dev'
+Requires-Dist: pytest-mock (==3.8.2) ; extra == 'dev'
+Requires-Dist: pytest-servers[all] (>=0.2.0) ; extra == 'dev'
+Requires-Dist: pytest-benchmark[histogram] ; extra == 'dev'
+Requires-Dist: pytest-virtualenv ; extra == 'dev'
+Requires-Dist: pytest-asyncio (==0.20.3) ; extra == 'dev'
+Requires-Dist: pylint (==2.15.0) ; extra == 'dev'
+Requires-Dist: mypy (==0.982) ; extra == 'dev'
+Requires-Dist: types-python-dateutil ; extra == 'dev'
+Requires-Dist: types-PyYAML ; extra == 'dev'
+Requires-Dist: types-requests ; extra == 'dev'
+Requires-Dist: dulwich ; extra == 'dev'
+Requires-Dist: hypothesis ; extra == 'dev'
+Provides-Extra: remote
+Requires-Dist: msgpack (<2,>=1.0.4) ; extra == 'remote'
+Requires-Dist: requests (>=2.22.0) ; extra == 'remote'
+Provides-Extra: tests
+Requires-Dist: msgpack (<2,>=1.0.4) ; extra == 'tests'
+Requires-Dist: requests (>=2.22.0) ; extra == 'tests'
+Requires-Dist: pytest (==7.2.0) ; extra == 'tests'
+Requires-Dist: pytest-sugar (==0.9.6) ; extra == 'tests'
+Requires-Dist: pytest-cov (==3.0.0) ; extra == 'tests'
+Requires-Dist: pytest-mock (==3.8.2) ; extra == 'tests'
+Requires-Dist: pytest-servers[all] (>=0.2.0) ; extra == 'tests'
+Requires-Dist: pytest-benchmark[histogram] ; extra == 'tests'
+Requires-Dist: pytest-virtualenv ; extra == 'tests'
+Requires-Dist: pytest-asyncio (==0.20.3) ; extra == 'tests'
+Requires-Dist: pylint (==2.15.0) ; extra == 'tests'
+Requires-Dist: mypy (==0.982) ; extra == 'tests'
+Requires-Dist: types-python-dateutil ; extra == 'tests'
+Requires-Dist: types-PyYAML ; extra == 'tests'
+Requires-Dist: types-requests ; extra == 'tests'
+Requires-Dist: dulwich ; extra == 'tests'
+Requires-Dist: hypothesis ; extra == 'tests'
+
+DQL
+===
+
+|PyPI| |Status| |Python Version| |License|
+
+|Tests| |Codecov| |pre-commit| |Black|
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/dql.svg
+   :target: https://pypi.org/project/dql-alpha/
+   :alt: PyPI
+.. |Status| image:: https://img.shields.io/pypi/status/dql.svg
+   :target: https://pypi.org/project/dql/
+   :alt: Status
+.. |Python Version| image:: https://img.shields.io/pypi/pyversions/dql
+   :target: https://pypi.org/project/dql
+   :alt: Python Version
+.. |License| image:: https://img.shields.io/pypi/l/dql
+   :target: https://opensource.org/licenses/Apache-2.0
+   :alt: License
+.. |Tests| image:: https://github.com/iterative/dql/workflows/Tests/badge.svg
+   :target: https://github.com/iterative/dql/actions?workflow=Tests
+   :alt: Tests
+.. |Codecov| image:: https://codecov.io/gh/iterative/dql/branch/main/graph/badge.svg
+   :target: https://app.codecov.io/gh/iterative/dql
+   :alt: Codecov
+.. |pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+   :target: https://github.com/pre-commit/pre-commit
+   :alt: pre-commit
+.. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Black
+
+
+Features
+--------
+
+* TODO
+
+
+Requirements
+------------
+
+* TODO
+
+
+Installation
+------------
+
+You can install *DQL* via pip_ from PyPI_:
+
+.. code:: console
+
+   $ pip install dql-alpha
+
+
+Usage
+-----
+DQL can be used as a CLI (from system terminal), or as a Python library.
+
+TODO: CLI usage
+
+To use it from Python code, import class ``dql.catalog.Catalog``, which provides methods for all the same commands above, like ``ls()``, ``get()``, ``find()``, ``du()`` and ``index()``.
+
+.. code:: py
+
+    from dql.catalog import Catalog
+    catalog = Catalog()
+    catalog.ls(["s3://ldb-public/remote/data-lakes/dogs-and-cats/"], update=True)
+
+
+Contributing
+------------
+
+Contributions are very welcome.
+To learn more, see the `Contributor Guide`_.
+
+
+License
+-------
+
+Distributed under the terms of the `Apache 2.0 license`_,
+*DQL* is free and open source software.
+
+
+Issues
+------
+
+If you encounter any problems,
+please `file an issue`_ along with a detailed description.
+
+
+.. _Apache 2.0 license: https://opensource.org/licenses/Apache-2.0
+.. _PyPI: https://pypi.org/
+.. _file an issue: https://github.com/iterative/dql/issues
+.. _pip: https://pip.pypa.io/
+.. github-only
+.. _Contributor Guide: CONTRIBUTING.rst
