@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools_scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "labxpipe"
+authors = [{name = "Charles E. Vejnar"}]
+description = "Genomics pipelines"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "Mozilla Public License 2.0 (MPL 2.0)"}
+dependencies = [
+    "labxdb-tools",
+    "pyfnutils",
+    "xlsxwriter",
+    "zstandard",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://git.sr.ht/~vejnar/LabxPipe"
+
+[project.scripts]
+lxpipe = "labxpipe_scripts.lxpipe:main"
+
+[tool.setuptools_scm]
