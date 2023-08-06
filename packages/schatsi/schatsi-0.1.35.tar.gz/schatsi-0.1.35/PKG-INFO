@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: schatsi
+Version: 0.1.35
+Summary: 
+Home-page: https://github.com/robnoflop/Schatsi
+Author: robnoflop
+Author-email: info@robertkasseck.de
+Requires-Python: >=3.9.8,<4.0.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: PyMuPDF (>=1.20.2,<2.0.0)
+Requires-Dist: click (>=8.1.3,<9.0.0)
+Requires-Dist: dask[diagnostics,distributed] (>=2022.10.0,<2023.0.0)
+Requires-Dist: docx2python (==2.0.4)
+Requires-Dist: loguru (>=0.6.0,<0.7.0)
+Requires-Dist: nltk (>=3.7,<4.0)
+Requires-Dist: pandas (>=1.5.1,<2.0.0)
+Requires-Dist: pydantic (>=1.10.7,<2.0.0)
+Requires-Dist: pyparsing (>=3.0.9,<4.0.0)
+Requires-Dist: tqdm (>=4.64.1,<5.0.0)
+Requires-Dist: xlrd (>=1.0.0,<2.0.0)
+Project-URL: Repository, https://github.com/robnoflop/Schatsi
+Description-Content-Type: text/markdown
+
+# (f)SCHA.T.S.I
+
+(f)SCHA.T.S.I - An abbreviation for '**f**aster **SCH**eduling *A*lgorithm for **T**ext **S**each **I**ntelligence'.
+
+
+## Getting Started
+https://python-poetry.org/
+```
+pip install poetry
+poetry lock
+.venv\Scripts\activate
+poetry config virtualenvs.in-project true
+poetry install
+```
+
+Generate documentation
+----------------------
+
+Theme documentation: https://sphinx-rtd-theme.readthedocs.io/en/stable/index.html
+apidoc documentation: https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
+
+
+os.environ["SPHINX_APIDOC_OPTIONS"]="members,show-inheritance"
+
+Windows
+
+```shell
+cd docs
+sphinx-apidoc -lfM -d 0 -o schatsi/ ../src/schatsi
+.\make.bat html
+```
+
+Mac/Linux
+
+```shell
+cd docs
+sphinx-apidoc -lfM -d 0 -o schatsi/ ../src/schatsi
+make html
+```
