@@ -1,0 +1,99 @@
+Metadata-Version: 2.1
+Name: xpublish_wms
+Version: 0.1.dev71
+Summary: WMS plugin for xpublish
+Author-email: Matthew Iannucci <matt.iannucci@rpsgroup.com>
+License: Copyright 2017 AUTHOR NAME
+        
+        
+        Redistribution and use in source and binary forms,
+        with or without modification,
+        are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice,
+           this list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its contributors
+           may be used to endorse or promote products derived from this software
+           without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+        THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+        ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+        LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+        (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+        LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+        HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+        STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+        WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: Homepage, https://github.com/asascience-open/xpublish-wms
+Keywords: xarray,xpublish,wms
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.89
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+## xpublish-wms
+
+[![Tests](https://github.com/asascience-open/xpublish-wms/actions/workflows/tests.yml/badge.svg)](https://github.com/asascience-open/xpublish-wms/actions/workflows/tests.yml)
+
+[Xpublish](https://xpublish.readthedocs.io/en/latest/) routers for the [OGC WMS API](https://www.ogc.org/standards/wms).
+
+### Documentation and code
+
+URLs for the docs and code.
+
+### Installation
+
+This package is not yet published to pypi, so install from source with pip:
+
+```
+git+https://github.com/asascience-open/xpublish-wms@72ee989
+```
+
+### Example
+
+```python
+import xarray as xr
+import xpublish
+from xpublish.routers import base_router, zarr_router
+from xpublish_wms import cf_wms_router
+
+
+ds = xr.open_dataset("dataset.nc")
+
+rest = xpublish.Rest(
+    datasets,
+    routers=[
+        (base_router, {"tags": ["info"]}),
+        (cf_wms_router, {"tags": ["wms"], "prefix": "/wms"}),
+        (zarr_router, {"tags": ["zarr"], "prefix": "/zarr"}),
+    ],
+)
+```
+
+## Get in touch
+
+Report bugs, suggest features or view the source code on [GitHub](https://github.com/asascience-open/xpublish-wms/issues).
+
+
+## License and copyright
+
+xpublish-wms is licensed under BSD 3-Clause "New" or "Revised" License (BSD-3-Clause).
+
+Development occurs on GitHub at <https://github.com/asascience-open/xpublish-wms>.
