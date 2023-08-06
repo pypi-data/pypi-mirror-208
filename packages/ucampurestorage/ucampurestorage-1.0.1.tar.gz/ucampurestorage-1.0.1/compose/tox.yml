@@ -1,0 +1,21 @@
+version: '3.2'
+services:
+  tox:
+    build:
+      context: ..
+      dockerfile: compose/tox.Dockerfile
+    entrypoint: ["tox"]
+    command: []
+    env_file:
+      - tox.env
+    volumes:
+      - type: bind
+        source: ../
+        target: /app
+        read_only: true
+      - type: volume
+        source: tox-data
+        target: /tmp/tox-data
+
+volumes:
+  tox-data:
