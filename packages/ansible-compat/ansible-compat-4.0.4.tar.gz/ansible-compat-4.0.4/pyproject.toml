@@ -1,0 +1,151 @@
+[build-system]
+requires = [
+  "setuptools >= 61.0", # PEP-621
+  "setuptools_scm[toml] >= 7.0.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+# https://peps.python.org/pep-0621/#readme
+requires-python = ">=3.9"
+dynamic = ["version"]
+name = "ansible-compat"
+description = "Ansible compatibility goodies"
+readme = "README.md"
+authors = [{ "name" = "Sorin Sbarnea", "email" = "ssbarnea@redhat.com" }]
+maintainers = [{ "name" = "Sorin Sbarnea", "email" = "ssbarnea@redhat.com" }]
+license = { text = "MIT" }
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python",
+  "Topic :: System :: Systems Administration",
+  "Topic :: Software Development :: Bug Tracking",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Utilities",
+]
+keywords = ["ansible"]
+dependencies = [
+  # https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html
+  "ansible-core>=2.12",
+  "packaging",
+  "PyYAML",
+  "subprocess-tee>=0.4.1",
+  "jsonschema>=4.6.0",
+  "typing-extensions>=4.5.0;python_version<'3.10'",
+]
+
+[project.urls]
+homepage = "https://github.com/ansible/ansible-compat"
+documentation = "https://ansible-compat.readthedocs.io/"
+repository = "https://github.com/ansible/ansible-compat"
+changelog = "https://github.com/ansible/ansible-compat/releases"
+
+[project.optional-dependencies]
+docs = ["argparse-manpage", "black", "mkdocs-ansible[lock]>=0.1.2"]
+test = ["coverage", "pip-tools", "pytest>=7.2.0", "pytest-mock", "pytest-plus"]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]
+fail_under = 93
+skip_covered = true
+show_missing = true
+
+[tool.mypy]
+python_version = 3.9
+color_output = true
+error_summary = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+# disallow_any_unimported = True
+#; warn_redundant_casts = True
+# warn_return_any = True
+# warn_unused_configs = True
+exclude = "test/local-content"
+
+[[tool.mypy.overrides]]
+module = "ansible.*"
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint.BASIC]
+good-names = [
+  "f", # filename
+  "i",
+  "j",
+  "k",
+  "ns", # namespace
+  "ex",
+  "Run",
+  "_",
+]
+
+[tool.pylint.IMPORTS]
+preferred-modules = ["unittest:pytest"]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+  # On purpose disabled as we rely on black
+  "line-too-long",
+  # local imports do not work well with pre-commit hook
+  "import-error",
+  # already covered by ruff which is faster
+  "too-many-arguments", # PLR0913
+  # Temporary disable duplicate detection we remove old code from prerun
+  "duplicate-code",
+]
+
+[tool.pytest.ini_options]
+# ensure we treat warnings as error
+filterwarnings = ["error"]
+
+[tool.ruff]
+select = ["ALL"]
+ignore = [
+  # Disabled on purpose:
+  "ANN101", # Missing type annotation for `self` in method
+  "D203", # incompatible with D211
+  "D211",
+  "D213", # incompatible with D212
+  "E501", # we use black
+  "RET504", # Unnecessary variable assignment before `return` statement
+  # Temporary disabled during adoption:
+  "S607", # Starting a process with a partial executable path
+  "PLR0912", # Bug https://github.com/charliermarsh/ruff/issues/4244
+  "PLR0913", # Bug https://github.com/charliermarsh/ruff/issues/4244
+
+]
+target-version = "py39"
+
+[tool.ruff.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.flake8-pytest-style]
+parametrize-values-type = "tuple"
+
+[tool.ruff.isort]
+known-first-party = ["ansible_compat"]
+known-third-party = ["packaging"]
+
+[tool.ruff.per-file-ignores]
+"test/**/*.py" = ["SLF001", "S101", "FBT001"]
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"

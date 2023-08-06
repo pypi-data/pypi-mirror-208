@@ -1,0 +1,113 @@
+---
+ci:
+  # format compatible with commitlint
+  autoupdate_commit_msg: "chore: pre-commit autoupdate"
+  autoupdate_schedule: monthly
+  autofix_commit_msg: |
+    chore: auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  skip:
+    # https://github.com/pre-commit-ci/issues/issues/55
+    - pip-compile
+default_language_version:
+  # Needed in order to make pip-compile output predictable.
+  python: python3.9
+exclude: |
+  (?x)^(
+    test/assets/.*
+  )$
+repos:
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.267"
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    # keep it before yamllint
+    rev: "v3.0.0-alpha.9-for-vscode"
+    hooks:
+      - id: prettier
+        additional_dependencies:
+          - prettier
+          - prettier-plugin-toml
+          - prettier-plugin-sort-json
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v4.4.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        exclude: >
+          (?x)^(
+            examples/playbooks/(with-skip-tag-id|unicode).yml|
+            examples/playbooks/example.yml
+          )$
+      - id: mixed-line-ending
+      - id: check-byte-order-marker
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: debug-statements
+        language_version: python3
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.31.0
+    hooks:
+      - id: yamllint
+        files: \.(yaml|yml)$
+        types: [file, yaml]
+        entry: yamllint --strict
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        language_version: python3
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.3.0
+    hooks:
+      - id: mypy
+        # empty args needed in order to match mypy cli behavior
+        args: ["--strict"]
+        additional_dependencies:
+          - ansible-core
+          - cached_property
+          - packaging
+          - pytest
+          - pytest-mock
+          - subprocess-tee>=0.4.1
+          - "typing-extensions>=4.5.0;python_version<'3.10'"
+          - types-PyYAML
+          - types-pkg_resources
+          - types-jsonschema>=4.4.9
+  - repo: https://github.com/pycqa/pylint
+    rev: v3.0.0a6
+    hooks:
+      - id: pylint
+        additional_dependencies:
+          - PyYAML
+          - pytest
+          - typing_extensions
+  # Keep last due to being considerably slower than the others:
+  - repo: local
+    hooks:
+      - id: pip-compile-upgrade
+        # To run it execute: `pre-commit run pip-compile-upgrade --hook-stage manual`
+        name: Upgrade constraints files and requirements
+        files: ^(pyproject\.toml|requirements\.txt)$
+        language: python
+        entry: python -m piptools compile --resolver=backtracking --upgrade -q --strip-extras --extra docs --extra test --output-file=requirements.txt pyproject.toml --unsafe-package ansible-core --unsafe-package resolvelib --unsafe-package typing_extensions
+        pass_filenames: false
+        stages:
+          - manual
+        additional_dependencies:
+          - pip-tools>=6.11.0
+      - id: pip-compile
+        name: Check constraints files and requirements
+        files: ^(pyproject\.toml|requirements\.txt)$
+        language: python
+        entry: python -m piptools compile --resolver=backtracking -q --strip-extras --extra docs --extra test --output-file=requirements.txt pyproject.toml --unsafe-package ansible-core --unsafe-package resolvelib --unsafe-package typing_extensions
+        pass_filenames: false
+        additional_dependencies:
+          - pip-tools>=6.11.0
