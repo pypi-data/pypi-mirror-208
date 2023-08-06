@@ -1,0 +1,83 @@
+version: "3.8"
+name: gama
+
+services:
+  gama_ui:
+    container_name: gama_ui
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_GAMA_VARIANT: $GAMA_VARIANT
+    networks:
+      - vessel
+
+  gama_chart_tiler:
+    container_name: gama_chart_tiler
+    image: ghcr.io/greenroom-robotics/gr_chart_tiler:1.1.0
+    ports:
+      - 3001:8080
+    networks:
+      - vessel
+    volumes:
+      - ./data/charts/styles:/app/data/styles
+      - ./data/charts/tiles:/app/data/tiles
+      - ./data/charts/config.json:/app/data/config.json
+
+  gama_chart_api:
+    container_name: gama_chart_api
+    image: ghcr.io/greenroom-robotics/gr_chart_api:1.1.0
+    volumes:
+      - ./data/charts:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 3002:3000
+    networks:
+      - vessel
+
+  gama_vessel:
+    container_name: gama_vessel
+    environment:
+      - DISPLAY
+    volumes:
+      - ./log:/home/ros/.ros/log
+      - ./.gama:/home/.gama
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+    privileged: true
+
+  lookout:
+    container_name: lookout
+    image: ghcr.io/greenroom-robotics/lookout
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - vessel
+    privileged: true
+    command: ./scripts/watch.sh ./scripts/build.sh -- lookout_bringup lookout.launch.py ${LOOKOUT_COMMAND_ARGS:-}
+
+  groot:
+    container_name: groot
+    image: ghcr.io/greenroom-robotics/groot
+    environment:
+      - DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    networks:
+      - vessel
+
+  gama_greenstream:
+    container_name: gama_greenstream
+    image: ghcr.io/greenroom-robotics/gama_greenstream:${GAMA_VERSION:-latest}
+    volumes:
+      - ./.gama:/home/.gama
+    privileged: true
+    network_mode: host
+
+  gama_docs:
+    container_name: gama_docs
+    image: ghcr.io/greenroom-robotics/gama_docs:${GAMA_VERSION:-latest}
+    ports:
+      - "3003:3000"
+
+networks:
+  vessel:

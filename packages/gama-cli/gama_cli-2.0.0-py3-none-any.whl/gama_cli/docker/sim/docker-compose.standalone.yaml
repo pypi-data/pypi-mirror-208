@@ -1,0 +1,30 @@
+services:
+  whiskey_ue_sim_standalone:
+    container_name: whiskey_ue_sim_standalone
+    image: ghcr.io/greenroom-robotics/whiskey_ue_sim_standalone
+    build:
+      context: ./projects/whiskey_ue
+      dockerfile: ./../docker/sim/Dockerfile.standalone
+    networks:
+      - gama_vessel
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - DISPLAY
+      - XDG_RUNTIME_DIR
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY
+      - SIM_ARGS=-ResX=1280 -ResY=720 -WINDOWED
+      - ROS_DOMAIN_ID
+
+networks:
+  gama_vessel:

@@ -1,0 +1,20 @@
+version: "3.8"
+name: gama
+
+services:
+  gama_gs:
+    container_name: gama_gs
+    image: ghcr.io/greenroom-robotics/gama_gs:${GAMA_VERSION:-latest}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./.gama:/home/.gama
+      - type: bind
+        source: /dev
+        target: /dev
+        bind:
+          propagation: rshared
+    privileged: true
+    command: ./scripts/launch.sh gama_gs_bringup gs.launch.py ${GAMA_GS_COMMAND_ARGS}
+
+networks:
+  gs:
