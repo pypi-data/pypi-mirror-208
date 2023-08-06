@@ -1,0 +1,860 @@
+{
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "title": "Schema for output json file",
+   "description": "Raw data json",
+   "type": "array",
+   "items": {
+   "type": "array",
+   "items": {
+   "type": "object",
+   "properties": {
+      "serialNumber": {
+        "description": "Chip serial number",
+        "type": "string"
+      },
+      "testType": {
+        "description": "Test type",
+        "type": "string"
+      },
+      "results": {
+       "description": "Results of measurement",
+       "type": "object",
+       "properties": {
+      "Measurements": {
+         "description": "Measurement data",
+         "type": "object",
+         "properties": {
+            "Temperature": {
+               "description": "Temperature in celcius",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^C$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "SetCurrent": {
+               "description": "Current set to the power supply in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Current": {
+               "description": "Current in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux30": {
+               "description": "Vmux channel 30 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux33": {
+               "description": "Vmux channel 33 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux37": {
+               "description": "Vmux channel 37 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux34": {
+               "description": "Vmux channel 34 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux38": {
+               "description": "Vmux channel 38 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux36": {
+               "description": "Vmux channel 36 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vmux32": {
+               "description": "Vmux channel 32 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Imux0": {
+               "description": "Imux channel 0 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Imux28": {
+               "description": "Imux channel 28 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Imux29": {
+               "description": "Imux channel 29 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Imux30": {
+               "description": "Imux channel 30 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Imux31": {
+               "description": "Imux channel 31 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Imux63": {
+               "description": "Imux channel 63 in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "VinA": {
+               "description": "Calculated VinA in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "VinD": {
+               "description": "Calculated VinD in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "VDDA": {
+               "description": "Calculated VDDA in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "VDDD": {
+               "description": "Calculated VDDD in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Vofs": {
+               "description": "Calculated VOFS in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "VrefOVP": {
+               "description": "Calculated VrefOVP in volt",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^V$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "IinA": {
+               "description": "Calculated IinA in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "IinD": {
+               "description": "Calculated IinD in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "IshuntA": {
+               "description": "Calculated IshuntA in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "IshuntD": {
+               "description": "Calculated IshuntD in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "IcoreA": {
+               "description": "Calculated IcoreA in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "IcoreD": {
+               "description": "Calculated IcoreD in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            },
+            "Iref": {
+               "description": "Calculated Iref in amp",
+               "type": "object",
+               "properties": {
+                  "X": {
+                     "description": "Plotted in X-axis or not",
+                     "type": "boolean"
+                  },
+                  "Unit": {
+                     "description": "Unit",
+                     "type": "string",
+                     "pattern": "^A$"
+                  },
+                  "Values": {
+                     "type": "array",
+                     "items": {
+                        "type": "number"
+                     }
+                  }
+               },
+               "required": [
+                  "X",
+                  "Unit",
+                  "Values"
+               ]
+            }
+         }
+      },
+      "Metadata": {
+         "description": "Meta data",
+         "type": "object",
+         "properties": {
+            "ChipID": {
+               "description": "ChipID from chip config",
+               "type": "integer"
+            },
+            "Name": {
+               "description": "Chip unique ID from chip config",
+               "type": "string"
+            },
+            "Institution": {
+               "description": "Institution",
+               "type": "string"
+            },
+            "TimeStart": {
+               "description": "Unix time stamp of the start time",
+               "type": "integer"
+            },
+            "TimeEnd": {
+               "description": "Unix time stamp of the end time",
+               "type": "integer"
+            },
+            "FirmwareVersion": {
+               "description": "Firmware version",
+               "type": "string"
+            },
+            "FirmwareIdentifier": {
+               "description": "Firmware identifier",
+               "type": "string"
+            },
+            "ChannelConfig": {
+               "description": "Channel config"
+            },
+            "SoftwareVersion": {
+               "description": "software version",
+               "type": "string"
+            },
+            "ChipConfigs": {
+               "description": "Chip configs excluding pixel configs",
+               "type": "object"
+            },
+            "SoftwareType": {},
+            "AverageTemperature": {
+               "description": "averaged temperature",
+               "type": "number"
+            }
+         },
+         "required": [
+            "ChipID",
+            "Name",
+            "Institution",
+            "TimeStart",
+            "TimeEnd",
+            "FirmwareVersion",
+            "FirmwareIdentifier",
+            "ChannelConfig",
+            "SoftwareVersion",
+            "ChipConfigs",
+            "SoftwareType"
+         ]
+      }
+   },
+   "required": [
+      "Measurements",
+      "Metadata"
+   ]
+   }
+   },
+     "required": [
+        "serialNumber",
+        "testType",
+        "results"
+     ]
+ }
+ }
+}

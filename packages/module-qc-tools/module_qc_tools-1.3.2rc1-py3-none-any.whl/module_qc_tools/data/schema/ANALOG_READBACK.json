@@ -1,0 +1,198 @@
+{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "title": "Schema for output json file",
+   "description": "Raw data json",
+   "type": "array",
+   "items": {
+   "type": "array",
+   "items": {
+     "type": "object",
+     "required": ["serialNumber", "testType", "subtestType", "results"],
+     "properties": {
+       "serialNumber": {
+         "description": "Chip serial number",
+         "type": "string"
+       },
+       "testType": {
+         "description": "Test type",
+         "type": "string",
+         "pattern": "^ANALOG_READBACK$"
+       },
+       "results": {
+         "description": "Results of measurement",
+         "type": "object",
+         "properties": {
+           "Measurements": {
+             "description": "Measurement data",
+             "type": "object",
+             "oneOf": [
+               {"required": [
+                 "Vmux0",
+                 "Vmux3",
+                 "Vmux4",
+                 "Vmux5",
+                 "Vmux6",
+                 "Vmux7",
+                 "Vmux8",
+                 "Vmux9",
+                 "Vmux10",
+                 "Vmux11",
+                 "Vmux12",
+                 "Vmux13",
+                 "Vmux15",
+                 "Vmux17",
+                 "Vmux30",
+                 "Vmux31",
+                 "Vmux32",
+                 "Vmux33",
+                 "Vmux34",
+                 "Vmux35",
+                 "Vmux36",
+                 "Vmux37",
+                 "Vmux38",
+                 "Vmux39",
+                 "Vmux63",
+                 "Imux0",
+                 "Imux1",
+                 "Imux2",
+                 "Imux3",
+                 "Imux4",
+                 "Imux5",
+                 "Imux6",
+                 "Imux7",
+                 "Imux8",
+                 "Imux10",
+                 "Imux11",
+                 "Imux12",
+                 "Imux13",
+                 "Imux14",
+                 "Imux15",
+                 "Imux16",
+                 "Imux17",
+                 "Imux18",
+                 "Imux19",
+                 "Imux20",
+                 "Imux21",
+                 "Imux22",
+                 "Imux23",
+                 "Imux24",
+                 "Imux25",
+                 "Imux28",
+                 "Imux29",
+                 "Imux30",
+                 "Imux31",
+                 "Imux63"
+               ],
+               "patternProperties":{
+                 ".":{
+                   "type": "object",
+                   "required": ["X", "Unit", "Values"],
+                   "properties": {
+                     "Values": {
+                       "type": "array"
+                     }
+                   }
+                 }
+               }
+               },
+               {"required": [
+                 "Vmux2",
+                 "Vmux30",
+                 "Vmux14",
+                 "Vmux16",
+                 "Vmux18",
+                 "Imux9",
+                 "Imux63",
+                 "MonSensSldoDigSelBias",
+                 "MonSensSldoAnaSelBias",
+                 "MonSensAcbSelBias",
+                 "MonSensSldoDigDem",
+                 "MonSensSldoAnaDem",
+                 "MonSensAcbDem",
+                 "TExtExtNTC"
+               ],
+               "patternProperties":{
+                 ".":{
+                   "type": "object",
+                   "required": ["X", "Unit", "Values"],
+                   "properties": {
+                     "Values": {
+                       "type": "array",
+                       "minItems": 32,
+                       "maxItems": 32
+                     }
+                   }
+                 }
+               }
+               },
+               {"required": [
+                 "Vmux34",
+                 "Vmux38",
+                 "Vmux30",
+                 "SldoTrimA",
+                 "SldoTrimD",
+                 "ROSC0",
+                 "ROSC1",
+                 "ROSC2",
+                 "ROSC3",
+                 "ROSC4",
+                 "ROSC5",
+                 "ROSC6",
+                 "ROSC7",
+                 "ROSC8",
+                 "ROSC9",
+                 "ROSC10",
+                 "ROSC11",
+                 "ROSC12",
+                 "ROSC13",
+                 "ROSC14",
+                 "ROSC15",
+                 "ROSC16",
+                 "ROSC17",
+                 "ROSC18",
+                 "ROSC19",
+                 "ROSC20",
+                 "ROSC21",
+                 "ROSC22",
+                 "ROSC23",
+                 "ROSC24",
+                 "ROSC25",
+                 "ROSC26",
+                 "ROSC27",
+                 "ROSC28",
+                 "ROSC29",
+                 "ROSC30",
+                 "ROSC31",
+                 "ROSC32",
+                 "ROSC33",
+                 "ROSC34",
+                 "ROSC35",
+                 "ROSC36",
+                 "ROSC37",
+                 "ROSC38",
+                 "ROSC39",
+                 "ROSC40",
+                 "ROSC41"
+               ],
+               "patternProperties":{
+                 ".":{
+                   "type": "object",
+                   "required": ["X", "Unit", "Values"],
+                   "properties": {
+                     "Values": {
+                       "type": "array",
+                       "minItems": 16,
+                       "maxItems": 16
+                     }
+                   }
+                 }
+               }
+               }
+             ]
+           }
+         }
+       }
+     }
+  }
+ }
+}
