@@ -1,0 +1,42 @@
+[project]
+name = "nonebot-plugin-og"
+version = "0.3.0"
+description = "检测链接并发送网站简介及预览图"
+authors = [
+    {name = "mute.", email = "mute231010@gmail.com"},
+]
+dependencies = ["httpx", "nonebot2", "pyquery", "nonebot-adapter-onebot"]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+[project.urls]
+Homepage = "https://github.com/mute23-code/nonebot_plugin_og"
+
+[tool.poetry]
+name = "nonebot-plugin-og"
+version = "0.3.0"
+description = "检测链接并发送网站简介及预览图"
+authors = ["mute. <mute231010@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "nonebot_plugin_og"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyquery = "^2.0.0"
+httpx = "^0.24.0"
+nonebot2 = "^2.0.0rc4"
+nonebot-adapter-onebot = "^2.2.3"
+
+
+
+[tool.nonebot]
+adapters = [{name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11"}]
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
