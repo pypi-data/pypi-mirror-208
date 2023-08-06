@@ -1,0 +1,107 @@
+#!python -Wignore
+"""Starbug2 Matching
+usage: starbug2-match [-Bfhv] [-o output] [-p file.param] [-s KEY=VAL] table.fits ...
+    -B  --band               : match in "BAND" mode (does not preserve a column for every frame)
+    -D  --dither             : match in "DITHER" mode (preserves a column for every frame)
+    -f  --full               : export full catalogue
+    -G  --generic            : match in "GENERIC" mode
+    -h  --help               : show help message
+    -o  --output  file.fits  : output matched catalogue
+    -p  --param   file.param : load starbug parameter file
+    -s  --set     option     : set value in parameter file at runtime (-s MATCH_THRESH=1)
+"""
+
+import os,sys,getopt,glob
+import numpy as np
+import pkg_resources
+from astropy.io import fits
+from astropy.table import Table, hstack
+import starbug2
+from starbug2 import utils
+from starbug2 import matching
+
+VERBOSE=0x01
+KILLPROC=0x02
+
+BANDMATCH   =0x04
+DITHERMATCH =0x08
+GENERICMATCH=0x10
+
+EXPFULL = 0x100
+
+options=0
+
+parameter={}
+pfile=None
+output=None
+setdict={}
+
+def usage():
+    if options& VERBOSE: quit(__doc__)
+    else: quit( __doc__.split("\n")[1])
+
+opts,args=getopt.getopt(sys.argv[1:], "BDfGhvo:p:s:", ("band","dither","full", "generic", "help","verbose",
+                                                "output=", "param=", "set="))
+
+for opt,optarg in opts:
+    if opt in ("-h", "--help"): usage()
+    if opt in ("-v", "--verbose"): options|=VERBOSE
+    if opt in ("-o", "--output"): output=optarg
+    if opt in ("-p", "--param"): pfile=optarg
+
+    if opt in ("-f","--full"): options|=EXPFULL
+
+
+    if opt in ("-s","--set"): 
+        if '=' in optarg:
+            key,val=optarg.split('=')
+            try: val=float(val)
+            except: pass
+            setdict[key]=val
+
+        else: perror("unable to set parameter, use syntax -s KEY=VALUE\n")
+
+    if opt in ("-B","--band"): options|=BANDMATCH
+    if opt in ("-D","--dither"): options|=DITHERMATCH
+    if opt in ("-G","--generic"): options|=GENERICMATCH
+
+if not len(args): usage()
+
+if pfile: parameters=utils.load_params(pfile)
+elif os.path.exists("./starbug.param"): parameters=utils.load_params("./starbug.param")
+else: parameters=utils.load_params("%s/default.param"%pkg_resources.resource_filename("starbug2", "param/"))
+
+if parameters: parameters.update(setdict)
+else: 
+    utils.perror("failed to load parameter file\n")
+    quit("..quitting :(")
+
+tables=[Table.read(fname,format="fits") for fname in args]
+
+colnames=starbug2.match_cols
+colnames+=[ name for name in parameters["MATCH_COLS"].split() if name not in colnames]
+
+if options & BANDMATCH:
+    matched=matching.band_match(tables,parameters["MATCH_THRESH"],colnames)
+    utils.export_table(matched,fname="out.fits")
+
+else:
+    if options & DITHERMATCH: av,full=matching.dither_match(tables, parameters["MATCH_THRESH"], colnames)
+    if options & GENERICMATCH: 
+        full=matching.generic_match(tables,threshold=parameters["MATCH_THRESH"], add_src=True)
+        av=None#_=matching.finish_matching(full, colnames=tables[0].colnames)
+    else:
+        av,full=matching.cascade_match(tables, parameters["MATCH_THRESH"], colnames)
+
+
+    full=Table(full,dtype=[float]*len(full.colnames)).filled(np.nan) ## fill empty values with null
+
+    if av: av.meta.update(tables[0].meta)
+
+    if output is None:
+        output=utils.combine_fnames( [ name for name in args] , ntrys=100)
+    dname,fname,ext=utils.split_fname(output)
+
+    utils.printf("-> %s/%s*\n"%(dname,fname))
+    if options&EXPFULL: utils.export_table(full,fname="%s/%sfull.fits"%(dname,fname))
+    if av: utils.export_table(av,"%s/%smatch.fits"%(dname,fname))
