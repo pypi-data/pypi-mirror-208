@@ -1,0 +1,910 @@
+# 1 什么是xToolkit库
+
+库xToolkit的中文名字叫Ｘ工具集．是python内置库的一个扩展库.把python的datetime,string,list,dist，xthread等数据结构进行了系统库功能的扩展。
+
+安装方法(利用阿里云的pypi源安装会比默认的pypi快很多)：
+
+```shell
+pip install xToolkit -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+备用安装方法(由于国内几个源同步pypi源的频率都不同,如果这个频率慢了，就换其他的):
+
+```shell
+# 豆瓣源
+pip install xToolkit  -i  http://pypi.douban.com/simple --trusted-host pypi.douban.com
+```
+
+升级方法（利用阿里云的pypi源安装会比默认的pypi快很）
+
+```
+pip install --upgrade xToolkit -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+导入方法：
+
+```shell
+from xToolkit import xstring, xdatetime, xthreading, xlise, xfile
+```
+
+本库使用到了第三库 python-dateutil，jieba，numpy，pandas，emoji，在安装本库的时候会自动安装，不过其中有几个库比较大，可以提前安装好，这样可以避免安装第三方库的时候安装出错。
+
+# 2 适用对象
+
+- 适用对象：python工程师
+- 作者：熊利宏
+- 邮箱：xionglihong@163.com
+- 有任何意见欢迎发送邮件，我们一起打造一个好用的python内置库的扩展库
+- [操作文档CSDN地址：https://blog.csdn.net/qq_22409661/article/details/108531485](https://blog.csdn.net/qq_22409661/article/details/108531485)
+
+# 3 怎么使用xToolkit呢？
+
+## 3.1 时间模块 xdatetime模块
+
+### 3.1.1 判断时间格式时分是否正确
+
+支持判断的类型包括 date,datetime,time,int,float,str 其他类型默认为False
+
+```python
+xdatetime.shape("2020-03-23 00:00:00")
+>> True
+
+xdatetime.shape(25251425)
+>> True
+
+xdatetime.shape(253698.25)
+>> True
+
+xdatetime.shape("2020-03-")
+>> False
+
+xdatetime.shape("english")
+>> False
+
+xdatetime.shape("我是一个兵")
+>> False
+
+xdatetime.shape("258741")
+>> True
+
+xdatetime.shape("2020/03/20T10:09:06.252525+0800")
+>> True
+
+xdatetime.shape(datetime.datetime(2020, 9, 29, 8, 12))
+>> True
+
+xdatetime.shape(datetime.date(2020, 9, 29))
+>> True
+
+xdatetime.shape(datetime.time(8, 9, 29))
+>> True
+```
+
+
+
+### 3.1.2 get方法创建对象
+
+利用get方法可以创建时间对象，并且创建的方法还比较多，可以传入时间戳，时间字符串，datetime对象，date对象等
+
+```python
+# 时间戳方法
+xdatetime.get(98787987)
+>> 1973-02-17T17:06:27+08:00
+```
+
+```python
+#字符串方式
+xdatetime.get("1988-07-20")
+>> 1988-07-20T00:00:00
+
+xdatetime.get("2020-09-22-10-06-14")
+>> 2020-09-22T10:06:14
+```
+
+```python
+# datetime对象
+xdatetime.get((datetime(2020, 3, 23, 21, 56, 12))
+>> 2020-03-23T21:56:12
+```
+
+```python
+# date对象等
+xdatetime.get(date(2020, 3, 23))
+>> 2020-03-23T00:00:00
+```
+
+### 3.1.3 获取时间戳
+
+获取当前时间戳
+
+```python
+# 此方法获取的时间戳没有微妙部分，如果需要获取微妙部分，用time.time()
+xdatetime.get().timestamp
+>> 1585833834.0
+```
+
+获取指定时间的时间戳
+
+```python
+xdatetime.get("2020-04-02 21:26:54").timestamp
+>> 1585834014.0
+```
+
+### 3.1.4 获取年月日时分秒
+
+获取日期时间元素，年月日时分秒，微妙
+
+```python
+# 年
+xdatetime.get().year
+>> 2020
+```
+
+```python
+# 月
+xdatetime.get().month
+>> 4
+```
+
+```python
+# 日
+xdatetime.get().day
+>> 2
+```
+
+```python
+# 时
+xdatetime.get().hour
+>> 21
+```
+
+```python
+# 分
+xdatetime.get().minute
+>> 37
+```
+
+```python
+# 秒
+xdatetime.get().second
+>> 48
+```
+
+```python
+# 微妙
+xdatetime.get().microsecond
+>> 70815
+```
+
+```python
+# 星期
+xdatetime.get().weekday
+# 返回数字 1-7代表周一到周日
+>> 5
+```
+
+```python
+# 周
+xdatetime.get().weed
+# 返回整数代表当前是本年第多少个周
+>> 35
+```
+
+```python
+# 季
+xdatetime.get().quarter
+# 返回整数代表当前是本年第几个季度
+>> 3
+```
+
+### 3.1.5 时间推移
+
+shift方法获取某个时间之前或之后的时间,关键字参数：years, months, days, hours，minutes，seconds，microseconds， weeks
+
+```python
+# 一年以前
+xdatetime.get().shift(years=-1)
+>> 2019-04-03T21:10:49.095790+08:00
+```
+
+```python
+# 一年以后
+xdatetime.get().shift(years=1)
+>> 2021-04-03T21:10:49.095790+08:00
+```
+
+```python
+#一个月之后
+xdatetime.get().shift(months=1)
+>> 2020-05-03T21:12:17.332790+08:00
+```
+
+```python
+#一天以后
+xdatetime.get().shift(days=1)
+>> 2020-04-04T21:14:30.914443+08:00
+```
+
+```python
+#一个小时以后
+xdatetime.get().shift(hours=1)
+>> 2020-04-03T22:14:08.301192+08:00
+```
+
+```python
+#一分钟以后
+xdatetime.get().shift(minutes=1)
+>> 2020-04-03T21:17:27.956196+08:00
+```
+
+```python
+#一秒钟以后
+xdatetime.get().shift(seconds=1)
+>> 2020-04-03T21:16:45.380686+08:00
+```
+
+```python
+#一毫秒以后
+xdatetime.get().shift(microseconds=1)
+>> 2020-04-03T21:16:58.252929+08:00
+```
+
+```python
+#一周以后
+xdatetime.get().shift(weeks=1)
+>> 2020-04-10T21:17:11.827210+08:00
+```
+
+### 3.1.6 时间替换
+
+替换datetime对象，年月日时分秒某一部分，返回一个被替换后的datetime对象，原对象不变关键字参数：year, month, day, hour，minute，second，microsecond
+
+```python
+# 把年替换会成2018
+xdatetime.get().replace(year=2018)
+>> 2018-04-03T21:23:42.819295+08:00
+```
+
+```python
+# 把月替换会成10
+xdatetime.get().replace(month=10)
+>> 2018-10-03T21:23:42.819295+08:00
+```
+
+```python
+# 把日替换会成7
+xdatetime.get().replace(day=7)
+>> 2018-04-07T21:23:42.819295+08:00
+```
+
+```python
+# 把时替换会成22
+xdatetime.get().replace(hour=22)
+>> 2018-04-03T22:23:42.819295+08:00
+```
+
+```python
+# 把分替换会成21
+xdatetime.get().replace(minute=21)
+>> 2018-04-03T21:21:42.819295+08:00
+```
+
+```python
+# 把秒替换会成21
+xdatetime.get().replace(second=21)
+>> 2018-04-03T21:23:21.819295+08:00
+```
+
+### 3.1.7 时间扩展部分
+
+#### 3.1.7.1 二个时间的差值
+
+计算二个时间的差值，返回值为秒数,传入的二个时间格式包括，时间字符串，datetime，时间戳等
+
+```python
+xdatetime.get("2020-04-28 10:52:52", "1988-07-20 17:31:12").how
+>> 1002648100
+```
+
+```python
+xdatetime.get("2020-04-28", "1988-07-20 17:31:12").how
+>> 1002608928
+```
+
+```python
+xdatetime.get("1975-04-28 14:14:55", "1988-07-20 17:31:12").how
+>> -417496577
+```
+
+#### 3.1.7.2 开始与结束时间
+
+- 返回 指定时间中，年，月，周的开始时间和结束时间
+- 类型genre Y->年，M->月，W->周
+- 第一个参数：年
+- 第二个参数：年月类型中，代表月，周类型代表周数
+
+```python
+# 年(当genre为年时，月失效)
+xdatetime.get(2020, 0, genre="Y").begin_end
+>> ['2020-01-01', '2020-12-01']
+
+xdatetime.get(2021, 0, genre="Y").begin_end
+>> ['2021-01-01', '2021-12-01']
+```
+
+```python
+# 月
+xdatetime.get(2020, 8, genre="M").begin_end
+>> ['2020-08-01', '2020-08-31']
+
+xdatetime.get(2021, 5, genre="M").begin_end
+>> ['2021-05-01', '2021-05-31']
+```
+
+```python
+# 周
+xdatetime.get(2020, 35, genre="W").begin_end
+>> ['2020-08-24', '2020-08-30']
+
+xdatetime.get(2021, 45, genre="W").begin_end
+>> ['2021-11-08', '2021-11-14']
+```
+
+```python
+# 季
+xdatetime.get(2020, 1, genre="Q").begin_end
+>> ['2020-01-01', '2020-03-31']
+
+xdatetime.get(2021, 2, genre="Q").begin_end
+>> ['2021-04-01', '2021-06-30']
+
+xdatetime.get(2020, 3, genre="Q").begin_end
+>> ['2020-07-01', '2020-09-30']
+
+xdatetime.get(2021, 4, genre="Q").begin_end
+>> ['2021-10-01', '2021-12-31']
+```
+
+#### 3.1.7.3 时间是否在指定时间区间中
+
+- 计算时间是否在指定的时间区间内，返回值为bool型
+- 需要传入二个参数，第一个为需要验证的字符串，第二个是一个时间列表，里面包含二个时间，开始时间和结束时间
+
+```python
+xdatetime.get("2027-04-01", ["1988-04-14", "2020-05-14"]).middle
+>> False
+```
+
+```python
+xdatetime.get("2020-04-15", ["2020-04-14", "2020-05-14 12:12:14"]).middle
+>> True
+```
+
+## 3.2 字符串模块xstring
+
+### 3.2.1 字符串格式效验
+
+进行字符串格式效验，包括车牌格式，身份证号码，整形或浮点型，时间字符串，URL地址，手机号，银行卡，用户姓名，密码，邮箱，工号。
+
+```python
+# 车牌号
+xstring.check("鄂A96288").is_car_number
+>>True
+```
+
+```python
+# 身份证号码
+# 提供中国大陆身份证验证，暂时只支持效验18位身份证
+xstring.check("110101199003072316").is_identity_card
+>>True
+```
+
+```python
+# 整形或浮点型
+xstring.check("12.5").is_int_or_float
+>>True
+```
+
+```python
+# 时间字符串
+xstring.check("1988-07-20").is_datetime_string
+>>True
+```
+
+```python
+# URL地址
+xstring.check("https://wwww.baidu.com").is_url
+>>True
+```
+
+```python
+# 手机号
+xstring.check("15172383635").is_phone
+>>True
+```
+
+```python
+# 银行卡
+xstring.check("6222600260001072444").is_bank_number
+>>True
+```
+
+```python
+# 用户姓名
+# 姓名要求为2-4个中文
+xstring.check("熊利宏").is_user_name
+>>True
+```
+
+```python
+# 密码
+# 包含6-18位字符，必须包含字母与数字，可以包含特殊字符
+xstring.check("xlh123456").is_user_password
+>>True
+```
+
+```python
+# 邮箱
+# 第一种：只允许英文字母、数字、下划线、英文句号、以及中划线组成
+# 第二种：名称允许汉字、字母、数字，域名只允许英文域名
+xstring.check("xionglihong@163.com").is_mailbox
+>>True
+```
+
+```python
+# 工号
+# 工号格式为 4个大写字母+8位数字
+xstring.check("HBBZ00000001").is_job
+>>True
+```
+
+### 3.2.2 字符串处理
+
+##### 3.2.2.1 身份证号码处理
+
+进行字符串处理，比如从身份证提取生日号码，性别等操作
+
+```python
+xstring.dispose("11010119900307053X").get_identity_card(True)
+>>{'code': '0000', 'msg': '身份证格式正确', 'data': {'age': '31','birthday': '1990-03-07', 'gender': '男'}}
+```
+
+##### 3.2.2.2 split 多标签分割
+
+```python
+# 主要解决了系统模块split只能用一个分隔符
+xstring.dispose("abc,我的-他的,1245*ss").split([",", "-", "*"])
+>>['abc', '我的', '他的', '1245', 'ss']
+```
+
+##### 3.2.2.3 strip多字符串过滤
+
+```python
+# 如果不传过滤参数，默认去掉所有空格
+xstring.dispose("          鄂 A9 62 --8 8---__  ").strip()
+>>鄂A962--88---__
+```
+
+```python
+xstring.dispose("          鄂 A9 62 --8 8---__  ").strip([" ", "-", "_"])
+>> 鄂A96288
+```
+
+##### 3.2.2.4 把字符串转换为emoji表情
+
+```python
+xstring.dispose('Python is :thumbs_up:').string_to_emoji()
+>>Python is 👍
+```
+
+##### 3.2.2.5 emoji表情转字符串
+
+```python
+xstring.dispose('Python is 👍').emoji_to_string()
+>>Python is :thumbs_up:
+```
+
+##### 3.2.2.6 中文分词
+
+```python
+# 分词对象 中国人民解放军海军工程大学
+
+# 全模式：把文本中所有可能的词语都扫描出来，有冗余 cut_all=True
+# ['中国', '中国人民解放军', '中国人民解放军海军', '国人', '人民', '人民解放军', '解放', '解放军', '海军', '海军工程大学', '军工', '工程', '大学']
+# 精确模式：把文本精确的切分开，不存在冗余单词 cut_all=False
+# ['中国人民解放军', '海军工程大学']
+# 默认为精确模式
+
+# 精确模式
+xstring.dispose('中国人民解放军海军工程大学').part(cut_all=False)
+>>['中国人民解放军', '海军工程大学']
+
+# 全模式
+xstring.dispose('中国人民解放军海军工程大学').part(cut_all=True)
+>>['中国', '中国人民解放军', '中国人民解放军海军', '国人', '人民', '人民解放军', '解放', '解放军', '海军', '海军工程大学', '军工', '工程', '大学']
+```
+
+##### 3.2.2.7 金额人性化
+
+```python
+# 金额人性化,保留二位小数
+
+xstring.dispose(3.0).humanized_amount()
+xstring.dispose("3.0").humanized_amount()
+xstring.dispose(37787841.902).humanized_amount()
+xstring.dispose("37787841.9882").humanized_amount()
+xstring.dispose(378978989).humanized_amount()
+xstring.dispose("378978989").humanized_amount()
+
+>>3.00
+>>3.00
+>>37,787,841.90
+>>37,787,841.99
+>>378,978,989.00
+>>378,978,989.00
+```
+
+### 3.2.3 字符串高级格式校验
+
+本模块主要用于项目中入参模块对用户输入的参数进行校验，校验成功返回用户输入的值，校验失败返回Flash
+
+```python
+# 参数校验
+class ParameterVerifyData(object):
+    """
+    参数校验
+    """
+
+    def __call__(self, request, parameter, **kwargs):
+        """
+        is_blank 如果为True代表如果用户传值，就进行校验，如果传空，值就为空
+        """
+        method = kwargs["method"] if kwargs.get("method") else "POST"
+
+        # 参数
+        if method == "POST":
+            parameter = request.POST.get(parameter, None)
+        else:
+            parameter = request.GET.get(parameter, None)
+
+        return xstring.formative(parameter, **kwargs)
+    
+# 参数校验
+ParameterVerify = ParameterVerifyData()
+```
+
+ParameterVerify从本质上调用xstring.formative(parameter, **kwargs)
+
+```python
+    # 查询订单列表
+    @staticmethod
+    def select_order_list(request):
+        """
+        查询订单列表
+        """
+        # 参数校验
+        parameter = {
+            "rests_license": ParameterVerify(request, "rests_license", rule="is_url_list"),
+            "limit": ParameterVerify(request, "limit", rule="is_int"),
+            "shopping_sign": ParameterVerify(request, "shopping_sign", rule="casual"),  # 商店标识
+            "title": ParameterVerify(request, "title", rule="casual"),
+            "distribution": ParameterVerify(request, "distribution", rule="is_choices", choices=["快递", "线下取货"]),
+        }
+
+        for key, item in parameter.items():
+            if item is False:
+                return GlobalReturn(code=10001, msg="{}为{}，格式错误".format(key, item))
+
+        return GlobalReturn(**OperationOrderForm().select_order_list(request=request, **parameter))
+```
+
+支持的校验类型为：
+
+| 校验类型                | 关键字           | 说明                                           |
+| ----------------------- | ---------------- | ---------------------------------------------- |
+| is_car_number           | 车牌号           |                                                |
+| is_identity_card        | 身份证           |                                                |
+| is_int_or_float         | 整形或浮点型     |                                                |
+| is_int                  | 整形             |                                                |
+| is_datetime_string      | 时间字符串       |                                                |
+| is_url                  | url地址          |                                                |
+| is_phone                | 手机号           |                                                |
+| is_bank_number          | 银行卡           |                                                |
+| is_user_name            | 用户姓名         |                                                |
+| is_user_password        | 密码             |                                                |
+| is_mailbox              | 邮箱             |                                                |
+| is_json                 | json             |                                                |
+| is_choices              | 枚举格式         |                                                |
+| is_car_number_list      | 车牌号列表       | 列表的每一个值为车牌号，以下同理               |
+| is_identity_card_list   | 身份证列表       |                                                |
+| is_int_or_float_list    | 整形或浮点型列表 |                                                |
+| is_int_list             | 整形列表         |                                                |
+| is_datetime_string_list | 时间字符串列表   |                                                |
+| is_url_list             | url地址列表      |                                                |
+| is_phone_list           | 手机号列表       |                                                |
+| is_bank_number_list     | 银行卡列表       |                                                |
+| is_user_name_list       | 用户姓名列表     |                                                |
+| is_user_password_list   | 密码列表         |                                                |
+| is_mailbox_list         | 邮箱列表         |                                                |
+| is_json_list            | json列表         |                                                |
+| is_casual_list          | 任意列表         | 列表里面的值不进行校验，只能确保整体是一个列表 |
+
+参数说明 xstring.formative(parameter, **kwargs)：
+
+- parameter 为需要校验的参数名称
+- is_blank 是否可以为空，如果可以为空，不进行规则校验，直接返回空字符串，如果用户传了，就进行规则校验
+- rule 为正则标识，如果rule为is_choices，必须传choices，choices为枚举值，choices的类型为列表
+
+
+
+## 3.3 多线程模块xthread
+
+### 3.3.1 多线程模块
+
+把多个函数放入多线程模块
+
+```python
+# 函数一
+def function_1(a, b, c):
+    time.sleep(1)
+    return a * 2, b * 2, c * 2
+
+# 函数二
+def function_2(a, b):
+    time.sleep(1)
+    return a * 2, b * 2
+
+# 函数三
+def function_3(a):
+    time.sleep(1)
+    return a * 2
+
+# 函数四
+def function_4():
+    time.sleep(1)
+    return 0
+
+
+st = time.time()
+result = xthreading([function_1, 1, 1, 1], [function_2, 2, 2], [function_3, 2], [function_4])
+print(result[0])
+print(result[1])
+print(result[2])
+print(result[3])
+et = time.time()
+print("运行时间：{}".format(et - st))
+
+>> (2, 2, 2)
+>> (4, 4)
+>> 4
+>> 0
+>> 运行时间：1.0010571479797363
+
+# 从上面的运行时间可以看出，如果单线程执行应该是4秒以上，结果为1秒,说明运行时是多线程运行
+```
+
+## 3.4 列表模块xlist
+
+### 3.4.1 值的频率
+
+```python
+# 计算列表中值的频率
+xlise.basics(["武汉", "武昌", "武汉", "无聊", "五菱", "武昌"]).values_count()
+>>{'武昌': 2, '武汉': 2, '五菱': 1, '无聊': 1}
+```
+
+### 3.4.2 字典列表值替换
+
+```python
+# 1.字典型列表的值整体替换
+# 2.要求传入参数格式为 [{"id": None, "name": "wuhan"}, {"id": 5, "name": "中国"}, {"id": 25, "name": "上号"}, {"id": 5, "name": "测试"}]
+# 3.这种形状的参数即可，比如可以传入 django 的 QuerySet 等
+# 4.参数：
+#    1.需要替换的对象
+#    2.kwargs["rules"] 要求元祖，比如 ((None, ''), (45, 47)))
+
+value = [{"id": None, "name": "wuhan"}, {"id": 5, "name": "中国"}, {"id": 25, "name": "上号"}, {"id": 5, "name": "测试"}]
+xlise.basics(value).dict_to_value(rules=((None, ''), ("中国", "china")))
+>>[{'id': '', 'name': 'wuhan'}, {'id': 5.0, 'name': 'china'}, {'id': 25.0, 'name': '上号'}, {'id': 5.0, 'name': '测试'}]
+```
+
+## 3.5 文件模块xfile
+
+### 3.5.1 excel转dict
+
+导入的excel表格的格式是这样的：
+
+![excel表格格式](https://img-blog.csdnimg.cn/20200917213012349.png#pic_center)
+
+#### 3.5.1.1 基本用法
+
+```python
+# excel转dict
+
+# 1.传来的文件可以是文件路径，也可以是二进制文件
+# 2.传来的可以是二进制文件，这里以django接收前端传来文件为例：
+#     接收用 request.FILES.get("fileName", None) 传入 my_file 即可
+
+# kwargs接收的参数有:
+    # sheet索引，0代表第一个表，1代表第二个表，默认0
+    # max表格最大的行数，默认2000行
+    # min表格最小的行数，默认1行
+    # title 表头(用于表头校验)
+
+# 表头为选填,如果不填，不进行表头校验
+xfile.read("./result/t_excel.xls").excel_to_dict()
+>> [{'编号': 1, '时间': '1988-07-21 00:00:00', '年龄': 1, '分数': 63.2, '总分': 1},
+    {'编号': 2, '时间': '1988-07-21 00:00:00', '年龄': 1, '分数': 63.2, '总分': 1},
+    {'编号': 3, '时间': '1988-07-21 00:00:00', '年龄': 1, '分数': 63.2, '总分': 1},
+    {'编号': 4, '时间': '1988-07-21 00:00:00', '年龄': 1, '分数': 63.2, '总分': 1},
+    {'编号': 5, '时间': '1988-07-21 00:00:00', '年龄': 1, '分数': 63.2, '总分': 1},
+    {'编号': 6, '时间': '1988-07-21 00:00:00', '年龄': 1, '分数': 63.2, '总分': 1}
+    ]
+```
+
+#### 3.5.1.2 校验表头再进行读取
+
+错误的表头是这样的：
+
+![excel表格格式(错误的表头)](https://img-blog.csdnimg.cn/20200930112459173.png#pic_center)
+
+```python
+xfile.read("./result/t_excel.xls").excel_to_dict(title=["编号", "时间", "年龄", "分数", "总分"])
+>> {'code': '0001', 'data': {'data': None}, 'msg': '表头第 3 列错误，错误值为 年龄1 应该为 年龄'}
+```
+
+## 3.6 大杂烩模块xfile
+
+### 3.6.1 经纬度计算二点距离
+
+```python
+# 参数格式：（纬度，经度）,(3.6546879, 4.5879546), (6.5879546, 5.1123654)
+xhotchpotch.distance_hav((3.6546879, 4.5879546), (6.5879546, 5.1123654))
+>> 331293.8566141046
+```
+
+# 4 升级日志
+
+2019年05年10日　V0.0.10 
+
+- xToolkit 上线啦
+- 新增获取当前时间功能
+
+2019年05年16日　V0.0.12 
+
+- 新增格式化时间format功能，更人性化的输出时间格式
+- 新增推移时间功能 
+- 新增替换时间功能
+- 新增判断时间格式是否正确功能 
+- 新增获取时间区间功能
+
+2019年06月11日　V0.0.21 
+
+- 新增字符串效验功能
+
+2019年08月20日　v0.0.25 
+
+- 新增中国居民身份证效验功能
+- 新增中国大陆手机号码效验功能
+- 新增数字效验功能
+
+2019年09月02日　v0.0.30
+
+- 新增浮点数，银行卡效验
+
+2020年05月28日　v0.0.43
+
+- 新增字符串 split多分割标识
+
+ 2020年06月06日　v0.0.46
+
+- 修护获取指定月最后一天，输入整数型字符串报错的BUG
+- 新增判断整数，扩充了string.isdigit()
+
+2020年06月22日　v0.0.47
+
+- 新增字符串 strip多过滤标识
+
+2020年06月28日　v0.0.48
+
+- 修改了手机号格式判断如果为纯数字报错的BUG
+- 新增多线程模块
+
+2020年06月28日　v0.0.49
+
+- 新增 指定时间中，年，月，周的开始时间和结束时间
+- 获取时间元素中，新增 获取星期和周
+- 新增 字符串转emoji表情
+- 新增 emoji表情转字符串
+- 新增 中文分词（精确模式，全模式）
+- 新增列表模块
+- 新增列表模块 计算值的频率功能
+
+2020年06月28日　v0.0.50
+
+- 新增 字符串格式校验加入工号格式校验
+
+2020年09月10日　v0.0.62
+
+- 修护 第三依赖库不自动安装的BUG
+
+2020年09月16日 v0.0.63
+
+- 新增文件模块
+- 新增文件模块读取功能
+- 新增excel转dict功能
+
+2020年09月19日 V0.0.64
+
+- 新增数字人性化
+
+2020年09月20日 V0.0.65
+
+- xdatetime 返回当前季度（1-4季度）
+- 输入年，季度，返回季度的开始日期和结束日期
+- 数字人性化格式小数部分换成Decimal库实现
+
+2020年09月21日 V0.0.66
+
+- 文件读取功能,新增文件校验，在读取之前校验文件是否存在，和格式是否正确
+
+2020年09月22日 V0.0.67
+
+- 解决xdatetime.shape()传入None保存的BUG
+- excel转dict加入表头校验功能
+- 解决xdatetime.shape()传入date类型报错的bug
+
+2020年09月30日 V0.0.68
+
+- excel转dict表头校验功能描述错误，错误值与实际值反了
+- 新增 字典型列表值整体替换功能
+
+2021年03月08日 V0.0.71
+
+- 修改numpy依赖库的最低版为1.20.3，因为1.19.4在windows平台上运行会报错
+
+2021年04月15日 V0.0.72
+
+- 身份证详情返回字段中，返回年龄字段
+
+2021年06月09日 V0.0.73
+
+- 新增 对象字符串转对象 功能
+- 新增 对象转对象字符串 功能
+- 新增 字节串和字符串 功能
+- 新增 字符串和字节串 功能
+
+2021年06月21日 V0.0.74
+
+- 修改第三方库numpy为1.19.5，因为linux里面numpy最高版本为1.19.5
+- 时间类新增高级时间戳功能，支持输出 秒级时间戳，毫秒级时间戳，微秒级时间戳
+
+2022年07月06日 V0.0.75
+
+- 去掉demjson第三方库，因为他不支持python >= 3.5，改用系统的ast
+- 修改时间模块，计算开始时间与结束时间，输入参数为年，计算错误的BUG
+
+2022年07月07日 V0.0.76
+
+- 新增大杂烩模块
+- 大杂烩模块新增计算经纬度二点距离功能
+
+2022年08月16日 V0.0.77
+
+- 新增字符串复合校验模块
+
+2022年08月24日 V0.0.78
+
+- 正则校验模块改为match
+
+2022年08月24日 V0.0.83
+
+- 复合参数校验添加ip地址校验
+
+2022年05月17日 V0.0.84
+
+- 复合参数校验添加自定义正则表达式校验
+
+开发计划：
+
+- 无
