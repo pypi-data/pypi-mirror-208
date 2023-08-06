@@ -1,0 +1,86 @@
+
+# MarkBassModel
+
+The **MarkBassModel** package is a Python package that provides functions for fitting and predicting using the Bass diffusion model.
+
+## Description
+
+The Bass diffusion model is a popular method in marketing analytics used to forecast the rate of adoption of new products in a market. The MarkBassModel package offers functionality to assist with various tasks related to product marketing and adoption, including:
+
+- Forecasting product sales
+- Estimating market potential through diffusion analysis
+- Comparing the performance of different products
+
+## Functions
+
+The MarkBassModel package provides the following functions:
+
+### `diffusion(sales)`
+
+This function calculates the cumulative diffusion curve based on the sales data provided.
+
+### `adoption_rate(t, p, q, m, N)`
+
+This function calculates the adoption rate at a given time based on the Bass diffusion model's parameters.
+
+- `t`: Time at which the adoption rate is calculated.
+- `p`: Coefficient of innovation.
+- `q`: Coefficient of imitation.
+- `m`: Total market potential.
+- `N`: Cumulative number of adopters at time `t`.
+
+### `bass_f(t, p, q)`
+
+This function calculates the Bass diffusion curve at a given time based on the Bass diffusion model's parameters.
+
+### `bass_F(t, p, q)`
+
+This function calculates the cumulative Bass diffusion curve at a given time based on the Bass diffusion model's parameters.
+
+### `predict_bass_model(params, m)`
+
+This function predicts the diffusion of a new product using the Bass diffusion model's parameters (`p` and `q`) and the total market potential (`m`).
+
+### `plot_bass(p, q, title)`
+
+This function plots the Bass diffusion curve for the given parameters `p` and `q`. The `title` parameter specifies the title of the plot.
+
+## Installation
+
+You can install the MarkBassModel package using pip:
+
+```shell
+pip install markbassmodel
+```
+
+## Usage
+
+To use the MarkBassModel package, start by importing it:
+
+```python
+import markbassmodel
+```
+
+To calculate the parameters:
+
+```python
+markbassmodel.diffusion(sales)
+```
+
+To plot the Bass diffusion curve:
+
+```python
+markbassmodel.plot_bass(params['p'], params['q'], 'Bass diffusion curve')
+```
+
+## Example Data
+
+You can find a sample dataset of smartphone sales over a period of time [here](https://drive.google.com/drive/folders/1rtiKrg9xa2TMH8cTqN2l-eHWqQG1ZH6c?usp=sharing). You can use this dataset to test and experiment with the MarkBassModel package.
+
+## License
+
+The MarkBassModel package is released under the [MIT License](https://opensource.org/licenses/MIT).
+
+
+
+
