@@ -1,0 +1,38 @@
+# This file establishes dependencies between layered requirement specs
+main:
+  constraints:
+    - dev
+
+recommended:
+  constraints:
+    - dev
+  includes:
+    - main
+
+docs:
+  constraints:
+    - dev
+  includes:
+    - main
+
+tests:
+  constraints:
+    - dev
+  includes:
+    - main
+
+dev:  # All dependencies, except Mitsuba package
+  includes:
+    - recommended
+    - docs
+    - tests
+
+optional:  # All dependencies
+  includes:
+    - dev
+
+production:  # Recommended & Mitsuba package
+  constraints:
+    - dev
+  includes:
+    - recommended
