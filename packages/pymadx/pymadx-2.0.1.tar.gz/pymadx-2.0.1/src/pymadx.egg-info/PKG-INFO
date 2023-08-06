@@ -1,0 +1,83 @@
+Metadata-Version: 2.1
+Name: pymadx
+Version: 2.0.1
+Summary: Package for loading MADX output.
+Author-email: "JAI@RHUL" <laurie.nevay@cern.ch>
+Maintainer-email: Laurie Nevay <laurie.nevay@cern.ch>
+License: pymadx Copyright (C) Royal Holloway, University of London 2023
+        
+        pymadx is free software: you can redistribute it and/or modify 
+        it under the terms of the GNU General Public License as published 
+        by the Free Software Foundation version 3 of the License.
+        
+        pymadx is distributed in the hope that it will be useful, but 
+        WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+        
+        You should have received a copy of the GNU General Public License
+        along with pymadx.  If not, see <http://www.gnu.org/licenses/>.
+        
+Project-URL: homepage, http://www.pp.rhul.ac.uk/bdsim/pymadx
+Project-URL: documentation, http://www.pp.rhul.ac.uk/bdsim/pymadx
+Project-URL: repository, https://bitbucket.org/jairhul/pymadx
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Software Development
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: pytransport
+Provides-Extra: dev
+License-File: LICENCE.txt
+License-File: COPYING.txt
+
+#pymadx#
+
+A python package containing both utilities for processing and analysing MADX output.
+
+## Authors ##
+
+L. Nevay
+S. Boogert
+S. Walker
+A. Abramov
+W. Shields
+J. Snuverink
+
+## Setup ##
+
+pip install pymadx
+
+Or from source, from the main directory:
+
+$ make install
+
+or for development where the local copy of the repository is used
+and can be reloaded with local changes:
+
+$ make develop
+
+Look in the Makefile for the various pip commands (e.g. for with a venv).
+
+
+```
+$> python
+>>> import pymadx
+>>> t = pymadx.Data.Tfs("twiss.tfs")
+```
+
+## Dependencies ##
+
+ * matplotlib
+ * numpy
+ * pytransport (optional)
+

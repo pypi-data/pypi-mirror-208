@@ -1,0 +1,48 @@
+[project]
+name = "pymadx"
+requires-python = ">=3.6"
+dynamic = ["version"]
+readme = "README.md"
+description = "Package for loading MADX output."
+license = {file = "LICENCE.txt"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development"
+    ]
+authors = [
+  {name = "JAI@RHUL", email = "laurie.nevay@cern.ch"}
+]
+maintainers = [
+  {name = "Laurie Nevay", email = "laurie.nevay@cern.ch"}
+]
+dependencies = [
+  "matplotlib>=3.0",
+  "numpy>=1.14",
+  "importlib-metadata"
+]
+
+[project.optional-dependencies]
+pytransport = ["pytransport"]
+dev = ["pytest", "sphinx", "sphinx-rtd-theme"]
+
+[project.urls]
+homepage = "http://www.pp.rhul.ac.uk/bdsim/pymadx"
+documentation = "http://www.pp.rhul.ac.uk/bdsim/pymadx"
+repository = "https://bitbucket.org/jairhul/pymadx"
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/pymadx/_version.py"
